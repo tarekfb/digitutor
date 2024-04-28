@@ -65,7 +65,7 @@ export const getOrCreateCustomerId = async ({
       user_id: session.user.id,
       stripe_customer_id: customer.id,
       updated_at: new Date(),
-    });
+    }); // if this error needs to be fixed, do this: .toDateString()
 
   if (insertError) {
     return { error: insertError };
