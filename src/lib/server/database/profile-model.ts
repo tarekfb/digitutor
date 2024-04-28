@@ -1,37 +1,18 @@
-// import { eq } from "drizzle-orm";
-// import db from "$lib/server/database/drizzle";
-// import { profileTable } from "$lib/server/database/schemas";
-// import type { Session } from "@supabase/supabase-js";
+import type { Session, SupabaseClient } from "@supabase/supabase-js";
+import type { Database } from "~/DatabaseDefinitions";
 
-// export const getProfileBySession = async (session: Session) => {
-//   const id = session.user.id;
+export const getProfileBySession = async (supabase: SupabaseClient<Database>, session: Session) => {
+    const id = session.user.id;
+    const { data: profile } = await getProfileByUserId(supabase, id);
+    return profile;
+};
 
+export const getProfileByUserId = async (supabase: SupabaseClient<Database>, userId: string) => {
+    return await supabase
+        .from("profiles")
+        .select(`*`)
+        .eq("id", userId)
+        .single();
 
+}
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-//   return await getProfileByUserId(id);
-// }
-
-// export const getProfileByUserId = async (userId: string) => {
-//   const profile = await db
-//     .select()
-//     .from(profileTable)
-//     .where(eq(profileTable.userId, userId));
-//   if (profile.length === 0)
-//     return null;
-//   else
-//     return profile[0];
-// }

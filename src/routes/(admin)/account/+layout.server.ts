@@ -1,5 +1,6 @@
 import { redirect } from "@sveltejs/kit";
 import type { LayoutServerLoad } from "./$types";
+import { getProfileBySession } from "~/lib/server/database/profile-model";
 
 export const load: LayoutServerLoad = async ({
   locals: { supabase, getSession },
@@ -10,11 +11,7 @@ export const load: LayoutServerLoad = async ({
     throw redirect(303, "/login");
   }
 
-  const { data: profile } = await supabase
-    .from("profiles")
-    .select(`*`)
-    .eq("id", session.user.id)
-    .single();
+  const profile = await getProfileBySession(supabase, session);
 
   return { session, profile };
 };
