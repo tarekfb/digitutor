@@ -3,6 +3,9 @@
   "editor.defaultFormatter": "svelte.svelte-vscode",
   "eslint.validate": ["javascript", "javascriptreact", "svelte"],
   "[typescript]": {
-    "editor.defaultFormatter": "esbenp.prettier-vscode"
+    "editor.defaultFormatter": "vscode.typescript-language-features"
+  },
+  "[jsonc]": {
+    "editor.defaultFormatter": "vscode.json-language-features"
   }
 }

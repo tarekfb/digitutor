@@ -23,7 +23,6 @@
     "@typescript-eslint/parser": "^6.19.0",
     "autoprefixer": "^10.4.15",
     "daisyui": "^4.7.3",
-    "drizzle-kit": "^0.20.17",
     "eslint": "^8.28.0",
     "eslint-config-prettier": "^9.1.0",
     "eslint-plugin-svelte": "^2.30.0",
@@ -43,7 +42,6 @@
     "@supabase/auth-ui-svelte": "^0.2.2",
     "@supabase/supabase-js": "^2.33.0",
     "dotenv": "^16.4.5",
-    "drizzle-orm": "^0.30.9",
     "pg": "^8.11.5",
     "postgres": "^3.4.4",
     "stripe": "^13.3.0"

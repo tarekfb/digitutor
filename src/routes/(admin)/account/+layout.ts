@@ -3,7 +3,7 @@ import {
   PUBLIC_SUPABASE_URL,
 } from "$env/static/public";
 import { createSupabaseLoadClient } from "@supabase/auth-helpers-sveltekit";
-import type { Database } from "../../../DatabaseDefinitions.js";
+import type {  Tables } from "../../../DatabaseDefinitions.js";
 import { redirect } from "@sveltejs/kit";
 
 export const load = async ({ fetch, data, depends, url }) => {
@@ -17,10 +17,10 @@ export const load = async ({ fetch, data, depends, url }) => {
   });
 
   const {
-    data: { session },
+    data: { session }
   } = await supabase.auth.getSession();
 
-  const profile: Database["public"]["Tables"]["profiles"]["Row"] | null =
+  const profile: Tables<'profiles'> | null =
     data.profile;
 
   const createProfilePath = "/account/create_profile";
@@ -36,7 +36,7 @@ export const load = async ({ fetch, data, depends, url }) => {
 };
 
 export const _hasFullProfile = (
-  profile: Database["public"]["Tables"]["profiles"]["Row"] | null,
+  profile: Tables<'profiles'> | null,
 ) => {
   if (!profile) {
     return false;
