@@ -1,9 +1,9 @@
 import type { SupabaseClient, Session } from "@supabase/supabase-js";
 import type { Database } from "../../../DatabaseDefinitions";
-
-import { pricingPlans } from "../../(marketing)/pricing/pricing_plans";
+import { pricingPlans } from "~/routes/(marketing)/pricing/pricing_plans";
 import { PRIVATE_STRIPE_API_KEY } from "$env/static/private";
 import Stripe from "stripe";
+
 const stripe = new Stripe(PRIVATE_STRIPE_API_KEY, { apiVersion: "2023-08-16" });
 
 export const getOrCreateCustomerId = async ({
@@ -64,8 +64,8 @@ export const getOrCreateCustomerId = async ({
     .insert({
       user_id: session.user.id,
       stripe_customer_id: customer.id,
-      updated_at: new Date(),
-    }); // if this error needs to be fixed, do this: .toDateString()
+      updated_at: new Date().toDateString(),
+    }); // this was previously new Date(). Type error becasue date not equal to string. investigate if stripe table have issues [2024-04-]
 
   if (insertError) {
     return { error: insertError };
