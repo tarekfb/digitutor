@@ -24,7 +24,7 @@
 </script>
 
 <svelte:head>
-  <title>Sign in</title>
+  <title>Log in</title>
 </svelte:head>
 
 {#if $page.url.searchParams.get("verified") == "true"}
@@ -44,7 +44,7 @@
     <span>Email verified! Please sign in.</span>
   </div>
 {/if}
-<h1 class="text-2xl font-bold mb-6">Sign In</h1>
+<h1 class="text-2xl font-bold mb-6">Log in</h1>
 <Auth
   supabaseClient={data.supabase}
   view="sign_in"
