@@ -1,9 +1,12 @@
 <script>
   import Navbar from "~/lib/components/navbar.svelte";
   import "../../app.css";
+
+  export let data;
+  const { profile } = data;
 </script>
 
-<Navbar />
+<Navbar {profile} />
 
 <div class="">
   <slot />
