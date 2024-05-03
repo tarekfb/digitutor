@@ -1,5 +1,5 @@
 import type { Session, SupabaseClient } from "@supabase/supabase-js";
-import type { Database } from "~/DatabaseDefinitions";
+import type { Database } from "src/supabase";
 
 export const getProfileBySession = async (supabase: SupabaseClient<Database>, session: Session) => {
     const id = session.user.id;

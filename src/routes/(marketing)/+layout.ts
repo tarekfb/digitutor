@@ -3,7 +3,7 @@ import {
     PUBLIC_SUPABASE_URL,
 } from "$env/static/public";
 import { createSupabaseLoadClient } from "@supabase/auth-helpers-sveltekit";
-import type { Tables } from "~/DatabaseDefinitions.js";
+import type { Tables } from "src/supabase.js";
 
 export const load = async ({ fetch, data, depends }) => {
     depends("supabase:auth");
@@ -15,14 +15,12 @@ export const load = async ({ fetch, data, depends }) => {
         serverSession: data.session,
     });
 
-    const {
-        data: { session }
-    } = await supabase.auth.getSession();
 
-    const profile: Tables<'profiles'> | null =
-        data.profile;
+    const { data: { session } } = await supabase.auth.getSession();
+    const profile: Tables<'profiles'> | null = data.profile;
+    const { listings } = data;
 
-    return { supabase, session, profile };
+    return { supabase, session, profile, listings };
 };
 
 export const _hasFullProfile = (
