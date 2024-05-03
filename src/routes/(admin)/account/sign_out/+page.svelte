@@ -7,11 +7,8 @@
   let message = "Signing out....";
 
   supabase.auth.signOut().then(({ error }) => {
-    if (error) {
-      message = "There was an issue signing out.";
-    } else {
-      goto("/");
-    }
+    if (error) message = "There was an issue signing out.";
+    else goto("/");
   });
 </script>
 

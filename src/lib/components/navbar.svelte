@@ -1,99 +1,70 @@
 <script lang="ts">
-  import { WebsiteName } from "$lib/constants";
-  import type { Tables } from "src/supabase";
-  import AvatarPlaceholder from "$lib/components/avatar-placeholder.svelte";
+  import { Button } from "$lib/components/ui/button";
+  import * as DropdownMenu from "$lib/components/ui/dropdown-menu";
+  import * as Avatar from "$lib/components/ui/avatar";
+  import { UserRound, LogOut } from "lucide-svelte";
+  // import Logo from "$lib/components/logo/logo.svelte";
+  import { goto } from "$app/navigation";
+  import { page } from "$app/stores";
   import { convertToInitials } from "$lib/helpers";
+  import type { Tables } from "src/supabase";
+  import { WebsiteName } from "../constants";
 
   export let profile: Tables<"profiles"> | null;
+
+  let initials: string = "";
+  $: {
+    if (profile && profile)
+      initials = profile.full_name ? convertToInitials(profile.full_name) : "?";
+  }
 </script>
 
-<div class="navbar bg-base-100 container mx-auto">
-  <div class="flex-1">
-    <a class="btn btn-ghost normal-case text-xl" href="/">{WebsiteName}</a>
-  </div>
-
-  {#if !profile}
-    <ul class="menu menu-horizontal px-1 sm:hidden font-bold text-lg">
-      <li class="md:mx-2">
-        <a href="/login/sign_up" class="border border-primary">Sign up</a>
-      </li>
-    </ul>
-  {/if}
-
-  <div class="flex-none">
-    <ul class="menu menu-horizontal px-1 hidden sm:flex font-bold text-lg">
-      <li class="md:mx-2"><a href="/pricing">Pricing</a></li>
-      {#if profile}
-        <li class="md:mx-2">
-          <a href="/account/sign_out">Sign out</a>
-        </li>
-        <li class="md:mx-2">
-          <a href="/account">
-            <AvatarPlaceholder
-              initials={profile.full_name
-                ? convertToInitials(profile.full_name)
-                : "?"}
-              size={"w-8"}
-            />
-            Account
-          </a>
-        </li>
-      {:else}
-        <li class="md:mx-2">
-          <a href="/login/sign_in">Log in</a>
-        </li>
-        <li class="md:mx-2">
-          <a href="/login/sign_up" class="border border-primary">Sign up</a>
-        </li>
-      {/if}
-    </ul>
-
-    <div class="dropdown dropdown-end sm:hidden">
-      <!-- svelte-ignore a11y-label-has-associated-control -->
-      <!-- svelte-ignore a11y-no-noninteractive-tabindex -->
-      <label tabindex="0" class="btn btn-ghost btn-circle">
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          class="h-5 w-5"
-          fill="none"
-          viewBox="0 0 24 24"
-          stroke="currentColor"
-          ><path
-            stroke-linecap="round"
-            stroke-linejoin="round"
-            stroke-width="2"
-            d="M4 6h16M4 12h16M4 18h7"
-          /></svg
-        >
-      </label>
-
-      <!-- svelte-ignore a11y-no-noninteractive-tabindex -->
-      <ul
-        tabindex="0"
-        class="menu menu-lg dropdown-content mt-3 z-[1] p-2 shadow bg-base-100 rounded-box w-52 font-bold"
-      >
-        <li><a href="/pricing">Pricing</a></li>
-        {#if profile}
-          <li class="md:mx-2">
-            <a href="/account/sign_out">Sign out</a>
-          </li>
-          <li class="md:mx-2">
-            <a href="/account">
-              <AvatarPlaceholder
-                initials={profile.full_name
-                  ? convertToInitials(profile.full_name)
-                  : "?"}
-                size={"w-8"}
-              />
-              Account
-            </a>
-          </li>
+<header class="sticky top-0 z-40 w-full bg-colorBackgroundSecondary">
+  <div
+    class="container flex h-16 items-center space-x-4 sm:justify-between sm:space-x-0"
+  >
+    <a href="/" class="text-2xl font-semibold">
+      {WebsiteName}
+    </a>
+    <div class="flex flex-1 items-center justify-end space-x-4">
+      <nav class="flex items-center space-x-1">
+        {#if !profile}
+          <Button on:click={() => goto("/login/sign_in")}>Log in</Button>
         {:else}
-          <li class="md:mx-2">
-            <a href="/login/sign_in">Log in</a>
-          </li>
+          <DropdownMenu.Root>
+            <DropdownMenu.Trigger asChild let:builder>
+              <Button
+                variant="ghost"
+                builders={[builder]}
+                class="relative h-8 w-8 rounded-full"
+              >
+                <Avatar.Root class="h-8 w-8">
+                  <Avatar.Fallback>{initials}</Avatar.Fallback>
+                </Avatar.Root>
+              </Button>
+            </DropdownMenu.Trigger>
+            <DropdownMenu.Content class="w-56" align="end">
+              <DropdownMenu.Label class="font-normal">
+                <p class="text-sm font-medium leading-none">
+                  {profile?.full_name}
+                </p>
+              </DropdownMenu.Label>
+              <DropdownMenu.Separator />
+              <DropdownMenu.Group>
+                <DropdownMenu.Item on:click={() => goto("/account")}>
+                  <UserRound class="mr-2 h-4 w-4" />
+                  Account
+                </DropdownMenu.Item>
+              </DropdownMenu.Group>
+              <DropdownMenu.Separator />
+              <DropdownMenu.Item on:click={() => goto("/account/sign_out")}>
+                <LogOut class="mr-2 h-4 w-4" />
+                Sign out
+              </DropdownMenu.Item>
+            </DropdownMenu.Content>
+          </DropdownMenu.Root>
         {/if}
-      </ul>
+      </nav>
     </div>
   </div>
-</div>
+</header>
