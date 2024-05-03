@@ -2,6 +2,7 @@
   import "../../../../app.css";
   import { writable } from "svelte/store";
   import { setContext } from "svelte";
+  import { WebsiteName } from "$lib/constants";
 
   const adminSectionStore = writable("");
   setContext("adminSection", adminSectionStore);
@@ -23,7 +24,7 @@
   <div class="drawer-content">
     <div class="navbar bg-base-100 lg:hidden">
       <div class="flex-1">
-        <a class="btn btn-ghost normal-case text-xl" href="/">SaaS Starter</a>
+        <a class="btn btn-ghost normal-case text-xl" href="/">{WebsiteName}</a>
       </div>
       <div class="flex-none">
         <div class="dropdown dropdown-end">
@@ -59,14 +60,14 @@
         <div
           class="normal-case menu-title text-xl font-bold text-primary flex flex-row"
         >
-          <a href="/" class="grow">Saas Starter</a>
+          <a href="/" class="grow">{WebsiteName}</a>
           <label for="admin-drawer" class="lg:hidden ml-3"> &#x2715; </label>
         </div>
       </li>
       <li>
         <a
           href="/account"
-          class={adminSection === "home" ? "active" : ""}
+          class={adminSection === "dashboard" ? "active" : ""}
           on:click={closeDrawer}
         >
           <svg
@@ -82,7 +83,7 @@
               d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"
             /></svg
           >
-          Home
+          Dashboard
         </a>
       </li>
       <li>

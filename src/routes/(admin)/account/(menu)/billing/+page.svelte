@@ -2,7 +2,7 @@
   import { getContext } from "svelte";
   import type { Writable } from "svelte/store";
   import SettingsModule from "../settings/settings_module.svelte";
-  import PricingModule from "~/routes/(marketing)/pricing/pricing_module.svelte";
+  import PricingModule from "src/routes/(marketing)/pricing/pricing_module.svelte";
   import {
     pricingPlans,
     defaultPlanId,

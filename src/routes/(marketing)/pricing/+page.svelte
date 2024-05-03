@@ -1,6 +1,6 @@
 <script lang="ts">
   import PricingModule from "./pricing_module.svelte";
-  import { WebsiteName } from "./../../../config";
+  import { WebsiteName } from "$lib/constants";
 </script>
 
 <svelte:head>

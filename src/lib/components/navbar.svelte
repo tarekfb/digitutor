@@ -1,8 +1,8 @@
 <script lang="ts">
-  import { WebsiteName } from "~/config";
-  import type { Tables } from "~/DatabaseDefinitions.js";
-  import AvatarPlaceholder from "~/lib/components/avatar-placeholder.svelte";
-  import { convertToInitials } from "~/lib/util/initials";
+  import { WebsiteName } from "$lib/constants";
+  import type { Tables } from "src/supabase";
+  import AvatarPlaceholder from "$lib/components/avatar-placeholder.svelte";
+  import { convertToInitials } from "$lib/helpers";
 
   export let profile: Tables<"profiles"> | null;
 </script>

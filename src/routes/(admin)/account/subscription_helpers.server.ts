@@ -1,6 +1,6 @@
 import type { SupabaseClient, Session } from "@supabase/supabase-js";
-import type { Database } from "../../../DatabaseDefinitions";
-import { pricingPlans } from "~/routes/(marketing)/pricing/pricing_plans";
+import type { Database } from "../../../supabase";
+import { pricingPlans } from "src/routes/(marketing)/pricing/pricing_plans";
 import { PRIVATE_STRIPE_API_KEY } from "$env/static/private";
 import Stripe from "stripe";
 

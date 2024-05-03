@@ -1,5 +1,5 @@
 import { SupabaseClient, Session } from "@supabase/supabase-js";
-import { Database } from "./DatabaseDefinitions";
+import { Database } from "./supabase";
 
 // See https://kit.svelte.dev/docs/types#app
 // for information about these interfaces
@@ -18,4 +18,4 @@ declare global {
   }
 }
 
-export {};
+export { };
