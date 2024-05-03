@@ -13,9 +13,7 @@ export const actions = {
     const hourlyPrice = formData.get("hourlyPrice") as string;
 
     let validationError;
-    if (!title || title === "")
-      validationError = "En rubrik är obligatorisk";
-
+    if (!title || title === "") validationError = "En rubrik är obligatorisk";
 
     if (validationError) {
       return fail(400, {
@@ -25,9 +23,7 @@ export const actions = {
       });
     }
 
-    if (!hourlyPrice)
-      validationError = "Ett timpris är obligatoriskt";
-
+    if (!hourlyPrice) validationError = "Ett timpris är obligatoriskt";
 
     if (validationError) {
       return fail(400, {
@@ -37,7 +33,7 @@ export const actions = {
       });
     }
 
-    const initListing = { title, hourlyPrice }
+    const initListing = { title, hourlyPrice };
 
     try {
       const listing = await createListing(supabase, initListing);

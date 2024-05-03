@@ -3,13 +3,13 @@ import type { LayoutServerLoad } from "./$types";
 import { getProfileBySession } from "$lib/server/database/profiles";
 
 export const load: LayoutServerLoad = async ({
-    locals: { supabase, getSession },
+  locals: { supabase, getSession },
 }) => {
-    const session = await getSession();
+  const session = await getSession();
 
-    const profile = session ? await getProfileBySession(supabase, session) : null;
+  const profile = session ? await getProfileBySession(supabase, session) : null;
 
-    const listings = await getListings(supabase, 5);
+  const listings = await getListings(supabase, 5);
 
-    return { session, profile, listings }; // TODO: stream these
+  return { session, profile, listings }; // TODO: stream these
 };

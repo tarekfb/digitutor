@@ -19,7 +19,7 @@
   }
 </script>
 
-<header class="sticky top-0 z-40 w-full bg-colorBackgroundSecondary">
+<header class="sticky top-0 z-40 w-full bg-primary text-background">
   <div
     class="container flex h-16 items-center space-x-4 sm:justify-between sm:space-x-0"
   >
@@ -29,6 +29,7 @@
     <div class="flex flex-1 items-center justify-end space-x-4">
       <nav class="flex items-center space-x-1">
         {#if !profile}
+          <Button on:click={() => goto("/login/sign_up")} variant="primary">Sign up</Button>
           <Button on:click={() => goto("/login/sign_in")}>Log in</Button>
         {:else}
           <DropdownMenu.Root>

@@ -17,11 +17,10 @@ export const load = async ({ fetch, data, depends, url }) => {
   });
 
   const {
-    data: { session }
+    data: { session },
   } = await supabase.auth.getSession();
 
-  const profile: Tables<'profiles'> | null =
-    data.profile;
+  const profile: Tables<"profiles"> | null = data.profile;
 
   const createProfilePath = "/account/create_profile";
   if (
@@ -35,9 +34,7 @@ export const load = async ({ fetch, data, depends, url }) => {
   return { supabase, session, profile };
 };
 
-export const _hasFullProfile = (
-  profile: Tables<'profiles'> | null,
-) => {
+export const _hasFullProfile = (profile: Tables<"profiles"> | null) => {
   if (!profile) {
     return false;
   }

@@ -5,4 +5,3 @@
 
 <p>Listing title</p>
 <p>{listing?.title}</p>
-
