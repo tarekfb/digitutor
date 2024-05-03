@@ -1,15 +1,15 @@
 <script lang="ts">
   import { getContext } from "svelte";
   import type { Writable } from "svelte/store";
-  import { IconCurrencyKroneSwedish } from "@tabler/icons-svelte";
-  import { IconHeading } from "@tabler/icons-svelte";
-  // import * as Dialog from "$lib/components/ui/dialog";
+  // import { IconCurrencyKroneSwedish } from "@tabler/icons-svelte";
+  // import { IconHeading } from "@tabler/icons-svelte";
+  import * as Dialog from "$lib/components/ui/dialog";
+  import { Button, buttonVariants } from "$lib/components/ui/button/index.js";
+  import { Input } from "$lib/components/ui/input/index.js";
+  import { Label } from "$lib/components/ui/label/index.js";
 
   let adminSection: Writable<string> = getContext("adminSection");
   adminSection.set("dashboard");
-  let isModalOpen = true;
-
-  const createNewListing = async () => {};
 </script>
 
 <svelte:head>
@@ -21,47 +21,38 @@
 <div class="my-6">
   <h1 class="text-xl font-bold mb-1">Annonser</h1>
   <p>Här ska annonserna in</p>
-  <button class="btn" on:click={() => (isModalOpen = true)}>Skapa annons</button
-  >
-  <dialog
-    id="new-listing"
-    class="modal modal-bottom sm:modal-middle"
-    class:modal-open={isModalOpen}
-  >
-    <div class="modal-box">
-      <h2 class="font-bold text-lg">Skapa annons</h2>
-      <form class="py-4 flex flex-col gap-y-4">
-        <label class="input input-bordered flex items-center gap-2">
-          <IconHeading />
-          <input type="text" class="grow" placeholder="Rubrik" />
-        </label>
-        <label class="input input-bordered flex items-center gap-2">
-          <IconCurrencyKroneSwedish />
-          <input type="number" class="grow" placeholder="Timpris" />
-        </label>
-        <button class="btn btn-primary">Skapa</button>
-      </form>
-      <div class="modal-action">
-        <form method="dialog">
-          <button
-            class="btn btn-sm btn-circle btn-ghost absolute right-2 top-2"
-            on:click={() => (isModalOpen = false)}>✕</button
-          >
-        </form>
-      </div>
-    </div>
-  </dialog>
 
-  <!-- <Dialog.Root>
-    <Dialog.Trigger>Open</Dialog.Trigger>
-    <Dialog.Content>
+  <Dialog.Root>
+    <Dialog.Trigger class={buttonVariants({ variant: "default" })}
+      >Skapa annons</Dialog.Trigger
+    >
+    <Dialog.Content class="sm:max-w-[425px]">
       <Dialog.Header>
-        <Dialog.Title>Are you sure absolutely sure?</Dialog.Title>
+        <Dialog.Title>Edit profile</Dialog.Title>
         <Dialog.Description>
-          This action cannot be undone. This will permanently delete your
-          account and remove your data from our servers.
+          Du kan fylla i mer information om annonsen i nästa steg.
         </Dialog.Description>
       </Dialog.Header>
+      <form method="POST" action="?/signout">
+        <div class="grid gap-4 py-4">
+          <div class="grid grid-cols-4 items-center gap-4">
+            <Label for="title" class="text-right">Rubrik</Label>
+            <Input id="title" value="Test annons" class="col-span-3" />
+          </div>
+          <div class="grid grid-cols-4 items-center gap-4">
+            <Label for="hourly-price" class="text-right">Timpris</Label>
+            <Input
+              id="hourly-price"
+              type="number"
+              value="100"
+              class="col-span-3"
+            />
+          </div>
+        </div>
+        <Dialog.Footer>
+          <Button type="submit">Skapa</Button>
+        </Dialog.Footer>
+      </form>
     </Dialog.Content>
-  </Dialog.Root> -->
+  </Dialog.Root>
 </div>

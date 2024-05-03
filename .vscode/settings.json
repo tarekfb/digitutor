@@ -1,11 +1,18 @@
 {
   "editor.formatOnSave": true,
   "editor.defaultFormatter": "svelte.svelte-vscode",
-  "eslint.validate": ["javascript", "javascriptreact", "svelte"],
+  "eslint.validate": [
+    "javascript",
+    "javascriptreact",
+    "svelte"
+  ],
   "[typescript]": {
     "editor.defaultFormatter": "vscode.typescript-language-features"
   },
   "[jsonc]": {
     "editor.defaultFormatter": "vscode.json-language-features"
+  },
+  "[css]": {
+    "editor.defaultFormatter": "vscode.css-language-features"
   }
 }

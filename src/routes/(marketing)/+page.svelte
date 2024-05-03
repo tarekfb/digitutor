@@ -1,5 +1,4 @@
 <script lang="ts">
-  import { list } from "postcss";
   import { WebsiteName } from "$lib/constants";
   import type { Listing } from "$lib/server/database/listings.js";
   export let data;
