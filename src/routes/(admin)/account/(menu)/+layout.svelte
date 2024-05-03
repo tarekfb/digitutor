@@ -1,4 +1,4 @@
-<script lang="ts">
+<!-- <script lang="ts">
   import "../../../../app.css";
   import { writable } from "svelte/store";
   import { setContext } from "svelte";
@@ -139,5 +139,56 @@
         <a href="/account/sign_out" class="mt-auto text-base">Sign Out</a>
       </li>
     </ul>
+  </div>
+</div> -->
+
+<script lang="ts">
+  import { writable } from "svelte/store";
+  import { setContext } from "svelte";
+  import SidebarNav from "$lib/components/sidebar-nav.svelte";
+  import { Separator } from "$lib/components/ui/separator/index.js";
+
+  const adminSectionStore = writable("");
+  setContext("adminSection", adminSectionStore);
+  let adminSection: string;
+  adminSectionStore.subscribe((value) => {
+    adminSection = value;
+  });
+
+  const sidebarNavItems = [
+    {
+      title: "Dashboard",
+      href: "/account",
+    },
+    {
+      title: "Billing",
+      href: "/billing",
+    },
+    {
+      title: "Messages",
+      href: "/messagess",
+    },
+    {
+      title: "Settings",
+      href: "/settings",
+    },
+  ];
+</script>
+
+<div class="space-y-6 p-10 pb-16 md:block">
+  <div class="space-y-0.5">
+    <h2 class="text-2xl font-bold tracking-tight">Settings</h2>
+    <p class="text-muted-foreground">
+      Manage your account settings and set e-mail preferences.
+    </p>
+  </div>
+  <Separator class="my-6" />
+  <div class="flex flex-col space-y-8 lg:flex-row lg:space-x-12 lg:space-y-0">
+    <aside class="-mx-4 lg:w-1/5">
+      <SidebarNav items={sidebarNavItems} />
+    </aside>
+    <div class="flex-1 lg:max-w-2xl">
+      <slot />
+    </div>
   </div>
 </div>

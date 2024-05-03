@@ -29,7 +29,7 @@
     <div class="flex flex-1 items-center justify-end space-x-4">
       <nav class="flex items-center space-x-1">
         {#if !profile}
-          <Button on:click={() => goto("/login/sign_up")} variant="primary">Sign up</Button>
+          <Button on:click={() => goto("/login/sign_up")}>Sign up</Button>
           <Button on:click={() => goto("/login/sign_in")}>Log in</Button>
         {:else}
           <DropdownMenu.Root>
@@ -39,8 +39,12 @@
                 builders={[builder]}
                 class="relative h-8 w-8 rounded-full"
               >
-                <Avatar.Root class="h-8 w-8">
-                  <Avatar.Fallback>{initials}</Avatar.Fallback>
+                <Avatar.Root
+                  class="h-8 w-8 flex justify-center place-items-center items-center"
+                >
+                  <Avatar.Fallback class="bg-blue-600"
+                    >{initials}</Avatar.Fallback
+                  >
                 </Avatar.Root>
               </Button>
             </DropdownMenu.Trigger>
