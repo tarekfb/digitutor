@@ -1,7 +1,4 @@
 <script lang="ts">
-  // import { cubicInOut } from "svelte/easing";
-  // import { crossfade } from "svelte/transition";
-  // import { page } from "$app/stores";
   import { cn } from "$lib/utils.js";
   import { Button } from "$lib/components/ui/button";
   import { ScrollArea } from "$lib/components/ui/scroll-area/index.js";
@@ -9,48 +6,12 @@
   import { Label } from "$lib/components/ui/label/index.js";
   import { Switch } from "$lib/components/ui/switch/index.js";
 
-  export let conversations: string[] = [];
   let className: string | null | undefined = undefined;
   export { className as class };
+
+  export let conversations: string[] = [];
   let isMinimized = true;
-
-  // let className: string | undefined | null = undefined;
-  // export let items: { href: string; title: string }[];
-  // export { className as class };
-
-  // const [send, receive] = crossfade({
-  //   duration: 250,
-  //   easing: cubicInOut,
-  // });
 </script>
-
-<!-- 
-<nav class={cn("flex flex-col space-x-0 sm:flex-row  sm:space-x-2", className)}>
-  {#each items as item}
-    {@const isActive = $page.url.pathname === item.href}
-
-    <Button
-      href={item.href}
-      variant="ghost"
-      class={cn(
-        !isActive && "hover:underline",
-        "relative justify-start hover:bg-transparent",
-      )}
-      data-sveltekit-noscroll
-    >
-      {#if isActive}
-        <div
-          class="absolute inset-0 rounded-md bg-muted"
-          in:send={{ key: "active-sidebar-tab" }}
-          out:receive={{ key: "active-sidebar-tab" }}
-        />
-      {/if}
-      <div class="relative">
-        {item.title}
-      </div>
-    </Button>
-  {/each}
-</nav> -->
 
 <div
   class={cn(
@@ -60,7 +21,13 @@
 >
   <div class="space-y-2 py-2">
     <a href="/" class="">
-      <h1 class="text-3xl px-2">M</h1>
+      <h1 class="text-3xl px-2">
+        {#if isMinimized}
+          M
+        {:else}
+          Mindic
+        {/if}
+      </h1>
     </a>
     <div class="flex items-center space-x-2 px-2">
       <Switch id="airplane-mode" bind:checked={isMinimized} />
@@ -144,7 +111,7 @@
     </div>
     <div class="py-2">
       <h2 class="relative px-3 text-lg font-semibold tracking-tight">
-        Meddelanden
+        Konversationer
       </h2>
       <ScrollArea class="h-[300px] ">
         <div class="space-y-1">
@@ -174,3 +141,42 @@
     </div>
   </div>
 </div>
+
+<!-- 
+  // let className: string | undefined | null = undefined;
+  // export let items: { href: string; title: string }[];
+  // export { className as class };
+
+  // const [send, receive] = crossfade({
+  //   duration: 250,
+  //   easing: cubicInOut,
+  // }); -->
+<!-- 
+<nav class={cn("flex flex-col space-x-0 sm:flex-row  sm:space-x-2", className)}>
+  {#each items as item}
+    {@const isActive = $page.url.pathname === item.href}
+
+    <Button
+      href={item.href}
+      variant="ghost"
+      class={cn(
+        !isActive && "hover:underline",
+        "relative justify-start hover:bg-transparent",
+      )}
+      data-sveltekit-noscroll
+    >
+      {#if isActive}
+        <div
+          class="absolute inset-0 rounded-md bg-muted"
+          in:send={{ key: "active-sidebar-tab" }}
+          out:receive={{ key: "active-sidebar-tab" }}
+        />
+      {/if}
+      <div class="relative">
+        {item.title}
+      </div>
+    </Button>
+  {/each}
+</nav> -->
+<!-- // import {cubicInOut} from "svelte/easing"; // import {crossfade} from "svelte/transition";
+// import {page} from "$app/stores"; -->

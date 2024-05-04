@@ -1,13 +1,15 @@
 <script lang="ts">
-  import { WebsiteName } from "$lib/constants";
+  import { websiteName } from "$lib/constants";
   import type { Listing } from "$lib/server/database/listings.js";
+  import ListingComponent from "$lib/components/listing.svelte";
+
   export let data;
   const listings: Listing[] | null = data.listings;
 </script>
 
 <svelte:head>
-  <title>{WebsiteName}</title>
-  <meta name="description" content="{WebsiteName} Home Page" />
+  <title>{websiteName}</title>
+  <meta name="description" content="{websiteName} Home Page" />
 </svelte:head>
 
 <div class="hero min-h-[60vh]">
@@ -100,41 +102,9 @@
     >
       {#if listings && listings.length > 0}
         {#each listings as listing}
-          <div
-            class="card bg-white w-[270px] min-h-[300px] flex-none shadow-xl"
-          >
-            <div class="card-body items-center text-center p-[24px] pt-[32px]">
-              <h1 class="text-2xl">
-                Title: {listing.title}
-              </h1>
-              Image:{#if listing.profile?.avatar_url}
-                <img src={listing.profile?.avatar_url} alt="Teacher avatar" />
-              {/if}
-              <p>
-                Descr: {#if listing.description}
-                  {listing.description}
-                {/if}
-              </p>
-              <!-- <h2 class="card-title">
-              {feature.name}
-            </h2>
-            <p class="text-sm">
-              {feature.description}
-            </p>
-            {#if feature.link}
-            <a
-            href={feature.link}
-            class="pb-4"
-            target={feature.newPage ? "_blank" : ""}
-            >
-            <button
-            class="btn btn-xs btn-outline rounded-full btn-primary min-w-[100px]"
-            >{feature.linkText ? feature.linkText : "Try It"}</button
-            > -->
-              <!-- </a> -->
-              <!-- {/if} -->
-            </div>
-          </div>
+          <a href="/listings/{listing.id}" aria-label="Navigate to ad">
+            <ListingComponent {listing} />
+          </a>
         {/each}
       {/if}
     </div>

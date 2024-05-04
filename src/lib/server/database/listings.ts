@@ -1,6 +1,5 @@
 import type { SupabaseClient } from "@supabase/supabase-js";
 import type { Database, Tables } from "src/supabase";
-import { getProfileByUserId } from "$lib/server/database/profiles";
 
 export type Listing = Omit<Tables<"listings">, "profile"> & {
   profile?: Tables<"profiles">;
@@ -9,32 +8,31 @@ export type Listing = Omit<Tables<"listings">, "profile"> & {
 export const getListings = async (
   supabase: SupabaseClient<Database>,
   max?: number,
+  userId?: string
 ): Promise<Listing[] | null> => {
-  if (max) {
-    const { data: listings } = await supabase
-      .from("listings")
-      .select(
-        `
+  let query = supabase
+    .from("listings")
+    .select(
+      `
             *,
             profile (
               *
             )
           `,
-      )
-      .limit(max);
+    );
 
-    return listings as Listing[] | null;
+  if (userId) query = query.eq("profile", userId)
+  if (max) query = query.limit(max);
+
+  const { data, error } = await query;
+
+  if (error) {
+    console.log(`Failed to read listings ${userId && "for userId" + userId}: `, { error });
+    throw error;
   }
 
-  const { data: listings } = await supabase.from("listings").select(`
-        *,
-        profile (
-          *
-        )
-      `);
-
-  return listings as Listing[] | null;
-};
+  return data as unknown as Listing[] | null;
+}
 
 export const getListingById = async (
   supabase: SupabaseClient<Database>,
@@ -56,7 +54,7 @@ export const getListingById = async (
     .single();
 
   if (error) {
-    console.log("Failed to create listing: " + id, { error });
+    console.log("Failed to read listing: " + id, { error });
     throw error;
   }
 
@@ -116,8 +114,6 @@ export const createListing = async (
     throw error;
   }
 
-  console.log(data);
-
   return data as unknown as Listing;
 };
 
@@ -140,7 +136,6 @@ export const deleteListing = async (
     .delete()
     .eq('id', listingId)
     .eq('profile', userId); // for safety measure check userId as well
-
 
   if (error) {
     console.log("Failed to delete listing: " + listingId, { error });
