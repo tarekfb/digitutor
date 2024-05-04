@@ -59,6 +59,9 @@
   )}
 >
   <div class="space-y-2 py-2">
+    <a href="/" class="">
+      <h1 class="text-3xl px-2">M</h1>
+    </a>
     <div class="flex items-center space-x-2 px-2">
       <Switch id="airplane-mode" bind:checked={isMinimized} />
       <Label for="airplane-mode">Visa</Label>

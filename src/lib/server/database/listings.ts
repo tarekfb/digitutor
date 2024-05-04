@@ -118,16 +118,32 @@ export const createListing = async (
 
   console.log(data);
 
-  // const listing = addProfileToListing(supabase, data);
   return data as unknown as Listing;
 };
 
-// const addProfileToListing = async (supabase: SupabaseClient<Database>, dbListing: Tables<"listings">): Promise<Listing> => {
-//   const profile = await getProfileByUserId(supabase, dbListing.profile);
-//   return {
-//     ...dbListing,
-//     profile: {
-//       ...profile
-//     }
-//   }
-// }
+
+export const deleteListing = async (
+  supabase: SupabaseClient<Database>,
+  listingId: string,
+): Promise<void> => {
+  const session = await supabase.auth.getSession();
+
+  if (!session.data.session) {
+    console.log("Missing session when deleting listing: ", { listingId });
+    throw new Error("No session");
+  }
+
+  const userId = session.data.session.user.id;
+
+  const { error } = await supabase
+    .from('listings')
+    .delete()
+    .eq('id', listingId)
+    .eq('profile', userId); // for safety measure check userId as well
+
+
+  if (error) {
+    console.log("Failed to delete listing: " + listingId, { error });
+    throw error;
+  }
+};
