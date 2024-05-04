@@ -2,23 +2,33 @@
   import { getContext } from "svelte";
   import type { Writable } from "svelte/store";
   import * as Dialog from "$lib/components/ui/dialog";
+  import ListingComponent from "$lib/components/listing.svelte";
   import { Button, buttonVariants } from "$lib/components/ui/button/index.js";
   import { Input } from "$lib/components/ui/input/index.js";
   import { Label } from "$lib/components/ui/label/index.js";
+  import type { Listing } from "$lib/server/database/listings";
 
   let adminSection: Writable<string> = getContext("adminSection");
   adminSection.set("dashboard");
+
+  export let data;
+  const listings = data.listings as Listing[]; // will always be an array
 </script>
 
 <svelte:head>
   <title>Account</title>
 </svelte:head>
 
-<h1 class="text-2xl font-bold mb-1">Dashboard</h1>
+<h1 class="text-2xl font-bold mb-1">Dina annonser</h1>
 
 <div class="my-6">
-  <h1 class="text-xl font-bold mb-1">Annonser</h1>
-  <p>Här ska annonserna in</p>
+  <div class="space-y-2 mb-4">
+    {#each listings as listing}
+      <a href="/listings/{listing.id}" aria-label="Navigate to ad">
+        <ListingComponent {listing} />
+      </a>
+    {/each}
+  </div>
 
   <Dialog.Root>
     <Dialog.Trigger class={buttonVariants({ variant: "default" })}
@@ -35,7 +45,12 @@
         <div class="grid gap-4 py-4">
           <div class="grid grid-cols-4 items-center gap-4">
             <Label for="title" class="text-right">Rubrik</Label>
-            <Input id="title" name="title" value="Test annons" class="col-span-3" />
+            <Input
+              id="title"
+              name="title"
+              value="Test annons"
+              class="col-span-3"
+            />
           </div>
           <div class="grid grid-cols-4 items-center gap-4">
             <Label for="hourlyPrice" class="text-right">Timpris</Label>

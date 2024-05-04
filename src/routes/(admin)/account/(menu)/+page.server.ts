@@ -1,11 +1,35 @@
 import { fail, redirect } from "@sveltejs/kit";
-import { createListing } from "$lib/server/database/listings";
+import { createListing, getListings } from "$lib/server/database/listings";
+import type { PageServerLoad } from "./$types";
+import { unknownErrorMessage } from "src/lib/constants";
+
+export const load: PageServerLoad = async ({
+  locals: { supabase, getSession },
+}) => {
+  const session = await getSession();
+
+  if (!session)
+    throw redirect(303, "/login");
+
+  try {
+    const listings = await getListings(supabase, 3, session.user.id);
+    return { session, listings };
+  } catch (e) {
+    console.error(e);
+    // TODO: setFlash unable to fetch listings something went wrong
+    // return fail(500, {
+    //   message: "Unknown error. If issue persists, please contact us.",
+    // });
+  }
+  return { session, listings: [] };
+};
 
 export const actions = {
   createListing: async ({ locals: { supabase, getSession }, request }) => {
     const session = await getSession();
     if (!session)
       throw redirect(303, "/login");
+
     const formData = await request.formData();
     const title = formData.get("title") as string;
     const hourlyPrice = formData.get("hourlyPrice") as string;
@@ -38,8 +62,9 @@ export const actions = {
       const { id } = await createListing(supabase, initListing);
       listingId = id;
     } catch (error) {
+      console.error(error);
       return fail(500, {
-        errorMessage: "Unknown error. If this persists please contact us.",
+        errorMessage: unknownErrorMessage,
         initListing,
       });
     }

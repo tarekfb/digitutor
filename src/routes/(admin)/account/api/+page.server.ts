@@ -1,4 +1,5 @@
 import { fail, redirect } from "@sveltejs/kit";
+import { unknownErrorMessage } from "src/lib/constants";
 
 export const actions = {
   updateEmail: async ({ request, locals: { supabase, getSession } }) => {
@@ -34,7 +35,7 @@ export const actions = {
 
     if (error) {
       return fail(500, {
-        errorMessage: "Unknown error. If this persists please contact us.",
+        errorMessage: unknownErrorMessage,
         email,
       });
     }
@@ -133,7 +134,7 @@ export const actions = {
     });
     if (error) {
       return fail(500, {
-        errorMessage: "Unknown error. If this persists please contact us.",
+        errorMessage: unknownErrorMessage,
         newPassword1,
         newPassword2,
         currentPassword,
@@ -183,7 +184,7 @@ export const actions = {
     );
     if (error) {
       return fail(500, {
-        errorMessage: "Unknown error. If this persists please contact us.",
+        errorMessage: unknownErrorMessage,
         currentPassword,
       });
     }
@@ -205,6 +206,7 @@ export const actions = {
     let validationError;
     const fieldMaxTextLength = 50;
     const errorFields = [];
+
     if (!fullName) {
       validationError = "Name is required";
       errorFields.push("fullName");
@@ -243,12 +245,14 @@ export const actions = {
       full_name: fullName,
       company_name: companyName,
       website: website,
-      updated_at: new Date(),
+      updated_at: new Date().toDateString(),
+      role: null,
+      avatar_url: null,
     });
 
     if (error) {
       return fail(500, {
-        errorMessage: "Unknown error. If this persists please contact us.",
+        errorMessage: unknownErrorMessage,
         fullName,
         companyName,
         website,

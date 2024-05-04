@@ -8,7 +8,7 @@
   import { page } from "$app/stores";
   import { convertToInitials } from "$lib/helpers";
   import type { Tables } from "src/supabase";
-  import { WebsiteName } from "../constants";
+  import { websiteName } from "../constants";
 
   export let profile: Tables<"profiles"> | null;
 
@@ -24,7 +24,7 @@
     class="container flex h-16 items-center space-x-4 sm:justify-between sm:space-x-0"
   >
     <a href="/" class="text-2xl font-semibold">
-      {WebsiteName}
+      {websiteName}
     </a>
     <div class="flex flex-1 items-center justify-end space-x-4">
       <nav class="flex items-center space-x-1">

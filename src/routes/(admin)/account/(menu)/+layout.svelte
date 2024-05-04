@@ -158,7 +158,7 @@
 
 <div class="space-y-6 p-8 ml-14 pb-16 md:block">
   <div class="space-y-2">
-    <h2 class="text-2xl font-bold tracking-tight">Dashboard</h2>
+    <h2 class="text-3xl font-bold tracking-tight">Profil</h2>
     <p class="text-muted-foreground">
       Hantera konversationer, annonser och din profil.
     </p>

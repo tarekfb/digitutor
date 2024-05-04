@@ -27,26 +27,25 @@ export const load = async ({ fetch, data, depends, url }) => {
     profile &&
     !_hasFullProfile(profile) &&
     url.pathname !== createProfilePath
-  ) {
+  )
     throw redirect(303, createProfilePath);
-  }
+
 
   return { supabase, session, profile };
 };
 
 export const _hasFullProfile = (profile: Tables<"profiles"> | null) => {
-  if (!profile) {
+  if (!profile)
     return false;
-  }
-  if (!profile.full_name) {
+
+  if (!profile.full_name)
     return false;
-  }
-  if (!profile.company_name) {
+
+  if (!profile.company_name)
     return false;
-  }
-  if (!profile.website) {
+
+  if (!profile.website)
     return false;
-  }
 
   return true;
 };

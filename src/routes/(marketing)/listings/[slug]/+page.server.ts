@@ -1,17 +1,13 @@
 import { error, fail, redirect } from "@sveltejs/kit";
-import { deleteListing } from "src/lib/server/database/listings";
+import { unknownErrorMessage } from "src/lib/constants";
+import { deleteListing, getListingById } from "src/lib/server/database/listings";
 
 export const load = async ({ locals: { supabase }, params: { slug } }) => {
-  const { data: listing } = await supabase
-    .from("listings")
-    .select()
-    .eq("id", slug)
-    .limit(1)
-    .single();
-  if (!listing) {
+  const listing = await getListingById(supabase, slug);
+
+  if (!listing)
     console.log("Missing listing for listing id: " + slug);
-    error(404, "Listing not found");
-  }
+
   return { listing };
 };
 
@@ -26,7 +22,7 @@ export const actions = {
       await deleteListing(supabase, slug);
     } catch (error) {
       return fail(500, {
-        errorMessage: "Unknown error. If this persists please contact us.",
+        errorMessage: unknownErrorMessage,
       });
     }
     throw redirect(303, `/account`);
