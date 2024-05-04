@@ -10,9 +10,7 @@
     <div class="max-w-lg">
       <h1 class="text-5xl font-bold">Det här va lite pinsamt...</h1>
       <p class="py-6 text-2xl">Något gick fel: {$page?.error?.message}</p>
-      <div>
-        <Button on:click={() => goto("/")}>Gå hem</Button>
-      </div>
+      <Button on:click={() => goto("/")}>Gå hem</Button>
     </div>
   </div>
 </div>

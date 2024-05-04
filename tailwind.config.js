@@ -6,7 +6,7 @@ const config = {
 	content: ["./src/**/*.{html,js,svelte,ts}"],
 	safelist: ["dark"],
 	theme: {
-		container: {
+		container: { // todo remove or move to app.css
 			center: true,
 			padding: "2rem",
 			screens: {

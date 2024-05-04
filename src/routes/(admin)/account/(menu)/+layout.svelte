@@ -147,49 +147,43 @@
   import { setContext } from "svelte";
   import SidebarNav from "$lib/components/sidebar-nav.svelte";
   import { Separator } from "$lib/components/ui/separator/index.js";
-
+ 
   const adminSectionStore = writable("");
   setContext("adminSection", adminSectionStore);
   let adminSection: string;
   adminSectionStore.subscribe((value) => {
     adminSection = value;
   });
-
-  const sidebarNavItems = [
-    {
-      title: "Dashboard",
-      href: "/account",
-    },
-    {
-      title: "Billing",
-      href: "/billing",
-    },
-    {
-      title: "Messages",
-      href: "/messagess",
-    },
-    {
-      title: "Settings",
-      href: "/settings",
-    },
-  ];
 </script>
 
-<div class="space-y-6 p-10 pb-16 md:block">
-  <div class="space-y-0.5">
+<div class="space-y-6 p-8 ml-14 pb-16 md:block">
+  <div class="space-y-2">
     <h2 class="text-2xl font-bold tracking-tight">Dashboard</h2>
     <p class="text-muted-foreground">
-      Översikt på lektioner, meddelanden och din.
+      Hantera konversationer, annonser och din profil.
     </p>
   </div>
-  <Separator class="my-6" />
-  <div
-    class="flex flex-row space-x-12 space-y-0 sm:flex-col sm:space-y-8 sm:space-x-0"
-  >
-    <aside class="-mx-4 lg:w-1/5 overflow-x-hidden bg-slate-200">
-      <!-- add toggle button and pass it to component -->
-      <SidebarNav items={sidebarNavItems} />
-    </aside>
+  <Separator class="my-4" />
+  <div class="flex flex-row sm:flex-col sm:space-y-8 sm:space-x-0">
+    <SidebarNav
+      conversations={[
+        "Jane",
+        "John",
+        "Foo",
+        "Bar",
+        "One",
+        "More",
+        "Made",
+        "Up",
+        "Name",
+        "Made",
+        "Up",
+        "Name",
+        "Made",
+        "Up",
+        "Name",
+      ]}
+    />
     <div class="flex-1 lg:max-w-2xl">
       <slot />
     </div>
