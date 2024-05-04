@@ -4,18 +4,14 @@ import { createListing } from "$lib/server/database/listings";
 export const actions = {
   createListing: async ({ locals: { supabase, getSession }, request }) => {
     const session = await getSession();
-    if (!session) {
+    if (!session)
       throw redirect(303, "/login");
-    }
-
     const formData = await request.formData();
     const title = formData.get("title") as string;
     const hourlyPrice = formData.get("hourlyPrice") as string;
 
     let validationError;
-    if (!title || title === "")
-      validationError = "En rubrik är obligatorisk";
-
+    if (!title || title === "") validationError = "En rubrik är obligatorisk";
 
     if (validationError) {
       return fail(400, {
@@ -25,9 +21,7 @@ export const actions = {
       });
     }
 
-    if (!hourlyPrice)
-      validationError = "Ett timpris är obligatoriskt";
-
+    if (!hourlyPrice) validationError = "Ett timpris är obligatoriskt";
 
     if (validationError) {
       return fail(400, {
@@ -37,17 +31,19 @@ export const actions = {
       });
     }
 
-    const initListing = { title, hourlyPrice }
+    const initListing = { title, hourlyPrice };
 
+    let listingId = "";
     try {
-      const listing = await createListing(supabase, initListing);
-      redirect(307, `/listings/${listing.id}`);
+      const { id } = await createListing(supabase, initListing);
+      listingId = id;
     } catch (error) {
       return fail(500, {
         errorMessage: "Unknown error. If this persists please contact us.",
         initListing,
       });
     }
+    throw redirect(303, `/listings/${listingId}`);
   },
 
   signout: async ({ locals: { supabase, getSession } }) => {

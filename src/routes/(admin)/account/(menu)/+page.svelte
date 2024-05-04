@@ -1,8 +1,6 @@
 <script lang="ts">
   import { getContext } from "svelte";
   import type { Writable } from "svelte/store";
-  // import { IconCurrencyKroneSwedish } from "@tabler/icons-svelte";
-  // import { IconHeading } from "@tabler/icons-svelte";
   import * as Dialog from "$lib/components/ui/dialog";
   import { Button, buttonVariants } from "$lib/components/ui/button/index.js";
   import { Input } from "$lib/components/ui/input/index.js";
@@ -33,16 +31,17 @@
           Du kan fylla i mer information om annonsen i nästa steg.
         </Dialog.Description>
       </Dialog.Header>
-      <form method="POST" action="?/signout">
+      <form method="POST" action="?/createListing">
         <div class="grid gap-4 py-4">
           <div class="grid grid-cols-4 items-center gap-4">
             <Label for="title" class="text-right">Rubrik</Label>
-            <Input id="title" value="Test annons" class="col-span-3" />
+            <Input id="title" name="title" value="Test annons" class="col-span-3" />
           </div>
           <div class="grid grid-cols-4 items-center gap-4">
-            <Label for="hourly-price" class="text-right">Timpris</Label>
+            <Label for="hourlyPrice" class="text-right">Timpris</Label>
             <Input
-              id="hourly-price"
+              id="hourlyPrice"
+              name="hourlyPrice"
               type="number"
               value="100"
               class="col-span-3"

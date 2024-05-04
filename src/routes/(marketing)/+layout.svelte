@@ -1,12 +1,12 @@
 <script>
-  import Navbar from "$lib/components/navbar.svelte";
+  import Navigation from "src/lib/components/navbar.svelte";
   import "src/app.css";
 
   export let data;
   const { profile } = data;
 </script>
 
-<Navbar {profile} />
+<Navigation {profile} />
 
 <div class="">
   <slot />
