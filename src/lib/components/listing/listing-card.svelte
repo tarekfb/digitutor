@@ -2,7 +2,7 @@
   import { Circle } from "lucide-svelte";
   import { Star } from "lucide-svelte";
   import * as Card from "$lib/components/ui/card/index.js";
-  import type { Listing } from "../server/database/listings";
+  import type { Listing } from "../../server/database/listings";
 
   export let listing: Listing;
 </script>

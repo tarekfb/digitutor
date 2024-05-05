@@ -1,7 +1,7 @@
 <script lang="ts">
   import { websiteName } from "$lib/constants";
   import type { Listing } from "$lib/server/database/listings.js";
-  import ListingComponent from "$lib/components/listing.svelte";
+  import ListingCard from "src/lib/components/listing/listing-card.svelte";
 
   export let data;
   const listings: Listing[] | null = data.listings;
@@ -100,7 +100,7 @@
       <div class="flex flex-col gap-y-4 mt-12">
         {#each listings as listing}
           <a href="/listings/{listing.id}" aria-label="Navigate to ad">
-            <ListingComponent {listing} />
+            <ListingCard {listing} />
           </a>
         {/each}
       </div>

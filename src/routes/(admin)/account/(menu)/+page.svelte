@@ -2,7 +2,7 @@
   import { getContext } from "svelte";
   import type { Writable } from "svelte/store";
   import * as Dialog from "$lib/components/ui/dialog";
-  import ListingComponent from "$lib/components/listing.svelte";
+  import ListingCard from "src/lib/components/listing/listing-card.svelte";
   import { Button, buttonVariants } from "$lib/components/ui/button/index.js";
   import { Input } from "$lib/components/ui/input/index.js";
   import { Label } from "$lib/components/ui/label/index.js";
@@ -16,7 +16,7 @@
 </script>
 
 <svelte:head>
-  <title>Account</title>
+  <title>Konto</title>
 </svelte:head>
 
 <h1 class="text-2xl font-bold mb-1">Dina annonser</h1>
@@ -28,7 +28,7 @@
     {:else}
     {#each listings as listing}
       <a href="/listings/{listing.id}" aria-label="Navigate to ad">
-        <ListingComponent {listing} />
+        <ListingCard {listing} />
       </a>
     {/each}
 
