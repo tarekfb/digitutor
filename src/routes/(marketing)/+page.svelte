@@ -96,18 +96,15 @@
         </span>
       </div>
     </div>
-
-    <div
-      class="flex gap-6 mt-12 max-w-[1064px] mx-auto place-content-center flex-wrap"
-    >
-      {#if listings && listings.length > 0}
+    {#if listings && listings.length > 0}
+      <div class="flex flex-col gap-y-4 mt-12">
         {#each listings as listing}
           <a href="/listings/{listing.id}" aria-label="Navigate to ad">
             <ListingComponent {listing} />
           </a>
         {/each}
-      {/if}
-    </div>
+      </div>
+    {/if}
   </div>
 </div>
 <div class="hero min-h-[60vh] mt-12">

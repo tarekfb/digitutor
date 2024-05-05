@@ -22,14 +22,19 @@
 <h1 class="text-2xl font-bold mb-1">Dina annonser</h1>
 
 <div class="my-6">
-  <div class="space-y-2 mb-4">
+  <div class="flex flex-col gap-y-4 mb-4">
+    {#if listings.length === 0}
+      <p>Inga annonser. Testa skapa en!</p>
+    {:else}
     {#each listings as listing}
       <a href="/listings/{listing.id}" aria-label="Navigate to ad">
         <ListingComponent {listing} />
       </a>
     {/each}
-  </div>
 
+    {/if}
+  </div>
+  
   <Dialog.Root>
     <Dialog.Trigger class={buttonVariants({ variant: "default" })}
       >Skapa annons</Dialog.Trigger
