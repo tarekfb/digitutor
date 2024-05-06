@@ -26,15 +26,14 @@
     {#if listings.length === 0}
       <p>Inga annonser. Testa skapa en!</p>
     {:else}
-    {#each listings as listing}
-      <a href="/listings/{listing.id}" aria-label="Navigate to ad">
-        <ListingCard {listing} />
-      </a>
-    {/each}
-
+      {#each listings as listing}
+        <a href="/listings/{listing.id}" aria-label="Navigate to ad">
+          <ListingCard {listing} />
+        </a>
+      {/each}
     {/if}
   </div>
-  
+
   <Dialog.Root>
     <Dialog.Trigger class={buttonVariants({ variant: "default" })}
       >Skapa annons</Dialog.Trigger

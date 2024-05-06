@@ -2,7 +2,7 @@
   import { Separator } from "$lib/components/ui/separator/index.js";
   import DeleteListing from "src/lib/components/listing/delete-listing.svelte";
   import MissingListing from "src/lib/components/listing/missing-listing.svelte";
-  import ListingDescription from "src/lib/components/listing/listing-description.svelte";
+  // import ListingDescription from "src/lib/components/listing/listing-description.svelte";
   import type { User } from "@supabase/supabase-js";
   import { Button } from "$lib/components/ui/button";
 
@@ -19,7 +19,7 @@
   {#if !listing}
     <MissingListing />
   {:else}
-    <div class="flex justify-between items-center">
+    <div class="flex justify-between items-center w-full">
       <h1 class="text-3xl">{listing.title}</h1>
       {#if isAuthor}
         <DeleteListing />

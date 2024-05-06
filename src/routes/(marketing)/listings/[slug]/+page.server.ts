@@ -1,9 +1,12 @@
 import { fail, redirect } from "@sveltejs/kit";
+import { formSchema } from "src/lib/components/listing/listing-description.svelte";
+import { zod } from "sveltekit-superforms/adapters";
 import { unknownErrorMessage } from "src/lib/constants";
+ import { superValidate } from "sveltekit-superforms";
+
 import { deleteListing, getListingById } from "src/lib/server/database/listings";
-
 export const load = async ({ locals: { supabase, getSession }, params: { slug } }) => {
-
+  const form = await superValidate(zod(formSchema))
   try {
     const session = await getSession();
     const user = session?.user;
