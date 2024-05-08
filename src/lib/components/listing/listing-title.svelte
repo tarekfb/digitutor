@@ -1,25 +1,8 @@
 <script lang="ts">
   import * as Form from "$lib/components/ui/form/index.js";
   import { Textarea } from "$lib/components/ui/textarea/index.js";
+  import { Input } from "$lib/components/ui/input/index.js";
 
-  // let data: SuperValidated<Infer<typeof listingSchema>> = $page.data.textarea;
-  // export { data as form };
-
-  // const super_form = superForm(data, {
-  //   validators: zodClient(listingSchema),
-  //   onUpdated: ({ form: f }) => {
-  //     if (f.valid) {
-  //       toast.success(`You submitted ${JSON.stringify(f.data, null, 2)}`);
-  //     } else {
-  //       toast.error("Please fix the errors in the form.");
-  //     }
-  //   },
-  //   onError: ({ result }) => {
-  //     toast.error(result.error.message);
-  //   }
-  // });
-
-  // const { form: formData, enhance, errors } = super_form;
   export let isEditing;
   export let listingForm;
   export let disabled;
@@ -27,13 +10,13 @@
 </script>
 
 <div>
-  <Form.Field form={listingForm} name="description">
+  <Form.Field form={listingForm} name="title">
     <Form.Control let:attrs>
-      <Textarea
+      <Input
         {...attrs}
-        placeholder="Skriv några ord om din annons..."
-        class="resize-y"
-        bind:value={$formData.description}
+        type="text"
+        bind:value={$formData.title}
+        placeholder="Rubrik"
       />
     </Form.Control>
     <Form.FieldErrors />
@@ -43,7 +26,7 @@
       type="button"
       variant="secondary"
       on:click={() => {
-        isEditing.description = false;
+        isEditing.title = false;
       }}>Avbryt</Form.Button
     >
     <Form.Button type="submit" {disabled}>Spara</Form.Button>

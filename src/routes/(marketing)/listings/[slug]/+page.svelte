@@ -1,50 +1,127 @@
 <script lang="ts">
   import { Separator } from "$lib/components/ui/separator/index.js";
-  import DeleteListing from "src/lib/components/listing/delete-listing.svelte";
-  import MissingListing from "src/lib/components/listing/missing-listing.svelte";
-  import ListingDescription from "src/lib/components/listing/listing-description.svelte";
-  import type { User } from "@supabase/supabase-js";
+  import DeleteListing from "$lib/components/listing/delete-listing.svelte";
+  import MissingListing from "$lib/components/listing/missing-listing.svelte";
+  import ListingDescription from "$lib/components/listing/listing-description.svelte";
   import { Button } from "$lib/components/ui/button";
+  import { toast } from "svelte-sonner";
+  import { zodClient } from "sveltekit-superforms/adapters";
+  import SuperDebug, { superForm } from "sveltekit-superforms";
+  import { listingSchema } from "$lib/models/listing";
+  import { Input } from "$lib/components/ui/input/index.js";
+  import ListingTitle from "src/lib/components/listing/listing-title.svelte";
 
   export let data;
-  const listing = data.listing;
-  const user: User | undefined = data.user;
-  const form = data.form;
-  let isEditingDescription = false;
+  const { listing, user, form } = data;
+
   let isAuthor = false;
-  if (user && listing && listing.profile)
+  $: if (user && listing && listing.profile)
     isAuthor = user.id === listing.profile.id;
+
+  let isEditing = {
+    title: false,
+    description: false,
+    hourlyPrice: false,
+    subjects: false,
+  };
+
+  const listingForm = superForm(form, {
+    validators: zodClient(listingSchema),
+    onUpdated: ({ form: f }) => {
+      if (f.valid) {
+        toast.success(`You submitted ${JSON.stringify(f.data, null, 2)}`);
+      } else {
+        toast.error("Please fix the errors in the form.");
+      }
+    },
+    onError: ({ result }) => {
+      toast.error(result.error.message);
+    },
+  });
+  const { form: formData, enhance, errors } = listingForm;
 </script>
 
 <div class="p-8 space-y-2">
   {#if !listing}
     <MissingListing />
+  {:else if isAuthor}
+    <form method="POST" action="?/updateListing" use:enhance class="flex flex-col gap-y-4">
+      <div class="flex justify-between items-center">
+        {#if isEditing.title}
+          <ListingTitle
+            disabled={$errors.title && $errors.title.length > 0}
+            {formData}
+            {listingForm}
+            bind:isEditing
+          />
+        {:else}
+          <h1 class="text-3xl">{listing.title}</h1>
+          <Button on:click={() => (isEditing.title = true)}>Ändra</Button>
+        {/if}
+      </div>
+      <h2 class="text-xl">{listing.hourlyPrice} SEK</h2>
+      <Separator />
+      <div>
+        {#if listing.description}
+          <p>{listing.description}</p>
+        {:else if isEditing.description}
+          <ListingDescription
+            {formData}
+            {listingForm}
+            bind:isEditing
+            disabled={$errors.description && $errors.description.length > 0}
+          />
+        {:else}
+          <div class="flex justify-center gap-x-2">
+            <p>Den här annonsen har ingen beskrivning just nu.</p>
+            <Button on:click={() => (isEditing.description = true)}
+              >Ändra</Button
+            >
+          </div>
+        {/if}
+        <div>
+          {#if listing.subjects.length > 0}
+            {#each listing.subjects as subject}
+              <p>{subject}</p>
+            {/each}
+          {:else if isEditing.subjects}
+            <div class="flex justify-end gap-x-4">
+              <Button
+                type="button"
+                variant="secondary"
+                on:click={() => {
+                  isEditing.subjects = false;
+                }}>Avbryt</Button
+              >
+              <Button
+                on:click={() => {
+                  isEditing.subjects = false;
+                }}
+              >Spara</Button>
+              <!-- <Form.Button type="submit" {disabled}>Spara</Form.Button> -->
+            </div>
+          {:else}
+            Inga subjects
+            <Button
+              on:click={() => {
+                isEditing.subjects = true;
+              }}>Ändra</Button
+            >
+          {/if}
+        </div>
+      </div>
+      <SuperDebug data={$formData} />
+    </form>
+    <DeleteListing />
   {:else}
-    <div class="flex justify-between items-center">
-      <h1 class="text-3xl">{listing.title}</h1>
-      {#if isAuthor}
-        <DeleteListing />
-      {/if}
-    </div>
+    <h1 class="text-3xl">{listing.title}</h1>
     <h2 class="text-xl">{listing.hourlyPrice} SEK</h2>
     <Separator class="my-4" />
     <div>
       {#if listing.description}
         <p>{listing.description}</p>
       {:else}
-        <div class="flex justify-center gap-x-2">
-          {#if !isEditingDescription}
-            <p>Den här annonsen har ingen beskrivning just nu.</p>
-          {/if}
-          {#if isAuthor && !isEditingDescription}
-            <Button on:click={() => (isEditingDescription = true)}>Ändra</Button
-            >
-          {/if}
-        </div>
-        {#if isAuthor && isEditingDescription}
-          <ListingDescription {form} {isEditingDescription} />
-        {/if}
-        <!-- <Button variant="secondary">Lägg till en beskrivning</Button> -->
+        <p>Den här annonsen har ingen beskrivning just nu.</p>
       {/if}
     </div>
   {/if}

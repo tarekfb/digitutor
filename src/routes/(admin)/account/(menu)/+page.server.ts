@@ -1,7 +1,7 @@
 import { fail, redirect } from "@sveltejs/kit";
 import { createListing, getListings } from "$lib/server/database/listings";
 import type { PageServerLoad } from "./$types";
-import { unknownErrorMessage } from "src/lib/constants";
+import { unknownErrorMessage } from "$lib/constants";
 
 export const load: PageServerLoad = async ({
   locals: { supabase, getSession },

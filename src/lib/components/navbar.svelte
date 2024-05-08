@@ -5,8 +5,7 @@
   import { UserRound, LogOut } from "lucide-svelte";
   // import Logo from "$lib/components/logo/logo.svelte";
   import { goto } from "$app/navigation";
-  import { page } from "$app/stores";
-  import { convertToInitials } from "$lib/helpers";
+  import { convertToInitials } from "$lib/utils";
   import type { Tables } from "src/supabase";
   import { websiteName } from "../constants";
 

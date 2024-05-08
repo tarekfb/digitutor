@@ -2,11 +2,11 @@
   import { getContext } from "svelte";
   import type { Writable } from "svelte/store";
   import * as Dialog from "$lib/components/ui/dialog";
-  import ListingCard from "src/lib/components/listing/listing-card.svelte";
+  import ListingCard from "$lib/components/listing/listing-card.svelte";
   import { Button, buttonVariants } from "$lib/components/ui/button/index.js";
   import { Input } from "$lib/components/ui/input/index.js";
   import { Label } from "$lib/components/ui/label/index.js";
-  import type { Listing } from "$lib/server/database/listings";
+  import type { Listing } from "$lib/models/listing";
 
   let adminSection: Writable<string> = getContext("adminSection");
   adminSection.set("dashboard");

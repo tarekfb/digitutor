@@ -1,9 +1,6 @@
 import type { SupabaseClient } from "@supabase/supabase-js";
-import type { Database, Tables } from "src/supabase";
-
-export type Listing = Omit<Tables<"listings">, "profile"> & {
-  profile?: Tables<"profiles">;
-};
+import type { Listing } from "$lib/models/listing";
+import type { Database, Tables } from "src/supabase"
 
 export const getListings = async (
   supabase: SupabaseClient<Database>,

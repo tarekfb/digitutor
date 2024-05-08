@@ -1,5 +1,5 @@
 import { fail, redirect } from "@sveltejs/kit";
-import { unknownErrorMessage } from "src/lib/constants";
+import { unknownErrorMessage } from "$lib/constants";
 
 export const actions = {
   updateEmail: async ({ request, locals: { supabase, getSession } }) => {

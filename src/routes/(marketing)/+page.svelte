@@ -1,7 +1,7 @@
 <script lang="ts">
   import { websiteName } from "$lib/constants";
-  import type { Listing } from "$lib/server/database/listings.js";
-  import ListingCard from "src/lib/components/listing/listing-card.svelte";
+  import type { Listing } from "$lib/models/listing";
+  import ListingCard from "$lib/components/listing/listing-card.svelte";
 
   export let data;
   const listings: Listing[] | null = data.listings;

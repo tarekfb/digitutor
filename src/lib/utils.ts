@@ -2,6 +2,7 @@ import { type ClassValue, clsx } from "clsx";
 import { twMerge } from "tailwind-merge";
 import { cubicOut } from "svelte/easing";
 import type { TransitionConfig } from "svelte/transition";
+import type { z } from "zod";
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
@@ -59,4 +60,15 @@ export const flyAndScale = (
     },
     easing: cubicOut,
   };
+};
+
+export type TypeToZod<T> = {
+  [K in keyof T]: T[K] extends (string | number | boolean | null | undefined | number[])
+  ? (undefined extends T[K] ? z.ZodOptional<z.ZodType<Exclude<T[K], undefined>>> : z.ZodType<T[K]>)
+  : z.ZodObject<TypeToZod<T[K]>>
+};
+
+export const convertToInitials = (fullName: string): string => {
+  const names = fullName.split(" ");
+  return names[0][0] + names[names.length - 1][0];
 };
