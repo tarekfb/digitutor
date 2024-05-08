@@ -2,14 +2,15 @@
   import { Separator } from "$lib/components/ui/separator/index.js";
   import DeleteListing from "src/lib/components/listing/delete-listing.svelte";
   import MissingListing from "src/lib/components/listing/missing-listing.svelte";
-  // import ListingDescription from "src/lib/components/listing/listing-description.svelte";
+  import ListingDescription from "src/lib/components/listing/listing-description.svelte";
   import type { User } from "@supabase/supabase-js";
   import { Button } from "$lib/components/ui/button";
 
   export let data;
   const listing = data.listing;
   const user: User | undefined = data.user;
-
+  const form = data.form;
+  let isEditingDescription = false;
   let isAuthor = false;
   if (user && listing && listing.profile)
     isAuthor = user.id === listing.profile.id;
@@ -19,7 +20,7 @@
   {#if !listing}
     <MissingListing />
   {:else}
-    <div class="flex justify-between items-center w-full">
+    <div class="flex justify-between items-center">
       <h1 class="text-3xl">{listing.title}</h1>
       {#if isAuthor}
         <DeleteListing />
@@ -31,13 +32,19 @@
       {#if listing.description}
         <p>{listing.description}</p>
       {:else}
-        <p>Ingen beskrivning</p>
-        {#if isAuthor}
-          <!-- <ListingDescription /> -->
-          <!-- todo: this comp needs form data passed as prop. Needs to come from loader to this file -->
-        {:else}
-          <Button variant="secondary">Lägg till en beskrivning</Button>
+        <div class="flex justify-center gap-x-2">
+          {#if !isEditingDescription}
+            <p>Den här annonsen har ingen beskrivning just nu.</p>
+          {/if}
+          {#if isAuthor && !isEditingDescription}
+            <Button on:click={() => (isEditingDescription = true)}>Ändra</Button
+            >
+          {/if}
+        </div>
+        {#if isAuthor && isEditingDescription}
+          <ListingDescription {form} {isEditingDescription} />
         {/if}
+        <!-- <Button variant="secondary">Lägg till en beskrivning</Button> -->
       {/if}
     </div>
   {/if}
