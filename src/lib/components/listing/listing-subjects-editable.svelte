@@ -67,7 +67,7 @@
 <div class="space-y-2">
   {#if subjects.length > 0}
     <div class="flex gap-2 items-center flex-wrap max-w-full">
-      {#each subjects as subject} 
+      {#each subjects as subject}
         <div
           class="bg-slate-100 flex justify-between items-center gap-x-1 p-1 rounded-lg"
         >
@@ -80,71 +80,71 @@
         </div>
       {/each}
     </div>
+  {/if}
 
-    {#if isEditing.subjects}
-      <div class="flex justify-between items-center">
-        <Popover.Root bind:open let:ids>
-          <Popover.Trigger asChild let:builder>
-            <Button
-              builders={[builder]}
-              variant="outline"
-              role="combobox"
-              aria-expanded={open}
-              class="w-[200px] justify-between"
-            >
-              {selectedValue}
-              <ChevronsUpDown class="ml-2 h-4 w-4 shrink-0 opacity-50" />
-            </Button>
-          </Popover.Trigger>
-          <Popover.Content class="w-[200px] p-0">
-            <Command.Root>
-              <Command.Input {placeholder} />
-              <Command.Empty>No framework found.</Command.Empty>
-              <Command.Group>
-                {#each languages as language}
-                  <Command.Item
-                    value={language.value}
-                    onSelect={(currentValue) => {
-                      value = currentValue;
-                      closeAndFocusTrigger(ids.trigger);
-                    }}
-                  >
-                    <Check
-                      class={cn(
-                        "mr-2 h-4 w-4",
-                        value !== language.value && "text-transparent",
-                      )}
-                    />
-                    {language.label}
-                  </Command.Item>
-                {/each}
-              </Command.Group>
-            </Command.Root>
-          </Popover.Content>
-        </Popover.Root>
+  {#if isEditing.subjects}
+    <div class="flex justify-between items-center">
+      <Popover.Root bind:open let:ids>
+        <Popover.Trigger asChild let:builder>
+          <Button
+            builders={[builder]}
+            variant="outline"
+            role="combobox"
+            aria-expanded={open}
+            class="w-[200px] justify-between"
+          >
+            {selectedValue}
+            <ChevronsUpDown class="ml-2 h-4 w-4 shrink-0 opacity-50" />
+          </Button>
+        </Popover.Trigger>
+        <Popover.Content class="w-[200px] p-0">
+          <Command.Root>
+            <Command.Input {placeholder} />
+            <Command.Empty>No framework found.</Command.Empty>
+            <Command.Group>
+              {#each languages as language}
+                <Command.Item
+                  value={language.value}
+                  onSelect={(currentValue) => {
+                    value = currentValue;
+                    closeAndFocusTrigger(ids.trigger);
+                  }}
+                >
+                  <Check
+                    class={cn(
+                      "mr-2 h-4 w-4",
+                      value !== language.value && "text-transparent",
+                    )}
+                  />
+                  {language.label}
+                </Command.Item>
+              {/each}
+            </Command.Group>
+          </Command.Root>
+        </Popover.Content>
+      </Popover.Root>
 
-        <div class="flex justify-end gap-x-4 w-full">
-          <Button
-            type="button"
-            variant="secondary"
-            on:click={() => {
-              isEditing.subjects = false;
-            }}>Avbryt</Button
-          >
-          <Button
-            role="submit"
-            disabled={value === "" || value === placeholder}
-            on:click={() => {
-              isEditing.subjects = false;
-              addSubject(parseInt(value)); 
-            }}>Spara</Button
-          >
-        </div>
+      <div class="flex justify-end gap-x-4 w-full">
+        <Button
+          type="button"
+          variant="secondary"
+          on:click={() => {
+            isEditing.subjects = false;
+          }}>Avbryt</Button
+        >
+        <Button
+          role="submit"
+          disabled={value === "" || value === placeholder}
+          on:click={() => {
+            isEditing.subjects = false;
+            addSubject(parseInt(value));
+          }}>Lägg till</Button
+        >
       </div>
-    {:else}
-      <Button size="icon" on:click={() => (isEditing.subjects = true)}
-        ><Plus /></Button
-      >
-    {/if}
+    </div>
+  {:else}
+    <Button size="icon" on:click={() => (isEditing.subjects = true)}
+      ><Plus /></Button
+    >
   {/if}
 </div>

@@ -2,14 +2,14 @@
   import { Separator } from "$lib/components/ui/separator/index.js";
   import DeleteListing from "$lib/components/listing/delete-listing.svelte";
   import MissingListing from "$lib/components/listing/missing-listing.svelte";
-  import ListingDescription from "$lib/components/listing/listing-description.svelte";
   import { Button } from "$lib/components/ui/button";
   import { toast } from "svelte-sonner";
   import { zodClient } from "sveltekit-superforms/adapters";
   import SuperDebug, { superForm } from "sveltekit-superforms";
   import { listingSchema } from "$lib/models/listing";
-  import ListingTitle from "src/lib/components/listing/listing-title.svelte";
-  import ListingDropdown from "src/lib/components/listing/listing-dropdown.svelte";
+  import ListingDescriptionEditable from "src/lib/components/listing/listing-description-editable.svelte";
+  import ListingTitleEditable from "src/lib/components/listing/listing-title-editable.svelte";
+  import ListingSubjectsEditable from "src/lib/components/listing/listing-subjects-editable.svelte";
 
   export let data;
   const { listing, user, form } = data;
@@ -31,7 +31,7 @@
       if (f.valid) {
         toast.success(`You submitted ${JSON.stringify(f.data, null, 2)}`);
       } else {
-        toast.error("Please fix the errors in the form.");
+        toast.error("Fixa felen i formuläret.");
       }
     },
     onError: ({ result }) => {
@@ -49,12 +49,14 @@
 
   const addSubject = (subjectId: number) => {
     if ($formData.subjects.includes(subjectId)) {
-      toast.info("Subject already added"); // not working
+      toast.info("Redan tillagd.");
       return;
     }
 
-    const newFormData = [...$formData.subjects, subjectId];
-    formData.set({ ...$formData, subjects: newFormData });
+    const arrayWithSubject = [...$formData.subjects, subjectId];
+    const newFormData = { ...$formData, currency: "SEK",subjects: arrayWithSubject };
+    formData.set(newFormData);
+    
   };
 </script>
 
@@ -70,7 +72,7 @@
     >
       <div class="flex justify-between items-center">
         {#if isEditing.title}
-          <ListingTitle
+          <ListingTitleEditable
             disabled={$errors.title && $errors.title.length > 0}
             {formData}
             {listingForm}
@@ -87,7 +89,7 @@
         {#if listing.description}
           <p>{listing.description}</p>
         {:else if isEditing.description}
-          <ListingDescription
+          <ListingDescriptionEditable
             {formData}
             {listingForm}
             bind:isEditing
@@ -102,7 +104,7 @@
           </div>
         {/if}
       </div>
-      <ListingDropdown
+      <ListingSubjectsEditable
         {formData}
         {isEditing}
         {listingForm}

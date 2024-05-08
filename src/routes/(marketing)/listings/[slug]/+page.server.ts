@@ -46,6 +46,8 @@ export const actions = {
 
     const form = await superValidate(event, zod(listingSchema));
 
+    console.log(form.data)
+
     if (!form.valid)
       return fail(400, {
         form,
