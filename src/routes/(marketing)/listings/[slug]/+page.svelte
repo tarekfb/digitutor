@@ -8,8 +8,10 @@
   import { zodClient } from "sveltekit-superforms/adapters";
   import SuperDebug, { superForm } from "sveltekit-superforms";
   import { listingSchema } from "$lib/models/listing";
-  import { Input } from "$lib/components/ui/input/index.js";
   import ListingTitle from "src/lib/components/listing/listing-title.svelte";
+  import { Subjects } from "src/lib/models/common.js";
+  import { Plus } from "lucide-svelte";
+  import { CircleMinus } from "lucide-svelte";
 
   export let data;
   const { listing, user, form } = data;
@@ -45,7 +47,12 @@
   {#if !listing}
     <MissingListing />
   {:else if isAuthor}
-    <form method="POST" action="?/updateListing" use:enhance class="flex flex-col gap-y-4">
+    <form
+      method="POST"
+      action="?/updateListing"
+      use:enhance
+      class="flex flex-col gap-y-4"
+    >
       <div class="flex justify-between items-center">
         {#if isEditing.title}
           <ListingTitle
@@ -79,36 +86,48 @@
             >
           </div>
         {/if}
-        <div>
-          {#if listing.subjects.length > 0}
+      </div>
+      <div class="space-y-2">
+        {#if listing.subjects.length > 0}
+          <div class="flex gap-x-2 items-center">
             {#each listing.subjects as subject}
-              <p>{subject}</p>
-            {/each}
-          {:else if isEditing.subjects}
-            <div class="flex justify-end gap-x-4">
-              <Button
-                type="button"
-                variant="secondary"
-                on:click={() => {
-                  isEditing.subjects = false;
-                }}>Avbryt</Button
+              <div
+                class="bg-slate-100 flex justify-between items-center gap-x-1 p-1 rounded-lg"
               >
-              <Button
-                on:click={() => {
-                  isEditing.subjects = false;
-                }}
-              >Spara</Button>
-              <!-- <Form.Button type="submit" {disabled}>Spara</Form.Button> -->
+                <p>{Subjects[subject]}</p>
+                <Button variant="destructive" size="icon"
+                  ><CircleMinus /></Button
+                >
+              </div>
+            {/each}
+          </div>
+
+          {#if isEditing.subjects}
+            <div class="flex justify-between items-center">
+              <p>dropdown</p>
+
+              <div class="flex justify-end gap-x-4 w-full">
+                <Button
+                  type="button"
+                  variant="secondary"
+                  on:click={() => {
+                    isEditing.subjects = false;
+                  }}>Avbryt</Button
+                >
+                <Button
+                  on:click={() => {
+                    isEditing.subjects = false;
+                  }}>Spara</Button
+                >
+                <!-- <Form.Button type="submit" {disabled}>Spara</Form.Button> -->
+              </div>
             </div>
           {:else}
-            Inga subjects
-            <Button
-              on:click={() => {
-                isEditing.subjects = true;
-              }}>Ändra</Button
+            <Button size="icon" on:click={() => (isEditing.subjects = true)}
+              ><Plus /></Button
             >
           {/if}
-        </div>
+        {/if}
       </div>
       <SuperDebug data={$formData} />
     </form>
