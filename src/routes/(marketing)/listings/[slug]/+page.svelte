@@ -16,18 +16,18 @@
   export let data;
   const { listing, user, form } = data;
 
-  let isAuthor = false;
-  $: if (user && listing && listing.profile)
-    isAuthor = user.id === listing.profile.id;
-
   let isEditing = false;
+  let isAuthor = false;
+  if (user && listing && listing.profile)
+    isAuthor = user.id === listing.profile.id;
 
   const listingForm = superForm(form, {
     validators: zodClient(listingSchema),
-
     onUpdated: ({ form: f }) => {
       if (f.valid) {
-        toast.success(`You submitted ${JSON.stringify(f.data, null, 2)}`);
+        toast.success(
+          `Uppdaterat annonsen: ${JSON.stringify(f.data, null, 2)}`,
+        );
       } else {
         toast.error("Fixa felen i formuläret.");
       }
@@ -36,7 +36,7 @@
       toast.error(result.error.message);
     },
   });
-  const { form: formData, enhance, errors } = listingForm;
+  const { form: formData, enhance, errors, message } = listingForm;
 </script>
 
 <div class="p-8 space-y-2">
@@ -50,6 +50,9 @@
         action="?/updateListing"
         class="flex flex-col gap-y-4"
       >
+        {#if $message}
+          <div class="text-3xl">{$message}</div>
+        {/if}
         <TitleEditable {formData} {listingForm} />
         <HourlyPriceEditable {formData} {listingForm} />
         <Separator />
