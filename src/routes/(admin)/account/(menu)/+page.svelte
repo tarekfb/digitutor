@@ -58,16 +58,6 @@
               class="col-span-3"
             />
           </div>
-          <div class="grid grid-cols-4 items-center gap-4">
-            <Label for="hourlyPrice" class="text-right">Timpris</Label>
-            <Input
-              id="hourlyPrice"
-              name="hourlyPrice"
-              type="number"
-              value="100"
-              class="col-span-3"
-            />
-          </div>
         </div>
         <Dialog.Footer>
           <Button type="submit">Skapa</Button>

@@ -5,7 +5,8 @@ import type { Database, Tables } from "src/supabase"
 export const getListings = async (
   supabase: SupabaseClient<Database>,
   max?: number,
-  userId?: string
+  userId?: string,
+  visible?: boolean,
 ): Promise<Listing[] | null> => {
   let query = supabase
     .from("listings")
@@ -19,6 +20,7 @@ export const getListings = async (
     );
 
   if (userId) query = query.eq("profile", userId)
+  if (visible) query = query.eq("visible", visible)
   if (max) query = query.limit(max);
 
   const { data, error } = await query;
@@ -60,12 +62,12 @@ export const getListingById = async (
 
 export const createListing = async (
   supabase: SupabaseClient<Database>,
-  input: { title: string; hourlyPrice: string },
+  title: string,
 ): Promise<Listing> => {
   const session = await supabase.auth.getSession();
 
   if (!session.data.session) {
-    console.log("Missing session when creating listing: ", { input });
+    console.log("Missing session when creating listing: ", { title });
     throw new Error("No session");
   }
 
@@ -74,14 +76,15 @@ export const createListing = async (
 
   const dbListing: Tables<"listings"> = {
     id: listingId,
-    title: input.title,
-    hourlyPrice: Number(input.hourlyPrice),
+    title: title,
+    hourlyPrice: 0,
     created_at: new Date().toDateString(),
     updated_at: null,
     currency: "SEK",
-    description: null,
+    description: "",
     subjects: [],
     profile: userId,
+    visible: false
   };
 
   const { data, error } = await supabase

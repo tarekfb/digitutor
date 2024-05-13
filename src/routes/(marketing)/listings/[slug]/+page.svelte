@@ -13,6 +13,7 @@
   import HourlyPriceEditable from "src/lib/components/listing/hourly-price-editable.svelte";
   import NonEditableListing from "src/lib/components/listing/non-editable-listing.svelte";
   import LoadingSpinner from "src/lib/components/atoms/loading-spinner.svelte";
+  import VisibilityEditable from "src/lib/components/listing/visibility-editable.svelte";
   import { SaveIcon, X, Pencil } from "lucide-svelte";
 
   export let data;
@@ -57,6 +58,8 @@
         <DescriptionEditable {formData} {listingForm} />
         <SubjectsEditable {formData} {errors} />
 
+        <VisibilityEditable {formData} {listingForm} />
+
         <div class="flex justify-end gap-x-2">
           <div class="mr-auto">
             <DeleteListing />
@@ -81,6 +84,19 @@
       </form>
     {:else}
       <NonEditableListing {listing} />
+      {#if listing.visible}
+           <div
+          class="bg-green-300 p-2 rounded-lg self-start border-black border-solid border"
+        >
+          Publicerad
+        </div>
+      {:else}
+        <div
+          class="bg-slate-100 p-2 rounded-lg self-start border-black border-solid border"
+        >
+          Ej publicerad
+        </div>
+      {/if}
       <Button on:click={() => (isEditing = true)} class="self-end">
         <Pencil class="mr-2 h-4 w-4" />
         Ändra</Button
