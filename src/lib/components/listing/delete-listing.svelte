@@ -2,17 +2,21 @@
   import { Trash2 } from "lucide-svelte";
   import * as AlertDialog from "$lib/components/ui/alert-dialog/index.js";
   import { enhance } from "$app/forms";
-  import LoadingSpinner from "$lib/components/loading-spinner.svelte";
+  import LoadingSpinner from "src/lib/components/atoms/loading-spinner.svelte";
   import { Button } from "$lib/components/ui/button";
-  
+
   let formLoading = false;
   let isOpen = false;
 </script>
 
 <AlertDialog.Root bind:open={isOpen}>
   <AlertDialog.Trigger asChild let:builder>
-    <Button builders={[builder]} variant="destructive" size="icon" aria-label="Delete listing">
-      <Trash2 />
+    <Button
+      builders={[builder]}
+      variant="destructive"
+      aria-label="Delete listing"
+    >
+      <Trash2 class="h-5 w-5 mr-2" /> Ta bort
     </Button>
   </AlertDialog.Trigger>
   <AlertDialog.Content>
@@ -39,8 +43,7 @@
       >
         {#if formLoading}
           <Button disabled type="submit" class="w-full space-x-2">
-            <LoadingSpinner size={{ w: 5, h: 5 }} /><span>Laddar...</span
-            ></Button
+            <LoadingSpinner /><span>Laddar...</span></Button
           >
         {:else}
           <Button type="submit" variant="destructive" class="w-full space-x-2">

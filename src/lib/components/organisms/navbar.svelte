@@ -7,7 +7,7 @@
   import { goto } from "$app/navigation";
   import { convertToInitials } from "$lib/utils";
   import type { Tables } from "src/supabase";
-  import { websiteName } from "../constants";
+  import { websiteName } from "../../constants";
 
   export let profile: Tables<"profiles"> | null;
 

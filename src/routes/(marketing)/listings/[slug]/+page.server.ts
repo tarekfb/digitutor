@@ -52,7 +52,7 @@ export const actions = {
 
     try {
       await updateListing(supabase, form.data, slug);
-      return message(form, 'Form posted successfully!');
+      return message(form, 'Annonsen är uppdaterad.');
     } catch (error) {
       return fail(500, {
         form,

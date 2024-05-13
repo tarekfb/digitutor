@@ -1,5 +1,5 @@
 <script>
-  import Navigation from "$lib/components/navbar.svelte";
+  import Navigation from "src/lib/components/organisms/navbar.svelte";
   import "src/app.css";
 
   export let data;
