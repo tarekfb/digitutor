@@ -1,11 +1,13 @@
 <script lang="ts">
-  export let size = { w: 8, h: 8 };
+  import { cn } from "$lib/utils.js";
+  let className: string | null | undefined = undefined;
+  export { className as class };
 </script>
 
 <div role="status">
   <svg
     aria-hidden="true"
-    class="w-{size.w} h-{size.h} animate-spin fill-primary"
+    class={cn("animate-spin fill-primary w-5 h-5", className)}
     viewBox="0 0 100 101"
     fill="none"
     xmlns="http://www.w3.org/2000/svg"

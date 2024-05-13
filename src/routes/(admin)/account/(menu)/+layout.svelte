@@ -1,7 +1,7 @@
 <script lang="ts">
   import { writable } from "svelte/store";
   import { setContext } from "svelte";
-  import SidebarNav from "$lib/components/sidebar-nav.svelte";
+  import SidebarNav from "src/lib/components/organisms/sidebar-nav.svelte";
   import { Separator } from "$lib/components/ui/separator/index.js";
 
   const adminSectionStore = writable("");
