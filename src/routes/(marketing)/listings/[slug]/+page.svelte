@@ -28,6 +28,7 @@
     onUpdated: ({ form: f }) => {
       if (f.valid) {
         toast.success(`Uppdaterat annonsen.`);
+        isEditing = false;
       } else {
         toast.error("Fixa felen i formuläret.");
       }
@@ -36,7 +37,7 @@
       toast.error(result.error.message);
     },
   });
-  const { form: formData, enhance, errors, message, submitting } = listingForm;
+  const { form: formData, enhance, errors, submitting } = listingForm;
 </script>
 
 <div class="p-8 flex flex-col gap-y-2">
@@ -50,9 +51,6 @@
         action="?/updateListing"
         class="flex flex-col gap-y-4"
       >
-        {#if $message}
-          <div class="text-3xl">{$message}</div>
-        {/if}
         <TitleEditable {formData} {listingForm} />
         <HourlyPriceEditable {formData} {listingForm} />
         <Separator />
