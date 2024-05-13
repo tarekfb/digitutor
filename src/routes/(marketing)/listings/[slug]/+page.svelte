@@ -1,54 +1,77 @@
 <script lang="ts">
+  import { Separator } from "$lib/components/ui/separator/index.js";
+  import DeleteListing from "$lib/components/listing/delete-listing.svelte";
+  import MissingListing from "$lib/components/listing/missing-listing.svelte";
   import { Button } from "$lib/components/ui/button";
-  import { goto } from "$app/navigation";
-  import { Trash2 } from "lucide-svelte";
-  import { Construction } from "lucide-svelte";
-  import * as AlertDialog from "$lib/components/ui/alert-dialog/index.js";
+  import { toast } from "svelte-sonner";
+  import { zodClient } from "sveltekit-superforms/adapters";
+  import SuperDebug, { superForm } from "sveltekit-superforms";
+  import { listingSchema } from "$lib/models/listing";
+  import DescriptionEditable from "src/lib/components/listing/description-editable.svelte";
+  import TitleEditable from "src/lib/components/listing/title-editable.svelte";
+  import SubjectsEditable from "src/lib/components/listing/subjects-editable.svelte";
+  import HourlyPriceEditable from "src/lib/components/listing/hourly-price-editable.svelte";
+  import NonEditableListing from "src/lib/components/listing/non-editable-listing.svelte";
 
   export let data;
-  const listing = data.listing;
+  const { listing, user, form } = data;
+
+  let isEditing = false;
+  let isAuthor = false;
+  if (user && listing && listing.profile)
+    isAuthor = user.id === listing.profile.id;
+
+  const listingForm = superForm(form, {
+    validators: zodClient(listingSchema),
+    onUpdated: ({ form: f }) => {
+      if (f.valid) {
+        toast.success(
+          `Uppdaterat annonsen: ${JSON.stringify(f.data, null, 2)}`,
+        );
+      } else {
+        toast.error("Fixa felen i formuläret.");
+      }
+    },
+    onError: ({ result }) => {
+      toast.error(result.error.message);
+    },
+  });
+  const { form: formData, enhance, errors, message } = listingForm;
 </script>
 
 <div class="p-8 space-y-2">
   {#if !listing}
-    <h1 class="text-3xl">Ojdå... Här var det tomt</h1>
-    <h1 class="text-xl">
-      Den här annonsen finns inte längre. Vill du gå hem istället?
-    </h1>
+    <MissingListing />
+  {:else if isAuthor}
+    {#if isEditing}
+      <form
+        method="POST"
+        use:enhance
+        action="?/updateListing"
+        class="flex flex-col gap-y-4"
+      >
+        {#if $message}
+          <div class="text-3xl">{$message}</div>
+        {/if}
+        <TitleEditable {formData} {listingForm} />
+        <HourlyPriceEditable {formData} {listingForm} />
+        <Separator />
+        <DescriptionEditable {formData} {listingForm} />
+        <SubjectsEditable {formData} {errors} />
 
-    <Button on:click={() => goto("/")}>Gå hem</Button>
-  {:else}
-    <div class="flex justify-between items-center">
-      <h1 class="text-3xl">{listing.title}</h1>
-      <form method="POST" action="?/deleteListing">
-        <AlertDialog.Root>
-          <AlertDialog.Trigger asChild let:builder>
-            <Button builders={[builder]} aria-label="Delete listing">
-              <Trash2 />
-            </Button>
-          </AlertDialog.Trigger>
-          <AlertDialog.Content>
-            <AlertDialog.Header>
-              <AlertDialog.Title>Är du säker?</AlertDialog.Title>
-              <AlertDialog.Description>
-                Detta går inte att ångra. Tar du bort annonsen försvinner den
-                helt och hållet.
-              </AlertDialog.Description>
-            </AlertDialog.Header>
-            <AlertDialog.Footer>
-              <AlertDialog.Cancel>Avbryt</AlertDialog.Cancel>
-              <AlertDialog.Action on:click={() => goto("/")}
-                >Ta bort</AlertDialog.Action
-              >
-            </AlertDialog.Footer>
-          </AlertDialog.Content>
-        </AlertDialog.Root>
+        <Button
+          type="submit"
+          disabled={$errors._errors && $errors._errors.length > 0}>Spara</Button
+        >
+        <SuperDebug data={$formData} />
       </form>
-    </div>
-    <h2 class="text-xl">{listing.hourlyPrice} SEK</h2>
-    <div class="flex flex-col items-center gap-y-4 mt-12">
-      <Construction size="100" />
-      <h3 class="text-4xl">Work in progress</h3>
-    </div>
+      <DeleteListing />
+    {:else}
+      <NonEditableListing {listing} />
+      <Button on:click={() => (isEditing = true)}>Ändra</Button>
+    {/if}
+    <Button on:click={() => (isEditing = false)}>Sluta ändra</Button>
+  {:else}
+    <NonEditableListing {listing} />
   {/if}
 </div>

@@ -2,11 +2,11 @@
   import { getContext } from "svelte";
   import type { Writable } from "svelte/store";
   import * as Dialog from "$lib/components/ui/dialog";
-  import ListingComponent from "$lib/components/listing.svelte";
+  import ListingCard from "$lib/components/listing/listing-card.svelte";
   import { Button, buttonVariants } from "$lib/components/ui/button/index.js";
   import { Input } from "$lib/components/ui/input/index.js";
   import { Label } from "$lib/components/ui/label/index.js";
-  import type { Listing } from "$lib/server/database/listings";
+  import type { Listing } from "$lib/models/listing";
 
   let adminSection: Writable<string> = getContext("adminSection");
   adminSection.set("dashboard");
@@ -16,18 +16,22 @@
 </script>
 
 <svelte:head>
-  <title>Account</title>
+  <title>Konto</title>
 </svelte:head>
 
 <h1 class="text-2xl font-bold mb-1">Dina annonser</h1>
 
 <div class="my-6">
-  <div class="space-y-2 mb-4">
-    {#each listings as listing}
-      <a href="/listings/{listing.id}" aria-label="Navigate to ad">
-        <ListingComponent {listing} />
-      </a>
-    {/each}
+  <div class="flex flex-col gap-y-4 mb-4">
+    {#if listings.length === 0}
+      <p>Inga annonser. Testa skapa en!</p>
+    {:else}
+      {#each listings as listing}
+        <a href="/listings/{listing.id}" aria-label="Navigate to ad">
+          <ListingCard {listing} />
+        </a>
+      {/each}
+    {/if}
   </div>
 
   <Dialog.Root>

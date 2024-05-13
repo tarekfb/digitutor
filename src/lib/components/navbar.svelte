@@ -5,8 +5,7 @@
   import { UserRound, LogOut } from "lucide-svelte";
   // import Logo from "$lib/components/logo/logo.svelte";
   import { goto } from "$app/navigation";
-  import { page } from "$app/stores";
-  import { convertToInitials } from "$lib/helpers";
+  import { convertToInitials } from "$lib/utils";
   import type { Tables } from "src/supabase";
   import { websiteName } from "../constants";
 
@@ -32,6 +31,10 @@
           <Button on:click={() => goto("/login/sign_up")}>Sign up</Button>
           <Button on:click={() => goto("/login/sign_in")}>Log in</Button>
         {:else}
+          <Button on:click={() => goto("/account")}>
+            <UserRound class="mr-2 h-4 w-4" />
+            Account
+          </Button>
           <DropdownMenu.Root>
             <DropdownMenu.Trigger asChild let:builder>
               <Button
@@ -54,13 +57,6 @@
                   {profile?.full_name}
                 </p>
               </DropdownMenu.Label>
-              <DropdownMenu.Separator />
-              <DropdownMenu.Group>
-                <DropdownMenu.Item on:click={() => goto("/account")}>
-                  <UserRound class="mr-2 h-4 w-4" />
-                  Account
-                </DropdownMenu.Item>
-              </DropdownMenu.Group>
               <DropdownMenu.Separator />
               <DropdownMenu.Item on:click={() => goto("/account/sign_out")}>
                 <LogOut class="mr-2 h-4 w-4" />

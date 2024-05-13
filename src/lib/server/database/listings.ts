@@ -1,9 +1,6 @@
 import type { SupabaseClient } from "@supabase/supabase-js";
-import type { Database, Tables } from "src/supabase";
-
-export type Listing = Omit<Tables<"listings">, "profile"> & {
-  profile?: Tables<"profiles">;
-};
+import type { InputListing, Listing } from "$lib/models/listing";
+import type { Database, Tables } from "src/supabase"
 
 export const getListings = async (
   supabase: SupabaseClient<Database>,
@@ -141,4 +138,36 @@ export const deleteListing = async (
     console.log("Failed to delete listing: " + listingId, { error });
     throw error;
   }
+};
+
+export const updateListing = async (
+  supabase: SupabaseClient<Database>,
+  input: InputListing,
+  listingId: string
+): Promise<Listing> => {
+
+  const { data, error } = await supabase
+    .from("listings")
+    .update({ ...input, updated_at: new Date().toDateString() })
+    .eq("id", listingId)
+    .select(
+      `
+    *,
+    profile (
+      *
+    )
+  `,
+    )
+
+  if (error) {
+    console.log("Failed to update listing", { error });
+    throw error;
+  }
+
+  if (data === null) {
+    console.log("Failed to update listing. Listing is null.", { data, error });
+    throw error;
+  }
+
+  return data as unknown as Listing;
 };
