@@ -3,17 +3,33 @@
   import { Star } from "lucide-svelte";
   import * as Card from "$lib/components/ui/card/index.js";
   import type { Listing } from "$lib/models/listing";
+  import { Badge } from "../ui/badge";
 
   export let listing: Listing;
 </script>
 
 <Card.Root>
-  <Card.Header class="grid grid-cols-[1fr_110px] items-start gap-4 space-y-0">
+  <Card.Header class="flex flex-col  space-y-0">
     <div class="space-y-1">
-      <Card.Title>{listing.title}</Card.Title>
+      <div class="flex justify-between gap-x-2 w-full">
+        <Card.Title>{listing.title}</Card.Title>
+        {#if listing.visible}
+          <div
+            class="bg-green-300 p-1 text-sm rounded-lg self-start border-black border-solid border"
+          >
+            Publicerad
+          </div>
+        {:else}
+          <div
+            class="bg-slate-100 p-1 text-sm rounded-lg self-start border-black border-solid border"
+          >
+            Ej publicerad
+          </div>
+        {/if}
+      </div>
       <Card.Description>
         {#if listing.description}
-        {listing.description}
+          {listing.description}
         {/if}
       </Card.Description>
     </div>

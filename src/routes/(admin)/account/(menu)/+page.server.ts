@@ -32,7 +32,6 @@ export const actions = {
 
     const formData = await request.formData();
     const title = formData.get("title") as string;
-    const hourlyPrice = formData.get("hourlyPrice") as string;
 
     let validationError;
     if (!title || title === "") validationError = "En rubrik är obligatorisk";
@@ -45,8 +44,6 @@ export const actions = {
       });
     }
 
-    if (!hourlyPrice) validationError = "Ett timpris är obligatoriskt";
-
     if (validationError) {
       return fail(400, {
         errorMessage: validationError,
@@ -55,17 +52,15 @@ export const actions = {
       });
     }
 
-    const initListing = { title, hourlyPrice };
-
     let listingId = "";
     try {
-      const { id } = await createListing(supabase, initListing);
+      const { id } = await createListing(supabase, title);
       listingId = id;
     } catch (error) {
       console.error(error);
       return fail(500, {
         errorMessage: unknownErrorMessage,
-        initListing,
+        title,
       });
     }
     throw redirect(303, `/listings/${listingId}`);

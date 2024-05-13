@@ -7,7 +7,7 @@ export const load: LayoutServerLoad = async ({
 }) => {
   const session = await getSession();
   const profile = session && await getProfileBySession(supabase, session);
-  const listings = await getListings(supabase, 5);
+  const listings = await getListings(supabase, 5, undefined, true);
 
   return { session, profile, listings }; // TODO: stream these
 };
