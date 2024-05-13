@@ -7,8 +7,6 @@
 
 <div class="flex gap-2 items-center flex-wrap max-w-full border rounded-lg p-2">
   {#each languages as subject}
-    {@const checked = $formData.subjects.includes(subject.id)}
-
     <label class="bg-slate-100 p-2 rounded-lg">
       <input
         type="checkbox"

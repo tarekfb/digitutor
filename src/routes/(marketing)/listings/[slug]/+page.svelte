@@ -11,7 +11,7 @@
   import TitleEditable from "src/lib/components/listing/title-editable.svelte";
   import SubjectsEditable from "src/lib/components/listing/subjects-editable.svelte";
   import HourlyPriceEditable from "src/lib/components/listing/hourly-price-editable.svelte";
-  import AsRead from "src/lib/components/listing/as-read.svelte";
+  import NonEditableListing from "src/lib/components/listing/non-editable-listing.svelte";
 
   export let data;
   const { listing, user, form } = data;
@@ -64,22 +64,11 @@
       </form>
       <DeleteListing />
     {:else}
-      <AsRead {listing} />
+      <NonEditableListing {listing} />
       <Button on:click={() => (isEditing = true)}>Ändra</Button>
     {/if}
     <Button on:click={() => (isEditing = false)}>Sluta ändra</Button>
   {:else}
-    <AsRead {listing} />
+    <NonEditableListing {listing} />
   {/if}
 </div>
-
-<!-- <h1 class="text-3xl">{listing.title}</h1>
-    <h2 class="text-xl">{listing.hourlyPrice} SEK</h2>
-    <Separator class="my-4" />
-    <div>
-      {#if listing.description}
-        <p>{listing.description}</p>
-      {:else}
-        <p>Den här annonsen har ingen beskrivning just nu.</p>
-      {/if}
-    </div> -->

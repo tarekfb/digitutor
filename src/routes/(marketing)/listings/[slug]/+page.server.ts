@@ -2,7 +2,7 @@ import { fail, redirect, error } from "@sveltejs/kit";
 import { zod } from "sveltekit-superforms/adapters";
 import { unknownErrorMessage } from "$lib/constants";
 import { superValidate } from "sveltekit-superforms";
-import { deleteListing, getListingById } from "$lib/server/database/listings";
+import { deleteListing, getListingById, updateListing } from "$lib/server/database/listings";
 import { listingSchema } from "$lib/models/listing";
 
 export const load = async ({ locals: { supabase, getSession }, params: { slug } }) => {
@@ -43,22 +43,23 @@ export const actions = {
     const session = await getSession();
     if (!session)
       throw redirect(303, "/login");
-    // const formData = await event.request.formData();
-    // console.log(formData)
+
     const form = await superValidate(event, zod(listingSchema));
 
-    console.log("subjects are", form.data.subjects)
+    console.log("subjects are", form.data)
 
-    if (!form.valid){
-      console.log("form was invalid")
+    if (!form.valid) {
       return fail(400, {
         form,
       });
     }
 
+    console.log(form)
+
     try {
-      // await updateListing(supabase, slug);
-      console.log("reached listing with slug: " + slug);
+      const response = await updateListing(supabase, form.data, slug);
+      console.log("respopsne was ")
+      console.log(response)
       return {
         form,
       };
