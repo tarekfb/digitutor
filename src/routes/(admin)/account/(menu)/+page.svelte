@@ -35,12 +35,14 @@
   </div>
 
   <Dialog.Root>
-    <Dialog.Trigger class={buttonVariants({ variant: "default" })}
-      >Skapa annons</Dialog.Trigger
-    >
+    <div class="flex justify-end w-full">
+      <Dialog.Trigger class={buttonVariants({ variant: "default" })}>
+        Skapa annons
+      </Dialog.Trigger>
+    </div>
     <Dialog.Content class="sm:max-w-[425px]">
       <Dialog.Header>
-        <Dialog.Title>Edit profile</Dialog.Title>
+        <Dialog.Title>Skapa annons</Dialog.Title>
         <Dialog.Description>
           Du kan fylla i mer information om annonsen i nästa steg.
         </Dialog.Description>
