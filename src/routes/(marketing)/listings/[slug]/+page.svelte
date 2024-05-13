@@ -7,9 +7,11 @@
   import { zodClient } from "sveltekit-superforms/adapters";
   import SuperDebug, { superForm } from "sveltekit-superforms";
   import { listingSchema } from "$lib/models/listing";
-  import ListingDescriptionEditable from "src/lib/components/listing/listing-description-editable.svelte";
-  import ListingTitleEditable from "src/lib/components/listing/listing-title-editable.svelte";
-  import ListingSubjectsEditable from "src/lib/components/listing/listing-subjects-editable.svelte";
+  import DescriptionEditable from "src/lib/components/listing/description-editable.svelte";
+  import TitleEditable from "src/lib/components/listing/title-editable.svelte";
+  import SubjectsEditable from "src/lib/components/listing/subjects-editable.svelte";
+  import HourlyPriceEditable from "src/lib/components/listing/hourly-price-editable.svelte";
+  import AsRead from "src/lib/components/listing/as-read.svelte";
 
   export let data;
   const { listing, user, form } = data;
@@ -18,15 +20,11 @@
   $: if (user && listing && listing.profile)
     isAuthor = user.id === listing.profile.id;
 
-  let isEditing = {
-    title: false,
-    description: false,
-    hourlyPrice: false,
-    subjects: false,
-  };
+  let isEditing = false;
 
   const listingForm = superForm(form, {
     validators: zodClient(listingSchema),
+
     onUpdated: ({ form: f }) => {
       if (f.valid) {
         toast.success(`You submitted ${JSON.stringify(f.data, null, 2)}`);
@@ -39,84 +37,43 @@
     },
   });
   const { form: formData, enhance, errors } = listingForm;
-
-  const removeSubject = (subjectId: number) => {
-    const newFormData = $formData.subjects.filter(
-      (subject) => subject !== subjectId,
-    );
-    formData.set({ ...$formData, subjects: newFormData });
-  };
-
-  const addSubject = (subjectId: number) => {
-    if ($formData.subjects.includes(subjectId)) {
-      toast.info("Redan tillagd.");
-      return;
-    }
-
-    const arrayWithSubject = [...$formData.subjects, subjectId];
-    const newFormData = { ...$formData, currency: "SEK",subjects: arrayWithSubject };
-    formData.set(newFormData);
-    
-  };
 </script>
 
 <div class="p-8 space-y-2">
   {#if !listing}
     <MissingListing />
   {:else if isAuthor}
-    <form
-      method="POST"
-      action="?/updateListing"
-      use:enhance
-      class="flex flex-col gap-y-4"
-    >
-      <div class="flex justify-between items-center">
-        {#if isEditing.title}
-          <ListingTitleEditable
-            disabled={$errors.title && $errors.title.length > 0}
-            {formData}
-            {listingForm}
-            bind:isEditing
-          />
-        {:else}
-          <h1 class="text-3xl">{listing.title}</h1>
-          <Button on:click={() => (isEditing.title = true)}>Ändra</Button>
-        {/if}
-      </div>
-      <h2 class="text-xl">{listing.hourlyPrice} SEK</h2>
-      <Separator />
-      <div>
-        {#if listing.description}
-          <p>{listing.description}</p>
-        {:else if isEditing.description}
-          <ListingDescriptionEditable
-            {formData}
-            {listingForm}
-            bind:isEditing
-            disabled={$errors.description && $errors.description.length > 0}
-          />
-        {:else}
-          <div class="flex justify-center gap-x-2">
-            <p>Den här annonsen har ingen beskrivning just nu.</p>
-            <Button on:click={() => (isEditing.description = true)}
-              >Ändra</Button
-            >
-          </div>
-        {/if}
-      </div>
-      <ListingSubjectsEditable
-        {formData}
-        {isEditing}
-        {listingForm}
-        {removeSubject}
-        {addSubject}
-        subjects={$formData.subjects}
-      />
-      <SuperDebug data={$formData} />
-    </form>
-    <DeleteListing />
+    {#if isEditing}
+      <form
+        method="POST"
+        use:enhance
+        action="?/updateListing"
+        class="flex flex-col gap-y-4"
+      >
+        <TitleEditable {formData} {listingForm} />
+        <HourlyPriceEditable {formData} {listingForm} />
+        <Separator />
+        <DescriptionEditable {formData} {listingForm} />
+        <SubjectsEditable {formData} {errors} />
+
+        <Button
+          type="submit"
+          disabled={$errors._errors && $errors._errors.length > 0}>Spara</Button
+        >
+        <SuperDebug data={$formData} />
+      </form>
+      <DeleteListing />
+    {:else}
+      <AsRead {listing} />
+      <Button on:click={() => (isEditing = true)}>Ändra</Button>
+    {/if}
+    <Button on:click={() => (isEditing = false)}>Sluta ändra</Button>
   {:else}
-    <h1 class="text-3xl">{listing.title}</h1>
+    <AsRead {listing} />
+  {/if}
+</div>
+
+<!-- <h1 class="text-3xl">{listing.title}</h1>
     <h2 class="text-xl">{listing.hourlyPrice} SEK</h2>
     <Separator class="my-4" />
     <div>
@@ -125,6 +82,4 @@
       {:else}
         <p>Den här annonsen har ingen beskrivning just nu.</p>
       {/if}
-    </div>
-  {/if}
-</div>
+    </div> -->

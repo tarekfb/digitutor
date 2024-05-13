@@ -43,15 +43,18 @@ export const actions = {
     const session = await getSession();
     if (!session)
       throw redirect(303, "/login");
-
+    // const formData = await event.request.formData();
+    // console.log(formData)
     const form = await superValidate(event, zod(listingSchema));
 
-    console.log(form.data)
+    console.log("subjects are", form.data.subjects)
 
-    if (!form.valid)
+    if (!form.valid){
+      console.log("form was invalid")
       return fail(400, {
         form,
       });
+    }
 
     try {
       // await updateListing(supabase, slug);
