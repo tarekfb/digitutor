@@ -8,9 +8,13 @@
 
 <Form.Field form={listingForm} name="visible">
   <Form.Control let:attrs>
-    <div class="flex gap-x-2">
-      <Checkbox {...attrs} bind:checked={$formData.visible} />
-      <Form.Label>Synlig</Form.Label>
+    <div class="flex gap-x-2 items-center">
+      <Checkbox
+        {...attrs}
+        bind:checked={$formData.visible}
+        class="w-5 h-5 flex items-center justify-center"
+      />
+      <Form.Label class="text-xl">Synlig</Form.Label>
     </div>
     <input name={attrs.name} value={$formData.mobile} hidden />
   </Form.Control>

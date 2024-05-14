@@ -1,5 +1,5 @@
 <script lang="ts">
-  import "src/app.css";
+  import "src/app.pcss";
   import { navigating } from "$app/stores";
   import { expoOut } from "svelte/easing";
   import { slide } from "svelte/transition";

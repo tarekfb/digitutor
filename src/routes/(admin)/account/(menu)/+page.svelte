@@ -7,62 +7,67 @@
   import { Input } from "$lib/components/ui/input/index.js";
   import { Label } from "$lib/components/ui/label/index.js";
   import type { Listing } from "$lib/models/listing";
+  import StudentAccount from "src/lib/components/organisms/student-account.svelte";
 
   let adminSection: Writable<string> = getContext("adminSection");
   adminSection.set("dashboard");
 
   export let data;
-  const listings = data.listings as Listing[]; // will always be an array
+  const listings = data.listings as Listing[]; // will always be an array, and never null
 </script>
 
 <svelte:head>
   <title>Konto</title>
 </svelte:head>
 
-<h1 class="text-2xl font-bold mb-1">Dina annonser</h1>
+{#if data.profile.role === "teacher"}
+  <h1 class="text-2xl font-bold mb-1">Dina annonser</h1>
 
-<div class="my-6">
-  <div class="flex flex-col gap-y-4 mb-4">
-    {#if listings.length === 0}
-      <p>Inga annonser. Testa skapa en!</p>
-    {:else}
-      {#each listings as listing}
-        <a href="/listings/{listing.id}" aria-label="Navigate to ad">
-          <ListingCard {listing} />
-        </a>
-      {/each}
-    {/if}
-  </div>
-
-  <Dialog.Root>
-    <div class="flex justify-end w-full">
-      <Dialog.Trigger class={buttonVariants({ variant: "default" })}>
-        Skapa annons
-      </Dialog.Trigger>
+  <div class="my-6">
+    <div class="flex flex-col gap-y-4 mb-4">
+      {#if listings.length === 0}
+        <p>Inga annonser. Testa skapa en!</p>
+      {:else}
+        {#each listings as listing}
+          <a href="/listings/{listing.id}" aria-label="Navigate to ad">
+            <ListingCard {listing} />
+          </a>
+        {/each}
+      {/if}
     </div>
-    <Dialog.Content class="sm:max-w-[425px]">
-      <Dialog.Header>
-        <Dialog.Title>Skapa annons</Dialog.Title>
-        <Dialog.Description>
-          Du kan fylla i mer information om annonsen i nästa steg.
-        </Dialog.Description>
-      </Dialog.Header>
-      <form method="POST" action="?/createListing">
-        <div class="grid gap-4 py-4">
-          <div class="grid grid-cols-4 items-center gap-4">
-            <Label for="title" class="text-right">Rubrik</Label>
-            <Input
-              id="title"
-              name="title"
-              value="Test annons"
-              class="col-span-3"
-            />
+
+    <Dialog.Root>
+      <div class="flex justify-end w-full">
+        <Dialog.Trigger class={buttonVariants({ variant: "default" })}>
+          Skapa annons
+        </Dialog.Trigger>
+      </div>
+      <Dialog.Content class="sm:max-w-[425px]">
+        <Dialog.Header>
+          <Dialog.Title>Skapa annons</Dialog.Title>
+          <Dialog.Description>
+            Du kan fylla i mer information om annonsen i nästa steg.
+          </Dialog.Description>
+        </Dialog.Header>
+        <form method="POST" action="?/createListing">
+          <div class="grid gap-4 py-4">
+            <div class="grid grid-cols-4 items-center gap-4">
+              <Label for="title" class="text-right">Rubrik</Label>
+              <Input
+                id="title"
+                name="title"
+                value="Test annons"
+                class="col-span-3"
+              />
+            </div>
           </div>
-        </div>
-        <Dialog.Footer>
-          <Button type="submit">Skapa</Button>
-        </Dialog.Footer>
-      </form>
-    </Dialog.Content>
-  </Dialog.Root>
-</div>
+          <Dialog.Footer>
+            <Button type="submit">Skapa</Button>
+          </Dialog.Footer>
+        </form>
+      </Dialog.Content>
+    </Dialog.Root>
+  </div>
+{:else}
+  <StudentAccount />
+{/if}

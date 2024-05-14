@@ -13,6 +13,7 @@
       type="text"
       bind:value={$formData.title}
       placeholder="Rubrik"
+      class="text-2xl"
     />
   </Form.Control>
   <Form.FieldErrors />

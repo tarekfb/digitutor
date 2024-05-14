@@ -43,10 +43,12 @@
                 class="relative h-8 w-8 rounded-full"
               >
                 <Avatar.Root
-                  class="h-8 w-8 flex justify-center place-items-center items-center"
+                  class="h-8 w-8 flex justify-center text-xs items-center"
                 >
-                  <Avatar.Fallback class="bg-blue-600"
-                    >{initials}</Avatar.Fallback
+                  <Avatar.Fallback class="bg-accent text-background"
+                    >{convertToInitials(
+                      profile.full_name ?? "? ?",
+                    )}</Avatar.Fallback
                   >
                 </Avatar.Root>
               </Button>
