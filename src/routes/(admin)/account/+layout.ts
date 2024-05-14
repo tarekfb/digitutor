@@ -41,11 +41,5 @@ export const _hasFullProfile = (profile: Tables<"profiles"> | null) => {
   if (!profile.full_name)
     return false;
 
-  if (!profile.company_name)
-    return false;
-
-  if (!profile.website)
-    return false;
-
   return true;
 };
