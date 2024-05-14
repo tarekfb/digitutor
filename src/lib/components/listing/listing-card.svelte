@@ -3,7 +3,6 @@
   import { Star } from "lucide-svelte";
   import * as Card from "$lib/components/ui/card/index.js";
   import type { Listing } from "$lib/models/listing";
-  import { Badge } from "../ui/badge";
 
   export let listing: Listing;
 </script>

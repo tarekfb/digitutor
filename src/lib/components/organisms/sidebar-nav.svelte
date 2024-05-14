@@ -5,19 +5,23 @@
   import { goto } from "$app/navigation";
   import { Label } from "$lib/components/ui/label/index.js";
   import { Switch } from "$lib/components/ui/switch/index.js";
-  import { DollarSign, FileText, Settings } from "lucide-svelte";
+  import { DollarSign, Settings } from "lucide-svelte";
   import * as Avatar from "$lib/components/ui/avatar";
+  import type { Role } from "$lib/models/profile";
+  import ListingNav from "./listing-nav.svelte";
+  import ConversationsNav from "./conversations-nav.svelte";
+  import Separator from "../ui/separator/separator.svelte";
 
   let className: string | null | undefined = undefined;
   export { className as class };
-
+  export let role: Role;
   export let conversations: string[] = [];
   let isMinimized = true;
 </script>
 
 <div
   class={cn(
-    `${isMinimized ? "w-14" : "w-36"} z-10 bg-slate-100 overflow-x-hidden fixed h-full left-0 top-0 pb-12`,
+    `${isMinimized ? "w-14" : "w-3/4"} z-10 bg-card overflow-x-hidden fixed h-full left-0 top-0 pb-12 border border-r-foreground`,
     className,
   )}
 >
@@ -35,6 +39,7 @@
       <Switch id="airplane-mode" bind:checked={isMinimized} />
       <Label for="airplane-mode">Dölj</Label>
     </div>
+    <Separator />
     <div>
       <h2
         class="px-3 text-lg font-semibold tracking-tight overflow-x-hidden text-ellipsis whitespace-nowrap"
@@ -42,28 +47,21 @@
         Dashboard
       </h2>
       <div class="space-y-1">
-        <Button
-          variant="secondary"
-          class="w-full justify-start"
-          on:click={() => goto("/account")}
-        >
-          <FileText class="h-5 w-5 mr-1" />
-
-          {#if !isMinimized}
-            Annonser
-          {/if}
-        </Button>
-        <Button
-          variant="ghost"
-          class="w-full justify-start"
-          on:click={() => goto("/account/billing")}
-        >
-          <DollarSign class="h-5 w-5 mr-1" />
-
-          {#if !isMinimized}
-            Billing
-          {/if}
-        </Button>
+        {#if role === "teacher"}
+          <ListingNav {isMinimized} />
+        {:else}
+          <ConversationsNav {isMinimized} />
+          <Button
+            variant="ghost"
+            class="w-full justify-start"
+            on:click={() => goto("/account/billing")}
+          >
+            <DollarSign class="h-5 w-5 mr-1" />
+            {#if !isMinimized}
+              Billing
+            {/if}
+          </Button>
+        {/if}
         <Button
           variant="ghost"
           class="w-full justify-start"
@@ -76,30 +74,34 @@
         </Button>
       </div>
     </div>
-    <div class="py-2">
-      <h2
-        class="relative px-3 text-lg font-semibold tracking-tight overflow-x-hidden text-ellipsis whitespace-nowrap"
-      >
-        Konversationer
-      </h2>
-      <ScrollArea class="h-[300px] ">
-        <div class="space-y-1">
-          {#each conversations as conversation}
-            <Button variant="ghost" class="w-full justify-start font-normal">
-              <Avatar.Root
-                class="h-6 w-6 flex justify-center items-center mr-2"
-              >
-                <Avatar.Fallback class="bg-primary text-white text-xs"
-                  >{convertToInitials(conversation)}</Avatar.Fallback
+    <Separator />
+    {#if role === "teacher"}
+      <div class="py-2">
+        <h2
+          class="relative px-3 text-lg font-semibold tracking-tight overflow-x-hidden text-ellipsis whitespace-nowrap"
+        >
+          Konversationer
+        </h2>
+        <ScrollArea class="h-96">
+          <div class="space-y-1">
+            {#each conversations as conversation}
+              <Button variant="ghost" class="w-full justify-start font-normal">
+                <Avatar.Root
+                  class="h-6 w-6 flex justify-center items-center mr-2"
                 >
-              </Avatar.Root>
-              {#if !isMinimized}
-                {conversation}
-              {/if}
-            </Button>
-          {/each}
-        </div>
-      </ScrollArea>
-    </div>
+                  <Avatar.Fallback class="bg-primary text-white text-xs"
+                    >{convertToInitials(conversation)}</Avatar.Fallback
+                  >
+                </Avatar.Root>
+                {#if !isMinimized}
+                  {conversation}
+                {/if}
+              </Button>
+            {/each}
+          </div>
+        </ScrollArea>
+      </div>
+    {/if}
+    <Separator />
   </div>
 </div>

@@ -21,11 +21,6 @@ export enum Subjects {
   Laravel = 20,
 }
 
-export enum Role {
-  Teacher = 1,
-  Student = 2,
-}
-
 export const languages = [
   { label: "JavaScript", id: 1 },
   { label: "Python", id: 2 },
@@ -47,4 +42,24 @@ export const languages = [
   { label: "Spring", id: 18 },
   { label: "dotNet", id: 19 },
   { label: "Laravel", id: 20 },
+];
+
+
+export const mockConversations = [
+  "John Smith",
+  "Jane Johnson",
+  "Michael Brown",
+  "Emily Davis",
+  "Daniel Wilson",
+  "Sarah Thompson",
+  "Joseph Thompson",
+  "Emily Wilson",
+  "David Smith",
+  "Maria Johnson",
+  "Daniel Davis",
+  "Jennifer Wilson",
+  "Mark Thompson",
+  "Jessica Brown",
+  "Thomas Davis",
+  "Samantha Johnson",
 ];
