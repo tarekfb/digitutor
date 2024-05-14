@@ -85,7 +85,7 @@
         <Button
           variant="ghost"
           class="w-full justify-start"
-          on:click={() => goto("/settings")}
+          on:click={() => goto("/account/settings")}
         >
           <svg
             xmlns="http://www.w3.org/2000/svg"
