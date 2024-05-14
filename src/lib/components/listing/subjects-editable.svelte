@@ -5,9 +5,9 @@
   export let errors;
 </script>
 
-<div class="flex gap-2 items-center flex-wrap max-w-full border rounded-lg p-2">
+<div class="flex gap-2 items-center flex-wrap max-w-full border rounded-lg p-2 bg-background">
   {#each languages as subject}
-    <label class="bg-slate-100 p-2 rounded-lg">
+    <label class="bg-card p-2 rounded-lg">
       <input
         type="checkbox"
         bind:group={$formData.subjects}

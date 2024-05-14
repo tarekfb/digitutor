@@ -89,8 +89,8 @@
                 <Avatar.Root
                   class="h-6 w-6 flex justify-center items-center mr-2"
                 >
-                  <Avatar.Fallback class="bg-primary text-white text-xs"
-                    >{convertToInitials(conversation)}</Avatar.Fallback
+                <Avatar.Fallback class="bg-accent text-background text-xs"
+                >{convertToInitials(conversation)}</Avatar.Fallback
                   >
                 </Avatar.Root>
                 {#if !isMinimized}

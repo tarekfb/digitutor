@@ -1,6 +1,5 @@
 <script lang="ts">
   import * as Form from "$lib/components/ui/form/index.js";
-  import { Input } from "$lib/components/ui/input/index.js";
 
   export let listingForm;
   export let formData;
@@ -8,12 +7,16 @@
 
 <Form.Field form={listingForm} name="hourlyPrice">
   <Form.Control let:attrs>
-    <input
-      {...attrs}
-      type="number"
-      bind:value={$formData.hourlyPrice}
-      placeholder="Välj timpris"
-    />
+    <div class="flex gap-x-2 items-center text-xl">
+      <input
+        {...attrs}
+        type="number"
+        bind:value={$formData.hourlyPrice}
+        placeholder="Välj timpris"
+        class="p-2 border bg-gray-100 rounded-lg w-16"
+      />
+      SEK
+    </div>
   </Form.Control>
   <Form.FieldErrors />
 </Form.Field>

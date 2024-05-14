@@ -13,8 +13,10 @@
   import HourlyPriceEditable from "src/lib/components/listing/hourly-price-editable.svelte";
   import NonEditableListing from "src/lib/components/listing/non-editable-listing.svelte";
   import LoadingSpinner from "src/lib/components/atoms/loading-spinner.svelte";
+  import * as Avatar from "$lib/components/ui/avatar";
   import VisibilityEditable from "src/lib/components/listing/visibility-editable.svelte";
   import { SaveIcon, X, Pencil } from "lucide-svelte";
+  import { convertToInitials } from "src/lib/utils.js";
 
   export let data;
   const { listing, user, form } = data;
@@ -41,7 +43,7 @@
   const { form: formData, enhance, errors, submitting } = listingForm;
 </script>
 
-<div class="p-8 flex flex-col gap-y-2">
+<div class="flex flex-col gap-y-2">
   {#if !listing}
     <MissingListing />
   {:else if isAuthor}
@@ -50,20 +52,16 @@
         method="POST"
         use:enhance
         action="?/updateListing"
-        class="flex flex-col gap-y-4"
+        class="flex flex-col gap-y-4 generic-card m-8"
       >
         <TitleEditable {formData} {listingForm} />
         <HourlyPriceEditable {formData} {listingForm} />
         <Separator />
         <DescriptionEditable {formData} {listingForm} />
         <SubjectsEditable {formData} {errors} />
-
         <VisibilityEditable {formData} {listingForm} />
 
         <div class="flex justify-end gap-x-2">
-          <div class="mr-auto">
-            <DeleteListing />
-          </div>
           <Button on:click={() => (isEditing = false)} variant="secondary">
             <X class="mr-2 h-5 w-5" />
             Avbryt
@@ -82,27 +80,47 @@
           </Button>
         </div>
       </form>
+      <div class="self-end mx-8 mb-8">
+        <DeleteListing />
+      </div>
     {:else}
-      <NonEditableListing {listing} />
-      {#if listing.visible}
-           <div
-          class="bg-green-300 p-2 rounded-lg self-start border-black border-solid border"
+      <div class="flex flex-col gap-y-4 generic-card m-8">
+        <NonEditableListing {listing} />
+        {#if listing.visible}
+          <div
+            class="bg-green-300 p-2 rounded-lg self-start border-black border-solid border"
+          >
+            Publicerad
+          </div>
+        {:else}
+          <div
+            class="bg-slate-100 p-2 rounded-lg self-start border-black border-solid border"
+          >
+            Ej publicerad
+          </div>
+        {/if}
+        <Button on:click={() => (isEditing = true)} class="self-end">
+          <Pencil class="mr-2 h-4 w-4" />
+          Ändra</Button
         >
-          Publicerad
-        </div>
-      {:else}
-        <div
-          class="bg-slate-100 p-2 rounded-lg self-start border-black border-solid border"
-        >
-          Ej publicerad
-        </div>
-      {/if}
-      <Button on:click={() => (isEditing = true)} class="self-end">
-        <Pencil class="mr-2 h-4 w-4" />
-        Ändra</Button
-      >
+      </div>
     {/if}
   {:else}
-    <NonEditableListing {listing} />
+    <div class="flex justify-between gap-x-2 mx-8 mt-8 items-center">
+      <h1 class="text-3xl md:text-4xl">
+        {listing.profile?.full_name}
+      </h1>
+      <Avatar.Root class="h-8 w-8 flex justify-center text-xs items-center">
+        <Avatar.Fallback class="bg-accent text-background"
+          >{convertToInitials(
+            listing.profile?.full_name ?? "? ?",
+          )}</Avatar.Fallback
+        >
+      </Avatar.Root>
+    </div>
+    <div class="generic-card m-8 flex flex-col">
+      <NonEditableListing {listing} />
+    </div>
+    <Button class="mx-8">Kontakta {listing.profile?.full_name}</Button>
   {/if}
 </div>
