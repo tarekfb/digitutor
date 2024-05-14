@@ -23,21 +23,21 @@
   <div class="flex flex-row sm:flex-col sm:space-y-8 sm:space-x-0">
     <SidebarNav
       conversations={[
-        "Jane",
-        "John",
-        "Foo",
-        "Bar",
-        "One",
-        "More",
-        "Made",
-        "Up",
-        "Name",
-        "Made",
-        "Up",
-        "Name",
-        "Made",
-        "Up",
-        "Name",
+        "Jane Doe",
+        "John Doe",
+        "Foo Ber",
+        "Bar Tad",
+        "One Agf",
+        "More Fsa",
+        "Made Tasd",
+        "Up Gfdas",
+        "Name Avd",
+        "Made Pka",
+        "Up Pka",
+        "Name Pka",
+        "Made Pka",
+        "Up Pka",
+        "Name Pka",
       ]}
     />
     <div class="flex-1 lg:max-w-2xl">
