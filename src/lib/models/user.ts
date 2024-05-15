@@ -2,18 +2,16 @@ import type { Tables } from "src/supabase";
 import type { TypeToZod } from "$lib/utils";
 import { z } from "zod";
 
-export type Role = Pick<Tables<"profiles">, "role">["role"];
 
-export type InputUser = Pick<Tables<"profiles">, "role" | "first_name" | "last_name"> & {
+export type SignUpUser = Pick<Tables<"profiles">, "role" | "first_name" | "last_name"> & {
     email: string;
     password: string;
     terms: boolean;
 };
-
-const properties: TypeToZod<InputUser> = {
+const signUpUserFields: TypeToZod<SignUpUser> = {
     email: z
         .string()
-        .min(3, "E-postaddressen måste vara minst 3 bokstäver."),
+        .min(3, "E-postaddressen måste vara minst 3 karaktärer."),
     password: z
         .string()
         .min(5, "Lösenordet måste vara minst 5 karaktärer."),
@@ -32,8 +30,7 @@ const properties: TypeToZod<InputUser> = {
         .refine((s) => s === true, "Du måste godkanna villkoren.")
 
 }
-
-export const signupSchema = z.object(properties)
+export const signUpSchema = z.object(signUpUserFields)
 
 
 export type CreateProfileInput = {
@@ -42,3 +39,19 @@ export type CreateProfileInput = {
     firstName: string;
     lastName: string;
 }
+
+export type Role = Pick<Tables<"profiles">, "role">["role"];
+
+export type SignInUser = {
+    email: string;
+    password: string;
+}
+const signInProperties = {
+    email: z
+        .string()
+        .min(1, "E-postaddressen får inte vara tom."),
+    password: z
+        .string()
+        .min(1, "Lösenordet får inte vara tomt."),
+}
+export const signInSchema = z.object(signInProperties)

@@ -1,4 +1,15 @@
 <script lang="ts">
+  import * as Form from "$lib/components/ui/form";
+  import * as Card from "$lib/components/ui/card";
+  import SuperDebug, { superForm } from "sveltekit-superforms";
+  import { Button } from "$lib/components/ui/button";
+  import { zodClient } from "sveltekit-superforms/adapters";
+  import { toast } from "svelte-sonner";
+  import { signInSchema, signUpSchema } from "src/lib/models/user";
+  import { Input } from "src/lib/components/ui/input";
+  import { Checkbox } from "src/lib/components/ui/checkbox";
+  import LoadingSpinner from "src/lib/components/atoms/loading-spinner.svelte";
+  import * as RadioGroup from "$lib/components/ui/radio-group";
   import { Auth } from "@supabase/auth-ui-svelte";
   import { sharedAppearance, oauthProviders } from "../login_config";
   import { goto } from "$app/navigation";
@@ -6,7 +17,7 @@
   import { page } from "$app/stores";
 
   export let data;
-  let { supabase } = data;
+  let { supabase, form } = data;
 
   onMount(() => {
     supabase.auth.onAuthStateChange((event) => {
@@ -21,10 +32,25 @@
       }
     });
   });
+
+  const userForm = superForm(form, {
+    validators: zodClient(signInSchema),
+    onUpdated: ({ form: f }) => {
+      if (f.valid) {
+        toast.success(`Loggat in.`);
+      } else {
+        toast.error("Fixa felen i formuläret.");
+      }
+    },
+    onError: ({ result }) => {
+      toast.error(result.error.message);
+    },
+  });
+  const { form: formData, enhance, errors, submitting } = userForm;
 </script>
 
 <svelte:head>
-  <title>Log in</title>
+  <title>Logga in</title>
 </svelte:head>
 
 {#if $page.url.searchParams.get("verified") == "true"}
@@ -41,11 +67,66 @@
         d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"
       /></svg
     >
-    <span>Email verified! Please sign in.</span>
+    <span>Epost verifierad! Vänligen logga in.</span>
   </div>
 {/if}
-<h1 class="text-2xl font-bold mb-6">Log in</h1>
-<Auth
+<h1 class="text-2xl font-bold mb-6">Logga in</h1>
+
+<form
+  class="flex text-start mx-auto max-w-sm md:max-w-xl"
+  method="POST"
+  use:enhance
+>
+  <Card.Root>
+    <Card.Header class="space-y-1">
+      <Card.Title class="text-2xl">Skapa ett konto</Card.Title>
+      <Card.Description
+        >Har du redan ett konto? <a href="/login/sign_in" class="underline"
+          >Logga in här.</a
+        ></Card.Description
+      >
+    </Card.Header>
+    <Card.Content class="grid gap-4">
+      <Form.Field form={userForm} name="email">
+        <Form.Control let:attrs>
+          <Input
+            {...attrs}
+            type="email"
+            bind:value={$formData.email}
+            placeholder="Email"
+          />
+        </Form.Control>
+        <Form.FieldErrors />
+      </Form.Field>
+      <Form.Field form={userForm} name="password">
+        <Form.Control let:attrs>
+          <Input
+            {...attrs}
+            type="password"
+            bind:value={$formData.password}
+            placeholder="Lösenord"
+          />
+        </Form.Control>
+        <Form.FieldErrors />
+      </Form.Field>
+    </Card.Content>
+    <Card.Footer class="justify-center">
+      <Button
+        type="submit"
+        disabled={($errors._errors && $errors._errors.length > 0) ||
+          $submitting}
+      >
+        {#if $submitting}
+          <LoadingSpinner class="mr-2" /> <span>Laddar...</span>
+        {:else}
+          Logga in
+        {/if}
+      </Button>
+    </Card.Footer>
+  </Card.Root>
+</form>
+
+<!-- <<Auth
   supabaseClient={data.supabase}
   view="sign_in"
   redirectTo={`${data.url}/auth/callback`}
@@ -54,10 +135,10 @@
   showLinks={false}
   appearance={sharedAppearance}
   additionalData={undefined}
-/>
+/>> -->
 <div class="text-l text-slate-800 mt-4">
-  <a class="underline" href="/login/forgot_password">Forgot password?</a>
+  <a class="underline" href="/login/forgot_password">Glömt lösen?</a>
 </div>
 <div class="text-l text-slate-800 mt-3">
-  Don't have an account? <a class="underline" href="/login/sign_up">Sign up</a>.
+  Har du inget konto <a class="underline" href="/login/sign_up">Skapa konto</a>.
 </div>

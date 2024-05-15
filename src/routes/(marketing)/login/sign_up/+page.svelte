@@ -1,45 +1,20 @@
 <script lang="ts">
-  import { Auth } from "@supabase/auth-ui-svelte";
-  import { sharedAppearance } from "../login_config";
-  import * as Tabs from "$lib/components/ui/tabs";
   import * as Form from "$lib/components/ui/form";
   import * as Card from "$lib/components/ui/card";
-  import * as Alert from "$lib/components/ui/alert";
-  // import { registerSchema } from "$lib/models/profile";
-  import SuperDebug, {
-    superForm,
-    type SuperValidated,
-  } from "sveltekit-superforms";
-  import { Loader2, SaveIcon } from "lucide-svelte";
-  import { AlertCircle } from "lucide-svelte";
+  import SuperDebug, { superForm } from "sveltekit-superforms";
   import { Button } from "$lib/components/ui/button";
   import { zodClient } from "sveltekit-superforms/adapters";
   import { toast } from "svelte-sonner";
-  import { signupSchema } from "src/lib/models/user";
+  import { signUpSchema } from "src/lib/models/user";
   import { Input } from "src/lib/components/ui/input";
   import { Checkbox } from "src/lib/components/ui/checkbox";
-  import { browser } from "$app/environment";
   import LoadingSpinner from "src/lib/components/atoms/loading-spinner.svelte";
-  import { Switch } from "src/lib/components/ui/switch";
   import * as RadioGroup from "$lib/components/ui/radio-group";
-
-  // gör superforms
-  // skapa schema som ha detalkjer för user, och om det behövs från profile också
-  // sen gör en vanlig formsubmit med superforms
-  // där inne kör man koden härifrån
-  // https://github.com/supabase-community/supabase-ui-svelte/blob/main/src/EmailAuthView.svelte
-  // i submit
-  // och sen efter det länkar man ihop den till en ny profil som man skapar i db
-  const test = {
-    true: "green",
-    Rejected: "red",
-    Pending: "yellow",
-  };
 
   export let data;
   const { form } = data;
   const userForm = superForm(form, {
-    validators: zodClient(signupSchema),
+    validators: zodClient(signUpSchema),
     onUpdated: ({ form: f }) => {
       if (f.valid) {
         toast.success(`Skapat användare.`);
@@ -52,8 +27,6 @@
     },
   });
   const { form: formData, enhance, errors, submitting } = userForm;
-
-  $: isStudent = (b: boolean) => (b ? "student" : "teacher");
 </script>
 
 <svelte:head>

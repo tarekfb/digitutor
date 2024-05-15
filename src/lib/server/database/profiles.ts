@@ -22,7 +22,7 @@ export const getProfileByUserId = async (
     .single();
 
   if (error) {
-    console.log(`Failed to get profile for userId: ${userId}*`, { error });
+    console.log(`Failed to get profile for userId: ${userId}`, { error });
     throw error;
   }
 
@@ -52,8 +52,8 @@ export const createProfile = async (
     .limit(1)
     .single();
   if (error) {
-    console.log(`Failed to create profile for userId: ${userInput.userId}*`, { error });
-    throw error
+    console.log(`Failed to create profile for userId: ${userInput.userId}`, { error });
+    throw error;
   }
   return data;
 }

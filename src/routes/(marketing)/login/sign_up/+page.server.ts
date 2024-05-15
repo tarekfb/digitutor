@@ -3,21 +3,20 @@ import type { PageServerLoad } from "./$types";
 import { unknownErrorMessage } from "src/lib/constants";
 import { message, superValidate } from "sveltekit-superforms";
 import { zod } from "sveltekit-superforms/adapters";
-import { signupSchema, type CreateProfileInput } from "src/lib/models/user";
+import { signUpSchema, type CreateProfileInput } from "src/lib/models/user";
 import { createProfile } from "src/lib/server/database/profiles";
 
 export const ssr = false;
 
 
-export const load: PageServerLoad = async ({ locals: { supabase, getSession } }) => {
+export const load: PageServerLoad = async ({ locals: { getSession } }) => {
     try {
         const session = await getSession();
-        const user = session?.user;
         if (session)
             throw redirect(303, "/account");
 
-        const form = await superValidate(zod(signupSchema))
-        return { user, form };
+        const form = await superValidate(zod(signUpSchema))
+        return { form };
     } catch (e) {
         console.error("Error when loading signup", e);
         throw error(500, {
@@ -33,7 +32,7 @@ export const actions = {
         if (session)
             throw redirect(303, "/account");
 
-        const form = await superValidate(event, zod(signupSchema));
+        const form = await superValidate(event, zod(signUpSchema));
         const { email, password, role, first_name, last_name } = form.data;
         if (!form.valid) {
             return fail(400, {
@@ -42,15 +41,14 @@ export const actions = {
         }
 
 
-        // console.log(email)
-        // console.log(password)
+        let inputUser: CreateProfileInput;
         try {
             const { data, error } = await supabase.auth.signUp({
                 email, password
             })
 
             if (error) {
-                console.error("Supabase error on signup", error);
+                console.error("Supabase error on signup", { error });
                 return fail(500, { message: unknownErrorMessage, form })
             }
             console.log("hit")
@@ -60,17 +58,31 @@ export const actions = {
                 return fail(500, { message: unknownErrorMessage, form })
             }
 
-            const inputUser: CreateProfileInput = {
+            // https://github.com/orgs/supabase/discussions/1282
+            if (data.user.identities && data.user.identities.length === 0)
+                return fail(400, { message: "E-postadressen används redan.", form })
+
+            inputUser = {
                 userId: data.user.id,
                 role,
                 firstName: first_name,
                 lastName: last_name,
             }
+
+        } catch (error) {
+            console.error("Error when creating supabase auth user", error);
+            return fail(500, {
+                message: unknownErrorMessage, form,
+            });
+        }
+
+        try {
             const createdUser = await createProfile(supabase, inputUser)
             console.log("createduser")
             console.log(createdUser.id)
-            return message(form, 'Skapat konto.');
+            return message(form, 'Vänligen bekräfta din e-postadress.');
         } catch (error) {
+            console.error("Error when creating profile", error);
             return fail(500, {
                 message: unknownErrorMessage, form,
             });
