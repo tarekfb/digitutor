@@ -18,7 +18,9 @@
   }
 </script>
 
-<header class="sticky top-0 z-40 w-full bg-primary text-background">
+<header
+  class="sticky top-0 z-40 w-full bg-gradient-to-r from-primary to-accent text-background"
+>
   <div
     class="container flex h-16 items-center space-x-4 sm:justify-between sm:space-x-0"
   >
@@ -28,8 +30,10 @@
     <div class="flex flex-1 items-center justify-end space-x-4">
       <nav class="flex items-center space-x-1">
         {#if !profile}
-          <Button on:click={() => goto("/login/sign_up")}>Sign up</Button>
-          <Button on:click={() => goto("/login/sign_in")}>Log in</Button>
+          <Button variant="ghost" on:click={() => goto("/login/sign_in")}
+            >Logga in</Button
+          >
+          <Button on:click={() => goto("/login/sign_up")}>Skapa konto</Button>
         {:else}
           <Button on:click={() => goto("/account")}>
             <UserRound class="mr-2 h-4 w-4" />
