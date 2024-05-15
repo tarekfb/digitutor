@@ -10,12 +10,6 @@
   import { websiteName } from "../../constants";
 
   export let profile: Tables<"profiles"> | null;
-
-  let initials: string = "";
-  $: {
-    if (profile && profile)
-      initials = profile.full_name ? convertToInitials(profile.full_name) : "?";
-  }
 </script>
 
 <header
@@ -51,7 +45,8 @@
                 >
                   <Avatar.Fallback class="bg-accent text-background"
                     >{convertToInitials(
-                      profile.full_name ?? "? ?",
+                      profile.first_name ?? "?",
+                      profile.last_name ?? "?",
                     )}</Avatar.Fallback
                   >
                 </Avatar.Root>
@@ -60,7 +55,7 @@
             <DropdownMenu.Content class="w-56" align="end">
               <DropdownMenu.Label class="font-normal">
                 <p class="text-sm font-medium leading-none">
-                  {profile?.full_name}
+                  {profile?.first_name ?? "Saknar namn..."}
                 </p>
               </DropdownMenu.Label>
               <DropdownMenu.Separator />

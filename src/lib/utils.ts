@@ -68,7 +68,6 @@ export type TypeToZod<T> = {
   : z.ZodObject<TypeToZod<T[K]>>
 };
 
-export const convertToInitials = (fullName: string): string => {
-  const names = fullName.split(" ");
-  return names[0][0] + names[names.length - 1][0];
+export const convertToInitials = (firstName: string, lastName: string): string => {
+  return firstName[0] + lastName[0];
 };
