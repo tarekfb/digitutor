@@ -7,6 +7,7 @@ export type Listing = Omit<Tables<"listings">, "profile"> & {
 };
 
 export type InputListing = Pick<Tables<"listings">, 'hourlyPrice' | 'description' | 'subjects' | 'title' | 'visible'>;
+
 const properties: TypeToZod<InputListing> = {
     description: z
         .string()

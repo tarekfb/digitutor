@@ -7,13 +7,13 @@ export type Role = Pick<Tables<"profiles">, "role">["role"];
 export type InputUser = Pick<Tables<"profiles">, "role" | "first_name" | "last_name"> & {
     email: string;
     password: string;
+    terms: boolean;
 };
 
 const properties: TypeToZod<InputUser> = {
     email: z
         .string()
-        .min(3, "E-postaddressen måste vara minst 3 bokstäver.")
-        .refine((s) => s.trim() !== "", "E-postaddressen får inte vara tom."),
+        .min(3, "E-postaddressen måste vara minst 3 bokstäver."),
     password: z
         .string()
         .min(5, "Lösenordet måste vara minst 5 karaktärer."),
@@ -25,5 +25,20 @@ const properties: TypeToZod<InputUser> = {
         .max(50, "Förnamnet får inte vara mer än 50 bokstäver."),
     last_name: z
         .string()
+        .min(1, "Efternamnet måste vara minst 1 bokstav.")
         .max(50, "Efternamnet får inte vara mer än 50 bokstäver."),
+    terms: z
+        .boolean()
+        .refine((s) => s === true, "Du måste godkanna villkoren.")
+
+}
+
+export const signupSchema = z.object(properties)
+
+
+export type CreateProfileInput = {
+    userId: string;
+    role: "teacher" | "student" | "admin";
+    firstName: string;
+    lastName: string;
 }
