@@ -3,7 +3,7 @@ import type { PageServerLoad } from "./$types";
 import { unknownErrorMessage } from "src/lib/constants";
 import { message, superValidate } from "sveltekit-superforms";
 import { zod } from "sveltekit-superforms/adapters";
-import { signUpSchema, type CreateProfileInput } from "src/lib/models/user";
+import { signUpSchema, type CreateProfile } from "src/lib/models/user";
 import { createProfile } from "src/lib/server/database/profiles";
 
 export const ssr = false;
@@ -41,7 +41,7 @@ export const actions = {
         }
 
 
-        let inputUser: CreateProfileInput;
+        let inputUser: CreateProfile;
         try {
             const { data, error } = await supabase.auth.signUp({
                 email, password
@@ -63,7 +63,7 @@ export const actions = {
                 return fail(400, { message: "E-postadressen används redan.", form })
 
             inputUser = {
-                userId: data.user.id,
+                id: data.user.id,
                 role,
                 firstName: first_name,
                 lastName: last_name,

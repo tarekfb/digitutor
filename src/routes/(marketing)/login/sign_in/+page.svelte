@@ -70,7 +70,6 @@
     <span>Epost verifierad! Vänligen logga in.</span>
   </div>
 {/if}
-<h1 class="text-2xl font-bold mb-6">Logga in</h1>
 
 <form
   class="flex text-start mx-auto max-w-sm md:max-w-xl"
@@ -79,12 +78,12 @@
 >
   <Card.Root>
     <Card.Header class="space-y-1">
-      <Card.Title class="text-2xl">Skapa ett konto</Card.Title>
+      <Card.Title class="text-2xl">Logga in</Card.Title>
       <Card.Description
-        >Har du redan ett konto? <a href="/login/sign_in" class="underline"
-          >Logga in här.</a
-        ></Card.Description
-      >
+      >Har du inget konto? <a href="/login/sign_up" class="underline text-foreground"
+        >Skapa konto här.</a
+      ></Card.Description
+    >
     </Card.Header>
     <Card.Content class="grid gap-4">
       <Form.Field form={userForm} name="email">
@@ -109,8 +108,12 @@
         </Form.Control>
         <Form.FieldErrors />
       </Form.Field>
+      <a
+        href="/login/forgot_password"
+        class="underline text-muted-foreground text-sm justify-self-center">Glömt lösen</a
+      >
     </Card.Content>
-    <Card.Footer class="justify-center">
+    <Card.Footer class="flex flex-col justify-center">
       <Button
         type="submit"
         disabled={($errors._errors && $errors._errors.length > 0) ||
@@ -136,9 +139,22 @@
   appearance={sharedAppearance}
   additionalData={undefined}
 />> -->
-<div class="text-l text-slate-800 mt-4">
-  <a class="underline" href="/login/forgot_password">Glömt lösen?</a>
-</div>
-<div class="text-l text-slate-800 mt-3">
-  Har du inget konto <a class="underline" href="/login/sign_up">Skapa konto</a>.
-</div>
+<!-- <div>
+  <Button
+    variant="link"
+    class="underline text-md"
+    on:click={() => goto("/login/forgot_password")}
+  >
+    Glömt lösenord
+  </Button>
+  <div class="flex gap-x-1 items-center">
+    Har du inget konto?
+    <Button
+      variant="link"
+      class="underline text-md m-0 p-1"
+      on:click={() => goto("/login/sign_up")}
+    >
+      Skapa konto
+    </Button>
+  </div>
+</div> -->

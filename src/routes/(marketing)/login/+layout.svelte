@@ -9,11 +9,11 @@
   }
 </script>
 
-<div class="text-center max-w-lg py-12 flex items-center justify-center">
-  <div class="flex flex-col">
-    <slot />
-    <div class="mt-8 {isEurope ? 'block' : 'hidden'}">
-      🍪 Inloggning använder kakor 🍪
-    </div>
+<div
+  class="text-center max-w-lg py-12 flex flex-col items-center justify-center gap-y-4"
+>
+  <slot />
+  <div class="mt-8 {isEurope ? 'block' : 'hidden'}">
+    🍪 Inloggning använder kakor 🍪
   </div>
 </div>

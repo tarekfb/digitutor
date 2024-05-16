@@ -3,11 +3,9 @@ import type { PageServerLoad } from "./$types";
 import { unknownErrorMessage } from "src/lib/constants";
 import { message, superValidate } from "sveltekit-superforms";
 import { zod } from "sveltekit-superforms/adapters";
-import { signInSchema, type CreateProfileInput } from "src/lib/models/user";
-import { createProfile } from "src/lib/server/database/profiles";
+import { signInSchema } from "src/lib/models/user";
 
 export const ssr = false;
-
 
 export const load: PageServerLoad = async ({ locals: { getSession } }) => {
     try {

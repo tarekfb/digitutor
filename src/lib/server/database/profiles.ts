@@ -1,5 +1,5 @@
 import type { Session, SupabaseClient } from "@supabase/supabase-js";
-import type { CreateProfileInput } from "src/lib/models/user";
+import type { CreateProfile, CompleteProfileInput } from "src/lib/models/user";
 import type { Database, Tables } from "src/supabase";
 
 export const getProfileBySession = async (
@@ -32,17 +32,17 @@ export const getProfileByUserId = async (
 
 export const createProfile = async (
   supabase: SupabaseClient<Database>,
-  userInput: CreateProfileInput,
+  profileInput: CreateProfile,
 ): Promise<Tables<"profiles">> => {
 
   const dbProfile: Tables<"profiles"> = {
-    id: userInput.userId,
-    role: userInput.role,
+    id: profileInput.id,
+    role: profileInput.role,
     created_at: new Date().toDateString(),
     updated_at: null,
     avatar_url: null,
-    first_name: userInput.firstName,
-    last_name: userInput.lastName,
+    first_name: profileInput.firstName,
+    last_name: profileInput.lastName,
   };
 
   const { data, error } = await supabase
@@ -52,7 +52,24 @@ export const createProfile = async (
     .limit(1)
     .single();
   if (error) {
-    console.log(`Failed to create profile for userId: ${userInput.userId}`, { error });
+    console.log(`Failed to create profile for userId: ${profileInput.id}`, { error });
+    throw error;
+  }
+  return data;
+}
+
+export const updateProfile = async (
+  supabase: SupabaseClient<Database>,
+  profileInput: Tables<"profiles">,
+): Promise<Tables<"profiles">> => {
+  const { data, error } = await supabase
+    .from("profiles")
+    .upsert(profileInput)
+    .select(`*`)
+    .limit(1)
+    .single();
+  if (error) {
+    console.log(`Failed to update profile for userId: ${profileInput.id}`, { error });
     throw error;
   }
   return data;

@@ -2,7 +2,6 @@ import type { Tables } from "src/supabase";
 import type { TypeToZod } from "$lib/utils";
 import { z } from "zod";
 
-
 export type SignUpUser = Pick<Tables<"profiles">, "role" | "first_name" | "last_name"> & {
     email: string;
     password: string;
@@ -33,8 +32,8 @@ const signUpUserFields: TypeToZod<SignUpUser> = {
 export const signUpSchema = z.object(signUpUserFields)
 
 
-export type CreateProfileInput = {
-    userId: string;
+export type CreateProfile = {
+    id: string;
     role: "teacher" | "student" | "admin";
     firstName: string;
     lastName: string;
@@ -55,3 +54,16 @@ const signInProperties = {
         .min(1, "Lösenordet får inte vara tomt."),
 }
 export const signInSchema = z.object(signInProperties)
+
+export type CompleteProfileInput = {
+    firstName: string;
+    lastName: string;
+}
+
+export const completeProfileProperties = {
+    firstName: signUpUserFields.first_name,
+    lastName: signUpUserFields.last_name,
+}
+
+export const completeProfileSchema = z.object(completeProfileProperties);
+

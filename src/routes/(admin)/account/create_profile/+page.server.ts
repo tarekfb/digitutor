@@ -1,0 +1,84 @@
+import { unknownErrorMessage } from "$lib/constants.js";
+import { _hasFullProfile } from "src/routes/(admin)/account/+layout.js";
+import { error, fail, redirect } from "@sveltejs/kit";
+import { zod } from "sveltekit-superforms/adapters";
+import { message, superValidate } from "sveltekit-superforms/client";
+import { completeProfileSchema } from "$lib/models/user.js";
+import { getProfileBySession, updateProfile } from "src/lib/server/database/profiles.js";
+import type { Tables } from "src/supabase";
+import type { PageServerParentData } from "./$types";
+
+export async function load({ parent }) {
+  const data = await parent();
+  const { profile } = data;
+
+  // user completed their profile
+  // redirect to select plan if student
+  if (_hasFullProfile(profile)) {
+    if (profile.role === "student")
+      throw redirect(303, "/account/select_plan");
+    throw redirect(303, "/account");
+  }
+
+  const initFormData = {
+    firstName: profile.first_name ?? "",
+    lastName: profile.last_name ?? "",
+  }
+
+  try {
+    const form = await superValidate(initFormData, zod(completeProfileSchema))
+    return { form, data };
+  } catch (e) {
+    console.error("Error when loading createprofile", e);
+    throw error(500, {
+      message: unknownErrorMessage,
+    });
+  };
+}
+
+export const actions = {
+  default: async (event) => {
+    const { locals: { supabase, getSession } } = event;
+    const session = await getSession();
+    if (!session)
+      throw redirect(303, "/login");
+
+    const form = await superValidate(event, zod(completeProfileSchema));
+
+    if (!form.valid) {
+      return fail(400, {
+        form,
+      });
+    }
+
+    const { firstName, lastName } = form.data;
+
+    let profile: Tables<"profiles">;
+    try {
+      profile = await getProfileBySession(supabase, session);
+    } catch (error) {
+      console.error("Error on fetch profile in complete profile", error);
+      return fail(500, {
+        message: unknownErrorMessage, form
+      });
+    }
+
+    profile = {
+      ...profile,
+      first_name: firstName,
+      last_name: lastName
+    };
+
+
+    try {
+      await updateProfile(supabase, profile);
+      return message(form, 'Skapat profil.');
+    } catch (error) {
+      console.error("Error on complete profile for userid " + profile.id, error);
+      return fail(500, {
+        message: unknownErrorMessage, form,
+      });
+    }
+
+  }
+}

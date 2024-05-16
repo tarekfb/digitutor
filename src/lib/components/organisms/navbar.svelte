@@ -41,9 +41,9 @@
                 class="relative h-8 w-8 rounded-full"
               >
                 <Avatar.Root
-                  class="h-8 w-8 flex justify-center text-xs items-center"
+                  class="h-8 w-8 flex justify-center text-xs items-center "
                 >
-                  <Avatar.Fallback class="bg-accent text-background"
+                  <Avatar.Fallback class="text-background bg-primary"
                     >{convertToInitials(
                       profile.first_name ?? "?",
                       profile.last_name ?? "?",
@@ -61,7 +61,7 @@
               <DropdownMenu.Separator />
               <DropdownMenu.Item on:click={() => goto("/account/sign_out")}>
                 <LogOut class="mr-2 h-4 w-4" />
-                Sign out
+                Logga ut
               </DropdownMenu.Item>
             </DropdownMenu.Content>
           </DropdownMenu.Root>
