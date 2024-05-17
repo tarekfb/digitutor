@@ -28,7 +28,7 @@
 </svelte:head>
 
 <form
-  class="flex text-start mx-auto max-w-sm md:max-w-xl"
+  class="text-start"
   method="POST"
   use:enhance
 >

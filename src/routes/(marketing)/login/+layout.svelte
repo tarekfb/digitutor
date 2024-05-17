@@ -10,7 +10,7 @@
 </script>
 
 <div
-  class="text-center max-w-lg py-12 flex flex-col items-center justify-center gap-y-4"
+  class="text-center py-12 px-8 flex flex-col items-center justify-center gap-y-4 max-w-sm md:max-w-xl"
 >
   <slot />
   <div class="mt-8 {isEurope ? 'block' : 'hidden'}">

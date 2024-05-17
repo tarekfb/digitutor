@@ -43,29 +43,7 @@
   <title>Logga in</title>
 </svelte:head>
 
-{#if $page.url.searchParams.get("verified") == "true"}
-  <div role="alert" class="alert alert-success mb-5">
-    <svg
-      xmlns="http://www.w3.org/2000/svg"
-      class="stroke-current shrink-0 h-6 w-6"
-      fill="none"
-      viewBox="0 0 24 24"
-      ><path
-        stroke-linecap="round"
-        stroke-linejoin="round"
-        stroke-width="2"
-        d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"
-      /></svg
-    >
-    <span>Epost verifierad! Vänligen logga in.</span>
-  </div>
-{/if}
-
-<form
-  class="flex text-start mx-auto max-w-sm md:max-w-xl"
-  method="POST"
-  use:enhance
->
+<form class="text-start" method="POST" use:enhance>
   <Card.Root>
     <Card.Header class="space-y-1">
       <Card.Title class="text-2xl">Logga in</Card.Title>
@@ -120,15 +98,33 @@
     </Card.Footer>
   </Card.Root>
 </form>
+
+{#if $page.url.searchParams.get("verified") == "true"}
+  <!-- <svg
+      xmlns="http://www.w3.org/2000/svg"
+      class="stroke-current shrink-0 h-6 w-6"
+      fill="none"
+      viewBox="0 0 24 24"
+      ><path
+        stroke-linecap="round"
+        stroke-linejoin="round"
+        stroke-width="2"
+        d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"
+      /></svg
+    > -->
+
+  <Alert.Root variant="success" class="bg-card">
+    <Alert.Title>E-post verifierad</Alert.Title>
+    <Alert.Description>Vänligen logga in.</Alert.Description>
+  </Alert.Root>
+{/if}
 {#if $message}
-  <div class="max-w-sm">
-    <Alert.Root variant={$message.variant ?? "default"} class="bg-card">
-      <Alert.Title>{$message.title}</Alert.Title>
-      <Alert.Description>
-        {$message.description}
-      </Alert.Description>
-    </Alert.Root>
-  </div>
+  <Alert.Root variant={$message.variant ?? "default"} class="bg-card">
+    <Alert.Title>{$message.title}</Alert.Title>
+    <Alert.Description>
+      {$message.description}
+    </Alert.Description>
+  </Alert.Root>
 {/if}
 
 <!-- <<Auth
