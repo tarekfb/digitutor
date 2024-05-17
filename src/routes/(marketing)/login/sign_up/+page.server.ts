@@ -45,15 +45,12 @@ export const actions = {
                 email, password
             })
 
+            // this error takes presence of email in use and presumably more errors
             if (error?.status === 429) {
                 console.error("Email rate limit exceeded", error)
                 return message(form, { variant: "destructive", title: "För många e-postutskick", description: "Kan ej skicka e-post just nu. Försök igen senare." }, { status: 429 });
             }
 
-            if (error) {
-                console.error("Supabase error on signup", { error });
-                return message(form, genericErrorMessage, { status: 500 });
-            }
 
             if (!data.user) {
                 console.error("User data was null on signup", error);
@@ -63,6 +60,13 @@ export const actions = {
             // https://github.com/orgs/supabase/discussions/1282
             if (data.user.identities && data.user.identities.length === 0)
                 return setError(form, "email", "E-postadressen används redan");
+
+
+            if (error) {
+                console.error("Supabase error on signup", { error });
+                return message(form, genericErrorMessage, { status: 500 });
+            }
+
 
             inputUser = {
                 id: data.user.id,
