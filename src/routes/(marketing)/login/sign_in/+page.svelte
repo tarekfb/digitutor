@@ -1,17 +1,14 @@
 <script lang="ts">
   import * as Form from "$lib/components/ui/form";
   import * as Card from "$lib/components/ui/card";
-  import SuperDebug, { superForm } from "sveltekit-superforms";
+  import { superForm } from "sveltekit-superforms";
   import { Button } from "$lib/components/ui/button";
   import { zodClient } from "sveltekit-superforms/adapters";
   import { toast } from "svelte-sonner";
-  import { signInSchema, signUpSchema } from "src/lib/models/user";
+  import * as Alert from "$lib/components/ui/alert/index.js";
+  import { signInSchema } from "src/lib/models/user";
   import { Input } from "src/lib/components/ui/input";
-  import { Checkbox } from "src/lib/components/ui/checkbox";
   import LoadingSpinner from "src/lib/components/atoms/loading-spinner.svelte";
-  import * as RadioGroup from "$lib/components/ui/radio-group";
-  import { Auth } from "@supabase/auth-ui-svelte";
-  import { sharedAppearance, oauthProviders } from "../login_config";
   import { goto } from "$app/navigation";
   import { onMount } from "svelte";
   import { page } from "$app/stores";
@@ -35,18 +32,11 @@
 
   const userForm = superForm(form, {
     validators: zodClient(signInSchema),
-    onUpdated: ({ form: f }) => {
-      if (f.valid) {
-        toast.success(`Loggat in.`);
-      } else {
-        toast.error("Fixa felen i formuläret.");
-      }
-    },
     onError: ({ result }) => {
       toast.error(result.error.message);
     },
   });
-  const { form: formData, enhance, errors, submitting } = userForm;
+  const { form: formData, enhance, errors, submitting, message } = userForm;
 </script>
 
 <svelte:head>
@@ -80,10 +70,11 @@
     <Card.Header class="space-y-1">
       <Card.Title class="text-2xl">Logga in</Card.Title>
       <Card.Description
-      >Har du inget konto? <a href="/login/sign_up" class="underline text-foreground"
-        >Skapa konto här.</a
-      ></Card.Description
-    >
+        >Har du inget konto? <a
+          href="/login/sign_up"
+          class="underline text-foreground">Skapa konto här.</a
+        ></Card.Description
+      >
     </Card.Header>
     <Card.Content class="grid gap-4">
       <Form.Field form={userForm} name="email">
@@ -110,7 +101,8 @@
       </Form.Field>
       <a
         href="/login/forgot_password"
-        class="underline text-muted-foreground text-sm justify-self-center">Glömt lösen</a
+        class="underline text-muted-foreground text-sm justify-self-center"
+        >Glömt lösen</a
       >
     </Card.Content>
     <Card.Footer class="flex flex-col justify-center">
@@ -128,6 +120,16 @@
     </Card.Footer>
   </Card.Root>
 </form>
+{#if $message}
+  <div class="max-w-sm">
+    <Alert.Root variant={$message.variant ?? "default"} class="bg-card">
+      <Alert.Title>{$message.title}</Alert.Title>
+      <Alert.Description>
+        {$message.description}
+      </Alert.Description>
+    </Alert.Root>
+  </div>
+{/if}
 
 <!-- <<Auth
   supabaseClient={data.supabase}

@@ -12,6 +12,10 @@ export const alertVariants = tv({
 			default: "bg-background text-foreground",
 			destructive:
 				"border-destructive/50 text-destructive text-destructive dark:border-destructive [&>svg]:text-destructive",
+			success:
+				"border-success/50 text-success text-success dark:border-success [&>svg]:text-success",
+			warning:
+				"border-warning/50 text-warning text-warning dark:border-warning [&>svg]:text-warning",
 		},
 	},
 	defaultVariants: {
@@ -26,7 +30,6 @@ export {
 	Root,
 	Description,
 	Title,
-	//
 	Root as Alert,
 	Description as AlertDescription,
 	Title as AlertTitle,

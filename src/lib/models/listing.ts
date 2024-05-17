@@ -11,19 +11,19 @@ export type InputListing = Pick<Tables<"listings">, 'hourlyPrice' | 'description
 const properties: TypeToZod<InputListing> = {
     description: z
         .string()
-        .min(10, "Beskrivningen måste vara minst 10 karaktärer.")
-        .max(160, "Beskrivningen måste vara maximalt 160 karaktärer.")
-        .refine((s) => s.trim() !== "", "Beskrivningen får inte vara tom."),
+        .min(10, "Måste vara minst 10 karaktärer.")
+        .max(160, "Måste vara maximalt 160 karaktärer.")
+        .refine((s) => s.trim() !== "", "Får inte vara tom."),
     hourlyPrice: z
         .number()
-        .min(0, "Timpriset får inte vara negativt.")
+        .min(0, "Får inte vara negativt.")
         .max(100000, "Självinsikt och självsäkerhet är en hårfin balansgång."),
     subjects: z.number().array().min(1, "Du måste välja minst ett ämne."),
     title: z
         .string()
-        .min(3, "Rubriken måste vara minst 3 bokstäver.")
-        .max(80, "Rubriken måste vara maximalt 100 bokstäver.")
-        .refine((s) => s.trim() !== "", "Rubriken får inte vara tom."),
+        .min(3, "Måste vara minst 3 bokstäver.")
+        .max(80, "Måste vara maximalt 100 bokstäver.")
+        .refine((s) => s.trim() !== "", "Får inte vara tom."),
     visible: z
         .boolean()
     // currency: z

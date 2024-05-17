@@ -1,7 +1,7 @@
 <script lang="ts">
   import * as Form from "$lib/components/ui/form";
   import * as Card from "$lib/components/ui/card";
-  import SuperDebug, { superForm } from "sveltekit-superforms";
+  import { superForm } from "sveltekit-superforms";
   import { Button } from "$lib/components/ui/button";
   import { zodClient } from "sveltekit-superforms/adapters";
   import { toast } from "svelte-sonner";
@@ -10,23 +10,17 @@
   import { Checkbox } from "src/lib/components/ui/checkbox";
   import LoadingSpinner from "src/lib/components/atoms/loading-spinner.svelte";
   import * as RadioGroup from "$lib/components/ui/radio-group";
+  import * as Alert from "$lib/components/ui/alert/index.js";
 
   export let data;
   const { form } = data;
   const userForm = superForm(form, {
     validators: zodClient(signUpSchema),
-    onUpdated: ({ form: f }) => {
-      if (f.valid) {
-        toast.success(`Skapat användare.`);
-      } else {
-        toast.error("Fixa felen i formuläret.");
-      }
-    },
     onError: ({ result }) => {
       toast.error(result.error.message);
     },
   });
-  const { form: formData, enhance, errors, submitting } = userForm;
+  const { form: formData, enhance, errors, submitting, message } = userForm;
 </script>
 
 <svelte:head>
@@ -151,4 +145,13 @@
   </Card.Root>
   <!-- <Loader2 class="mr-2 h-4 w-4 animate-spin" /> -->
 </form>
-<SuperDebug data={$formData} />
+{#if $message}
+  <div>
+    <Alert.Root variant={$message.variant ?? "default"} class="bg-card">
+      <Alert.Title>{$message.title}</Alert.Title>
+      <Alert.Description>
+        {$message.description}
+      </Alert.Description>
+    </Alert.Root>
+  </div>
+{/if}

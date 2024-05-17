@@ -10,23 +10,23 @@ export type SignUpUser = Pick<Tables<"profiles">, "role" | "first_name" | "last_
 const signUpUserFields: TypeToZod<SignUpUser> = {
     email: z
         .string()
-        .min(3, "E-postaddressen måste vara minst 3 karaktärer."),
+        .min(3, "Måste vara minst 3 karaktärer."),
     password: z
         .string()
-        .min(5, "Lösenordet måste vara minst 5 karaktärer."),
+        .min(5, "Måste vara minst 5 karaktärer."),
     role: z
         .enum(["student", "teacher", "admin"]),
     first_name: z
         .string()
-        .min(1, "Förnamnet måste vara minst 1 bokstav.")
-        .max(50, "Förnamnet får inte vara mer än 50 bokstäver."),
+        .min(1, "Måste vara minst 1 bokstav.")
+        .max(50, "Får inte vara mer än 50 bokstäver."),
     last_name: z
         .string()
-        .min(1, "Efternamnet måste vara minst 1 bokstav.")
-        .max(50, "Efternamnet får inte vara mer än 50 bokstäver."),
+        .min(1, "Måste vara minst 1 bokstav.")
+        .max(50, "Får inte vara mer än 50 bokstäver."),
     terms: z
         .boolean()
-        .refine((s) => s === true, "Du måste godkanna villkoren.")
+        .refine((s) => s === true, "Villkoren är obligatoriska.")
 
 }
 export const signUpSchema = z.object(signUpUserFields)
@@ -48,10 +48,10 @@ export type SignInUser = {
 const signInProperties = {
     email: z
         .string()
-        .min(1, "E-postaddressen får inte vara tom."),
+        .min(1, "Får inte vara tom."),
     password: z
         .string()
-        .min(1, "Lösenordet får inte vara tomt."),
+        .min(1, "Får inte vara tomt."),
 }
 export const signInSchema = z.object(signInProperties)
 

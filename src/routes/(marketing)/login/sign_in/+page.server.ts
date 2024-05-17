@@ -4,6 +4,7 @@ import { unknownErrorMessage } from "src/lib/constants";
 import { message, superValidate } from "sveltekit-superforms";
 import { zod } from "sveltekit-superforms/adapters";
 import { signInSchema } from "src/lib/models/user";
+import { isAuthApiError, type AuthApiError } from "@supabase/supabase-js";
 
 export const ssr = false;
 
@@ -42,6 +43,9 @@ export const actions = {
             const { data, error } = await supabase.auth.signInWithPassword({
                 email, password
             })
+            if (error && error.message === "Email not confirmed")
+                return message(form, { variant: "warning", title: "Verifiera e-post", description: "E-postadressen är inte verifierad. Kika in din inkorg för att verifiera e-posten." }, { status: 400 });
+
 
             if (error) {
                 console.error("Supabase error on signin", { error });
@@ -56,11 +60,21 @@ export const actions = {
             return message(form, 'Inloggning lyckades');
 
         } catch (error) {
-            console.error("Error on signin supabase auth user", error);
-            return fail(500, {
-                message: unknownErrorMessage, form,
-            });
-        }
+            if (isAuthApiError(error)) {
+                const authApiError = error as AuthApiError;
+                if (authApiError.message === "Email not confirmed") {
+                    console.log("hej frå¨n catch")
+                    return fail(500, {
+                        message: unknownErrorMessage, form,
+                    });
+                }
 
+                console.error("Error on signin supabase auth user", error);
+                return fail(500, {
+                    message: unknownErrorMessage, form,
+                });
+            }
+
+        }
     }
 }
