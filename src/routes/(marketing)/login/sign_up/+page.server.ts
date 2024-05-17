@@ -1,14 +1,12 @@
 import { error, fail, redirect } from "@sveltejs/kit";
 import type { PageServerLoad } from "./$types";
-import { genericErrorMessage, unknownErrorHeading, unknownErrorMessage } from "src/lib/constants";
+import { genericErrorMessage, unknownErrorMessage } from "src/lib/constants";
 import { message, superValidate } from "sveltekit-superforms";
 import { zod } from "sveltekit-superforms/adapters";
 import { signUpSchema, type CreateProfile } from "src/lib/models/user";
 import { createProfile } from "src/lib/server/database/profiles";
-import type { Message } from "src/lib/models/common";
 
 export const ssr = false;
-
 
 export const load: PageServerLoad = async ({ locals: { getSession } }) => {
     try {
@@ -54,26 +52,18 @@ export const actions = {
 
             if (error) {
                 console.error("Supabase error on signup", { error });
-                return message(form, {
-                    variant: "destructive",
-                    title: unknownErrorHeading,
-                    description: unknownErrorMessage
-                }, { status: 500 });
+                return message(form, genericErrorMessage, { status: 500 });
             }
 
             if (!data.user) {
                 console.error("User data was null on signup", error);
-                return message(form, {
-                    variant: "destructive",
-                    title: unknownErrorHeading,
-                    description: unknownErrorMessage
-                }, { status: 500 });
+                return message(form, genericErrorMessage, { status: 500 });
             }
 
             // https://github.com/orgs/supabase/discussions/1282
-            if (data.user.identities && data.user.identities.length === 0) {
+            if (data.user.identities && data.user.identities.length === 0)
                 return message(form, { variant: "destructive", title: "E-postadressen används redan", description: "Testa att skapa ett konto med annan e-postadress." }, { status: 400 });
-            }
+
 
             inputUser = {
                 id: data.user.id,
