@@ -1,10 +1,9 @@
 import { error, fail, redirect } from "@sveltejs/kit";
 import type { PageServerLoad } from "./$types";
-import { unknownErrorMessage } from "src/lib/constants";
+import { genericErrorMessage, unknownErrorMessage } from "src/lib/constants";
 import { message, superValidate } from "sveltekit-superforms";
 import { zod } from "sveltekit-superforms/adapters";
 import { signInSchema } from "src/lib/models/user";
-import { isAuthApiError, type AuthApiError } from "@supabase/supabase-js";
 
 export const ssr = false;
 
@@ -43,38 +42,25 @@ export const actions = {
             const { data, error } = await supabase.auth.signInWithPassword({
                 email, password
             })
-            if (error && error.message === "Email not confirmed")
-                return message(form, { variant: "warning", title: "Verifiera e-post", description: "E-postadressen är inte verifierad. Kika in din inkorg för att verifiera e-posten." }, { status: 400 });
-
-
             if (error) {
-                console.error("Supabase error on signin", { error });
-                return fail(500, { message: unknownErrorMessage, form })
+                switch (error.message) {
+                    case "Invalid login credentials":
+                        return message(form, { variant: "destructive", title: "Ogiltiga inloggingsuppgifter", description: "E-postadressen eller lösenordet stämmer inte överens." }, { status: 400 });
+                    case "Email not confirmed":
+                        return message(form, { variant: "warning", title: "Verifiera e-post", description: "E-postadressen är inte verifierad. Kika in din inkorg för att verifiera e-posten." }, { status: 400 });
+                    default:
+                        console.error("Supabase error on signin", { error });
+                        return message(form, genericErrorMessage, { status: 500 });
+                }
             }
-
             if (!data.user) {
                 console.error("User data was null on signup", error);
-                return fail(500, { message: unknownErrorMessage, form })
+                return message(form, genericErrorMessage, { status: 500 });
             }
-
-            return message(form, 'Inloggning lyckades');
-
         } catch (error) {
-            if (isAuthApiError(error)) {
-                const authApiError = error as AuthApiError;
-                if (authApiError.message === "Email not confirmed") {
-                    console.log("hej frå¨n catch")
-                    return fail(500, {
-                        message: unknownErrorMessage, form,
-                    });
-                }
-
-                console.error("Error on signin supabase auth user", error);
-                return fail(500, {
-                    message: unknownErrorMessage, form,
-                });
-            }
-
+            console.error("Error on signin supabase auth user", error);
+            return message(form, genericErrorMessage, { status: 500 });
         }
+        throw redirect(302, "/account");
     }
 }

@@ -102,7 +102,7 @@
       <a
         href="/login/forgot_password"
         class="underline text-muted-foreground text-sm justify-self-center"
-        >Glömt lösen</a
+        >Glömt lösen?</a
       >
     </Card.Content>
     <Card.Footer class="flex flex-col justify-center">

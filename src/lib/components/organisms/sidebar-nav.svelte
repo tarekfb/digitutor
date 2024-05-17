@@ -74,8 +74,8 @@
         </Button>
       </div>
     </div>
-    <Separator />
     {#if role === "teacher"}
+      <Separator />
       <div class="py-2">
         <h2
           class="relative px-3 text-lg font-semibold tracking-tight overflow-x-hidden text-ellipsis whitespace-nowrap"
@@ -104,7 +104,7 @@
           </div>
         </ScrollArea>
       </div>
+      <Separator />
     {/if}
-    <Separator />
   </div>
 </div>

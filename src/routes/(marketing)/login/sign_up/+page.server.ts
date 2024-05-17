@@ -1,6 +1,6 @@
 import { error, fail, redirect } from "@sveltejs/kit";
 import type { PageServerLoad } from "./$types";
-import { unknownErrorHeading, unknownErrorMessage } from "src/lib/constants";
+import { genericErrorMessage, unknownErrorHeading, unknownErrorMessage } from "src/lib/constants";
 import { message, superValidate } from "sveltekit-superforms";
 import { zod } from "sveltekit-superforms/adapters";
 import { signUpSchema, type CreateProfile } from "src/lib/models/user";
@@ -83,7 +83,7 @@ export const actions = {
             }
         } catch (error) {
             console.error("Error when creating supabase auth user", error);
-            return message(form, { variant: "destructive", title: unknownErrorHeading, description: unknownErrorMessage }, { status: 500 });
+            return message(form, genericErrorMessage, { status: 500 });
         }
 
         try {
@@ -91,7 +91,7 @@ export const actions = {
             return message(form, { variant: "success", title: "Verifiera e-postadress", description: "Kika in din inkorg för att verifiera e-posten.", status: 201 });
         } catch (error) {
             console.error("Error when creating profile", error);
-            return message(form, { variant: "destructive", title: unknownErrorHeading, description: unknownErrorMessage }, { status: 500 });
+            return message(form, genericErrorMessage, { status: 500 });
         }
     }
 }
