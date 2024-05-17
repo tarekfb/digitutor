@@ -1,16 +1,16 @@
 <svelte:head>
-  <title>Log In</title>
+  <title>Logga in</title>
 </svelte:head>
 
 <div>
-  <h1 class="text-xl font-bold">Get Started</h1>
+  <h1 class="text-xl font-bold">Kom igång</h1>
   <a href="/login/sign_up"
-    ><button class="btn btn-primary mt-3 btn-wide">Sign Up</button></a
+    ><button class="btn btn-primary mt-3 btn-wide">Skapa konto</button></a
   >
 
-  <h1 class="text-xl mt-6">Already have an account?</h1>
+  <h1 class="text-xl mt-6">Har du redan ett konto?</h1>
   <a href="/login/sign_in"
-    ><button class="btn btn-outline btn-primary mt-3 btn-wide">Sign In</button
+    ><button class="btn btn-outline btn-primary mt-3 btn-wide">Logga in</button
     ></a
   >
 </div>

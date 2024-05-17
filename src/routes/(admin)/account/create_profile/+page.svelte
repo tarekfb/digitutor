@@ -1,84 +1,97 @@
 <script lang="ts">
-  import "../../../../app.pcss";
-  import { enhance, applyAction } from "$app/forms";
-  import type { SubmitFunction } from "@sveltejs/kit";
-
+  import * as Form from "$lib/components/ui/form";
+  import * as Card from "$lib/components/ui/card";
+  import { superForm } from "sveltekit-superforms";
+  import { Button } from "$lib/components/ui/button";
+  import { zodClient } from "sveltekit-superforms/adapters";
+  import { toast } from "svelte-sonner";
+  import { completeProfileSchema } from "src/lib/models/user";
+  import { Input } from "src/lib/components/ui/input";
+  import LoadingSpinner from "src/lib/components/atoms/loading-spinner.svelte";
+  import { goto } from "$app/navigation";
+  import { LogOut } from "lucide-svelte";
+  import { websiteName } from "src/lib/constants";
   export let data;
-  export let form: FormAccountUpdateResult;
+  let { session, form } = data;
 
-  let { session, profile } = data;
-
-  let loading = false;
-  let fullName: string = profile?.full_name ?? "";
-
-  const fieldError = (liveForm: FormAccountUpdateResult, name: string) => {
-    let errors = liveForm?.errorFields ?? [];
-    return errors.includes(name);
-  };
-
-  const handleSubmit: SubmitFunction = () => {
-    loading = true;
-    return async ({ update, result }) => {
-      await update({ reset: false });
-      await applyAction(result);
-      loading = false;
-    };
-  };
+  const completeProfileForm = superForm(form, {
+    validators: zodClient(completeProfileSchema),
+    onUpdated: ({ form: f }) => {
+      if (f.valid) {
+        toast.success(`Skapat profil.`);
+      } else {
+        toast.error("Fixa felen i formuläret.");
+      }
+    },
+    onError: ({ result }) => {
+      toast.error(result.error.message);
+    },
+  });
+  const { form: formData, enhance, errors, submitting } = completeProfileForm;
 </script>
 
 <svelte:head>
-  <title>Create Profile</title>
+  <title>Skapa profil</title>
 </svelte:head>
-
 <div
-  class="text-center content-center max-w-lg mx-auto min-h-[100vh] pb-12 flex items-center place-content-center"
+  class="text-center max-w-lg py-12 flex flex-col items-center justify-center gap-y-4"
 >
-  <div class="flex flex-col w-64 lg:w-80">
-    <div>
-      <h1 class="text-2xl font-bold mb-6">Create Profile</h1>
-      <form
-        class="form-widget"
-        method="POST"
-        action="/account/api?/updateProfile"
-        use:enhance={handleSubmit}
-      >
-        <div class="mt-4">
-          <label for="fullName">
-            <span class="text-l text-center">Your Name</span>
-          </label>
-          <input
-            id="fullName"
-            name="fullName"
-            type="text"
-            placeholder="Your full name"
-            class="{fieldError(form, 'fullName')
-              ? 'input-error'
-              : ''} mt-1 input input-bordered w-full max-w-xs"
-            value={form?.fullName ?? fullName}
-            maxlength="50"
-          />
-        </div>
-
-        {#if form?.errorMessage}
-          <p class="text-red-700 text-sm font-bold text-center mt-3">
-            {form?.errorMessage}
-          </p>
-        {/if}
-        <div class="mt-4">
-          <input
-            type="submit"
-            class="btn btn-primary mt-3 btn-wide"
-            value={loading ? "..." : "Create Profile"}
-            disabled={loading}
-          />
-        </div>
-      </form>
-
-      <div class="text-sm text-slate-800 mt-14">
-        You are logged in as {session?.user?.email}.
-        <br />
-        <a class="underline" href="/account/sign_out"> Sign out </a>
-      </div>
-    </div>
+  <form
+    class="flex text-start mx-auto max-w-sm md:max-w-xl"
+    method="POST"
+    use:enhance
+  >
+    <Card.Root>
+      <Card.Header class="space-y-1">
+        <Card.Title class="text-2xl">Skapa profil</Card.Title>
+        <Card.Description
+          >Färdigställ ditt konto för att börja använda {websiteName}.
+        </Card.Description>
+      </Card.Header>
+      <Card.Content class="grid gap-4">
+        <Form.Field form={completeProfileForm} name="firstName">
+          <Form.Control let:attrs>
+            <Input
+              {...attrs}
+              type="text"
+              bind:value={$formData.firstName}
+              placeholder="Förnamn"
+            />
+          </Form.Control>
+          <Form.FieldErrors />
+        </Form.Field>
+        <Form.Field form={completeProfileForm} name="lastName">
+          <Form.Control let:attrs>
+            <Input
+              {...attrs}
+              type="text"
+              bind:value={$formData.lastName}
+              placeholder="Efternamn"
+            />
+          </Form.Control>
+          <Form.FieldErrors />
+        </Form.Field>
+      </Card.Content>
+      <Card.Footer class="justify-center">
+        <Button
+          type="submit"
+          disabled={($errors._errors && $errors._errors.length > 0) ||
+            $submitting}
+        >
+          {#if $submitting}
+            <LoadingSpinner class="mr-2" /> <span>Laddar...</span>
+          {:else}
+            Skapa profil
+          {/if}
+        </Button>
+      </Card.Footer>
+    </Card.Root>
+  </form>
+  <div class="text-sm text-muted-foreground">
+    You are logged in as {session?.user?.email}.
+    <Button variant="secondary" on:click={() => goto("/account/sign_out")}>
+      <LogOut class="mr-2 h-4 w-4" />
+      Logga ut
+    </Button>
   </div>
 </div>

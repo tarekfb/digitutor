@@ -108,12 +108,13 @@
   {:else}
     <div class="flex justify-between gap-x-2 mx-8 mt-8 items-center">
       <h1 class="text-3xl md:text-4xl">
-        {listing.profile?.full_name}
+        {listing.profile?.first_name ?? "Saknar namn..."}
       </h1>
       <Avatar.Root class="h-8 w-8 flex justify-center text-xs items-center">
         <Avatar.Fallback class="bg-accent text-background"
           >{convertToInitials(
-            listing.profile?.full_name ?? "? ?",
+            listing.profile?.first_name ?? "?",
+            listing.profile?.last_name ?? "?",
           )}</Avatar.Fallback
         >
       </Avatar.Root>
@@ -121,6 +122,8 @@
     <div class="generic-card m-8 flex flex-col">
       <NonEditableListing {listing} />
     </div>
-    <Button class="mx-8">Kontakta {listing.profile?.full_name}</Button>
+    <Button class="mx-8"
+      >Kontakta {listing.profile?.first_name ?? "läraren"}</Button
+    >
   {/if}
 </div>

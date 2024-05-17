@@ -4,18 +4,16 @@
     isEurope = Intl.DateTimeFormat()
       .resolvedOptions()
       .timeZone.startsWith("Europe/");
-  } catch (e) {
+  } catch {
     /* continue */
   }
 </script>
 
 <div
-  class="text-center content-center max-w-lg mx-auto min-h-[70vh] pb-12 flex items-center place-content-center"
+  class="text-center py-12 px-8 flex flex-col items-center justify-center gap-y-4 max-w-sm md:max-w-xl"
 >
-  <div class="flex flex-col w-64 lg:w-80">
-    <slot />
-    <div class="mt-8 {isEurope ? 'block' : 'hidden'}">
-      🍪 Logging in uses Cookies 🍪
-    </div>
+  <slot />
+  <div class="mt-8 {isEurope ? 'block' : 'hidden'}">
+    🍪 Inloggning använder kakor 🍪
   </div>
 </div>

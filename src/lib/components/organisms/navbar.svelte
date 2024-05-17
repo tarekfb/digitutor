@@ -10,15 +10,11 @@
   import { websiteName } from "../../constants";
 
   export let profile: Tables<"profiles"> | null;
-
-  let initials: string = "";
-  $: {
-    if (profile && profile)
-      initials = profile.full_name ? convertToInitials(profile.full_name) : "?";
-  }
 </script>
 
-<header class="sticky top-0 z-40 w-full bg-primary text-background">
+<header
+  class="sticky top-0 z-40 w-full bg-gradient-to-r from-primary to-accent text-background"
+>
   <div
     class="container flex h-16 items-center space-x-4 sm:justify-between sm:space-x-0"
   >
@@ -28,8 +24,10 @@
     <div class="flex flex-1 items-center justify-end space-x-4">
       <nav class="flex items-center space-x-1">
         {#if !profile}
-          <Button on:click={() => goto("/login/sign_up")}>Sign up</Button>
-          <Button on:click={() => goto("/login/sign_in")}>Log in</Button>
+          <Button variant="ghost" on:click={() => goto("/login/sign_in")}
+            >Logga in</Button
+          >
+          <Button on:click={() => goto("/login/sign_up")}>Skapa konto</Button>
         {:else}
           <Button on:click={() => goto("/account")}>
             <UserRound class="mr-2 h-4 w-4" />
@@ -43,11 +41,12 @@
                 class="relative h-8 w-8 rounded-full"
               >
                 <Avatar.Root
-                  class="h-8 w-8 flex justify-center text-xs items-center"
+                  class="h-8 w-8 flex justify-center text-xs items-center "
                 >
-                  <Avatar.Fallback class="bg-accent text-background"
+                  <Avatar.Fallback class="text-background bg-primary"
                     >{convertToInitials(
-                      profile.full_name ?? "? ?",
+                      profile.first_name ?? "?",
+                      profile.last_name ?? "?",
                     )}</Avatar.Fallback
                   >
                 </Avatar.Root>
@@ -56,13 +55,13 @@
             <DropdownMenu.Content class="w-56" align="end">
               <DropdownMenu.Label class="font-normal">
                 <p class="text-sm font-medium leading-none">
-                  {profile?.full_name}
+                  {profile?.first_name ?? "Saknar namn..."}
                 </p>
               </DropdownMenu.Label>
               <DropdownMenu.Separator />
               <DropdownMenu.Item on:click={() => goto("/account/sign_out")}>
                 <LogOut class="mr-2 h-4 w-4" />
-                Sign out
+                Logga ut
               </DropdownMenu.Item>
             </DropdownMenu.Content>
           </DropdownMenu.Root>

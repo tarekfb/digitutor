@@ -44,7 +44,6 @@ export const languages = [
   { label: "Laravel", id: 20 },
 ];
 
-
 export const mockConversations = [
   "John Smith",
   "Jane Johnson",
@@ -63,3 +62,9 @@ export const mockConversations = [
   "Thomas Davis",
   "Samantha Johnson",
 ];
+
+export type Message = {
+  title: string;
+  description: string;
+  variant?: "success" | "warning" | "destructive";
+};

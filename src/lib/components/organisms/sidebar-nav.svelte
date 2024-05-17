@@ -7,7 +7,7 @@
   import { Switch } from "$lib/components/ui/switch/index.js";
   import { DollarSign, Settings } from "lucide-svelte";
   import * as Avatar from "$lib/components/ui/avatar";
-  import type { Role } from "$lib/models/profile";
+  import type { Role } from "src/lib/models/user";
   import ListingNav from "./listing-nav.svelte";
   import ConversationsNav from "./conversations-nav.svelte";
   import Separator from "../ui/separator/separator.svelte";
@@ -74,8 +74,8 @@
         </Button>
       </div>
     </div>
-    <Separator />
     {#if role === "teacher"}
+      <Separator />
       <div class="py-2">
         <h2
           class="relative px-3 text-lg font-semibold tracking-tight overflow-x-hidden text-ellipsis whitespace-nowrap"
@@ -89,8 +89,11 @@
                 <Avatar.Root
                   class="h-6 w-6 flex justify-center items-center mr-2"
                 >
-                <Avatar.Fallback class="bg-accent text-background text-xs"
-                >{convertToInitials(conversation)}</Avatar.Fallback
+                  <Avatar.Fallback class="bg-accent text-background text-xs"
+                    >{convertToInitials(
+                      conversation.split(" ")[0],
+                      conversation.split(" ")[1],
+                    )}</Avatar.Fallback
                   >
                 </Avatar.Root>
                 {#if !isMinimized}
@@ -101,7 +104,7 @@
           </div>
         </ScrollArea>
       </div>
+      <Separator />
     {/if}
-    <Separator />
   </div>
 </div>

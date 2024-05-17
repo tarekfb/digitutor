@@ -12,11 +12,6 @@ const config = {
     alias: {
 			'src/*': './src/*',
 			'root/*': './*',
-
-
-      // "src/": [
-			// 	"./src/"
-			// ],
     }
   },
 };

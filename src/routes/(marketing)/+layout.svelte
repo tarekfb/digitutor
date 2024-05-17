@@ -4,7 +4,7 @@
   import { websiteName } from "src/lib/constants";
 
   export let data;
-  const { profile } = data;
+  const profile = data.profile;
 </script>
 
 <Navigation {profile} />
