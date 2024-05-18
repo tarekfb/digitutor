@@ -6,7 +6,7 @@
   import { toast } from "svelte-sonner";
   import { zodClient } from "sveltekit-superforms/adapters";
   import { superForm } from "sveltekit-superforms";
-  import { listingSchema } from "$lib/models/listing";
+  import { createListingSchema } from "$lib/models/listing";
   import DescriptionEditable from "src/lib/components/listing/description-editable.svelte";
   import TitleEditable from "src/lib/components/listing/title-editable.svelte";
   import SubjectsEditable from "src/lib/components/listing/subjects-editable.svelte";
@@ -27,7 +27,7 @@
     isAuthor = user.id === listing.profile.id;
 
   const listingForm = superForm(form, {
-    validators: zodClient(listingSchema),
+    validators: zodClient(createListingSchema),
     onUpdated: ({ form: f }) => {
       if (f.valid) {
         toast.success(`Uppdaterat annonsen.`);
@@ -40,7 +40,7 @@
       toast.error(result.error.message);
     },
   });
-  const { form: formData, enhance, errors, submitting } = listingForm;
+  const { form: formData, enhance, errors, submitting, allErrors} = listingForm;
 </script>
 
 <div class="flex flex-col gap-y-2">
@@ -68,7 +68,7 @@
           </Button>
           <Button
             type="submit"
-            disabled={($errors._errors && $errors._errors.length > 0) ||
+            disabled={$allErrors.length > 0 ||
               $submitting}
           >
             {#if $submitting}

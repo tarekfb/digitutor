@@ -1,6 +1,6 @@
 import { error, fail, redirect } from "@sveltejs/kit";
 import type { PageServerLoad } from "./$types";
-import { genericErrorMessage, unknownErrorMessage } from "src/lib/constants";
+import { getGenericErrorMessage, unknownErrorMessage } from "src/lib/constants";
 import { message, setError, superValidate } from "sveltekit-superforms";
 import { zod } from "sveltekit-superforms/adapters";
 import { signUpSchema, type CreateProfile } from "src/lib/models/user";
@@ -32,13 +32,13 @@ export const actions = {
             throw redirect(303, "/account");
 
         const form = await superValidate(event, zod(signUpSchema));
-        const { email, password, role, first_name, last_name } = form.data;
         if (!form.valid) {
             return fail(400, {
                 form,
             });
         }
 
+        const { email, password, role, first_name, last_name } = form.data;
         let inputUser: CreateProfile;
         try {
             const { data, error } = await supabase.auth.signUp({
@@ -54,7 +54,7 @@ export const actions = {
 
             if (!data.user) {
                 console.error("User data was null on signup", error);
-                return message(form, genericErrorMessage, { status: 500 });
+                return message(form, getGenericErrorMessage(), { status: 500 });
             }
 
             // https://github.com/orgs/supabase/discussions/1282
@@ -64,7 +64,7 @@ export const actions = {
 
             if (error) {
                 console.error("Supabase error on signup", { error });
-                return message(form, genericErrorMessage, { status: 500 });
+                return message(form, getGenericErrorMessage(), { status: 500 });
             }
 
 
@@ -76,7 +76,7 @@ export const actions = {
             }
         } catch (error) {
             console.error("Error when creating supabase auth user", error);
-            return message(form, genericErrorMessage, { status: 500 });
+            return message(form, getGenericErrorMessage(), { status: 500 });
         }
 
         try {
@@ -84,7 +84,7 @@ export const actions = {
             return message(form, { variant: "success", title: "Verifiera e-postadress", description: "Kika i din inkorg för att verifiera e-posten.", status: 201 });
         } catch (error) {
             console.error("Error when creating profile", error);
-            return message(form, genericErrorMessage, { status: 500 });
+            return message(form, getGenericErrorMessage(), { status: 500 });
         }
     }
 }

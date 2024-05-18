@@ -3,14 +3,14 @@ import { zod } from "sveltekit-superforms/adapters";
 import { unknownErrorMessage } from "$lib/constants";
 import { message, superValidate } from "sveltekit-superforms";
 import { deleteListing, getListingById, updateListing } from "$lib/server/database/listings";
-import { listingSchema } from "$lib/models/listing";
+import { createListingSchema } from "$lib/models/listing";
 
 export const load = async ({ locals: { supabase, getSession }, params: { slug } }) => {
   try {
     const session = await getSession();
     const user = session?.user;
     const listing = await getListingById(supabase, slug);
-    const form = await superValidate(listing, zod(listingSchema))
+    const form = await superValidate(listing, zod(createListingSchema))
     if (!listing)
       console.error("Missing listing for listing id: " + slug);
     return { listing, user, form };
@@ -42,7 +42,7 @@ export const actions = {
     if (!session)
       throw redirect(303, "/login");
 
-    const form = await superValidate(event, zod(listingSchema));
+    const form = await superValidate(event, zod(createListingSchema));
 
     if (!form.valid) {
       return fail(400, {
