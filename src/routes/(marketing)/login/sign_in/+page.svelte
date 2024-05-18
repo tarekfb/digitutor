@@ -36,13 +36,47 @@
       toast.error(result.error.message);
     },
   });
-  const { form: formData, enhance, errors, submitting, message } = userForm;
+  const {
+    form: formData,
+    enhance,
+    errors,
+    submitting,
+    message,
+    allErrors,
+  } = userForm;
 </script>
 
 <svelte:head>
   <title>Logga in</title>
 </svelte:head>
 
+{#if $page.url.searchParams.get("verified") == "true"}
+  <!-- <svg
+      xmlns="http://www.w3.org/2000/svg"
+      class="stroke-current shrink-0 h-6 w-6"
+      fill="none"
+      viewBox="0 0 24 24"
+      ><path
+        stroke-linecap="round"
+        stroke-linejoin="round"
+        stroke-width="2"
+        d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"
+      /></svg
+    > -->
+
+  <Alert.Root variant="success" class="bg-card">
+    <Alert.Title>E-post verifierad</Alert.Title>
+    <Alert.Description>Vänligen logga in.</Alert.Description>
+  </Alert.Root>
+{/if}
+{#if $message}
+  <Alert.Root variant={$message.variant ?? "default"} class="bg-card">
+    <Alert.Title>{$message.title}</Alert.Title>
+    <Alert.Description>
+      {$message.description}
+    </Alert.Description>
+  </Alert.Root>
+{/if}
 <form class="text-start" method="POST" use:enhance>
   <Card.Root>
     <Card.Header class="space-y-1">
@@ -84,11 +118,7 @@
       >
     </Card.Content>
     <Card.Footer class="flex flex-col justify-center">
-      <Button
-        type="submit"
-        disabled={($errors._errors && $errors._errors.length > 0) ||
-          $submitting}
-      >
+      <Button type="submit" disabled={$allErrors.length > 0 || $submitting}>
         {#if $submitting}
           <LoadingSpinner class="mr-2" /> <span>Laddar...</span>
         {:else}
@@ -98,61 +128,3 @@
     </Card.Footer>
   </Card.Root>
 </form>
-
-{#if $page.url.searchParams.get("verified") == "true"}
-  <!-- <svg
-      xmlns="http://www.w3.org/2000/svg"
-      class="stroke-current shrink-0 h-6 w-6"
-      fill="none"
-      viewBox="0 0 24 24"
-      ><path
-        stroke-linecap="round"
-        stroke-linejoin="round"
-        stroke-width="2"
-        d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"
-      /></svg
-    > -->
-
-  <Alert.Root variant="success" class="bg-card">
-    <Alert.Title>E-post verifierad</Alert.Title>
-    <Alert.Description>Vänligen logga in.</Alert.Description>
-  </Alert.Root>
-{/if}
-{#if $message}
-  <Alert.Root variant={$message.variant ?? "default"} class="bg-card">
-    <Alert.Title>{$message.title}</Alert.Title>
-    <Alert.Description>
-      {$message.description}
-    </Alert.Description>
-  </Alert.Root>
-{/if}
-
-<!-- <<Auth
-  supabaseClient={data.supabase}
-  view="sign_in"
-  redirectTo={`${data.url}/auth/callback`}
-  providers={oauthProviders}
-  socialLayout="horizontal"
-  showLinks={false}
-  appearance={sharedAppearance}
-  additionalData={undefined}
-/>> -->
-<!-- <div>
-  <Button
-    variant="link"
-    class="underline text-md"
-    on:click={() => goto("/login/forgot_password")}
-  >
-    Glömt lösenord
-  </Button>
-  <div class="flex gap-x-1 items-center">
-    Har du inget konto?
-    <Button
-      variant="link"
-      class="underline text-md m-0 p-1"
-      on:click={() => goto("/login/sign_up")}
-    >
-      Skapa konto
-    </Button>
-  </div>
-</div> -->

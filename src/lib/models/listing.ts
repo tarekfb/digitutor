@@ -8,7 +8,7 @@ export type Listing = Omit<Tables<"listings">, "profile"> & {
 
 export type InputListing = Pick<Tables<"listings">, 'hourlyPrice' | 'description' | 'subjects' | 'title' | 'visible'>;
 
-const properties: TypeToZod<InputListing> = {
+const createListingProps: TypeToZod<InputListing> = {
     description: z
         .string()
         .min(10, "Måste vara minst 10 karaktärer.")
@@ -33,4 +33,6 @@ const properties: TypeToZod<InputListing> = {
     // .refine((s) => /^[A-Za-z]*$/.test(s), "Valutan får inte innehålla mellanslag."),
 }
 
-export const listingSchema = z.object(properties)
+export const createListingSchema = z.object(createListingProps)
+
+export const initCreateListingSchema = z.object({ title: createListingProps.title })

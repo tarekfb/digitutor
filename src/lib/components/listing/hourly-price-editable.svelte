@@ -13,7 +13,7 @@
         type="number"
         bind:value={$formData.hourlyPrice}
         placeholder="Välj timpris"
-        class="p-2 border bg-gray-100 rounded-lg w-16"
+        class="p-2 border bg-gray-100 rounded-lg w-32"
       />
       SEK
     </div>

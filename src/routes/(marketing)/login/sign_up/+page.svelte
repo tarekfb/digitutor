@@ -20,18 +20,24 @@
       toast.error(result.error.message);
     },
   });
-  const { form: formData, enhance, errors, submitting, message } = userForm;
+  const { form: formData, enhance, submitting, message, allErrors } = userForm;
 </script>
 
 <svelte:head>
   <title>Skapa konto</title>
 </svelte:head>
 
-<form
-  class="text-start"
-  method="POST"
-  use:enhance
->
+{#if $message}
+  <div>
+    <Alert.Root variant={$message.variant ?? "default"} class="bg-card">
+      <Alert.Title>{$message.title}</Alert.Title>
+      <Alert.Description>
+        {$message.description}
+      </Alert.Description>
+    </Alert.Root>
+  </div>
+{/if}
+<form class="text-start" method="POST" use:enhance>
   <Card.Root>
     <Card.Header class="space-y-1">
       <Card.Title class="text-2xl">Skapa ett konto</Card.Title>
@@ -132,7 +138,7 @@
     <Card.Footer class="justify-center">
       <Button
         type="submit"
-        disabled={($errors._errors && $errors._errors.length > 0) ||
+        disabled={$allErrors.length > 0 ||
           $submitting}
       >
         {#if $submitting}
@@ -145,13 +151,3 @@
   </Card.Root>
   <!-- <Loader2 class="mr-2 h-4 w-4 animate-spin" /> -->
 </form>
-{#if $message}
-  <div>
-    <Alert.Root variant={$message.variant ?? "default"} class="bg-card">
-      <Alert.Title>{$message.title}</Alert.Title>
-      <Alert.Description>
-        {$message.description}
-      </Alert.Description>
-    </Alert.Root>
-  </div>
-{/if}

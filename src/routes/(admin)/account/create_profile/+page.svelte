@@ -27,7 +27,7 @@
       toast.error(result.error.message);
     },
   });
-  const { form: formData, enhance, errors, submitting } = completeProfileForm;
+  const { form: formData, enhance, errors, submitting, allErrors } = completeProfileForm;
 </script>
 
 <svelte:head>
@@ -73,11 +73,7 @@
         </Form.Field>
       </Card.Content>
       <Card.Footer class="justify-center">
-        <Button
-          type="submit"
-          disabled={($errors._errors && $errors._errors.length > 0) ||
-            $submitting}
-        >
+        <Button type="submit" disabled={$allErrors.length > 0 || $submitting}>
           {#if $submitting}
             <LoadingSpinner class="mr-2" /> <span>Laddar...</span>
           {:else}

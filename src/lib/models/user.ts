@@ -60,10 +60,8 @@ export type CompleteProfileInput = {
     lastName: string;
 }
 
-export const completeProfileProperties = {
+export const completeProfileSchema = z.object({
     firstName: signUpUserFields.first_name,
     lastName: signUpUserFields.last_name,
-}
-
-export const completeProfileSchema = z.object(completeProfileProperties);
+});
 
