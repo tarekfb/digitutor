@@ -10,26 +10,6 @@ import type { Session } from "@supabase/supabase-js";
 export const load: PageServerLoad = async ({
   locals: { supabase, getSession },
 }) => {
-  // const session = await getSession();
-
-  // if (!session)
-  //   throw redirect(303, "/login");
-
-  // try {
-  //   const listings = await getListings(supabase, 3, session.user.id);
-  //   return { session, listings };
-  // } catch (e) {
-  //   console.error(e);
-  //   // TODO: setFlash unable to fetch listings something went wrong
-  //   // return fail(500, {
-  //   //   message: "Unknown error. If issue persists, please contact us.",
-  //   // });
-  // }
-  // return { session, listings: [] };
-
-
-
-
   let session: Session | null;
   try {
     session = await getSession();

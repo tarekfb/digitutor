@@ -26,7 +26,7 @@ export const getListings = async (
   const { data, error } = await query;
 
   if (error) {
-    console.log(`Failed to read listings ${userId && "for userId" + userId}: `, { error });
+    console.log(`Failed to read listings ${userId ? "for userId" + userId : ''}`, { error });
     throw error;
   }
 
