@@ -3,9 +3,9 @@
   import { setContext } from "svelte";
   import SidebarNav from "src/lib/components/organisms/sidebar-nav.svelte";
   import { Separator } from "$lib/components/ui/separator/index.js";
-  import { mockConversations } from "src/lib/models/common.js";
 
   export let data;
+  const conversations = data.conversations ?? [];
   const adminSectionStore = writable("");
   setContext("adminSection", adminSectionStore);
   let adminSection: string;
@@ -23,10 +23,7 @@
   </div>
   <Separator class="my-4" />
   <div class="flex flex-row sm:flex-col sm:space-y-8 sm:space-x-0">
-    <SidebarNav
-      conversations={mockConversations}
-      role={data.profile?.role ?? "user"}
-    />
+    <SidebarNav {conversations} role={data.profile?.role ?? "user"} />
     <div class="flex-1 lg:max-w-2xl">
       <slot />
     </div>

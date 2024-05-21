@@ -9,5 +9,4 @@ export const getGenericErrorMessage = (variant?: "success" | "warning" | "destru
         variant: variant ?? "destructive",
         title: title ?? "Något gick fel",
         description: description ?? "Kontakta oss om detta fortsätter."
-
     })

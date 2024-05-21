@@ -19,12 +19,12 @@
   import { convertToInitials } from "src/lib/utils.js";
 
   export let data;
-  const { listing, user, form } = data;
+  const { listing, profile, form } = data;
 
   let isEditing = false;
   let isAuthor = false;
-  if (user && listing && listing.profile)
-    isAuthor = user.id === listing.profile.id;
+  if (profile && listing && listing.profile)
+    isAuthor = profile.id === listing.profile.id;
 
   const listingForm = superForm(form, {
     validators: zodClient(createListingSchema),

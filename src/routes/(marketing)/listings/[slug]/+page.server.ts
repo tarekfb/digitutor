@@ -2,18 +2,24 @@ import { fail, redirect, error } from "@sveltejs/kit";
 import { zod } from "sveltekit-superforms/adapters";
 import { unknownErrorMessage } from "$lib/constants";
 import { message, superValidate } from "sveltekit-superforms";
-import { deleteListing, getListingById, updateListing } from "$lib/server/database/listings";
+import { deleteListing, getListing, updateListing } from "$lib/server/database/listings";
 import { createListingSchema } from "$lib/models/listing";
 
 export const load = async ({ locals: { supabase, getSession }, params: { slug } }) => {
   try {
     const session = await getSession();
-    const user = session?.user;
-    const listing = await getListingById(supabase, slug);
-    const form = await superValidate(listing, zod(createListingSchema))
+    if (!session)
+      throw redirect(303, "/login");
+
+    const listing = await getListing(supabase, slug);
     if (!listing)
-      console.error("Missing listing for listing id: " + slug);
-    return { listing, user, form };
+      error(404, {
+        message: 'Not found'
+      });
+
+    const form = await superValidate(listing, zod(createListingSchema))
+
+    return { listing, form };
   } catch (e) {
     console.error("Error when reading listing with id: " + slug, e);
     throw error(500, {

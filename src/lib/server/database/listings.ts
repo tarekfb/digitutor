@@ -26,14 +26,14 @@ export const getListings = async (
   const { data, error } = await query;
 
   if (error) {
-    console.log(`Failed to read listings ${userId ? "for userId" + userId : ''}`, { error });
+    console.error(`Failed to read listings ${userId ? "for userId" + userId : ''}`, { error });
     throw error;
   }
 
   return data as unknown as Listing[] | null;
 }
 
-export const getListingById = async (
+export const getListing = async (
   supabase: SupabaseClient<Database>,
   id: string,
 ): Promise<Listing | null> => {
@@ -53,7 +53,7 @@ export const getListingById = async (
     .single();
 
   if (error) {
-    console.log("Failed to read listing: " + id, { error });
+    console.error("Failed to read listing: " + id, { error });
     throw error;
   }
 
@@ -67,7 +67,7 @@ export const createListing = async (
   const session = await supabase.auth.getSession();
 
   if (!session.data.session) {
-    console.log("Missing session when creating listing: ", { title });
+    console.error("Missing session when creating listing: ", { title });
     throw new Error("No session");
   }
 
@@ -102,12 +102,12 @@ export const createListing = async (
     .single();
 
   if (error) {
-    console.log("Failed to create listing: ", { dbListing, error });
+    console.error("Failed to create listing: ", { dbListing, error });
     throw error;
   }
 
   if (data === null) {
-    console.log("Failed to create listing. Listing is null.", {
+    console.error("Failed to create listing. Listing is null.", {
       dbListing,
       error,
     });
@@ -125,7 +125,7 @@ export const deleteListing = async (
   const session = await supabase.auth.getSession();
 
   if (!session.data.session) {
-    console.log("Missing session when deleting listing: ", { listingId });
+    console.error("Missing session when deleting listing: ", { listingId });
     throw new Error("No session");
   }
 
@@ -138,7 +138,7 @@ export const deleteListing = async (
     .eq('profile', userId); // for safety measure check userId as well
 
   if (error) {
-    console.log("Failed to delete listing: " + listingId, { error });
+    console.error("Failed to delete listing: " + listingId, { error });
     throw error;
   }
 };
@@ -163,12 +163,12 @@ export const updateListing = async (
     )
 
   if (error) {
-    console.log("Failed to update listing", { error });
+    console.error("Failed to update listing", { error });
     throw error;
   }
 
   if (data === null) {
-    console.log("Failed to update listing. Listing is null.", { data, error });
+    console.error("Failed to update listing. Listing is null.", { data, error });
     throw error;
   }
 
