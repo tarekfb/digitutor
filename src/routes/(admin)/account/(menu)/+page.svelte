@@ -24,8 +24,8 @@
   adminSection.set("dashboard");
 
   export let data;
+  const { listings, conversations } = data;
 
-  const listings = data.listings;
   const form = data.form as SuperValidated<
     {
       title: string;
@@ -180,5 +180,5 @@
     {/if}
   </div>
 {:else}
-  <StudentAccount />
+  <StudentAccount {conversations} />
 {/if}
