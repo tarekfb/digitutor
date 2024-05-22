@@ -1,34 +1,36 @@
 import { error, fail, redirect } from "@sveltejs/kit";
 import { createListing, getListings } from "$lib/server/database/listings";
 import type { PageServerLoad } from "./$types";
-import { getGenericErrorMessage, unknownErrorMessage } from "$lib/constants";
+import { getGenericErrorMessage } from "$lib/constants";
 import { message, superValidate } from "sveltekit-superforms";
 import { initCreateListingSchema } from "src/lib/models/listing";
 import { zod } from "sveltekit-superforms/adapters";
-import type { Session } from "@supabase/supabase-js";
 
 export const load: PageServerLoad = async ({
   locals: { supabase, getSession },
 }) => {
-  let session: Session | null;
-  try {
-    session = await getSession();
-    if (!session)
-      throw redirect(303, "/login");
-  } catch (e) {
-    console.error("Error when loading account root", e);
-    throw new Error(unknownErrorMessage)
-  }
+  const session = await getSession();
+  if (!session)
+    throw redirect(303, "/login");
 
   const form = await superValidate(zod(initCreateListingSchema))
 
+  let listings;
   try {
-    const listings = await getListings(supabase, 3, session.user.id);
-    return { form, session, listings };
+    listings = await getListings(supabase, 3, session.user.id);
   } catch (e) {
     console.error(e);
     return message(form, { content: getGenericErrorMessage(undefined, "Kunde inte hämta annonser", undefined), session }, { status: 429 });
   }
+
+  if (!listings) {
+    console.error("Listings not found for /account root");
+    throw error(404, {
+      message: 'Not found'
+    });
+  }
+
+  return { form, session, listings };
 };
 
 export const actions = {
@@ -54,7 +56,7 @@ export const actions = {
       console.error(error);
       return message(form, getGenericErrorMessage(), { status: 500 });
     }
-    throw redirect(303, `/listings/${listingId}`);
+    throw redirect(303, `/listing/${listingId}`);
   },
 
   signout: async ({ locals: { supabase, getSession } }) => {

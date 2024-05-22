@@ -83,13 +83,14 @@
         >
           Konversationer
         </h2>
-        <ScrollArea class="h-96">
+        <ScrollArea class="max-h-96">
           <div class="space-y-1">
             {#each conversations as conversation}
               <Button
                 variant="ghost"
                 class="w-full justify-start font-normal"
-                on:click={() => goto(`/conversations/${conversation.id}`)}
+                on:click={() =>
+                  goto(`/account/conversation/${conversation.id}`)}
               >
                 <Avatar.Root
                   class="h-6 w-6 flex justify-center items-center mr-2"

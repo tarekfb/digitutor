@@ -23,13 +23,10 @@ export const getConversation = async (
     .limit(1)
     .single();
 
-  console.log(data)
   if (error) {
     console.error("Failed to get conversation: " + id, { error });
     throw error;
   }
-
-  console.log(data)
 
   return data as unknown as Conversation;
 }

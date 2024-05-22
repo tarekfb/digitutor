@@ -5,6 +5,5 @@ export const load: LayoutServerLoad = async (parentData) => {
   const { locals: { supabase }, } = parentData;
   const { profile, session } = await parentData.parent();
   const conversations = await getConversations(supabase, session.user.id);
-  console.log(conversations)
-  return { session, profile, conversations };
+  return { session, profile, conversations }; // todo stream these
 };

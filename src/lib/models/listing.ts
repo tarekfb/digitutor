@@ -12,7 +12,7 @@ const createListingProps: TypeToZod<InputListing> = {
     description: z
         .string()
         .min(10, "Måste vara minst 10 karaktärer.")
-        .max(160, "Måste vara maximalt 160 karaktärer.")
+        .max(160, "Får inte vara mer än 160 karaktärer.")
         .refine((s) => s.trim() !== "", "Får inte vara tom."),
     hourlyPrice: z
         .number()

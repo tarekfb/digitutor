@@ -6,10 +6,10 @@
   import { mockConversations } from "src/lib/models/common.js";
   import { Circle } from "lucide-svelte";
   import * as Card from "$lib/components/ui/card/index.js";
+  import Title from "../atoms/title.svelte";
 </script>
 
-<h1 class="text-2xl font-bold mb-1">Dina konversationer</h1>
-
+<Title>Dina konversationer</Title>
 <div class="my-6">
   <div class="flex flex-col gap-y-4 mb-4">
     {#if mockConversations.length === 0}

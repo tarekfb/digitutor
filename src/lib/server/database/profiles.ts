@@ -1,5 +1,6 @@
 import type { Session, SupabaseClient } from "@supabase/supabase-js";
 import type { CreateProfile, CompleteProfileInput } from "src/lib/models/user";
+import { getNow } from "src/lib/utils";
 import type { Database, Tables } from "src/supabase";
 
 export const getProfileBySession = async (
@@ -22,7 +23,7 @@ export const getProfileByUserId = async (
     .single();
 
   if (error) {
-    console.log(`Failed to get profile for userId: ${userId}`, { error });
+    console.error(`Failed to get profile for userId: ${userId}`, { error });
     throw error;
   }
 
@@ -38,7 +39,7 @@ export const createProfile = async (
   const dbProfile: Tables<"profiles"> = {
     id: profileInput.id,
     role: profileInput.role,
-    created_at: new Date().toDateString(),
+    created_at: getNow(),
     updated_at: null,
     avatar_url: null,
     first_name: profileInput.firstName,
@@ -52,7 +53,7 @@ export const createProfile = async (
     .limit(1)
     .single();
   if (error) {
-    console.log(`Failed to create profile for userId: ${profileInput.id}`, { error });
+    console.error(`Failed to create profile for userId: ${profileInput.id}`, { error });
     throw error;
   }
   return data;
@@ -69,7 +70,7 @@ export const updateProfile = async (
     .limit(1)
     .single();
   if (error) {
-    console.log(`Failed to update profile for userId: ${profileInput.id}`, { error });
+    console.error(`Failed to update profile for userId: ${profileInput.id}`, { error });
     throw error;
   }
   return data;

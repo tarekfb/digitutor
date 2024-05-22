@@ -1,6 +1,7 @@
 import type { SupabaseClient } from "@supabase/supabase-js";
 import type { InputListing, Listing } from "$lib/models/listing";
 import type { Database, Tables } from "src/supabase"
+import { getNow } from '$lib/utils'
 
 export const getListings = async (
   supabase: SupabaseClient<Database>,
@@ -78,7 +79,7 @@ export const createListing = async (
     id: listingId,
     title: title,
     hourlyPrice: 0,
-    created_at: new Date().toDateString(),
+    created_at: getNow(),
     updated_at: null,
     currency: "SEK",
     description: "",
@@ -151,7 +152,7 @@ export const updateListing = async (
 
   const { data, error } = await supabase
     .from("listings")
-    .update({ ...input, updated_at: new Date().toDateString() })
+    .update({ ...input, updated_at: getNow() })
     .eq("id", listingId)
     .select(
       `

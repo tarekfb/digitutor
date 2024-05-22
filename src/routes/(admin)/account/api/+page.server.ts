@@ -1,5 +1,6 @@
 import { fail, redirect } from "@sveltejs/kit";
 import { unknownErrorMessage } from "$lib/constants";
+import { getNow } from "src/lib/utils.js";
 
 export const actions = {
   updateEmail: async ({ request, locals: { supabase, getSession } }) => {
@@ -224,7 +225,7 @@ export const actions = {
     const { error } = await supabase.from("profiles").upsert({
       id: session?.user.id,
       full_name: fullName,
-      updated_at: new Date().toDateString(),
+      updated_at: getNow(),
       role: null,
       avatar_url: null,
     });
