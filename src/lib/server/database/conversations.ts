@@ -1,6 +1,7 @@
 import type { SupabaseClient } from "@supabase/supabase-js";
-import type { Database } from "src/supabase"
+import type { Database, Tables } from "src/supabase"
 import type { Conversation } from "src/lib/models/conversations";
+import { getNow } from "src/lib/utils";
 
 export const getConversation = async (
   supabase: SupabaseClient<Database>,
@@ -26,6 +27,42 @@ export const getConversation = async (
   if (error) {
     console.error("Failed to get conversation: " + id, { error });
     throw error;
+  }
+
+  return data as unknown as Conversation;
+}
+
+export const startConversation = async (
+  supabase: SupabaseClient<Database>,
+  teacher: string,
+  student: string
+): Promise<Conversation> => {
+  const { data, error } = await supabase
+    .from("conversations")
+    .select(
+      `
+                  *,
+                  teacher (
+                    *
+                  ),
+                  student (
+                    *
+                  )
+                `,
+    )
+    .eq("student", student)
+    .eq("teacher", teacher)
+    .limit(1)
+    .single();
+
+  if (error) {
+    console.error(`Failed to get conversation for studentid ${student} and teacherid ${teacher}`, { error });
+    throw error;
+  }
+
+  if (!data) { // no existing convo, create new
+    const newConversation = await createConversation(supabase, teacher);
+    return newConversation as unknown as Conversation;
   }
 
   return data as unknown as Conversation;
@@ -63,3 +100,47 @@ export const getConversations = async (
 
   return data as unknown as Conversation[];
 }
+
+export const createConversation = async (
+  supabase: SupabaseClient<Database>,
+  teacher: string,
+): Promise<Tables<"conversations">> => {
+  const session = await supabase.auth.getSession();
+
+  if (!session.data.session) {
+    console.error("Missing session when creating conversation");
+    throw new Error("No session");
+  }
+
+  const student = session.data.session.user.id;
+
+  const dbConversation: Tables<"conversations"> = {
+    id: crypto.randomUUID(),
+    teacher,
+    student: student,
+    created_at: getNow(),
+  };
+
+  const { data, error } = await supabase
+    .from("conversations")
+    .insert(dbConversation)
+    .select('*')
+    .limit(1)
+    .single();
+
+  if (error) {
+    console.error("Failed to create conversation: ", { dbConversation, error });
+    throw error;
+  }
+
+  if (data === null) {
+    console.error("Failed to create conversation. Conversation is null.", {
+      dbConversation,
+      error,
+    });
+    throw error;
+  }
+
+  return data;
+};
+

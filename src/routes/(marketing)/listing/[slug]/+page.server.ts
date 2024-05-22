@@ -1,31 +1,31 @@
 import { fail, redirect, error } from "@sveltejs/kit";
 import { zod } from "sveltekit-superforms/adapters";
-import { unknownErrorMessage } from "$lib/constants";
+import { getGenericErrorMessage, unknownErrorMessage } from "$lib/constants";
 import { message, superValidate } from "sveltekit-superforms";
 import { deleteListing, getListing, updateListing } from "$lib/server/database/listings";
 import { createListingSchema } from "$lib/models/listing";
+import { createConversation, getConversation, startConversation } from "src/lib/server/database/conversations";
+import { startConversationSchema } from "src/lib/models/conversations";
 
-export const load = async ({ locals: { supabase, getSession }, params: { slug } }) => {
+export const load = async ({ locals: { supabase }, params: { slug } }) => {
+  let listing;
   try {
-    const session = await getSession();
-    if (!session)
-      throw redirect(303, "/login");
-
-    const listing = await getListing(supabase, slug);
-    if (!listing)
-      error(404, {
-        message: 'Not found'
-      });
-
-    const form = await superValidate(listing, zod(createListingSchema))
-
-    return { listing, form };
+    listing = await getListing(supabase, slug);
   } catch (e) {
     console.error("Error when reading listing with id: " + slug, e);
     throw error(500, {
       message: unknownErrorMessage,
     });
   };
+  if (!listing)
+    throw error(404, {
+      message: 'Not found'
+    });
+
+  const createListingForm = await superValidate(listing, zod(createListingSchema))
+  const startConversationForm = await superValidate({ teacher: listing.profile?.id }, zod(startConversationSchema))
+
+  return { listing, createListingForm, startConversationForm };
 }
 
 export const actions = {
@@ -36,6 +36,7 @@ export const actions = {
     try {
       await deleteListing(supabase, slug);
     } catch (error) {
+      console.error("Error when deleting listing slug id: " + slug, error);
       return fail(500, {
         errorMessage: unknownErrorMessage,
       });
@@ -65,4 +66,36 @@ export const actions = {
       });
     }
   },
-};
+  contact: async (event) => {
+    const { locals: { supabase, getSession }, params: { slug } } = event;
+    const session = await getSession();
+    if (!session)
+      throw redirect(303, "/login"); // todo: in the future should implement a redirect after login
+
+
+    const form = await superValidate(event, zod(startConversationSchema));
+    if (!form.valid) {
+      return message(form, getGenericErrorMessage(), { status: 500 });
+    }
+
+    const { teacher } = form.data;
+    if (!teacher) {
+      console.error("Error when starting conversation for listing slug: " + slug, error);
+      return
+    }
+
+    let conversationId: string;
+    try {
+      const conversation = await startConversation(supabase, teacher, session.user.id);
+      console.log("conversation is ", conversation);
+      console.log("hit")
+      console.log(conversation)
+      conversationId = conversation.id;
+    } catch (error) {
+      console.error("Error when starting conversation for listing slug: " + slug, error);
+      return message(form, getGenericErrorMessage(), { status: 500 });
+    }
+    console.log(conversationId)
+    throw redirect(303, `/account/conversation/${conversationId}`);
+  }
+}

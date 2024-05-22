@@ -94,7 +94,7 @@
         </Form.Control>
         <Form.FieldErrors />
       </Form.Field>
-      <div class="flex justify-end gap-x-2">
+      <div class="flex justify-end">
         <FormSubmit
           {allErrors}
           {submitting}

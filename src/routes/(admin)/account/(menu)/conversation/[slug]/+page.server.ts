@@ -81,7 +81,6 @@ export const actions = {
 
     try {
       const message = await sendMessage(supabase, inputMessage);
-      console.log(message)
       return { form }
     } catch (error) {
       console.error(error);

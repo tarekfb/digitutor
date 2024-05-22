@@ -13,3 +13,8 @@ export const sendMessageSchema = z.object({
         .min(1, "Måste vara minst 1 karaktär.")
         .max(300, "Får inte vara mer än 300 karaktärer")
 })
+
+export const startConversationSchema = z.object({
+    teacher: z
+        .string()
+})

@@ -55,7 +55,7 @@ export const sendMessage = async (
     .single();
 
   if (error) {
-    console.error("Failed to create listing: ", { dbListing: dbMessage, error });
+    console.error("Failed to send message: ", { dbMessage, error });
     throw error;
   }
 
@@ -67,5 +67,5 @@ export const sendMessage = async (
     throw error;
   }
 
-  return data;;
+  return data;
 };
