@@ -59,11 +59,9 @@ export const actions = {
 
     try {
       await updateListing(supabase, form.data, slug);
-      return message(form, 'Annonsen är uppdaterad.');
+      return { form };
     } catch (error) {
-      return fail(500, {
-        form,
-      });
+      return message(form, getGenericErrorMessage(), { status: 500 });
     }
   },
   contact: async (event) => {
@@ -86,16 +84,12 @@ export const actions = {
 
     let conversationId: string;
     try {
-      const conversation = await startConversation(supabase, teacher, session.user.id);
-      console.log("conversation is ", conversation);
-      console.log("hit")
-      console.log(conversation)
-      conversationId = conversation.id;
+      const { id } = await startConversation(supabase, teacher, session.user.id);
+      conversationId = id;
     } catch (error) {
       console.error("Error when starting conversation for listing slug: " + slug, error);
       return message(form, getGenericErrorMessage(), { status: 500 });
     }
-    console.log(conversationId)
     throw redirect(303, `/account/conversation/${conversationId}`);
   }
 }

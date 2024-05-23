@@ -8,6 +8,7 @@
   import { superForm } from "sveltekit-superforms";
   import { createListingSchema } from "$lib/models/listing";
   import DescriptionEditable from "src/lib/components/listing/description-editable.svelte";
+  import FormMessage from "src/lib/components/molecules/form-message.svelte";
   import TitleEditable from "src/lib/components/listing/title-editable.svelte";
   import SubjectsEditable from "src/lib/components/listing/subjects-editable.svelte";
   import HourlyPriceEditable from "src/lib/components/listing/hourly-price-editable.svelte";
@@ -102,6 +103,7 @@
           loadingText={"Skickar..."}
         />
       </div>
+      <FormMessage {message} class="mt-2" />
     </form>
   {:else}
     <Title>Hittade ingen konversation</Title>

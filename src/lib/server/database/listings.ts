@@ -139,6 +139,7 @@ export const deleteListing = async (
     .eq('profile', userId) // for safety measure check userId as well
     .select('*')
     .limit(1)
+    .order('id')
     .single();
 
   if (error) {
@@ -166,21 +167,23 @@ export const updateListing = async (
     .eq("id", listingId)
     .select(
       `
-    *,
-    profile (
-      *
-    )
-  `,
-    )
+      *,
+      profile (
+        *
+      )
+    `)
+    .limit(1)
+    .order('id')
+    .single();
 
   if (error) {
     console.error("Failed to update listing", { error });
     throw error;
   }
 
-  if (data === null) {
+  if (!data) {
     console.error("Failed to update listing. Listing is null.", { data, error });
-    throw error;
+    throw new Error("Unexpected null response");
   }
 
   return data as unknown as Listing;

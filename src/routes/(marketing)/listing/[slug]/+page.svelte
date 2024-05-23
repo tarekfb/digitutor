@@ -20,6 +20,7 @@
   import FormSubmit from "src/lib/components/molecules/form-submit.svelte";
   import { startConversationSchema } from "src/lib/models/conversations.js";
   import * as Alert from "$lib/components/ui/alert/index.js";
+  import FormMessage from "src/lib/components/molecules/form-message.svelte";
 
   export let data;
   const { listing, profile, createListingForm, startConversationForm } = data;
@@ -31,17 +32,6 @@
 
   const listingForm = superForm(createListingForm, {
     validators: zodClient(createListingSchema),
-    onUpdated: ({ form: f }) => {
-      if (f.valid) {
-        toast.success(`Uppdaterat annonsen.`);
-        isEditing = false;
-      } else {
-        toast.error("Fixa felen i formuläret.");
-      }
-    },
-    onError: ({ result }) => {
-      toast.error(result.error.message);
-    },
   });
 
   const contactForm = superForm(startConversationForm, {
@@ -54,6 +44,7 @@
     errors,
     submitting,
     allErrors,
+    message,
   } = listingForm;
 
   const {
@@ -65,7 +56,7 @@
   } = contactForm;
 </script>
 
-<div class="flex flex-col gap-y-2">
+<div class="flex flex-col gap-y-4 pb-8">
   {#if !listing}
     <MissingListing />
   {:else if isAuthor}
@@ -97,6 +88,14 @@
             {/if}
           </Button>
         </div>
+        {#if $message}
+          <Alert.Root variant={$message.variant ?? "default"} class="bg-card">
+            <Alert.Title>{$message.title}</Alert.Title>
+            <Alert.Description>
+              {$message.description}
+            </Alert.Description>
+          </Alert.Root>
+        {/if}
       </form>
       <div class="self-end mx-8 mb-8">
         <DeleteListing />
@@ -137,28 +136,17 @@
         >
       </Avatar.Root>
     </div>
-    <div class="generic-card m-8 flex flex-col">
+    <div class="generic-card mx-8 flex flex-col">
       <NonEditableListing {listing} />
     </div>
-    <form method="POST" use:enhanceContactForm action="?/contact">
+    <form method="POST" use:enhanceContactForm action="?/contact" class="flex flex-col gap-y-4 mx-8">
       <input type="hidden" name="teacher" value={$contactFormData.teacher} />
-      <div class="flex justify-end gap-x-2 mx-8">
-        <FormSubmit
-          submitting={contactFormSubmitting}
-          allErrors={contactAllErrors}
-          text="Kontakta {listing.profile?.first_name ?? 'läraren'}"
-        />
-        {#if $contactMessage}
-          <div>
-            <Alert.Root variant={$contactMessage.variant ?? "default"} class="bg-card">
-              <Alert.Title>{$contactMessage.title}</Alert.Title>
-              <Alert.Description>
-                {$contactMessage.description}
-              </Alert.Description>
-            </Alert.Root>
-          </div>
-        {/if}
-      </div>
+      <FormSubmit
+        submitting={contactFormSubmitting}
+        allErrors={contactAllErrors}
+        text="Kontakta {listing.profile?.first_name ?? 'läraren'}"
+      />
+      <FormMessage message={contactMessage} />
     </form>
   {/if}
 </div>
