@@ -122,7 +122,7 @@ export const createListing = async (
 export const deleteListing = async (
   supabase: SupabaseClient<Database>,
   listingId: string,
-): Promise<void> => {
+): Promise<Tables<"listings">> => {
   const session = await supabase.auth.getSession();
 
   if (!session.data.session) {
@@ -132,16 +132,26 @@ export const deleteListing = async (
 
   const userId = session.data.session.user.id;
 
-  const { error } = await supabase
+  const { error, data } = await supabase
     .from('listings')
     .delete()
     .eq('id', listingId)
-    .eq('profile', userId); // for safety measure check userId as well
+    .eq('profile', userId) // for safety measure check userId as well
+    .select('*')
+    .limit(1)
+    .single();
 
   if (error) {
     console.error("Failed to delete listing: " + listingId, { error });
     throw error;
   }
+
+  if (!data) {
+    console.error("Delete listing resposne was null", error);
+    throw new Error("Unexpected null response");
+  }
+
+  return data;
 };
 
 export const updateListing = async (
