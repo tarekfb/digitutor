@@ -11,11 +11,12 @@
   import ListingNav from "./listing-nav.svelte";
   import ConversationsNav from "./conversations-nav.svelte";
   import Separator from "../ui/separator/separator.svelte";
+  import type { Conversation } from "src/lib/models/conversations";
 
   let className: string | null | undefined = undefined;
   export { className as class };
   export let role: Role;
-  export let conversations: string[] = [];
+  export let conversations: Conversation[];
   let isMinimized = true;
 </script>
 
@@ -82,19 +83,24 @@
         >
           Konversationer
         </h2>
-        <ScrollArea class="h-96">
+        <ScrollArea class="max-h-96">
           <div class="space-y-1">
             {#each conversations as conversation}
-              <Button variant="ghost" class="w-full justify-start font-normal">
+              <Button
+                variant="ghost"
+                class="w-full justify-start font-normal"
+                on:click={() =>
+                  goto(`/account/conversation/${conversation.id}`)}
+              >
                 <Avatar.Root
                   class="h-6 w-6 flex justify-center items-center mr-2"
                 >
-                  <Avatar.Fallback class="bg-accent text-background text-xs"
-                    >{convertToInitials(
-                      conversation.split(" ")[0],
-                      conversation.split(" ")[1],
-                    )}</Avatar.Fallback
-                  >
+                  <Avatar.Fallback class="bg-accent text-background text-xs">
+                    {convertToInitials(
+                      conversation.student.first_name,
+                      conversation.student.last_name,
+                    )}
+                  </Avatar.Fallback>
                 </Avatar.Root>
                 {#if !isMinimized}
                   {conversation}

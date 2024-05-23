@@ -5,16 +5,14 @@
   export let formData;
 </script>
 
-<div>
-  <Form.Field form={listingForm} name="description">
-    <Form.Control let:attrs>
-      <Textarea
-        {...attrs}
-        placeholder="Skriv några ord om din annons..."
-        class="resize-y"
-        bind:value={$formData.description}
-      />
-    </Form.Control>
-    <Form.FieldErrors />
-  </Form.Field>
-</div>
+<Form.Field form={listingForm} name="description">
+  <Form.Control let:attrs>
+    <Textarea
+      {...attrs}
+      placeholder="Skriv några ord om din annons..."
+      class="resize-y"
+      bind:value={$formData.description}
+    />
+  </Form.Control>
+  <Form.FieldErrors />
+</Form.Field>

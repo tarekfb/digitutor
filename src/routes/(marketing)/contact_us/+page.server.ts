@@ -1,4 +1,5 @@
 import { fail } from "@sveltejs/kit";
+import { getNow } from "src/lib/utils.js";
 
 /** @type {import('./$types').Actions} */
 export const actions = {
@@ -41,7 +42,7 @@ export const actions = {
       errors["message"] = "Message too long (" + message.length + " of 2000)";
     }
 
-    console.log("errors:", errors);
+    console.error(errors);
     if (Object.keys(errors).length > 0) {
       return fail(400, { errors });
     }
@@ -55,7 +56,7 @@ export const actions = {
         email,
         phone,
         message_body: message,
-        updated_at: new Date().toString(),
+        updated_at: getNow(),
       });
 
     if (insertError) {

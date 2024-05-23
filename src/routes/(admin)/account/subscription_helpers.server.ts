@@ -3,6 +3,7 @@ import type { Database } from "../../../supabase";
 import { pricingPlans } from "src/routes/(marketing)/pricing/pricing_plans";
 import { PRIVATE_STRIPE_API_KEY } from "$env/static/private";
 import Stripe from "stripe";
+import { getNow } from "src/lib/utils";
 
 const stripe = new Stripe(PRIVATE_STRIPE_API_KEY, { apiVersion: "2023-08-16" });
 
@@ -31,7 +32,7 @@ export const getOrCreateCustomerId = async ({
   // Fetch data needed to create customer
   const { data: profile, error: profileError } = await supabaseServiceRole
     .from("profiles")
-    .select(`full_name`)
+    .select(`*`)
     .eq("id", session.user.id)
     .single();
   if (profileError) {
@@ -43,7 +44,7 @@ export const getOrCreateCustomerId = async ({
   try {
     customer = await stripe.customers.create({
       email: session.user.email,
-      name: profile.full_name ?? "",
+      name: profile ? profile.first_name + " " + profile.last_name : "",
       metadata: {
         user_id: session.user.id,
       },
@@ -62,7 +63,7 @@ export const getOrCreateCustomerId = async ({
     .insert({
       user_id: session.user.id,
       stripe_customer_id: customer.id,
-      updated_at: new Date().toDateString(),
+      updated_at: getNow(),
     }); // this was previously new Date(). Type error becasue date not equal to string. investigate if stripe table have issues [2024-04-]
 
   if (insertError) {

@@ -3,22 +3,23 @@
   import { Button, buttonVariants } from "$lib/components/ui/button/index.js";
   import { Input } from "$lib/components/ui/input/index.js";
   import { Label } from "$lib/components/ui/label/index.js";
-  import { mockConversations } from "src/lib/models/common.js";
   import { Circle } from "lucide-svelte";
   import * as Card from "$lib/components/ui/card/index.js";
+  import Title from "../atoms/title.svelte";
+
+  export let conversations;
 </script>
 
-<h1 class="text-2xl font-bold mb-1">Dina konversationer</h1>
-
+<Title>Dina konversationer</Title>
 <div class="my-6">
   <div class="flex flex-col gap-y-4 mb-4">
-    {#if mockConversations.length === 0}
+    {#if conversations.length === 0}
       <p>Inga konversationer. Testa söka efter en lärare!</p>
     {:else}
-      {#each mockConversations as conversation}
+      {#each conversations as conversation}
         <Card.Root>
           <Card.Header class="flex flex-col  space-y-0">
-            <Card.Title>{conversation}</Card.Title>
+            <Card.Title>{conversation.id}</Card.Title>
           </Card.Header>
           <Card.Content>
             <div class="flex space-x-4 text-sm text-muted-foreground">

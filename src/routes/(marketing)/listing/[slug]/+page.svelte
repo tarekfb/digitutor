@@ -17,16 +17,19 @@
   import VisibilityEditable from "src/lib/components/listing/visibility-editable.svelte";
   import { SaveIcon, X, Pencil } from "lucide-svelte";
   import { convertToInitials } from "src/lib/utils.js";
+  import FormSubmit from "src/lib/components/molecules/form-submit.svelte";
+  import { startConversationSchema } from "src/lib/models/conversations.js";
+  import * as Alert from "$lib/components/ui/alert/index.js";
 
   export let data;
-  const { listing, user, form } = data;
+  const { listing, profile, createListingForm, startConversationForm } = data;
 
   let isEditing = false;
   let isAuthor = false;
-  if (user && listing && listing.profile)
-    isAuthor = user.id === listing.profile.id;
+  if (profile && listing && listing.profile)
+    isAuthor = profile.id === listing.profile.id;
 
-  const listingForm = superForm(form, {
+  const listingForm = superForm(createListingForm, {
     validators: zodClient(createListingSchema),
     onUpdated: ({ form: f }) => {
       if (f.valid) {
@@ -40,7 +43,26 @@
       toast.error(result.error.message);
     },
   });
-  const { form: formData, enhance, errors, submitting, allErrors} = listingForm;
+
+  const contactForm = superForm(startConversationForm, {
+    validators: zodClient(startConversationSchema),
+  });
+
+  const {
+    form: formData,
+    enhance,
+    errors,
+    submitting,
+    allErrors,
+  } = listingForm;
+
+  const {
+    form: contactFormData,
+    enhance: enhanceContactForm,
+    submitting: contactFormSubmitting,
+    allErrors: contactAllErrors,
+    message: contactMessage,
+  } = contactForm;
 </script>
 
 <div class="flex flex-col gap-y-2">
@@ -66,11 +88,7 @@
             <X class="mr-2 h-5 w-5" />
             Avbryt
           </Button>
-          <Button
-            type="submit"
-            disabled={$allErrors.length > 0 ||
-              $submitting}
-          >
+          <Button type="submit" disabled={$allErrors.length > 0 || $submitting}>
             {#if $submitting}
               <LoadingSpinner class="mr-2" /> <span>Laddar...</span>
             {:else}
@@ -122,8 +140,25 @@
     <div class="generic-card m-8 flex flex-col">
       <NonEditableListing {listing} />
     </div>
-    <Button class="mx-8"
-      >Kontakta {listing.profile?.first_name ?? "läraren"}</Button
-    >
+    <form method="POST" use:enhanceContactForm action="?/contact">
+      <input type="hidden" name="teacher" value={$contactFormData.teacher} />
+      <div class="flex justify-end gap-x-2 mx-8">
+        <FormSubmit
+          submitting={contactFormSubmitting}
+          allErrors={contactAllErrors}
+          text="Kontakta {listing.profile?.first_name ?? 'läraren'}"
+        />
+        {#if $contactMessage}
+          <div>
+            <Alert.Root variant={$contactMessage.variant ?? "default"} class="bg-card">
+              <Alert.Title>{$contactMessage.title}</Alert.Title>
+              <Alert.Description>
+                {$contactMessage.description}
+              </Alert.Description>
+            </Alert.Root>
+          </div>
+        {/if}
+      </div>
+    </form>
   {/if}
 </div>

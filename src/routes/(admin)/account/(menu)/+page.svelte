@@ -3,10 +3,9 @@
   import type { Writable } from "svelte/store";
   import * as Dialog from "$lib/components/ui/dialog";
   import ListingCard from "$lib/components/listing/listing-card.svelte";
-  import { Button, buttonVariants } from "$lib/components/ui/button/index.js";
+  import { Button } from "$lib/components/ui/button/index.js";
   import { Input } from "$lib/components/ui/input/index.js";
-  import { Label } from "$lib/components/ui/label/index.js";
-  import { initCreateListingSchema, type Listing } from "$lib/models/listing";
+  import { initCreateListingSchema } from "$lib/models/listing";
   import StudentAccount from "src/lib/components/organisms/student-account.svelte";
   import * as Form from "$lib/components/ui/form";
   import { superForm, type SuperValidated } from "sveltekit-superforms";
@@ -16,6 +15,7 @@
   import * as Alert from "$lib/components/ui/alert/index.js";
   import { mediaQuery } from "svelte-legos";
   import * as Drawer from "$lib/components/ui/drawer/index.js";
+  import Title from "$lib/components/atoms/title.svelte";
 
   let open = false;
   const isDesktop = mediaQuery("(min-width: 768px)");
@@ -24,7 +24,8 @@
   adminSection.set("dashboard");
 
   export let data;
-  const listings = data.listings as Listing[]; // will always be an array, and never null
+  const { listings, conversations } = data;
+
   const form = data.form as SuperValidated<
     {
       title: string;
@@ -34,8 +35,9 @@
       title: string;
     }
   >;
-  // this too is complaining about potential undefined. Maybe there's an issue with parent serving data?
+  // this is complaining about potential undefined. Maybe there's an issue with parent serving data?
   // anyway, proceeding with this dirty hack...
+
   const userForm = superForm(form, {
     validators: zodClient(initCreateListingSchema),
     onError: ({ result }) => {
@@ -50,20 +52,20 @@
 </svelte:head>
 
 {#if data.profile.role === "teacher"}
-  <h1 class="text-2xl font-bold mb-1">Dina annonser</h1>
+  <Title>Dina annonser</Title>
 
-  <div class="my-6">
-    <div class="flex flex-col gap-y-4 mb-4">
-      {#if listings.length === 0}
-        <p>Inga annonser. Testa skapa en!</p>
-      {:else}
-        {#each listings as listing}
-          <a href="/listings/{listing.id}" aria-label="Navigate to ad">
-            <ListingCard {listing} />
-          </a>
-        {/each}
-      {/if}
-    </div>
+  <div class="flex flex-col gap-y-4 my-6">
+    {#if !listings}
+      <p>Kunde inte hämta annonser.</p>
+    {:else if listings.length === 0}
+      <p>Inga annonser. Testa skapa en!</p>
+    {:else}
+      {#each listings as listing}
+        <a href="/listing/{listing.id}" aria-label="Navigate to ad">
+          <ListingCard {listing} />
+        </a>
+      {/each}
+    {/if}
 
     {#if $isDesktop}
       <Dialog.Root bind:open>
@@ -176,60 +178,7 @@
         </Drawer.Content>
       </Drawer.Root>
     {/if}
-    <!-- 
-    <Dialog.Root>
-      <div class="flex justify-end w-full">
-        <Dialog.Trigger class={buttonVariants({ variant: "default" })}>
-          Skapa annons
-        </Dialog.Trigger>
-      </div>
-      <Dialog.Content class="flex flex-col gap-y-4 bg-card sm:max-w-[425px]">
-        <Dialog.Header>
-          <Dialog.Title>Skapa annons</Dialog.Title>
-          <Dialog.Description>
-            Du kan fylla i mer information om annonsen i nästa steg.
-          </Dialog.Description>
-        </Dialog.Header>
-        {#if $message}
-          <div>
-            <Alert.Root variant={$message.variant ?? "default"} class="bg-card">
-              <Alert.Title>{$message.title}</Alert.Title>
-              <Alert.Description>
-                {$message.description}
-              </Alert.Description>
-            </Alert.Root>
-          </div>
-        {/if}
-        <form method="POST" action="?/createListing" use:enhance>
-          <div class="grid gap-4 py-4">
-            <Form.Field form={userForm} name="title">
-              <Form.Control let:attrs>
-                <Input
-                  {...attrs}
-                  type="text"
-                  bind:value={$formData.title}
-                  placeholder="Rubrik"
-                />
-              </Form.Control>
-              <Form.FieldErrors />
-            </Form.Field>
-          </div>
-          <Dialog.Footer>
-            <Button
-              type="submit"
-              disabled={$allErrors.length > 0 || $submitting}
-            >
-              {#if $submitting}
-                <LoadingSpinner class="mr-2" /> <span>Laddar...</span>
-              {:else}
-                Skapa
-              {/if}
-            </Button>
-          </Dialog.Footer>
-        </form>
-      </Dialog.Content>
-    </Dialog.Root> -->
   </div>
 {:else}
-  <StudentAccount />
+  <StudentAccount {conversations} />
 {/if}
