@@ -61,44 +61,42 @@
     <MissingListing />
   {:else if isAuthor}
     {#if isEditing}
-      <form
-        method="POST"
-        use:enhance
-        action="?/updateListing"
-        class="flex flex-col gap-y-4 generic-card m-8"
-      >
-        <TitleEditable {formData} {listingForm} />
-        <HourlyPriceEditable {formData} {listingForm} />
-        <Separator />
-        <DescriptionEditable {formData} {listingForm} />
-        <SubjectsEditable {formData} {errors} />
-        <VisibilityEditable {formData} {listingForm} />
+      <div class="flex flex-col gap-y-4 m-8">
+        <FormMessage {message} scroll />
+        <form
+          method="POST"
+          use:enhance
+          action="?/updateListing"
+          class="flex flex-col gap-y-4 generic-card"
+        >
+          <TitleEditable {formData} {listingForm} />
+          <HourlyPriceEditable {formData} {listingForm} />
+          <Separator />
+          <DescriptionEditable {formData} {listingForm} />
+          <SubjectsEditable {formData} {errors} />
+          <VisibilityEditable {formData} {listingForm} />
 
-        <div class="flex justify-end gap-x-2">
-          <Button on:click={() => (isEditing = false)} variant="secondary">
-            <X class="mr-2 h-5 w-5" />
-            Avbryt
-          </Button>
-          <Button type="submit" disabled={$allErrors.length > 0 || $submitting}>
-            {#if $submitting}
-              <LoadingSpinner class="mr-2" /> <span>Laddar...</span>
-            {:else}
-              <SaveIcon class="mr-2 h-5 w-5" />
-              Spara
-            {/if}
-          </Button>
-        </div>
-        {#if $message}
-          <Alert.Root variant={$message.variant ?? "default"} class="bg-card">
-            <Alert.Title>{$message.title}</Alert.Title>
-            <Alert.Description>
-              {$message.description}
-            </Alert.Description>
-          </Alert.Root>
-        {/if}
-      </form>
-      <div class="self-end mx-8 mb-8">
-        <DeleteListing />
+          <div class="flex justify-end gap-x-2">
+            <Button on:click={() => (isEditing = false)} variant="secondary">
+              <X class="mr-2 h-5 w-5" />
+              Avbryt
+            </Button>
+            <Button
+              type="submit"
+              disabled={$allErrors.length > 0 || $submitting}
+            >
+              {#if $submitting}
+                <LoadingSpinner class="mr-2" /> <span>Laddar...</span>
+              {:else}
+                <SaveIcon class="mr-2 h-5 w-5" />
+                Spara
+              {/if}
+            </Button>
+          </div>
+          <div class="self-start">
+            <DeleteListing />
+          </div>
+        </form>
       </div>
     {:else}
       <div class="flex flex-col gap-y-4 generic-card m-8">
@@ -139,14 +137,19 @@
     <div class="generic-card mx-8 flex flex-col">
       <NonEditableListing {listing} />
     </div>
-    <form method="POST" use:enhanceContactForm action="?/contact" class="flex flex-col gap-y-4 mx-8">
+    <form
+      method="POST"
+      use:enhanceContactForm
+      action="?/contact"
+      class="flex flex-col gap-y-4 mx-8"
+    >
       <input type="hidden" name="teacher" value={$contactFormData.teacher} />
       <FormSubmit
         submitting={contactFormSubmitting}
         allErrors={contactAllErrors}
         text="Kontakta {listing.profile?.first_name ?? 'läraren'}"
       />
-      <FormMessage message={contactMessage} />
+      <FormMessage message={contactMessage} scroll />
     </form>
   {/if}
 </div>

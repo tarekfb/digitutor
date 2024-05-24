@@ -5,10 +5,23 @@
   let className: string | null | undefined = undefined;
   export { className as class };
   export let message;
+  let element: HTMLElement;
+  export let scroll = false;
+
+  $: $message, scrollIntoView();
+
+  const scrollIntoView = () => {
+    if (!scroll) return;
+    if (!$message) return;
+    setTimeout(
+      () => element.scrollIntoView({ behavior: "smooth", block: "end" }),
+      1,
+    );
+  };
 </script>
 
 {#if $message}
-  <div class={cn("", className)}>
+  <div class={cn("", className)} bind:this={element}>
     <Alert.Root variant={$message.variant ?? "default"} class="bg-card">
       <Alert.Title>{$message.title}</Alert.Title>
       <Alert.Description>

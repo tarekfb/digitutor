@@ -94,7 +94,7 @@
           loadingText="Skickar..."
         />
       </div>
-      <FormMessage {message} class="mt-2" />
+      <FormMessage {message} class="mt-2" scroll />
     </form>
   {:else}
     <Title>Hittade ingen konversation</Title>

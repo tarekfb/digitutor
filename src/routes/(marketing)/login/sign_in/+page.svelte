@@ -12,6 +12,7 @@
   import { goto } from "$app/navigation";
   import { onMount } from "svelte";
   import { page } from "$app/stores";
+  import FormMessage from "src/lib/components/molecules/form-message.svelte";
 
   export let data;
   let { supabase, form } = data;
@@ -69,14 +70,8 @@
     <Alert.Description>Vänligen logga in.</Alert.Description>
   </Alert.Root>
 {/if}
-{#if $message}
-  <Alert.Root variant={$message.variant ?? "default"} class="bg-card">
-    <Alert.Title>{$message.title}</Alert.Title>
-    <Alert.Description>
-      {$message.description}
-    </Alert.Description>
-  </Alert.Root>
-{/if}
+
+<FormMessage {message} scroll />
 <form class="text-start" method="POST" use:enhance>
   <Card.Root>
     <Card.Header class="space-y-1">

@@ -11,14 +11,13 @@
   import LoadingSpinner from "src/lib/components/atoms/loading-spinner.svelte";
   import * as RadioGroup from "$lib/components/ui/radio-group";
   import * as Alert from "$lib/components/ui/alert/index.js";
+  import FormMessage from "src/lib/components/molecules/form-message.svelte";
 
   export let data;
   const { form } = data;
   const userForm = superForm(form, {
     validators: zodClient(signUpSchema),
-    onError: ({ result }) => {
-      toast.error(result.error.message);
-    },
+    onResult: () => {},
   });
   const { form: formData, enhance, submitting, message, allErrors } = userForm;
 </script>
@@ -27,16 +26,7 @@
   <title>Skapa konto</title>
 </svelte:head>
 
-{#if $message}
-  <div>
-    <Alert.Root variant={$message.variant ?? "default"} class="bg-card">
-      <Alert.Title>{$message.title}</Alert.Title>
-      <Alert.Description>
-        {$message.description}
-      </Alert.Description>
-    </Alert.Root>
-  </div>
-{/if}
+<FormMessage {message} scroll />
 <form class="text-start" method="POST" use:enhance>
   <Card.Root>
     <Card.Header class="space-y-1">
@@ -136,11 +126,7 @@
       </Form.Field>
     </Card.Content>
     <Card.Footer class="justify-center">
-      <Button
-        type="submit"
-        disabled={$allErrors.length > 0 ||
-          $submitting}
-      >
+      <Button type="submit" disabled={$allErrors.length > 0 || $submitting}>
         {#if $submitting}
           <LoadingSpinner class="mr-2" /> <span>Laddar...</span>
         {:else}
