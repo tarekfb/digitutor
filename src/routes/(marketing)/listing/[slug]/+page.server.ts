@@ -4,7 +4,7 @@ import { getGenericErrorMessage, unknownErrorMessage } from "$lib/constants";
 import { message, superValidate } from "sveltekit-superforms";
 import { deleteListing, getListing, updateListing } from "$lib/server/database/listings";
 import { createListingSchema } from "$lib/models/listing";
-import { createConversation, getConversation, startConversation } from "src/lib/server/database/conversations";
+import { startConversation } from "src/lib/server/database/conversations";
 import { startConversationSchema } from "src/lib/models/conversations";
 
 export const load = async ({ locals: { supabase }, params: { slug } }) => {

@@ -13,11 +13,10 @@
   import { sendMessageSchema } from "src/lib/models/conversations";
   import { Textarea } from "$lib/components/ui/textarea/index.js";
   import { timeAgo } from "src/lib/utils";
+  import { chat, sendMessage, reset } from "src/stores/count";
+
   export let data;
-  const { profile, messages, form } = data;
-  const conversation = data.conversation;
-  const receiver =
-    profile.role == "teacher" ? conversation.student : conversation.teacher;
+  const { profile, messages, form, conversation } = data;
 
   const sendMessageForm = superForm(form, {
     validators: zodClient(sendMessageSchema),
@@ -32,6 +31,9 @@
     message,
     allErrors,
   } = sendMessageForm;
+
+  const receiver =
+    profile.role == "teacher" ? conversation.student : conversation.teacher;
 </script>
 
 <div class="flex flex-col gap-y-4">
@@ -50,7 +52,7 @@
       </Button>
     </div>
 
-    {#each messages as message}
+    {#each $chat as message}
       <div
         class="flex flex-col gap-y-2 bg-card p-2 rounded-md {message.sender ===
         profile.id
@@ -104,3 +106,6 @@
     </div>
   {/if}
 </div>
+
+<Button on:click={() => sendMessage()}>Insert</Button>
+<Button on:click={() => reset()}>Reset</Button>

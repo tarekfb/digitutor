@@ -133,14 +133,12 @@ export const createConversation = async (
     .single();
 
   if (error) {
-    console.error("Failed to create conversation: ", { dbConversation, error });
+    console.error("Failed to create conversation: ", { error });
+    throw error;
   }
 
   if (!data) {
-    console.error("Failed to create conversation. Conversation is null.", {
-      dbConversation,
-      error,
-    });
+    console.error("Failed to create conversation. Response was null.");
     throw new Error("Unexpected null response");
   }
 
