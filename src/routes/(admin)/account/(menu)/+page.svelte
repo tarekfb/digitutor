@@ -16,6 +16,7 @@
   import { mediaQuery } from "svelte-legos";
   import * as Drawer from "$lib/components/ui/drawer/index.js";
   import Title from "$lib/components/atoms/title.svelte";
+  import FormMessage from "src/lib/components/molecules/form-message.svelte";
 
   let open = false;
   const isDesktop = mediaQuery("(min-width: 768px)");
@@ -81,19 +82,7 @@
               Du kan fylla i mer information om annonsen i nästa steg.
             </Dialog.Description>
           </Dialog.Header>
-          {#if $message}
-            <div>
-              <Alert.Root
-                variant={$message.variant ?? "default"}
-                class="bg-card"
-              >
-                <Alert.Title>{$message.title}</Alert.Title>
-                <Alert.Description>
-                  {$message.description}
-                </Alert.Description>
-              </Alert.Root>
-            </div>
-          {/if}
+          <FormMessage {message} scroll />
           <form method="POST" action="?/createListing" use:enhance>
             <div class="grid gap-4 py-4">
               <Form.Field form={userForm} name="title">
@@ -137,19 +126,7 @@
               Du kan fylla i mer information om annonsen i nästa steg.
             </Drawer.Description>
           </Drawer.Header>
-          {#if $message}
-            <div class="mb-4">
-              <Alert.Root
-                variant={$message.variant ?? "default"}
-                class="bg-card"
-              >
-                <Alert.Title>{$message.title}</Alert.Title>
-                <Alert.Description>
-                  {$message.description}
-                </Alert.Description>
-              </Alert.Root>
-            </div>
-          {/if}
+          <FormMessage {message} scroll class="mb-4" />
           <form method="POST" action="?/createListing" use:enhance>
             <Form.Field form={userForm} name="title">
               <Form.Control let:attrs>
