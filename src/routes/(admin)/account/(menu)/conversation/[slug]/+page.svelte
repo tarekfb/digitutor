@@ -12,7 +12,7 @@
   import { goto } from "$app/navigation";
   import { sendMessageSchema } from "src/lib/models/conversations";
   import { Textarea } from "$lib/components/ui/textarea/index.js";
-
+  import { timeAgo } from "src/lib/utils";
   export let data;
   const { profile, messages, form } = data;
   const conversation = data.conversation;
@@ -61,8 +61,8 @@
           {message.sender === profile.id ? "Du" : receiver.first_name}
         </h3>
         <p>{message.content}</p>
-        <p class="text-sm text-muted-foreground">
-          {message.created_at.substring(0, 10)}
+        <p class="text-xs text-muted-foreground">
+          {timeAgo(message.created_at)} sedan
         </p>
       </div>
     {:else}
