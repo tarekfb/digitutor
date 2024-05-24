@@ -16,10 +16,8 @@
   export let data;
   const { profile, messages, form } = data;
   const conversation = data.conversation;
-  const title =
-    profile.role === "teacher"
-      ? `${conversation.student.first_name} ${conversation.student.last_name}`
-      : `${conversation.teacher.first_name} ${conversation.teacher.last_name}`;
+  const receiver =
+    profile.role == "teacher" ? conversation.student : conversation.teacher;
 
   const sendMessageForm = superForm(form, {
     validators: zodClient(sendMessageSchema),
@@ -39,13 +37,13 @@
 <div class="flex flex-col gap-y-4">
   {#if conversation}
     <div class="flex gap-x-4 items-center">
-      <Title>{title}</Title>
+      <Title>{receiver.first_name}</Title>
       <Button class="relative h-8 w-8 rounded-full">
         <Avatar.Root class="h-8 w-8 flex justify-center text-xs items-center ">
           <Avatar.Fallback class="text-background bg-primary"
             >{convertToInitials(
-              title.split(" ")[0],
-              title.split(" ")[1],
+              receiver.first_name,
+              receiver.last_name,
             )}</Avatar.Fallback
           >
         </Avatar.Root>
@@ -60,7 +58,7 @@
           : 'self-start'}"
       >
         <h3 class="font-semibold">
-          {message.sender === profile.id ? "Du" : title}
+          {message.sender === profile.id ? "Du" : receiver.first_name}
         </h3>
         <p>{message.content}</p>
         <p class="text-sm text-muted-foreground">
