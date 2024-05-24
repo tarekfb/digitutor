@@ -80,11 +80,11 @@ export const actions = {
     }
 
     try {
-      const message = await sendMessage(supabase, inputMessage);
+      await sendMessage(supabase, inputMessage);
       return { form }
     } catch (error) {
       console.error(error);
-      return message(form, getGenericErrorMessage(), { status: 500 });
+      return message(form, getGenericErrorMessage("destructive", "Kunde ej skicka meddelandet"), { status: 500 });
     }
   },
 };

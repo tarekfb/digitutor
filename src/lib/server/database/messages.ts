@@ -52,6 +52,7 @@ export const sendMessage = async (
     .insert(dbMessage)
     .select('*')
     .limit(1)
+    .order("id")
     .single();
 
   if (error) {
@@ -59,12 +60,9 @@ export const sendMessage = async (
     throw error;
   }
 
-  if (data === null) {
-    console.error("Failed to send message. Message is null.", {
-      dbMessage,
-      error,
-    });
-    throw error;
+  if (!data) {
+    console.error("Failed to send message. Message is null");
+    throw new Error("Unexpected null response");
   }
 
   return data;

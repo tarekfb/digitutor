@@ -53,19 +53,23 @@ export const startConversation = async (
     .eq("student", student)
     .eq("teacher", teacher)
     .limit(1)
-    .single();
 
   if (error) {
     console.error(`Failed to get conversation for studentid ${student} and teacherid ${teacher}`, { error });
     throw error;
   }
 
-  if (!data) { // no existing convo, create new
+  if (!data) {
+    console.error(`Failed to get conversation for studentid ${student} and teacherid ${teacher}`, { data, error });
+    throw new Error("Unexpected null response");
+  }
+
+  if (data.length === 0) { // no existing convo, create new
     const newConversation = await createConversation(supabase, teacher);
     return newConversation as unknown as Conversation;
   }
 
-  return data as unknown as Conversation;
+  return data[0] as unknown as Conversation;
 }
 
 export const getConversations = async (
@@ -130,15 +134,14 @@ export const createConversation = async (
 
   if (error) {
     console.error("Failed to create conversation: ", { dbConversation, error });
-    throw error;
   }
 
-  if (data === null) {
+  if (!data) {
     console.error("Failed to create conversation. Conversation is null.", {
       dbConversation,
       error,
     });
-    throw error;
+    throw new Error("Unexpected null response");
   }
 
   return data;
