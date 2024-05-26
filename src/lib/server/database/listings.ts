@@ -107,12 +107,9 @@ export const createListing = async (
     throw error;
   }
 
-  if (data === null) {
-    console.error("Failed to create listing. Listing is null.", {
-      dbListing,
-      error,
-    });
-    throw error;
+  if (!data) {
+    console.error("Failed to create listing. Response was null");
+    throw new Error("Unexpected null response");
   }
 
   return data as unknown as Listing;
@@ -148,7 +145,7 @@ export const deleteListing = async (
   }
 
   if (!data) {
-    console.error("Delete listing resposne was null", error);
+    console.error("Failed to delete listing. Response was null");
     throw new Error("Unexpected null response");
   }
 
@@ -182,7 +179,7 @@ export const updateListing = async (
   }
 
   if (!data) {
-    console.error("Failed to update listing. Listing is null.", { data, error });
+    console.error("Failed to update listing. Response was null.");
     throw new Error("Unexpected null response");
   }
 

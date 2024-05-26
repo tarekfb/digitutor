@@ -76,3 +76,30 @@ export const getNow = () => {
   return new Date().toISOString();
 
 }
+
+export const timeAgo = (dateIsoString: string): string => {
+  const pastDate = new Date(dateIsoString);
+  const now = new Date();
+  const diffInSeconds = Math.floor((now.getTime() - pastDate.getTime()) / 1000);
+
+  const minutes = 60;
+  const hours = minutes * 60;
+  const days = hours * 24;
+  const years = days * 365;
+
+  if (diffInSeconds < minutes) {
+    return '>1 min';
+  } else if (diffInSeconds < hours) {
+    const mins = Math.floor(diffInSeconds / minutes);
+    return `${mins} minut${mins > 1 ? 'er' : ''}`;
+  } else if (diffInSeconds < days) {
+    const hrs = Math.floor(diffInSeconds / hours);
+    return `${hrs} timm${hrs > 1 ? 'ar' : 'e'}`;
+  } else if (diffInSeconds < years) {
+    const dys = Math.floor(diffInSeconds / days);
+    return `${dys} dag${dys > 1 ? 'ar' : ''}`;
+  } else {
+    const yrs = Math.floor(diffInSeconds / years);
+    return `${yrs} år`;
+  }
+}

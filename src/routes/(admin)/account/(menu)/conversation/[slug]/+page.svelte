@@ -12,18 +12,20 @@
   import { goto } from "$app/navigation";
   import { sendMessageSchema } from "src/lib/models/conversations";
   import { Textarea } from "$lib/components/ui/textarea/index.js";
+  import { timeAgo } from "src/lib/utils";
+  import { chat, loadChat, loadMore } from "src/stores/count";
 
   export let data;
-  const { profile, messages, form } = data;
-  const conversation = data.conversation;
-  const receiver =
-    profile.role == "teacher" ? conversation.student : conversation.teacher;
+  const { profile, messages, form, conversation, supabase } = data;
+
+  loadChat(conversation.id, supabase);
 
   const sendMessageForm = superForm(form, {
     validators: zodClient(sendMessageSchema),
     onError: ({ result }) => {
       toast.error(result.error.message);
     },
+    invalidateAll: false,
   });
   const {
     form: formData,
@@ -32,6 +34,9 @@
     message,
     allErrors,
   } = sendMessageForm;
+
+  const receiver =
+    profile.role == "teacher" ? conversation.student : conversation.teacher;
 </script>
 
 <div class="flex flex-col gap-y-4">
@@ -50,7 +55,7 @@
       </Button>
     </div>
 
-    {#each messages as message}
+    {#each $chat as message}
       <div
         class="flex flex-col gap-y-2 bg-card p-2 rounded-md {message.sender ===
         profile.id
@@ -61,8 +66,8 @@
           {message.sender === profile.id ? "Du" : receiver.first_name}
         </h3>
         <p>{message.content}</p>
-        <p class="text-sm text-muted-foreground">
-          {message.created_at.substring(0, 10)}
+        <p class="text-xs text-muted-foreground">
+          {timeAgo(message.created_at)} sedan
         </p>
       </div>
     {:else}
