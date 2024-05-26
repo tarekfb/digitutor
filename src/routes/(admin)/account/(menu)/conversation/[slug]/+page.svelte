@@ -13,16 +13,19 @@
   import { sendMessageSchema } from "src/lib/models/conversations";
   import { Textarea } from "$lib/components/ui/textarea/index.js";
   import { timeAgo } from "src/lib/utils";
-  import { chat, sendMessage, reset } from "src/stores/count";
+  import { chat, loadChat, loadMore } from "src/stores/count";
 
   export let data;
-  const { profile, messages, form, conversation } = data;
+  const { profile, messages, form, conversation, supabase } = data;
+
+  loadChat(conversation.id, supabase);
 
   const sendMessageForm = superForm(form, {
     validators: zodClient(sendMessageSchema),
     onError: ({ result }) => {
       toast.error(result.error.message);
     },
+    invalidateAll: false,
   });
   const {
     form: formData,
@@ -106,6 +109,3 @@
     </div>
   {/if}
 </div>
-
-<Button on:click={() => sendMessage()}>Insert</Button>
-<Button on:click={() => reset()}>Reset</Button>
