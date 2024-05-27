@@ -10,7 +10,7 @@
   import type { Role } from "src/lib/models/user";
   import ListingNav from "./listing-nav.svelte";
   import ConversationsNav from "./conversations-nav.svelte";
-  import Separator from "../ui/separator/separator.svelte";
+  import Separator from "$lib/components/ui/separator/separator.svelte";
   import type { Conversation } from "src/lib/models/conversations";
 
   let className: string | null | undefined = undefined;

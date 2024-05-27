@@ -1,16 +1,12 @@
 import { redirect, error, fail } from "@sveltejs/kit";
-import { unknownErrorMessage } from "$lib/constants";
+import { initMessagesCount, unknownErrorMessage } from "$lib/constants";
 import { getMessages } from "src/lib/server/database/messages";
 import { getConversation } from "src/lib/server/database/conversations";
 import { sendMessageSchema, type InputMessage } from "src/lib/models/conversations";
-import { createListing, getListings } from "$lib/server/database/listings";
-import type { PageServerLoad } from "./$types";
 import { getGenericErrorMessage } from "$lib/constants";
 import { message, superValidate } from "sveltekit-superforms";
-import { initCreateListingSchema } from "src/lib/models/listing";
 import { zod } from "sveltekit-superforms/adapters";
 import { sendMessage } from "src/lib/server/database/messages";
-
 
 export const load = async ({ locals: { supabase, getSession }, params: { slug } }) => {
   const session = await getSession();
@@ -37,7 +33,7 @@ export const load = async ({ locals: { supabase, getSession }, params: { slug } 
 
   let messages;
   try {
-    messages = await getMessages(supabase, conversation.id);
+    messages = await getMessages(supabase, conversation.id, initMessagesCount);
   } catch (e) {
     console.error("Error when fetching messages for slug: " + slug, e);
     throw error(500, {
@@ -45,7 +41,7 @@ export const load = async ({ locals: { supabase, getSession }, params: { slug } 
     });
   };
 
-  messages = await getMessages(supabase, conversation.id);
+  messages = await getMessages(supabase, conversation.id, initMessagesCount);
   if (!messages) {
     console.error("Messages not found for slug: " + slug);
     throw error(404, {
@@ -55,14 +51,13 @@ export const load = async ({ locals: { supabase, getSession }, params: { slug } 
 
   const form = await superValidate(zod(sendMessageSchema))
 
-
   return { conversation, messages, form };
 }
 
 
 export const actions = {
   sendMessage: async (event) => {
-    const { locals: { supabase, getSession }, request } = event;
+    const { locals: { supabase, getSession } } = event;
     const session = await getSession();
     if (!session)
       throw redirect(303, "/login");

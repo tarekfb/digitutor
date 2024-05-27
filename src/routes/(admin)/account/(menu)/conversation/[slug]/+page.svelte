@@ -13,12 +13,14 @@
   import { sendMessageSchema } from "src/lib/models/conversations";
   import { Textarea } from "$lib/components/ui/textarea/index.js";
   import { timeAgo } from "src/lib/utils";
-  import { chat, loadChat, loadMore } from "src/stores/count";
+  import { chat, loadChat } from "src/stores/chat";
+  import { ScrollArea } from "$lib/components/ui/scroll-area/index.js";
+  import Separator from "$lib/components/ui/separator/separator.svelte";
+  import { afterUpdate } from "svelte";
+  import ChatWindow from "src/lib/components/molecules/chat-window.svelte";
 
   export let data;
   const { profile, messages, form, conversation, supabase } = data;
-
-  loadChat(conversation.id, supabase);
 
   const sendMessageForm = superForm(form, {
     validators: zodClient(sendMessageSchema),
@@ -39,73 +41,70 @@
     profile.role == "teacher" ? conversation.student : conversation.teacher;
 </script>
 
-<div class="flex flex-col gap-y-4">
-  {#if conversation}
-    <div class="flex gap-x-4 items-center">
-      <Title>{receiver.first_name}</Title>
-      <Button class="relative h-8 w-8 rounded-full">
-        <Avatar.Root class="h-8 w-8 flex justify-center text-xs items-center ">
-          <Avatar.Fallback class="text-background bg-primary"
-            >{convertToInitials(
-              receiver.first_name,
-              receiver.last_name,
-            )}</Avatar.Fallback
-          >
-        </Avatar.Root>
-      </Button>
+{#if conversation}
+  <div class="flex flex-col justify-between gap-y-4 h-full">
+    <div class="flex flex-col gap-y-4">
+      <div class="flex gap-x-4 items-center">
+        <Title>{receiver.first_name}</Title>
+        <Button class="relative h-8 w-8 rounded-full">
+          <Avatar.Root class="h-8 w-8 flex fy-center text-xs items-center ">
+            <Avatar.Fallback class="text-background bg-primary"
+              >{convertToInitials(
+                receiver.first_name,
+                receiver.last_name,
+              )}</Avatar.Fallback
+            >
+          </Avatar.Root>
+        </Button>
+      </div>
+
+      <ChatWindow
+        {supabase}
+        {profile}
+        {messages}
+        {receiver}
+        conversationId={conversation.id}
+      />
+
+      <Separator />
     </div>
 
-    {#each $chat as message}
-      <div
-        class="flex flex-col gap-y-2 bg-card p-2 rounded-md {message.sender ===
-        profile.id
-          ? 'self-end'
-          : 'self-start'}"
-      >
-        <h3 class="font-semibold">
-          {message.sender === profile.id ? "Du" : receiver.first_name}
-        </h3>
-        <p>{message.content}</p>
-        <p class="text-xs text-muted-foreground">
-          {timeAgo(message.created_at)} sedan
-        </p>
-      </div>
-    {:else}
-      <p>Inga meddelanden ännu</p>
-    {/each}
-
-    <form
-      method="POST"
-      action="?/sendMessage"
-      use:enhance
-      class="flex flex-col gap-y-2"
-    >
-      <Form.Field form={sendMessageForm} name="content">
-        <Form.Control let:attrs>
-          <Textarea
-            {...attrs}
-            placeholder="Skriv ett meddelande..."
-            class="resize-y bg-card"
-            bind:value={$formData.content}
-          />
-        </Form.Control>
-        <Form.FieldErrors />
-      </Form.Field>
-      <div class="flex justify-end">
-        <FormSubmit
-          {allErrors}
-          {submitting}
-          text="Skicka"
-          loadingText="Skickar..."
-        />
-      </div>
+    <div class="flex flex-col gap-y-4">
       <FormMessage {message} class="mt-2" scroll />
-    </form>
-  {:else}
+      <form
+        method="POST"
+        action="?/sendMessage"
+        use:enhance
+        class="flex flex-col gap-y-2"
+      >
+        <Form.Field form={sendMessageForm} name="content">
+          <Form.Control let:attrs>
+            <Textarea
+              {...attrs}
+              placeholder="Skriv ett meddelande..."
+              class="resize-y bg-card"
+              bind:value={$formData.content}
+            />
+          </Form.Control>
+          <Form.FieldErrors />
+        </Form.Field>
+        <div class="flex justify-end">
+          <FormSubmit
+            {allErrors}
+            {submitting}
+            text="Skicka"
+            loadingText="Skickar..."
+          />
+        </div>
+      </form>
+    </div>
+  </div>
+{:else}
+  <div class="flex flex-col gap-y-4">
     <Title>Hittade ingen konversation</Title>
     <div class="flex justify-between">
       <span>Vill du gå tillbaka till ditt konto?</span>
       <Button on:click={() => goto("/")}>Konto</Button>
     </div>
-  {/if}
-</div>
+  </div>
+{/if}

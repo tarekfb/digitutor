@@ -13,7 +13,10 @@ export const getMessages = async (
     .select('*')
     .eq("conversation", conversationId)
 
-  if (max) query = query.limit(max);
+  if (max) {
+    query = query.limit(max)
+    query = query.order("created_at", { ascending: false });
+  }
 
   const { data, error } = await query;
 
@@ -26,7 +29,7 @@ export const getMessages = async (
     console.error("Failed to get messages. Response was null");
     throw new Error("Unexpected null response");
   }
-
+  if (max) return data.reverse();
   return data;
 }
 

@@ -1,55 +1,59 @@
-// import { getMessages, sendMessage as sendMessageToDb } from 'src/lib/server/database/messages.js'
-// import { writable, get } from 'svelte/store'
-// import type { SupabaseClient } from '@supabase/supabase-js'
-// import type { InputMessage } from 'src/lib/models/conversations.js'
-// import type { Database } from 'lucide-svelte'
-// export const chat = writable([])
-
-// let isAdded = false
-// let initChatCount = 25
-// let tableName = 'global_chat'
-
-// export const loadChat = async (supabase: SupabaseClient<Database>, conversationId: string) => {
-
-//     const data = await getMessages(supabase, conversationId, initChatCount)
-//     if (!data) throw new Error("Test")
-
-//     chat.set(data)
-
-//     const mySubscription = supabase
-//         .from(tableName)
-//         .on('INSERT', (payload) => {
-//             chat.set([...data, payload.new])
-//             loadChat()
-//         })
-//         .subscribe()
-// }
-
-// export const loadMore = async () => {
-//     const { data, error } = await supabase
-//         .from(tableName)
-//         .select()
-//         .order('id', { ascending: false })
-//         .limit((initChatCount += 5))
-//     chat.set(data.reverse())
-// }
+import type { SupabaseClient } from '@supabase/supabase-js';
+import type { Database, Tables } from 'src/supabase';
+import { writable } from 'svelte/store'
+import { initMessagesCount as count } from "$lib/constants";
 
 
+let initMessageCount = count;
 
-// export const sendMessage = async (
-//     supabase: SupabaseClient<Database>,
-//     input: InputMessage,
-// ) => {
-//     const message = sendMessageToDb(supabase, input)
-//     loadChat();
-// }
+export const getMessages = async (
+    supabase: SupabaseClient<Database>,
+    conversationId: string,
+    loadMore = 0
+): Promise<Tables<"messages">[]> => {
+    let query = supabase
+        .from("messages")
+        .select('*')
+        .eq("conversation", conversationId)
+        .order("created_at", { ascending: false })
+        .limit(initMessageCount += loadMore)
 
+    const { data, error } = await query;
 
-// export const replyData = async (id: string) => {
-//     const { data, error } = await supabase.from(tableName).select().eq('id', id)
-//     if (error) {
-//         return console.error(error)
-//     }
-//     console.log('chatstore (replydata):', data)
-//     return data
-// }
+    if (error) {
+        console.error(`Failed to fetch messages for conversationId: ${conversationId}`, { error });
+        throw error;
+    }
+
+    if (!data) {
+        console.error("Failed to get messages. Response was null");
+        throw new Error("Unexpected null response");
+    }
+
+    return data;
+}
+
+export const chat = writable<Tables<"messages">[]>([]);
+
+export const loadChat = async (conversationId: string, supabase: SupabaseClient<Database>, loadMore = 0, initMessages: Tables<"messages">[] = []) => {
+    if (initMessages.length > 0) {
+        chat.set(initMessages)
+    } else {
+        try {
+            const messages = await getMessages(supabase, conversationId, loadMore)
+            chat.set(messages.reverse());
+        } catch (e) {
+            console.error(e);
+            // todo setflash if error
+        }
+    }
+
+    supabase
+        .channel('schema-db-changes')
+        .on('postgres_changes', {
+            event: 'INSERT',
+            schema: 'public',
+        }, () => loadChat(conversationId, supabase)
+        )
+        .subscribe()
+};
