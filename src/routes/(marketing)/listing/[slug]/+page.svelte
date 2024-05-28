@@ -10,6 +10,8 @@
   import { startConversationSchema } from "src/lib/models/conversations.js";
   import FormMessage from "src/lib/components/molecules/form-message.svelte";
   import EditableListing from "src/lib/components/organisms/editable-listing.svelte";
+  import { Button } from "$lib/components/ui/button";
+  import { Pencil } from "lucide-svelte";
 
   export let data;
   $: ({ profile, listing } = data);
@@ -68,7 +70,11 @@
         stopEditing={() => (isEditing = false)}
       />
     {:else}
-      <NonEditableListing {listing} startEditing={() => (isEditing = true)} />
+      <NonEditableListing {listing} />
+      <Button on:click={() => (isEditing = true)} class="self-end mx-8">
+        <Pencil class="mr-2 h-4 w-4" />
+        Ändra</Button
+      >
     {/if}
   {:else}
     <div class="flex justify-between gap-x-2 mx-8 mt-8 items-center">
@@ -84,9 +90,7 @@
         >
       </Avatar.Root>
     </div>
-    <div class="generic-card mx-8 flex flex-col">
-      <NonEditableListing {listing} startEditing={() => (isEditing = true)} />
-    </div>
+    <NonEditableListing {listing} />
     <form
       method="POST"
       use:enhanceContactForm

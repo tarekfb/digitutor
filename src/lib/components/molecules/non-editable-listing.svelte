@@ -1,10 +1,7 @@
 <script lang="ts">
   import type { Listing } from "src/lib/models/listing";
   import { Subjects } from "src/lib/models/common";
-  import { Button } from "$lib/components/ui/button";
-  import { Pencil } from "lucide-svelte";
 
-  export let startEditing: () => void;
   export let listing: Listing;
   const { title, description, subjects, hourlyPrice, visible } = listing;
 </script>
@@ -41,8 +38,4 @@
       Ej publicerad
     </div>
   {/if}
-  <Button on:click={startEditing} class="self-end">
-    <Pencil class="mr-2 h-4 w-4" />
-    Ändra</Button
-  >
 </div>

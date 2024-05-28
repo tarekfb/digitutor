@@ -21,7 +21,7 @@
 </script>
 
 {#if $message}
-  <div class={cn("", className)} bind:this={element}>
+  <div class={cn("text-center", className)} bind:this={element}>
     <Alert.Root variant={$message.variant ?? "default"} class="bg-card">
       <Alert.Title>{$message.title}</Alert.Title>
       <Alert.Description>

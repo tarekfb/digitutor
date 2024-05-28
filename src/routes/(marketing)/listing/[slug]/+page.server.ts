@@ -81,6 +81,9 @@ export const actions = {
       return
     }
 
+    if (teacher === session.user.id)
+      return message(form, getGenericErrorMessage(undefined, undefined, "Du kan inte kontakta dig själv."), { status: 400 });
+
     let conversationId: string;
     try {
       const { id } = await startConversation(supabase, teacher, session.user.id);
