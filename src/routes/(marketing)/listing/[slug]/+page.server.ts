@@ -24,7 +24,6 @@ export const load = async ({ locals: { supabase }, params: { slug } }) => {
 
   const createListingForm = await superValidate(listing, zod(createListingSchema))
   const startConversationForm = await superValidate({ teacher: listing.profile?.id }, zod(startConversationSchema))
-
   return { listing, createListingForm, startConversationForm };
 }
 
