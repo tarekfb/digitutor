@@ -2,7 +2,7 @@
   import { timeAgo } from "src/lib/utils";
   import { chat, loadChat } from "src/stores/chat";
   import { ScrollArea } from "$lib/components/ui/scroll-area/index.js";
-  import { afterUpdate } from "svelte";
+  import type { Tables } from "src/supabase";
 
   export let messages;
   export let supabase;
@@ -12,20 +12,24 @@
 
   loadChat(conversationId, supabase, undefined, messages);
 
-  afterUpdate(() => {
-    const scrollToBottom = () => {
-      const messagesDiv = document.querySelector("#messages");
-      const lastElement = messagesDiv?.lastElementChild;
-      lastElement?.scrollIntoView({ behavior: "smooth", block: "end" });
-    };
+  const scroll = (node: HTMLElement, messages: Tables<"messages">[]) => {
+    setTimeout(() => {
+      node?.scrollIntoView({ behavior: "smooth", block: "end" });
+    }, 750);
+    // the node contains all messages
+    // scroll still doesn't work without this settimeout hack
+    // todo: fix
 
-    const unsubscribe = chat.subscribe(() => scrollToBottom());
-    return () => unsubscribe();
-  });
+    return {
+      update() {
+        node?.scrollIntoView({ behavior: "smooth", block: "end" });
+      },
+    };
+  };
 </script>
 
 <ScrollArea class="max-h-[50vh]">
-  <div class="flex flex-col gap-y-4" id="messages">
+  <div class="flex flex-col gap-y-4" use:scroll={$chat}>
     {#each $chat as message}
       <div
         class="flex flex-col gap-y-2 bg-card p-2 rounded-md {message.sender ===
