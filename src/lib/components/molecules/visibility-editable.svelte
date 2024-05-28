@@ -16,7 +16,7 @@
       />
       <Form.Label class="text-xl">Synlig</Form.Label>
     </div>
-    <input name={attrs.name} value={$formData.mobile} hidden />
+    <input name={attrs.name} bind:checked={$formData.visible} type="checkbox" value={$formData.visible} hidden />
   </Form.Control>
   <Form.FieldErrors />
 </Form.Field>

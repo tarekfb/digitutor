@@ -2,7 +2,7 @@
   import { getContext } from "svelte";
   import type { Writable } from "svelte/store";
   import * as Dialog from "$lib/components/ui/dialog";
-  import ListingCard from "$lib/components/listing/listing-card.svelte";
+  import ListingCard from "$lib/components/molecules/listing-card.svelte";
   import { Button } from "$lib/components/ui/button/index.js";
   import { Input } from "$lib/components/ui/input/index.js";
   import { initCreateListingSchema } from "$lib/models/listing";
@@ -12,7 +12,6 @@
   import { zodClient } from "sveltekit-superforms/adapters";
   import { toast } from "svelte-sonner";
   import LoadingSpinner from "src/lib/components/atoms/loading-spinner.svelte";
-  import * as Alert from "$lib/components/ui/alert/index.js";
   import { mediaQuery } from "svelte-legos";
   import * as Drawer from "$lib/components/ui/drawer/index.js";
   import Title from "$lib/components/atoms/title.svelte";

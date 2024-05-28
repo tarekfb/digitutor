@@ -1,12 +1,11 @@
 <script lang="ts">
   import { websiteName } from "$lib/constants";
-  import type { Listing } from "$lib/models/listing";
-  import ListingCard from "$lib/components/listing/listing-card.svelte";
+  import ListingCard from "$lib/components/molecules/listing-card.svelte";
   import { Button } from "src/lib/components/ui/button";
   import { goto } from "$app/navigation";
 
   export let data;
-  const listings: Listing[] | null = data.listings;
+  const listings = data.listings;
 </script>
 
 <svelte:head>

@@ -11,4 +11,4 @@ export const getGenericErrorMessage = (variant?: "success" | "warning" | "destru
         description: description ?? "Kontakta oss om detta fortsätter."
     })
 
-export const initMessagesCount = 25
+export const initMessagesCount = 25;
