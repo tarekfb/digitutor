@@ -56,6 +56,8 @@ export const actions = {
       });
     }
 
+    console.log(form.data.visible)
+
     try {
       await updateListing(supabase, form.data, slug);
       return { form };
