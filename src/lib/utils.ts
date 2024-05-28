@@ -68,14 +68,9 @@ export type TypeToZod<T> = {
   : z.ZodObject<TypeToZod<T[K]>>
 };
 
-export const convertToInitials = (firstName: string, lastName: string): string => {
-  return firstName[0] + lastName[0];
-};
+export const convertToInitials = (firstName: string, lastName: string): string => (firstName[0] + lastName[0]).toUpperCase();
 
-export const getNow = () => {
-  return new Date().toISOString();
-
-}
+export const getNow = () => new Date().toISOString();
 
 export const timeAgo = (dateIsoString: string): string => {
   const pastDate = new Date(dateIsoString);

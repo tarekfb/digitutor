@@ -24,7 +24,6 @@ export const load = async ({ locals: { supabase }, params: { slug } }) => {
 
   const createListingForm = await superValidate(listing, zod(createListingSchema))
   const startConversationForm = await superValidate({ teacher: listing.profile?.id }, zod(startConversationSchema))
-
   return { listing, createListingForm, startConversationForm };
 }
 
@@ -81,6 +80,9 @@ export const actions = {
       console.error("Error when starting conversation for listing slug: " + slug, error);
       return
     }
+
+    if (teacher === session.user.id)
+      return message(form, getGenericErrorMessage(undefined, undefined, "Du kan inte kontakta dig själv."), { status: 400 });
 
     let conversationId: string;
     try {

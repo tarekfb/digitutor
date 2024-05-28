@@ -12,17 +12,13 @@
   import { goto } from "$app/navigation";
   import { sendMessageSchema } from "src/lib/models/conversations";
   import { Textarea } from "$lib/components/ui/textarea/index.js";
-  import { timeAgo } from "src/lib/utils";
-  import { chat, loadChat } from "src/stores/chat";
-  import { ScrollArea } from "$lib/components/ui/scroll-area/index.js";
   import Separator from "$lib/components/ui/separator/separator.svelte";
-  import { afterUpdate } from "svelte";
   import ChatWindow from "src/lib/components/molecules/chat-window.svelte";
 
   export let data;
-  const { profile, messages, form, conversation, supabase } = data;
+  const { profile, messages, conversation, supabase } = data;
 
-  const sendMessageForm = superForm(form, {
+  const sendMessageForm = superForm(data.form, {
     validators: zodClient(sendMessageSchema),
     onError: ({ result }) => {
       toast.error(result.error.message);
