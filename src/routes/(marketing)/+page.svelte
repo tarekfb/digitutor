@@ -35,7 +35,7 @@
       <span> placeholdern för blabla</span>
     </div>
   </div>
-  {#if data.session}
+  {#if !data.session}
     <Button on:click={() => goto("/login/sign_up")}>Skapa konto</Button>
   {/if}
 </div>
