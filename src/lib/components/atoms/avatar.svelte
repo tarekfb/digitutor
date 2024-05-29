@@ -1,12 +1,11 @@
 <script lang="ts">
-  import { goto } from "$app/navigation";
   import * as Avatar from "$lib/components/ui/avatar";
   import { Button } from "$lib/components/ui/button";
   import { convertToInitials } from "$lib/utils";
   import { cn } from "$lib/utils.js";
 
   interface OnClick {
-    onClick?: () => void; // Optional function property
+    onClick?: () => void;
   }
 
   let className: string | null | undefined = undefined;
