@@ -4,14 +4,15 @@
   import { superForm } from "sveltekit-superforms";
   import { createListingSchema } from "$lib/models/listing";
   import NonEditableListing from "src/lib/components/molecules/non-editable-listing.svelte";
-  import * as Avatar from "$lib/components/ui/avatar";
   import { convertToInitials } from "src/lib/utils.js";
   import FormSubmit from "src/lib/components/molecules/form-submit.svelte";
+  import Avatar from "src/lib/components/atoms/avatar.svelte";
   import { startConversationSchema } from "src/lib/models/conversations.js";
   import FormMessage from "src/lib/components/molecules/form-message.svelte";
   import EditableListing from "src/lib/components/organisms/editable-listing.svelte";
   import { Button } from "$lib/components/ui/button";
   import { Pencil } from "lucide-svelte";
+  import { goto } from "$app/navigation";
 
   export let data;
   $: ({ profile, listing } = data);
@@ -81,14 +82,11 @@
       <h1 class="text-3xl md:text-4xl">
         {listing.profile?.first_name ?? "Saknar namn..."}
       </h1>
-      <Avatar.Root class="h-8 w-8 flex justify-center text-xs items-center">
-        <Avatar.Fallback class="bg-accent text-background"
-          >{convertToInitials(
-            listing.profile?.first_name ?? "?",
-            listing.profile?.last_name ?? "?",
-          )}</Avatar.Fallback
-        >
-      </Avatar.Root>
+      <Avatar
+        firstName={listing.profile?.first_name ?? "?"}
+        lastName={listing.profile?.last_name ?? "?"}
+        onClick={() => goto(`/profile/${listing.profile?.id}`)}
+      />
     </div>
     <NonEditableListing {listing} />
     <form
