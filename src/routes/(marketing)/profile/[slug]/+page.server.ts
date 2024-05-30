@@ -27,7 +27,7 @@ export const load = async ({ locals: { supabase }, params: { slug } }) => {
 
     let listings;
     try {
-        listings = await getListingsByTeacherId(supabase, slug);
+        listings = await getListingsByTeacherId(supabase, slug, undefined, true);
     } catch (e) {
         console.error("Error when reading listings for profile with id: " + slug, e);
         throw error(500, {
