@@ -3,15 +3,13 @@
   import { Button } from "$lib/components/ui/button";
   import { goto } from "$app/navigation";
   import { unknownErrorMessage } from "src/lib/constants";
+  import PrimaryTitle from "src/lib/components/atoms/primary-title.svelte";
 </script>
 
-<div class="hero min-h-[100vh]">
-  <div class="hero-content text-center">
-    <div class="max-w-lg">
-      <h1 class="text-5xl font-bold">Det här va lite pinsamt...</h1>
-      <!-- <p class="py-6 text-2xl">Något gick fel: {$page?.error?.message}</p> -->
-      <p class="py-6 text-2xl">{unknownErrorMessage}</p>
-      <Button on:click={() => goto("/")}>Gå hem</Button>
-    </div>
-  </div>
+<div class="max-w-lg text-center flex flex-col items-center m-8">
+  <PrimaryTitle class="text-5xl md:text-6xl">Det här va lite pinsamt...</PrimaryTitle>
+  <p class="py-6 text-2xl">{unknownErrorMessage}</p>
+  <Button on:click={() => goto("/")}>Gå hem</Button>
 </div>
+
+<!-- <p class="py-6 text-2xl">Något gick fel: {$page?.error?.message}</p> -->

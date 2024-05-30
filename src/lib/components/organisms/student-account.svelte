@@ -5,7 +5,7 @@
   import { Label } from "$lib/components/ui/label/index.js";
   import { Circle } from "lucide-svelte";
   import * as Card from "$lib/components/ui/card/index.js";
-  import Title from "../atoms/title.svelte";
+  import Title from "../atoms/primary-title.svelte";
   import { goto } from "$app/navigation";
   import { SquareArrowOutUpRight } from 'lucide-svelte';
 

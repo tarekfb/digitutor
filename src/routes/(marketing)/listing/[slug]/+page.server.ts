@@ -5,7 +5,7 @@ import { message, superValidate } from "sveltekit-superforms";
 import { deleteListing, getListing, updateListing } from "$lib/server/database/listings";
 import { createListingSchema } from "$lib/models/listing";
 import { startConversation } from "src/lib/server/database/conversations";
-import { startConversationSchema } from "src/lib/models/conversations";
+import { contactSchema } from "src/lib/models/conversations";
 
 export const load = async ({ locals: { supabase }, params: { slug } }) => {
   let listing;
@@ -23,8 +23,8 @@ export const load = async ({ locals: { supabase }, params: { slug } }) => {
     });
 
   const createListingForm = await superValidate(listing, zod(createListingSchema))
-  const startConversationForm = await superValidate({ teacher: listing.profile?.id }, zod(startConversationSchema))
-  return { listing, createListingForm, startConversationForm };
+  const contactForm = await superValidate({ teacher: listing.profile.id }, zod(contactSchema))
+  return { listing, createListingForm, contactForm };
 }
 
 export const actions = {
@@ -70,7 +70,7 @@ export const actions = {
       throw redirect(303, "/login"); // todo: in the future should implement a redirect after login
 
 
-    const form = await superValidate(event, zod(startConversationSchema));
+    const form = await superValidate(event, zod(contactSchema));
     if (!form.valid) {
       return message(form, getGenericErrorMessage(), { status: 500 });
     }
@@ -78,7 +78,7 @@ export const actions = {
     const { teacher } = form.data;
     if (!teacher) {
       console.error("Error when starting conversation for listing slug: " + slug, error);
-      return
+      return message(form, getGenericErrorMessage(), { status: 500 });
     }
 
     if (teacher === session.user.id)

@@ -1,6 +1,8 @@
 <script lang="ts">
   import * as Alert from "$lib/components/ui/alert/index.js";
   import { cn } from "$lib/utils.js";
+  import { Button } from "$lib/components/ui/button";
+  import { Drawer as DrawerPrimitive } from "vaul-svelte";
 
   let className: string | null | undefined = undefined;
   export { className as class };
@@ -30,3 +32,6 @@
     </Alert.Root>
   </div>
 {/if}
+
+<!-- <Button size="icon" variant="ghost" class="absolute right-1 top-1">x</Button> -->
+<!-- todo implement closeable -->

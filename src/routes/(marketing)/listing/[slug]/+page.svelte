@@ -4,15 +4,14 @@
   import { superForm } from "sveltekit-superforms";
   import { createListingSchema } from "$lib/models/listing";
   import NonEditableListing from "src/lib/components/molecules/non-editable-listing.svelte";
-  import { convertToInitials } from "src/lib/utils.js";
-  import FormSubmit from "src/lib/components/molecules/form-submit.svelte";
   import Avatar from "src/lib/components/atoms/avatar.svelte";
-  import { startConversationSchema } from "src/lib/models/conversations.js";
-  import FormMessage from "src/lib/components/molecules/form-message.svelte";
+  import { contactSchema } from "src/lib/models/conversations.js";
   import EditableListing from "src/lib/components/organisms/editable-listing.svelte";
   import { Button } from "$lib/components/ui/button";
   import { Pencil } from "lucide-svelte";
   import { goto } from "$app/navigation";
+  import PrimaryTitle from "src/lib/components/atoms/primary-title.svelte";
+  import ContactTeacherForm from "src/lib/components/molecules/contact-teacher-form.svelte";
 
   export let data;
   $: ({ profile, listing } = data);
@@ -32,8 +31,8 @@
     resetForm: false,
   });
 
-  const contactForm = superForm(data.startConversationForm, {
-    validators: zodClient(startConversationSchema),
+  const contactForm = superForm(data.contactForm, {
+    validators: zodClient(contactSchema),
   });
 
   const {
@@ -45,20 +44,19 @@
     message,
     reset,
   } = listingForm;
-
-  const {
-    form: contactFormData,
-    enhance: enhanceContactForm,
-    submitting: contactFormSubmitting,
-    allErrors: contactAllErrors,
-    message: contactMessage,
-  } = contactForm;
 </script>
 
 <div class="flex flex-col gap-y-4 pb-8">
   {#if !listing}
     <MissingListing />
   {:else if isAuthor}
+    <div class="flex justify-between gap-x-2 mx-8 mt-8 items-center">
+      <PrimaryTitle>{listing.profile.first_name}</PrimaryTitle>
+      <Avatar
+        profile={listing.profile}
+        onClick={() => goto(`/profile/${listing.profile?.id}`)}
+      />
+    </div>
     {#if isEditing}
       <EditableListing
         {formData}
@@ -79,29 +77,18 @@
     {/if}
   {:else}
     <div class="flex justify-between gap-x-2 mx-8 mt-8 items-center">
-      <h1 class="text-3xl md:text-4xl">
-        {listing.profile?.first_name ?? "Saknar namn..."}
-      </h1>
+      <PrimaryTitle>{listing.profile.first_name}</PrimaryTitle>
       <Avatar
-        firstName={listing.profile?.first_name ?? "?"}
-        lastName={listing.profile?.last_name ?? "?"}
+        profile={listing.profile}
         onClick={() => goto(`/profile/${listing.profile?.id}`)}
       />
     </div>
     <NonEditableListing {listing} />
-    <form
-      method="POST"
-      use:enhanceContactForm
+    <ContactTeacherForm
+      form={contactForm}
       action="?/contact"
-      class="flex flex-col gap-y-4 mx-8"
-    >
-      <input type="hidden" name="teacher" value={$contactFormData.teacher} />
-      <FormSubmit
-        submitting={contactFormSubmitting}
-        allErrors={contactAllErrors}
-        text="Kontakta {listing.profile?.first_name ?? 'läraren'}"
-      />
-      <FormMessage message={contactMessage} scroll />
-    </form>
+      firstName={listing.profile.first_name}
+      buttonStyling="self-end"
+    />
   {/if}
 </div>

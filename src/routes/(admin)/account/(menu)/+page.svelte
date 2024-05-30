@@ -14,7 +14,7 @@
   import LoadingSpinner from "src/lib/components/atoms/loading-spinner.svelte";
   import { mediaQuery } from "svelte-legos";
   import * as Drawer from "$lib/components/ui/drawer/index.js";
-  import Title from "$lib/components/atoms/title.svelte";
+  import PrimaryTitle from "src/lib/components/atoms/primary-title.svelte";
   import FormMessage from "src/lib/components/molecules/form-message.svelte";
 
   let open = false;
@@ -52,7 +52,7 @@
 </svelte:head>
 
 {#if data.profile.role === "teacher"}
-  <Title>Dina annonser</Title>
+  <PrimaryTitle>Dina annonser</PrimaryTitle>
 
   <div class="flex flex-col gap-y-4 my-6">
     {#if !listings}

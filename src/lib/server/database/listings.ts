@@ -8,7 +8,7 @@ export const getListings = async (
   max?: number,
   userId?: string,
   visible?: boolean,
-): Promise<Listing[] | null> => {
+): Promise<Listing[]> => {
   let query = supabase
     .from("listings")
     .select(
@@ -21,7 +21,7 @@ export const getListings = async (
     );
 
   if (userId) query = query.eq("profile", userId)
-  if (visible) query = query.eq("visible", visible)
+  if (visible) query = query.eq("visible", true)
   if (max) query = query.limit(max);
 
   const { data, error } = await query;
@@ -31,7 +31,49 @@ export const getListings = async (
     throw error;
   }
 
-  return data as unknown as Listing[] | null;
+  if (!data) {
+    console.error(`Failed to get listings. Response was null`);
+    throw new Error("Unexpected null response");
+  }
+
+  return data as unknown as Listing[];
+}
+
+export const getListingsByTeacherId = async (
+  supabase: SupabaseClient<Database>,
+  teacherId: string,
+  max?: number,
+  visible?: boolean,
+): Promise<Listing[]> => {
+
+  let query = supabase
+    .from("listings")
+    .select(
+      `
+            *,
+            profile (
+              *
+            )
+          `,
+    )
+    .eq("profile", teacherId)
+
+  if (visible) query = query.eq("visible", visible)
+  if (max) query = query.limit(max);
+
+  const { data, error } = await query;
+
+  if (error) {
+    console.error(`Failed to read listings ${teacherId ? "for userId" + teacherId : ''}`, { error });
+    throw error;
+  }
+
+  if (!data) {
+    console.error(`Failed to get listings for teacher ${teacherId}. Response was null`);
+    throw new Error("Unexpected null response");
+  }
+
+  return data as unknown as Listing[];
 }
 
 export const getListing = async (
