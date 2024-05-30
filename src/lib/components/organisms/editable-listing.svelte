@@ -1,6 +1,6 @@
 <script lang="ts">
   import { Separator } from "$lib/components/ui/separator/index.js";
-  import DeleteListing from "src/lib/components/molecules/delete-listing.svelte";
+  import DeleteListing from "src/lib/components/atoms/delete-listing.svelte";
   import { Button } from "$lib/components/ui/button";
   import DescriptionEditable from "src/lib/components/molecules/description-editable.svelte";
   import TitleEditable from "src/lib/components/molecules/title-editable.svelte";

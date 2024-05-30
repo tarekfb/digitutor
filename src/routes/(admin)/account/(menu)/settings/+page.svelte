@@ -1,52 +1,95 @@
 <script lang="ts">
   import { getContext } from "svelte";
   import type { Writable } from "svelte/store";
-  import SettingsModule from "./settings_module.svelte";
+  import PrimaryTitle from "src/lib/components/atoms/primary-title.svelte";
+  import SettingsForm from "src/lib/components/molecules/settings-form.svelte";
+  import { superForm } from "sveltekit-superforms/client";
+  import { zodClient } from "sveltekit-superforms/adapters";
+  import { emailSchema, nameSchema } from "src/lib/models/profile.js";
+  import { Input } from "src/lib/components/ui/input";
+  import * as Form from "$lib/components/ui/form";
+  import { toast } from "svelte-sonner";
+  import { deleteAccountSchema } from "src/lib/models/user.js";
+  import FormSubmit from "src/lib/components/molecules/form-submit.svelte";
+  import DeleteAccount from "src/lib/components/atoms/delete-account.svelte";
 
   let adminSection: Writable<string> = getContext("adminSection");
   adminSection.set("settings");
 
   export let data;
-  let { session, profile } = data;
+  const updateNameForm = data.updateNameForm;
+  const updateEmailForm = data.updateEmailForm;
+  const deleteAccountForm = data.deleteAccountForm;
+
+  const nameForm = superForm(updateNameForm, {
+    validators: zodClient(nameSchema),
+    onUpdated({ form }) {
+      if (form.valid) {
+        nameReset({ newState: updateNameForm.data });
+        toast.success(`Ändrat namn.`);
+      }
+    },
+    resetForm: false,
+  });
+  const { form: nameData, reset: nameReset } = nameForm;
+
+  const emailForm = superForm(updateEmailForm, {
+    validators: zodClient(emailSchema),
+    resetForm: false,
+  });
+  const { form: emailData } = emailForm;
+
+  const deleteForm = superForm(deleteAccountForm, {
+    validators: zodClient(deleteAccountSchema),
+    resetForm: false,
+  });
+  const { form: deleteData } = deleteForm;
 </script>
 
 <svelte:head>
   <title>Settings</title>
 </svelte:head>
 
-<h1 class="text-2xl font-bold mb-6">Settings</h1>
+<div class="flex flex-col gap-y-4">
+  <PrimaryTitle>Inställningar</PrimaryTitle>
+  <SettingsForm form={nameForm} action="?/name" title="Namn">
+    <Form.Field form={nameForm} name="firstName">
+      <Form.Control let:attrs>
+        <Input
+          {...attrs}
+          type="text"
+          bind:value={$nameData.firstName}
+          placeholder="Förnamn"
+        />
+      </Form.Control>
+      <Form.FieldErrors />
+    </Form.Field>
+    <Form.Field form={nameForm} name="lastName">
+      <Form.Control let:attrs>
+        <Input
+          {...attrs}
+          type="text"
+          bind:value={$nameData.lastName}
+          placeholder="Efternamn"
+        />
+      </Form.Control>
+      <Form.FieldErrors />
+    </Form.Field>
+  </SettingsForm>
 
-<SettingsModule
-  title="Profile"
-  editable={false}
-  fields={[
-    { id: "fullName", label: "Name", initialValue: profile?.full_name ?? "" },
-  ]}
-  editButtonTitle="Edit Profile"
-  editLink="/account/settings/edit_profile"
-/>
+  <SettingsForm form={emailForm} action="?/email" title="Email">
+    <Form.Field form={emailForm} name="email">
+      <Form.Control let:attrs>
+        <Input
+          {...attrs}
+          type="email"
+          bind:value={$emailData.email}
+          placeholder="Email"
+        />
+      </Form.Control>
+      <Form.FieldErrors />
+    </Form.Field>
+  </SettingsForm>
 
-<SettingsModule
-  title="Email"
-  editable={false}
-  fields={[{ id: "email", initialValue: session?.user?.email || "" }]}
-  editButtonTitle="Change Email"
-  editLink="/account/settings/change_email"
-/>
-
-<SettingsModule
-  title="Password"
-  editable={false}
-  fields={[{ id: "password", initialValue: "••••••••••••••••" }]}
-  editButtonTitle="Change Password"
-  editLink="/account/settings/change_password"
-/>
-
-<SettingsModule
-  title="Danger Zone"
-  editable={false}
-  dangerous={true}
-  fields={[]}
-  editButtonTitle="Delete Account"
-  editLink="/account/settings/delete_account"
-/>
+  <DeleteAccount form={deleteForm} />
+</div>

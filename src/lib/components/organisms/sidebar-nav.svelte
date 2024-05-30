@@ -7,7 +7,7 @@
   import { Switch } from "$lib/components/ui/switch/index.js";
   import { DollarSign, Settings } from "lucide-svelte";
   import * as Avatar from "$lib/components/ui/avatar";
-  import type { Role } from "src/lib/models/user";
+  import type { Role } from "src/lib/models/profile";
   import ListingNav from "./listing-nav.svelte";
   import ConversationsNav from "./conversations-nav.svelte";
   import Separator from "$lib/components/ui/separator/separator.svelte";

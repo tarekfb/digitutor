@@ -7,7 +7,8 @@ export type SignUpUser = Pick<Tables<"profiles">, "role" | "first_name" | "last_
     password: string;
     terms: boolean;
 };
-const signUpUserFields: TypeToZod<SignUpUser> = {
+
+export const signUpUserFields: TypeToZod<SignUpUser> = {
     email: z
         .string()
         .min(3, "Måste vara minst 3 karaktärer."),
@@ -31,20 +32,11 @@ const signUpUserFields: TypeToZod<SignUpUser> = {
 }
 export const signUpSchema = z.object(signUpUserFields)
 
-
-export type CreateProfile = {
-    id: string;
-    role: "teacher" | "student" | "admin";
-    firstName: string;
-    lastName: string;
-}
-
-export type Role = Pick<Tables<"profiles">, "role">["role"];
-
 export type SignInUser = {
     email: string;
     password: string;
 }
+
 const signInProperties = {
     email: z
         .string()
@@ -55,13 +47,6 @@ const signInProperties = {
 }
 export const signInSchema = z.object(signInProperties)
 
-export type CompleteProfileInput = {
-    firstName: string;
-    lastName: string;
-}
-
-export const completeProfileSchema = z.object({
-    firstName: signUpUserFields.first_name,
-    lastName: signUpUserFields.last_name,
-});
-
+export const deleteAccountSchema = z.object({
+    id: z.string()
+})

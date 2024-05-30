@@ -15,7 +15,7 @@
     >Skapa konto</Button
   >
   <SecondaryTitle>Har du redan ett konto?</SecondaryTitle>
-  <Button on:click={() => goto("/login/sign_in")} class="self-center"
+  <Button variant="secondary" on:click={() => goto("/login/sign_in")} class="self-center"
     >Logga in</Button
   >
 </div>

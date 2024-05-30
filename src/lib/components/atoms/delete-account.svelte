@@ -1,0 +1,59 @@
+<script lang="ts">
+  import { Trash2 } from "lucide-svelte";
+  import * as AlertDialog from "$lib/components/ui/alert-dialog/index.js";
+  import { Button } from "$lib/components/ui/button";
+  import FormSubmit from "../molecules/form-submit.svelte";
+  import FormMessage from "../molecules/form-message.svelte";
+  import SecondaryTitle from "./secondary-title.svelte";
+  import { text } from "@sveltejs/kit";
+  import LoadingSpinner from "./loading-spinner.svelte";
+
+  let isOpen = false;
+  export let form;
+
+  const { form: formData, enhance, submitting, allErrors, message } = form;
+</script>
+
+<div class="flex flex-col gap-y-4 generic-card">
+  <SecondaryTitle>Ta bort konto</SecondaryTitle>
+  <AlertDialog.Root bind:open={isOpen}>
+    <AlertDialog.Trigger asChild let:builder>
+      <Button
+        builders={[builder]}
+        variant="destructive"
+        aria-label="Delete account"
+      >
+        Ta bort konto
+      </Button>
+    </AlertDialog.Trigger>
+    <AlertDialog.Content>
+      <AlertDialog.Header>
+        <AlertDialog.Title>Är du säker?</AlertDialog.Title>
+        <AlertDialog.Description>
+          Detta går inte att ångra. Tar du bort ditt konto försvinner kontot och
+          all relaterad information permanent.
+        </AlertDialog.Description>
+      </AlertDialog.Header>
+      <AlertDialog.Footer>
+        <AlertDialog.Cancel>Avbryt</AlertDialog.Cancel>
+        <form method="POST" action="?/delete" use:enhance>
+          <input hidden value={$formData.id} name="id" />
+
+          <!-- todo fix this -->
+          <!-- button inside buttopn -->
+          <!-- modify the dialog to take variantk -->
+          <AlertDialog.Action class="m-0 p-0 w-full">
+            <FormSubmit
+              {submitting}
+              {allErrors}
+              variant="destructive"
+              text="Ta bort konto"
+              class="w-full"
+            /></AlertDialog.Action
+          >
+        </form>
+      </AlertDialog.Footer>
+    </AlertDialog.Content>
+  </AlertDialog.Root>
+  <FormMessage {message} scroll />
+</div>

@@ -46,7 +46,7 @@ export const actions = {
       const { id } = await createListing(supabase, title);
       listingId = id;
     } catch (error) {
-      console.error(error);
+      console.error("Failed to create listing", error);
       return message(form, getGenericErrorMessage(), { status: 500 });
     }
     throw redirect(303, `/listing/${listingId}`);
