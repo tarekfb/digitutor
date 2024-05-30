@@ -1,19 +1,18 @@
 <script lang="ts">
   import { Button } from "$lib/components/ui/button";
   import * as DropdownMenu from "$lib/components/ui/dropdown-menu";
-  import * as Avatar from "$lib/components/ui/avatar";
   import { UserRound, LogOut } from "lucide-svelte";
-  // import Logo from "$lib/components/logo/logo.svelte";
+  // import Logo from "$lib/components/atoms/logo.svelte";
   import { goto } from "$app/navigation";
-  import { convertToInitials } from "$lib/utils";
   import type { Tables } from "src/supabase";
   import { websiteName } from "../../constants";
+  import Avatar from "../atoms/avatar.svelte";
 
   export let profile: Tables<"profiles"> | null;
 </script>
 
 <header
-  class="sticky top-0 z-40 w-full bg-gradient-to-r from-primary to-accent text-background"
+  class="sticky top-0 z-40 w-full bg-gradient-to-r from-primary to-accent text-background px-1"
 >
   <div
     class="container flex h-16 items-center space-x-4 sm:justify-between sm:space-x-0"
@@ -22,7 +21,7 @@
       {websiteName}
     </a>
     <div class="flex flex-1 items-center justify-end space-x-4">
-      <nav class="flex items-center space-x-1">
+      <nav class="flex items-center space-x-4">
         {#if !profile}
           <Button variant="ghost" on:click={() => goto("/login/sign_in")}
             >Logga in</Button
@@ -40,22 +39,17 @@
                 builders={[builder]}
                 class="relative h-8 w-8 rounded-full"
               >
-                <Avatar.Root
-                  class="h-8 w-8 flex justify-center text-xs items-center "
-                >
-                  <Avatar.Fallback class="text-background bg-primary"
-                    >{convertToInitials(
-                      profile.first_name ?? "?",
-                      profile.last_name ?? "?",
-                    )}</Avatar.Fallback
-                  >
-                </Avatar.Root>
+                <Avatar
+                  {profile}
+                  onClick={undefined}
+                  fallbackClass="bg-primary"
+                />
               </Button>
             </DropdownMenu.Trigger>
             <DropdownMenu.Content class="w-56" align="end">
               <DropdownMenu.Label class="font-normal">
                 <p class="text-sm font-medium leading-none">
-                  {profile?.first_name ?? "Saknar namn..."}
+                  {profile.first_name}
                 </p>
               </DropdownMenu.Label>
               <DropdownMenu.Separator />

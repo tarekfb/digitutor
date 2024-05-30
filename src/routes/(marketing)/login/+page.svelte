@@ -1,16 +1,21 @@
+<script>
+  import { goto } from "$app/navigation";
+  import PrimaryTitle from "src/lib/components/atoms/primary-title.svelte";
+  import SecondaryTitle from "src/lib/components/atoms/secondary-title.svelte";
+  import { Button } from "src/lib/components/ui/button";
+</script>
+
 <svelte:head>
   <title>Logga in</title>
 </svelte:head>
 
-<div>
-  <h1 class="text-xl font-bold">Kom igång</h1>
-  <a href="/login/sign_up"
-    ><button class="btn btn-primary mt-3 btn-wide">Skapa konto</button></a
+<div class="flex flex-col gap-y-6 generic-card">
+  <PrimaryTitle>Kom igång - skapa konto</PrimaryTitle>
+  <Button on:click={() => goto("/login/sign_up")} class="self-center"
+    >Skapa konto</Button
   >
-
-  <h1 class="text-xl mt-6">Har du redan ett konto?</h1>
-  <a href="/login/sign_in"
-    ><button class="btn btn-outline btn-primary mt-3 btn-wide">Logga in</button
-    ></a
+  <SecondaryTitle>Har du redan ett konto?</SecondaryTitle>
+  <Button on:click={() => goto("/login/sign_in")} class="self-center"
+    >Logga in</Button
   >
 </div>
