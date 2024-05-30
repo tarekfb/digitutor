@@ -18,7 +18,7 @@
   const reviews: string[] = [];
 </script>
 
-<div class="flex flex-col gap-y-4 m-8">
+<div class="flex flex-col gap-y-4">
   <div class="flex justify-between gap-x-2 text-2xl">
     <PrimaryTitle>{profile.first_name}</PrimaryTitle>
     <Avatar

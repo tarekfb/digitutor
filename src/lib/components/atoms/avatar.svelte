@@ -10,6 +10,7 @@
   }
 
   let className: string | null | undefined = undefined;
+  export let fallbackClass: string | null | undefined = undefined;
   export { className as class };
   
   export let onClick: OnClick["onClick"];
@@ -19,7 +20,7 @@
 
   const base = "flex justify-center text-lg items-center font-normal";
   const size = "h-10 w-10";
-  const fallback = "text-background bg-accent";
+  const fallback = "text-background bg-accent " + (fallbackClass ? ` ${fallbackClass}` : "");
 </script>
 
 {#if onClick && profile.role === "teacher"}

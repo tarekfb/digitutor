@@ -12,7 +12,7 @@
   <meta name="description" content="{websiteName} Home Page" />
 </svelte:head>
 
-<div class="text-center py-12 flex flex-col items-center gap-y-4 md:gap-y-8">
+<div class="flex flex-col items-center gap-y-4 text-center py-12 md:gap-y-8">
   <div class="max-w-xl">
     <div
       class="text-3xl md:text-4xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-primary to-accent"
