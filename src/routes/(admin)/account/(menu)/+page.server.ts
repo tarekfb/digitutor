@@ -1,4 +1,4 @@
-import { error, fail, redirect } from "@sveltejs/kit";
+import { fail, redirect } from "@sveltejs/kit";
 import { createListing, getListings } from "$lib/server/database/listings";
 import type { PageServerLoad } from "./$types";
 import { getGenericErrorMessage } from "$lib/constants";
@@ -21,13 +21,6 @@ export const load: PageServerLoad = async ({
   } catch (e) {
     console.error(e);
     return message(form, { content: getGenericErrorMessage(undefined, "Kunde inte hämta annonser", undefined), session }, { status: 429 });
-  }
-
-  if (!listings) {
-    console.error("Listings not found for /account root");
-    throw error(404, {
-      message: 'Not found'
-    });
   }
 
   return { form, session, listings };

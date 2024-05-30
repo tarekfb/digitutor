@@ -7,6 +7,7 @@
   export let message;
   let element: HTMLElement;
   export let scroll = false;
+  import { Button } from "$lib/components/ui/button";
 
   $: $message, scrollIntoView();
 
@@ -30,3 +31,7 @@
     </Alert.Root>
   </div>
 {/if}
+
+<!-- <Button size="icon" variant="ghost" class="absolute right-1 top-1">x</Button> -->
+<!-- todo implement closeable -->
+<!-- import { Button } from "$lib/components/ui/button"; -->

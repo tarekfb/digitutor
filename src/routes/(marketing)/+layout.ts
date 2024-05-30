@@ -25,12 +25,11 @@ export const load = async ({ fetch, data, depends }) => {
 };
 
 export const _hasFullProfile = (profile: Tables<"profiles"> | null) => {
-  if (!profile) {
+  if (!profile)
     return false;
-  }
-  if (!profile.full_name) {
+
+  if (!profile.first_name || profile.last_name)
     return false;
-  }
 
   return true;
 };

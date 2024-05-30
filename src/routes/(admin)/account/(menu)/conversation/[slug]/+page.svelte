@@ -4,10 +4,9 @@
   import { zodClient } from "sveltekit-superforms/adapters";
   import { superForm } from "sveltekit-superforms";
   import FormMessage from "src/lib/components/molecules/form-message.svelte";
-  import * as Avatar from "$lib/components/ui/avatar";
   import * as Form from "$lib/components/ui/form/index.js";
-  import { convertToInitials } from "src/lib/utils.js";
-  import Title from "src/lib/components/atoms/title.svelte";
+  import Avatar from "src/lib/components/atoms/avatar.svelte";
+  import PrimaryTitle from "src/lib/components/atoms/primary-title.svelte";
   import FormSubmit from "src/lib/components/molecules/form-submit.svelte";
   import { goto } from "$app/navigation";
   import { sendMessageSchema } from "src/lib/models/conversations";
@@ -40,17 +39,10 @@
 {#if conversation}
   <div class="flex flex-col justify-between gap-y-4 h-full">
     <div class="flex flex-col gap-y-4">
-      <div class="flex gap-x-4 items-center">
-        <Title>{receiver.first_name}</Title>
+      <div class="flex gap-x-4 justify-between">
+        <PrimaryTitle>{receiver.first_name}</PrimaryTitle>
         <Button class="relative h-8 w-8 rounded-full">
-          <Avatar.Root class="h-8 w-8 flex fy-center text-xs items-center ">
-            <Avatar.Fallback class="text-background bg-primary"
-              >{convertToInitials(
-                receiver.first_name,
-                receiver.last_name,
-              )}</Avatar.Fallback
-            >
-          </Avatar.Root>
+          <Avatar onClick={() => goto(`/profile/${receiver.id}`)} profile={receiver} />
         </Button>
       </div>
 
@@ -97,7 +89,7 @@
   </div>
 {:else}
   <div class="flex flex-col gap-y-4">
-    <Title>Hittade ingen konversation</Title>
+    <PrimaryTitle>Hittade ingen konversation</PrimaryTitle>
     <div class="flex justify-between">
       <span>Vill du gå tillbaka till ditt konto?</span>
       <Button on:click={() => goto("/")}>Konto</Button>

@@ -1,5 +1,5 @@
 import type { Session, SupabaseClient } from "@supabase/supabase-js";
-import type { CreateProfile, CompleteProfileInput } from "src/lib/models/user";
+import type { CreateProfile } from "src/lib/models/user";
 import { getNow } from "src/lib/utils";
 import type { Database, Tables } from "src/supabase";
 
@@ -27,6 +27,12 @@ export const getProfileByUserId = async (
     throw error;
   }
 
+
+  if (!data) {
+    console.error(`Failed to get profile by user id: ${userId}. Data was null`, { data, error });
+    throw new Error("Unexpected null response");
+  }
+
   return data;
 };
 
@@ -52,10 +58,17 @@ export const createProfile = async (
     .select(`*`)
     .limit(1)
     .single();
+
   if (error) {
     console.error(`Failed to create profile for userId: ${profileInput.id}`, { error });
     throw error;
   }
+
+  if (!data) {
+    console.error(`Failed to create profile. Data was null`, { data, error });
+    throw new Error("Unexpected null response");
+  }
+
   return data;
 }
 
@@ -69,9 +82,16 @@ export const updateProfile = async (
     .select(`*`)
     .limit(1)
     .single();
+
   if (error) {
     console.error(`Failed to update profile for userId: ${profileInput.id}`, { error });
     throw error;
   }
+
+  if (!data) {
+    console.error(`Failed to update profile for profile id ${profileInput.id}. Data was null`, { data, error });
+    throw new Error("Unexpected null response");
+  }
+
   return data;
 }

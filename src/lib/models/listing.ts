@@ -3,7 +3,7 @@ import type { TypeToZod } from "$lib/utils";
 import { z } from "zod";
 
 export type Listing = Omit<Tables<"listings">, "profile"> & {
-    profile?: Tables<"profiles">;
+    profile: Tables<"profiles">;
 };
 
 export type InputListing = Pick<Tables<"listings">, 'hourlyPrice' | 'description' | 'subjects' | 'title' | 'visible'>;

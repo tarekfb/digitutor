@@ -5,7 +5,6 @@
   import { goto } from "$app/navigation";
 
   export let data;
-  const listings = data.listings;
 </script>
 
 <svelte:head>
@@ -56,14 +55,15 @@
         </span>
       </div>
     </div>
-    {#if listings && listings.length > 0}
-      <div class="flex flex-col gap-y-4 mt-12">
-        {#each listings as listing}
-          <a href="/listing/{listing.id}" aria-label="Navigate to ad">
-            <ListingCard {listing} />
-          </a>
-        {/each}
-      </div>
-    {/if}
+
+    <div class="flex flex-col gap-y-4 mt-12">
+      {#each data.listings as listing}
+        <a href="/listing/{listing.id}" aria-label="Navigate to ad">
+          <ListingCard {listing} />
+        </a>
+      {:else}
+        <p>Det finns inga annonser ännu.</p>
+      {/each}
+    </div>
   </div>
 </div>
