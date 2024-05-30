@@ -88,11 +88,14 @@ export const actions = {
         if (!session)
             throw redirect(303, "/login");
 
-        const form = await superValidate(event, zod(emailSchema));
+        const form = await superValidate(event, zod(deleteAccountSchema));
         if (!form.valid)
-            return fail(400, { nameForm: form });
-        
-        return message(form, getGenericErrorMessage(), { status: 500 });
+            return fail(400, { form });
+
+        setTimeout(async () => {
+            return message(form, getGenericErrorMessage(), { status: 500 });
+
+        }, 3000)
 
         // const currentPassword = formData.get("currentPassword") as string;
 

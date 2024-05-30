@@ -34,25 +34,23 @@
           all relaterad information permanent.
         </AlertDialog.Description>
       </AlertDialog.Header>
-      <AlertDialog.Footer>
-        <AlertDialog.Cancel>Avbryt</AlertDialog.Cancel>
-        <form method="POST" action="?/delete" use:enhance>
-          <input hidden value={$formData.id} name="id" />
-
-          <!-- todo fix this -->
-          <!-- button inside buttopn -->
-          <!-- modify the dialog to take variantk -->
-          <AlertDialog.Action class="m-0 p-0 w-full">
-            <FormSubmit
-              {submitting}
-              {allErrors}
-              variant="destructive"
-              text="Ta bort konto"
-              class="w-full"
-            /></AlertDialog.Action
+      <form method="POST" action="?/delete" use:enhance>
+        <input hidden value={$formData.id} name="id" />
+        <AlertDialog.Footer>
+          <AlertDialog.Cancel>Avbryt</AlertDialog.Cancel>
+          <AlertDialog.Action
+            type="submit"
+            disabled={$allErrors.length > 0 || $submitting}
+            class="bg-destructive"
           >
-        </form>
-      </AlertDialog.Footer>
+            {#if $submitting}
+              <LoadingSpinner class="mr-2" /> <span>Laddar...</span>
+            {:else}
+              Ta bort konto
+            {/if}
+          </AlertDialog.Action>
+        </AlertDialog.Footer>
+      </form>
     </AlertDialog.Content>
   </AlertDialog.Root>
   <FormMessage {message} scroll />
