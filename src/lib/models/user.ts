@@ -48,5 +48,5 @@ const signInProperties = {
 export const signInSchema = z.object(signInProperties)
 
 export const deleteAccountSchema = z.object({
-    id: z.string()
+    password: signInProperties.password,
 })

@@ -1,12 +1,11 @@
 <script lang="ts">
-  import { Trash2 } from "lucide-svelte";
   import * as AlertDialog from "$lib/components/ui/alert-dialog/index.js";
   import { Button } from "$lib/components/ui/button";
-  import FormSubmit from "../molecules/form-submit.svelte";
   import FormMessage from "../molecules/form-message.svelte";
   import SecondaryTitle from "./secondary-title.svelte";
-  import { text } from "@sveltejs/kit";
   import LoadingSpinner from "./loading-spinner.svelte";
+  import { Input } from "src/lib/components/ui/input";
+  import * as Form from "$lib/components/ui/form";
 
   let isOpen = false;
   export let form;
@@ -21,7 +20,7 @@
       <Button
         builders={[builder]}
         variant="destructive"
-        disabled={$allErrors.length > 0 || $submitting}
+        disabled={$submitting}
         aria-label="Delete account"
       >
         {#if $submitting}
@@ -39,8 +38,15 @@
           all relaterad information permanent.
         </AlertDialog.Description>
       </AlertDialog.Header>
-      <form method="POST" action="?/delete" use:enhance>
-        <input hidden value={$formData.id} name="id" />
+      <form method="POST" action="?/delete" use:enhance class="flex flex-col gap-y-4">
+        <Form.Field {form} name="password">
+          <Form.Control let:attrs>
+            <Form.Label>Password</Form.Label>
+            <Input {...attrs} type="password" bind:value={$formData.password} />
+          </Form.Control>
+          <Form.Description />
+          <Form.FieldErrors />
+        </Form.Field>
         <AlertDialog.Footer>
           <AlertDialog.Cancel>Avbryt</AlertDialog.Cancel>
           <AlertDialog.Action

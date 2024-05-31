@@ -10,22 +10,17 @@
   import * as Form from "$lib/components/ui/form";
   import { toast } from "svelte-sonner";
   import { deleteAccountSchema } from "src/lib/models/user.js";
-  import FormSubmit from "src/lib/components/molecules/form-submit.svelte";
   import DeleteAccount from "src/lib/components/atoms/delete-account.svelte";
 
   let adminSection: Writable<string> = getContext("adminSection");
   adminSection.set("settings");
 
   export let data;
-  const updateNameForm = data.updateNameForm;
-  const updateEmailForm = data.updateEmailForm;
-  const deleteAccountForm = data.deleteAccountForm;
-
-  const nameForm = superForm(updateNameForm, {
+  const nameForm = superForm(data.updateNameForm, {
     validators: zodClient(nameSchema),
     onUpdated({ form }) {
       if (form.valid) {
-        nameReset({ newState: updateNameForm.data });
+        nameReset({ newState: data.updateNameForm.data });
         toast.success(`Ändrat namn.`);
       }
     },
@@ -33,15 +28,13 @@
   });
   const { form: nameData, reset: nameReset } = nameForm;
 
-  const emailForm = superForm(updateEmailForm, {
+  const emailForm = superForm(data.updateEmailForm, {
     validators: zodClient(emailSchema),
-    resetForm: false,
   });
   const { form: emailData } = emailForm;
 
-  const deleteForm = superForm(deleteAccountForm, {
+  const deleteForm = superForm(data.deleteAccountForm, {
     validators: zodClient(deleteAccountSchema),
-    resetForm: false,
   });
 </script>
 

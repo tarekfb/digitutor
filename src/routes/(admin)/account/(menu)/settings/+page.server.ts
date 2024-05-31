@@ -19,10 +19,8 @@ export const load: PageServerLoad = async (parentData) => {
         lastName: profile.last_name
     }
     const updateNameForm = await superValidate(initName, zod(nameSchema));
-
     const updateEmailForm = await superValidate({ email: session.user.email }, zod(emailSchema));
-
-    const deleteAccountForm = await superValidate({ id: session.user.id }, zod(deleteAccountSchema));
+    const deleteAccountForm = await superValidate(zod(deleteAccountSchema));
 
     return { updateNameForm, updateEmailForm, deleteAccountForm };
 };
@@ -36,7 +34,7 @@ export const actions = {
 
         const form = await superValidate(event, zod(nameSchema));
         if (!form.valid)
-            return fail(400, { nameForm: form });
+            return fail(400, { form });
 
         const { firstName, lastName } = form.data;
 
@@ -56,7 +54,7 @@ export const actions = {
 
         try {
             await updateProfile(supabase, profileInput);
-            return { nameForm: form }
+            return { form }
         } catch (error) {
             console.error(`Error on update profile in update name with userid ${session.user.id}`, error);
             return message(form, getGenericErrorMessage(), { status: 500 });
@@ -82,7 +80,7 @@ export const actions = {
         }
     },
     delete: async (event) => {
-        const { locals: { supabase, getSession } } = event;
+        const { locals: { supabase, getSession, supabaseServiceRole } } = event;
         const session = await getSession();
         if (!session)
             throw redirect(303, "/login");
@@ -90,44 +88,44 @@ export const actions = {
         const form = await superValidate(event, zod(deleteAccountSchema));
         if (!form.valid)
             return fail(400, { form });
-        
+
         await new Promise(resolve => setTimeout(resolve, 2500));
 
-        return message(form, getGenericErrorMessage(), { status: 500 });
 
-        // const currentPassword = formData.get("currentPassword") as string;
+        const { password } = form.data;
+        const { id, email } = session.user;
+        if (!email) {
+            console.error(`User with id ${id} has no email and therefore password could not be verified`);
+            return message(form, getGenericErrorMessage(), { status: 500 });
+        }
 
-        // if (!currentPassword) {
-        //     return fail(400, {
-        //         errorMessage:
-        //             "You must provide your current password to delete your account. If you forgot it, sign out then use 'forgot password' on the sign in page.",
-        //         errorFields: ["currentPassword"],
-        //         currentPassword,
-        //     });
-        // }
+        // Check current password is correct before deleting account
+        const { error } = await supabase.auth.signInWithPassword({
+            email,
+            password,
+        });
 
-        // // Check current password is correct before deleting account
-        // const { error: pwError } = await supabase.auth.signInWithPassword({
-        //     email: session?.user.email || "",
-        //     password: currentPassword,
-        // });
-        // if (pwError) {
-        //     // The user was logged out because of bad password. Redirect to error page explaining.
-        //     throw redirect(303, "/login/current_password_error");
-        // }
+        if (error)
+            throw redirect(303, "/login/current_password_error");
+        // user was logged out because of bad password. Redirect to error page with explaination.
 
-        // const { error } = await supabaseServiceRole.auth.admin.deleteUser(
-        //     session.user.id,
-        //     true,
-        // );
-        // if (error) {
-        //     return fail(500, {
-        //         errorMessage: unknownErrorMessage,
-        //         currentPassword,
-        //     });
-        // }
 
-        // await supabase.auth.signOut();
-        // throw redirect(303, "/");
+        try {
+            const { error } = await supabaseServiceRole.auth.admin.deleteUser(
+                id,
+                true,
+            );
+            if (error) {
+                console.error(`Error on attempt to delete user with userid ${id}`, error);
+                return message(form, getGenericErrorMessage(), { status: 500 });
+            }
+
+            await supabase.auth.signOut();
+        } catch (e) {
+            console.error(`Error on attempt to delete & signout user with userid ${id}`, e);
+            return message(form, getGenericErrorMessage(), { status: 500 });
+        }
+
+        throw redirect(303, "/");
     },
 }
