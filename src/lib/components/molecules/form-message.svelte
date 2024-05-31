@@ -14,7 +14,7 @@
     if (!scroll) return;
     if (!$message) return;
     setTimeout(
-      () => element.scrollIntoView({ behavior: "smooth", block: "start" }),
+      () => element.scrollIntoView({ behavior: "smooth", block: "end" }),
       1,
     );
   };
