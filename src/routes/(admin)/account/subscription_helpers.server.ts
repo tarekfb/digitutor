@@ -1,6 +1,6 @@
 import type { SupabaseClient, Session } from "@supabase/supabase-js";
 import type { Database } from "../../../supabase";
-import { pricingPlans } from "src/routes/(marketing)/pricing/pricing_plans";
+import { pricingPlans } from "src/routes/(marketing)/pricing/pricing-plans";
 import { PRIVATE_STRIPE_API_KEY } from "$env/static/private";
 import Stripe from "stripe";
 import { getNow } from "src/lib/utils";
@@ -108,7 +108,7 @@ export const fetchSubscription = async ({
     if (!appSubscription) {
       return {
         error:
-          "Stripe subscription does not have matching app subscription in pricing_plans.ts (via product id match)",
+          "Stripe subscription does not have matching app subscription in pricing-plans.ts (via product id match)",
       };
     }
   }

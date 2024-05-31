@@ -1,5 +1,7 @@
 <script lang="ts">
+  import { goto } from "$app/navigation";
   import { pricingPlans } from "$lib/constants";
+  import { Button } from "../ui/button";
 
   // Module context
   export let highlightedPlanId: string = "";
@@ -70,7 +72,7 @@
           {plan.description}
         </p>
         <div class="mt-auto pt-4 text-sm text-gray-600">
-          Inkluderar:
+          Plan Includes:
           <ul class="list-disc list-inside mt-2 space-y-1">
             {#each plan.features as feature}
               <li class="">{feature}</li>
@@ -89,13 +91,21 @@
                 Current Plan
               </div>
             {:else}
-              <a
+              <Button
+                on:click={() =>
+                  goto(
+                    "/account/subscribe/" +
+                      (plan?.stripe_price_id ?? "free_plan"),
+                  )}
+              >
+                {callToAction}
+              </Button>
+              <!-- <a
                 href={"/account/subscribe/" +
                   (plan?.stripe_price_id ?? "free_plan")}
                 class="btn btn-primary w-[80%] mx-auto"
               >
-                {callToAction}
-              </a>
+              </a> -->
             {/if}
           </div>
         </div>
@@ -103,7 +113,7 @@
     </div>
   {/each}
 </div>
-<!-- 
+
 <h1 class="text-2xl font-bold text-center mt-24">Pricing FAQ</h1>
 <div class="flex place-content-center">
   <div class="join join-vertical max-w-xl py-6 mx-auto">
@@ -155,7 +165,7 @@
       </div>
     </div>
   </div>
-</div> -->
+</div>
 
 <svg style="display:none" version="2.0">
   <defs>
@@ -183,7 +193,7 @@
     </symbol>
   </defs>
 </svg>
-<!-- 
+
 <h1 class="text-2xl font-bold text-center mt-16">Plan Features</h1>
 <h2 class="text-xl text-center text-slate-500 mt-1 pb-3">
   Example feature table
@@ -252,4 +262,4 @@
       {/each}
     </tbody>
   </table>
-</div> -->
+</div>

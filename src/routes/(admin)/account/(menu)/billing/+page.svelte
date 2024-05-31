@@ -3,10 +3,7 @@
   import type { Writable } from "svelte/store";
   import SettingsModule from "../settings/settings_module.svelte";
   import PricingModule from "src/routes/(marketing)/pricing/pricing_module.svelte";
-  import {
-    pricingPlans,
-    defaultPlanId,
-  } from "../../../../(marketing)/pricing/pricing_plans";
+  import { pricingPlans, defaultPlanId } from "$lib/constants";
 
   let adminSection: Writable<string> = getContext("adminSection");
   adminSection.set("billing");
