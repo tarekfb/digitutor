@@ -25,6 +25,7 @@
   class={cn("flex flex-col gap-y-4 generic-card", className)}
 >
   <SecondaryTitle>{title}</SecondaryTitle>
+  <FormMessage {message} scroll />
   <slot />
   {#if shouldHaveSubmit}
     <FormSubmit
@@ -34,5 +35,4 @@
       class={buttonStyling}
     />
   {/if}
-  <FormMessage {message} scroll />
 </form>

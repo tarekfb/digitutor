@@ -19,11 +19,11 @@ export const signUpUserFields: TypeToZod<SignUpUser> = {
         .enum(["student", "teacher", "admin"]),
     first_name: z
         .string()
-        .min(1, "Måste vara minst 1 bokstav.")
+        .min(1, "Får inte vara tomt.")
         .max(50, "Får inte vara mer än 50 bokstäver."),
     last_name: z
         .string()
-        .min(1, "Måste vara minst 1 bokstav.")
+        .min(1, "Får inte vara tomt.")
         .max(50, "Får inte vara mer än 50 bokstäver."),
     terms: z
         .boolean()
@@ -50,3 +50,15 @@ export const signInSchema = z.object(signInProperties)
 export const deleteAccountSchema = z.object({
     password: signInProperties.password,
 })
+// export const passwordSchema = z.object({
+//     password: signInProperties.password,
+// })
+
+export const passwordSchema = z.object({
+    new: signUpUserFields.password,
+    confirm: signUpUserFields.password,
+    current: signInProperties.password,
+}).refine((data) => data.new === data.confirm, {
+    message: "Lösenorden stämmer inte överens.",
+    path: ["confirm"],
+});

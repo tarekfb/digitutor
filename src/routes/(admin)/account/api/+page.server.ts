@@ -126,7 +126,7 @@ export const actions = {
       });
       if (error) {
         // The user was logged out because of bad password. Redirect to error page explaining.
-        throw redirect(303, "/login/current_password_error");
+        throw redirect(303, "/login/settings_password_error");
       }
     }
 
@@ -176,7 +176,7 @@ export const actions = {
     });
     if (pwError) {
       // The user was logged out because of bad password. Redirect to error page explaining.
-      throw redirect(303, "/login/current_password_error");
+      throw redirect(303, "/login/settings_password_error");
     }
 
     const { error } = await supabaseServiceRole.auth.admin.deleteUser(
@@ -193,6 +193,7 @@ export const actions = {
     await supabase.auth.signOut();
     throw redirect(303, "/");
   },
+  
   updateProfile: async ({ request, locals: { supabase, getSession } }) => {
     const session = await getSession();
     if (!session) {

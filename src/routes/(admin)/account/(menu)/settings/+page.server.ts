@@ -1,13 +1,14 @@
 import { fail, redirect } from "@sveltejs/kit";
 import type { PageServerLoad } from "./$types";
-import { getGenericErrorMessage, unknownErrorMessage } from "src/lib/constants";
+import { getGenericErrorMessage } from "src/lib/constants";
 import { message, superValidate } from "sveltekit-superforms";
 import { zod } from "sveltekit-superforms/adapters";
 import { emailSchema, nameSchema } from "src/lib/models/profile";
 import { getProfileBySession, updateProfile } from "src/lib/server/database/profiles";
 import type { Tables } from "src/supabase";
 import { updateUserEmail } from "src/lib/server/database/user";
-import { deleteAccountSchema } from "src/lib/models/user";
+import { deleteAccountSchema, passwordSchema } from "src/lib/models/user";
+import { isAuthApiError } from "@supabase/supabase-js";
 
 export const load: PageServerLoad = async (parentData) => {
     const { profile, session } = await parentData.parent();
@@ -21,8 +22,9 @@ export const load: PageServerLoad = async (parentData) => {
     const updateNameForm = await superValidate(initName, zod(nameSchema));
     const updateEmailForm = await superValidate({ email: session.user.email }, zod(emailSchema));
     const deleteAccountForm = await superValidate(zod(deleteAccountSchema));
+    const updatePasswordForm = await superValidate(zod(passwordSchema));
 
-    return { updateNameForm, updateEmailForm, deleteAccountForm };
+    return { updateNameForm, updateEmailForm, deleteAccountForm, updatePasswordForm };
 };
 
 export const actions = {
@@ -89,9 +91,6 @@ export const actions = {
         if (!form.valid)
             return fail(400, { form });
 
-        await new Promise(resolve => setTimeout(resolve, 2500));
-
-
         const { password } = form.data;
         const { id, email } = session.user;
         if (!email) {
@@ -106,9 +105,8 @@ export const actions = {
         });
 
         if (error)
-            throw redirect(303, "/login/current_password_error");
+            throw redirect(303, "/login/settings_password_error");
         // user was logged out because of bad password. Redirect to error page with explaination.
-
 
         try {
             const { error } = await supabaseServiceRole.auth.admin.deleteUser(
@@ -128,4 +126,45 @@ export const actions = {
 
         throw redirect(303, "/");
     },
+    password: async (event) => {
+        const { locals: { supabase, getSession } } = event;
+        const session = await getSession();
+        if (!session)
+            throw redirect(303, "/login");
+
+        const form = await superValidate(event, zod(passwordSchema));
+        if (!form.valid)
+            return fail(400, { form });
+
+        const { new: newPassword, current } = form.data;
+
+        const { id, email } = session.user;
+        if (!email) {
+            console.error(`User with id ${id} has no email and therefore password could not be verified`);
+            return message(form, getGenericErrorMessage(), { status: 500 });
+        }
+        const { error } = await supabase.auth.signInWithPassword({
+            email,
+            password: current,
+        });
+
+        if (error)
+            throw redirect(303, "/login/settings_password_error");
+        // user was logged out because of bad password. Redirect to error page with explaination.
+
+
+        const { error: updateError } = await supabase.auth.updateUser({
+            password: newPassword,
+        });
+
+        if (updateError) {
+            const isSameAsCurrent = isAuthApiError(updateError) && updateError.status === 422 && updateError.message.includes("different")
+            if (isSameAsCurrent)
+                return message(form, getGenericErrorMessage(undefined, "Ange ett nytt lösenord", "Det angivna lösenordet är samma som det nuvarande."), { status: 500 });
+
+            console.log(`Error on attempt to update password with userid ${id}`, updateError);
+            return message(form, getGenericErrorMessage(), { status: 500 });
+        }
+        return message(form, getGenericErrorMessage("success", "Lösenord ändrat", "Använd det nya lösenordet nästa gång du loggar in."));
+    }
 }

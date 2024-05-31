@@ -10,6 +10,7 @@
   import LoadingSpinner from "src/lib/components/atoms/loading-spinner.svelte";
   import * as RadioGroup from "$lib/components/ui/radio-group";
   import FormMessage from "src/lib/components/molecules/form-message.svelte";
+  import Label from "src/lib/components/atoms/label.svelte";
 
   export let data;
   const { form } = data;
@@ -38,6 +39,7 @@
     <Card.Content class="grid gap-4">
       <Form.Field form={userForm} name="first_name">
         <Form.Control let:attrs>
+          <Label>Förnamn</Label>
           <Input
             {...attrs}
             type="text"
@@ -49,6 +51,7 @@
       </Form.Field>
       <Form.Field form={userForm} name="last_name">
         <Form.Control let:attrs>
+          <Label>Efternamn</Label>
           <Input
             {...attrs}
             type="text"
@@ -60,17 +63,19 @@
       </Form.Field>
       <Form.Field form={userForm} name="email">
         <Form.Control let:attrs>
+          <Label>E-postadress</Label>
           <Input
             {...attrs}
             type="email"
             bind:value={$formData.email}
-            placeholder="Email"
+            placeholder="E-postadress"
           />
         </Form.Control>
         <Form.FieldErrors />
       </Form.Field>
       <Form.Field form={userForm} name="password">
         <Form.Control let:attrs>
+          <Label>Lösenord</Label>
           <Input
             {...attrs}
             type="password"

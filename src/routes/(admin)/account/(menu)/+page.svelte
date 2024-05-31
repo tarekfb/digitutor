@@ -16,6 +16,7 @@
   import * as Drawer from "$lib/components/ui/drawer/index.js";
   import PrimaryTitle from "src/lib/components/atoms/primary-title.svelte";
   import FormMessage from "src/lib/components/molecules/form-message.svelte";
+  import Label from "src/lib/components/atoms/label.svelte";
 
   let open = false;
   const isDesktop = mediaQuery("(min-width: 768px)");
@@ -86,6 +87,7 @@
             <div class="grid gap-4 py-4">
               <Form.Field form={userForm} name="title">
                 <Form.Control let:attrs>
+                  <Label>E-postadress</Label>
                   <Input
                     {...attrs}
                     type="text"
@@ -129,6 +131,7 @@
           <form method="POST" action="?/createListing" use:enhance>
             <Form.Field form={userForm} name="title">
               <Form.Control let:attrs>
+                <Label>E-postadress</Label>
                 <Input
                   {...attrs}
                   type="text"

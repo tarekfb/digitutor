@@ -15,6 +15,7 @@
 
 <div class="flex flex-col gap-y-4 generic-card">
   <SecondaryTitle>Ta bort konto</SecondaryTitle>
+  <FormMessage {message} scroll />
   <AlertDialog.Root bind:open={isOpen}>
     <AlertDialog.Trigger asChild let:builder>
       <Button
@@ -38,7 +39,12 @@
           all relaterad information permanent.
         </AlertDialog.Description>
       </AlertDialog.Header>
-      <form method="POST" action="?/delete" use:enhance class="flex flex-col gap-y-4">
+      <form
+        method="POST"
+        action="?/delete"
+        use:enhance
+        class="flex flex-col gap-y-4"
+      >
         <Form.Field {form} name="password">
           <Form.Control let:attrs>
             <Form.Label>Password</Form.Label>
@@ -64,5 +70,4 @@
       </form>
     </AlertDialog.Content>
   </AlertDialog.Root>
-  <FormMessage {message} scroll />
 </div>
