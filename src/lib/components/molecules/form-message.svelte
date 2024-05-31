@@ -7,7 +7,6 @@
   export let message;
   let element: HTMLElement;
   export let scroll = false;
-  import { Button } from "$lib/components/ui/button";
 
   $: $message, scrollIntoView();
 
@@ -15,7 +14,7 @@
     if (!scroll) return;
     if (!$message) return;
     setTimeout(
-      () => element.scrollIntoView({ behavior: "smooth", block: "end" }),
+      () => element.scrollIntoView({ behavior: "smooth", block: "start" }),
       1,
     );
   };

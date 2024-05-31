@@ -5,7 +5,7 @@
   import { Button } from "$lib/components/ui/button";
   import { zodClient } from "sveltekit-superforms/adapters";
   import { toast } from "svelte-sonner";
-  import { completeProfileSchema } from "src/lib/models/user";
+  import { nameSchema } from "src/lib/models/profile";
   import { Input } from "src/lib/components/ui/input";
   import LoadingSpinner from "src/lib/components/atoms/loading-spinner.svelte";
   import { goto } from "$app/navigation";
@@ -15,7 +15,7 @@
   let { session, form } = data;
 
   const completeProfileForm = superForm(form, {
-    validators: zodClient(completeProfileSchema),
+    validators: zodClient(nameSchema),
     onUpdated: ({ form: f }) => {
       if (f.valid) {
         toast.success(`Skapat profil.`);
@@ -27,7 +27,13 @@
       toast.error(result.error.message);
     },
   });
-  const { form: formData, enhance, errors, submitting, allErrors } = completeProfileForm;
+  const {
+    form: formData,
+    enhance,
+    errors,
+    submitting,
+    allErrors,
+  } = completeProfileForm;
 </script>
 
 <svelte:head>

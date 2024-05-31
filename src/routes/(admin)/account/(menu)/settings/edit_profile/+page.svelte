@@ -1,4 +1,4 @@
-<script lang="ts">
+<!-- <script lang="ts">
   import SettingsModule from "../settings_module.svelte";
   import { getContext } from "svelte";
   import type { Writable } from "svelte/store";
@@ -31,4 +31,4 @@
       maxlength: 50,
     },
   ]}
-/>
+/> -->

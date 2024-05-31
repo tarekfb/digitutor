@@ -45,7 +45,7 @@ export const actions = {
             if (error) {
                 switch (error.message) {
                     case "Invalid login credentials":
-                        return message(form, { variant: "destructive", title: "Ogiltiga inloggingsuppgifter", description: "E-postadressen eller lösenordet stämmer inte överens." }, { status: 400 });
+                        return message(form, { variant: "destructive", title: "Ogiltiga inloggingsuppgifter", description: "E-postadressen eller lösenordet stämmer inte." }, { status: 400 });
                     case "Email not confirmed":
                         return message(form, { variant: "warning", title: "Verifiera e-post", description: "E-postadressen är inte verifierad. Kika i din inkorg för att verifiera e-posten." }, { status: 400 });
                     default:

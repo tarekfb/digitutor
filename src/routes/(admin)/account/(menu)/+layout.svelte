@@ -13,9 +13,9 @@
   });
 </script>
 
-<div class="flex p-8 ml-14 h-screen">
+<div class="flex p-8 ml-14 min-h-screen">
   <SidebarNav {conversations} role={data.profile?.role ?? "user"} />
-  <div class="flex-1 lg:max-w-2xl ">
+  <div class="flex-1 lg:max-w-2xl">
     <slot />
   </div>
 </div>

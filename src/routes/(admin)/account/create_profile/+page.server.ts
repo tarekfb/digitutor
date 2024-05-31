@@ -3,10 +3,9 @@ import { _hasFullProfile } from "src/routes/(admin)/account/+layout.js";
 import { error, fail, redirect } from "@sveltejs/kit";
 import { zod } from "sveltekit-superforms/adapters";
 import { message, superValidate } from "sveltekit-superforms/client";
-import { completeProfileSchema } from "$lib/models/user.js";
+import { nameSchema } from "$lib/models/profile";
 import { getProfileBySession, updateProfile } from "src/lib/server/database/profiles.js";
 import type { Tables } from "src/supabase";
-import type { PageServerParentData } from "./$types";
 
 export async function load({ parent }) {
   const data = await parent();
@@ -26,7 +25,7 @@ export async function load({ parent }) {
   }
 
   try {
-    const form = await superValidate(initFormData, zod(completeProfileSchema))
+    const form = await superValidate(initFormData, zod(nameSchema))
     return { form, data };
   } catch (e) {
     console.error("Error when loading createprofile", e);
@@ -43,7 +42,7 @@ export const actions = {
     if (!session)
       throw redirect(303, "/login");
 
-    const form = await superValidate(event, zod(completeProfileSchema));
+    const form = await superValidate(event, zod(nameSchema));
 
     if (!form.valid) {
       return fail(400, {

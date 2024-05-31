@@ -3,8 +3,9 @@ import type { PageServerLoad } from "./$types";
 import { getGenericErrorMessage, unknownErrorMessage } from "src/lib/constants";
 import { message, setError, superValidate } from "sveltekit-superforms";
 import { zod } from "sveltekit-superforms/adapters";
-import { signUpSchema, type CreateProfile } from "src/lib/models/user";
+import { signUpSchema } from "src/lib/models/user";
 import { createProfile } from "src/lib/server/database/profiles";
+import type { CreateProfile } from "src/lib/models/profile";
 
 export const ssr = false;
 
@@ -51,7 +52,6 @@ export const actions = {
                 return message(form, { variant: "destructive", title: "För många e-postutskick", description: "Kan ej skicka e-post just nu. Försök igen senare." }, { status: 429 });
             }
 
-
             if (!data.user) {
                 console.error("User data was null on signup", error);
                 return message(form, getGenericErrorMessage(), { status: 500 });
@@ -61,12 +61,10 @@ export const actions = {
             if (data.user.identities && data.user.identities.length === 0)
                 return setError(form, "email", "E-postadressen används redan");
 
-
             if (error) {
                 console.error("Supabase error on signup", { error });
                 return message(form, getGenericErrorMessage(), { status: 500 });
             }
-
 
             inputUser = {
                 id: data.user.id,

@@ -13,6 +13,7 @@
   import { onMount } from "svelte";
   import { page } from "$app/stores";
   import FormMessage from "src/lib/components/molecules/form-message.svelte";
+  import Label from "src/lib/components/atoms/label.svelte";
 
   export let data;
   let { supabase, form } = data;
@@ -86,17 +87,19 @@
     <Card.Content class="grid gap-4">
       <Form.Field form={userForm} name="email">
         <Form.Control let:attrs>
+          <Label>E-postadress</Label>
           <Input
             {...attrs}
             type="email"
             bind:value={$formData.email}
-            placeholder="Email"
+            placeholder="E-postadress"
           />
         </Form.Control>
         <Form.FieldErrors />
       </Form.Field>
       <Form.Field form={userForm} name="password">
         <Form.Control let:attrs>
+          <Label>Lösenord</Label>
           <Input
             {...attrs}
             type="password"
