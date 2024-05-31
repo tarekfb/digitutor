@@ -43,14 +43,13 @@
     validators: zodClient(deleteAccountSchema),
     resetForm: false,
   });
-  const { form: deleteData } = deleteForm;
 </script>
 
 <svelte:head>
   <title>Settings</title>
 </svelte:head>
 
-<div class="flex flex-col gap-y-4">
+<div class="flex flex-col gap-y-4 pb-8">
   <PrimaryTitle>Inställningar</PrimaryTitle>
   <SettingsForm form={nameForm} action="?/name" title="Namn">
     <Form.Field form={nameForm} name="firstName">

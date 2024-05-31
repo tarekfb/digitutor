@@ -73,7 +73,6 @@ export const actions = {
             return fail(400, { nameForm: form });
 
         const { email } = form.data;
-
         try {
             await updateUserEmail(supabase, email);
             return message(form, getGenericErrorMessage("success", "Bekräfta e-postadresserna", "Bekräfta ändringen på både gamla och nya e-postadresserna. Tills dess loggar du in med din nuvarande e-postadress."));
@@ -91,11 +90,10 @@ export const actions = {
         const form = await superValidate(event, zod(deleteAccountSchema));
         if (!form.valid)
             return fail(400, { form });
+        
+        await new Promise(resolve => setTimeout(resolve, 2500));
 
-        setTimeout(async () => {
-            return message(form, getGenericErrorMessage(), { status: 500 });
-
-        }, 3000)
+        return message(form, getGenericErrorMessage(), { status: 500 });
 
         // const currentPassword = formData.get("currentPassword") as string;
 

@@ -18,7 +18,7 @@
       () => element.scrollIntoView({ behavior: "smooth", block: "end" }),
       1,
     );
-  };
+    };
 </script>
 
 {#if $message}

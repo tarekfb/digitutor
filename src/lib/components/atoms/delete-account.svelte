@@ -21,9 +21,14 @@
       <Button
         builders={[builder]}
         variant="destructive"
+        disabled={$allErrors.length > 0 || $submitting}
         aria-label="Delete account"
       >
-        Ta bort konto
+        {#if $submitting}
+          <LoadingSpinner class="mr-2" /> <span>Laddar...</span>
+        {:else}
+          Ta bort konto
+        {/if}
       </Button>
     </AlertDialog.Trigger>
     <AlertDialog.Content>
