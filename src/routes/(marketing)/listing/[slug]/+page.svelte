@@ -50,7 +50,7 @@
   {#if !listing}
     <MissingListing />
   {:else if isAuthor}
-    <div class="flex justify-between gap-x-2 mx-8 mt-8 items-center">
+    <div class="flex justify-between gap-x-2 items-center">
       <PrimaryTitle>{listing.profile.first_name}</PrimaryTitle>
       <Avatar
         profile={listing.profile}
@@ -76,7 +76,7 @@
       >
     {/if}
   {:else}
-    <div class="flex justify-between gap-x-2 mx-8 mt-8 items-center">
+    <div class="flex justify-between gap-x-2 items-center">
       <PrimaryTitle>{listing.profile.first_name}</PrimaryTitle>
       <Avatar
         profile={listing.profile}

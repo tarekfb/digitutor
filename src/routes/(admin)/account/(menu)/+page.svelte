@@ -17,6 +17,7 @@
   import PrimaryTitle from "src/lib/components/atoms/primary-title.svelte";
   import FormMessage from "src/lib/components/molecules/form-message.svelte";
   import Label from "src/lib/components/atoms/label.svelte";
+  import CreateListing from "src/lib/components/atoms/create-listing.svelte";
 
   let open = false;
   const isDesktop = mediaQuery("(min-width: 768px)");
@@ -45,7 +46,6 @@
       toast.error(result.error.message);
     },
   });
-  const { form: formData, enhance, submitting, message, allErrors } = userForm;
 </script>
 
 <svelte:head>
@@ -68,95 +68,7 @@
       {/each}
     {/if}
 
-    {#if $isDesktop}
-      <Dialog.Root bind:open>
-        <Dialog.Trigger asChild let:builder>
-          <Button builders={[builder]}>Skapa annons</Button>
-        </Dialog.Trigger>
-        <Dialog.Content
-          class="flex flex-col gap-y-4 px-4 bg-card sm:max-w-[425px]"
-        >
-          <Dialog.Header>
-            <Dialog.Title>Skapa annons</Dialog.Title>
-            <Dialog.Description>
-              Du kan fylla i mer information om annonsen i nästa steg.
-            </Dialog.Description>
-          </Dialog.Header>
-          <FormMessage {message} scroll />
-          <form method="POST" action="?/createListing" use:enhance>
-            <div class="grid gap-4 py-4">
-              <Form.Field form={userForm} name="title">
-                <Form.Control let:attrs>
-                  <Label>E-postadress</Label>
-                  <Input
-                    {...attrs}
-                    type="text"
-                    bind:value={$formData.title}
-                    placeholder="Rubrik"
-                  />
-                </Form.Control>
-                <Form.FieldErrors />
-              </Form.Field>
-            </div>
-            <Dialog.Footer>
-              <Button
-                type="submit"
-                disabled={$allErrors.length > 0 || $submitting}
-              >
-                {#if $submitting}
-                  <LoadingSpinner class="mr-2" /> <span>Laddar...</span>
-                {:else}
-                  Skapa
-                {/if}
-              </Button>
-            </Dialog.Footer>
-          </form>
-        </Dialog.Content>
-      </Dialog.Root>
-    {:else}
-      <Drawer.Root bind:open>
-        <Drawer.Trigger asChild let:builder>
-          <div class="flex justify-end w-full">
-            <Button builders={[builder]}>Skapa annons</Button>
-          </div>
-        </Drawer.Trigger>
-        <Drawer.Content class="flex flex-col bg-card px-8">
-          <Drawer.Header class="text-left">
-            <Drawer.Title>Skapa annons</Drawer.Title>
-            <Drawer.Description>
-              Du kan fylla i mer information om annonsen i nästa steg.
-            </Drawer.Description>
-          </Drawer.Header>
-          <FormMessage {message} scroll class="mb-4" />
-          <form method="POST" action="?/createListing" use:enhance>
-            <Form.Field form={userForm} name="title">
-              <Form.Control let:attrs>
-                <Label>E-postadress</Label>
-                <Input
-                  {...attrs}
-                  type="text"
-                  bind:value={$formData.title}
-                  placeholder="Rubrik"
-                />
-              </Form.Control>
-              <Form.FieldErrors />
-            </Form.Field>
-            <Drawer.Footer>
-              <Button
-                type="submit"
-                disabled={$allErrors.length > 0 || $submitting}
-              >
-                {#if $submitting}
-                  <LoadingSpinner class="mr-2" /> <span>Laddar...</span>
-                {:else}
-                  Skapa
-                {/if}
-              </Button>
-            </Drawer.Footer>
-          </form>
-        </Drawer.Content>
-      </Drawer.Root>
-    {/if}
+    <CreateListing form={userForm} />
   </div>
 {:else}
   <StudentAccount {conversations} />

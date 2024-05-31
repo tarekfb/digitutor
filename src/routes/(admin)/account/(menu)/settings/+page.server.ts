@@ -98,9 +98,6 @@ export const actions = {
             return message(form, getGenericErrorMessage(), { status: 500 });
         }
 
-        const promise = await new Promise(resolve => setTimeout(resolve, 3000))
-        return message(form, getGenericErrorMessage(), { status: 500 });
-
         // Check current password is correct before deleting account
         const { error } = await supabase.auth.signInWithPassword({
             email,

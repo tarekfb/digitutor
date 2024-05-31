@@ -1,5 +1,4 @@
 <script lang="ts">
-  import * as AlertDialog from "$lib/components/ui/alert-dialog/index.js";
   import { Button } from "$lib/components/ui/button";
   import FormMessage from "../molecules/form-message.svelte";
   import FormSubmit from "../molecules/form-submit.svelte";
@@ -47,40 +46,38 @@
             {description}
           </Dialog.Description>
         </Dialog.Header>
-        <div class="flex flex-col gap-y-4 mx-4">
-          <FormMessage {message} scroll />
-          <form
-            method="POST"
-            action="?/delete"
-            use:enhance
-            class="flex flex-col gap-y-4"
-          >
-            <Form.Field {form} name="password">
-              <Form.Control let:attrs>
-                <Label>Password</Label>
-                <Input
-                  {...attrs}
-                  type="password"
-                  bind:value={$formData.password}
-                />
-                <Form.FieldErrors />
-              </Form.Control>
-            </Form.Field>
-            <div class="flex justify-center gap-x-2">
-              <Dialog.Footer>
-                <Dialog.Close asChild let:builder>
-                  <Button variant="outline" builders={[builder]}>Cancel</Button>
-                </Dialog.Close>
-              </Dialog.Footer>
-              <FormSubmit
-                {submitting}
-                {allErrors}
-                text="Ta bort konto"
-                variant="destructive"
+        <FormMessage {message} scroll />
+        <form
+          method="POST"
+          action="?/delete"
+          use:enhance
+          class="flex flex-col gap-y-4"
+        >
+          <Form.Field {form} name="password">
+            <Form.Control let:attrs>
+              <Label>Password</Label>
+              <Input
+                {...attrs}
+                type="password"
+                bind:value={$formData.password}
               />
-            </div>
-          </form>
-        </div>
+              <Form.FieldErrors />
+            </Form.Control>
+          </Form.Field>
+          <div class="flex justify-end gap-x-4">
+            <Dialog.Footer>
+              <Dialog.Close asChild let:builder>
+                <Button variant="outline" builders={[builder]}>Avbryt</Button>
+              </Dialog.Close>
+            </Dialog.Footer>
+            <FormSubmit
+              {submitting}
+              {allErrors}
+              text="Ta bort konto"
+              variant="destructive"
+            />
+          </div>
+        </form>
       </Dialog.Content>
     </Dialog.Root>
   {:else}
@@ -106,7 +103,7 @@
             {description}
           </Drawer.Description>
         </Drawer.Header>
-        <div class="flex flex-col gap-y-4 mx-4">
+        <div class="flex flex-col gap-y-4 mx-4 mb-4">
           <FormMessage {message} scroll />
           <form
             method="POST"
@@ -125,20 +122,18 @@
                 <Form.FieldErrors />
               </Form.Control>
             </Form.Field>
-            <div class="flex justify-center gap-x-2">
-              <Drawer.Footer>
+            <div class="flex justify-end gap-x-2">
+              <Drawer.Footer class="m-0 p-0">
                 <Drawer.Close asChild let:builder>
-                  <Button variant="outline" builders={[builder]}>Cancel</Button>
+                  <Button variant="outline" builders={[builder]}>Avbryt</Button>
                 </Drawer.Close>
               </Drawer.Footer>
-              <div class="self-center p-4 flex items-center justify-center">
-                <FormSubmit
-                  {submitting}
-                  {allErrors}
-                  text="Ta bort konto"
-                  variant="destructive"
-                />
-              </div>
+              <FormSubmit
+                {submitting}
+                {allErrors}
+                text="Ta bort konto"
+                variant="destructive"
+              />
             </div>
           </form>
         </div>

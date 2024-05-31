@@ -1,15 +1,15 @@
 <script lang="ts">
   import type { Listing } from "src/lib/models/listing";
   import { Subjects } from "src/lib/models/common";
-  import PrimaryTitle from "src/lib/components/atoms/primary-title.svelte";
+  import SecondaryTitle from "src/lib/components/atoms/secondary-title.svelte";
 
   export let listing: Listing;
   const { title, description, subjects, hourlyPrice, visible } = listing;
 </script>
 
-<div class="flex flex-col gap-y-4 generic-card m-8">
+<div class="flex flex-col gap-y-4 generic-card">
   <div class="flex flex-col gap-y-4">
-    <PrimaryTitle class="font-semibold">{title}</PrimaryTitle>
+    <SecondaryTitle class="font-semibold">{title}</SecondaryTitle>
     <h2 class="text-xl">{hourlyPrice} SEK</h2>
     {#if description}
       <p>{description}</p>
