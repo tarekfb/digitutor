@@ -5,11 +5,11 @@ export const websiteName = "Mindic";
 export const unknownErrorMessage = "Något gick fel. Kontakta oss om detta fortsätter."
 
 export const getGenericErrorMessage = (variant?: "success" | "warning" | "destructive", title?: string, description?: string): Message => (
-    {
-        variant: variant ?? "destructive",
-        title: title ?? "Något gick fel",
-        description: description ?? "Kontakta oss om detta fortsätter."
-    })
+  {
+    variant: variant ?? "destructive",
+    title: title ?? "Något gick fel",
+    description: description ?? "Kontakta oss om detta fortsätter."
+  })
 
 export const initMessagesCount = 25;
 
@@ -19,8 +19,7 @@ export const pricingPlans = [
   {
     id: "free",
     name: "Gratis",
-    description: "En kostnadsfri plan för att kickstarta ditt lärande!",
-    price: "0 SEK",
+    price: 0,
     priceIntervalName: "per månad",
     stripe_price_id: null,
     features: ["1 kontaktförfrågning per månad"],
@@ -28,14 +27,12 @@ export const pricingPlans = [
   {
     id: "pro",
     name: "Pro",
-    description:
-      "En plan som täcker alla dina behov",
-    price: "49 SEK",
+    
+    price: 49,
     priceIntervalName: "per månad",
     stripe_price_id: "price_1NkdZCHMjzZ8mGZnRSjUm4yA",
     stripe_product_id: "prod_OXj1CcemGMWOlU",
     features: [
-      "Allt i gratisplanen",
       "Obegränsat med kontaktförfrågningar",
     ],
   },

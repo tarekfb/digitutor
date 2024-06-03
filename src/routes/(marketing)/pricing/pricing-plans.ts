@@ -20,8 +20,9 @@ export const pricingPlans = [
     stripe_price_id: "price_1NkdZCHMjzZ8mGZnRSjUm4yA",
     stripe_product_id: "prod_OXj1CcemGMWOlU",
     features: [
-      "Allt i gratisplanen",
       "Obegränsat med kontaktförfrågningar",
+      "Inget betalkort krävs",
+      "Inga överraskningar eller avgifter",
     ],
   },
   // {
