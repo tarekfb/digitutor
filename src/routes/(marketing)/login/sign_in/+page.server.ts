@@ -4,7 +4,6 @@ import { MessageId, getGenericErrorMessage, unknownErrorMessage } from "src/lib/
 import { message, superValidate } from "sveltekit-superforms";
 import { zod } from "sveltekit-superforms/adapters";
 import { resendSchema, signInSchema } from "src/lib/models/user";
-import { isAuthError } from "@supabase/supabase-js";
 
 export const ssr = false;
 
@@ -54,9 +53,9 @@ export const actions = {
                         // can return error but not relevant, just act as if no resend was attempted
                         const { error: resendError } = await supabase.auth.resend({
                             type: 'signup',
-                            email: 'email@example.com',
+                            email,
                             options: {
-                                emailRedirectTo: 'https://example.com/welcome'
+                                emailRedirectTo: '/account'
                             }
                         })
                         if (resendError?.status === 429) {

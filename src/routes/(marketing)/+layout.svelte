@@ -1,15 +1,14 @@
 <script>
-  import Navigation from "src/lib/components/organisms/navbar.svelte";
+  import Navbar from "src/lib/components/organisms/navbar.svelte";
   import "src/app.pcss";
   import { websiteName } from "src/lib/constants";
 
   export let data;
-  const profile = data.profile;
 </script>
 
-<Navigation {profile} />
+<Navbar profile={data.profile} />
 
-<div class="flex flex-col items-center m-8 gap-y-4"> 
+<div class="flex flex-col items-center m-8 gap-y-4">
   <slot />
 </div>
 
@@ -17,9 +16,7 @@
 <div class="flex-grow"></div>
 <div class="bg-">
   <div class="border-t max-w-[1000px] mx-auto"></div>
-  <footer
-    class="flex justify-between py-10 px-16"
-  >
+  <footer class="flex justify-between py-10 px-16">
     <a href="/" class="self-center">
       <h1 class="text-3xl md:text-4xl">{websiteName}</h1>
     </a>
