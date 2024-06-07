@@ -1,10 +1,12 @@
 <script lang="ts">
   import * as Alert from "$lib/components/ui/alert/index.js";
   import { cn } from "$lib/utils.js";
+  import type { Message } from "$lib/models/common";
+  import type { Writable } from "svelte/store";
 
   let className: string | null | undefined = undefined;
   export { className as class };
-  export let message;
+  export let message: Writable<Message>;
   let element: HTMLElement;
   export let scroll = false;
 
@@ -26,6 +28,7 @@
       <Alert.Title>{$message.title}</Alert.Title>
       <Alert.Description>
         {$message.description}
+        <slot />
       </Alert.Description>
     </Alert.Root>
   </div>

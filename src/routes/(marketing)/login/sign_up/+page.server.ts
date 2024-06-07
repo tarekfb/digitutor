@@ -81,6 +81,14 @@ export const actions = {
             await createProfile(supabase, inputUser)
             return message(form, { variant: "success", title: "Verifiera e-postadress", description: "Kika i din inkorg för att verifiera e-posten.", status: 201 });
         } catch (error) {
+            if (error && typeof error === "object") {
+                const supabaseError = error as {
+                    code: string; message: string;
+                }
+                if (supabaseError.code && supabaseError.code === "23505")
+                    return message(form, { variant: "success", title: "Verifiera e-postadress", description: "Kika i din inkorg för att verifiera e-posten.", status: 201 });
+            }
+
             console.error("Error when creating profile", error);
             return message(form, getGenericErrorMessage(), { status: 500 });
         }

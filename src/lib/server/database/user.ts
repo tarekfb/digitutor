@@ -2,7 +2,6 @@ import type { SupabaseClient } from "@supabase/supabase-js";
 import type { Database } from "lucide-svelte";
 
 export const updateUserEmail = async (supabase: SupabaseClient<Database>, email: string) => {
-
     const { error, data } = await supabase.auth.updateUser({ email });
 
     // this error takes presence of email in use and presumably more errors
