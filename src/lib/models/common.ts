@@ -1,3 +1,5 @@
+import type { MessageId } from "../constants";
+
 export enum Subjects {
   JavaScript = 1,
   Python = 2,
@@ -44,27 +46,10 @@ export const languages = [
   { label: "Laravel", id: 20 },
 ];
 
-export const mockConversations = [
-  "John Smith",
-  "Jane Johnson",
-  "Michael Brown",
-  "Emily Davis",
-  "Daniel Wilson",
-  "Sarah Thompson",
-  "Joseph Thompson",
-  "Emily Wilson",
-  "David Smith",
-  "Maria Johnson",
-  "Daniel Davis",
-  "Jennifer Wilson",
-  "Mark Thompson",
-  "Jessica Brown",
-  "Thomas Davis",
-  "Samantha Johnson",
-];
-
 export type Message = {
   title: string;
   description: string;
   variant?: "success" | "warning" | "destructive";
+  id?: MessageId;
+  data: any;
 };

@@ -47,6 +47,8 @@ const signInProperties = {
 }
 export const signInSchema = z.object(signInProperties)
 
+export const resendSchema = z.object({ email: signInProperties.email })
+
 export const deleteAccountSchema = z.object({
     password: signInProperties.password,
 })

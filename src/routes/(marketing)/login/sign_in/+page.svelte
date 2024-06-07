@@ -14,6 +14,8 @@
   import { page } from "$app/stores";
   import FormMessage from "src/lib/components/molecules/form-message.svelte";
   import Label from "src/lib/components/atoms/label.svelte";
+  import { MessageId } from "src/lib/constants.js";
+  import FormSubmit from "src/lib/components/molecules/form-submit.svelte";
 
   export let data;
   let { supabase, form } = data;
@@ -37,15 +39,9 @@
     onError: ({ result }) => {
       toast.error(result.error.message);
     },
+    resetForm: false,
   });
-  const {
-    form: formData,
-    enhance,
-    errors,
-    submitting,
-    message,
-    allErrors,
-  } = userForm;
+  const { form: formData, enhance, submitting, message, allErrors } = userForm;
 </script>
 
 <svelte:head>
@@ -72,8 +68,16 @@
   </Alert.Root>
 {/if}
 
-<FormMessage {message} scroll />
-<form class="text-start" method="POST" use:enhance>
+<FormMessage {message} scroll>
+  {#if $message.id === MessageId.RateLimitExceeded}
+    <p class="mt-2">
+      Försökte skicka bekräftelsemail men misslyckades p.g.a. för många
+      e-postutskick.
+    </p>
+    <p>Försök igen lite senare.</p>
+  {/if}
+</FormMessage>
+<form class="text-start" method="POST" action="?/signIn" use:enhance>
   <Card.Root>
     <Card.Header class="space-y-1">
       <Card.Title class="text-2xl">Logga in</Card.Title>
