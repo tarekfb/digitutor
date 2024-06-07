@@ -26,7 +26,6 @@
     <nav class="flex flex-col space-y-1">
       <span class="font-semibold uppercase">Explore</span>
       <a class="link link-hover" href="/">Overview</a>
-      <a class="link link-hover" href="/pricing">Pricing</a>
       <a class="link link-hover" href="/contact_us">Contact Us</a>
     </nav>
   </footer>
