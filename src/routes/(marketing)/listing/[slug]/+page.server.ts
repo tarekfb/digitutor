@@ -28,8 +28,7 @@ export const load = async ({ locals: { supabase }, params: { slug } }) => {
 }
 
 export const actions = {
-  deleteListing: async ({ locals: { supabase, getSession }, params: { slug } }) => {
-    const session = await getSession();
+  deleteListing: async ({ locals: { supabase, session }, params: { slug } }) => {
     if (!session)
       throw redirect(303, "/login");
     try {
@@ -43,8 +42,7 @@ export const actions = {
     throw redirect(303, `/account`);
   },
   updateListing: async (event) => {
-    const { locals: { supabase, getSession }, params: { slug } } = event;
-    const session = await getSession();
+    const { locals: { supabase, session }, params: { slug } } = event;
     if (!session)
       throw redirect(303, "/login");
 
@@ -64,8 +62,7 @@ export const actions = {
     }
   },
   contact: async (event) => {
-    const { locals: { supabase, getSession }, params: { slug } } = event;
-    const session = await getSession();
+    const { locals: { supabase, session }, params: { slug } } = event;
     if (!session)
       throw redirect(303, "/login"); // todo: in the future should implement a redirect after login
 

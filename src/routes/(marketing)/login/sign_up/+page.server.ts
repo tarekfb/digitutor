@@ -9,9 +9,8 @@ import type { CreateProfile } from "src/lib/models/profile";
 
 export const ssr = false;
 
-export const load: PageServerLoad = async ({ locals: { getSession } }) => {
+export const load: PageServerLoad = async ({ locals: { session } }) => {
     try {
-        const session = await getSession();
         if (session)
             throw redirect(303, "/account");
 
@@ -27,8 +26,7 @@ export const load: PageServerLoad = async ({ locals: { getSession } }) => {
 
 export const actions = {
     default: async (event) => {
-        const { locals: { supabase, getSession } } = event;
-        const session = await getSession();
+        const { locals: { supabase, session } } = event;
         if (session)
             throw redirect(303, "/account");
 

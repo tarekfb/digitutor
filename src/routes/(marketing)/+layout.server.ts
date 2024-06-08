@@ -3,9 +3,8 @@ import type { LayoutServerLoad } from "./$types";
 import { getProfileBySession } from "$lib/server/database/profiles";
 
 export const load: LayoutServerLoad = async ({
-  locals: { supabase, getSession },
+  locals: { supabase, session },
 }) => {
-  const session = await getSession();
   const profile = session && await getProfileBySession(supabase, session);
   const listings = await getListings(supabase, 5, undefined, true);
 

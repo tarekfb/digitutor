@@ -8,8 +8,7 @@ import { message, superValidate } from "sveltekit-superforms";
 import { zod } from "sveltekit-superforms/adapters";
 import { sendMessage } from "src/lib/server/database/messages";
 
-export const load = async ({ locals: { supabase, getSession }, params: { slug } }) => {
-  const session = await getSession();
+export const load = async ({ locals: { supabase, session }, params: { slug } }) => {
   if (!session)
     throw redirect(303, "/login");
 
@@ -57,8 +56,7 @@ export const load = async ({ locals: { supabase, getSession }, params: { slug } 
 
 export const actions = {
   sendMessage: async (event) => {
-    const { locals: { supabase, getSession } } = event;
-    const session = await getSession();
+    const { locals: { supabase, session } } = event;
     if (!session)
       throw redirect(303, "/login");
 

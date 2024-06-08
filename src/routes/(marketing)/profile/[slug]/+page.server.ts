@@ -43,8 +43,7 @@ export const load = async ({ locals: { supabase }, params: { slug } }) => {
 
 export const actions = {
     contact: async (event) => {
-        const { locals: { supabase, getSession }, params: { slug } } = event;
-        const session = await getSession();
+        const { locals: { supabase, session }, params: { slug } } = event;
         if (!session)
             throw redirect(303, "/login"); // todo: in the future should implement a redirect after login
 

@@ -29,8 +29,7 @@ export const load: PageServerLoad = async (parentData) => {
 
 export const actions = {
     name: async (event) => {
-        const { locals: { supabase, getSession } } = event;
-        const session = await getSession();
+        const { locals: { supabase, session } } = event;
         if (!session)
             throw redirect(303, "/login");
 
@@ -63,8 +62,7 @@ export const actions = {
         }
     },
     email: async (event) => {
-        const { locals: { supabase, getSession } } = event;
-        const session = await getSession();
+        const { locals: { supabase, session } } = event;
         if (!session)
             throw redirect(303, "/login");
 
@@ -82,8 +80,7 @@ export const actions = {
         }
     },
     delete: async (event) => {
-        const { locals: { supabase, getSession, supabaseServiceRole } } = event;
-        const session = await getSession();
+        const { locals: { supabase, session, supabaseServiceRole } } = event;
         if (!session)
             throw redirect(303, "/login");
 
@@ -127,8 +124,7 @@ export const actions = {
         throw redirect(303, "/");
     },
     password: async (event) => {
-        const { locals: { supabase, getSession } } = event;
-        const session = await getSession();
+        const { locals: { supabase, session } } = event;
         if (!session)
             throw redirect(303, "/login");
 

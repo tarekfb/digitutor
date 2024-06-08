@@ -1,25 +1,8 @@
-import {
-  PUBLIC_SUPABASE_ANON_KEY,
-  PUBLIC_SUPABASE_URL,
-} from "$env/static/public";
-import { createSupabaseLoadClient } from "@supabase/auth-helpers-sveltekit";
+
 import type { Tables } from "src/supabase.js";
 import { redirect } from "@sveltejs/kit";
 
-export const load = async ({ fetch, data, depends, url }) => {
-  depends("supabase:auth");
-
-  const supabase = createSupabaseLoadClient({
-    supabaseUrl: PUBLIC_SUPABASE_URL,
-    supabaseKey: PUBLIC_SUPABASE_ANON_KEY,
-    event: { fetch },
-    serverSession: data.session,
-  });
-
-  const {
-    data: { session },
-  } = await supabase.auth.getSession();
-
+export const load = async ({ data, depends, url }) => {
   const profile: Tables<"profiles"> | null = data.profile;
 
   const createProfilePath = "/account/create_profile";
@@ -30,8 +13,7 @@ export const load = async ({ fetch, data, depends, url }) => {
   )
     throw redirect(303, createProfilePath);
 
-
-  return { supabase, session, profile };
+  return { profile }; // todo: available in parent? No need to return here?
 };
 
 export const _hasFullProfile = (profile: Tables<"profiles"> | null) => {

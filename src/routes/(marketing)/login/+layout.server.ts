@@ -2,12 +2,11 @@ import type { LayoutServerLoad } from "./$types";
 
 export const load: LayoutServerLoad = async ({
   url,
-  locals: { getSession },
+  locals: { session },
 }) => {
-  const session = await getSession();
 
   return {
-    session: session,
+    session,
     url: url.origin,
   };
 };

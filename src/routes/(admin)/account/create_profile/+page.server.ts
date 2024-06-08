@@ -37,8 +37,7 @@ export async function load({ parent }) {
 
 export const actions = {
   default: async (event) => {
-    const { locals: { supabase, getSession } } = event;
-    const session = await getSession();
+    const { locals: { supabase, session } } = event;
     if (!session)
       throw redirect(303, "/login");
 
