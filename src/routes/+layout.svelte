@@ -12,6 +12,7 @@
 
 	onMount(() => {
 		const { data } = supabase.auth.onAuthStateChange((_, newSession) => {
+			console.log("ran onAuthStateChange", { newSession });
 			if (!newSession) {
 				/**
 				 * Queue this as a task so the navigation won't prevent the

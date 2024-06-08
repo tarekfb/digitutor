@@ -1,5 +1,5 @@
 import { error, fail, redirect } from "@sveltejs/kit";
-import type { PageServerLoad } from "./$types";
+import type { Actions, PageServerLoad } from "./$types";
 import { MessageId, getGenericErrorMessage, unknownErrorMessage } from "src/lib/constants";
 import { message, superValidate } from "sveltekit-superforms";
 import { zod } from "sveltekit-superforms/adapters";
@@ -24,7 +24,7 @@ export const load: PageServerLoad = async ({ locals: { session } }) => {
     };
 }
 
-export const actions = {
+export const actions: Actions = {
     signIn: async (event) => {
         const { locals: { supabase, session } } = event;
         if (session)
@@ -74,6 +74,7 @@ export const actions = {
             console.error("Error on signin supabase auth user", error);
             return message(form, getGenericErrorMessage(), { status: 500 });
         }
-        throw redirect(302, "/account");
+        throw redirect(302, "/"); // todo: redirect to /account
     },
+
 }
