@@ -9,32 +9,30 @@
   import { signInSchema } from "src/lib/models/user";
   import { Input } from "src/lib/components/ui/input";
   import LoadingSpinner from "src/lib/components/atoms/loading-spinner.svelte";
-  import { goto } from "$app/navigation";
-  import { onMount } from "svelte";
+  // import { goto } from "$app/navigation";
+  // import { onMount } from "svelte";
   import { page } from "$app/stores";
   import FormMessage from "src/lib/components/molecules/form-message.svelte";
   import Label from "src/lib/components/atoms/label.svelte";
   import { MessageId } from "src/lib/constants.js";
-  import FormSubmit from "src/lib/components/molecules/form-submit.svelte";
 
   export let data;
-  let { supabase, form } = data;
 
-  onMount(() => {
-    supabase.auth.onAuthStateChange((event) => {
-      // Redirect to account after sucessful login
-      if (event == "SIGNED_IN") {
-        // Delay needed because order of callback not guaranteed.
-        // Give the layout callback priority to update state or
-        // we'll just bounch back to login when /account tries to load
-        setTimeout(() => {
-          goto("/account");
-        }, 1);
-      }
-    });
-  });
+  // onMount(() => {
+  //   supabase.auth.onAuthStateChange((event) => {
+  //     // Redirect to account after sucessful login
+  //     if (event == "SIGNED_IN") {
+  //       // Delay needed because order of callback not guaranteed.
+  //       // Give the layout callback priority to update state or
+  //       // we'll just bounch back to login when /account tries to load
+  //       setTimeout(() => {
+  //         goto("/account");
+  //       }, 1);
+  //     }
+  //   });
+  // });
 
-  const userForm = superForm(form, {
+  const userForm = superForm(data.form, {
     validators: zodClient(signInSchema),
     onError: ({ result }) => {
       toast.error(result.error.message);
@@ -49,22 +47,23 @@
 </svelte:head>
 
 {#if $page.url.searchParams.get("verified") == "true"}
-  <!-- <svg
-      xmlns="http://www.w3.org/2000/svg"
-      class="stroke-current shrink-0 h-6 w-6"
-      fill="none"
-      viewBox="0 0 24 24"
-      ><path
-        stroke-linecap="round"
-        stroke-linejoin="round"
-        stroke-width="2"
-        d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"
-      /></svg
-    > -->
-
   <Alert.Root variant="success" class="bg-card">
     <Alert.Title>E-post verifierad</Alert.Title>
-    <Alert.Description>Vänligen logga in.</Alert.Description>
+    <Alert.Description class="flex flex-col justify-center text-center gap-y-4">
+      Vänligen logga in.
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        class="stroke-current shrink-0 h-6 w-6"
+        fill="none"
+        viewBox="0 0 24 24"
+        ><path
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          stroke-width="2"
+          d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"
+        /></svg
+      >
+    </Alert.Description>
   </Alert.Root>
 {/if}
 

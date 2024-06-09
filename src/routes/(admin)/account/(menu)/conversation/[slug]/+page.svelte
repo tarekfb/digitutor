@@ -15,7 +15,9 @@
   import ChatWindow from "src/lib/components/molecules/chat-window.svelte";
 
   export let data;
-  const { profile, messages, conversation, supabase } = data;
+  $: ({ profile, messages, conversation, supabase } = data);
+  $: receiver =
+    profile.role == "teacher" ? conversation.student : conversation.teacher;
 
   const sendMessageForm = superForm(data.form, {
     validators: zodClient(sendMessageSchema),
@@ -31,9 +33,6 @@
     message,
     allErrors,
   } = sendMessageForm;
-
-  const receiver =
-    profile.role == "teacher" ? conversation.student : conversation.teacher;
 </script>
 
 {#if conversation}
@@ -42,7 +41,10 @@
       <div class="flex gap-x-4 justify-between">
         <PrimaryTitle>{receiver.first_name}</PrimaryTitle>
         <Button class="relative h-8 w-8 rounded-full">
-          <Avatar onClick={() => goto(`/profile/${receiver.id}`)} profile={receiver} />
+          <Avatar
+            onClick={() => goto(`/profile/${receiver.id}`)}
+            profile={receiver}
+          />
         </Button>
       </div>
 

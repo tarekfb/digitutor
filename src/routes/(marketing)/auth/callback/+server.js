@@ -1,4 +1,3 @@
-// src/routes/auth/callback/+server.js
 import { redirect } from "@sveltejs/kit";
 import { isAuthApiError } from "@supabase/supabase-js";
 

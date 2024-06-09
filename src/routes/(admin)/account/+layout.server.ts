@@ -3,15 +3,13 @@ import type { LayoutServerLoad } from "./$types";
 import { getProfileBySession } from "$lib/server/database/profiles";
 
 export const load: LayoutServerLoad = async ({
-  locals: { supabase, getSession },
+  locals: { supabase, safeGetSession },
 }) => {
-  const session = await getSession();
+  const { session } = await safeGetSession();
 
-  if (!session) {
+  if (!session)
     throw redirect(303, "/login");
-  }
 
   const profile = await getProfileBySession(supabase, session);
-
   return { session, profile };
 };

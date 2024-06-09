@@ -9,7 +9,7 @@ import type { Tables } from "src/supabase";
 
 export async function load({ parent }) {
   const data = await parent();
-  const { profile } = data;
+  const profile = data.profile;
 
   // user completed their profile
   // redirect to select plan if student
@@ -37,8 +37,8 @@ export async function load({ parent }) {
 
 export const actions = {
   default: async (event) => {
-    const { locals: { supabase, getSession } } = event;
-    const session = await getSession();
+    const { locals: { supabase, safeGetSession } } = event;
+    const { session } = await safeGetSession();
     if (!session)
       throw redirect(303, "/login");
 

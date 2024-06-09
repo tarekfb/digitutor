@@ -29,8 +29,9 @@ export const load: PageServerLoad = async (parentData) => {
 
 export const actions = {
     name: async (event) => {
-        const { locals: { supabase, getSession } } = event;
-        const session = await getSession();
+        const { locals: { supabase, safeGetSession } } = event;
+       
+        const { session } = await safeGetSession();
         if (!session)
             throw redirect(303, "/login");
 
@@ -63,8 +64,8 @@ export const actions = {
         }
     },
     email: async (event) => {
-        const { locals: { supabase, getSession } } = event;
-        const session = await getSession();
+        const { locals: { supabase, safeGetSession } } = event;
+        const { session } = await safeGetSession();
         if (!session)
             throw redirect(303, "/login");
 
@@ -82,8 +83,8 @@ export const actions = {
         }
     },
     delete: async (event) => {
-        const { locals: { supabase, getSession, supabaseServiceRole } } = event;
-        const session = await getSession();
+        const { locals: { supabase, safeGetSession, supabaseServiceRole } } = event;
+        const { session } = await safeGetSession();
         if (!session)
             throw redirect(303, "/login");
 
@@ -127,8 +128,8 @@ export const actions = {
         throw redirect(303, "/");
     },
     password: async (event) => {
-        const { locals: { supabase, getSession } } = event;
-        const session = await getSession();
+        const { locals: { supabase, safeGetSession } } = event;
+        const { session } = await safeGetSession();
         if (!session)
             throw redirect(303, "/login");
 
@@ -162,7 +163,7 @@ export const actions = {
             if (isSameAsCurrent)
                 return message(form, getGenericErrorMessage(undefined, "Ange ett nytt lösenord", "Det angivna lösenordet är samma som det nuvarande."), { status: 500 });
 
-            console.log(`Error on attempt to update password with userid ${id}`, updateError);
+            console.error(`Error on attempt to update password with userid ${id}`, updateError);
             return message(form, getGenericErrorMessage(), { status: 500 });
         }
         return message(form, getGenericErrorMessage("success", "Lösenord ändrat", "Använd det nya lösenordet nästa gång du loggar in."));

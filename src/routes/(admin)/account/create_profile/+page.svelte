@@ -11,8 +11,9 @@
   import { goto } from "$app/navigation";
   import { LogOut } from "lucide-svelte";
   import { websiteName } from "src/lib/constants";
+  
   export let data;
-  let { session, form } = data;
+  $: ({ session, form } = data);
 
   const completeProfileForm = superForm(form, {
     validators: zodClient(nameSchema),
@@ -30,7 +31,6 @@
   const {
     form: formData,
     enhance,
-    errors,
     submitting,
     allErrors,
   } = completeProfileForm;

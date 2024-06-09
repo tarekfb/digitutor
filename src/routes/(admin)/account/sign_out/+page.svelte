@@ -3,7 +3,8 @@
 
   export let data;
 
-  let { supabase } = data;
+  const supabase = data.supabase;
+  
   let message = "Signing out....";
 
   supabase.auth.signOut().then(({ error }) => {
