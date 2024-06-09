@@ -3,7 +3,42 @@
   import { navigating } from "$app/stores";
   import { expoOut } from "svelte/easing";
   import { slide } from "svelte/transition";
-  import { Toaster } from "svelte-sonner";
+  import { Toaster, toast } from "svelte-sonner";
+  import { goto, invalidate } from "$app/navigation";
+  import { onMount } from "svelte";
+  import { getFlash } from "sveltekit-flash-message";
+  import { page } from "$app/stores";
+
+  export let data;
+  $: ({ session, supabase } = data);
+
+  onMount(() => {
+    const { data } = supabase.auth.onAuthStateChange((_, newSession) => {
+      if (!newSession) {
+        /**
+         * Queue this as a task so the navigation won't prevent the
+         * triggering function from completing
+         */
+        setTimeout(() => {
+          goto("/", { invalidateAll: true });
+        });
+      }
+      if (newSession?.expires_at !== session?.expires_at) {
+        invalidate("supabase:auth");
+      }
+    });
+
+    return () => data.subscription.unsubscribe();
+  });
+
+  const flash = getFlash(page);
+
+  $: if ($flash) {
+    if ($flash.type == "success") toast.success($flash.message);
+
+    // Clear the flash message to avoid double-toasting.
+    $flash = undefined;
+  }
 </script>
 
 {#if $navigating}

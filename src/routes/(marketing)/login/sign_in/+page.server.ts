@@ -1,16 +1,16 @@
-import { error, fail, redirect } from "@sveltejs/kit";
-import type { PageServerLoad } from "./$types";
+import { error, fail } from "@sveltejs/kit";
+import type { Actions, PageServerLoad } from "./$types";
 import { MessageId, getGenericErrorMessage, unknownErrorMessage } from "src/lib/constants";
 import { message, superValidate } from "sveltekit-superforms";
 import { zod } from "sveltekit-superforms/adapters";
 import { resendSchema, signInSchema } from "src/lib/models/user";
-import { isAuthError } from "@supabase/supabase-js";
+import { redirect } from 'sveltekit-flash-message/server'
 
-export const ssr = false;
+// export const ssr = false; // todo: activate again once ssion is issue resolved
 
-export const load: PageServerLoad = async ({ locals: { getSession } }) => {
+export const load: PageServerLoad = async ({ locals: { safeGetSession } }) => {
+    const { session } = await safeGetSession();
     try {
-        const session = await getSession();
         if (session)
             throw redirect(303, "/account");
 
@@ -26,10 +26,10 @@ export const load: PageServerLoad = async ({ locals: { getSession } }) => {
     };
 }
 
-export const actions = {
+export const actions: Actions = {
     signIn: async (event) => {
-        const { locals: { supabase, getSession } } = event;
-        const session = await getSession();
+        const { locals: { supabase, session } } = event;
+
         if (session)
             throw redirect(303, "/account");
 
@@ -54,9 +54,9 @@ export const actions = {
                         // can return error but not relevant, just act as if no resend was attempted
                         const { error: resendError } = await supabase.auth.resend({
                             type: 'signup',
-                            email: 'email@example.com',
+                            email,
                             options: {
-                                emailRedirectTo: 'https://example.com/welcome'
+                                emailRedirectTo: '/account'
                             }
                         })
                         if (resendError?.status === 429) {
@@ -77,6 +77,7 @@ export const actions = {
             console.error("Error on signin supabase auth user", error);
             return message(form, getGenericErrorMessage(), { status: 500 });
         }
-        throw redirect(302, "/account");
+        throw redirect(302, "/account"); // todo: redirect to /account
     },
+
 }

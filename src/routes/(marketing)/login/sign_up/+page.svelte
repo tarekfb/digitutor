@@ -13,8 +13,8 @@
   import Label from "src/lib/components/atoms/label.svelte";
 
   export let data;
-  const { form } = data;
-  const userForm = superForm(form, {
+
+  const userForm = superForm(data.form, {
     validators: zodClient(signUpSchema),
     onResult: () => {},
   });

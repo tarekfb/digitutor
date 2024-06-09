@@ -9,7 +9,8 @@
   import { zodClient } from "sveltekit-superforms/adapters";
 
   export let data;
-  const { profile, listings, session } = data;
+
+  $: ({ profile, listings, session } = data);
 
   const contactForm = superForm(data.contactForm, {
     validators: zodClient(contactSchema),

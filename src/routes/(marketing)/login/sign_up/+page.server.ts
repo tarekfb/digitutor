@@ -7,11 +7,11 @@ import { signUpSchema } from "src/lib/models/user";
 import { createProfile } from "src/lib/server/database/profiles";
 import type { CreateProfile } from "src/lib/models/profile";
 
-export const ssr = false;
+// export const ssr = false; // todo: activate again once ssion is issue resolved
 
-export const load: PageServerLoad = async ({ locals: { getSession } }) => {
+export const load: PageServerLoad = async ({ locals: { safeGetSession } }) => {
+    const { session } = await safeGetSession();
     try {
-        const session = await getSession();
         if (session)
             throw redirect(303, "/account");
 
@@ -27,8 +27,7 @@ export const load: PageServerLoad = async ({ locals: { getSession } }) => {
 
 export const actions = {
     default: async (event) => {
-        const { locals: { supabase, getSession } } = event;
-        const session = await getSession();
+        const { locals: { supabase, session } } = event;
         if (session)
             throw redirect(303, "/account");
 
