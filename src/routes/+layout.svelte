@@ -34,6 +34,7 @@
   const flash = getFlash(page);
 
   $: if ($flash) {
+    console.log("flash", $flash);
     if ($flash.type == "success") toast.success($flash.message);
 
     // Clear the flash message to avoid double-toasting.

@@ -30,7 +30,7 @@
         {:else}
           <Button on:click={() => goto("/account")}>
             <UserRound class="mr-2 h-4 w-4" />
-            Account
+            Konto
           </Button>
           <DropdownMenu.Root>
             <DropdownMenu.Trigger asChild let:builder>

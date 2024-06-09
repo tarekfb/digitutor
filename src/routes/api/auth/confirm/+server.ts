@@ -1,7 +1,5 @@
 import type { EmailOtpType } from '@supabase/supabase-js'
-// import { redirect } from '@sveltejs/kit'
-import { redirect } from 'sveltekit-flash-message/server'
-
+import { redirect } from '@sveltejs/kit'
 import type { RequestHandler } from './$types'
 import { error } from '@sveltejs/kit';
 import { unknownErrorMessage } from 'src/lib/constants';
@@ -14,7 +12,7 @@ export const GET: RequestHandler = async (event) => {
 
     /**
      * Clean up the redirect URL by deleting the Auth flow parameters.
-     *
+        *
      * `next` is preserved for now, because it's needed in the error case.
      */
     const redirectTo = new URL(url)
@@ -26,9 +24,7 @@ export const GET: RequestHandler = async (event) => {
         const { error } = await supabase.auth.verifyOtp({ type, token_hash })
         if (!error) {
             redirectTo.searchParams.delete('next')
-            // todo setflash verified
-            redirect(303, '/account', { type: 'success', message: 'Bekräftat mail' }, event)
-            // return redirect(303, redirectTo)
+            redirect(303, '/confirmed')
         }
     }
 
