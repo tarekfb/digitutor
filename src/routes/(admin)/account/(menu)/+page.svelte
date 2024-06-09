@@ -26,7 +26,7 @@
   adminSection.set("dashboard");
 
   export let data;
-  const { listings, conversations } = data;
+	$: ({ listings, conversations } = data);
 
   const form = data.form as SuperValidated<
     {

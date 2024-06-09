@@ -8,7 +8,8 @@ import { message, superValidate } from "sveltekit-superforms";
 import { zod } from "sveltekit-superforms/adapters";
 import { sendMessage } from "src/lib/server/database/messages";
 
-export const load = async ({ locals: { supabase, session }, params: { slug } }) => {
+export const load = async ({ locals: { supabase, safeGetSession }, params: { slug } }) => {
+  const { session } = await safeGetSession();
   if (!session)
     throw redirect(303, "/login");
 
@@ -21,7 +22,6 @@ export const load = async ({ locals: { supabase, session }, params: { slug } }) 
       message: unknownErrorMessage,
     });
   };
-
 
   if (!conversation) {
     console.error("Conversation not found for slug: " + slug);
@@ -50,13 +50,14 @@ export const load = async ({ locals: { supabase, session }, params: { slug } }) 
 
   const form = await superValidate(zod(sendMessageSchema))
 
-  return { conversation, messages, form };
+  return { conversation, messages, form }; // todo stream messages and skeleton load them
 }
 
 
 export const actions = {
   sendMessage: async (event) => {
-    const { locals: { supabase, session } } = event;
+    const { locals: { supabase, safeGetSession } } = event;
+    const { session } = await safeGetSession();
     if (!session)
       throw redirect(303, "/login");
 

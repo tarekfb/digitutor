@@ -46,7 +46,7 @@
   } = listingForm;
 </script>
 
-<div class="flex flex-col gap-y-4 pb-8">
+<div class="flex flex-col gap-y-4 pb-8 w-full">
   {#if !listing}
     <MissingListing />
   {:else if isAuthor}
@@ -70,7 +70,7 @@
       />
     {:else}
       <NonEditableListing {listing} />
-      <Button on:click={() => (isEditing = true)} class="self-end mx-8">
+      <Button on:click={() => (isEditing = true)} class="self-end">
         <Pencil class="mr-2 h-4 w-4" />
         Ändra</Button
       >

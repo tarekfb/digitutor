@@ -3,33 +3,33 @@
   import { navigating } from "$app/stores";
   import { expoOut } from "svelte/easing";
   import { slide } from "svelte/transition";
-  import { Toaster } from "svelte-sonner";
-	import { goto, invalidate } from '$app/navigation';
-	import { onMount } from 'svelte';
+  import { Toaster, toast } from "svelte-sonner";
+  import { goto, invalidate } from "$app/navigation";
+  import { onMount } from "svelte";
 
-	export let data;
-	$: ({ session, supabase } = data);
+  export let data;
+  $: ({ session, supabase } = data);
 
-	onMount(() => {
-		const { data } = supabase.auth.onAuthStateChange((_, newSession) => {
-			console.log("ran onAuthStateChange", { newSession });
-			if (!newSession) {
-				/**
-				 * Queue this as a task so the navigation won't prevent the
-				 * triggering function from completing
-				 */
-				setTimeout(() => {
-					goto('/', { invalidateAll: true });
-				});
-			}
-			if (newSession?.expires_at !== session?.expires_at) {
-				invalidate('supabase:auth');
-			}
-		});
+  onMount(() => {
+    const { data } = supabase.auth.onAuthStateChange((_, newSession) => {
+      if (!newSession) {
+        /**
+         * Queue this as a task so the navigation won't prevent the
+         * triggering function from completing
+         */
+        setTimeout(() => {
+          goto("/", { invalidateAll: true });
+        });
 
-		return () => data.subscription.unsubscribe();
-	});
-  </script>
+      }
+      if (newSession?.expires_at !== session?.expires_at) {
+        invalidate("supabase:auth");
+      }
+    });
+
+    return () => data.subscription.unsubscribe();
+  });
+</script>
 
 {#if $navigating}
   <!-- 

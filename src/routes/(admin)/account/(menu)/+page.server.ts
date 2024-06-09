@@ -7,8 +7,9 @@ import { initCreateListingSchema } from "src/lib/models/listing";
 import { zod } from "sveltekit-superforms/adapters";
 
 export const load: PageServerLoad = async ({
-  locals: { supabase, session },
+  locals: { supabase, safeGetSession },
 }) => {
+  const { session } = await safeGetSession();
   if (!session)
     throw redirect(303, "/login");
 
@@ -27,7 +28,8 @@ export const load: PageServerLoad = async ({
 
 export const actions = {
   createListing: async (event) => {
-    const { locals: { supabase, session } } = event;
+    const { locals: { supabase, safeGetSession } } = event;
+    const { session } = await safeGetSession();
     if (!session)
       throw redirect(303, "/login");
 
@@ -50,7 +52,8 @@ export const actions = {
     throw redirect(303, `/listing/${listingId}`);
   },
 
-  signout: async ({ locals: { supabase, session } }) => {
+  signout: async ({ locals: { supabase, safeGetSession } }) => {
+    const { session } = await safeGetSession();
     if (session) {
       await supabase.auth.signOut();
       throw redirect(303, "/");

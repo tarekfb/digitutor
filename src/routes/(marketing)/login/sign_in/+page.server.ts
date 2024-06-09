@@ -5,9 +5,10 @@ import { message, superValidate } from "sveltekit-superforms";
 import { zod } from "sveltekit-superforms/adapters";
 import { resendSchema, signInSchema } from "src/lib/models/user";
 
-export const ssr = false;
+// export const ssr = false; // todo: activate again once ssion is issue resolved
 
-export const load: PageServerLoad = async ({ locals: { session } }) => {
+export const load: PageServerLoad = async ({ locals: { safeGetSession } }) => {
+    const { session } = await safeGetSession();
     try {
         if (session)
             throw redirect(303, "/account");

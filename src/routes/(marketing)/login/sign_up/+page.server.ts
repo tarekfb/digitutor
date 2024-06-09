@@ -7,9 +7,10 @@ import { signUpSchema } from "src/lib/models/user";
 import { createProfile } from "src/lib/server/database/profiles";
 import type { CreateProfile } from "src/lib/models/profile";
 
-export const ssr = false;
+// export const ssr = false; // todo: activate again once ssion is issue resolved
 
-export const load: PageServerLoad = async ({ locals: { session } }) => {
+export const load: PageServerLoad = async ({ locals: { safeGetSession } }) => {
+    const { session } = await safeGetSession();
     try {
         if (session)
             throw redirect(303, "/account");
