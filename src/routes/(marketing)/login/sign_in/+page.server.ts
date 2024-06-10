@@ -1,10 +1,9 @@
-import { error, fail } from "@sveltejs/kit";
+import { error, fail, redirect } from "@sveltejs/kit";
 import type { Actions, PageServerLoad } from "./$types";
 import { MessageId, getGenericErrorMessage, unknownErrorMessage } from "src/lib/constants";
 import { message, superValidate } from "sveltekit-superforms";
 import { zod } from "sveltekit-superforms/adapters";
 import { resendSchema, signInSchema } from "src/lib/models/user";
-import { redirect } from 'sveltekit-flash-message/server'
 
 // export const ssr = false; // todo: activate again once ssion is issue resolved
 
@@ -77,7 +76,7 @@ export const actions: Actions = {
             console.error("Error on signin supabase auth user", error);
             return message(form, getGenericErrorMessage(), { status: 500 });
         }
-        throw redirect(302, "/account"); // todo: redirect to /account
+        throw redirect(302, "/account"); 
     },
 
 }
