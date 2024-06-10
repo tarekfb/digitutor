@@ -19,7 +19,7 @@
   method="POST"
   use:enhance
   {action}
-  class={cn("flex flex-col gap-y-4 mx-8", className)}
+  class={cn("flex flex-col gap-y-4", className)}
 >
   <input type="hidden" name="teacher" value={$formData.teacher} />
   <FormSubmit

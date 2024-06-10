@@ -5,7 +5,7 @@
   import { goto } from "$app/navigation";
   import { Label } from "$lib/components/ui/label/index.js";
   import { Switch } from "$lib/components/ui/switch/index.js";
-  import { DollarSign, Settings } from "lucide-svelte";
+  import { Settings } from "lucide-svelte";
   import * as Avatar from "$lib/components/ui/avatar";
   import type { Role } from "src/lib/models/profile";
   import ListingNav from "./listing-nav.svelte";
@@ -52,16 +52,6 @@
           <ListingNav {isMinimized} />
         {:else}
           <ConversationsNav {isMinimized} />
-          <Button
-            variant="ghost"
-            class="w-full justify-start"
-            on:click={() => goto("/account/billing")}
-          >
-            <DollarSign class="h-5 w-5 mr-1" />
-            {#if !isMinimized}
-              Billing
-            {/if}
-          </Button>
         {/if}
         <Button
           variant="ghost"

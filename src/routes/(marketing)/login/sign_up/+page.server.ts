@@ -7,14 +7,9 @@ import { signUpSchema } from "src/lib/models/user";
 import { createProfile } from "src/lib/server/database/profiles";
 import type { CreateProfile } from "src/lib/models/profile";
 
-// export const ssr = false; // todo: activate again once ssion is issue resolved
 
-export const load: PageServerLoad = async ({ locals: { safeGetSession } }) => {
-    const { session } = await safeGetSession();
+export const load: PageServerLoad = async () => {
     try {
-        if (session)
-            throw redirect(303, "/account");
-
         const form = await superValidate(zod(signUpSchema))
         return { form };
     } catch (e) {
@@ -78,14 +73,14 @@ export const actions = {
 
         try {
             await createProfile(supabase, inputUser)
-            return message(form, { variant: "success", title: "Verifiera e-postadress", description: "Kika i din inkorg för att verifiera e-posten.", status: 201 });
+            return message(form, { variant: "success", title: "Verifiera e-postadress", description: "Kika i din inkorg för att verifiera e-post: " + email + ".", status: 201 });
         } catch (error) {
             if (error && typeof error === "object") {
                 const supabaseError = error as {
                     code: string; message: string;
                 }
-                if (supabaseError.code && supabaseError.code === "23505")
-                    return message(form, { variant: "success", title: "Verifiera e-postadress", description: "Kika i din inkorg för att verifiera e-posten.", status: 201 });
+                if (supabaseError.code && supabaseError.code === "23505") // duplicate key constraint violation - somehow profile exists but not user. Allow.
+                    return message(form, { variant: "success", title: "Verifiera e-postadress", description: "Kika i din inkorg för att verifiera e-post: " + email + ".", status: 201 });
             }
 
             console.error("Error when creating profile", error);

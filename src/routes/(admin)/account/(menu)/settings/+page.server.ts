@@ -30,7 +30,6 @@ export const load: PageServerLoad = async (parentData) => {
 export const actions = {
     name: async (event) => {
         const { locals: { supabase, safeGetSession } } = event;
-       
         const { session } = await safeGetSession();
         if (!session)
             throw redirect(303, "/login");

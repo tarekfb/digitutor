@@ -41,9 +41,9 @@ export const load: LayoutLoad = async ({ data, depends, fetch }) => {
     data: { session },
   } = await supabase.auth.getSession()
 
-  const {
-    data: { user },
-  } = await supabase.auth.getUser()
+  // checking session because if not, supabase throws 403 because of bad JWT
+  const userResponse = session ? await supabase.auth.getUser() : null
+  const user = userResponse?.data?.user ?? null;
 
   return { session, supabase, user }
 }

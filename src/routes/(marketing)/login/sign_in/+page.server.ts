@@ -5,17 +5,10 @@ import { message, superValidate } from "sveltekit-superforms";
 import { zod } from "sveltekit-superforms/adapters";
 import { resendSchema, signInSchema } from "src/lib/models/user";
 
-// export const ssr = false; // todo: activate again once ssion is issue resolved
-
-export const load: PageServerLoad = async ({ locals: { safeGetSession } }) => {
-    const { session } = await safeGetSession();
+export const load: PageServerLoad = async () => {
     try {
-        if (session)
-            throw redirect(303, "/account");
-
         const form = await superValidate(zod(signInSchema))
         const resendEmailForm = await superValidate(zod(resendSchema))
-
         return { form, resendEmailForm };
     } catch (e) {
         console.error("Error when loading signin", e);
@@ -28,6 +21,7 @@ export const load: PageServerLoad = async ({ locals: { safeGetSession } }) => {
 export const actions: Actions = {
     signIn: async (event) => {
         const { locals: { supabase, session } } = event;
+
         if (session)
             throw redirect(303, "/account");
 
@@ -60,7 +54,7 @@ export const actions: Actions = {
                         if (resendError?.status === 429) {
                             return message(form, { variant: "warning", title: "Verifiera e-postadress", description: "E-postadressen är inte verifierad. Kika i din inkorg för att verifiera e-posten.", id: MessageId.RateLimitExceeded }, { status: 403 });
                         }
-                        return message(form, { variant: "warning", title: "Verifiera e-postadress", description: "E-postadressen är inte verifierad. Ett bekräftelsemail har skickats.Kika i din inkorg för att verifiera e-posten." }, { status: 403 });
+                        return message(form, { variant: "warning", title: "Verifiera e-postadress", description: "E-postadressen är inte verifierad. Ett bekräftelsemail har skickats. Kika i din inkorg för att verifiera e-posten." }, { status: 403 });
 
                     default:
                         console.error("Supabase error on signin", { error });
@@ -75,7 +69,7 @@ export const actions: Actions = {
             console.error("Error on signin supabase auth user", error);
             return message(form, getGenericErrorMessage(), { status: 500 });
         }
-        throw redirect(302, "/"); // todo: redirect to /account
+        throw redirect(302, "/account");
     },
 
 }

@@ -1,10 +1,10 @@
-import type { LayoutServerLoad } from "./$types";
+import { redirect } from "@sveltejs/kit";
+import type { LayoutServerLoad } from "../$types";
 
-export const load: LayoutServerLoad = async ({
-  url,
-}) => {
+export const ssr = true;
 
-  return {
-    url: url.origin,
-  };
-};
+export const load: LayoutServerLoad = async ({ locals: { safeGetSession } }) => {
+    const { session } = await safeGetSession();
+    if (session)
+        throw redirect(303, "/account");
+}

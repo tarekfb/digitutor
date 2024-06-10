@@ -1,8 +1,9 @@
 import { createServerClient } from '@supabase/ssr'
-import { type Handle, redirect } from '@sveltejs/kit'
+import { type Handle } from '@sveltejs/kit'
 import { sequence } from '@sveltejs/kit/hooks'
-
 import { PUBLIC_SUPABASE_URL, PUBLIC_SUPABASE_ANON_KEY } from '$env/static/public'
+import { createClient } from '@supabase/supabase-js'
+import { PRIVATE_SUPABASE_SERVICE_ROLE } from '$env/static/private'
 
 const supabase: Handle = async ({ event, resolve }) => {
   /**
@@ -52,6 +53,11 @@ const supabase: Handle = async ({ event, resolve }) => {
     return { session, user }
   }
 
+  event.locals.supabaseServiceRole = createClient(
+    PUBLIC_SUPABASE_URL,
+    PRIVATE_SUPABASE_SERVICE_ROLE,
+    { auth: { persistSession: false } },
+  )
   return resolve(event, {
     filterSerializedResponseHeaders(name) {
       /**
