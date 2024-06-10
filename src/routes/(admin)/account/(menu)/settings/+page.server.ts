@@ -1,4 +1,4 @@
-import { fail, redirect } from "@sveltejs/kit";
+import { fail } from "@sveltejs/kit";
 import type { PageServerLoad } from "./$types";
 import { getGenericErrorMessage } from "src/lib/constants";
 import { message, superValidate } from "sveltekit-superforms";
@@ -9,6 +9,7 @@ import type { Tables } from "src/supabase";
 import { updateUserEmail } from "src/lib/server/database/user";
 import { deleteAccountSchema, passwordSchema } from "src/lib/models/user";
 import { isAuthApiError } from "@supabase/supabase-js";
+import { redirect } from "sveltekit-flash-message/server";
 
 export const load: PageServerLoad = async (parentData) => {
     const { profile, session } = await parentData.parent();
@@ -82,7 +83,7 @@ export const actions = {
         }
     },
     delete: async (event) => {
-        const { locals: { supabase, safeGetSession, supabaseServiceRole } } = event;
+        const { locals: { supabase, safeGetSession, supabaseServiceRole }, cookies } = event;
         const { session } = await safeGetSession();
         if (!session)
             throw redirect(303, "/login");
@@ -124,7 +125,7 @@ export const actions = {
             return message(form, getGenericErrorMessage(), { status: 500 });
         }
 
-        throw redirect(303, "/");
+        throw redirect(303, `/`, { message: 'Ditt konto har raderats.', type: 'success' }, cookies);
     },
     password: async (event) => {
         const { locals: { supabase, safeGetSession } } = event;

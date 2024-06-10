@@ -3,7 +3,6 @@ import type { Database, Tables } from 'src/supabase';
 import { writable } from 'svelte/store'
 import { initMessagesCount as count } from "$lib/constants";
 
-
 let initMessageCount = count;
 
 export const getMessages = async (

@@ -47,7 +47,7 @@
       {/if}
     </Button>
   </div>
-  <div class="self-start">
+  <div class="self-end">
     <DeleteListing />
   </div>
 </form>
