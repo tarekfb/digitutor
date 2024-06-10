@@ -11,9 +11,10 @@ import type { CreateProfile } from "src/lib/models/profile";
 
 export const load: PageServerLoad = async ({ locals: { safeGetSession } }) => {
     const { session } = await safeGetSession();
+    if (session)
+        throw redirect(303, "/account");
+
     try {
-        if (session)
-            throw redirect(303, "/account");
 
         const form = await superValidate(zod(signUpSchema))
         return { form };

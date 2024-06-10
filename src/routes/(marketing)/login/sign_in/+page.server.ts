@@ -10,10 +10,10 @@ import { redirect } from 'sveltekit-flash-message/server'
 
 export const load: PageServerLoad = async ({ locals: { safeGetSession } }) => {
     const { session } = await safeGetSession();
-    try {
-        if (session)
-            throw redirect(303, "/account");
+    if (session)
+        throw redirect(303, "/account");
 
+    try {
         const form = await superValidate(zod(signInSchema))
         const resendEmailForm = await superValidate(zod(resendSchema))
 

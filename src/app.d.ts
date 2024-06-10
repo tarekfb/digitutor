@@ -13,7 +13,7 @@ declare global {
       user: User | null
     }
     interface PageData {
-      flash?: { type: 'success' | 'error'; message: string };
+      flash?: { type: 'success' | 'error' | 'info' | 'warning'; message: string };
     }
     // interface PageData {
     //   session: Session | null;
