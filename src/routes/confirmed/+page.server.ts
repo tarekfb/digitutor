@@ -1,22 +1,9 @@
 import type { EmailOtpType } from '@supabase/supabase-js'
 import { error, redirect } from '@sveltejs/kit';
 import type { PageServerLoad } from './$types';
+import { unknownErrorMessage } from 'src/lib/constants';
 
 export const load: PageServerLoad = async (event) => {
-    const { locals: { safeGetSession } } = event;
-    const { user, session } = await safeGetSession();
-
-    if (!session || !user) {
-        // todo setflash explanation
-        // redirect(
-        //     303,
-        //     '/listing/0196cf3d-e0a6-49e6-aa98-6957ebe80e0f', // todo: go to /login
-        //     { message: 'Test', type: 'warning' },
-        //     event
-        // )
-        throw redirect(303, "/login");
-    }
-
     const { url, locals: { supabase } } = event;
     const token_hash = url.searchParams.get('token_hash')
     const type = url.searchParams.get('type') as EmailOtpType | null
@@ -33,7 +20,7 @@ export const load: PageServerLoad = async (event) => {
     redirectTo.searchParams.delete('type')
 
     if (token_hash && type) {
-        const { error: e } = await supabase.auth.verifyOtp({ type, token_hash })
+        const { error: e, data: { user } } = await supabase.auth.verifyOtp({ type, token_hash })
 
         // if (e){
         //     redirect(
@@ -43,17 +30,21 @@ export const load: PageServerLoad = async (event) => {
         //     event
         // )        // user was logged out because of bad password. Redirect to error page with explaination.
 
-        if (e){
-            console.log("error")
+        if (e) {
+            console.error("Unknown error on verify otp on email confirmation", e);
             // redirect(303, '/login/sign_in', { message: 'Test', type: 'error' }, event)
             error(500, {
                 message: "Vi försökte verifiera dig men någonting gick fel. Försök igen senare.",
             });
         }
 
+        if (!user) {
+            console.error("User data was null on verify otp on email confirmation", e);
+            throw error(500, unknownErrorMessage);
+        }
+
         redirectTo.searchParams.delete('next')
-        // setFlash({ type: 'success', message: 'ok' }, event);
-        return { email: user.email };       
+        return { email: user.email };
     }
 
     throw error(500, {
@@ -63,8 +54,3 @@ export const load: PageServerLoad = async (event) => {
     // return redirect(303, redirectTo)
 
 }
-
-
-// export const GET: RequestHandler = async (event) => {
-   
-// }
