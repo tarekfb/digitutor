@@ -50,7 +50,6 @@
     "lucide-svelte": "^0.376.1",
     "pg": "^8.11.5",
     "postgres": "^3.4.4",
-    "stripe": "^13.3.0",
     "supabase": "^1.163.6",
     "svelte-legos": "^0.2.2",
     "svelte-sonner": "^0.3.22",
