@@ -10,7 +10,11 @@
   export let profile;
   export let receiver;
 
-  loadChat(conversationId, supabase, undefined, messages);
+  try {
+    loadChat(conversationId, supabase, undefined, messages);
+  } catch (e) {
+    console.log("error", e);
+  }
 
   const scroll = (node: HTMLElement, messages: Tables<"messages">[]) => {
     setTimeout(() => {

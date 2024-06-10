@@ -16,7 +16,7 @@
       variant="destructive"
       aria-label="Delete listing"
     >
-      <Trash2 class="h-5 w-5 mr-2" /> Ta bort
+      <Trash2 class="h-5 w-5 mr-2" /> Ta bort annons
     </Button>
   </AlertDialog.Trigger>
   <AlertDialog.Content>
@@ -24,7 +24,8 @@
       <AlertDialog.Title>Är du säker?</AlertDialog.Title>
       <AlertDialog.Description>
         Detta går inte att ångra. Tar du bort annonsen försvinner den helt och
-        hållet.
+        hållet. Om du bara vill dölja annonsen kan du istället ändra
+        synligheten.
       </AlertDialog.Description>
     </AlertDialog.Header>
     <AlertDialog.Footer>

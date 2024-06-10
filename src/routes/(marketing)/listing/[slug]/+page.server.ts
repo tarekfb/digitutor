@@ -1,4 +1,4 @@
-import { fail, redirect, error } from "@sveltejs/kit";
+import { fail, error } from "@sveltejs/kit";
 import { zod } from "sveltekit-superforms/adapters";
 import { getGenericErrorMessage, unknownErrorMessage } from "$lib/constants";
 import { message, superValidate } from "sveltekit-superforms";
@@ -6,9 +6,9 @@ import { deleteListing, getListing, updateListing } from "$lib/server/database/l
 import { createListingSchema } from "$lib/models/listing";
 import { startConversation } from "src/lib/server/database/conversations";
 import { contactSchema } from "src/lib/models/conversations";
+import { redirect } from "sveltekit-flash-message/server";
 
-export const load = async (evemt) => {
-  const { locals: { supabase }, params: { slug } } = evemt;
+export const load = async ({ locals: { supabase }, params: { slug } }) => {
   let listing;
   try {
     listing = await getListing(supabase, slug);
@@ -29,7 +29,7 @@ export const load = async (evemt) => {
 }
 
 export const actions = {
-  deleteListing: async ({ locals: { supabase, safeGetSession }, params: { slug } }) => {
+  deleteListing: async ({ locals: { supabase, safeGetSession }, cookies, params: { slug } }) => {
     const { session } = await safeGetSession();
     if (!session)
       throw redirect(303, "/login");
@@ -41,7 +41,8 @@ export const actions = {
         errorMessage: unknownErrorMessage,
       });
     }
-    throw redirect(303, `/account`);
+
+    throw redirect(303, `/account`, { message: 'Annonsen är borttagen.', type: 'success' }, cookies);
   },
   updateListing: async (event) => {
     const { locals: { supabase, safeGetSession }, params: { slug } } = event;

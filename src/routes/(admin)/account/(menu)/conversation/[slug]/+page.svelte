@@ -47,7 +47,7 @@
           />
         </Button>
       </div>
-
+      <Separator />
       <ChatWindow
         {supabase}
         {profile}
