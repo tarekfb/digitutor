@@ -11,7 +11,7 @@
   import { goto } from "$app/navigation";
   import { LogOut } from "lucide-svelte";
   import { websiteName } from "src/lib/constants";
-  
+
   export let data;
   $: ({ session, form } = data);
 
@@ -89,11 +89,11 @@
       </Card.Footer>
     </Card.Root>
   </form>
-  <div class="text-sm text-muted-foreground">
+  <!-- <div class="text-sm text-muted-foreground">
     You are logged in as {session?.user?.email}.
     <Button variant="secondary" on:click={() => goto("/account/sign_out")}>
       <LogOut class="mr-2 h-4 w-4" />
       Logga ut
     </Button>
-  </div>
+  </div> -->
 </div>

@@ -1,14 +1,17 @@
 <script lang="ts">
   import { Button } from "$lib/components/ui/button";
   import * as DropdownMenu from "$lib/components/ui/dropdown-menu";
-  import { UserRound, LogOut } from "lucide-svelte";
+  import { UserRound, LogOut, LogOutIcon } from "lucide-svelte";
   // import Logo from "$lib/components/atoms/logo.svelte";
   import { goto } from "$app/navigation";
   import type { Tables } from "src/supabase";
   import { websiteName } from "../../constants";
   import Avatar from "../atoms/avatar.svelte";
+  import { enhance } from "$app/forms";
+  import LoadingSpinner from "../atoms/loading-spinner.svelte";
 
   export let profile: Tables<"profiles"> | null;
+  let formLoading = false;
 </script>
 
 <header
@@ -53,10 +56,28 @@
                 </p>
               </DropdownMenu.Label>
               <DropdownMenu.Separator />
-              <DropdownMenu.Item on:click={() => goto("/account/sign_out")}>
-                <LogOut class="mr-2 h-4 w-4" />
-                Logga ut
-              </DropdownMenu.Item>
+              <form
+                method="POST"
+                action="?/signout"
+                use:enhance={() => {
+                  formLoading = true;
+                  return async ({ update }) => {
+                    formLoading = false;
+                    update();
+                  };
+                }}
+              >
+                <DropdownMenu.Item class="data-[highlighted]:bg-white">
+                  <button type="submit" class="flex space-x-2 w-full">
+                    {#if formLoading}
+                      <LoadingSpinner class="text-background mr-2" />
+                    {:else}
+                      <LogOutIcon size="18" class="mr-2" />
+                    {/if}
+                    Logga ut
+                  </button>
+                </DropdownMenu.Item>
+              </form>
             </DropdownMenu.Content>
           </DropdownMenu.Root>
         {/if}

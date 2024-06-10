@@ -5,19 +5,23 @@
   import { goto } from "$app/navigation";
   import { Label } from "$lib/components/ui/label/index.js";
   import { Switch } from "$lib/components/ui/switch/index.js";
-  import { Settings } from "lucide-svelte";
+  import { Settings, LogOutIcon } from "lucide-svelte";
   import * as Avatar from "$lib/components/ui/avatar";
   import type { Role } from "src/lib/models/profile";
   import ListingNav from "./listing-nav.svelte";
   import ConversationsNav from "./conversations-nav.svelte";
   import Separator from "$lib/components/ui/separator/separator.svelte";
   import type { Conversation } from "src/lib/models/conversations";
+  import Link from "../atoms/link.svelte";
+  import { enhance } from "$app/forms";
+  import LoadingSpinner from "../atoms/loading-spinner.svelte";
 
   let className: string | null | undefined = undefined;
   export { className as class };
   export let role: Role;
   export let conversations: Conversation[];
   let isMinimized = true;
+  let formLoading = false;
 </script>
 
 <div
@@ -27,15 +31,41 @@
   )}
 >
   <div class="space-y-2 py-2">
-    <a href="/" class="">
-      <h1 class="text-3xl px-2">
-        {#if isMinimized}
-          M
-        {:else}
-          Mindic
-        {/if}
-      </h1>
-    </a>
+    <div class="flex justify-between gap-x-4 mr-2 items-center">
+      <Link href="/" class="text-3xl px-2">
+        <h1>
+          {#if isMinimized}
+            M
+          {:else}
+            Mindic
+          {/if}
+        </h1>
+      </Link>
+      <form
+        method="POST"
+        action="?/signout"
+        use:enhance={() => {
+          formLoading = true;
+          return async ({ update }) => {
+            formLoading = false;
+            update();
+          };
+        }}
+      >
+        <Button
+          variant="outline"
+          size="icon"
+          type="submit"
+          disabled={formLoading}
+        >
+          {#if formLoading}
+            <LoadingSpinner class="text-background" />
+          {:else}
+            <LogOutIcon size="18" />
+          {/if}
+        </Button>
+      </form>
+    </div>
     <div class="flex items-center space-x-2 px-2">
       <Switch id="airplane-mode" bind:checked={isMinimized} />
       <Label for="airplane-mode">Dölj</Label>
