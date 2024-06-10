@@ -73,14 +73,14 @@ export const actions = {
 
         try {
             await createProfile(supabase, inputUser)
-            return message(form, { variant: "success", title: "Verifiera e-postadress", description: "Kika i din inkorg för att verifiera e-posten.", status: 201 });
+            return message(form, { variant: "success", title: "Verifiera e-postadress", description: "Kika i din inkorg för att verifiera e-post: " + email + ".", status: 201 });
         } catch (error) {
             if (error && typeof error === "object") {
                 const supabaseError = error as {
                     code: string; message: string;
                 }
-                if (supabaseError.code && supabaseError.code === "23505")
-                    return message(form, { variant: "success", title: "Verifiera e-postadress", description: "Kika i din inkorg för att verifiera e-posten.", status: 201 });
+                if (supabaseError.code && supabaseError.code === "23505") // duplicate key constraint violation - somehow profile exists but not user. Allow.
+                    return message(form, { variant: "success", title: "Verifiera e-postadress", description: "Kika i din inkorg för att verifiera e-post: " + email + ".", status: 201 });
             }
 
             console.error("Error when creating profile", error);

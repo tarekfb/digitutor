@@ -9,7 +9,6 @@ export const load: PageServerLoad = async () => {
     try {
         const form = await superValidate(zod(signInSchema))
         const resendEmailForm = await superValidate(zod(resendSchema))
-
         return { form, resendEmailForm };
     } catch (e) {
         console.error("Error when loading signin", e);

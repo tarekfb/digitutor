@@ -22,7 +22,6 @@
         setTimeout(() => {
           goto("/", { invalidateAll: true });
         });
-
       }
       if (newSession?.expires_at !== session?.expires_at) {
         invalidate("supabase:auth");
@@ -35,8 +34,22 @@
   const flash = getFlash(page);
 
   $: if ($flash) {
-    console.log("flash", $flash);
-    if ($flash.type == "success") toast.success($flash.message);
+    switch ($flash.type) {
+      case "success":
+        toast.success($flash.message);
+        break;
+      case "warning":
+        toast.warning($flash.message);
+        break;
+      case "info":
+        toast.info($flash.message);
+        break;
+      case "error":
+        toast.error($flash.message);
+        break;
+      default:
+        break;
+    }
 
     // Clear the flash message to avoid double-toasting.
     $flash = undefined;

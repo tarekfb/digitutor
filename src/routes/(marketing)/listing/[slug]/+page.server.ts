@@ -7,7 +7,8 @@ import { createListingSchema } from "$lib/models/listing";
 import { startConversation } from "src/lib/server/database/conversations";
 import { contactSchema } from "src/lib/models/conversations";
 
-export const load = async ({ locals: { supabase }, params: { slug } }) => {
+export const load = async (evemt) => {
+  const { locals: { supabase }, params: { slug } } = evemt;
   let listing;
   try {
     listing = await getListing(supabase, slug);
