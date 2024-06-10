@@ -20,9 +20,9 @@
     >E-post verifierad!</Alert.Title
   >
   <Alert.Description class="text-xl md:text-2xl"
-    >Du kan nu fortsätta.</Alert.Description
+    >Du kan nu fortsätta <Button
+      on:click={() => goto("/account")}>Konto</Button
+    >
+    <!-- todo apply btn-wide --></Alert.Description
   >
 </Alert.Root>
-
-<Button on:click={() => goto("/account")}>Konto</Button>
-<!-- todo apply btn-wide -->

@@ -4,12 +4,11 @@ export const load = async (event) => {
     const { locals: { safeGetSession } } = event;
     const { user, session } = await safeGetSession();
 
-
     if (!session || !user) {
         // todo setflash explanation
         redirect(
             303,
-            '/login',
+            '/login/sign_up',
             { message: 'Test', type: 'warning' },
             event
         )

@@ -52,7 +52,7 @@ const supabase: Handle = async ({ event, resolve }) => {
 
     return { session, user }
   }
-  
+
   event.locals.supabaseServiceRole = createClient(
     PUBLIC_SUPABASE_URL,
     PRIVATE_SUPABASE_SERVICE_ROLE,

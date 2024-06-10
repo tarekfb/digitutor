@@ -7,15 +7,9 @@ import { signUpSchema } from "src/lib/models/user";
 import { createProfile } from "src/lib/server/database/profiles";
 import type { CreateProfile } from "src/lib/models/profile";
 
-// export const ssr = false; // todo: activate again once ssion is issue resolved
 
-export const load: PageServerLoad = async ({ locals: { safeGetSession } }) => {
-    const { session } = await safeGetSession();
-    if (session)
-        throw redirect(303, "/account");
-
+export const load: PageServerLoad = async () => {
     try {
-
         const form = await superValidate(zod(signUpSchema))
         return { form };
     } catch (e) {

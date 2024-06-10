@@ -5,13 +5,7 @@ import { message, superValidate } from "sveltekit-superforms";
 import { zod } from "sveltekit-superforms/adapters";
 import { resendSchema, signInSchema } from "src/lib/models/user";
 
-// export const ssr = false; // todo: activate again once ssion is issue resolved
-
-export const load: PageServerLoad = async ({ locals: { safeGetSession } }) => {
-    const { session } = await safeGetSession();
-    if (session)
-        throw redirect(303, "/account");
-
+export const load: PageServerLoad = async () => {
     try {
         const form = await superValidate(zod(signInSchema))
         const resendEmailForm = await superValidate(zod(resendSchema))
@@ -76,7 +70,7 @@ export const actions: Actions = {
             console.error("Error on signin supabase auth user", error);
             return message(form, getGenericErrorMessage(), { status: 500 });
         }
-        throw redirect(302, "/account"); 
+        throw redirect(302, "/account");
     },
 
 }
