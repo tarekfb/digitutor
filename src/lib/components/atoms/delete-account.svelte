@@ -10,6 +10,7 @@
   import * as Dialog from "$lib/components/ui/dialog/index.js";
   import * as Drawer from "$lib/components/ui/drawer/index.js";
   import { Label } from "$lib/components/ui/label/index.js";
+  import PasswordInput from "../molecules/password-input.svelte";
 
   let open = false;
   const isDesktop = mediaQuery("(min-width: 768px)");
@@ -56,11 +57,7 @@
           <Form.Field {form} name="password">
             <Form.Control let:attrs>
               <Label>Password</Label>
-              <Input
-                {...attrs}
-                type="password"
-                bind:value={$formData.password}
-              />
+              <PasswordInput {formData} {attrs} />
               <Form.FieldErrors />
             </Form.Control>
           </Form.Field>
@@ -114,11 +111,7 @@
             <Form.Field {form} name="password">
               <Form.Control let:attrs>
                 <Label>Password</Label>
-                <Input
-                  {...attrs}
-                  type="password"
-                  bind:value={$formData.password}
-                />
+                <PasswordInput {formData} {attrs} />
                 <Form.FieldErrors />
               </Form.Control>
             </Form.Field>

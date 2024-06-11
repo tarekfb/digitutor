@@ -102,7 +102,7 @@
     <Form.Field form={passwordForm} name="new">
       <Form.Control let:attrs>
         <Label>Nytt lösenord</Label>
-        <PasswordInput formData={passwordData} {attrs} placeholder={undefined} />
+        <PasswordInput formData={passwordData} {attrs} placeholder="" />
       </Form.Control>
       <Form.Description />
       <Form.FieldErrors />
@@ -110,7 +110,7 @@
     <Form.Field form={passwordForm} name="confirm">
       <Form.Control let:attrs>
         <Label>Bekräfta nytt lösenord</Label>
-        <Input {...attrs} type="password" bind:value={$passwordData.confirm} />
+        <PasswordInput formData={passwordData} {attrs} placeholder="" />
       </Form.Control>
       <Form.Description />
       <Form.FieldErrors />
@@ -118,7 +118,7 @@
     <Form.Field form={passwordForm} name="current">
       <Form.Control let:attrs>
         <Label>Nuvarande lösenord</Label>
-        <Input {...attrs} type="password" bind:value={$passwordData.current} />
+        <PasswordInput formData={passwordData} {attrs} placeholder="" />
       </Form.Control>
       <Form.Description />
       <Form.FieldErrors />

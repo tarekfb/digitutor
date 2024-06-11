@@ -11,7 +11,12 @@
 <!-- todo bind data properly (now static)
 and also update in password settigngs -->
 {#if show}
-  <Input {...attrs} type="text" bind:value={$formData.password} {placeholder}>
+  <Input
+    {...attrs}
+    type="text"
+    bind:value={$formData[attrs.name]}
+    {placeholder}
+  >
     <Button slot="icon" variant="ghost" on:click={() => (show = false)}>
       <EyeOffIcon />
     </Button>
@@ -20,7 +25,7 @@ and also update in password settigngs -->
   <Input
     {...attrs}
     type="password"
-    bind:value={$formData.password}
+    bind:value={$formData[attrs.name]}
     {placeholder}
   >
     <Button slot="icon" variant="ghost" on:click={() => (show = true)}>
