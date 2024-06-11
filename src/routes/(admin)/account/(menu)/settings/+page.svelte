@@ -15,6 +15,7 @@
     passwordSchema,
   } from "src/lib/models/user.js";
   import DeleteAccount from "src/lib/components/atoms/delete-account.svelte";
+  import PasswordInput from "src/lib/components/molecules/password-input.svelte";
 
   let adminSection: Writable<string> = getContext("adminSection");
   adminSection.set("settings");
@@ -101,7 +102,7 @@
     <Form.Field form={passwordForm} name="new">
       <Form.Control let:attrs>
         <Label>Nytt lösenord</Label>
-        <Input {...attrs} type="password" bind:value={$passwordData.new} />
+        <PasswordInput formData={passwordData} {attrs} placeholder={undefined} />
       </Form.Control>
       <Form.Description />
       <Form.FieldErrors />
