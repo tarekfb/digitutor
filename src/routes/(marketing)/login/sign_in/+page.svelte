@@ -12,6 +12,7 @@
   import FormMessage from "src/lib/components/molecules/form-message.svelte";
   import Label from "src/lib/components/atoms/label.svelte";
   import { MessageId } from "src/lib/constants.js";
+  import PasswordInput from "src/lib/components/molecules/password-input.svelte";
 
   export let data;
 
@@ -23,6 +24,8 @@
     resetForm: false,
   });
   const { form: formData, enhance, submitting, message, allErrors } = userForm;
+
+  let show = false;
 </script>
 
 <svelte:head>
@@ -65,12 +68,7 @@
       <Form.Field form={userForm} name="password">
         <Form.Control let:attrs>
           <Label>Lösenord</Label>
-          <Input
-            {...attrs}
-            type="password"
-            bind:value={$formData.password}
-            placeholder="Lösenord"
-          />
+          <PasswordInput {formData} {attrs} />
         </Form.Control>
         <Form.FieldErrors />
       </Form.Field>

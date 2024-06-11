@@ -11,6 +11,7 @@
   import * as RadioGroup from "$lib/components/ui/radio-group";
   import FormMessage from "src/lib/components/molecules/form-message.svelte";
   import Label from "src/lib/components/atoms/label.svelte";
+  import PasswordInput from "src/lib/components/molecules/password-input.svelte";
 
   export let data;
 
@@ -76,12 +77,7 @@
       <Form.Field form={userForm} name="password">
         <Form.Control let:attrs>
           <Label>Lösenord</Label>
-          <Input
-            {...attrs}
-            type="password"
-            bind:value={$formData.password}
-            placeholder="Lösenord"
-          />
+          <PasswordInput {formData} {attrs} />
         </Form.Control>
         <Form.FieldErrors />
       </Form.Field>
