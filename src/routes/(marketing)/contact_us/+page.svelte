@@ -44,10 +44,10 @@
   <p>Kontakta oss om du har något på hjärtat, t.ex. om:</p>
   <ul class="list-disc list-outside space-y-0.5 mx-6">
     <li>
-      Din fråga täcks inte av vår <Link class="text-lg" href="/faq">FAQ</Link>.
+      Din fråga inte täcks av vår <Link class="text-lg" href="/faq">FAQ</Link>.
     </li>
-    <li>Du har synpunkt, klagomål eller önskningar.</li>
-    <li>Du vill bara vill säga hej!</li>
+    <li>Du har synpunkter, klagomål eller önskningar.</li>
+    <li>Du bara vill säga hej!</li>
   </ul>
   <p>Vi kontaktar dig så fort vi kan.</p>
 </div>
