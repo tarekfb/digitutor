@@ -100,7 +100,7 @@ export const getListing = async (
     throw error;
   }
 
-  return data as unknown as Listing | null;
+  return data as unknown as Listing;
 };
 
 export const createListing = async (

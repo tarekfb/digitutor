@@ -3,7 +3,7 @@ import { getGenericFormMessage, unknownErrorMessage } from "$lib/constants";
 import { getProfileByUserId } from "src/lib/server/database/profiles";
 import { getListingsByTeacherId } from "src/lib/server/database/listings";
 import { message, superValidate } from "sveltekit-superforms";
-import { contactSchema } from "src/lib/models/conversations";
+import { requestContactSchema } from "src/lib/models/conversations";
 import { zod } from "sveltekit-superforms/adapters";
 import { startConversation } from "src/lib/server/database/conversations";
 
@@ -35,7 +35,7 @@ export const load = async ({ locals: { supabase }, params: { slug } }) => {
         });
     }
 
-    const contactForm = await superValidate({ teacher: profile.id }, zod(contactSchema))
+    const contactForm = await superValidate({ teacher: profile.id }, zod(requestContactSchema))
 
     return { profile, listings, contactForm };
 }
@@ -47,7 +47,7 @@ export const actions = {
         if (!session)
             throw redirect(303, "/login"); // todo: in the future should implement a redirect after login
 
-        const form = await superValidate(event, zod(contactSchema));
+        const form = await superValidate(event, zod(requestContactSchema));
         if (!form.valid) {
             return message(form, getGenericFormMessage(), { status: 500 });
         }

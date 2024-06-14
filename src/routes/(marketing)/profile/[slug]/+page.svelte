@@ -5,7 +5,7 @@
   import SecondaryTitle from "src/lib/components/atoms/secondary-title.svelte";
   import ContactTeacherForm from "src/lib/components/molecules/contact-teacher-form.svelte";
   import { superForm } from "sveltekit-superforms/client";
-  import { contactSchema } from "src/lib/models/conversations.js";
+  import { requestContactSchema } from "src/lib/models/conversations.js";
   import { zodClient } from "sveltekit-superforms/adapters";
 
   export let data;
@@ -13,7 +13,7 @@
   $: ({ profile, listings, session } = data);
 
   const contactForm = superForm(data.contactForm, {
-    validators: zodClient(contactSchema),
+    validators: zodClient(requestContactSchema),
   });
 
   const reviews: string[] = [];
@@ -22,10 +22,7 @@
 <div class="flex flex-col gap-y-4">
   <div class="flex justify-between gap-x-2 text-2xl">
     <PrimaryTitle>{profile.first_name}</PrimaryTitle>
-    <Avatar
-      {profile}
-      onClick={undefined}
-    />
+    <Avatar {profile} onClick={undefined} />
   </div>
 
   <SecondaryTitle>Annonser</SecondaryTitle>
@@ -47,7 +44,7 @@
   {/each}
 
   <ContactTeacherForm
-    form={contactForm}
+    requestContactForm={contactForm}
     action="?/contact"
     firstName={profile.first_name}
     class="mx-0"

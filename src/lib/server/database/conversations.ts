@@ -1,7 +1,8 @@
-import type { SupabaseClient } from "@supabase/supabase-js";
+import type { PostgrestError, SupabaseClient } from "@supabase/supabase-js";
 import type { Database, Tables } from "src/supabase"
-import type { Conversation } from "src/lib/models/conversations";
+import type { Conversation, InputMessage } from "src/lib/models/conversations";
 import { getNow } from "src/lib/utils";
+import { sendMessage } from "./messages";
 
 export const getConversation = async (
   supabase: SupabaseClient<Database>,
@@ -32,10 +33,37 @@ export const getConversation = async (
   return data as unknown as Conversation;
 }
 
+export const getConversationForStudentAndTeacher = async (
+  supabase: SupabaseClient<Database>,
+  student: string,
+  teacher: string
+): Promise<Conversation | null> => {
+  const { data, error } = await supabase
+    .from("conversations")
+    .select(
+      `
+                  *,
+                  teacher (
+                    *
+                  ),
+                  student (
+                    *
+                  )
+                `,
+    )
+    .eq("student", student)
+    .eq("teacher", teacher)
+    .limit(1)
+    .single();
+
+  return error ? null : data as unknown as Conversation; // error means no existing convo, return null
+}
+
 export const startConversation = async (
   supabase: SupabaseClient<Database>,
   teacher: string,
-  student: string
+  student: string,
+  firstMessage: string,
 ): Promise<Conversation> => {
   const { data, error } = await supabase
     .from("conversations")
@@ -66,10 +94,11 @@ export const startConversation = async (
 
   if (data.length === 0) { // no existing convo, create new
     const newConversation = await createConversation(supabase, teacher);
+    await sendMessage(supabase, { content: firstMessage, conversation: newConversation.id }); // does this need to be awaited? todo: remove if not needed
     return newConversation as unknown as Conversation;
   }
 
-  return data[0] as unknown as Conversation;
+  throw new Error("A conversation already exists for this student and teacher");
 }
 
 export const getConversations = async (

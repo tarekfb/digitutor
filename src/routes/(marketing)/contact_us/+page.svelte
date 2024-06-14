@@ -1,8 +1,5 @@
 <script lang="ts">
-  import { applyAction } from "$app/forms";
-  import type { SubmitFunction } from "@sveltejs/kit";
   import { contactUsSchema } from "src/lib/models/contact-us.js";
-  import { sendMessageSchema } from "src/lib/models/conversations.js";
   import { toast } from "svelte-sonner";
   import { superForm } from "sveltekit-superforms";
   import { zodClient } from "sveltekit-superforms/adapters";

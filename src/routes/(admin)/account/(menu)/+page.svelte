@@ -42,9 +42,6 @@
 
   const userForm = superForm(form, {
     validators: zodClient(initCreateListingSchema),
-    onError: ({ result }) => {
-      toast.error(result.error.message);
-    },
   });
 </script>
 
