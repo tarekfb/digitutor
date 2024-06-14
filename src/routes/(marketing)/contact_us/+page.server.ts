@@ -1,66 +1,50 @@
 import { fail } from "@sveltejs/kit";
 import { getNow } from "src/lib/utils.js";
+import type { Actions, PageServerLoad } from "./$types";
+import { contactUsSchema } from "src/lib/models/contact-us";
+import { superValidate, message } from "sveltekit-superforms";
+import { zod } from "sveltekit-superforms/adapters";
+import { getGenericFormMessage } from "src/lib/constants";
 
-/** @type {import('./$types').Actions} */
-export const actions = {
-  submitContactUs: async ({ request, locals: { supabaseServiceRole } }) => {
-    const formData = await request.formData();
-    const errors: { [fieldName: string]: string } = {};
+export const load: PageServerLoad = async () => {
+  const form = await superValidate(zod(contactUsSchema));
+  return { form };
+}
 
-    const firstName = formData.get("first_name")?.toString() ?? "";
-    if (firstName.length < 2) {
-      errors["first_name"] = "First name is required";
-    }
-    if (firstName.length > 500) {
-      errors["first_name"] = "First name too long";
-    }
+export const actions: Actions = {
+  submit: async (event) => {
+    const { locals: { supabaseServiceRole } } = event;
 
-    const lastName = formData.get("last_name")?.toString() ?? "";
-    if (lastName.length < 2) {
-      errors["last_name"] = "Last name is required";
-    }
-    if (lastName.length > 500) {
-      errors["last_name"] = "Last name too long";
-    }
-
-    const email = formData.get("email")?.toString() ?? "";
-    if (email.length < 6) {
-      errors["email"] = "Email is required";
-    } else if (email.length > 500) {
-      errors["email"] = "Email too long";
-    } else if (!email.includes("@") || !email.includes(".")) {
-      errors["email"] = "Invalid email";
-    }
-
-    const phone = formData.get("phone")?.toString() ?? "";
-    if (phone.length > 100) {
-      errors["phone"] = "Phone number too long";
-    }
-
-    const message = formData.get("message")?.toString() ?? "";
-    if (message.length > 2000) {
-      errors["message"] = "Message too long (" + message.length + " of 2000)";
-    }
-
-    console.error(errors);
-    if (Object.keys(errors).length > 0) {
-      return fail(400, { errors });
-    }
-
-    // Save to database
-    const { error: insertError } = await supabaseServiceRole
-      .from("contact_requests")
-      .insert({
-        first_name: firstName,
-        last_name: lastName,
-        email,
-        phone,
-        message_body: message,
-        updated_at: getNow(),
+    const form = await superValidate(event, zod(contactUsSchema));
+    if (!form.valid) {
+      return fail(400, {
+        form,
       });
+    }
 
-    if (insertError) {
-      return fail(500, { errors: { _: "Error saving" } });
+    const { firstName, lastName, email, message: contactMessage } = form.data;
+
+    try {
+      const { error: insertError } = await supabaseServiceRole
+        .from("contact_requests")
+        .insert({
+          first_name: firstName,
+          last_name: lastName,
+          email,
+          message_body: contactMessage,
+          updated_at: getNow(),
+        });
+
+
+      if (insertError) {
+        console.error('Error when inserting contact request', insertError);
+        return message(form, getGenericFormMessage("destructive", undefined, "Kunde ej skicka meddelandet. Försök igen lite senare."), { status: 500 });
+      }
+
+      return message(form, getGenericFormMessage("success", "Meddelande skickat", "Vi svarar så fort vi kan."));
+    } catch (error) {
+      console.error('Unknown error when inserting contact request', error);
+      return message(form, getGenericFormMessage("destructive", undefined, "Kunde ej skicka meddelandet. Försök igen lite senare."), { status: 500 });
     }
   },
 };

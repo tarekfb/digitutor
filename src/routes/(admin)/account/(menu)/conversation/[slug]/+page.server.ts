@@ -3,7 +3,7 @@ import { initMessagesCount, unknownErrorMessage } from "$lib/constants";
 import { getMessages } from "src/lib/server/database/messages";
 import { getConversation } from "src/lib/server/database/conversations";
 import { sendMessageSchema, type InputMessage } from "src/lib/models/conversations";
-import { getGenericErrorMessage } from "$lib/constants";
+import { getGenericFormMessage } from "$lib/constants";
 import { message, superValidate } from "sveltekit-superforms";
 import { zod } from "sveltekit-superforms/adapters";
 import { sendMessage } from "src/lib/server/database/messages";
@@ -78,7 +78,7 @@ export const actions = {
       return { form }
     } catch (error) {
       console.error(error);
-      return message(form, getGenericErrorMessage("destructive", "Kunde ej skicka meddelandet"), { status: 500 });
+      return message(form, getGenericFormMessage("destructive", "Kunde ej skicka meddelandet"), { status: 500 });
     }
   },
 };

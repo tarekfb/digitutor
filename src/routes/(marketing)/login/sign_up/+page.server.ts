@@ -1,6 +1,6 @@
 import { error, fail, redirect } from "@sveltejs/kit";
 import type { PageServerLoad } from "./$types";
-import { getGenericErrorMessage, unknownErrorMessage } from "src/lib/constants";
+import { getGenericFormMessage, unknownErrorMessage } from "src/lib/constants";
 import { message, setError, superValidate } from "sveltekit-superforms";
 import { zod } from "sveltekit-superforms/adapters";
 import { signUpSchema } from "src/lib/models/user";
@@ -48,7 +48,7 @@ export const actions = {
 
             if (!data.user) {
                 console.error("User data was null on signup", error);
-                return message(form, getGenericErrorMessage(), { status: 500 });
+                return message(form, getGenericFormMessage(), { status: 500 });
             }
 
             // https://github.com/orgs/supabase/discussions/1282
@@ -57,7 +57,7 @@ export const actions = {
 
             if (error) {
                 console.error("Supabase error on signup", { error });
-                return message(form, getGenericErrorMessage(), { status: 500 });
+                return message(form, getGenericFormMessage(), { status: 500 });
             }
 
             inputUser = {
@@ -68,7 +68,7 @@ export const actions = {
             }
         } catch (error) {
             console.error("Error when creating supabase auth user", error);
-            return message(form, getGenericErrorMessage(), { status: 500 });
+            return message(form, getGenericFormMessage(), { status: 500 });
         }
 
         try {
@@ -84,7 +84,7 @@ export const actions = {
             }
 
             console.error("Error when creating profile", error);
-            return message(form, getGenericErrorMessage(), { status: 500 });
+            return message(form, getGenericFormMessage(), { status: 500 });
         }
     }
 }

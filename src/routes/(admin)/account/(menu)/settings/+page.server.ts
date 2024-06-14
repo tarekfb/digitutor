@@ -1,6 +1,6 @@
 import { fail } from "@sveltejs/kit";
 import type { PageServerLoad } from "./$types";
-import { getGenericErrorMessage } from "src/lib/constants";
+import { getGenericFormMessage } from "src/lib/constants";
 import { message, superValidate } from "sveltekit-superforms";
 import { zod } from "sveltekit-superforms/adapters";
 import { emailSchema, nameSchema } from "src/lib/models/profile";
@@ -46,7 +46,7 @@ export const actions = {
             profile = await getProfileBySession(supabase, session)
         } catch (error) {
             console.error(`Error on fetch profile in update name with userid ${session.user.id}`, error);
-            return message(form, getGenericErrorMessage(), { status: 500 });
+            return message(form, getGenericFormMessage(), { status: 500 });
         }
 
         const profileInput: Tables<"profiles"> = {
@@ -60,7 +60,7 @@ export const actions = {
             return { form }
         } catch (error) {
             console.error(`Error on update profile in update name with userid ${session.user.id}`, error);
-            return message(form, getGenericErrorMessage(), { status: 500 });
+            return message(form, getGenericFormMessage(), { status: 500 });
         }
     },
     email: async (event) => {
@@ -76,10 +76,10 @@ export const actions = {
         const { email } = form.data;
         try {
             await updateUserEmail(supabase, email);
-            return message(form, getGenericErrorMessage("success", "Bekräfta e-postadresserna", "Bekräfta ändringen på både gamla och nya e-postadresserna. Tills dess loggar du in med din nuvarande e-postadress."));
+            return message(form, getGenericFormMessage("success", "Bekräfta e-postadresserna", "Bekräfta ändringen på både gamla och nya e-postadresserna. Tills dess loggar du in med din nuvarande e-postadress."));
         } catch (error) {
             console.error(`Error on update profile in update name with userid ${session?.user.id}`, error);
-            return message(form, getGenericErrorMessage(), { status: 500 });
+            return message(form, getGenericFormMessage(), { status: 500 });
         }
     },
     delete: async (event) => {
@@ -96,7 +96,7 @@ export const actions = {
         const { id, email } = session.user;
         if (!email) {
             console.error(`User with id ${id} has no email and therefore password could not be verified`);
-            return message(form, getGenericErrorMessage(), { status: 500 });
+            return message(form, getGenericFormMessage(), { status: 500 });
         }
 
         // Check current password is correct before deleting account
@@ -116,13 +116,13 @@ export const actions = {
             );
             if (error) {
                 console.error(`Error on attempt to delete user with userid ${id}`, error);
-                return message(form, getGenericErrorMessage(), { status: 500 });
+                return message(form, getGenericFormMessage(), { status: 500 });
             }
 
             await supabase.auth.signOut();
         } catch (e) {
             console.error(`Error on attempt to delete & signout user with userid ${id}`, e);
-            return message(form, getGenericErrorMessage(), { status: 500 });
+            return message(form, getGenericFormMessage(), { status: 500 });
         }
 
         throw redirect(303, `/`, { message: 'Ditt konto har raderats.', type: 'success' }, cookies);
@@ -142,7 +142,7 @@ export const actions = {
         const { id, email } = session.user;
         if (!email) {
             console.error(`User with id ${id} has no email and therefore password could not be verified`);
-            return message(form, getGenericErrorMessage(), { status: 500 });
+            return message(form, getGenericFormMessage(), { status: 500 });
         }
         const { error } = await supabase.auth.signInWithPassword({
             email,
@@ -161,11 +161,11 @@ export const actions = {
         if (updateError) {
             const isSameAsCurrent = isAuthApiError(updateError) && updateError.status === 422 && updateError.message.includes("different")
             if (isSameAsCurrent)
-                return message(form, getGenericErrorMessage(undefined, "Ange ett nytt lösenord", "Det angivna lösenordet är samma som det nuvarande."), { status: 500 });
+                return message(form, getGenericFormMessage(undefined, "Ange ett nytt lösenord", "Det angivna lösenordet är samma som det nuvarande."), { status: 500 });
 
             console.error(`Error on attempt to update password with userid ${id}`, updateError);
-            return message(form, getGenericErrorMessage(), { status: 500 });
+            return message(form, getGenericFormMessage(), { status: 500 });
         }
-        return message(form, getGenericErrorMessage("success", "Lösenord ändrat", "Använd det nya lösenordet nästa gång du loggar in."));
+        return message(form, getGenericFormMessage("success", "Lösenord ändrat", "Använd det nya lösenordet nästa gång du loggar in."));
     }
 }
