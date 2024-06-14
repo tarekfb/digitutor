@@ -1,6 +1,6 @@
 import { fail, error } from "@sveltejs/kit";
 import { zod } from "sveltekit-superforms/adapters";
-import { getGenericErrorMessage, unknownErrorMessage } from "$lib/constants";
+import { getGenericFormMessage, unknownErrorMessage } from "$lib/constants";
 import { message, superValidate } from "sveltekit-superforms";
 import { deleteListing, getListing, updateListing } from "$lib/server/database/listings";
 import { createListingSchema } from "$lib/models/listing";
@@ -62,7 +62,7 @@ export const actions = {
       await updateListing(supabase, form.data, slug);
       return { form };
     } catch (error) {
-      return message(form, getGenericErrorMessage(), { status: 500 });
+      return message(form, getGenericFormMessage(), { status: 500 });
     }
   },
   contact: async (event) => {
@@ -73,17 +73,17 @@ export const actions = {
 
     const form = await superValidate(event, zod(contactSchema));
     if (!form.valid) {
-      return message(form, getGenericErrorMessage(), { status: 500 });
+      return message(form, getGenericFormMessage(), { status: 500 });
     }
 
     const { teacher } = form.data;
     if (!teacher) {
       console.error("Error when starting conversation for listing slug: " + slug, error);
-      return message(form, getGenericErrorMessage(), { status: 500 });
+      return message(form, getGenericFormMessage(), { status: 500 });
     }
 
     if (teacher === session.user.id)
-      return message(form, getGenericErrorMessage(undefined, undefined, "Du kan inte kontakta dig själv."), { status: 400 });
+      return message(form, getGenericFormMessage(undefined, undefined, "Du kan inte kontakta dig själv."), { status: 400 });
 
     let conversationId: string;
     try {
@@ -91,7 +91,7 @@ export const actions = {
       conversationId = id;
     } catch (error) {
       console.error("Error when starting conversation for listing slug: " + slug, error);
-      return message(form, getGenericErrorMessage(), { status: 500 });
+      return message(form, getGenericFormMessage(), { status: 500 });
     }
     throw redirect(303, `/account/conversation/${conversationId}`);
   }
