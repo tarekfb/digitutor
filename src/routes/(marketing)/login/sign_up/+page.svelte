@@ -17,7 +17,6 @@
 
   const userForm = superForm(data.form, {
     validators: zodClient(signUpSchema),
-    onResult: () => {},
   });
   const { form: formData, enhance, submitting, message, allErrors } = userForm;
 </script>

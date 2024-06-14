@@ -23,7 +23,6 @@ export const actions: Actions = {
     }
 
     const { firstName, lastName, email, message: contactMessage } = form.data;
-
     try {
       const { error: insertError } = await supabaseServiceRole
         .from("contact_requests")
@@ -41,7 +40,7 @@ export const actions: Actions = {
         return message(form, getGenericFormMessage("destructive", undefined, "Kunde ej skicka meddelandet. Försök igen lite senare."), { status: 500 });
       }
 
-      return message(form, getGenericFormMessage("success", "Meddelande skickat", "Vi svarar så fort vi kan."));
+      return { form }
     } catch (error) {
       console.error('Unknown error when inserting contact request', error);
       return message(form, getGenericFormMessage("destructive", undefined, "Kunde ej skicka meddelandet. Försök igen lite senare."), { status: 500 });

@@ -20,6 +20,10 @@
 
   const contactForm = superForm(data.form, {
     validators: zodClient(contactUsSchema),
+    onUpdated({ form }) {
+      if (form.valid)
+        toast.success(`Neddelande skickat. Vi svarar så fort vi kan.`);
+    },
   });
 
   const {
