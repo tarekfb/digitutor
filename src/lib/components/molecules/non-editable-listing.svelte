@@ -1,6 +1,6 @@
 <script lang="ts">
-  import type { Listing } from "src/lib/models/listing";
-  import { Subjects } from "src/lib/models/common";
+  import type { Listing } from "src/lib/shared/models/listing";
+  import { Subjects } from "src/lib/shared/models/common";
   import SecondaryTitle from "src/lib/components/atoms/secondary-title.svelte";
 
   export let listing: Listing;

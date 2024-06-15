@@ -1,12 +1,13 @@
 import { fail, error } from "@sveltejs/kit";
 import { zod } from "sveltekit-superforms/adapters";
-import { getGenericFormMessage, unknownErrorMessage } from "$lib/constants";
+import { getGenericFormMessage, unknownErrorMessage } from "$lib/shared/constants/constants";
 import { message, superValidate } from "sveltekit-superforms";
 import { deleteListing, getListing, updateListing } from "$lib/server/database/listings";
-import { createListingSchema } from "$lib/models/listing";
+import { createListingSchema } from "src/lib/shared/models/listing";
 import { getConversationForStudentAndTeacher, startConversation } from "src/lib/server/database/conversations";
-import { requestContactSchema, startContactSchema } from "src/lib/models/conversations";
+import { requestContactSchema, startContactSchema } from "src/lib/shared/models/conversations";
 import { redirect } from "sveltekit-flash-message/server";
+import { ResourceAlreadyExistsError } from "src/lib/shared/errors/resource-already-exists";
 
 export const load = async ({ locals: { supabase }, params: { slug }, parent }) => {
   let listing;
@@ -23,12 +24,13 @@ export const load = async ({ locals: { supabase }, params: { slug }, parent }) =
       message: 'Not found'
     });
 
-  const { profile } = await parent();
+  const parentData = await parent();
+  const role = parentData.profile?.role ?? "";
 
 
   const createListingForm = await superValidate(listing, zod(createListingSchema))
-  const requestContactForm = await superValidate({ teacher: listing.profile.id, role: profile?.role ?? "" }, zod(requestContactSchema))
-  const startContactForm = await superValidate({ teacher: listing.profile.id, role: profile?.role ?? "" }, zod(startContactSchema))
+  const requestContactForm = await superValidate({ teacher: listing.profile.id, role }, zod(requestContactSchema))
+  const startContactForm = await superValidate({ teacher: listing.profile.id, role }, zod(startContactSchema))
   return { listing, createListingForm, requestContactForm, startContactForm };
 }
 
@@ -112,7 +114,6 @@ export const actions = {
     }
 
     const { teacher, role, firstMessage } = form.data;
-    return message(form, getGenericFormMessage(), { status: 500 });
 
     if (teacher === session.user.id)
       return message(form, getGenericFormMessage(undefined, undefined, "Du kan inte kontakta dig själv."), { status: 400 });
@@ -130,9 +131,12 @@ export const actions = {
       const { id } = await startConversation(supabase, teacher, session.user.id, firstMessage);
       conversationId = id;
     } catch (error) {
+      if (error instanceof ResourceAlreadyExistsError) {
+        throw redirect(303, `/account/conversation/${error.message}`, { message: 'Du har redan kontaktat läraren.', type: 'info' }, event); // message is conversation id
+      }
       console.error("Error when starting conversation for listing slug: " + slug, error);
       return message(form, getGenericFormMessage(), { status: 500 });
     }
-    throw redirect(303, `/account/conversation/${conversationId} `);
+    throw redirect(303, `/account/conversation/${conversationId}`);
   }
 }

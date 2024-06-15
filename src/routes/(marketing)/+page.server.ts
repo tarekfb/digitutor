@@ -1,5 +1,5 @@
 import { error } from "@sveltejs/kit";
-import { unknownErrorMessage } from "src/lib/constants";
+import { unknownErrorMessage } from "src/lib/shared/constants/constants";
 import { redirect } from "sveltekit-flash-message/server";
 
 export const actions = {

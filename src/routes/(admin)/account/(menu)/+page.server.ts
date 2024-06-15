@@ -1,9 +1,9 @@
 import { error, fail } from "@sveltejs/kit";
 import { createListing, getListings } from "$lib/server/database/listings";
 import type { PageServerLoad } from "./$types";
-import { getGenericFormMessage, unknownErrorMessage } from "$lib/constants";
+import { getGenericFormMessage, unknownErrorMessage } from "$lib/shared/constants/constants";
 import { message, superValidate } from "sveltekit-superforms";
-import { initCreateListingSchema } from "src/lib/models/listing";
+import { initCreateListingSchema } from "src/lib/shared/models/listing";
 import { zod } from "sveltekit-superforms/adapters";
 import { redirect } from "sveltekit-flash-message/server";
 

@@ -1,9 +1,9 @@
 import { error, fail, redirect } from "@sveltejs/kit";
 import type { Actions, PageServerLoad } from "./$types";
-import { MessageId, getGenericFormMessage, unknownErrorMessage } from "src/lib/constants";
+import { MessageId, getGenericFormMessage, unknownErrorMessage } from "src/lib/shared/constants/constants";
 import { message, superValidate } from "sveltekit-superforms";
 import { zod } from "sveltekit-superforms/adapters";
-import { resendSchema, signInSchema } from "src/lib/models/user";
+import { resendSchema, signInSchema } from "src/lib/shared/models/user";
 
 export const load: PageServerLoad = async () => {
     try {

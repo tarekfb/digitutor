@@ -5,10 +5,11 @@
   import {
     requestContactSchema,
     startContactSchema,
-  } from "src/lib/models/conversations";
+  } from "src/lib/shared/models/conversations";
   import { superForm } from "sveltekit-superforms";
   import { zodClient } from "sveltekit-superforms/adapters";
   import StartContact from "../atoms/start-contact.svelte";
+  import { isStartingContact } from "src/stores/startContact";
 
   let className: string | null | undefined = undefined;
   export { className as class };
@@ -19,7 +20,6 @@
   export let startContactAction: string;
   export let firstName;
 
-  let isStartingContact = false;
   let wasGrantedContact = false;
 
   const requestContactFormValues = superForm(requestContactForm, {
@@ -27,14 +27,14 @@
     onUpdated({ form }) {
       if (form.valid) {
         // request to contact was granted
-        isStartingContact = true;
+        isStartingContact.set(true);
         wasGrantedContact = true;
       }
     },
     onSubmit: async (event) => {
       if (wasGrantedContact) {
         event.cancel();
-        isStartingContact = true;
+        isStartingContact.set(true);
       }
     },
   });
@@ -50,10 +50,6 @@
   const startContactFormValues = superForm(startContactForm, {
     validators: zodClient(startContactSchema),
   });
-
-  const toggleModal = () => {
-    isStartingContact = !isStartingContact;
-  };
 </script>
 
 <form
@@ -73,9 +69,4 @@
   <FormMessage message={$message} scroll />
 </form>
 
-<StartContact
-  form={startContactFormValues}
-  action={startContactAction}
-  {toggleModal}
-  open={isStartingContact}
-/>
+<StartContact form={startContactFormValues} action={startContactAction} />

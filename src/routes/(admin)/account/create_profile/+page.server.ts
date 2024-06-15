@@ -1,9 +1,9 @@
-import { unknownErrorMessage } from "$lib/constants.js";
+import { unknownErrorMessage } from "$lib/shared/constants/constants";
 import { _hasFullProfile } from "src/routes/(admin)/account/+layout.js";
 import { error, fail, redirect } from "@sveltejs/kit";
 import { zod } from "sveltekit-superforms/adapters";
 import { message, superValidate } from "sveltekit-superforms/client";
-import { nameSchema } from "$lib/models/profile";
+import { nameSchema } from "src/lib/shared/models/profile";
 import { getProfileBySession, updateProfile } from "src/lib/server/database/profiles.js";
 import type { Tables } from "src/supabase";
 

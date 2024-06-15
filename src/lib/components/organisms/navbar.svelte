@@ -5,7 +5,7 @@
   // import Logo from "$lib/components/atoms/logo.svelte";
   import { goto } from "$app/navigation";
   import type { Tables } from "src/supabase";
-  import { websiteName } from "../../constants";
+  import { websiteName } from "../../shared/constants/constants";
   import Avatar from "../atoms/avatar.svelte";
   import { enhance } from "$app/forms";
   import LoadingSpinner from "../atoms/loading-spinner.svelte";

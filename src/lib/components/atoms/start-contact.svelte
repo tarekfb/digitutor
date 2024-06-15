@@ -8,11 +8,10 @@
   import * as Drawer from "$lib/components/ui/drawer/index.js";
   import { Label } from "$lib/components/ui/label/index.js";
   import { Textarea } from "../ui/textarea";
+  import { isStartingContact } from "src/stores/startContact";
 
   export let form;
   export let action: string;
-  export let toggleModal: () => void;
-  export let open: boolean;
 
   const isDesktop = mediaQuery("(min-width: 768px)");
   const { form: formData, enhance, submitting, allErrors, message } = form;
@@ -25,12 +24,18 @@
     "För vilket ändamål (tenta, hobby, inlämning, o.s.v.)",
   ];
   const title = "Kontakta läraren";
+  let dialogOpen = false;
 
-  $: open, console.log("yes"); // do this for parent too
+  // sync store both ways
+  $: dialogOpen, isStartingContact.set(dialogOpen);
+  isStartingContact.subscribe((value) => {
+    dialogOpen = value;
+  });
 </script>
 
 {#if $isDesktop}
-  <Dialog.Root bind:open>
+  <Dialog.Root bind:open={dialogOpen}>
+    <Dialog.Trigger />
     <Dialog.Content class="sm:max-w-[425px] bg-card">
       <Dialog.Header>
         <Dialog.Title>{title}</Dialog.Title>
@@ -62,11 +67,7 @@
         <div class="flex justify-end gap-x-4">
           <Dialog.Footer>
             <Dialog.Close asChild let:builder>
-              <Button
-                variant="outline"
-                builders={[builder]}
-                on:click={toggleModal}>Avbryt</Button
-              >
+              <Button variant="outline" builders={[builder]}>Avbryt</Button>
             </Dialog.Close>
           </Dialog.Footer>
           <FormSubmit
@@ -80,7 +81,8 @@
     </Dialog.Content>
   </Dialog.Root>
 {:else}
-  <Drawer.Root bind:open>
+  <Drawer.Root bind:open={dialogOpen}>
+    <Dialog.Trigger />
     <Drawer.Content class="bg-card">
       <Drawer.Header class="text-left">
         <Drawer.Title>{title}</Drawer.Title>
@@ -113,11 +115,7 @@
           <div class="flex justify-end gap-x-2">
             <Drawer.Footer class="m-0 p-0">
               <Drawer.Close asChild let:builder>
-                <Button
-                  variant="outline"
-                  builders={[builder]}
-                  on:click={toggleModal}>Avbryt</Button
-                >
+                <Button variant="outline" builders={[builder]}>Avbryt</Button>
               </Drawer.Close>
             </Drawer.Footer>
             <FormSubmit

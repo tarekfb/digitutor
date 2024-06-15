@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { websiteName } from "$lib/constants";
+  import { websiteName } from "src/lib/shared/constants/constants";
   import ListingCard from "$lib/components/molecules/listing-card.svelte";
   import { Button } from "src/lib/components/ui/button";
   import { goto } from "$app/navigation";

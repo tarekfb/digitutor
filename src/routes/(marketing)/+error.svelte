@@ -4,7 +4,7 @@
   import { goto } from "$app/navigation";
   import PrimaryTitle from "src/lib/components/atoms/primary-title.svelte";
   import { page } from "$app/stores";
-  import { unknownErrorMessage } from "src/lib/constants";
+  import { unknownErrorMessage } from "src/lib/shared/constants/constants";
 </script>
 
 <div

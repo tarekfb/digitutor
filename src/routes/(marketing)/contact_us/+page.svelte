@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { contactUsSchema } from "src/lib/models/contact-us.js";
+  import { contactUsSchema } from "src/lib/shared/models/contact-us.js";
   import { toast } from "svelte-sonner";
   import { superForm } from "sveltekit-superforms";
   import { zodClient } from "sveltekit-superforms/adapters";

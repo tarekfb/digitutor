@@ -1,8 +1,9 @@
 import type { PostgrestError, SupabaseClient } from "@supabase/supabase-js";
 import type { Database, Tables } from "src/supabase"
-import type { Conversation, InputMessage } from "src/lib/models/conversations";
+import type { Conversation, InputMessage } from "src/lib/shared/models/conversations";
 import { getNow } from "src/lib/utils";
 import { sendMessage } from "./messages";
+import { ResourceAlreadyExistsError } from "src/lib/shared/errors/resource-already-exists";
 
 export const getConversation = async (
   supabase: SupabaseClient<Database>,
@@ -98,7 +99,13 @@ export const startConversation = async (
     return newConversation as unknown as Conversation;
   }
 
-  throw new Error("A conversation already exists for this student and teacher");
+  if (data.length === 1) {
+    console.error("User tried to create new conversation through a bug, not supposed to occur", { teacher, student })
+    throw new ResourceAlreadyExistsError(409, data[0].id.toString());
+  }
+
+  console.error("Unexpected error occured, invalid code path reached", { data, error });
+  throw new Error("Unexpected error occured");
 }
 
 export const getConversations = async (

@@ -2,7 +2,7 @@
   import MissingListing from "src/lib/components/organisms/missing-listing.svelte";
   import { zodClient } from "sveltekit-superforms/adapters";
   import { superForm } from "sveltekit-superforms";
-  import { createListingSchema } from "$lib/models/listing";
+  import { createListingSchema } from "src/lib/shared/models/listing.js";
   import NonEditableListing from "src/lib/components/molecules/non-editable-listing.svelte";
   import Avatar from "src/lib/components/atoms/avatar.svelte";
   import EditableListing from "src/lib/components/organisms/editable-listing.svelte";

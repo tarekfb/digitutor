@@ -7,11 +7,11 @@
   import { Switch } from "$lib/components/ui/switch/index.js";
   import { Settings, LogOutIcon } from "lucide-svelte";
   import * as Avatar from "$lib/components/ui/avatar";
-  import type { Role } from "src/lib/models/profile";
+  import type { Role } from "src/lib/shared/models/profile";
   import ListingNav from "./listing-nav.svelte";
   import ConversationsNav from "./conversations-nav.svelte";
   import Separator from "$lib/components/ui/separator/separator.svelte";
-  import type { Conversation } from "src/lib/models/conversations";
+  import type { Conversation } from "src/lib/shared/models/conversations";
   import Link from "../atoms/link.svelte";
   import { enhance } from "$app/forms";
   import LoadingSpinner from "../atoms/loading-spinner.svelte";
