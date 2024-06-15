@@ -4,7 +4,10 @@
   import { goto } from "$app/navigation";
   import PrimaryTitle from "src/lib/components/atoms/primary-title.svelte";
   import { page } from "$app/stores";
-  import { unknownErrorMessage, websiteName } from "src/lib/constants";
+  import {
+    unknownErrorMessage,
+    websiteName,
+  } from "src/lib/shared/constants/constants";
 </script>
 
 <!-- todo: make component -->

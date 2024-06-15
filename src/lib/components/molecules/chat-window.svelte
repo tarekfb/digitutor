@@ -13,7 +13,7 @@
   try {
     loadChat(conversationId, supabase, undefined, messages);
   } catch (e) {
-    console.log("error", e);
+    console.error("error", e);
   }
 
   const scroll = (node: HTMLElement, messages: Tables<"messages">[]) => {

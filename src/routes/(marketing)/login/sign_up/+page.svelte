@@ -4,7 +4,7 @@
   import { superForm } from "sveltekit-superforms";
   import { Button } from "$lib/components/ui/button";
   import { zodClient } from "sveltekit-superforms/adapters";
-  import { signUpSchema } from "src/lib/models/user";
+  import { signUpSchema } from "src/lib/shared/models/user.js";
   import { Input } from "src/lib/components/ui/input";
   import { Checkbox } from "src/lib/components/ui/checkbox";
   import LoadingSpinner from "src/lib/components/atoms/loading-spinner.svelte";

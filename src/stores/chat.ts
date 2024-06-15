@@ -1,7 +1,7 @@
 import type { SupabaseClient } from '@supabase/supabase-js';
 import type { Database, Tables } from 'src/supabase';
 import { writable } from 'svelte/store'
-import { initMessagesCount as count } from "$lib/constants";
+import { initMessagesCount as count } from "$lib/shared/constants/constants";
 
 let initMessageCount = count;
 

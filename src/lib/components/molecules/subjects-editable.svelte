@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { Subjects, languages } from "src/lib/models/common";
+  import { Subjects, languages } from "src/lib/shared/models/common";
 
   export let formData;
   export let errors;

@@ -1,13 +1,13 @@
 import { fail } from "@sveltejs/kit";
 import type { PageServerLoad } from "./$types";
-import { getGenericFormMessage } from "src/lib/constants";
+import { getGenericFormMessage } from "src/lib/shared/constants/constants";
 import { message, superValidate } from "sveltekit-superforms";
 import { zod } from "sveltekit-superforms/adapters";
-import { emailSchema, nameSchema } from "src/lib/models/profile";
+import { emailSchema, nameSchema } from "src/lib/shared/models/profile";
 import { getProfileBySession, updateProfile } from "src/lib/server/database/profiles";
 import type { Tables } from "src/supabase";
 import { updateUserEmail } from "src/lib/server/database/user";
-import { deleteAccountSchema, passwordSchema } from "src/lib/models/user";
+import { deleteAccountSchema, passwordSchema } from "src/lib/shared/models/user";
 import { isAuthApiError } from "@supabase/supabase-js";
 import { redirect } from "sveltekit-flash-message/server";
 
@@ -112,7 +112,7 @@ export const actions = {
         try {
             const { error } = await supabaseServiceRole.auth.admin.deleteUser(
                 id,
-                true,
+                false,
             );
             if (error) {
                 console.error(`Error on attempt to delete user with userid ${id}`, error);

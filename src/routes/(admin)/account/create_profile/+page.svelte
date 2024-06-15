@@ -5,15 +5,13 @@
   import { Button } from "$lib/components/ui/button";
   import { zodClient } from "sveltekit-superforms/adapters";
   import { toast } from "svelte-sonner";
-  import { nameSchema } from "src/lib/models/profile";
+  import { nameSchema } from "src/lib/shared/models/profile.js";
   import { Input } from "src/lib/components/ui/input";
   import LoadingSpinner from "src/lib/components/atoms/loading-spinner.svelte";
-  import { goto } from "$app/navigation";
-  import { LogOut } from "lucide-svelte";
-  import { websiteName } from "src/lib/constants";
+  import { websiteName } from "src/lib/shared/constants/constants";
 
   export let data;
-  $: ({ session, form } = data);
+  $: ({ form } = data);
 
   const completeProfileForm = superForm(form, {
     validators: zodClient(nameSchema),

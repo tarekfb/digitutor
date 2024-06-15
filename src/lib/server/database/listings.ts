@@ -1,5 +1,5 @@
 import type { SupabaseClient } from "@supabase/supabase-js";
-import type { InputListing, Listing } from "$lib/models/listing";
+import type { InputListing, Listing } from "src/lib/shared/models/listing";
 import type { Database, Tables } from "src/supabase"
 import { getNow } from '$lib/utils'
 
@@ -100,7 +100,7 @@ export const getListing = async (
     throw error;
   }
 
-  return data as unknown as Listing | null;
+  return data as unknown as Listing;
 };
 
 export const createListing = async (

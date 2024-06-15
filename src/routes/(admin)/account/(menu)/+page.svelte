@@ -5,7 +5,7 @@
   import ListingCard from "$lib/components/molecules/listing-card.svelte";
   import { Button } from "$lib/components/ui/button/index.js";
   import { Input } from "$lib/components/ui/input/index.js";
-  import { initCreateListingSchema } from "$lib/models/listing";
+  import { initCreateListingSchema } from "src/lib/shared/models/listing.js";
   import StudentAccount from "src/lib/components/organisms/student-account.svelte";
   import * as Form from "$lib/components/ui/form";
   import { superForm, type SuperValidated } from "sveltekit-superforms";
@@ -26,7 +26,7 @@
   adminSection.set("dashboard");
 
   export let data;
-	$: ({ listings, conversations } = data);
+  $: ({ listings, conversations } = data);
 
   const form = data.form as SuperValidated<
     {
@@ -42,9 +42,6 @@
 
   const userForm = superForm(form, {
     validators: zodClient(initCreateListingSchema),
-    onError: ({ result }) => {
-      toast.error(result.error.message);
-    },
   });
 </script>
 

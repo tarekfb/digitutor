@@ -1,6 +1,6 @@
 import type { SupabaseClient } from "@supabase/supabase-js";
 import type { Database, Tables } from "src/supabase"
-import type { InputMessage } from "$lib/models/conversations"
+import type { InputMessage } from "src/lib/shared/models/conversations"
 import { getNow } from '$lib/utils'
 
 export const getMessages = async (

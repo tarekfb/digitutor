@@ -1,10 +1,10 @@
 import { fail } from "@sveltejs/kit";
 import { getNow } from "src/lib/utils.js";
 import type { Actions, PageServerLoad } from "./$types";
-import { contactUsSchema } from "src/lib/models/contact-us";
+import { contactUsSchema } from "src/lib/shared/models/contact-us";
 import { superValidate, message } from "sveltekit-superforms";
 import { zod } from "sveltekit-superforms/adapters";
-import { getGenericFormMessage } from "src/lib/constants";
+import { getGenericFormMessage } from "src/lib/shared/constants/constants";
 
 export const load: PageServerLoad = async () => {
   const form = await superValidate(zod(contactUsSchema));

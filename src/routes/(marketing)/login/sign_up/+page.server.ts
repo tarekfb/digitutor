@@ -1,11 +1,11 @@
 import { error, fail, redirect } from "@sveltejs/kit";
 import type { PageServerLoad } from "./$types";
-import { getGenericFormMessage, unknownErrorMessage } from "src/lib/constants";
+import { getGenericFormMessage, unknownErrorMessage } from "src/lib/shared/constants/constants";
 import { message, setError, superValidate } from "sveltekit-superforms";
 import { zod } from "sveltekit-superforms/adapters";
-import { signUpSchema } from "src/lib/models/user";
+import { signUpSchema } from "src/lib/shared/models/user";
 import { createProfile } from "src/lib/server/database/profiles";
-import type { CreateProfile } from "src/lib/models/profile";
+import type { CreateProfile } from "src/lib/shared/models/profile";
 
 
 export const load: PageServerLoad = async () => {

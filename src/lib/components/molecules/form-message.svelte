@@ -1,7 +1,7 @@
 <script lang="ts">
   import * as Alert from "$lib/components/ui/alert/index.js";
   import { cn } from "$lib/utils.js";
-  import type { Message } from "$lib/models/common";
+  import type { Message } from "src/lib/shared/models/common";
   import type { Writable } from "svelte/store";
 
   let className: string | null | undefined = undefined;

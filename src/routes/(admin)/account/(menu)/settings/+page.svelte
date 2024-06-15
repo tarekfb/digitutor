@@ -6,14 +6,14 @@
   import SettingsForm from "src/lib/components/molecules/settings-form.svelte";
   import { superForm } from "sveltekit-superforms/client";
   import { zodClient } from "sveltekit-superforms/adapters";
-  import { emailSchema, nameSchema } from "src/lib/models/profile.js";
+  import { emailSchema, nameSchema } from "src/lib/shared/models/profile.js";
   import { Input } from "src/lib/components/ui/input";
   import * as Form from "$lib/components/ui/form";
   import { toast } from "svelte-sonner";
   import {
     deleteAccountSchema as deleteSchema,
     passwordSchema,
-  } from "src/lib/models/user.js";
+  } from "src/lib/shared/models/user.js";
   import DeleteAccount from "src/lib/components/atoms/delete-account.svelte";
   import PasswordInput from "src/lib/components/molecules/password-input.svelte";
 

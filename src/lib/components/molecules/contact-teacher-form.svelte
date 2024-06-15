@@ -2,31 +2,71 @@
   import FormSubmit from "src/lib/components/molecules/form-submit.svelte";
   import FormMessage from "src/lib/components/molecules/form-message.svelte";
   import { cn } from "$lib/utils.js";
-
-  export let buttonStyling: string | null | undefined = undefined;
+  import {
+    requestContactSchema,
+    startContactSchema,
+  } from "src/lib/shared/models/conversations";
+  import { superForm } from "sveltekit-superforms";
+  import { zodClient } from "sveltekit-superforms/adapters";
+  import StartContact from "../atoms/start-contact.svelte";
+  import { isStartingContact } from "src/stores/startContact";
 
   let className: string | null | undefined = undefined;
   export { className as class };
-
-  export let form;
+  export let buttonStyling: string | null | undefined = undefined;
+  export let requestContactForm;
+  export let requestContactAction: string;
+  export let startContactForm;
+  export let startContactAction: string;
   export let firstName;
-  export let action: string;
 
-  const { form: formData, enhance, submitting, allErrors, message } = form;
+  let wasGrantedContact = false;
+
+  const requestContactFormValues = superForm(requestContactForm, {
+    validators: zodClient(requestContactSchema),
+    onUpdated({ form }) {
+      if (form.valid) {
+        // request to contact was granted
+        isStartingContact.set(true);
+        wasGrantedContact = true;
+      }
+    },
+    onSubmit: async (event) => {
+      if (wasGrantedContact) {
+        event.cancel();
+        isStartingContact.set(true);
+      }
+    },
+  });
+
+  const {
+    form: formData,
+    enhance,
+    submitting,
+    allErrors,
+    message,
+  } = requestContactFormValues;
+
+  const startContactFormValues = superForm(startContactForm, {
+    validators: zodClient(startContactSchema),
+  });
 </script>
 
 <form
   method="POST"
   use:enhance
-  {action}
+  action={requestContactAction}
   class={cn("flex flex-col gap-y-4", className)}
 >
   <input type="hidden" name="teacher" value={$formData.teacher} />
+  <input type="hidden" name="role" value={$formData.role} />
   <FormSubmit
     {submitting}
     {allErrors}
     text="Kontakta {firstName}"
     class={buttonStyling}
   />
-  <FormMessage {message} scroll />
+  <FormMessage message={$message} scroll />
 </form>
+
+<StartContact form={startContactFormValues} action={startContactAction} />

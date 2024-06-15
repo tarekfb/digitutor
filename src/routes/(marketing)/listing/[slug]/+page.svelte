@@ -2,10 +2,9 @@
   import MissingListing from "src/lib/components/organisms/missing-listing.svelte";
   import { zodClient } from "sveltekit-superforms/adapters";
   import { superForm } from "sveltekit-superforms";
-  import { createListingSchema } from "$lib/models/listing";
+  import { createListingSchema } from "src/lib/shared/models/listing.js";
   import NonEditableListing from "src/lib/components/molecules/non-editable-listing.svelte";
   import Avatar from "src/lib/components/atoms/avatar.svelte";
-  import { contactSchema } from "src/lib/models/conversations.js";
   import EditableListing from "src/lib/components/organisms/editable-listing.svelte";
   import { Button } from "$lib/components/ui/button";
   import { Pencil } from "lucide-svelte";
@@ -14,7 +13,7 @@
   import ContactTeacherForm from "src/lib/components/molecules/contact-teacher-form.svelte";
 
   export let data;
-  $: ({ profile, listing } = data);
+  $: ({ profile, listing, requestContactForm, startContactForm } = data);
   let isEditing = false;
   let isAuthor = false;
   $: if (profile && listing && listing.profile)
@@ -29,10 +28,6 @@
       }
     },
     resetForm: false,
-  });
-
-  const contactForm = superForm(data.contactForm, {
-    validators: zodClient(contactSchema),
   });
 
   const {
@@ -85,8 +80,10 @@
     </div>
     <NonEditableListing {listing} />
     <ContactTeacherForm
-      form={contactForm}
-      action="?/contact"
+      {requestContactForm}
+      {startContactForm}
+      requestContactAction="?/requestContact"
+      startContactAction="?/startContact"
       firstName={listing.profile.first_name}
       buttonStyling="self-end"
     />

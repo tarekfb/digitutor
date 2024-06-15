@@ -1,7 +1,7 @@
 import type { EmailOtpType } from '@supabase/supabase-js'
 import { error, redirect } from '@sveltejs/kit';
 import type { PageServerLoad } from './$types';
-import { unknownErrorMessage } from 'src/lib/constants';
+import { unknownErrorMessage } from 'src/lib/shared/constants/constants';
 
 export const load: PageServerLoad = async (event) => {
     const { url, locals: { supabase } } = event;

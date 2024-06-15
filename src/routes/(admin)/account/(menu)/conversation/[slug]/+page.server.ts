@@ -1,9 +1,9 @@
 import { redirect, error, fail } from "@sveltejs/kit";
-import { initMessagesCount, unknownErrorMessage } from "$lib/constants";
+import { initMessagesCount, unknownErrorMessage } from "$lib/shared/constants/constants";
 import { getMessages } from "src/lib/server/database/messages";
 import { getConversation } from "src/lib/server/database/conversations";
-import { sendMessageSchema, type InputMessage } from "src/lib/models/conversations";
-import { getGenericFormMessage } from "$lib/constants";
+import { sendMessageSchema, type InputMessage } from "src/lib/shared/models/conversations";
+import { getGenericFormMessage } from "$lib/shared/constants/constants";
 import { message, superValidate } from "sveltekit-superforms";
 import { zod } from "sveltekit-superforms/adapters";
 import { sendMessage } from "src/lib/server/database/messages";

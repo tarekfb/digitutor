@@ -1,7 +1,7 @@
 <script>
   import Navbar from "src/lib/components/organisms/navbar.svelte";
   import "src/app.pcss";
-  import { websiteName } from "src/lib/constants";
+  import { websiteName } from "src/lib/shared/constants/constants";
 
   export let data;
 </script>
