@@ -98,3 +98,14 @@ export const timeAgo = (dateIsoString: string): string => {
     return `${yrs} år`;
   }
 }
+
+export const getRecipient = (self: "teacher" | "student" | "admin") => {
+  switch (self) {
+    case "teacher":
+      return "student";
+    case "student":
+      return "teacher";
+    case "admin":
+      return "admin";
+  }
+}

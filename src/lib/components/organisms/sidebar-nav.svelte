@@ -8,7 +8,7 @@
   import { Settings, LogOutIcon } from "lucide-svelte";
   import * as Avatar from "$lib/components/ui/avatar";
   import type { Role } from "src/lib/shared/models/profile";
-  import ListingNav from "./listing-nav.svelte";
+  import HomeNav from "./home-nav.svelte";
   import ConversationsNav from "./conversations-nav.svelte";
   import Separator from "$lib/components/ui/separator/separator.svelte";
   import type { Conversation } from "src/lib/shared/models/conversations";
@@ -79,7 +79,7 @@
       </h2>
       <div class="space-y-1">
         {#if role === "teacher"}
-          <ListingNav {isMinimized} />
+          <HomeNav {isMinimized} />
         {:else}
           <ConversationsNav {isMinimized} />
         {/if}

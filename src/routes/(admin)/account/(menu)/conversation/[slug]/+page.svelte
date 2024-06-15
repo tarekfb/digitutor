@@ -26,7 +26,7 @@
         // comparing specifically to false, not falsy
         event.cancel();
         toast.warning(
-          `Väntar på svar från ${receiver.first_name ?? "läraren"}. Du kan skicka fler meddelanden när du fått svar.`,
+          `Väntar på svar från ${recipient.first_name ?? "läraren"}. Du kan skicka fler meddelanden när du fått svar.`,
         );
       }
     },
@@ -41,7 +41,7 @@
   } = sendMessageForm;
 
   $: ({ profile, messages, conversation, supabase } = data);
-  $: receiver =
+  $: recipient =
     profile.role == "teacher" ? conversation.student : conversation.teacher;
 
   $: hasReceivedReply = messages.some(
@@ -59,11 +59,11 @@
   <div class="flex flex-col justify-between gap-y-4 h-full">
     <div class="flex flex-col gap-y-4">
       <div class="flex gap-x-4 justify-between">
-        <PrimaryTitle>{receiver.first_name}</PrimaryTitle>
+        <PrimaryTitle>{recipient.first_name}</PrimaryTitle>
         <Button class="relative h-8 w-8 rounded-full">
           <Avatar
-            onClick={() => goto(`/profile/${receiver.id}`)}
-            profile={receiver}
+            onClick={() => goto(`/profile/${recipient.id}`)}
+            profile={recipient}
           />
         </Button>
       </div>
@@ -72,7 +72,7 @@
         {supabase}
         {profile}
         {messages}
-        {receiver}
+        receiver={recipient}
         conversationId={conversation.id}
       />
       <Separator />

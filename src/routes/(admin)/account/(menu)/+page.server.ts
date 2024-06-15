@@ -8,7 +8,7 @@ import { zod } from "sveltekit-superforms/adapters";
 import { redirect } from "sveltekit-flash-message/server";
 
 export const load: PageServerLoad = async ({
-  locals: { supabase, safeGetSession },
+  locals: { supabase, safeGetSession }, parent,
 }) => {
   const { session } = await safeGetSession();
   if (!session)
@@ -24,7 +24,9 @@ export const load: PageServerLoad = async ({
     return message(form, { content: getGenericFormMessage(undefined, "Kunde inte hämta annonser", undefined), session }, { status: 429 });
   }
 
-  return { form, session, listings };
+  const { profile } = await parent();
+
+  return { form, session, listings, profile };
 };
 
 export const actions = {
