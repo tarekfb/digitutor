@@ -3,6 +3,7 @@
   import { chat, loadChat } from "src/stores/chat";
   import { ScrollArea } from "$lib/components/ui/scroll-area/index.js";
   import type { Tables } from "src/supabase";
+  import Avatar from "../atoms/avatar.svelte";
 
   export let messages;
   export let supabase;
@@ -35,22 +36,33 @@
 <ScrollArea class="max-h-[50vh]">
   <div class="flex flex-col gap-y-4" use:scroll={$chat}>
     {#each $chat as message}
-      <div
-        class="flex flex-col gap-y-2 bg-card p-2 rounded-md {message.sender ===
-        profile.id
-          ? 'self-end'
-          : 'self-start'}"
-      >
-        <h3 class="font-semibold">
-          {message.sender === profile.id ? "Du" : receiver.first_name}
-        </h3>
-        <p>{message.content}</p>
-        <p class="text-xs text-muted-foreground">
-          {timeAgo(message.created_at)} sedan
-        </p>
-      </div>
+      {#if message.sender === profile.id}
+        <!-- self -->
+        <div class="flex flex-col gap-y-2 bg-card p-2 rounded-md self-end">
+          <p>{message.content}</p>
+          <p class="text-xs text-muted-foreground">
+            {timeAgo(message.created_at)} sedan
+          </p>
+        </div>
+      {:else}
+        <div class="flex gap-x-4">
+          <div class="flex flex-col justify-end">
+            <Avatar
+              onClick={undefined}
+              profile={receiver}
+              class="text-sm w-7 h-7"
+            />
+          </div>
+          <div class="flex flex-col gap-y-2 bg-card p-2 rounded-md self-start">
+            <p>{message.content}</p>
+            <p class="text-xs text-muted-foreground">
+              {timeAgo(message.created_at)} sedan
+            </p>
+          </div>
+        </div>
+      {/if}
     {:else}
-      <p>Inga meddelanden ännu</p>
+      <p>Inga meddelanden ännu.</p>
     {/each}
   </div>
 </ScrollArea>

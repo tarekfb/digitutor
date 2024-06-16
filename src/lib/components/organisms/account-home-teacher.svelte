@@ -5,11 +5,12 @@
   import ListingCard from "../molecules/listing-card.svelte";
   import type { Conversation } from "src/lib/shared/models/conversations";
   import ConversationCard from "../molecules/conversation-card.svelte";
+  import type { Tables } from "src/supabase";
 
   export let conversations: Conversation[];
   export let listings: Listing[] | undefined;
   export let userForm;
-  export let profile;
+  export let profile: Tables<"profiles">;
 </script>
 
 <PrimaryTitle class="text-center">Dina annonser</PrimaryTitle>
