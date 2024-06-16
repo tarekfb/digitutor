@@ -8,12 +8,13 @@
   import Avatar from "src/lib/components/atoms/avatar.svelte";
   import PrimaryTitle from "src/lib/components/atoms/primary-title.svelte";
   import FormSubmit from "src/lib/components/molecules/form-submit.svelte";
-  import { goto } from "$app/navigation";
+  import { goto, invalidate } from "$app/navigation";
   import { sendMessageSchema } from "src/lib/shared/models/conversations";
   import { Textarea } from "$lib/components/ui/textarea/index.js";
   import Separator from "$lib/components/ui/separator/separator.svelte";
   import ChatWindow from "src/lib/components/molecules/chat-window.svelte";
   import { chat } from "src/stores/chat";
+  import type { Tables } from "src/supabase.js";
 
   export let data;
   const sendMessageForm = superForm(data.form, {
@@ -22,11 +23,11 @@
       toast.error(result.error.message);
     },
     onSubmit: async (event) => {
-      if (hasReceivedReply === false) {
+      if (isAllowedToReply === false) {
         // comparing specifically to false, not falsy
         event.cancel();
         toast.warning(
-          `Väntar på svar från ${receiver.first_name ?? "läraren"}. Du kan skicka fler meddelanden när du fått svar.`,
+          `Väntar på svar från ${recipient.first_name ?? "läraren"}. Du kan skicka fler meddelanden när du fått svar.`,
         );
       }
     },
@@ -40,17 +41,21 @@
     allErrors,
   } = sendMessageForm;
 
+  const getAllowedToReply = (msgs: Tables<"messages">[]) => {
+    if (profile.role == "teacher") return true; // always allow
+    if (msgs.length === 0) return true; // shouldn't happen but allow for error proofing
+    if (msgs.some((msg) => msg.sender !== profile.id)) return true; // has recieved reply
+  };
+
   $: ({ profile, messages, conversation, supabase } = data);
-  $: receiver =
+  $: recipient =
     profile.role == "teacher" ? conversation.student : conversation.teacher;
-
-  $: hasReceivedReply = messages.some(
-    (message) => message.sender !== profile.id,
-  );
-
-  $: chat.subscribe(() => {
-    if (!hasReceivedReply)
-      hasReceivedReply = $chat.some((message) => message.sender !== profile.id);
+  $: isAllowedToReply = getAllowedToReply(messages);
+  $: chat.subscribe((messages) => {
+    if (!isAllowedToReply) isAllowedToReply = getAllowedToReply($chat);
+    if (profile.role === 'teacher' && !conversation.has_replied && messages[messages.length - 1]?.sender === profile.id){
+      invalidate("conversations:has_replied");
+    }
     // if already replied, no need to iterate messages for performance reasons
   });
 </script>
@@ -58,21 +63,21 @@
 {#if conversation}
   <div class="flex flex-col justify-between gap-y-4 h-full">
     <div class="flex flex-col gap-y-4">
-      <div class="flex gap-x-4 justify-between">
-        <PrimaryTitle>{receiver.first_name}</PrimaryTitle>
+      <div class="flex gap-x-4">
         <Button class="relative h-8 w-8 rounded-full">
           <Avatar
-            onClick={() => goto(`/profile/${receiver.id}`)}
-            profile={receiver}
+            onClick={() => goto(`/profile/${recipient.id}`)}
+            profile={recipient}
           />
         </Button>
+        <PrimaryTitle>{recipient.first_name}</PrimaryTitle>
       </div>
       <Separator />
       <ChatWindow
         {supabase}
         {profile}
         {messages}
-        {receiver}
+        receiver={recipient}
         conversationId={conversation.id}
       />
       <Separator />
@@ -92,7 +97,7 @@
             placeholder="Skriv ett meddelande..."
             class="resize-y bg-card"
             bind:value={$formData.content}
-            disabled={!hasReceivedReply}
+            disabled={!isAllowedToReply}
           />
         </Form.Control>
         <Form.FieldErrors />

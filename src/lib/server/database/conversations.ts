@@ -159,6 +159,7 @@ export const createConversation = async (
     teacher,
     student: student,
     created_at: getNow(),
+    has_replied: false,
   };
 
   const { data, error } = await supabase

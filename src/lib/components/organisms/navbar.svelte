@@ -1,7 +1,7 @@
 <script lang="ts">
   import { Button } from "$lib/components/ui/button";
   import * as DropdownMenu from "$lib/components/ui/dropdown-menu";
-  import { UserRound, LogOut, LogOutIcon } from "lucide-svelte";
+  import { UserRound, LogOutIcon } from "lucide-svelte";
   // import Logo from "$lib/components/atoms/logo.svelte";
   import { goto } from "$app/navigation";
   import type { Tables } from "src/supabase";
