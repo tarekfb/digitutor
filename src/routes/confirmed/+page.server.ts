@@ -1,7 +1,7 @@
 import type { EmailOtpType } from '@supabase/supabase-js'
-import { error, redirect } from '@sveltejs/kit';
+import { error } from '@sveltejs/kit';
 import type { PageServerLoad } from './$types';
-import { unknownErrorMessage } from 'src/lib/shared/constants/constants';
+import { unknownErrorMessage } from '$lib/shared/constants/constants';
 
 export const load: PageServerLoad = async (event) => {
     const { url, locals: { supabase } } = event;
@@ -32,7 +32,7 @@ export const load: PageServerLoad = async (event) => {
 
         if (e) {
             console.error("Unknown error on verify otp on email confirmation", e);
-            // redirect(303, '/login/sign_in', { message: 'Test', type: 'error' }, event)
+            // redirect(303, '/auth/sign-in', { message: 'Test', type: 'error' }, event)
             error(500, {
                 message: "Vi försökte verifiera dig men någonting gick fel. Försök igen senare.",
             });

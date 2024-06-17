@@ -1,11 +1,11 @@
 <script lang="ts">
   import { getContext } from "svelte";
   import type { Writable } from "svelte/store";
-  import { initCreateListingSchema } from "src/lib/shared/models/listing.js";
-  import AccountHomeStudent from "src/lib/components/organisms/account-home-student.svelte";
+  import { initCreateListingSchema } from "$lib/shared/models/listing.js";
+  import AccountHomeStudent from "$lib/components/organisms/account-home-student.svelte";
   import { superForm, type SuperValidated } from "sveltekit-superforms";
   import { zodClient } from "sveltekit-superforms/adapters";
-  import AccountHomeTeacher from "src/lib/components/organisms/account-home-teacher.svelte";
+  import AccountHomeTeacher from "$lib/components/organisms/account-home-teacher.svelte";
 
   let adminSection: Writable<string> = getContext("adminSection");
   adminSection.set("dashboard");

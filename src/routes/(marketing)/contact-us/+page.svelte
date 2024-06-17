@@ -1,17 +1,17 @@
 <script lang="ts">
-  import { contactUsSchema } from "src/lib/shared/models/contact-us.js";
+  import { contactUsSchema } from "$lib/shared/models/contact-us.js";
   import { toast } from "svelte-sonner";
   import { superForm } from "sveltekit-superforms";
   import { zodClient } from "sveltekit-superforms/adapters";
-  import FormSubmit from "src/lib/components/molecules/form-submit.svelte";
+  import FormSubmit from "$lib/components/molecules/form-submit.svelte";
   import * as Form from "$lib/components/ui/form";
-  import Label from "src/lib/components/atoms/label.svelte";
-  import { Input } from "src/lib/components/ui/input";
-  import { Textarea } from "src/lib/components/ui/textarea";
-  import FormMessage from "src/lib/components/molecules/form-message.svelte";
-  import PrimaryTitle from "src/lib/components/atoms/primary-title.svelte";
-  import SecondaryTitle from "src/lib/components/atoms/secondary-title.svelte";
-  import Link from "src/lib/components/atoms/link.svelte";
+  import Label from "$lib/components/atoms/label.svelte";
+  import { Input } from "$lib/components/ui/input";
+  import { Textarea } from "$lib/components/ui/textarea";
+  import FormMessage from "$lib/components/molecules/form-message.svelte";
+  import PrimaryTitle from "$lib/components/atoms/primary-title.svelte";
+  import SecondaryTitle from "$lib/components/atoms/secondary-title.svelte";
+  import Link from "$lib/components/atoms/link.svelte";
 
   export let data;
 

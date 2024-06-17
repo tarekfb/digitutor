@@ -5,7 +5,7 @@ import { redirect } from "@sveltejs/kit";
 export const load = async ({ data, depends, url }) => {
   const profile: Tables<"profiles"> | null = data.profile;
 
-  const createProfilePath = "/account/create_profile";
+  const createProfilePath = "/account/create-profile";
   if (
     profile &&
     !_hasFullProfile(profile) &&

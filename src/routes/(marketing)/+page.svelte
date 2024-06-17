@@ -1,7 +1,7 @@
 <script lang="ts">
-  import { websiteName } from "src/lib/shared/constants/constants";
+  import { websiteName } from "$lib/shared/constants/constants";
   import ListingCard from "$lib/components/molecules/listing-card.svelte";
-  import { Button } from "src/lib/components/ui/button";
+  import { Button } from "$lib/components/ui/button";
   import { goto } from "$app/navigation";
 
   export let data;
@@ -35,7 +35,7 @@
     </div>
   </div>
   {#if !data.session}
-    <Button on:click={() => goto("/login/sign_up")}>Skapa konto</Button>
+    <Button on:click={() => goto("/auth/sign-up")}>Skapa konto</Button>
   {/if}
 </div>
 <div class="min-h-[60vh]">

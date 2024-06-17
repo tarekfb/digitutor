@@ -1,5 +1,5 @@
 import { createServerClient } from '@supabase/ssr'
-import { type Handle } from '@sveltejs/kit'
+import { redirect, type Handle } from '@sveltejs/kit'
 import { sequence } from '@sveltejs/kit/hooks'
 import { PUBLIC_SUPABASE_URL, PUBLIC_SUPABASE_ANON_KEY } from '$env/static/public'
 import { createClient } from '@supabase/supabase-js'
@@ -69,22 +69,19 @@ const supabase: Handle = async ({ event, resolve }) => {
   })
 }
 
-// const authGuard: Handle = async ({ event, resolve }) => {
-//   const { session, user } = await event.locals.safeGetSession()
-//   event.locals.session = session
-//   event.locals.user = user
 
-//   if (!event.locals.session && event.url.pathname.startsWith('/private')) {
-//     return redirect(303, '/auth')
-//   }
+const authGuard: Handle = async ({ event, resolve }) => {
+  const { session, user } = await event.locals.safeGetSession()
+  event.locals.session = session
+  event.locals.user = user
 
-//   if (event.locals.session && event.url.pathname === '/auth') {
-//     return redirect(303, '/private')
-//   }
+  if (!event.locals.session && event.url.pathname.startsWith('/account'))
+    return redirect(303, '/auth')
 
-//   return resolve(event)
-// }
+  if (event.locals.session && event.url.pathname === '/auth')
+    return redirect(303, '/account')
 
-// export const handle: Handle = sequence(supabase, authGuard)
+  return resolve(event)
+}
 
-export const handle: Handle = sequence(supabase)
+export const handle: Handle = sequence(supabase, authGuard)

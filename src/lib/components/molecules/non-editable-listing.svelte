@@ -1,7 +1,7 @@
 <script lang="ts">
-  import type { Listing } from "src/lib/shared/models/listing";
-  import { Subjects } from "src/lib/shared/models/common";
-  import SecondaryTitle from "src/lib/components/atoms/secondary-title.svelte";
+  import type { Listing } from "$lib/shared/models/listing";
+  import { Subjects } from "$lib/shared/models/common";
+  import SecondaryTitle from "$lib/components/atoms/secondary-title.svelte";
 
   export let listing: Listing;
   const { title, description, subjects, hourlyPrice, visible } = listing;

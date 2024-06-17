@@ -5,14 +5,14 @@
   import { Button } from "$lib/components/ui/button";
   import { zodClient } from "sveltekit-superforms/adapters";
   import { toast } from "svelte-sonner";
-  import { signInSchema } from "src/lib/shared/models/user.js";
-  import { Input } from "src/lib/components/ui/input";
-  import LoadingSpinner from "src/lib/components/atoms/loading-spinner.svelte";
+  import { signInSchema } from "$lib/shared/models/user.js";
+  import { Input } from "$lib/components/ui/input";
+  import LoadingSpinner from "$lib/components/atoms/loading-spinner.svelte";
 
-  import FormMessage from "src/lib/components/molecules/form-message.svelte";
-  import Label from "src/lib/components/atoms/label.svelte";
-  import { MessageId } from "src/lib/shared/constants/constants";
-  import PasswordInput from "src/lib/components/molecules/password-input.svelte";
+  import FormMessage from "$lib/components/molecules/form-message.svelte";
+  import Label from "$lib/components/atoms/label.svelte";
+  import { MessageId } from "$lib/shared/constants/constants";
+  import PasswordInput from "$lib/components/molecules/password-input.svelte";
 
   export let data;
 
@@ -24,8 +24,6 @@
     resetForm: false,
   });
   const { form: formData, enhance, submitting, message, allErrors } = userForm;
-
-  let show = false;
 </script>
 
 <svelte:head>
@@ -47,7 +45,7 @@
       <Card.Title class="text-2xl">Logga in</Card.Title>
       <Card.Description
         >Har du inget konto? <a
-          href="/login/sign_up"
+          href="/auth/sign-up"
           class="underline text-foreground">Skapa konto här.</a
         ></Card.Description
       >
@@ -73,7 +71,7 @@
         <Form.FieldErrors />
       </Form.Field>
       <a
-        href="/login/forgot_password"
+        href="/auth/forgot-password"
         class="underline text-muted-foreground text-sm justify-self-center"
         >Glömt lösen?</a
       >

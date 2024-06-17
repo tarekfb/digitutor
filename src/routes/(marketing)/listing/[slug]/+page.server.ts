@@ -3,11 +3,11 @@ import { zod } from "sveltekit-superforms/adapters";
 import { getGenericFormMessage, unknownErrorMessage } from "$lib/shared/constants/constants";
 import { message, superValidate } from "sveltekit-superforms";
 import { deleteListing, getListing, updateListing } from "$lib/server/database/listings";
-import { createListingSchema } from "src/lib/shared/models/listing";
-import { getConversationForStudentAndTeacher, startConversation } from "src/lib/server/database/conversations";
-import { requestContactSchema, startContactSchema } from "src/lib/shared/models/conversations";
+import { createListingSchema } from "$lib/shared/models/listing";
+import { getConversationForStudentAndTeacher, startConversation } from "$lib/server/database/conversations";
+import { requestContactSchema, startContactSchema } from "$lib/shared/models/conversations";
 import { redirect } from "sveltekit-flash-message/server";
-import { ResourceAlreadyExistsError } from "src/lib/shared/errors/resource-already-exists";
+import { ResourceAlreadyExistsError } from "$lib/shared/errors/resource-already-exists";
 
 export const load = async ({ locals: { supabase }, params: { slug }, parent }) => {
   let listing;
@@ -38,7 +38,7 @@ export const actions = {
   deleteListing: async ({ locals: { supabase, safeGetSession }, cookies, params: { slug } }) => {
     const { session } = await safeGetSession();
     if (!session)
-      throw redirect(303, "/login");
+      throw redirect(303, "/auth");
     try {
       await deleteListing(supabase, slug);
     } catch (error) {
@@ -54,7 +54,7 @@ export const actions = {
     const { locals: { supabase, safeGetSession }, params: { slug } } = event;
     const { session } = await safeGetSession();
     if (!session)
-      throw redirect(303, "/login");
+      throw redirect(303, "/auth");
 
     const form = await superValidate(event, zod(createListingSchema));
 
@@ -75,7 +75,7 @@ export const actions = {
     const { locals: { supabase, safeGetSession }, params: { slug } } = event;
     const { session } = await safeGetSession();
     if (!session)
-      throw redirect(303, "/login"); // todo: in the future should implement a redirect after login
+      throw redirect(303, "/auth"); // todo: in the future should implement a redirect after login
 
     const form = await superValidate(event, zod(requestContactSchema));
     if (!form.valid) {
@@ -103,11 +103,10 @@ export const actions = {
     const { locals: { supabase, safeGetSession }, params: { slug } } = event;
     const { session } = await safeGetSession();
     if (!session)
-      throw redirect(303, "/login"); // todo: in the future should implement a redirect after login
+      throw redirect(303, "/auth"); // todo: in the future should implement a redirect after login
 
     const form = await superValidate(event, zod(startContactSchema));
     if (!form.valid) { // this will not work nicely if teacher or role is invalid, but not expecting this to be an issue
-      console.log("invalid")
       return fail(400, {
         form,
       });

@@ -26,10 +26,10 @@
     <div class="flex flex-1 items-center justify-end space-x-4">
       <nav class="flex items-center space-x-4">
         {#if !profile}
-          <Button variant="ghost" on:click={() => goto("/login/sign_in")}
+          <Button variant="ghost" on:click={() => goto("/auth/sign-in")}
             >Logga in</Button
           >
-          <Button on:click={() => goto("/login/sign_up")}>Skapa konto</Button>
+          <Button on:click={() => goto("/auth/sign-up")}>Skapa konto</Button>
         {:else}
           <Button on:click={() => goto("/account")}>
             <UserRound class="mr-2 h-4 w-4" />

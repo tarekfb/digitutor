@@ -1,13 +1,13 @@
 import { error } from "@sveltejs/kit";
 import { getGenericFormMessage, unknownErrorMessage } from "$lib/shared/constants/constants";
-import { getProfileByUserId } from "src/lib/server/database/profiles";
-import { getListingsByTeacherId } from "src/lib/server/database/listings";
+import { getProfileByUserId } from "$lib/server/database/profiles";
+import { getListingsByTeacherId } from "$lib/server/database/listings";
 import { fail, message, superValidate } from "sveltekit-superforms";
-import { requestContactSchema, startContactSchema } from "src/lib/shared/models/conversations";
+import { requestContactSchema, startContactSchema } from "$lib/shared/models/conversations";
 import { zod } from "sveltekit-superforms/adapters";
-import { getConversationForStudentAndTeacher, startConversation } from "src/lib/server/database/conversations";
+import { getConversationForStudentAndTeacher, startConversation } from "$lib/server/database/conversations";
 import { redirect } from "sveltekit-flash-message/server";
-import { ResourceAlreadyExistsError } from "src/lib/shared/errors/resource-already-exists.js";
+import { ResourceAlreadyExistsError } from "$lib/shared/errors/resource-already-exists.js";
 
 export const load = async ({ locals: { supabase }, params: { slug }, parent }) => {
 
@@ -53,7 +53,7 @@ export const actions = {
         const { locals: { supabase, safeGetSession }, params: { slug } } = event;
         const { session } = await safeGetSession();
         if (!session)
-            throw redirect(303, "/login"); // todo: in the future should implement a redirect after login
+            throw redirect(303, "/auth"); // todo: in the future should implement a redirect after login
 
         const form = await superValidate(event, zod(requestContactSchema));
         if (!form.valid) {
@@ -81,11 +81,10 @@ export const actions = {
         const { locals: { supabase, safeGetSession }, params: { slug } } = event;
         const { session } = await safeGetSession();
         if (!session)
-            throw redirect(303, "/login"); // todo: in the future should implement a redirect after login
+            throw redirect(303, "/auth"); // todo: in the future should implement a redirect after login
 
         const form = await superValidate(event, zod(startContactSchema));
         if (!form.valid) { // this will not work nicely if teacher or role is invalid, but not expecting this to be an issue
-            console.log("invalid")
             return fail(400, {
                 form,
             });

@@ -1,7 +1,7 @@
 <script lang="ts">
   import { writable } from "svelte/store";
   import { setContext } from "svelte";
-  import SidebarNav from "src/lib/components/organisms/sidebar-nav.svelte";
+  import SidebarNav from "$lib/components/organisms/sidebar-nav.svelte";
 
   export let data;
   const conversations = data.conversations ?? [];

@@ -1,7 +1,7 @@
 <script>
-  import Navbar from "src/lib/components/organisms/navbar.svelte";
+  import Navbar from "$lib/components/organisms/navbar.svelte";
   import "src/app.pcss";
-  import { websiteName } from "src/lib/shared/constants/constants";
+  import { websiteName } from "$lib/shared/constants/constants";
 
   export let data;
 </script>
@@ -23,7 +23,7 @@
     <nav class="flex flex-col space-y-1">
       <span class="font-semibold uppercase">Explore</span>
       <a class="link link-hover" href="/">Overview</a>
-      <a class="link link-hover" href="/contact_us">Kontakta oss</a>
+      <a class="link link-hover" href="/contact-us">Kontakta oss</a>
     </nav>
   </footer>
 </div>

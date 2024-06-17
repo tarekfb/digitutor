@@ -3,16 +3,16 @@
   import { toast } from "svelte-sonner";
   import { zodClient } from "sveltekit-superforms/adapters";
   import { superForm } from "sveltekit-superforms";
-  import FormMessage from "src/lib/components/molecules/form-message.svelte";
+  import FormMessage from "$lib/components/molecules/form-message.svelte";
   import * as Form from "$lib/components/ui/form/index.js";
-  import Avatar from "src/lib/components/atoms/avatar.svelte";
-  import PrimaryTitle from "src/lib/components/atoms/primary-title.svelte";
-  import FormSubmit from "src/lib/components/molecules/form-submit.svelte";
+  import Avatar from "$lib/components/atoms/avatar.svelte";
+  import PrimaryTitle from "$lib/components/atoms/primary-title.svelte";
+  import FormSubmit from "$lib/components/molecules/form-submit.svelte";
   import { goto, invalidate } from "$app/navigation";
-  import { sendMessageSchema } from "src/lib/shared/models/conversations";
+  import { sendMessageSchema } from "$lib/shared/models/conversations";
   import { Textarea } from "$lib/components/ui/textarea/index.js";
   import Separator from "$lib/components/ui/separator/separator.svelte";
-  import ChatWindow from "src/lib/components/molecules/chat-window.svelte";
+  import ChatWindow from "$lib/components/molecules/chat-window.svelte";
   import { chat } from "src/stores/chat";
   import type { Tables } from "src/supabase.js";
 
@@ -53,7 +53,11 @@
   $: isAllowedToReply = getAllowedToReply(messages);
   $: chat.subscribe((messages) => {
     if (!isAllowedToReply) isAllowedToReply = getAllowedToReply($chat);
-    if (profile.role === 'teacher' && !conversation.has_replied && messages[messages.length - 1]?.sender === profile.id){
+    if (
+      profile.role === "teacher" &&
+      !conversation.has_replied &&
+      messages[messages.length - 1]?.sender === profile.id
+    ) {
       invalidate("conversations:has_replied");
     }
     // if already replied, no need to iterate messages for performance reasons

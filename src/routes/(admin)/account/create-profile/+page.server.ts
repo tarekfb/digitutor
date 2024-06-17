@@ -3,8 +3,8 @@ import { _hasFullProfile } from "src/routes/(admin)/account/+layout.js";
 import { error, fail, redirect } from "@sveltejs/kit";
 import { zod } from "sveltekit-superforms/adapters";
 import { message, superValidate } from "sveltekit-superforms/client";
-import { nameSchema } from "src/lib/shared/models/profile";
-import { getProfileBySession, updateProfile } from "src/lib/server/database/profiles.js";
+import { nameSchema } from "$lib/shared/models/profile";
+import { getProfileBySession, updateProfile } from "$lib/server/database/profiles.js";
 import type { Tables } from "src/supabase";
 
 export async function load({ parent }) {
@@ -40,7 +40,7 @@ export const actions = {
     const { locals: { supabase, safeGetSession } } = event;
     const { session } = await safeGetSession();
     if (!session)
-      throw redirect(303, "/login");
+      throw redirect(303, "/auth");
 
     const form = await superValidate(event, zod(nameSchema));
 

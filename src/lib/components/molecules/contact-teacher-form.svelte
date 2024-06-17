@@ -1,15 +1,15 @@
 <script lang="ts">
-  import FormSubmit from "src/lib/components/molecules/form-submit.svelte";
-  import FormMessage from "src/lib/components/molecules/form-message.svelte";
+  import FormSubmit from "$lib/components/molecules/form-submit.svelte";
+  import FormMessage from "$lib/components/molecules/form-message.svelte";
   import { cn } from "$lib/utils.js";
   import {
     requestContactSchema,
     startContactSchema,
-  } from "src/lib/shared/models/conversations";
+  } from "$lib/shared/models/conversations";
   import { superForm } from "sveltekit-superforms";
   import { zodClient } from "sveltekit-superforms/adapters";
   import StartContact from "../atoms/start-contact.svelte";
-  import { isStartingContact } from "src/stores/startContact";
+  import { isStartingContact } from "src/stores/start-contact";
 
   let className: string | null | undefined = undefined;
   export { className as class };

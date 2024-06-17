@@ -1,6 +1,6 @@
 <script lang="ts">
   import { Button } from "$lib/components/ui/button";
-  import LoadingSpinner from "src/lib/components/atoms/loading-spinner.svelte";
+  import LoadingSpinner from "$lib/components/atoms/loading-spinner.svelte";
   import { cn } from "$lib/utils.js";
   import type { Variant } from "../ui/button";
 

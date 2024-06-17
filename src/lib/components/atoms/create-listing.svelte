@@ -4,7 +4,7 @@
   import FormSubmit from "../molecules/form-submit.svelte";
   import SecondaryTitle from "./secondary-title.svelte";
   import LoadingSpinner from "./loading-spinner.svelte";
-  import { Input } from "src/lib/components/ui/input";
+  import { Input } from "$lib/components/ui/input";
   import * as Form from "$lib/components/ui/form";
   import { mediaQuery } from "svelte-legos";
   import * as Dialog from "$lib/components/ui/dialog/index.js";

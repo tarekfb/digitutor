@@ -1,5 +1,5 @@
 import type { SupabaseClient } from "@supabase/supabase-js";
-import type { InputListing, Listing } from "src/lib/shared/models/listing";
+import type { InputListing, Listing } from "$lib/shared/models/listing";
 import type { Database, Tables } from "src/supabase"
 import { getNow } from '$lib/utils'
 

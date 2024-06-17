@@ -1,9 +1,9 @@
 <script lang="ts">
   import ListingCard from "$lib/components/molecules/listing-card.svelte";
   import Avatar from "$lib/components/atoms/avatar.svelte";
-  import PrimaryTitle from "src/lib/components/atoms/primary-title.svelte";
-  import SecondaryTitle from "src/lib/components/atoms/secondary-title.svelte";
-  import ContactTeacherForm from "src/lib/components/molecules/contact-teacher-form.svelte";
+  import PrimaryTitle from "$lib/components/atoms/primary-title.svelte";
+  import SecondaryTitle from "$lib/components/atoms/secondary-title.svelte";
+  import ContactTeacherForm from "$lib/components/molecules/contact-teacher-form.svelte";
 
   export let data;
 

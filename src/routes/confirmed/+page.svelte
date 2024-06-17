@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { websiteName } from "src/lib/shared/constants/constants";
+  import { websiteName } from "$lib/shared/constants/constants";
   import * as Alert from "$lib/components/ui/alert/index.js";
   import { Button } from "$lib/components/ui/button";
   import { CheckCircle2 } from "lucide-svelte";

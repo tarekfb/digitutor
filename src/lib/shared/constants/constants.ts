@@ -1,4 +1,4 @@
-import type { Message } from "./shared/models/common";
+import type { Message } from "$lib/shared/models/common";
 
 export const websiteName = "Mindic";
 
