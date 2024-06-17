@@ -1,33 +1,25 @@
 import { redirect, error, fail } from "@sveltejs/kit";
 import { initMessagesCount, unknownErrorMessage } from "$lib/shared/constants/constants";
-import { getMessages } from "src/lib/server/database/messages";
-import { getConversation } from "src/lib/server/database/conversations";
-import { sendMessageSchema, type InputMessage } from "src/lib/shared/models/conversations";
+import { getMessages } from "$lib/server/database/messages";
+import { sendMessageSchema, type InputMessage } from "$lib/shared/models/conversations";
 import { getGenericFormMessage } from "$lib/shared/constants/constants";
 import { message, superValidate } from "sveltekit-superforms";
 import { zod } from "sveltekit-superforms/adapters";
-import { sendMessage } from "src/lib/server/database/messages";
+import { sendMessage } from "$lib/server/database/messages";
 
-export const load = async ({ locals: { supabase, safeGetSession }, params: { slug } }) => {
+export const load = async ({ locals: { supabase, safeGetSession }, params: { slug }, parent }) => {
   const { session } = await safeGetSession();
   if (!session)
-    throw redirect(303, "/login");
+    throw redirect(303, "/auth");
 
-  let conversation;
-  try {
-    conversation = await getConversation(supabase, slug);
-  } catch (e) {
-    console.error("Error when fetching conversation for slug: " + slug, e);
-    throw error(500, {
-      message: unknownErrorMessage,
-    });
-  };
+  const { conversations} = await parent();
 
+  const conversation = conversations.find((c) => c.id === slug);
   if (!conversation) {
     console.error("Conversation not found for slug: " + slug);
     throw error(404, {
       message: 'Not found'
-    });
+    })
   }
 
   let messages;
@@ -59,7 +51,7 @@ export const actions = {
     const { locals: { supabase, safeGetSession } } = event;
     const { session } = await safeGetSession();
     if (!session)
-      throw redirect(303, "/login");
+      throw redirect(303, "/auth");
 
     const form = await superValidate(event, zod(sendMessageSchema));
     if (!form.valid) {

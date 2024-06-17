@@ -3,7 +3,7 @@ import { createListing, getListings } from "$lib/server/database/listings";
 import type { PageServerLoad } from "./$types";
 import { getGenericFormMessage, unknownErrorMessage } from "$lib/shared/constants/constants";
 import { message, superValidate } from "sveltekit-superforms";
-import { initCreateListingSchema } from "src/lib/shared/models/listing";
+import { initCreateListingSchema } from "$lib/shared/models/listing";
 import { zod } from "sveltekit-superforms/adapters";
 import { redirect } from "sveltekit-flash-message/server";
 
@@ -12,7 +12,7 @@ export const load: PageServerLoad = async ({
 }) => {
   const { session } = await safeGetSession();
   if (!session)
-    throw redirect(303, "/login");
+    throw redirect(303, "/auth");
 
   const form = await superValidate(zod(initCreateListingSchema))
 
@@ -34,7 +34,7 @@ export const actions = {
     const { locals: { supabase, safeGetSession } } = event;
     const { session } = await safeGetSession();
     if (!session)
-      throw redirect(303, "/login");
+      throw redirect(303, "/auth");
 
     const form = await superValidate(event, zod(initCreateListingSchema));
     if (!form.valid) {
@@ -58,7 +58,7 @@ export const actions = {
   signout: async ({ locals: { supabase, safeGetSession }, cookies }) => {
     const { session } = await safeGetSession();
     if (!session)
-      redirect(303, "/login");
+      redirect(303, "/auth");
 
     const { error: e } = await supabase.auth.signOut();
     if (e) {

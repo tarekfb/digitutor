@@ -1,20 +1,20 @@
 import { fail } from "@sveltejs/kit";
 import type { PageServerLoad } from "./$types";
-import { getGenericFormMessage } from "src/lib/shared/constants/constants";
+import { getGenericFormMessage } from "$lib/shared/constants/constants";
 import { message, superValidate } from "sveltekit-superforms";
 import { zod } from "sveltekit-superforms/adapters";
-import { emailSchema, nameSchema } from "src/lib/shared/models/profile";
-import { getProfileBySession, updateProfile } from "src/lib/server/database/profiles";
+import { emailSchema, nameSchema } from "$lib/shared/models/profile";
+import { getProfileBySession, updateProfile } from "$lib/server/database/profiles";
 import type { Tables } from "src/supabase";
-import { updateUserEmail } from "src/lib/server/database/user";
-import { deleteAccountSchema, passwordSchema } from "src/lib/shared/models/user";
+import { updateUserEmail } from "$lib/server/database/user";
+import { deleteAccountSchema, passwordSchema } from "$lib/shared/models/user";
 import { isAuthApiError } from "@supabase/supabase-js";
 import { redirect } from "sveltekit-flash-message/server";
 
 export const load: PageServerLoad = async (parentData) => {
     const { profile, session } = await parentData.parent();
     if (!session)
-        throw redirect(303, "/login");
+        throw redirect(303, "/auth");
 
     const initName = {
         firstName: profile.first_name,
@@ -33,7 +33,7 @@ export const actions = {
         const { locals: { supabase, safeGetSession } } = event;
         const { session } = await safeGetSession();
         if (!session)
-            throw redirect(303, "/login");
+            throw redirect(303, "/auth");
 
         const form = await superValidate(event, zod(nameSchema));
         if (!form.valid)
@@ -67,7 +67,7 @@ export const actions = {
         const { locals: { supabase, safeGetSession } } = event;
         const { session } = await safeGetSession();
         if (!session)
-            throw redirect(303, "/login");
+            throw redirect(303, "/auth");
 
         const form = await superValidate(event, zod(emailSchema));
         if (!form.valid)
@@ -86,7 +86,7 @@ export const actions = {
         const { locals: { supabase, safeGetSession, supabaseServiceRole }, cookies } = event;
         const { session } = await safeGetSession();
         if (!session)
-            throw redirect(303, "/login");
+            throw redirect(303, "/auth");
 
         const form = await superValidate(event, zod(deleteAccountSchema));
         if (!form.valid)
@@ -106,7 +106,7 @@ export const actions = {
         });
 
         if (error)
-            throw redirect(303, "/login/settings_password_error");
+            throw redirect(303, "/auth/settings_password_error");
         // user was logged out because of bad password. Redirect to error page with explaination.
 
         try {
@@ -131,7 +131,7 @@ export const actions = {
         const { locals: { supabase, safeGetSession } } = event;
         const { session } = await safeGetSession();
         if (!session)
-            throw redirect(303, "/login");
+            throw redirect(303, "/auth");
 
         const form = await superValidate(event, zod(passwordSchema));
         if (!form.valid)
@@ -150,7 +150,7 @@ export const actions = {
         });
 
         if (error)
-            throw redirect(303, "/login/settings_password_error");
+            throw redirect(303, "/auth/settings_password_error");
         // user was logged out because of bad password. Redirect to error page with explaination.
 
 

@@ -8,7 +8,7 @@
   import * as Drawer from "$lib/components/ui/drawer/index.js";
   import { Label } from "$lib/components/ui/label/index.js";
   import { Textarea } from "../ui/textarea";
-  import { isStartingContact } from "src/stores/startContact";
+  import { isStartingContact } from "src/stores/start-contact";
 
   export let form;
   export let action: string;

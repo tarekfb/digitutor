@@ -5,10 +5,10 @@
   import { Button } from "$lib/components/ui/button";
   import { zodClient } from "sveltekit-superforms/adapters";
   import { toast } from "svelte-sonner";
-  import { nameSchema } from "src/lib/shared/models/profile.js";
-  import { Input } from "src/lib/components/ui/input";
-  import LoadingSpinner from "src/lib/components/atoms/loading-spinner.svelte";
-  import { websiteName } from "src/lib/shared/constants/constants";
+  import { nameSchema } from "$lib/shared/models/profile.js";
+  import { Input } from "$lib/components/ui/input";
+  import LoadingSpinner from "$lib/components/atoms/loading-spinner.svelte";
+  import { websiteName } from "$lib/shared/constants/constants";
 
   export let data;
   $: ({ form } = data);

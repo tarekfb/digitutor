@@ -14,11 +14,11 @@
     därför loggats ut.
   </p>
   <p>
-    Om du minns ditt lösenord, kan du <Link href="/login/sign_in">logga in</Link
-    > och försöka igen.
+    Om du minns ditt lösenord, kan du <Link href="/auth/sign-in">logga in</Link>
+    och försöka igen.
   </p>
   <p>
-    Om du har glömt ditt lösenord kan du <Link href="login/forgot_password"
+    Om du har glömt ditt lösenord kan du <Link href="/auth/forgot-password"
       >återställa det</Link
     >.
   </p>

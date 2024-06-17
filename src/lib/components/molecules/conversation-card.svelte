@@ -1,7 +1,7 @@
 <script lang="ts">
   import { Clock, CircleAlert } from "lucide-svelte";
-  import type { Conversation } from "src/lib/shared/models/conversations";
-  import { timeAgo } from "src/lib/utils";
+  import type { Conversation } from "$lib/shared/models/conversations";
+  import { timeAgo } from "$lib/utils";
   import type { Tables } from "src/supabase";
 
   export let conversation: Conversation;

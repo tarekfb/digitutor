@@ -2,7 +2,7 @@
   import { Trash2 } from "lucide-svelte";
   import * as AlertDialog from "$lib/components/ui/alert-dialog/index.js";
   import { enhance } from "$app/forms";
-  import LoadingSpinner from "src/lib/components/atoms/loading-spinner.svelte";
+  import LoadingSpinner from "$lib/components/atoms/loading-spinner.svelte";
   import { Button } from "$lib/components/ui/button";
 
   let formLoading = false;

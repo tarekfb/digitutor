@@ -1,6 +1,6 @@
 import type { Session, SupabaseClient } from "@supabase/supabase-js";
-import type { CreateProfile } from "src/lib/shared/models/profile";
-import { getNow } from "src/lib/utils";
+import type { CreateProfile } from "$lib/shared/models/profile";
+import { getNow } from "$lib/utils";
 import type { Database, Tables } from "src/supabase";
 
 export const getProfileBySession = async (

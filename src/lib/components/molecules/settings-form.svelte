@@ -1,6 +1,6 @@
 <script lang="ts">
-  import FormSubmit from "src/lib/components/molecules/form-submit.svelte";
-  import FormMessage from "src/lib/components/molecules/form-message.svelte";
+  import FormSubmit from "$lib/components/molecules/form-submit.svelte";
+  import FormMessage from "$lib/components/molecules/form-message.svelte";
   import { cn } from "$lib/utils.js";
   import SecondaryTitle from "../atoms/secondary-title.svelte";
 

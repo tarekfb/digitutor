@@ -1,11 +1,13 @@
 <script lang="ts">
-  import { Subjects, languages } from "src/lib/shared/models/common";
+  import { Subjects, languages } from "$lib/shared/models/common";
 
   export let formData;
   export let errors;
 </script>
 
-<div class="flex gap-2 items-center flex-wrap max-w-full border rounded-lg p-2 bg-background">
+<div
+  class="flex gap-2 items-center flex-wrap max-w-full border rounded-lg p-2 bg-background"
+>
   {#each languages as subject}
     <label class="bg-card p-2 rounded-lg">
       <input

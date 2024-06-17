@@ -1,16 +1,16 @@
 <script lang="ts">
-  import MissingListing from "src/lib/components/organisms/missing-listing.svelte";
+  import MissingListing from "$lib/components/organisms/missing-listing.svelte";
   import { zodClient } from "sveltekit-superforms/adapters";
   import { superForm } from "sveltekit-superforms";
-  import { createListingSchema } from "src/lib/shared/models/listing.js";
-  import NonEditableListing from "src/lib/components/molecules/non-editable-listing.svelte";
-  import Avatar from "src/lib/components/atoms/avatar.svelte";
-  import EditableListing from "src/lib/components/organisms/editable-listing.svelte";
+  import { createListingSchema } from "$lib/shared/models/listing.js";
+  import NonEditableListing from "$lib/components/molecules/non-editable-listing.svelte";
+  import Avatar from "$lib/components/atoms/avatar.svelte";
+  import EditableListing from "$lib/components/organisms/editable-listing.svelte";
   import { Button } from "$lib/components/ui/button";
   import { Pencil } from "lucide-svelte";
   import { goto } from "$app/navigation";
-  import PrimaryTitle from "src/lib/components/atoms/primary-title.svelte";
-  import ContactTeacherForm from "src/lib/components/molecules/contact-teacher-form.svelte";
+  import PrimaryTitle from "$lib/components/atoms/primary-title.svelte";
+  import ContactTeacherForm from "$lib/components/molecules/contact-teacher-form.svelte";
 
   export let data;
   $: ({ profile, listing, requestContactForm, startContactForm } = data);

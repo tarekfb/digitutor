@@ -1,21 +1,21 @@
 <script lang="ts">
   import { getContext } from "svelte";
   import type { Writable } from "svelte/store";
-  import PrimaryTitle from "src/lib/components/atoms/primary-title.svelte";
-  import Label from "src/lib/components/atoms/label.svelte";
-  import SettingsForm from "src/lib/components/molecules/settings-form.svelte";
+  import PrimaryTitle from "$lib/components/atoms/primary-title.svelte";
+  import Label from "$lib/components/atoms/label.svelte";
+  import SettingsForm from "$lib/components/molecules/settings-form.svelte";
   import { superForm } from "sveltekit-superforms/client";
   import { zodClient } from "sveltekit-superforms/adapters";
-  import { emailSchema, nameSchema } from "src/lib/shared/models/profile.js";
-  import { Input } from "src/lib/components/ui/input";
+  import { emailSchema, nameSchema } from "$lib/shared/models/profile.js";
+  import { Input } from "$lib/components/ui/input";
   import * as Form from "$lib/components/ui/form";
   import { toast } from "svelte-sonner";
   import {
     deleteAccountSchema as deleteSchema,
     passwordSchema,
-  } from "src/lib/shared/models/user.js";
-  import DeleteAccount from "src/lib/components/atoms/delete-account.svelte";
-  import PasswordInput from "src/lib/components/molecules/password-input.svelte";
+  } from "$lib/shared/models/user.js";
+  import DeleteAccount from "$lib/components/atoms/delete-account.svelte";
+  import PasswordInput from "$lib/components/molecules/password-input.svelte";
 
   let adminSection: Writable<string> = getContext("adminSection");
   adminSection.set("settings");

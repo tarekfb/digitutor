@@ -1,14 +1,14 @@
 <script lang="ts">
-  import DeleteListing from "src/lib/components/atoms/delete-listing.svelte";
+  import DeleteListing from "$lib/components/atoms/delete-listing.svelte";
   import { Button } from "$lib/components/ui/button";
-  import DescriptionEditable from "src/lib/components/molecules/description-editable.svelte";
-  import TitleEditable from "src/lib/components/molecules/title-editable.svelte";
-  import SubjectsEditable from "src/lib/components/molecules/subjects-editable.svelte";
-  import HourlyPriceEditable from "src/lib/components/molecules/hourly-price-editable.svelte";
-  import LoadingSpinner from "src/lib/components/atoms/loading-spinner.svelte";
-  import VisibilityEditable from "src/lib/components/molecules/visibility-editable.svelte";
+  import DescriptionEditable from "$lib/components/molecules/description-editable.svelte";
+  import TitleEditable from "$lib/components/molecules/title-editable.svelte";
+  import SubjectsEditable from "$lib/components/molecules/subjects-editable.svelte";
+  import HourlyPriceEditable from "$lib/components/molecules/hourly-price-editable.svelte";
+  import LoadingSpinner from "$lib/components/atoms/loading-spinner.svelte";
+  import VisibilityEditable from "$lib/components/molecules/visibility-editable.svelte";
   import { SaveIcon, X } from "lucide-svelte";
-  import FormMessage from "src/lib/components/molecules/form-message.svelte";
+  import FormMessage from "$lib/components/molecules/form-message.svelte";
 
   export let formData;
   export let listingForm;

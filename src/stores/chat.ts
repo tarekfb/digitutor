@@ -10,7 +10,7 @@ export const getMessages = async (
     conversationId: string,
     loadMore = 0
 ): Promise<Tables<"messages">[]> => {
-    let query = supabase
+    const query = supabase
         .from("messages")
         .select('*')
         .eq("conversation", conversationId)

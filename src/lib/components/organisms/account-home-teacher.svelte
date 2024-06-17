@@ -1,9 +1,9 @@
 <script lang="ts">
   import PrimaryTitle from "../atoms/primary-title.svelte";
-  import type { Listing } from "src/lib/shared/models/listing";
+  import type { Listing } from "$lib/shared/models/listing";
   import CreateListing from "../atoms/create-listing.svelte";
   import ListingCard from "../molecules/listing-card.svelte";
-  import type { Conversation } from "src/lib/shared/models/conversations";
+  import type { Conversation } from "$lib/shared/models/conversations";
   import ConversationCard from "../molecules/conversation-card.svelte";
   import type { Tables } from "src/supabase";
 

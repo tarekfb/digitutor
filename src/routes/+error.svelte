@@ -2,12 +2,12 @@
   import "src/app.pcss";
   import { Button } from "$lib/components/ui/button";
   import { goto } from "$app/navigation";
-  import PrimaryTitle from "src/lib/components/atoms/primary-title.svelte";
+  import PrimaryTitle from "$lib/components/atoms/primary-title.svelte";
   import { page } from "$app/stores";
   import {
     unknownErrorMessage,
     websiteName,
-  } from "src/lib/shared/constants/constants";
+  } from "$lib/shared/constants/constants";
 </script>
 
 <!-- todo: make component -->

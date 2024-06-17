@@ -1,38 +1,45 @@
-import type { PostgrestError, SupabaseClient } from "@supabase/supabase-js";
+import type { SupabaseClient } from "@supabase/supabase-js";
 import type { Database, Tables } from "src/supabase"
-import type { Conversation, InputMessage } from "src/lib/shared/models/conversations";
-import { getNow } from "src/lib/utils";
+import type { Conversation } from "$lib/shared/models/conversations";
+import { getNow } from "$lib/utils";
 import { sendMessage } from "./messages";
-import { ResourceAlreadyExistsError } from "src/lib/shared/errors/resource-already-exists";
+import { ResourceAlreadyExistsError } from "$lib/shared/errors/resource-already-exists";
 
-export const getConversation = async (
-  supabase: SupabaseClient<Database>,
-  id: string
-): Promise<Conversation> => {
-  const { data, error } = await supabase
-    .from("conversations")
-    .select(
-      `
-                  *,
-                  teacher (
-                    *
-                  ),
-                  student (
-                    *
-                  )
-                `,
-    )
-    .eq("id", id)
-    .limit(1)
-    .single();
+// atm not needed but probably will be at some point. Delete if not used in future [2024-06-17]
+// export const getConversation = async (
+//   supabase: SupabaseClient<Database>,
+//   id: string,
+//   profile: Tables<"profiles">
+// ): Promise<Conversation> => {
 
-  if (error) {
-    console.error("Failed to get conversation: " + id, { error });
-    throw error;
-  }
 
-  return data as unknown as Conversation;
-}
+//   let query = supabase
+//     .from("conversations")
+//     .select(
+//       `
+//                 *,
+//                 teacher (
+//                   *
+//                 ),
+//                 student (
+//                   *
+//                 )
+//               `,
+//     )
+//     .eq("id", id)
+
+//   if (profile.role === "student") query = query.eq("student", profile.id)
+//   else if (profile.role === "teacher") query = query.eq("teacher", profile.id)
+
+//   const { data, error } = await query.limit(1).single();
+
+//   if (error) {
+//     console.error("Failed to get conversation: " + id, { error });
+//     throw error;
+//   }
+
+//   return data as unknown as Conversation;
+// }
 
 export const getConversationForStudentAndTeacher = async (
   supabase: SupabaseClient<Database>,
