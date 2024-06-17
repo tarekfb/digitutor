@@ -40,7 +40,7 @@ export const actions = {
     if (!session)
       throw redirect(303, "/auth");
     try {
-      await deleteListing(supabase, slug);
+      await deleteListing(supabase, slug, session);
     } catch (error) {
       console.error("Error when deleting listing slug id: " + slug, error);
       return fail(500, {
@@ -65,7 +65,7 @@ export const actions = {
     }
 
     try {
-      await updateListing(supabase, form.data, slug);
+      await updateListing(supabase, form.data, slug, session);
       return { form };
     } catch (error) {
       return message(form, getGenericFormMessage(), { status: 500 });

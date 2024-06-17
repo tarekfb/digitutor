@@ -18,7 +18,7 @@
 
   let className: string | null | undefined = undefined;
   export { className as class };
-  export let role: Role;
+  export let role: Role | undefined;
   export let conversations: Conversation[];
   let isMinimized = true;
   let formLoading = false;

@@ -1,12 +1,12 @@
 import { error } from "@sveltejs/kit";
-import { unknownErrorMessage } from "$lib/shared/constants/constants";
+import { unknownErrorMessage } from "src/lib/shared/constants/constants";
 import { redirect } from "sveltekit-flash-message/server";
 
 export const actions = {
     signout: async ({ locals: { supabase, safeGetSession }, cookies }) => {
         const { session } = await safeGetSession();
         if (!session)
-            redirect(303, "/auth");
+            redirect(303, "/account");
 
         const { error: e } = await supabase.auth.signOut();
         if (e) {
