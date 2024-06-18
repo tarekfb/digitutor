@@ -7,11 +7,17 @@
   import type { Tables } from "src/supabase";
   import { websiteName } from "../../shared/constants/constants";
   import Avatar from "../atoms/avatar.svelte";
-  import { enhance } from "$app/forms";
   import LoadingSpinner from "../atoms/loading-spinner.svelte";
 
   export let profile: Tables<"profiles"> | null;
-  let formLoading = false;
+  export let logout: () => void;
+  let logoutLoading = false;
+
+  const wrappedLogout = () => {
+    logoutLoading = true;
+    logout();
+    logoutLoading = false;
+  };
 </script>
 
 <header
@@ -56,28 +62,20 @@
                 </p>
               </DropdownMenu.Label>
               <DropdownMenu.Separator />
-              <form
-                method="POST"
-                action="?/signout"
-                use:enhance={() => {
-                  formLoading = true;
-                  return async ({ update }) => {
-                    formLoading = false;
-                    update();
-                  };
-                }}
-              >
-                <DropdownMenu.Item class="data-[highlighted]:bg-white">
-                  <button type="submit" class="flex space-x-2 w-full">
-                    {#if formLoading}
-                      <LoadingSpinner class="text-background mr-2" />
-                    {:else}
-                      <LogOutIcon size="18" class="mr-2" />
-                    {/if}
-                    Logga ut
-                  </button>
-                </DropdownMenu.Item>
-              </form>
+              <DropdownMenu.Item class="data-[highlighted]:bg-white">
+                <button
+                  class="flex space-x-2 w-full"
+                  disabled={logoutLoading}
+                  on:click={wrappedLogout}
+                >
+                  {#if logoutLoading}
+                    <LoadingSpinner class="text-background mr-2" />
+                  {:else}
+                    <LogOutIcon size="18" class="mr-2" />
+                  {/if}
+                  Logga ut
+                </button>
+              </DropdownMenu.Item>
             </DropdownMenu.Content>
           </DropdownMenu.Root>
         {/if}

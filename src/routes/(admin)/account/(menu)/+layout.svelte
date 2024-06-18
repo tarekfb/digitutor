@@ -3,9 +3,11 @@
   import { setContext } from "svelte";
   import SidebarNav from "$lib/components/organisms/sidebar-nav.svelte";
   import type { PageData } from "./$types";
+  import { logout } from "src/lib/utils";
 
   export let data: PageData;
-  const conversations = data.conversations ?? [];
+  $: ({ supabase, session, profile, conversations } = data);
+
   const adminSectionStore = writable("");
   setContext("adminSection", adminSectionStore);
   let adminSection: string;
@@ -15,7 +17,11 @@
 </script>
 
 <div class="flex p-8 ml-14 min-h-screen">
-  <SidebarNav {conversations} role={data.profile?.role} />
+  <SidebarNav
+    {conversations}
+    role={profile?.role}
+    logout={() => logout(supabase, session)}
+  />
   <div class="flex-1 lg:max-w-2xl">
     <slot />
   </div>

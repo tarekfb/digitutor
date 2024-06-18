@@ -13,15 +13,22 @@
   import Separator from "$lib/components/ui/separator/separator.svelte";
   import type { Conversation } from "src/lib/shared/models/conversation";
   import Link from "../atoms/link.svelte";
-  import { enhance } from "$app/forms";
   import LoadingSpinner from "../atoms/loading-spinner.svelte";
 
   let className: string | null | undefined = undefined;
   export { className as class };
   export let role: Role | undefined;
   export let conversations: Conversation[];
+  export let logout: () => void;
+
   let isMinimized = true;
-  let formLoading = false;
+  let logoutLoading = false;
+
+  const wrappedLogout = () => {
+    logoutLoading = true;
+    logout();
+    logoutLoading = false;
+  };
 </script>
 
 <div
@@ -41,34 +48,23 @@
           {/if}
         </h1>
       </Link>
-      <form
-        method="POST"
-        action="?/signout"
-        use:enhance={() => {
-          formLoading = true;
-          return async ({ update }) => {
-            formLoading = false;
-            update();
-          };
-        }}
+
+      <Button
+        variant="outline"
+        size="icon"
+        disabled={logoutLoading}
+        on:click={wrappedLogout}
       >
-        <Button
-          variant="outline"
-          size="icon"
-          type="submit"
-          disabled={formLoading}
-        >
-          {#if formLoading}
-            <LoadingSpinner class="text-background" />
-          {:else}
-            <LogOutIcon size="18" />
-          {/if}
-        </Button>
-      </form>
+        {#if logoutLoading}
+          <LoadingSpinner class="text-background" />
+        {:else}
+          <LogOutIcon size="18" />
+        {/if}
+      </Button>
     </div>
     <div class="flex items-center space-x-2 px-2">
-      <Switch id="airplane-mode" bind:checked={isMinimized} />
-      <Label for="airplane-mode">Dölj</Label>
+      <Switch id="toggle" bind:checked={isMinimized} />
+      <Label for="toggle">Dölj</Label>
     </div>
     <Separator />
     <div>
