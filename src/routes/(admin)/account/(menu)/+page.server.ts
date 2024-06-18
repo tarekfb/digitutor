@@ -46,7 +46,7 @@ export const actions = {
 
     let listingId = "";
     try {
-      const { id } = await createListing(supabase, title);
+      const { id } = await createListing(supabase, title, session);
       listingId = id;
     } catch (error) {
       console.error("Failed to create listing", error);
@@ -55,11 +55,7 @@ export const actions = {
     throw redirect(303, `/listing/${listingId}`);
   },
 
-  signout: async ({ locals: { supabase, safeGetSession }, cookies }) => {
-    const { session } = await safeGetSession();
-    if (!session)
-      redirect(303, "/auth");
-
+  signout: async ({ locals: { supabase }, cookies }) => {
     const { error: e } = await supabase.auth.signOut();
     if (e) {
       console.error('Unknown error on signout', e);

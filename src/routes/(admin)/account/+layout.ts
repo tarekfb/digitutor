@@ -2,7 +2,7 @@
 import type { Tables } from "src/supabase.js";
 import { redirect } from "@sveltejs/kit";
 
-export const load = async ({ data, depends, url }) => {
+export const load = async ({ data, url }) => {
   const profile: Tables<"profiles"> | null = data.profile;
 
   const createProfilePath = "/account/create-profile";

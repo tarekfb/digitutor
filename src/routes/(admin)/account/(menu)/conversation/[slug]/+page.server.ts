@@ -8,11 +8,7 @@ import { zod } from "sveltekit-superforms/adapters";
 import { sendMessage } from "$lib/server/database/messages";
 
 export const load = async ({ locals: { supabase, safeGetSession }, params: { slug }, parent }) => {
-  const { session } = await safeGetSession();
-  if (!session)
-    throw redirect(303, "/auth");
-
-  const { conversations} = await parent();
+  const { conversations } = await parent();
 
   const conversation = conversations.find((c) => c.id === slug);
   if (!conversation) {
@@ -48,10 +44,7 @@ export const load = async ({ locals: { supabase, safeGetSession }, params: { slu
 
 export const actions = {
   sendMessage: async (event) => {
-    const { locals: { supabase, safeGetSession } } = event;
-    const { session } = await safeGetSession();
-    if (!session)
-      throw redirect(303, "/auth");
+    const { locals: { supabase } } = event;
 
     const form = await superValidate(event, zod(sendMessageSchema));
     if (!form.valid) {

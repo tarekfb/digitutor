@@ -1,4 +1,4 @@
-import type { SupabaseClient } from "@supabase/supabase-js";
+import type { Session, SupabaseClient } from "@supabase/supabase-js";
 import type { InputListing, Listing } from "$lib/shared/models/listing";
 import type { Database, Tables } from "src/supabase"
 import { getNow } from '$lib/utils'
@@ -106,19 +106,10 @@ export const getListing = async (
 export const createListing = async (
   supabase: SupabaseClient<Database>,
   title: string,
+  session: Session,
 ): Promise<Listing> => {
-  const session = await supabase.auth.getSession();
-
-  if (!session.data.session) {
-    console.error("Missing session when creating listing: ", { title });
-    throw new Error("No session");
-  }
-
-  const userId = session.data.session.user.id;
-  const listingId = crypto.randomUUID();
-
   const dbListing: Tables<"listings"> = {
-    id: listingId,
+    id: crypto.randomUUID(),
     title: title,
     hourlyPrice: 0,
     created_at: getNow(),
@@ -126,7 +117,7 @@ export const createListing = async (
     currency: "SEK",
     description: "",
     subjects: [],
-    profile: userId,
+    profile: session.user.id,
     visible: false
   };
 
@@ -161,21 +152,13 @@ export const createListing = async (
 export const deleteListing = async (
   supabase: SupabaseClient<Database>,
   listingId: string,
+  session: Session,
 ): Promise<Tables<"listings">> => {
-  const session = await supabase.auth.getSession();
-
-  if (!session.data.session) {
-    console.error("Missing session when deleting listing: ", { listingId });
-    throw new Error("No session");
-  }
-
-  const userId = session.data.session.user.id;
-
   const { error, data } = await supabase
     .from('listings')
     .delete()
     .eq('id', listingId)
-    .eq('profile', userId) // for safety measure check userId as well
+    .eq('profile', session.user.id)
     .select('*')
     .limit(1)
     .order('id')
@@ -197,13 +180,15 @@ export const deleteListing = async (
 export const updateListing = async (
   supabase: SupabaseClient<Database>,
   input: InputListing,
-  listingId: string
+  listingId: string,
+  session: Session,
 ): Promise<Listing> => {
 
   const { data, error } = await supabase
     .from("listings")
     .update({ ...input, updated_at: getNow() })
     .eq("id", listingId)
+    .eq('profile', session.user.id)
     .select(
       `
       *,

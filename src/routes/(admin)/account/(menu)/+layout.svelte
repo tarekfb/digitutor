@@ -2,8 +2,9 @@
   import { writable } from "svelte/store";
   import { setContext } from "svelte";
   import SidebarNav from "$lib/components/organisms/sidebar-nav.svelte";
+  import type { PageData } from "./$types";
 
-  export let data;
+  export let data: PageData;
   const conversations = data.conversations ?? [];
   const adminSectionStore = writable("");
   setContext("adminSection", adminSectionStore);
@@ -14,7 +15,7 @@
 </script>
 
 <div class="flex p-8 ml-14 min-h-screen">
-  <SidebarNav {conversations} role={data.profile?.role ?? "user"} />
+  <SidebarNav {conversations} role={data.profile?.role} />
   <div class="flex-1 lg:max-w-2xl">
     <slot />
   </div>

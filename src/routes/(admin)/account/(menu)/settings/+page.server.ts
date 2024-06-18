@@ -11,11 +11,12 @@ import { deleteAccountSchema, passwordSchema } from "$lib/shared/models/user";
 import { isAuthApiError } from "@supabase/supabase-js";
 import { redirect } from "sveltekit-flash-message/server";
 
-export const load: PageServerLoad = async (parentData) => {
-    const { profile, session } = await parentData.parent();
+export const load: PageServerLoad = async ({ parent, locals: { safeGetSession } }) => {
+    const { session } = await safeGetSession();
     if (!session)
         throw redirect(303, "/auth");
 
+    const { profile } = await parent();
     const initName = {
         firstName: profile.first_name,
         lastName: profile.last_name
