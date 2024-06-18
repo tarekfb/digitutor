@@ -1,7 +1,7 @@
-import { error, fail } from "@sveltejs/kit";
+import { fail } from "@sveltejs/kit";
 import { createListing, getListings } from "$lib/server/database/listings";
 import type { PageServerLoad } from "./$types";
-import { getGenericFormMessage, unknownErrorMessage } from "$lib/shared/constants/constants";
+import { getGenericFormMessage } from "$lib/shared/constants/constants";
 import { message, superValidate } from "sveltekit-superforms";
 import { initCreateListingSchema } from "$lib/shared/models/listing";
 import { zod } from "sveltekit-superforms/adapters";
@@ -53,15 +53,5 @@ export const actions = {
       return message(form, getGenericFormMessage(), { status: 500 });
     }
     throw redirect(303, `/listing/${listingId}`);
-  },
-
-  signout: async ({ locals: { supabase }, cookies }) => {
-    const { error: e } = await supabase.auth.signOut();
-    if (e) {
-      console.error('Unknown error on signout', e);
-      error(500, unknownErrorMessage);
-    }
-
-    throw redirect(303, "/", { message: 'Du har loggats ut.', type: 'success' }, cookies);
   },
 };

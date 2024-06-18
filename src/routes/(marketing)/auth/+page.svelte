@@ -1,4 +1,4 @@
-<script>
+<script lang="ts">
   import { goto } from "$app/navigation";
   import PrimaryTitle from "$lib/components/atoms/primary-title.svelte";
   import SecondaryTitle from "$lib/components/atoms/secondary-title.svelte";

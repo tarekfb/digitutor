@@ -3,6 +3,10 @@ import { twMerge } from "tailwind-merge";
 import { cubicOut } from "svelte/easing";
 import type { TransitionConfig } from "svelte/transition";
 import type { z } from "zod";
+import { invalidate } from "$app/navigation";
+import type { SupabaseClient, Session } from "@supabase/supabase-js";
+import { redirect } from "@sveltejs/kit";
+import type { Database } from "lucide-svelte";
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
@@ -109,3 +113,12 @@ export const getRecipient = (self: "teacher" | "student" | "admin") => {
       return "admin";
   }
 }
+
+export const logout = (
+  supabase: SupabaseClient<Database>,
+  session: Session | null | undefined,
+) => {
+  if (!session) redirect(303, "/auth");
+  supabase.auth.signOut();
+  invalidate("supabase:auth");
+};
