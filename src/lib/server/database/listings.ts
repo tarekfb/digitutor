@@ -39,22 +39,21 @@ export const getListings = async (
   return data as unknown as Listing[];
 }
 
-export const getListingsByTeacherId = async (
+export const getListingsByTeacher = async (
   supabase: SupabaseClient<Database>,
   teacherId: string,
   max?: number,
   visible?: boolean,
 ): Promise<Listing[]> => {
-
   let query = supabase
     .from("listings")
     .select(
       `
-            *,
-            profile (
-              *
-            )
-          `,
+        *,
+        profile (
+          *
+        )
+      `,
     )
     .eq("profile", teacherId)
 

@@ -15,6 +15,7 @@ const createListingProps: TypeToZod<InputListing> = {
         .max(160, "Får inte vara mer än 160 karaktärer.")
         .refine((s) => s.trim() !== "", "Får inte vara tom."),
     hourlyPrice: z
+        .coerce
         .number()
         .min(0, "Får inte vara negativt.")
         .max(100000, "Självinsikt och självsäkerhet är en hårfin balansgång."),

@@ -9,27 +9,22 @@
   import PrimaryTitle from "$lib/components/atoms/primary-title.svelte";
   import FormSubmit from "$lib/components/molecules/form-submit.svelte";
   import { goto, invalidate } from "$app/navigation";
-  import { sendMessageSchema } from "$lib/shared/models/conversations";
+  import { sendMessageSchema } from "src/lib/shared/models/conversation.js";
   import { Textarea } from "$lib/components/ui/textarea/index.js";
   import Separator from "$lib/components/ui/separator/separator.svelte";
   import ChatWindow from "$lib/components/molecules/chat-window.svelte";
   import { chat } from "src/stores/chat";
   import type { Tables } from "src/supabase.js";
+  import * as Alert from "$lib/components/ui/alert/index.js";
+  import type { PageData } from "./$types";
 
-  export let data;
+  export let data: PageData;
+  $: ({ profile, messages, conversation, supabase } = data);
+
   const sendMessageForm = superForm(data.form, {
     validators: zodClient(sendMessageSchema),
     onError: ({ result }) => {
       toast.error(result.error.message);
-    },
-    onSubmit: async (event) => {
-      if (isAllowedToReply === false) {
-        // comparing specifically to false, not falsy
-        event.cancel();
-        toast.warning(
-          `Väntar på svar från ${recipient.first_name ?? "läraren"}. Du kan skicka fler meddelanden när du fått svar.`,
-        );
-      }
     },
     invalidateAll: false,
   });
@@ -41,18 +36,24 @@
     allErrors,
   } = sendMessageForm;
 
-  const getAllowedToReply = (msgs: Tables<"messages">[]) => {
-    if (profile.role == "teacher") return true; // always allow
+  const getAllowedToReply = (
+    msgs: Tables<"messages">[],
+    profile: Tables<"profiles">,
+  ) => {
+    if (profile.role === "teacher") return true; // always allow
     if (msgs.length === 0) return true; // shouldn't happen but allow for error proofing
     if (msgs.some((msg) => msg.sender !== profile.id)) return true; // has recieved reply
+    return false;
   };
 
-  $: ({ profile, messages, conversation, supabase } = data);
   $: recipient =
     profile.role == "teacher" ? conversation.student : conversation.teacher;
-  $: isAllowedToReply = getAllowedToReply(messages);
+  $: isAllowedToReply = getAllowedToReply(messages, profile);
   $: chat.subscribe((messages) => {
-    if (!isAllowedToReply) isAllowedToReply = getAllowedToReply($chat);
+    // if already allowed to reply - skip for performance reasons
+    // also not interested on init execution
+    if (!isAllowedToReply && messages.length > 0)
+      isAllowedToReply = getAllowedToReply($chat, profile);
     if (
       profile.role === "teacher" &&
       !conversation.has_replied &&
@@ -60,7 +61,6 @@
     ) {
       invalidate("conversations:has_replied");
     }
-    // if already replied, no need to iterate messages for performance reasons
   });
 </script>
 
@@ -93,6 +93,15 @@
       use:enhance
       class="flex flex-col gap-y-2"
     >
+      {#if !isAllowedToReply}
+        <Alert.Root class="bg-card text-center">
+          <Alert.Title>Väntar på svar</Alert.Title>
+          <Alert.Description
+            >{`Väntar på svar från ${recipient.first_name ?? "läraren"}. Du kan
+          skicka fler meddelanden när du fått svar.`}</Alert.Description
+          >
+        </Alert.Root>
+      {/if}
       <FormMessage {message} class="mt-2" scroll />
       <Form.Field form={sendMessageForm} name="content">
         <Form.Control let:attrs>
@@ -111,6 +120,7 @@
           {allErrors}
           {submitting}
           text="Skicka"
+          disabled={!isAllowedToReply}
           loadingText="Skickar..."
         />
       </div>

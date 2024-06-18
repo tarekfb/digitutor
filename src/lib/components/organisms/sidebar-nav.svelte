@@ -11,7 +11,7 @@
   import HomeNav from "./home-nav.svelte";
   import ConversationsNav from "./conversations-nav.svelte";
   import Separator from "$lib/components/ui/separator/separator.svelte";
-  import type { Conversation } from "$lib/shared/models/conversations";
+  import type { Conversation } from "src/lib/shared/models/conversation";
   import Link from "../atoms/link.svelte";
   import { enhance } from "$app/forms";
   import LoadingSpinner from "../atoms/loading-spinner.svelte";

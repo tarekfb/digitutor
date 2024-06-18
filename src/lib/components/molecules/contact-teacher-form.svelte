@@ -5,7 +5,7 @@
   import {
     requestContactSchema,
     startContactSchema,
-  } from "$lib/shared/models/conversations";
+  } from "src/lib/shared/models/conversation";
   import { superForm } from "sveltekit-superforms";
   import { zodClient } from "sveltekit-superforms/adapters";
   import StartContact from "../atoms/start-contact.svelte";

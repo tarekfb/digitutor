@@ -12,7 +12,7 @@
   let className: string | null | undefined = undefined;
   export let fallbackClass: string | null | undefined = undefined;
   export { className as class };
-  
+
   export let onClick: OnClick["onClick"];
   export let profile: Tables<"profiles">;
 
@@ -20,7 +20,8 @@
 
   const base = "flex justify-center text-lg items-center font-normal";
   const size = "h-10 w-10";
-  const fallback = "text-background bg-accent " + (fallbackClass ? ` ${fallbackClass}` : "");
+  const fallback =
+    "text-background bg-accent " + (fallbackClass ? ` ${fallbackClass}` : "");
 </script>
 
 {#if onClick && profile.role === "teacher"}
@@ -30,15 +31,11 @@
     on:click={onClick}
   >
     <Avatar.Root class={base}>
-      <Avatar.Fallback class={fallback}
-        >{initials}</Avatar.Fallback
-      >
+      <Avatar.Fallback class={fallback}>{initials}</Avatar.Fallback>
     </Avatar.Root>
   </Button>
 {:else}
   <Avatar.Root class={cn(`${size} ${base}`, className)}>
-    <Avatar.Fallback class={fallback}
-      >{initials}</Avatar.Fallback
-    >
+    <Avatar.Fallback class={fallback}>{initials}</Avatar.Fallback>
   </Avatar.Root>
 {/if}

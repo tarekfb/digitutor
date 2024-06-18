@@ -1,7 +1,7 @@
 import { redirect, error, fail } from "@sveltejs/kit";
 import { initMessagesCount, unknownErrorMessage } from "$lib/shared/constants/constants";
 import { getMessages } from "$lib/server/database/messages";
-import { sendMessageSchema, type InputMessage } from "$lib/shared/models/conversations";
+import { sendMessageSchema, type InputMessage } from "$lib/shared/models/conversation";
 import { getGenericFormMessage } from "$lib/shared/constants/constants";
 import { message, superValidate } from "sveltekit-superforms";
 import { zod } from "sveltekit-superforms/adapters";
@@ -44,7 +44,12 @@ export const load = async ({ locals: { supabase, safeGetSession }, params: { slu
 
 export const actions = {
   sendMessage: async (event) => {
-    const { locals: { supabase } } = event;
+    const { locals: { supabase, safeGetSession } } = event;
+
+    const { session } = await safeGetSession();
+    if (!session)
+      throw redirect(303, "/auth");
+
 
     const form = await superValidate(event, zod(sendMessageSchema));
     if (!form.valid) {
@@ -59,7 +64,7 @@ export const actions = {
     }
 
     try {
-      await sendMessage(supabase, inputMessage);
+      await sendMessage(supabase, inputMessage, session);
       return { form }
     } catch (error) {
       console.error(error);
