@@ -16,8 +16,11 @@
   import { chat } from "src/stores/chat";
   import type { Tables } from "src/supabase.js";
   import * as Alert from "$lib/components/ui/alert/index.js";
+  import type { PageData } from "./$types";
 
-  export let data;
+  export let data: PageData;
+  $: ({ profile, messages, conversation, supabase } = data);
+
   const sendMessageForm = superForm(data.form, {
     validators: zodClient(sendMessageSchema),
     onError: ({ result }) => {
@@ -37,19 +40,20 @@
     msgs: Tables<"messages">[],
     profile: Tables<"profiles">,
   ) => {
-    if (profile.role == "teacher") return true; // always allow
+    if (profile.role === "teacher") return true; // always allow
     if (msgs.length === 0) return true; // shouldn't happen but allow for error proofing
     if (msgs.some((msg) => msg.sender !== profile.id)) return true; // has recieved reply
     return false;
   };
 
-  $: ({ profile, messages, conversation, supabase } = data);
   $: recipient =
     profile.role == "teacher" ? conversation.student : conversation.teacher;
   $: isAllowedToReply = getAllowedToReply(messages, profile);
   $: chat.subscribe((messages) => {
-    if (!isAllowedToReply) isAllowedToReply = getAllowedToReply($chat, profile);
-    // if already allowed to reply - skip, no need to run unnecessary logic for performance reasons
+    // if already allowed to reply - skip for performance reasons
+    // also not interested on init execution
+    if (!isAllowedToReply && messages.length > 0)
+      isAllowedToReply = getAllowedToReply($chat, profile);
     if (
       profile.role === "teacher" &&
       !conversation.has_replied &&
@@ -89,13 +93,15 @@
       use:enhance
       class="flex flex-col gap-y-2"
     >
-      <Alert.Root class="bg-card text-center">
-        <Alert.Title>Väntar på svar</Alert.Title>
-        <Alert.Description
-          >{`Väntar på svar från ${recipient.first_name ?? "läraren"}. Du kan
+      {#if !isAllowedToReply}
+        <Alert.Root class="bg-card text-center">
+          <Alert.Title>Väntar på svar</Alert.Title>
+          <Alert.Description
+            >{`Väntar på svar från ${recipient.first_name ?? "läraren"}. Du kan
           skicka fler meddelanden när du fått svar.`}</Alert.Description
-        >
-      </Alert.Root>
+          >
+        </Alert.Root>
+      {/if}
       <FormMessage {message} class="mt-2" scroll />
       <Form.Field form={sendMessageForm} name="content">
         <Form.Control let:attrs>
