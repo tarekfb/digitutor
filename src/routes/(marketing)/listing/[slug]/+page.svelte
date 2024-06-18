@@ -1,5 +1,4 @@
 <script lang="ts">
-  import MissingListing from "$lib/components/organisms/missing-listing.svelte";
   import { zodClient } from "sveltekit-superforms/adapters";
   import { superForm } from "sveltekit-superforms";
   import { createListingSchema } from "$lib/shared/models/listing.js";
@@ -10,14 +9,16 @@
   import { Pencil } from "lucide-svelte";
   import { goto } from "$app/navigation";
   import PrimaryTitle from "$lib/components/atoms/primary-title.svelte";
+  import SecondaryTitle from "$lib/components/atoms/secondary-title.svelte";
   import ContactTeacherForm from "$lib/components/molecules/contact-teacher-form.svelte";
+  import type { PageData } from "./$types";
+  import ReviewCard from "src/lib/components/molecules/review-card.svelte";
 
-  export let data;
-  $: ({ profile, listing, requestContactForm, startContactForm } = data);
+  export let data: PageData;
+  $: ({ profile, listing, requestContactForm, startContactForm, reviews } =
+    data);
+
   let isEditing = false;
-  let isAuthor = false;
-  $: if (profile && listing && listing.profile)
-    isAuthor = profile.id === listing.profile.id;
 
   const listingForm = superForm(data.createListingForm, {
     validators: zodClient(createListingSchema),
@@ -30,39 +31,21 @@
     resetForm: false,
   });
 
-  const {
-    form: formData,
-    enhance,
-    errors,
-    submitting,
-    allErrors,
-    message,
-    reset,
-  } = listingForm;
+  const { reset } = listingForm;
 </script>
 
 <div class="flex flex-col gap-y-4 pb-8 w-full">
-  {#if !listing}
-    <MissingListing />
-  {:else if isAuthor}
-    <div class="flex justify-between gap-x-2 items-center">
-      <PrimaryTitle>{listing.profile.first_name}</PrimaryTitle>
-      <Avatar
-        profile={listing.profile}
-        onClick={() => goto(`/profile/${listing.profile?.id}`)}
-      />
-    </div>
+  <div class="flex gap-x-2 items-center">
+    <Avatar
+      profile={listing.profile}
+      onClick={() => goto(`/profile/${listing.profile?.id}`)}
+    />
+    <PrimaryTitle>{listing.profile.first_name}</PrimaryTitle>
+  </div>
+  <SecondaryTitle>Annons</SecondaryTitle>
+  {#if profile?.id === listing.profile.id}
     {#if isEditing}
-      <EditableListing
-        {formData}
-        {enhance}
-        {submitting}
-        {message}
-        {errors}
-        {listingForm}
-        {allErrors}
-        stopEditing={() => (isEditing = false)}
-      />
+      <EditableListing {listingForm} stopEditing={() => (isEditing = false)} />
     {:else}
       <NonEditableListing {listing} />
       <Button on:click={() => (isEditing = true)} class="self-end">
@@ -71,14 +54,13 @@
       >
     {/if}
   {:else}
-    <div class="flex justify-between gap-x-2 items-center">
-      <PrimaryTitle>{listing.profile.first_name}</PrimaryTitle>
-      <Avatar
-        profile={listing.profile}
-        onClick={() => goto(`/profile/${listing.profile?.id}`)}
-      />
-    </div>
     <NonEditableListing {listing} />
+    {#if reviews.length !== 0}
+      <SecondaryTitle>Recensioner</SecondaryTitle>
+      {#each reviews as review}
+        <ReviewCard {review} />
+      {/each}
+    {/if}
     <ContactTeacherForm
       {requestContactForm}
       {startContactForm}

@@ -9,7 +9,7 @@
   import PrimaryTitle from "$lib/components/atoms/primary-title.svelte";
   import FormSubmit from "$lib/components/molecules/form-submit.svelte";
   import { goto, invalidate } from "$app/navigation";
-  import { sendMessageSchema } from "$lib/shared/models/conversations";
+  import { sendMessageSchema } from "src/lib/shared/models/conversation.js";
   import { Textarea } from "$lib/components/ui/textarea/index.js";
   import Separator from "$lib/components/ui/separator/separator.svelte";
   import ChatWindow from "$lib/components/molecules/chat-window.svelte";

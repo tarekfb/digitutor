@@ -5,9 +5,11 @@ import { message, superValidate } from "sveltekit-superforms";
 import { deleteListing, getListing, updateListing } from "$lib/server/database/listings";
 import { createListingSchema } from "$lib/shared/models/listing";
 import { getConversationForStudentAndTeacher, startConversation } from "$lib/server/database/conversations";
-import { requestContactSchema, startContactSchema } from "$lib/shared/models/conversations";
+import { requestContactSchema, startContactSchema } from "$lib/shared/models/conversation";
 import { redirect } from "sveltekit-flash-message/server";
 import { ResourceAlreadyExistsError } from "$lib/shared/errors/resource-already-exists";
+import { getReviewsByReceiver } from "src/lib/server/database/review";
+import type { Review } from "src/lib/shared/models/review.js";
 
 export const load = async ({ locals: { supabase }, params: { slug }, parent }) => {
   let listing;
@@ -27,11 +29,17 @@ export const load = async ({ locals: { supabase }, params: { slug }, parent }) =
   const parentData = await parent();
   const role = parentData.profile?.role ?? "";
 
+  let reviews: Review[] = [];
+  try {
+    reviews = await getReviewsByReceiver(supabase, listing.profile.id) ?? [];
+  } catch (e) {
+    console.error(`Error when reading reviews for profile ${listing.profile.id} on listing ${slug}`, e);
+  }
 
   const createListingForm = await superValidate(listing, zod(createListingSchema))
   const requestContactForm = await superValidate({ teacher: listing.profile.id, role }, zod(requestContactSchema))
   const startContactForm = await superValidate({ teacher: listing.profile.id, role }, zod(startContactSchema))
-  return { listing, createListingForm, requestContactForm, startContactForm };
+  return { listing, reviews, createListingForm, requestContactForm, startContactForm };
 }
 
 export const actions = {
@@ -127,7 +135,7 @@ export const actions = {
 
     let conversationId: string;
     try {
-      const { id } = await startConversation(supabase, teacher, session.user.id, firstMessage);
+      const { id } = await startConversation(supabase, teacher, session.user.id, firstMessage, session);
       conversationId = id;
     } catch (error) {
       if (error instanceof ResourceAlreadyExistsError) {

@@ -3,7 +3,7 @@
   import type { Listing } from "$lib/shared/models/listing";
   import CreateListing from "../atoms/create-listing.svelte";
   import ListingCard from "../molecules/listing-card.svelte";
-  import type { Conversation } from "$lib/shared/models/conversations";
+  import type { Conversation } from "src/lib/shared/models/conversation";
   import ConversationCard from "../molecules/conversation-card.svelte";
   import type { Tables } from "src/supabase";
 
@@ -22,7 +22,7 @@
   {:else}
     {#each listings as listing}
       <a href="/listing/{listing.id}" aria-label="Navigate to ad">
-        <ListingCard {listing} />
+        <ListingCard {listing} publicView />
       </a>
     {/each}
   {/if}

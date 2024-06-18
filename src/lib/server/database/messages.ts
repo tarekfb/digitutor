@@ -1,6 +1,6 @@
-import type { SupabaseClient } from "@supabase/supabase-js";
+import type { Session, SupabaseClient } from "@supabase/supabase-js";
 import type { Database, Tables } from "src/supabase"
-import type { InputMessage } from "$lib/shared/models/conversations"
+import type { InputMessage } from "$lib/shared/models/conversation"
 import { getNow } from '$lib/utils'
 
 export const getMessages = async (
@@ -37,19 +37,11 @@ export const getMessages = async (
 export const sendMessage = async (
   supabase: SupabaseClient<Database>,
   input: InputMessage,
+  session: Session
 ): Promise<Tables<"messages">> => {
-  const session = await supabase.auth.getSession();
-
-  if (!session.data.session) {
-    console.error("Missing session when sending message for conv id: ", { message: input.conversation });
-    throw new Error("No session");
-  }
-
-  const sender = session.data.session.user.id;
-
   const dbMessage: Tables<"messages"> = {
     id: crypto.randomUUID(),
-    sender,
+    sender: session.user.id,
     conversation: input.conversation,
     content: input.content,
     created_at: getNow(),

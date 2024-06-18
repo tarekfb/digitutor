@@ -5,33 +5,32 @@
   import type { Listing } from "$lib/shared/models/listing";
 
   export let listing: Listing;
+  export let publicView = true;
 </script>
 
 <Card.Root>
-  <Card.Header class="flex flex-col  space-y-0">
-    <div class="space-y-1">
-      <div class="flex justify-between gap-x-2 w-full">
-        <Card.Title>{listing.title}</Card.Title>
-        {#if listing.visible}
-          <div
-            class="bg-green-300 p-1 text-sm rounded-lg self-start border-black border-solid border"
-          >
+  <Card.Header>
+    <Card.Title class="flex justify-between gap-x-2 items-center">
+      {listing.title}
+      {#if !publicView}
+        <div
+          class="{listing.visible
+            ? 'bg-green-300'
+            : 'bg-slate-100'} p-1 font-normal text-sm rounded-md self-start border-black border-solid border"
+        >
+          {#if listing.visible}
             Publicerad
-          </div>
-        {:else}
-          <div
-            class="bg-slate-100 p-1 text-sm rounded-lg self-start border-black border-solid border"
-          >
+          {:else}
             Ej publicerad
-          </div>
-        {/if}
-      </div>
-      <Card.Description>
-        {#if listing.description}
-          {listing.description}
-        {/if}
-      </Card.Description>
-    </div>
+          {/if}
+        </div>
+      {/if}
+    </Card.Title>
+    <Card.Description>
+      {#if listing.description}
+        {listing.description}
+      {/if}
+    </Card.Description>
   </Card.Header>
   <Card.Content>
     <div class="flex space-x-4 text-sm text-muted-foreground">

@@ -1,6 +1,6 @@
-import type { SupabaseClient } from "@supabase/supabase-js";
+import type { Session, SupabaseClient } from "@supabase/supabase-js";
 import type { Database, Tables } from "src/supabase"
-import type { Conversation } from "$lib/shared/models/conversations";
+import type { Conversation } from "$lib/shared/models/conversation";
 import { getNow } from "$lib/utils";
 import { sendMessage } from "./messages";
 import { ResourceAlreadyExistsError } from "$lib/shared/errors/resource-already-exists";
@@ -72,6 +72,7 @@ export const startConversation = async (
   teacher: string,
   student: string,
   firstMessage: string,
+  session: Session,
 ): Promise<Conversation> => {
   const { data, error } = await supabase
     .from("conversations")
@@ -102,12 +103,12 @@ export const startConversation = async (
 
   if (data.length === 0) { // no existing convo, create new
     const newConversation = await createConversation(supabase, teacher);
-    await sendMessage(supabase, { content: firstMessage, conversation: newConversation.id }); // does this need to be awaited? todo: remove if not needed
+    await sendMessage(supabase, { content: firstMessage, conversation: newConversation.id }, session); // does this need to be awaited? todo: remove if not needed
     return newConversation as unknown as Conversation;
   }
 
   if (data.length === 1) {
-    console.error("User tried to create new conversation through a bug, not supposed to occur", { teacher, student })
+    console.error("User tried to create new conversation through a bug, if this happens frequently consider implementing the update event on start convo form.", { teacher, student })
     throw new ResourceAlreadyExistsError(409, data[0].id.toString());
   }
 
