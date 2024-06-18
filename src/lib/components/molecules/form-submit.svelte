@@ -11,12 +11,13 @@
   export let text: string;
   export let variant: Variant = "default";
   export let loadingText = "Laddar...";
+  export let disabled = false;
 </script>
 
 <Button
   type="submit"
   {variant}
-  disabled={$allErrors.length > 0 || $submitting}
+  disabled={$allErrors.length > 0 || $submitting || disabled}
   class={cn("", className)}
 >
   {#if $submitting}
