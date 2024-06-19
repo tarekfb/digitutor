@@ -62,7 +62,7 @@ export const load = async (event) => {
             if (session) {
                 try {
                     const hasExistingConversation = await getConversationForStudentAndTeacher(supabase, session.user.id, slug);
-                    allowCreateReview = hasExistingConversation ? true : false;
+                    allowCreateReview = hasExistingConversation?.has_replied ? true : false;
                 } catch (error) {
                     console.error(`Error when adding review for profile slug ${slug}, unable to read conversation for teacher & student` + slug, error);
                     allowCreateReview = true;
