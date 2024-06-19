@@ -64,72 +64,62 @@
   });
 </script>
 
-{#if conversation}
-  <div class="flex flex-col justify-between gap-y-4 h-full">
-    <div class="flex flex-col gap-y-4">
-      <div class="flex gap-x-4">
-        <Button class="relative h-8 w-8 rounded-full">
-          <Avatar
-            onClick={() => goto(`/profile/${recipient.id}`)}
-            profile={recipient}
-          />
-        </Button>
-        <PrimaryTitle>{recipient.first_name}</PrimaryTitle>
-      </div>
-      <Separator />
-      <ChatWindow
-        {supabase}
-        {profile}
-        {messages}
-        receiver={recipient}
-        conversationId={conversation.id}
-      />
-      <Separator />
-    </div>
-
-    <form
-      method="POST"
-      action="?/sendMessage"
-      use:enhance
-      class="flex flex-col gap-y-2"
-    >
-      {#if isAllowedToReply}
-        <AlertMessage
-          title="Väntar på svar"
-          description={`Väntar på svar från ${recipient.first_name ?? "läraren"}. Du kan
-          skicka fler meddelanden när du fått svar.`}
-        />
-      {/if}
-      <FormMessage {message} class="mt-2" scroll />
-      <Form.Field form={sendMessageForm} name="content">
-        <Form.Control let:attrs>
-          <Textarea
-            {...attrs}
-            placeholder="Skriv ett meddelande..."
-            class="resize-y bg-card"
-            bind:value={$formData.content}
-            disabled={!isAllowedToReply}
-          />
-        </Form.Control>
-        <Form.FieldErrors />
-      </Form.Field>
-      <div class="flex justify-end">
-        <FormSubmit
-          {allErrors}
-          {submitting}
-          text="Skicka"
-          disabled={!isAllowedToReply}
-          loadingText="Skickar..."
-        />
-      </div>
-    </form>
-  </div>
-{:else}
+<div class="flex flex-col justify-between gap-y-4 h-full">
   <div class="flex flex-col gap-y-4">
-    <PrimaryTitle>Hittade ingen konversation</PrimaryTitle>
-    <div class="flex justify-between">
-      <span>Vill du gå tillbaka till ditt konto?</span>
-      <Button on:click={() => goto("/")}>Konto</Button>
+    <div class="flex gap-x-4">
+      <Button class="relative h-8 w-8 rounded-full">
+        <Avatar
+          onClick={() => goto(`/profile/${recipient.id}`)}
+          profile={recipient}
+        />
+      </Button>
+      <PrimaryTitle>{recipient.first_name}</PrimaryTitle>
     </div>
+    <Separator />
+    <ChatWindow
+      {supabase}
+      {profile}
+      {messages}
+      receiver={recipient}
+      conversationId={conversation.id}
+    />
+    <Separator />
   </div>
-{/if}
+
+  <form
+    method="POST"
+    action="?/sendMessage"
+    use:enhance
+    class="flex flex-col gap-y-2"
+  >
+    {#if !isAllowedToReply}
+      <AlertMessage
+        title="Väntar på svar"
+        description={`Väntar på svar från ${recipient.first_name ?? "läraren"}. Du kan
+          skicka fler meddelanden när du fått svar.`}
+      />
+    {/if}
+    <FormMessage {message} class="mt-2" scroll />
+    <Form.Field form={sendMessageForm} name="content">
+      <Form.Control let:attrs>
+        <Textarea
+          {...attrs}
+          placeholder="Skriv ett meddelande..."
+          class="resize-y bg-card"
+          bind:value={$formData.content}
+          disabled={!isAllowedToReply}
+        />
+      </Form.Control>
+      <Form.FieldErrors />
+    </Form.Field>
+    <div class="flex justify-end">
+      <FormSubmit
+        {allErrors}
+        {submitting}
+        text="Skicka"
+        disabled={!isAllowedToReply}
+        loadingText="Skickar..."
+      />
+    </div>
+  </form>
+</div>

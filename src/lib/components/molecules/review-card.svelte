@@ -15,14 +15,17 @@
           {review.rating}<Star class="text-yellow-500" />
         </div>
       </Card.Title>
-      <div class="flex gap-x-2 items-center">
-        <Avatar
-          profile={review.sender}
-          onClick={undefined}
-          class="text-sm w-8 h-8"
-        />
-        <h4 class="font-semibold">{review.sender.first_name}</h4>
-      </div>
+      {#if review.sender}
+        <!-- if sender deleted account, sender will be null -->
+        <div class="flex gap-x-2 items-center">
+          <Avatar
+            profile={review.sender}
+            onClick={undefined}
+            class="text-sm w-8 h-8"
+          />
+          <h4 class="font-semibold">{review.sender.first_name}</h4>
+        </div>
+      {/if}
     </div>
   </Card.Header>
   {#if review.description}
