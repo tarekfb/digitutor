@@ -8,6 +8,7 @@
 
   export let message: Writable<Message>;
   export let scroll = false;
+  export let scrollTo: "start" | "end" = "start";
   let element: HTMLElement;
   $: $message, scrollIntoView();
 
@@ -15,7 +16,7 @@
     if (!scroll) return;
     if (!$message) return;
     setTimeout(
-      () => element.scrollIntoView({ behavior: "smooth", block: "start" }),
+      () => element.scrollIntoView({ behavior: "smooth", block: scrollTo }),
       1,
     );
   };
