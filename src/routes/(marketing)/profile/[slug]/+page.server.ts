@@ -56,7 +56,7 @@ export const load = async (event) => {
 
     let allowCreateReview: boolean = false;
     if (role === "student") {
-        const hasExistingReview = reviews.find((r) => r.sender.id === profile?.id)
+        const hasExistingReview = reviews.find((r) => r.sender?.id === profile?.id)
         if (!hasExistingReview) {
             const { session } = await safeGetSession();
             if (session) {

@@ -37,7 +37,6 @@
   <div class="flex flex-col gap-y-4" use:scroll={$chat}>
     {#each $chat as message}
       {#if message.sender === profile.id}
-        <!-- self -->
         <div class="flex flex-col gap-y-2 bg-card p-2 rounded-md self-end">
           <p>{message.content}</p>
           <p class="text-xs text-muted-foreground">
