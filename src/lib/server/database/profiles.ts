@@ -1,18 +1,10 @@
-import type { Session, SupabaseClient } from "@supabase/supabase-js";
-import type { CreateProfile } from "$lib/shared/models/profile";
-import { getNow } from "$lib/utils";
+import type { SupabaseClient } from "@supabase/supabase-js";
+import type { CreateProfile, ProfileInput } from "$lib/shared/models/profile";
+import { getNow, removeUndefined } from "$lib/utils";
 import type { Database, Tables } from "src/supabase";
+import { InvalidInputError } from "src/lib/shared/errors/invalid-input-error";
 
-export const getProfileBySession = async (
-  supabase: SupabaseClient<Database>,
-  session: Session,
-) => {
-  const id = session.user.id;
-  const profile = await getProfileByUserId(supabase, id);
-  return profile;
-};
-
-export const getProfileByUserId = async (
+export const getProfileByUser = async (
   supabase: SupabaseClient<Database>,
   userId: string,
 ): Promise<Tables<"profiles">> => {
@@ -74,22 +66,34 @@ export const createProfile = async (
 
 export const updateProfile = async (
   supabase: SupabaseClient<Database>,
-  profileInput: Tables<"profiles">,
+  profile: ProfileInput,
 ): Promise<Tables<"profiles">> => {
+  const { id, ...fieldsToUpdate } = profile;
+  const dbProfile = removeUndefined(fieldsToUpdate);
+
+  if (Object.keys(dbProfile).length === 0) {
+    console.error('Incoming profile had 0 fields to update', { id });
+    throw new InvalidInputError(400, 'Missing fields');
+  }
+
+  console.log(dbProfile)
+
   const { data, error } = await supabase
     .from("profiles")
-    .upsert(profileInput)
+    .update({ ...dbProfile, updated_at: getNow() })
+    .eq("id", id)
     .select(`*`)
     .limit(1)
+    .order('id')
     .single();
 
   if (error) {
-    console.error(`Failed to update profile for userId: ${profileInput.id}`, { error });
+    console.error(`Failed to update profile for userId: ${profile.id}`, { error });
     throw error;
   }
 
   if (!data) {
-    console.error(`Failed to update profile for profile id ${profileInput.id}. Data was null`, { data, error });
+    console.error(`Failed to update profile for profile id ${profile.id}. Data was null`, { data, error });
     throw new Error("Unexpected null response");
   }
 

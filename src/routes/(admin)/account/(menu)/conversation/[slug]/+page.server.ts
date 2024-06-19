@@ -7,7 +7,7 @@ import { message, superValidate } from "sveltekit-superforms";
 import { zod } from "sveltekit-superforms/adapters";
 import { sendMessage } from "$lib/server/database/messages";
 
-export const load = async ({ locals: { supabase, safeGetSession }, params: { slug }, parent }) => {
+export const load = async ({ locals: { supabase }, params: { slug }, parent }) => {
   const { conversations } = await parent();
 
   const conversation = conversations.find((c) => c.id === slug);

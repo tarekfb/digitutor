@@ -34,7 +34,7 @@
   const { reset } = listingForm;
 </script>
 
-<div class="flex flex-col gap-y-4 pb-8 w-full">
+<div class="flex flex-col gap-y-4 pb-8 w-full max-w-[1000px]">
   <div class="flex gap-x-2 items-center">
     <Avatar
       profile={listing.profile}

@@ -1,6 +1,6 @@
 import { error } from "@sveltejs/kit";
 import { getGenericFormMessage, unknownErrorMessage } from "$lib/shared/constants/constants";
-import { getProfileByUserId } from "$lib/server/database/profiles";
+import { getProfileByUser } from "$lib/server/database/profiles";
 import { getListingsByTeacher as getListingsByTeacher } from "$lib/server/database/listings";
 import { fail, message, superValidate } from "sveltekit-superforms";
 import { requestContactSchema, startContactSchema } from "$lib/shared/models/conversation";
@@ -8,7 +8,7 @@ import { addReviewSchema } from "$lib/shared/models/review";
 import { zod } from "sveltekit-superforms/adapters";
 import { getConversationForStudentAndTeacher, startConversation } from "$lib/server/database/conversations";
 import { redirect, setFlash } from "sveltekit-flash-message/server";
-import { ResourceAlreadyExistsError } from "$lib/shared/errors/resource-already-exists.js";
+import { ResourceAlreadyExistsError } from "src/lib/shared/errors/resource-already-exists-error.js";
 import { createReview, getReviewsByReceiver } from "src/lib/server/database/review.js";
 
 export const load = async (event) => {
@@ -16,7 +16,7 @@ export const load = async (event) => {
 
     let teacher;
     try {
-        teacher = await getProfileByUserId(supabase, slug);
+        teacher = await getProfileByUser(supabase, slug);
     } catch (e) {
         console.error("Error when reading profile with id: " + slug, e);
         throw error(500, {

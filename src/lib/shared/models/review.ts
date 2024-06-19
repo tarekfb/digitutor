@@ -2,7 +2,7 @@ import type { Tables } from "src/supabase";
 import { z } from "zod"
 
 export type Review = Omit<Tables<"reviews">, "sender" | "receiver"> & {
-    sender: Tables<"profiles">;
+    sender: Tables<"profiles"> | null;
     receiver: Tables<"profiles">;
 };
 export type InputReview = Pick<Tables<"reviews">, 'description' | 'rating'>;

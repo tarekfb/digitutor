@@ -3,9 +3,8 @@ import { _hasFullProfile } from "src/routes/(admin)/account/+layout.js";
 import { error, fail, redirect } from "@sveltejs/kit";
 import { zod } from "sveltekit-superforms/adapters";
 import { message, superValidate } from "sveltekit-superforms/client";
-import { nameSchema } from "$lib/shared/models/profile";
-import { getProfileBySession, updateProfile } from "$lib/server/database/profiles.js";
-import type { Tables } from "src/supabase";
+import { nameSchema, type ProfileInput } from "$lib/shared/models/profile";
+import { updateProfile } from "$lib/server/database/profiles.js";
 
 export async function load({ parent }) {
   const data = await parent();
@@ -38,8 +37,8 @@ export async function load({ parent }) {
 export const actions = {
   default: async (event) => {
     const { locals: { supabase, safeGetSession } } = event;
-    const { session } = await safeGetSession();
-    if (!session)
+    const { user } = await safeGetSession();
+    if (!user)
       throw redirect(303, "/auth");
 
     const form = await superValidate(event, zod(nameSchema));
@@ -52,28 +51,17 @@ export const actions = {
 
     const { firstName, lastName } = form.data;
 
-    let profile: Tables<"profiles">;
-    try {
-      profile = await getProfileBySession(supabase, session);
-    } catch (error) {
-      console.error("Error on fetch profile in complete profile", error);
-      return fail(500, {
-        message: unknownErrorMessage, form
-      });
-    }
-
-    profile = {
-      ...profile,
+    const profileInput: ProfileInput = {
+      id: user.id,
       first_name: firstName,
       last_name: lastName
-    };
-
+    }
 
     try {
-      await updateProfile(supabase, profile);
+      await updateProfile(supabase, profileInput);
       return message(form, 'Skapat profil.');
     } catch (error) {
-      console.error("Error on complete profile for userid " + profile.id, error);
+      console.error("Error on complete profile for userid " + user.id, { error });
       return fail(500, {
         message: unknownErrorMessage, form,
       });

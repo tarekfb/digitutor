@@ -1,15 +1,14 @@
 <script lang="ts">
-  import * as Alert from "$lib/components/ui/alert/index.js";
-  import { cn } from "$lib/utils.js";
   import type { Message } from "$lib/shared/models/common";
   import type { Writable } from "svelte/store";
+  import AlertMessage from "../atoms/alert-message.svelte";
 
   let className: string | null | undefined = undefined;
   export { className as class };
-  export let message: Writable<Message>;
-  let element: HTMLElement;
-  export let scroll = false;
 
+  export let message: Writable<Message>;
+  export let scroll = false;
+  let element: HTMLElement;
   $: $message, scrollIntoView();
 
   const scrollIntoView = () => {
@@ -23,14 +22,15 @@
 </script>
 
 {#if $message}
-  <div class={cn("text-center", className)} bind:this={element}>
-    <Alert.Root variant={$message.variant ?? "default"} class="bg-card">
-      <Alert.Title>{$message.title}</Alert.Title>
-      <Alert.Description>
-        {$message.description}
-        <slot />
-      </Alert.Description>
-    </Alert.Root>
+  <div bind:this={element}>
+    <AlertMessage
+      title={$message.title}
+      description={$message.description}
+      variant={$message.variant ?? "default"}
+      class={className}
+    >
+      <slot />
+    </AlertMessage>
   </div>
 {/if}
 

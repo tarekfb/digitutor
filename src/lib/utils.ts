@@ -122,3 +122,8 @@ export const logout = (
   supabase.auth.signOut();
   invalidate("supabase:auth");
 };
+
+export const removeUndefined = (fields: Record<string, any>) =>
+  Object.fromEntries(
+    Object.entries(fields).filter(([_, v]) => v !== undefined)
+  );
