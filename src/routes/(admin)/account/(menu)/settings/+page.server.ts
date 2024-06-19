@@ -102,19 +102,6 @@ export const actions = {
         // user was logged out because of bad password. Redirect to error page with explaination.
 
         try {
-            await updateProfile(supabase, {
-                id,
-                is_active: false
-            })
-        } catch (error) {
-            console.error(`Error on update profile in update name with userid ${id}`, error);
-            return message(form, getGenericFormMessage("destructive", "Kunde inte radera ditt konto", "Något gick fel. Vänligen kontakta oss på info@mindic.se och ange följande kod: 0"), { status: 500 });
-            // todo: add sentry error id
-            // todo: add real email
-            // todo: add copy paste for error code in frontend. send code as data
-        }
-
-        try {
             const { error } = await supabaseServiceRole.auth.admin.deleteUser(
                 id,
                 false,
