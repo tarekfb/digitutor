@@ -7,6 +7,10 @@
   import type { PageData } from "./$types";
   import AddReview from "src/lib/components/molecules/add-review.svelte";
   import ReviewCard from "src/lib/components/molecules/review-card.svelte";
+  import AlertMessage from "$lib/components/atoms/alert-message.svelte";
+  import { websiteName } from "$lib/shared/constants/constants";
+  import { Button } from "src/lib/components/ui/button";
+  import { goto } from "$app/navigation";
 
   export let data: PageData;
   $: ({
@@ -21,52 +25,63 @@
   } = data);
 </script>
 
-<div class="flex flex-col gap-y-4">
-  <div class="flex gap-x-2 text-2xl">
-    <Avatar profile={teacher} onClick={undefined} />
-    <PrimaryTitle>{teacher.first_name}</PrimaryTitle>
-  </div>
-
-  <SecondaryTitle>Annonser</SecondaryTitle>
-  <div class="flex flex-col gap-y-4 my-6">
-    {#each listings as listing}
-      <a href="/listing/{listing.id}" aria-label="Navigate to ad">
-        <ListingCard {listing} />
-      </a>
-    {:else}
-      <p>{teacher.first_name} har inga annonser ännu.</p>
-    {/each}
-  </div>
-
-  <SecondaryTitle>Recensioner</SecondaryTitle>
-  {#each reviews as review}
-    <ReviewCard {review} />
-  {:else}
-    <p>{teacher.first_name} har inga recensioner ännu.</p>
-  {/each}
-  {#if allowCreateReview}
-    <AddReview form={addReviewForm} {teacher} />
-  {/if}
-
-  <ContactTeacherForm
-    {requestContactForm}
-    {startContactForm}
-    requestContactAction="?/requestContact"
-    startContactAction="?/startContact"
-    firstName={teacher.first_name}
-    buttonStyling="self-end"
+{#if !teacher.is_active === false}
+  <AlertMessage
+    variant="destructive"
+    title="Profilen är borttagen."
+    description="Läraren finns inte längre på {websiteName}. Profilen är därför inte längre tillgänglig."
   />
+  <Button on:click={() => goto("/")}>Gå hem</Button>
+{:else}
+  <!-- else content here -->
 
-  {#if session?.user.id === teacher.id}
-    <small
-      class="mt-12 flex flex-col gap-y-2 text-center text-muted-foreground"
-    >
-      <span>
-        Vill du göra ändringar? <a href="/account" class="underline"
-          >Gå till din profil.</a
-        >
-      </span>
-      <span>Bara du kan se detta.</span>
-    </small>
-  {/if}
-</div>
+  <div class="flex flex-col gap-y-4">
+    <div class="flex gap-x-2 text-2xl">
+      <Avatar profile={teacher} onClick={undefined} />
+      <PrimaryTitle>{teacher.first_name}</PrimaryTitle>
+    </div>
+
+    <SecondaryTitle>Annonser</SecondaryTitle>
+    <div class="flex flex-col gap-y-4 my-6">
+      {#each listings as listing}
+        <a href="/listing/{listing.id}" aria-label="Navigate to ad">
+          <ListingCard {listing} />
+        </a>
+      {:else}
+        <p>{teacher.first_name} har inga annonser ännu.</p>
+      {/each}
+    </div>
+
+    <SecondaryTitle>Recensioner</SecondaryTitle>
+    {#each reviews as review}
+      <ReviewCard {review} />
+    {:else}
+      <p>{teacher.first_name} har inga recensioner ännu.</p>
+    {/each}
+    {#if allowCreateReview}
+      <AddReview form={addReviewForm} {teacher} />
+    {/if}
+
+    <ContactTeacherForm
+      {requestContactForm}
+      {startContactForm}
+      requestContactAction="?/requestContact"
+      startContactAction="?/startContact"
+      firstName={teacher.first_name}
+      buttonStyling="self-end"
+    />
+
+    {#if session?.user.id === teacher.id}
+      <small
+        class="mt-12 flex flex-col gap-y-2 text-center text-muted-foreground"
+      >
+        <span>
+          Vill du göra ändringar? <a href="/account" class="underline"
+            >Gå till din profil.</a
+          >
+        </span>
+        <span>Bara du kan se detta.</span>
+      </small>
+    {/if}
+  </div>
+{/if}

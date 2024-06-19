@@ -4,6 +4,7 @@
   import { zodClient } from "sveltekit-superforms/adapters";
   import { superForm } from "sveltekit-superforms";
   import FormMessage from "$lib/components/molecules/form-message.svelte";
+  import AlertMessage from "$lib/components/atoms/alert-message.svelte";
   import * as Form from "$lib/components/ui/form/index.js";
   import Avatar from "$lib/components/atoms/avatar.svelte";
   import PrimaryTitle from "$lib/components/atoms/primary-title.svelte";
@@ -15,7 +16,6 @@
   import ChatWindow from "$lib/components/molecules/chat-window.svelte";
   import { chat } from "src/stores/chat";
   import type { Tables } from "src/supabase.js";
-  import * as Alert from "$lib/components/ui/alert/index.js";
   import type { PageData } from "./$types";
 
   export let data: PageData;
@@ -93,14 +93,12 @@
       use:enhance
       class="flex flex-col gap-y-2"
     >
-      {#if !isAllowedToReply}
-        <Alert.Root class="bg-card text-center">
-          <Alert.Title>Väntar på svar</Alert.Title>
-          <Alert.Description
-            >{`Väntar på svar från ${recipient.first_name ?? "läraren"}. Du kan
-          skicka fler meddelanden när du fått svar.`}</Alert.Description
-          >
-        </Alert.Root>
+      {#if isAllowedToReply}
+        <AlertMessage
+          title="Väntar på svar"
+          description={`Väntar på svar från ${recipient.first_name ?? "läraren"}. Du kan
+          skicka fler meddelanden när du fått svar.`}
+        />
       {/if}
       <FormMessage {message} class="mt-2" scroll />
       <Form.Field form={sendMessageForm} name="content">

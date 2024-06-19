@@ -3,9 +3,8 @@ import type { PageServerLoad } from "./$types";
 import { getGenericFormMessage } from "$lib/shared/constants/constants";
 import { message, superValidate } from "sveltekit-superforms";
 import { zod } from "sveltekit-superforms/adapters";
-import { emailSchema, nameSchema } from "$lib/shared/models/profile";
-import { getProfileBySession, updateProfile } from "$lib/server/database/profiles";
-import type { Tables } from "src/supabase";
+import { emailSchema, nameSchema, type ProfileInput } from "$lib/shared/models/profile";
+import { updateProfile } from "$lib/server/database/profiles";
 import { updateUserEmail } from "$lib/server/database/user";
 import { deleteAccountSchema, passwordSchema } from "$lib/shared/models/user";
 import { isAuthApiError } from "@supabase/supabase-js";
@@ -32,8 +31,8 @@ export const load: PageServerLoad = async ({ parent, locals: { safeGetSession } 
 export const actions = {
     name: async (event) => {
         const { locals: { supabase, safeGetSession } } = event;
-        const { session } = await safeGetSession();
-        if (!session)
+        const { user } = await safeGetSession();
+        if (!user)
             throw redirect(303, "/auth");
 
         const form = await superValidate(event, zod(nameSchema));
@@ -42,16 +41,8 @@ export const actions = {
 
         const { firstName, lastName } = form.data;
 
-        let profile;
-        try {
-            profile = await getProfileBySession(supabase, session)
-        } catch (error) {
-            console.error(`Error on fetch profile in update name with userid ${session.user.id}`, error);
-            return message(form, getGenericFormMessage(), { status: 500 });
-        }
-
-        const profileInput: Tables<"profiles"> = {
-            ...profile,
+        const profileInput: ProfileInput = {
+            id: user.id,
             first_name: firstName,
             last_name: lastName
         }
@@ -60,7 +51,7 @@ export const actions = {
             await updateProfile(supabase, profileInput);
             return { form }
         } catch (error) {
-            console.error(`Error on update profile in update name with userid ${session.user.id}`, error);
+            console.error(`Error on update profile in update name with userid ${user.id}`, error);
             return message(form, getGenericFormMessage(), { status: 500 });
         }
     },
@@ -85,8 +76,8 @@ export const actions = {
     },
     delete: async (event) => {
         const { locals: { supabase, safeGetSession, supabaseServiceRole }, cookies } = event;
-        const { session } = await safeGetSession();
-        if (!session)
+        const { user } = await safeGetSession();
+        if (!user)
             throw redirect(303, "/auth");
 
         const form = await superValidate(event, zod(deleteAccountSchema));
@@ -94,7 +85,7 @@ export const actions = {
             return fail(400, { form });
 
         const { password } = form.data;
-        const { id, email } = session.user;
+        const { id, email } = user;
         if (!email) {
             console.error(`User with id ${id} has no email and therefore password could not be verified`);
             return message(form, getGenericFormMessage(), { status: 500 });
@@ -102,13 +93,26 @@ export const actions = {
 
         // Check current password is correct before deleting account
         const { error } = await supabase.auth.signInWithPassword({
-            email,
+            email, 
             password,
         });
 
         if (error)
             throw redirect(303, "/auth/settings_password_error");
         // user was logged out because of bad password. Redirect to error page with explaination.
+
+        try {
+            await updateProfile(supabase, {
+                id,
+                is_active: false
+            })
+        } catch (error) {
+            console.error(`Error on update profile in update name with userid ${id}`, error);
+            return message(form, getGenericFormMessage("destructive", "Kunde inte radera ditt konto", "Något gick fel. Vänligen kontakta oss på info@mindic.se och ange följande kod: 0"), { status: 500 });
+            // todo: add sentry error id
+            // todo: add real email
+            // todo: add copy paste for error code in frontend. send code as data
+        }
 
         try {
             const { error } = await supabaseServiceRole.auth.admin.deleteUser(

@@ -3,7 +3,7 @@ import type { Database, Tables } from "src/supabase"
 import type { Conversation } from "$lib/shared/models/conversation";
 import { getNow } from "$lib/utils";
 import { sendMessage } from "./messages";
-import { ResourceAlreadyExistsError } from "$lib/shared/errors/resource-already-exists";
+import { ResourceAlreadyExistsError } from "src/lib/shared/errors/resource-already-exists-error";
 
 // atm not needed but probably will be at some point. Delete if not used in future [2024-06-17]
 // export const getConversation = async (

@@ -7,7 +7,7 @@ import { createListingSchema } from "$lib/shared/models/listing";
 import { getConversationForStudentAndTeacher, startConversation } from "$lib/server/database/conversations";
 import { requestContactSchema, startContactSchema } from "$lib/shared/models/conversation";
 import { redirect } from "sveltekit-flash-message/server";
-import { ResourceAlreadyExistsError } from "$lib/shared/errors/resource-already-exists";
+import { ResourceAlreadyExistsError } from "src/lib/shared/errors/resource-already-exists-error";
 import { getReviewsByReceiver } from "src/lib/server/database/review";
 import type { Review } from "src/lib/shared/models/review.js";
 
