@@ -25,7 +25,7 @@
   <title>Skapa konto</title>
 </svelte:head>
 
-<FormMessage {message} scroll />
+<FormMessage {message} scroll scrollTo="end" />
 <form class="text-start" method="POST" use:enhance>
   <Card.Root>
     <Card.Header class="space-y-1">
