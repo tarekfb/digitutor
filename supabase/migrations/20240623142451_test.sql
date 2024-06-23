@@ -1,0 +1,3 @@
+alter table "public"."stripe_customers" add column "test" text default 'test'::text;
+
+
