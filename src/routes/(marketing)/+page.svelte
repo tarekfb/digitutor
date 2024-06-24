@@ -62,7 +62,7 @@
           <ListingCard {listing} />
         </a>
       {:else}
-        <p>Det finns inga annonser ännu.</p>
+        <p class="text-center">Det finns inga annonser ännu.</p>
       {/each}
     </div>
   </div>

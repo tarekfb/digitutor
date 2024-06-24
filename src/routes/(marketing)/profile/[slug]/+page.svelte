@@ -34,7 +34,7 @@
         <ListingCard {listing} />
       </a>
     {:else}
-      <p>{teacher.first_name} har inga annonser ännu.</p>
+      <p class="text-center">{teacher.first_name} har inga annonser ännu.</p>
     {/each}
   </div>
 
@@ -42,7 +42,7 @@
   {#each reviews as review}
     <ReviewCard {review} />
   {:else}
-    <p>{teacher.first_name} har inga recensioner ännu.</p>
+    <p class="text-center">{teacher.first_name} har inga recensioner ännu.</p>
   {/each}
   {#if allowCreateReview}
     <AddReview form={addReviewForm} {teacher} />
