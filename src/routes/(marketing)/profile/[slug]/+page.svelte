@@ -21,8 +21,8 @@
   } = data);
 </script>
 
-<div class="flex flex-col gap-y-4">
-  <div class="flex gap-x-2 text-2xl">
+<div class="flex flex-col gap-y-4 pb-8 w-full max-w-[1000px]">
+  <div class="avatar-container">
     <Avatar profile={teacher} onClick={undefined} />
     <PrimaryTitle>{teacher.first_name}</PrimaryTitle>
   </div>
@@ -34,7 +34,7 @@
         <ListingCard {listing} />
       </a>
     {:else}
-      <p>{teacher.first_name} har inga annonser ännu.</p>
+      <p class="text-center">{teacher.first_name} har inga annonser ännu.</p>
     {/each}
   </div>
 
@@ -42,7 +42,7 @@
   {#each reviews as review}
     <ReviewCard {review} />
   {:else}
-    <p>{teacher.first_name} har inga recensioner ännu.</p>
+    <p class="text-center">{teacher.first_name} har inga recensioner ännu.</p>
   {/each}
   {#if allowCreateReview}
     <AddReview form={addReviewForm} {teacher} />

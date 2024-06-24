@@ -6,6 +6,7 @@
   import type { Conversation } from "src/lib/shared/models/conversation";
   import ConversationCard from "../molecules/conversation-card.svelte";
   import type { Tables } from "src/supabase";
+  import Link from "../atoms/link.svelte";
 
   export let conversations: Conversation[];
   export let listings: Listing[] | undefined;
@@ -18,7 +19,7 @@
   {#if !listings}
     <p>Kunde inte hämta annonser.</p>
   {:else if listings.length === 0}
-    <p>Inga annonser. Testa skapa en!</p>
+    <p class="text-center">Inga annonser. Testa skapa en!</p>
   {:else}
     {#each listings as listing}
       <a href="/listing/{listing.id}" aria-label="Navigate to ad">
@@ -31,7 +32,7 @@
 </div>
 
 <PrimaryTitle class="text-center">Dina konversationer</PrimaryTitle>
-<div class="flex flex-col items-center gap-y-4 my-6">
+<div class="flex flex-col items-center text-center gap-y-4 my-6">
   {#each conversations as conversation}
     <a
       href={"/account/conversation/" + conversation.id}
@@ -40,6 +41,10 @@
       ><ConversationCard {conversation} {profile} />
     </a>
   {:else}
-    <p>Inga konversationer. Testa söka efter en lärare!</p>
+    <p>Inga konversationer ännu.</p>
+    <p class="text-lg">
+      Se våra <Link href="/tips">tips</Link> för att förbättra dina chanser att bli
+      kontaktad.
+    </p>
   {/each}
 </div>
