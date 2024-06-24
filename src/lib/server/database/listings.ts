@@ -110,7 +110,7 @@ export const createListing = async (
   const dbListing: Tables<"listings"> = {
     id: crypto.randomUUID(),
     title: title,
-    hourlyPrice: 0,
+    hourly_price: 0,
     created_at: getNow(),
     updated_at: null,
     currency: "SEK",
@@ -183,9 +183,19 @@ export const updateListing = async (
   session: Session,
 ): Promise<Listing> => {
 
+  const dbListing = {
+    id: listingId,
+    title: input.title,
+    hourly_price: input.hourlyPrice,
+    description: input.description,
+    subjects: input.subjects,
+    visible: input.visible,
+    updated_at: getNow(),
+  };
+
   const { data, error } = await supabase
     .from("listings")
-    .update({ ...input, updated_at: getNow() })
+    .update({ ...dbListing })
     .eq("id", listingId)
     .eq('profile', session.user.id)
     .select(

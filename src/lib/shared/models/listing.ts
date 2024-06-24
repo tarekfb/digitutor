@@ -6,7 +6,9 @@ export type Listing = Omit<Tables<"listings">, "profile"> & {
     profile: Tables<"profiles">;
 };
 
-export type InputListing = Pick<Tables<"listings">, 'hourlyPrice' | 'description' | 'subjects' | 'title' | 'visible'>;
+export type InputListing = Pick<Tables<"listings">, 'description' | 'subjects' | 'title' | 'visible'> & {
+    hourlyPrice: number
+};
 
 const createListingProps: TypeToZod<InputListing> = {
     description: z
