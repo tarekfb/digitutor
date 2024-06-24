@@ -17,7 +17,7 @@ const config = {
   vitePlugin: {
     // set to true for defaults or customize with object
     inspector: {
-      toggleKeyCombo: 'meta-shift',
+      toggleKeyCombo: 'control-shift',
       showToggleButton: 'always',
       toggleButtonPos: 'bottom-right'
     }
