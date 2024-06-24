@@ -16,7 +16,7 @@
   export let form;
   const { form: formData, enhance, submitting, allErrors, message } = form;
   const description =
-    "Du kan fylla i mer information om annonsen i nästa steg.";
+    "Du kan fylla i mer information om annonsen, eller ändra rubriken, i nästa steg.";
   const title = "Skapa annons";
 </script>
 
