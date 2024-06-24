@@ -22,7 +22,7 @@
   {:else}
     {#each listings as listing}
       <a href="/listing/{listing.id}" aria-label="Navigate to ad">
-        <ListingCard {listing} publicView />
+        <ListingCard {listing} publicView={false} />
       </a>
     {/each}
   {/if}

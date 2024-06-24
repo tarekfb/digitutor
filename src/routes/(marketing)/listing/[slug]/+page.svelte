@@ -1,7 +1,7 @@
 <script lang="ts">
   import { zodClient } from "sveltekit-superforms/adapters";
   import { superForm } from "sveltekit-superforms";
-  import { createListingSchema } from "$lib/shared/models/listing.js";
+  import { updateListingSchema } from "$lib/shared/models/listing.js";
   import NonEditableListing from "$lib/components/molecules/non-editable-listing.svelte";
   import Avatar from "$lib/components/atoms/avatar.svelte";
   import EditableListing from "$lib/components/organisms/editable-listing.svelte";
@@ -20,12 +20,12 @@
 
   let isEditing = false;
 
-  const listingForm = superForm(data.createListingForm, {
-    validators: zodClient(createListingSchema),
+  const listingForm = superForm(data.updateListingForm, {
+    validators: zodClient(updateListingSchema),
     onUpdated({ form }) {
       if (form.valid) {
         isEditing = false;
-        reset({ newState: data.createListingForm.data });
+        reset({ newState: data.updateListingForm.data });
       }
     },
     resetForm: false,
@@ -38,7 +38,7 @@
   <div class="flex gap-x-2 items-center">
     <Avatar
       profile={listing.profile}
-      onClick={() => goto(`/profile/${listing.profile?.id}`)}
+      onClick={() => goto(`/profile/${listing.profile.id}`)}
     />
     <PrimaryTitle>{listing.profile.first_name}</PrimaryTitle>
   </div>
@@ -53,14 +53,20 @@
         Ändra</Button
       >
     {/if}
+    <SecondaryTitle>Recensioner</SecondaryTitle>
+    {#each reviews as review}
+      <ReviewCard {review} />
+    {:else}
+      <p>{listing.profile.first_name} har inga recensioner ännu.</p>
+    {/each}
   {:else}
     <NonEditableListing {listing} />
-    {#if reviews.length !== 0}
-      <SecondaryTitle>Recensioner</SecondaryTitle>
-      {#each reviews as review}
-        <ReviewCard {review} />
-      {/each}
-    {/if}
+    <SecondaryTitle>Recensioner</SecondaryTitle>
+    {#each reviews as review}
+      <ReviewCard {review} />
+    {:else}
+      <p>{listing.profile.first_name} har inga recensioner ännu.</p>
+    {/each}
     <ContactTeacherForm
       {requestContactForm}
       {startContactForm}

@@ -4,13 +4,15 @@
   import SecondaryTitle from "$lib/components/atoms/secondary-title.svelte";
 
   export let listing: Listing;
-  const { title, description, subjects, hourlyPrice, visible } = listing;
+  $: ({ title, description, subjects, hourly_price } = listing);
+
 </script>
 
 <div class="flex flex-col gap-y-4 generic-card">
   <div class="flex flex-col gap-y-4">
+    
     <SecondaryTitle class="font-semibold">{title}</SecondaryTitle>
-    <h2 class="text-xl">{hourlyPrice} SEK</h2>
+    <h2 class="text-xl">{hourly_price} SEK</h2>
     {#if description}
       <p>{description}</p>
     {:else}
@@ -26,17 +28,4 @@
       {/each}
     </div>
   </div>
-  {#if visible}
-    <div
-      class="bg-green-300 p-2 rounded-lg self-start border-black border-solid border"
-    >
-      Publicerad
-    </div>
-  {:else}
-    <div
-      class="bg-slate-100 p-2 rounded-lg self-start border-black border-solid border"
-    >
-      Ej publicerad
-    </div>
-  {/if}
 </div>

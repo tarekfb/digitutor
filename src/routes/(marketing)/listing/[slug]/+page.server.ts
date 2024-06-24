@@ -3,7 +3,7 @@ import { zod } from "sveltekit-superforms/adapters";
 import { getGenericFormMessage, unknownErrorMessage } from "$lib/shared/constants/constants";
 import { message, superValidate } from "sveltekit-superforms";
 import { deleteListing, getListing, updateListing } from "$lib/server/database/listings";
-import { createListingSchema } from "$lib/shared/models/listing";
+import { updateListingSchema } from "$lib/shared/models/listing";
 import { getConversationForStudentAndTeacher, startConversation } from "$lib/server/database/conversations";
 import { requestContactSchema, startContactSchema } from "$lib/shared/models/conversation";
 import { redirect } from "sveltekit-flash-message/server";
@@ -17,14 +17,10 @@ export const load = async ({ locals: { supabase }, params: { slug }, parent }) =
     listing = await getListing(supabase, slug);
   } catch (e) {
     console.error("Error when reading listing with id: " + slug, e);
-    throw error(500, {
+    error(500, {
       message: unknownErrorMessage,
     });
   };
-  if (!listing)
-    throw error(404, {
-      message: 'Not found'
-    });
 
   const parentData = await parent();
   const role = parentData.profile?.role ?? "";
@@ -36,10 +32,10 @@ export const load = async ({ locals: { supabase }, params: { slug }, parent }) =
     console.error(`Error when reading reviews for profile ${listing.profile.id} on listing ${slug}`, e);
   }
 
-  const createListingForm = await superValidate(listing, zod(createListingSchema))
+  const updateListingForm = await superValidate({ ...listing, hourlyPrice: listing.hourly_price.toString() }, zod(updateListingSchema))
   const requestContactForm = await superValidate({ teacher: listing.profile.id, role }, zod(requestContactSchema))
   const startContactForm = await superValidate({ teacher: listing.profile.id, role }, zod(startContactSchema))
-  return { listing, reviews, createListingForm, requestContactForm, startContactForm };
+  return { listing, reviews, updateListingForm, requestContactForm, startContactForm };
 }
 
 export const actions = {
@@ -64,7 +60,7 @@ export const actions = {
     if (!session)
       throw redirect(303, "/auth");
 
-    const form = await superValidate(event, zod(createListingSchema));
+    const form = await superValidate(event, zod(updateListingSchema));
 
     if (!form.valid) {
       return fail(400, {
