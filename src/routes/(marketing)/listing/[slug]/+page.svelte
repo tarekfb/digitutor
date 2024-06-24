@@ -35,7 +35,7 @@
 </script>
 
 <div class="flex flex-col gap-y-4 pb-8 w-full max-w-[1000px]">
-  <div class="flex gap-x-2 items-center">
+  <div class="avatar-container">
     <Avatar
       profile={listing.profile}
       onClick={() => goto(`/profile/${listing.profile.id}`)}

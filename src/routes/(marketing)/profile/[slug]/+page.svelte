@@ -21,8 +21,8 @@
   } = data);
 </script>
 
-<div class="flex flex-col gap-y-4">
-  <div class="flex gap-x-2 text-2xl">
+<div class="flex flex-col gap-y-4 pb-8 w-full max-w-[1000px]">
+  <div class="avatar-container">
     <Avatar profile={teacher} onClick={undefined} />
     <PrimaryTitle>{teacher.first_name}</PrimaryTitle>
   </div>
