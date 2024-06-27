@@ -3,7 +3,7 @@ import { zod } from "sveltekit-superforms/adapters";
 import { getGenericFormMessage, unknownErrorMessage } from "$lib/shared/constants/constants";
 import { message, superValidate } from "sveltekit-superforms";
 import { deleteListing, getListing, updateListing } from "$lib/server/database/listings";
-import { updateListingSchema } from "$lib/shared/models/listing";
+import { updateListingSchema, type Listing } from "$lib/shared/models/listing";
 import { getConversationForStudentAndTeacher, startConversation } from "$lib/server/database/conversations";
 import { requestContactSchema, startContactSchema } from "$lib/shared/models/conversation";
 import { redirect } from "sveltekit-flash-message/server";
@@ -32,7 +32,7 @@ export const load = async ({ locals: { supabase }, params: { slug }, parent }) =
     console.error(`Error when reading reviews for profile ${listing.profile.id} on listing ${slug}`, e);
   }
 
-  const updateListingForm = await superValidate({ ...listing, hourlyPrice: listing.hourly_price.toString() }, zod(updateListingSchema))
+  const updateListingForm = await superValidate({ ...listing, hourlyPrice: listing.hourly_price }, zod(updateListingSchema))
   const requestContactForm = await superValidate({ teacher: listing.profile.id, role }, zod(requestContactSchema))
   const startContactForm = await superValidate({ teacher: listing.profile.id, role }, zod(startContactSchema))
   return { listing, reviews, updateListingForm, requestContactForm, startContactForm };
