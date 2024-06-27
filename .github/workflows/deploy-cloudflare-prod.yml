@@ -9,13 +9,12 @@ on:
 jobs:
   deploy_to_cloudflare:
     name: Deploy to Cloudflare
+    if: ${{ github.event.workflow_run.conclusion == 'success' && github.event.workflow_run.head_branch == 'master' }}
     runs-on: ubuntu-latest
 
     env:
         DEPLOY_HOOK_PROD: ${{ secrets.DEPLOY_HOOK_PROD }}
         
-    if: ${{ github.event.workflow_run.conclusion == 'success' && github.ref == 'refs/heads/master' }}
-
     steps:
       - name: Deploy to Cloudflare Pages
         run: curl -X POST https://api.cloudflare.com/client/v4/pages/webhooks/deploy_hooks/${{ env.DEPLOY_HOOK_PROD }}
