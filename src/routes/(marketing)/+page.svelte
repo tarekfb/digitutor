@@ -15,9 +15,9 @@
 <div class="flex flex-col items-center gap-y-4 text-center py-12 md:gap-y-8">
   <div class="max-w-xl">
     <div
-      class="text-3xl md:text-4xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-primary to-accent"
+      class="text-3xl md:text-4xl font-bold text-gradient"
     >
-      Mindic
+      {websiteName}
     </div>
 
     <div class="text-4xl md:text-6xl font-bold px-2" style="line-height: 1.2;">
@@ -42,7 +42,7 @@
   <div class="pt-20 pb-8 px-7">
     <div class="max-w-lg mx-auto text-center">
       <div
-        class="text-3xl md:text-5xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-primary to-accent"
+        class="text-3xl md:text-5xl font-bold text-gradient"
       >
         Spana in våra lärare
       </div>

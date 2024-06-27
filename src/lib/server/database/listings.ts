@@ -78,7 +78,7 @@ export const getListingsByTeacher = async (
 export const getListing = async (
   supabase: SupabaseClient<Database>,
   id: string,
-): Promise<Listing | null> => {
+): Promise<Listing> => {
   const { data, error } = await supabase
     .from("listings")
 
