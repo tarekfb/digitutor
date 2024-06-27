@@ -48,6 +48,12 @@
   } = requestContactFormValues;
 
   const startContactFormValues = superForm(startContactForm, {
+    // onUpdated({ form }) {
+    //   if (form.valid) { // this prevents opening the modal again if navigates back to this page
+    //     isStartingContact.set(false);
+    //     wasGrantedContact = false;
+    //   }
+    // },
     validators: zodClient(startContactSchema),
   });
 </script>

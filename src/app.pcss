@@ -84,12 +84,21 @@
   }
 }
 
+
 .link {
   @apply font-medium text-accent hover:underline
 }
 
+.avatar-container {
+  @apply flex gap-x-2 items-center
+}
+
 .generic-card {
   @apply bg-card p-8 rounded-lg shadow-md
+}
+
+.text-gradient {
+  @apply bg-clip-text text-transparent bg-gradient-to-r from-primary to-accent
 }
 
 /* a {
