@@ -14,7 +14,7 @@ jobs:
     env:
         DEPLOY_HOOK_PROD: ${{ secrets.DEPLOY_HOOK_PROD }}
         
-    if: ${{ github.event.workflow_run.conclusion == 'success' }}
+    if: ${{ github.event.workflow_run.conclusion == 'success' && github.ref == 'refs/heads/master' }}
 
     steps:
       - name: Deploy to Cloudflare Pages
