@@ -4,7 +4,7 @@
   import { expoOut } from "svelte/easing";
   import { slide } from "svelte/transition";
   import { Toaster, toast } from "svelte-sonner";
-  import { goto, invalidate } from "$app/navigation";
+  import { goto, invalidate, invalidateAll } from "$app/navigation";
   import { onMount } from "svelte";
   import { getFlash } from "sveltekit-flash-message";
   import { page } from "$app/stores";
@@ -19,8 +19,11 @@
          * Queue this as a task so the navigation won't prevent the
          * triggering function from completing
          */
+        // setTimeout(() => {
+        //   goto("/", { invalidateAll: true });
+        // });
         setTimeout(() => {
-          goto("/", { invalidateAll: true });
+          invalidateAll();
         });
       }
       if (newSession?.expires_at !== session?.expires_at) {

@@ -14,7 +14,7 @@
     {#each conversations as conversation}
       <a
         href={"/account/conversation/" + conversation.id}
-        aria-label="Navigate to ad"
+        aria-label="Gå till konversation"
         class="w-full"
       >
         <ConversationCard {conversation} {profile} />
