@@ -14,9 +14,7 @@
 
 <div class="flex flex-col items-center gap-y-4 text-center py-12 md:gap-y-8">
   <div class="max-w-xl">
-    <div
-      class="text-3xl md:text-4xl font-bold text-gradient"
-    >
+    <div class="text-3xl md:text-4xl font-bold text-gradient">
       {websiteName}
     </div>
 
@@ -41,9 +39,7 @@
 <div class="min-h-[60vh]">
   <div class="pt-20 pb-8 px-7">
     <div class="max-w-lg mx-auto text-center">
-      <div
-        class="text-3xl md:text-5xl font-bold text-gradient"
-      >
+      <div class="text-3xl md:text-5xl font-bold text-gradient">
         Spana in våra lärare
       </div>
       <div class="mt-6 text-xl font-bold">
@@ -58,9 +54,7 @@
 
     <div class="flex flex-col gap-y-4 mt-12">
       {#each data.listings as listing}
-        <a href="/listing/{listing.id}" aria-label="Navigate to ad">
-          <ListingCard {listing} />
-        </a>
+        <ListingCard {listing} publicView={false} clickable />
       {:else}
         <p class="text-center">Det finns inga annonser ännu.</p>
       {/each}
