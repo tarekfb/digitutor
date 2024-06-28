@@ -99,7 +99,7 @@ export const actions = {
 
     const conversation = await getConversationForStudentAndTeacher(supabase, session.user.id, teacher);
     if (conversation)
-      redirect(303, `/account/conversation/${conversation.id}`, { message: 'Du har redan kontaktat läraren.', type: 'info' }, event);
+      redirect(303, `/account/conversation/${conversation.id}`);
 
     return { form };
   },
@@ -135,7 +135,7 @@ export const actions = {
       conversationId = id;
     } catch (error) {
       if (error instanceof ResourceAlreadyExistsError) {
-        throw redirect(303, `/account/conversation/${error.message}`, { message: 'Du har redan kontaktat läraren.', type: 'info' }, event); // message is conversation id
+        throw redirect(303, `/account/conversation/${error.message}`); // message is conversation id
       }
       console.error("Error when starting conversation for listing slug: " + slug, error);
       return message(form, getGenericFormMessage(), { status: 500 });
