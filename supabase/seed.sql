@@ -25,7 +25,7 @@ VALUES
         '550e8400-e29b-41d4-a716-446655440000',
         'authenticated',
         'authenticated',
-        'user1@example.com',
+        'alice@example.com',
         crypt('asdasdasd', gen_salt('bf')),
         current_timestamp,
         current_timestamp,
@@ -44,7 +44,26 @@ VALUES
         '550e8400-e29b-41d4-a716-446655440010',
         'authenticated',
         'authenticated',
-        'user2@example.com',
+        'bob@example.com',
+        crypt('asdasdasd', gen_salt('bf')),
+        current_timestamp,
+        current_timestamp,
+        current_timestamp,
+        '{"provider":"email","providers":["email"]}',
+        '{}',
+        current_timestamp,
+        current_timestamp,
+        '',
+        '',
+        '',
+        ''
+    ),
+    (
+        '00000000-0000-0000-0000-000000000000',
+        '550e8400-e29b-41d4-a716-446655440020',
+        'authenticated',
+        'authenticated',
+        'charlie@example.com',
         crypt('asdasdasd', gen_salt('bf')),
         current_timestamp,
         current_timestamp,
@@ -75,7 +94,7 @@ VALUES
     (
         uuid_generate_v4(),
         '550e8400-e29b-41d4-a716-446655440000',
-        '{"sub":"550e8400-e29b-41d4-a716-446655440000","email":"user1@example.com"}' :: jsonb,
+        '{"sub":"550e8400-e29b-41d4-a716-446655440000","email":"alice@example.com"}' :: jsonb,
         'email',
         '00000000-0000-0000-0000-000000000000',
         current_timestamp,
@@ -85,23 +104,25 @@ VALUES
     (
         uuid_generate_v4(),
         '550e8400-e29b-41d4-a716-446655440010',
-        '{"sub":"550e8400-e29b-41d4-a716-446655440010","email":"user2@example.com"}' :: jsonb,
+        '{"sub":"550e8400-e29b-41d4-a716-446655440010","email":"bob@example.com"}' :: jsonb,
         'email',
         '00000000-0000-0000-0000-000000000001',
         current_timestamp,
         current_timestamp,
         current_timestamp
+    ),
+    (
+        uuid_generate_v4(),
+        '550e8400-e29b-41d4-a716-446655440020',
+        '{"sub":"550e8400-e29b-41d4-a716-446655440020","email":"charlie@example.com"}' :: jsonb,
+        'email',
+        '00000000-0000-0000-0000-000000000002',
+        current_timestamp,
+        current_timestamp,
+        current_timestamp
     );
--- Add additional seed data if needed
--- Example: Insert seed data into the subjects table
-INSERT INTO
-    public.subjects (id, title)
-VALUES
-    (1, 'JS'),
-    (2, 'TS'),
-    (3, 'CS');
 
--- Example: Insert seed data into the profiles table
+-- Insert seed data into the profiles table
 INSERT INTO
     public.profiles (id, first_name, last_name, role, created_at)
 VALUES
@@ -114,13 +135,20 @@ VALUES
     ),
     (
         '550e8400-e29b-41d4-a716-446655440010',
-        'Alice',
-        'Wonderland',
+        'Bob',
+        'Builder',
+        'student',
+        NOW()
+    ),
+    (
+        '550e8400-e29b-41d4-a716-446655440020',
+        'Charlie',
+        'Brown',
         'student',
         NOW()
     );
 
--- Example: Insert seed data into the listings table
+-- Insert seed data into the listings table
 INSERT INTO
     public.listings (
         id,
@@ -140,11 +168,11 @@ VALUES
         '{1}',
         50,
         'SEK',
-        '550e8400-e29b-41d4-a716-446655440000',  -- Adjusted to match profile ID
+        '550e8400-e29b-41d4-a716-446655440000',
         TRUE
     );
 
--- Example: Insert seed data into the conversations table
+-- Insert seed data into the conversations table
 INSERT INTO
     public.conversations (id, teacher, student, has_replied)
 VALUES
@@ -153,9 +181,15 @@ VALUES
         '550e8400-e29b-41d4-a716-446655440000',
         '550e8400-e29b-41d4-a716-446655440010',
         FALSE
+    ),
+    (
+        '550e8400-e29b-41d4-a716-446655440006',
+        '550e8400-e29b-41d4-a716-446655440000',
+        '550e8400-e29b-41d4-a716-446655440020',
+        FALSE
     );
 
--- Example: Insert seed data into the messages table
+-- Insert seed data into the messages table
 INSERT INTO
     public.messages (id, sender, conversation, content)
 VALUES
@@ -164,9 +198,21 @@ VALUES
         '550e8400-e29b-41d4-a716-446655440010',
         '550e8400-e29b-41d4-a716-446655440004',
         'Hello, I need help with my math homework'
+    ),
+    (
+        '550e8400-e29b-41d4-a716-446655440010',
+        '550e8400-e29b-41d4-a716-446655440000',
+        '550e8400-e29b-41d4-a716-446655440006',
+        'Absolutely, lets get started.'
+    ),
+    (
+        '550e8400-e29b-41d4-a716-446655440009',
+        '550e8400-e29b-41d4-a716-446655440020',
+        '550e8400-e29b-41d4-a716-446655440006',
+        'Can you assist me with my science project?'
     );
 
--- Example: Insert seed data into the reviews table
+-- Insert seed data into the reviews table
 INSERT INTO
     public.reviews (id, sender, receiver, rating, description)
 VALUES
@@ -178,7 +224,7 @@ VALUES
         'Great tutor! Highly recommend.'
     );
 
--- Example: Insert seed data into the stripe_customers table
+-- Insert seed data into the stripe_customers table
 INSERT INTO
     public.stripe_customers (user_id, stripe_customer_id)
 VALUES

@@ -11,8 +11,8 @@
 
   export let profile: Tables<"profiles"> | null;
   export let logout: () => void;
+  
   let logoutLoading = false;
-
   const wrappedLogout = () => {
     logoutLoading = true;
     logout();
