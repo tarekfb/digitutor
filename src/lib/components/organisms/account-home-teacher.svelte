@@ -22,9 +22,7 @@
     <p class="text-center">Inga annonser. Testa skapa en!</p>
   {:else}
     {#each listings as listing}
-      <a href="/listing/{listing.id}" aria-label="Navigate to ad">
-        <ListingCard {listing} publicView={false} />
-      </a>
+        <ListingCard {listing} publicView={false} clickable />
     {/each}
   {/if}
 
@@ -36,7 +34,7 @@
   {#each conversations as conversation}
     <a
       href={"/account/conversation/" + conversation.id}
-      aria-label="Navigate to ad"
+      aria-label="Gå till konversation"
       class="w-full"
       ><ConversationCard {conversation} {profile} />
     </a>

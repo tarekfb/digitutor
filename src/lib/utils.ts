@@ -4,7 +4,7 @@ import { cubicOut } from "svelte/easing";
 import type { TransitionConfig } from "svelte/transition";
 import type { z } from "zod";
 import { invalidate } from "$app/navigation";
-import type { SupabaseClient, Session } from "@supabase/supabase-js";
+import type { SupabaseClient, Session, PostgrestError } from "@supabase/supabase-js";
 import { redirect } from "@sveltejs/kit";
 import type { Database } from "lucide-svelte";
 
@@ -127,3 +127,9 @@ export const removeUndefined = (fields: Record<string, any>) =>
   Object.fromEntries(
     Object.entries(fields).filter(([_, v]) => v !== undefined)
   );
+
+export const isPostgrestError = (error: any): error is PostgrestError => (
+  typeof error.message === 'string' &&
+  typeof error.details === 'string' &&
+  typeof error.code === 'string'
+);

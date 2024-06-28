@@ -172,6 +172,29 @@ VALUES
         TRUE
     );
 
+INSERT INTO
+    public.listings (
+        id,
+        title,
+        description,
+        subjects,
+        hourly_price,
+        currency,
+        profile,
+        visible
+    )
+VALUES
+    (
+        '550e8400-e29b-41d4-a716-446655440004',
+        'React Tutoring',
+        'React for high school students',
+        '{1}',
+        100,
+        'SEK',
+        '550e8400-e29b-41d4-a716-446655440000',
+        FALSE
+    );
+
 -- Insert seed data into the conversations table
 INSERT INTO
     public.conversations (id, teacher, student, has_replied)

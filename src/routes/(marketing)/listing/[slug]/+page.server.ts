@@ -3,23 +3,29 @@ import { zod } from "sveltekit-superforms/adapters";
 import { getGenericFormMessage, unknownErrorMessage } from "$lib/shared/constants/constants";
 import { message, superValidate } from "sveltekit-superforms";
 import { deleteListing, getListing, updateListing } from "$lib/server/database/listings";
-import { updateListingSchema, type Listing } from "$lib/shared/models/listing";
+import { updateListingSchema } from "$lib/shared/models/listing";
 import { getConversationForStudentAndTeacher, startConversation } from "$lib/server/database/conversations";
 import { requestContactSchema, startContactSchema } from "$lib/shared/models/conversation";
 import { redirect } from "sveltekit-flash-message/server";
 import { ResourceAlreadyExistsError } from "src/lib/shared/errors/resource-already-exists-error";
 import { getReviewsByReceiver } from "src/lib/server/database/review";
 import type { Review } from "src/lib/shared/models/review.js";
+import { isPostgrestError } from "src/lib/utils";
 
 export const load = async ({ locals: { supabase }, params: { slug }, parent }) => {
   let listing;
   try {
     listing = await getListing(supabase, slug);
   } catch (e) {
-    console.error("Error when reading listing with id: " + slug, e);
-    error(500, {
-      message: unknownErrorMessage,
-    });
+    if (isPostgrestError(e)) {
+      console.error("PostgrestError when reading listing with id: " + slug, e);
+      error(404, { message: "Här finns det ingen annons. Har den tagits bort kanske?" });
+    } else {
+      console.error("Unknown error when reading listing with id: " + slug, e);
+      error(500, {
+        message: unknownErrorMessage, // todo: when have title + description, refactor to title: Hittade ingen annons.
+      });
+    }
   };
 
   const parentData = await parent();

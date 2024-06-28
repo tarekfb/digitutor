@@ -1,12 +1,12 @@
 <script lang="ts">
   import ListingCard from "$lib/components/molecules/listing-card.svelte";
-  import Avatar from "$lib/components/atoms/avatar.svelte";
   import PrimaryTitle from "$lib/components/atoms/primary-title.svelte";
   import SecondaryTitle from "$lib/components/atoms/secondary-title.svelte";
   import ContactTeacherForm from "$lib/components/molecules/contact-teacher-form.svelte";
   import type { PageData } from "./$types";
   import AddReview from "src/lib/components/molecules/add-review.svelte";
   import ReviewCard from "src/lib/components/molecules/review-card.svelte";
+  import AvatarNameBar from "src/lib/components/organisms/avatar-name-bar.svelte";
 
   export let data: PageData;
   $: ({
@@ -22,17 +22,13 @@
 </script>
 
 <div class="flex flex-col gap-y-4 pb-8 w-full max-w-[1000px]">
-  <div class="avatar-container">
-    <Avatar profile={teacher} onClick={undefined} />
+  <AvatarNameBar profile={teacher}>
     <PrimaryTitle>{teacher.first_name}</PrimaryTitle>
-  </div>
-
+  </AvatarNameBar>
   <SecondaryTitle>Annonser</SecondaryTitle>
   <div class="flex flex-col gap-y-4 my-6">
     {#each listings as listing}
-      <a href="/listing/{listing.id}" aria-label="Navigate to ad">
-        <ListingCard {listing} />
-      </a>
+      <ListingCard {listing} publicView={false} clickable />
     {:else}
       <p class="text-center">{teacher.first_name} har inga annonser ännu.</p>
     {/each}
