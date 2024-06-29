@@ -76,8 +76,6 @@ export const updateProfile = async (
     throw new InvalidInputError(400, 'Missing fields');
   }
 
-  console.log(dbProfile)
-
   const { data, error } = await supabase
     .from("profiles")
     .update({ ...dbProfile, updated_at: getNow() })

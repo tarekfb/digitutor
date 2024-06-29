@@ -13,7 +13,7 @@ import { redirect } from "sveltekit-flash-message/server";
 export const load: PageServerLoad = async ({ parent, locals: { safeGetSession } }) => {
     const { session } = await safeGetSession();
     if (!session)
-        throw redirect(303, "/auth");
+        throw redirect(303, "/sign-in");
 
     const { profile } = await parent();
     const initName = {
@@ -33,7 +33,7 @@ export const actions = {
         const { locals: { supabase, safeGetSession } } = event;
         const { user } = await safeGetSession();
         if (!user)
-            throw redirect(303, "/auth");
+            throw redirect(303, "/sign-in");
 
         const form = await superValidate(event, zod(nameSchema));
         if (!form.valid)
@@ -59,7 +59,7 @@ export const actions = {
         const { locals: { supabase, safeGetSession } } = event;
         const { session } = await safeGetSession();
         if (!session)
-            throw redirect(303, "/auth");
+            throw redirect(303, "/sign-in");
 
         const form = await superValidate(event, zod(emailSchema));
         if (!form.valid)
@@ -78,7 +78,7 @@ export const actions = {
         const { locals: { supabase, safeGetSession, supabaseServiceRole }, cookies } = event;
         const { user } = await safeGetSession();
         if (!user)
-            throw redirect(303, "/auth");
+            throw redirect(303, "/sign-in");
 
         const form = await superValidate(event, zod(deleteAccountSchema));
         if (!form.valid)
@@ -93,12 +93,12 @@ export const actions = {
 
         // Check current password is correct before deleting account
         const { error } = await supabase.auth.signInWithPassword({
-            email, 
+            email,
             password,
         });
 
         if (error)
-            throw redirect(303, "/auth/settings_password_error");
+            throw redirect(303, "/settings_password_error");
         // user was logged out because of bad password. Redirect to error page with explaination.
 
         try {
@@ -123,7 +123,7 @@ export const actions = {
         const { locals: { supabase, safeGetSession } } = event;
         const { session } = await safeGetSession();
         if (!session)
-            throw redirect(303, "/auth");
+            throw redirect(303, "/sign-in");
 
         const form = await superValidate(event, zod(passwordSchema));
         if (!form.valid)
@@ -142,7 +142,7 @@ export const actions = {
         });
 
         if (error)
-            throw redirect(303, "/auth/settings_password_error");
+            throw redirect(303, "/settings_password_error");
         // user was logged out because of bad password. Redirect to error page with explaination.
 
 

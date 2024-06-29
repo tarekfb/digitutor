@@ -33,7 +33,7 @@
     </div>
   </div>
   {#if !data.session}
-    <Button on:click={() => goto("/auth/sign-up")}>Skapa konto</Button>
+    <Button on:click={() => goto("/sign-up")}>Skapa konto</Button>
   {/if}
 </div>
 <div class="min-h-[60vh]">

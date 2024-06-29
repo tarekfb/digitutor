@@ -39,7 +39,7 @@ export const actions = {
     const { locals: { supabase, safeGetSession } } = event;
     const { user } = await safeGetSession();
     if (!user)
-      throw redirect(303, "/auth");
+      throw redirect(303, "/sign-in");
 
     const form = await superValidate(event, zod(nameSchema));
 
