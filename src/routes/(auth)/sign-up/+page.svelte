@@ -16,7 +16,7 @@
   import PrimaryTitle from "src/lib/components/atoms/primary-title.svelte";
   import FormSubmit from "src/lib/components/molecules/form-submit.svelte";
   import SecondaryTitle from "src/lib/components/atoms/secondary-title.svelte";
-  import AvatarNameBar from "src/lib/components/organisms/avatar-name-bar.svelte";
+  import * as Tabs from "$lib/components/ui/tabs";
 
   export let data;
 
@@ -25,143 +25,229 @@
     validators: zodClient(signUpSchema),
   });
   const { form: formData, enhance, submitting, message, allErrors } = userForm;
+
+  import { page } from "$app/stores";
+  import Avatar from "src/lib/components/atoms/avatar.svelte";
+  const role = $page.url.searchParams.get("role");
 </script>
 
 <svelte:head>
   <title>Skapa konto</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="true" />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300..700&display=swap"
+    rel="stylesheet"
+  />
 </svelte:head>
+
+<!-- <span class="text-[160px]">،، ⸲⸲ ⹁⹁ ︐ ︐ ﹐﹐</span> -->
 
 {#if $isDesktop}
   <div class="flex-1 flex justify-between">
-    <div class="w-full flex flex-col items-center justify-center p-20">
+    <div
+      class="w-full self-center flex flex-col items-center justify-center p-20 relative"
+    >
       <span
-        class="-ml-6 leading-none text-[160px] h-10 self-start font-serif text-muted-foreground"
+        class="absolute -top-12 left-10 tracking-[-0.02em] leading-none text-[160px] text-primary/35"
       >
-        "
+        ،،
       </span>
-      <SecondaryTitle>{data.review.description}</SecondaryTitle>
-      <AvatarNameBar profile={data.profile} class="mt-4"
-        ><SecondaryTitle class="text-muted-foreground text-lg"
-          >{data.profile.first_name}</SecondaryTitle
-        ></AvatarNameBar
+      <blockquote class="z-10">{data.review.description}</blockquote>
+      <span
+        class="absolute top-18 right-10 mr-6 tracking-[-0.02em] leading-none text-[160px] text-primary/35"
       >
+        ،،
+      </span>
+      <div class="flex gap-x-2 self-start mt-4">
+        <Avatar
+          profile={data.profile}
+          onClick={undefined}
+          class="text-sm w-7 h-7"
+        />
+        <SecondaryTitle class="text-muted-foreground text-md md:text-xl">
+          {data.profile.first_name}
+        </SecondaryTitle>
+      </div>
     </div>
     <div class="w-full bg-white flex flex-col items-center justify-center p-4">
-      <FormMessage {message} scroll scrollTo="end" />
       <form class="text-start flex flex-col gap-y-4" method="POST" use:enhance>
-        <div class="space-y-1 mb-4">
-          <PrimaryTitle class="text-2xl">Skapa ett konto</PrimaryTitle>
-          <p class="text-muted-foreground">
-            Har du redan ett konto? <a href="/sign-in" class="underline">
-              Logga in här.
-            </a>
-          </p>
-        </div>
-        <div class="flex flex-col gap-4">
-          <Form.Field form={userForm} name="first_name">
-            <Form.Control let:attrs>
-              <Label>Förnamn</Label>
-              <Input
-                {...attrs}
-                type="text"
-                bind:value={$formData.first_name}
-                placeholder="Förnamn"
-              />
-            </Form.Control>
-            <Form.FieldErrors />
-          </Form.Field>
-          <Form.Field form={userForm} name="last_name">
-            <Form.Control let:attrs>
-              <Label>Efternamn</Label>
-              <Input
-                {...attrs}
-                type="text"
-                bind:value={$formData.last_name}
-                placeholder="Efternamn"
-              />
-            </Form.Control>
-            <Form.FieldErrors />
-          </Form.Field>
-          <Form.Field form={userForm} name="email">
-            <Form.Control let:attrs>
-              <Label>E-postadress</Label>
-              <Input
-                {...attrs}
-                type="email"
-                bind:value={$formData.email}
-                placeholder="E-postadress"
-              />
-            </Form.Control>
-            <Form.FieldErrors />
-          </Form.Field>
-          <Form.Field form={userForm} name="password">
-            <Form.Control let:attrs>
-              <Label>Lösenord</Label>
-              <PasswordInput {formData} {attrs} />
-            </Form.Control>
-            <Form.FieldErrors />
-          </Form.Field>
-          <Form.Fieldset form={userForm} name="role" class="space-y-3">
-            <Form.Legend>Jag vill registrera mig som...</Form.Legend>
-            <RadioGroup.Root
-              bind:value={$formData.role}
-              class="flex flex-col space-y-1"
+        <Tabs.Root
+          value={role ?? "student"}
+          class="w-[400px] text-start flex flex-col gap-y-4"
+        >
+          <Tabs.List class=" self-center">
+            <Tabs.Trigger
+              value="student"
+              class="data-[state=active]:bg-primary data-[state=inactive]:bg-secondary data-[state=inactive]:text-black data-[state=active]:text-red-300"
+              >Student</Tabs.Trigger
             >
-              <div class="flex items-center space-x-3 space-y-0">
+            <Tabs.Trigger
+              value="teacher"
+              class="data-[state=active]:bg-primary data-[state=inactive]:bg-secondary data-[state=inactive]:text-black data-[state=active]:text-red-300"
+              >Lärare</Tabs.Trigger
+            >
+          </Tabs.List>
+          <Tabs.Content value="student">
+            <div class="space-y-1 mb-4">
+              <PrimaryTitle class="text-2xl"
+                >Skapa konto som student</PrimaryTitle
+              >
+              <p class="text-muted-foreground">
+                Har du redan ett konto? <a href="/sign-in" class="underline">
+                  Logga in här.
+                </a>
+              </p>
+            </div>
+            <div class="flex flex-col gap-4">
+              <Form.Field form={userForm} name="first_name">
                 <Form.Control let:attrs>
-                  <RadioGroup.Item value="student" {...attrs} />
-                  <Form.Label class="font-normal">Student</Form.Label>
+                  <Label>Förnamn</Label>
+                  <Input
+                    {...attrs}
+                    type="text"
+                    bind:value={$formData.first_name}
+                    placeholder="Förnamn"
+                  />
                 </Form.Control>
-              </div>
-              <div class="flex items-center space-x-3 space-y-0">
+                <Form.FieldErrors />
+              </Form.Field>
+              <Form.Field form={userForm} name="last_name">
                 <Form.Control let:attrs>
-                  <RadioGroup.Item value="teacher" {...attrs} />
-                  <Form.Label class="font-normal">Lärare</Form.Label>
+                  <Label>Efternamn</Label>
+                  <Input
+                    {...attrs}
+                    type="text"
+                    bind:value={$formData.last_name}
+                    placeholder="Efternamn"
+                  />
                 </Form.Control>
-              </div>
-              <RadioGroup.Input name="role" />
-            </RadioGroup.Root>
-            <Form.FieldErrors />
-          </Form.Fieldset>
-          <Form.Field
-            form={userForm}
-            name="terms"
-            class="flex flex-row items-start space-x-3 space-y-0 rounded-md border p-4"
-          >
-            <Form.Control let:attrs>
-              <Checkbox {...attrs} bind:checked={$formData.terms} />
-              <div class="space-y-1 leading-none">
-                <Form.Label class="text-foreground"
-                  >Jag accepterar villkoren och integritetspolicyn.</Form.Label
-                >
-                <Form.Description>
-                  Du accepterar <a href="/terms" class="underline">villkoren</a>
-                  och
-                  <a href="/privacy" class="underline">integritetspolicyn</a>.
-                </Form.Description>
-              </div>
-              <input name={attrs.name} value={$formData.terms} hidden />
-            </Form.Control>
-          </Form.Field>
-        </div>
+                <Form.FieldErrors />
+              </Form.Field>
+              <Form.Field form={userForm} name="email">
+                <Form.Control let:attrs>
+                  <Label>E-postadress</Label>
+                  <Input
+                    {...attrs}
+                    type="email"
+                    bind:value={$formData.email}
+                    placeholder="E-postadress"
+                  />
+                </Form.Control>
+                <Form.FieldErrors />
+              </Form.Field>
+              <Form.Field form={userForm} name="password">
+                <Form.Control let:attrs>
+                  <Label>Lösenord</Label>
+                  <PasswordInput {formData} {attrs} />
+                </Form.Control>
+                <Form.FieldErrors />
+              </Form.Field>
+              <input type="hidden" name="role" value="student" />
+              <Form.Field
+                form={userForm}
+                name="terms"
+                class="flex flex-row items-start space-x-3 space-y-0 rounded-md border p-4"
+              >
+                <Form.Control let:attrs>
+                  <Checkbox {...attrs} bind:checked={$formData.terms} />
+                  <Form.Label class="text-foreground"
+                    >Jag accepterar <a href="/terms" class="underline"
+                      >villkoren</a
+                    >
+                    och
+                    <a href="/privacy" class="underline">integritetspolicyn</a
+                    >.</Form.Label
+                  >
+                  <input name={attrs.name} value={$formData.terms} hidden />
+                </Form.Control>
+              </Form.Field>
+            </div>
+          </Tabs.Content>
+          <Tabs.Content value="teacher">
+            <div class="space-y-1 mb-4">
+              <PrimaryTitle class="text-2xl"
+                >Skapa ett konto som lärare</PrimaryTitle
+              >
+              <p class="text-muted-foreground">
+                Har du redan ett konto? <a href="/sign-in" class="underline">
+                  Logga in här.
+                </a>
+              </p>
+            </div>
+            <div class="flex flex-col gap-4">
+              <Form.Field form={userForm} name="first_name">
+                <Form.Control let:attrs>
+                  <Label>Förnamn</Label>
+                  <Input
+                    {...attrs}
+                    type="text"
+                    bind:value={$formData.first_name}
+                    placeholder="Förnamn"
+                  />
+                </Form.Control>
+                <Form.FieldErrors />
+              </Form.Field>
+              <Form.Field form={userForm} name="last_name">
+                <Form.Control let:attrs>
+                  <Label>Efternamn</Label>
+                  <Input
+                    {...attrs}
+                    type="text"
+                    bind:value={$formData.last_name}
+                    placeholder="Efternamn"
+                  />
+                </Form.Control>
+                <Form.FieldErrors />
+              </Form.Field>
+              <Form.Field form={userForm} name="email">
+                <Form.Control let:attrs>
+                  <Label>E-postadress</Label>
+                  <Input
+                    {...attrs}
+                    type="email"
+                    bind:value={$formData.email}
+                    placeholder="E-postadress"
+                  />
+                </Form.Control>
+                <Form.FieldErrors />
+              </Form.Field>
+              <Form.Field form={userForm} name="password">
+                <Form.Control let:attrs>
+                  <Label>Lösenord</Label>
+                  <PasswordInput {formData} {attrs} />
+                </Form.Control>
+                <Form.FieldErrors />
+              </Form.Field>
+              <input type="hidden" name="role" value="teacher" />
+              <Form.Field
+                form={userForm}
+                name="terms"
+                class="flex flex-row items-start space-x-3 space-y-0 rounded-md border p-4"
+              >
+                <Form.Control let:attrs>
+                  <Checkbox {...attrs} bind:checked={$formData.terms} />
+                  <Form.Label class="text-foreground"
+                    >Jag accepterar <a href="/terms" class="underline"
+                      >villkoren</a
+                    >
+                    och
+                    <a href="/privacy" class="underline">integritetspolicyn</a
+                    >.</Form.Label
+                  >
+                  <input name={attrs.name} value={$formData.terms} hidden />
+                </Form.Control>
+              </Form.Field>
+            </div>
+          </Tabs.Content>
+        </Tabs.Root>
+        <FormMessage {message} scroll scrollTo="start" />
         <FormSubmit
           {submitting}
           {allErrors}
           text="Skapa konto"
           class="self-center"
         />
-        <!-- <Button
-          type="submit"
-          disabled={$allErrors.length > 0 || $submitting}
-          class="self-center"
-        >
-          {#if $submitting}
-            <LoadingSpinner class="mr-2" /> <span>Laddar...</span>
-          {:else}
-            Skapa konto
-          {/if}
-        </Button> -->
-        <!-- <Loader2 class="mr-2 h-4 w-4 animate-spin" /> -->
       </form>
     </div>
   </div>
@@ -250,16 +336,12 @@
         >
           <Form.Control let:attrs>
             <Checkbox {...attrs} bind:checked={$formData.terms} />
-            <div class="space-y-1 leading-none">
-              <Form.Label class="text-foreground"
-                >Jag accepterar villkoren och integritetspolicyn.</Form.Label
-              >
-              <Form.Description>
-                Du accepterar <a href="/terms" class="underline">villkoren</a>
-                och
-                <a href="/privacy" class="underline">integritetspolicyn</a>.
-              </Form.Description>
-            </div>
+            <Form.Label class="text-foreground"
+              >Jag accepterar <a href="/terms" class="underline">villkoren</a>
+              och
+              <a href="/privacy" class="underline">integritetspolicyn</a
+              >.</Form.Label
+            >
             <input name={attrs.name} value={$formData.terms} hidden />
           </Form.Control>
         </Form.Field>
@@ -277,3 +359,14 @@
     <!-- <Loader2 class="mr-2 h-4 w-4 animate-spin" /> -->
   </form>
 {/if}
+
+<style>
+  /* @font-face {
+    font-family: "YourFontName";
+    src: url("/fonts/your-font.woff2") format("woff2");
+    unicode-range: U+0022;
+  } */
+  .custom-font {
+    font-family: "SpaceGrotesk", sans-serif;
+  }
+</style>
