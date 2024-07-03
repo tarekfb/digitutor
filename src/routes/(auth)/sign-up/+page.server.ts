@@ -8,9 +8,10 @@ import { createProfile } from "$lib/server/database/profiles";
 import type { CreateProfile } from "$lib/shared/models/profile";
 import type { Tables } from "src/supabase";
 import { getNow } from "src/lib/utils";
+import { getDisplayReview } from "src/lib/server/database/review";
 
 
-export const load: PageServerLoad = async () => {
+export const load: PageServerLoad = async ({ locals: { supabase } }) => {
     try {
         const form = await superValidate(zod(signUpSchema))
 
@@ -23,16 +24,8 @@ export const load: PageServerLoad = async () => {
             last_name: "Builder",
             role: "student"
         }
-        const review: Tables<"reviews"> = {
-            id: "0",
-            created_at: getNow(),
-            sender: "0",
-            description: `Lorem Ipsum is simply dummy text of the printing and typesetting
-        industry. Lorem Ipsum has been the industry's standard dummy text ever
-        since the 150er including versions of Lorem Ipsum`,
-            receiver: "0",
-            rating: 5
-        }
+        const reviews = await getDisplayReview(supabase, 1);
+        const review = reviews[0] ?? undefined;
         return { form, review, profile };
     } catch (e) {
         console.error("Error when loading signup", e);
