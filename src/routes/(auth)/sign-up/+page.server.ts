@@ -47,7 +47,6 @@ export const actions = {
                 form,
             });
         }
-        return message(form, getGenericFormMessage(), { status: 500 });
 
         const { email, password, role, first_name, last_name } = form.data;
         let inputUser: CreateProfile;
