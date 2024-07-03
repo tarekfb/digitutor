@@ -44,24 +44,30 @@
           <Star class="fill-yellow-300 text-yellow-400 w-7 h-7" />
         {/each}
       </div>
-      <div class="flex items-center gap-x-2 self-start mt-2.5">
-        <Avatar {review.profile} onClick={undefined} class="text-sm w-7 h-7" />
-        <cite class="not-italic text-md md:text-lg">
-          {review.profile.first_name}
-        </cite>
-        <ArrowRightIcon class="w-4 h-4" />
-        <a
-          class="gap-x-2 flex items-center"
-          href="/profile/{review.receiver.id}"
-        >
+      {#if review.sender}
+        <div class="flex items-center gap-x-2 self-start mt-2.5">
           <Avatar
-            profile={review.receiver}
-            class="text-sm w-7 h-7"
+            profile={review.sender}
             onClick={undefined}
+            class="text-sm w-7 h-7"
           />
-          <p class="text-md md:text-lg">{review.receiver.first_name}</p>
-        </a>
-      </div>
+          <cite class="not-italic text-md md:text-lg">
+            {review.sender.first_name}
+          </cite>
+          <ArrowRightIcon class="w-4 h-4" />
+          <a
+            class="gap-x-2 flex items-center"
+            href="/profile/{review.receiver.id}"
+          >
+            <Avatar
+              profile={review.receiver}
+              class="text-sm w-7 h-7"
+              onClick={undefined}
+            />
+            <p class="text-md md:text-lg">{review.receiver.first_name}</p>
+          </a>
+        </div>
+      {/if}
     </div>
   </aside>
   <div
