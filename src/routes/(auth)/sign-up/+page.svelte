@@ -12,7 +12,7 @@
   import { Star } from "lucide-svelte";
 
   export let data;
-  $: ({ profile, review } = data);
+  $: ({ review } = data);
 
   const userForm = superForm(data.form, {
     validators: zodClient(signUpSchema),
@@ -45,9 +45,9 @@
         {/each}
       </div>
       <div class="flex items-center gap-x-2 self-start mt-2.5">
-        <Avatar {profile} onClick={undefined} class="text-sm w-7 h-7" />
+        <Avatar {review.profile} onClick={undefined} class="text-sm w-7 h-7" />
         <cite class="not-italic text-md md:text-lg">
-          {profile.first_name}
+          {review.profile.first_name}
         </cite>
         <ArrowRightIcon class="w-4 h-4" />
         <a
