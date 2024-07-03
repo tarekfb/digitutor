@@ -48,7 +48,7 @@ export const actions = {
 
     const { session } = await safeGetSession();
     if (!session)
-      throw redirect(303, "/auth");
+      throw redirect(303, "/sign-in");
 
 
     const form = await superValidate(event, zod(sendMessageSchema));

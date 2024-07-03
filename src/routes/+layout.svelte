@@ -4,7 +4,7 @@
   import { expoOut } from "svelte/easing";
   import { slide } from "svelte/transition";
   import { Toaster, toast } from "svelte-sonner";
-  import { goto, invalidate, invalidateAll } from "$app/navigation";
+  import { invalidate, invalidateAll } from "$app/navigation";
   import { onMount } from "svelte";
   import { getFlash } from "sveltekit-flash-message";
   import { page } from "$app/stores";

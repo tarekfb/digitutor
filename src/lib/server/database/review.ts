@@ -1,8 +1,7 @@
 import type { Session, SupabaseClient } from "@supabase/supabase-js";
-import type { Database } from "lucide-svelte";
 import type { InputReview, Review } from "src/lib/shared/models/review";
 import { getNow } from "src/lib/utils";
-import type { Tables } from "src/supabase";
+import type { Database, Tables } from "src/supabase";
 
 
 export const createReview = async (
@@ -60,12 +59,41 @@ export const getReviewsByReceiver = async (
     const { data, error } = await query;
 
     if (error) {
-        console.error(`Failed to read listings ${receiver ? "for userId" + receiver : ''}`, { error });
+        console.error(`Failed to read reviews ${receiver ? "for userId" + receiver : ''}`, { error });
         throw error;
     }
 
     if (!data) {
-        console.error(`Failed to get listings for teacher ${receiver}. Response was null`);
+        console.error(`Failed to get reviews for teacher ${receiver}. Response was null`);
+        throw new Error("Unexpected null response");
+    }
+
+    return data as unknown as Review[];
+}
+
+export const getDisplayReview = async (supabase: SupabaseClient<Database>, max?: number) => {
+    let query = supabase
+        .from("reviews")
+        .select(`
+            *,
+            sender ("*"),
+            receiver ("*")
+          `)
+        .eq("rating", 5)
+        .neq("description", 'null')
+    // .gt('length(description)', 10) // no built in support for length, drizzle?
+
+    if (max) query = query.limit(max);
+
+    const { data, error } = await query;
+
+    if (error) {
+        console.error(`Failed to find review to display`, { error });
+        throw error;
+    }
+
+    if (!data) {
+        console.error(`Failed to find review to display. Response was null`);
         throw new Error("Unexpected null response");
     }
 

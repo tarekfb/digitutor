@@ -4,6 +4,6 @@
   export { className as class };
 </script>
 
-<h2 class={cn("text-xl md:text-2xl font-semibold", className)}>
+<h2 class={cn("text-xl md:text-2xl font-semibold whitespace-nowrap", className)}>
   <slot />
 </h2>

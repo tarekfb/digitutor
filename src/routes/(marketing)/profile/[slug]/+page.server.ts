@@ -84,7 +84,7 @@ export const actions = {
         const { locals: { supabase, safeGetSession }, params: { slug } } = event;
         const { session } = await safeGetSession();
         if (!session)
-            throw redirect(303, "/auth"); // todo: in the future should implement a redirect after login
+            throw redirect(303, "/sign-in"); // todo: in the future should implement a redirect after login
 
         const form = await superValidate(event, zod(requestContactSchema));
         if (!form.data.role) {
@@ -112,7 +112,7 @@ export const actions = {
         const { locals: { supabase, safeGetSession }, params: { slug } } = event;
         const { session } = await safeGetSession();
         if (!session)
-            throw redirect(303, "/auth"); // todo: in the future should implement a redirect after login
+            throw redirect(303, "/sign-in"); // todo: in the future should implement a redirect after login
 
         const form = await superValidate(event, zod(startContactSchema));
         if (!form.valid) { // this will not work nicely if teacher or role is invalid, but not expecting this to be an issue
@@ -149,7 +149,7 @@ export const actions = {
         const { locals: { supabase, safeGetSession }, params: { slug } } = event;
         const { session } = await safeGetSession();
         if (!session)
-            throw redirect(303, "/auth"); // todo: in the future should implement a redirect after login
+            throw redirect(303, "/sign-in"); // todo: in the future should implement a redirect after login
 
         const form = await superValidate(event, zod(addReviewSchema));
         if (!form.valid) {

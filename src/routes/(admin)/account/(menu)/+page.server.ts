@@ -12,7 +12,7 @@ export const load: PageServerLoad = async ({
 }) => {
   const { session } = await safeGetSession();
   if (!session)
-    throw redirect(303, "/auth");
+    throw redirect(303, "/sign-in");
 
   const form = await superValidate(zod(initCreateListingSchema))
 
@@ -34,7 +34,7 @@ export const actions = {
     const { locals: { supabase, safeGetSession } } = event;
     const { session } = await safeGetSession();
     if (!session)
-      throw redirect(303, "/auth");
+      throw redirect(303, "/sign-in");
 
     const form = await superValidate(event, zod(initCreateListingSchema));
     if (!form.valid) {
