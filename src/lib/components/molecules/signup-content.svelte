@@ -5,7 +5,7 @@
   import PasswordInput from "$lib/components/molecules/password-input.svelte";
   import PrimaryTitle from "src/lib/components/atoms/primary-title.svelte";
   import { Checkbox } from "../ui/checkbox";
-  
+
   export let type: "teacher" | "student" = "student";
   export let userForm;
   export let formData;
@@ -72,6 +72,7 @@
     form={userForm}
     name="terms"
     class="flex flex-row items-start space-x-3 space-y-0 rounded-md border p-4"
+    on:click={() => (formData.terms = !formData.terms)}
   >
     <Form.Control let:attrs>
       <Checkbox {...attrs} bind:checked={$formData.terms} />
