@@ -26,9 +26,9 @@
   <title>Skapa konto</title>
 </svelte:head>
 
-<div class="w-full flex-1 grid md:grid-cols-2">
+<div class="w-full flex-1 grid md:grid-cols-6">
   <aside
-    class="flex-col items-center justify-center flex-1 flex-shrink hidden basis-1/4 md:flex"
+    class="flex-col items-center justify-center flex-1 flex-shrink hidden basis-1/4 md:flex md:col-span-4"
   >
     <div class="relative flex flex-col gap-3">
       <div class="absolute select-none -top-12 -left-11">
@@ -71,7 +71,7 @@
     </div>
   </aside>
   <div
-    class="bg-white flex flex-col items-center md:justify-center p-4 col-span-2 md:col-span-1"
+    class="bg-white flex flex-col items-center md:justify-center p-4 col-span-2 md:col-start-5 md:col-span-2"
   >
     <form class="text-start flex flex-col gap-y-4" method="POST" use:enhance>
       <Tabs.Root
