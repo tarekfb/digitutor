@@ -4,19 +4,39 @@ import { MessageId, getGenericFormMessage, unknownErrorMessage } from "$lib/shar
 import { message, superValidate } from "sveltekit-superforms";
 import { zod } from "sveltekit-superforms/adapters";
 import { resendSchema, signInSchema } from "$lib/shared/models/user";
+import { getDisplayReviews } from "src/lib/server/database/review";
+import { getListingsByTeacher } from "src/lib/server/database/listings";
+import { Subjects } from "src/lib/shared/models/common";
 
-export const load: PageServerLoad = async () => {
+export const load: PageServerLoad = async ({ locals: { supabase } }) => {
+    let longReviews;
     try {
-        const form = await superValidate(zod(signInSchema))
-        const resendEmailForm = await superValidate(zod(resendSchema))
-        return { form, resendEmailForm };
-    } catch (e) {
-        console.error("Error when loading signin", e);
+        const reviews = await getDisplayReviews(supabase);
+        const sorted = reviews.sort((a, b) => (b.description?.length ?? 0) - (a.description?.length ?? 0));
+        longReviews = sorted.slice(0, 3);
+    }
+    catch (e) {
+        console.error("Error when fetching signin display review, perhaps didnt find valid review", e);
         throw error(500, {
             message: unknownErrorMessage,
         });
-    };
-}
+    }
+
+
+    let listings;
+    let subjects: Subjects[] = [];
+    try {
+        listings = await getListingsByTeacher(supabase, longReviews[0].receiver.id);
+        subjects = listings.flatMap(listing => listing.subjects)
+    }
+    catch (e) {
+        console.error("Error when fetching listings and subjects for signin", e);
+    }
+
+    const form = await superValidate(zod(signInSchema))
+    const resendEmailForm = await superValidate(zod(resendSchema))
+    return { listings, subjects, reviews: longReviews, form, resendEmailForm };
+};
 
 export const actions: Actions = {
     signIn: async (event) => {

@@ -6,13 +6,13 @@ import { zod } from "sveltekit-superforms/adapters";
 import { signUpSchema } from "$lib/shared/models/user";
 import { createProfile } from "$lib/server/database/profiles";
 import type { CreateProfile } from "$lib/shared/models/profile";
-import { getDisplayReview } from "src/lib/server/database/review";
+import { getDisplayReviews } from "src/lib/server/database/review";
 
 
 export const load: PageServerLoad = async ({ locals: { supabase } }) => {
     let review;
     try {
-        const reviews = await getDisplayReview(supabase, 1);
+        const reviews = await getDisplayReviews(supabase, 1);
         const longReviews = reviews.filter(r => r.description && r.description.length > 15);
         review = longReviews[0] ?? reviews[0];
     } catch (e) { // todo this will never occcur but write a playwright test that checks signup page is loading 

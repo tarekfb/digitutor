@@ -9,9 +9,11 @@
   import SignupContent from "src/lib/components/molecules/signup-content.svelte";
   import FormMessage from "src/lib/components/molecules/form-message.svelte";
   import FormSubmit from "src/lib/components/molecules/form-submit.svelte";
-  import { Star } from "lucide-svelte";
+  import AuthSplit from "src/lib/components/molecules/auth-split.svelte";
+  import type { PageData } from "./$types";
+  import Stars from "src/lib/components/atoms/stars.svelte";
 
-  export let data;
+  export let data: PageData;
   $: ({ review } = data);
 
   const userForm = superForm(data.form, {
@@ -26,12 +28,10 @@
   <title>Skapa konto</title>
 </svelte:head>
 
-<div class="w-full flex-1 grid md:grid-cols-6">
-  <aside
-    class="flex-col items-center justify-center flex-1 flex-shrink hidden basis-1/4 md:flex md:col-span-4"
-  >
+<AuthSplit>
+  <svelte:fragment slot="aside">
     <div class="relative flex flex-col gap-3">
-      <div class="absolute select-none -top-12 -left-11">
+      <div class="absolute select-none -top-32 -left-11 rotate-180">
         <span class="text-[160px] font-[helvetica] leading-none text-primary/40"
           >“</span
         >
@@ -39,11 +39,7 @@
       <blockquote class="z-10 max-w-lg text-3xl">
         {review.description}
       </blockquote>
-      <div class="flex gap-x-0.5">
-        {#each [...Array(5)] as _}
-          <Star class="fill-yellow-300 text-yellow-400 w-7 h-7" />
-        {/each}
-      </div>
+      <Stars rating={review.rating} />
       {#if review.sender}
         <div class="flex items-center gap-x-2 self-start mt-2.5">
           <Avatar
@@ -69,14 +65,12 @@
         </div>
       {/if}
     </div>
-  </aside>
-  <div
-    class="bg-white flex flex-col items-center md:justify-center p-4 col-span-2 md:col-start-5 md:col-span-2"
-  >
+  </svelte:fragment>
+  <svelte:fragment slot="form">
     <form class="text-start flex flex-col gap-y-4" method="POST" use:enhance>
       <Tabs.Root
         value={role ?? "student"}
-        class="md:w-[350px] text-start flex flex-col gap-y-4"
+        class="md:w-[300px] text-start flex flex-col gap-y-4"
       >
         <Tabs.List class=" self-center">
           <Tabs.Trigger
@@ -105,5 +99,5 @@
         class="self-center"
       />
     </form>
-  </div>
-</div>
+  </svelte:fragment>
+</AuthSplit>
