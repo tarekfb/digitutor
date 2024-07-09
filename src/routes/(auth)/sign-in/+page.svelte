@@ -96,7 +96,7 @@
       </div>
       <div class="flex flex-col items-center">
         {#if listings?.at(0)}
-          <PrimaryTitle class="font-normal">{listings[0].title}</PrimaryTitle>
+          <PrimaryTitle class="font-normal max-w-[400px] overflow-hidden">{listings[0].title}</PrimaryTitle>
         {/if}
         <div class="mt-6 flex flex-col gap-y-2">
           {#each reviews as review, index}

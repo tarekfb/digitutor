@@ -11,7 +11,7 @@
 
 <div
   class={cn(
-    "relative flex flex-col gap-y-2 bg-card rounded-md text-center p-2 w-72",
+    "relative flex flex-col gap-y-2 bg-card rounded-md text-center p-2 w-96",
     className,
   )}
 >
