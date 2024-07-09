@@ -2,11 +2,19 @@
   import Avatar from "$lib/components/atoms/avatar.svelte";
   import type { Review } from "src/lib/shared/models/review";
   import Stars from "../atoms/stars.svelte";
+  import { cn } from "$lib/utils.js";
 
+  let className: string | null | undefined = undefined;
+  export { className as class };
   export let review: Review;
 </script>
 
-<div class="relative flex flex-col gap-y-2 bg-card text-center p-2 w-72">
+<div
+  class={cn(
+    "relative flex flex-col gap-y-2 bg-card rounded-md text-center p-2 w-72",
+    className,
+  )}
+>
   {#if review.sender}
     <div class="absolute select-none -top-3 -left-3">
       <span class="text-[120px] leading-none text-primary/40">

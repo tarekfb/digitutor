@@ -8,22 +8,20 @@
 </svelte:head>
 
 <div
-  class="text-center flex flex-col items-center justify-center gap-y-4 md:max-w-xl"
+  class="text-center flex flex-col items-center justify-center gap-y-2 md:max-w-xl m-8"
 >
-  <div class="flex flex-col gap-y-2 generic-card">
-    <PrimaryTitle class="mb-2">Lösenordet stämde inte</PrimaryTitle>
-    <p>
-      Du försökte göra en ändring på ditt konto men angav fel lösenord. Du har
-      därför loggats ut.
-    </p>
-    <p>
-      Om du minns ditt lösenord, kan du <Link href="/sign-in">logga in</Link>
-      och försöka igen.
-    </p>
-    <p>
-      Om du har glömt ditt lösenord kan du <Link href="/forgot-password"
-        >återställa det</Link
-      >.
-    </p>
-  </div>
+  <PrimaryTitle class="mb-2">Lösenordet stämde inte</PrimaryTitle>
+  <p>
+    Du försökte göra en ändring på ditt konto men angav fel lösenord. Du har
+    därför loggats ut.
+  </p>
+  <p>
+    Om du minns ditt lösenord, kan du <Link href="/sign-in">logga in</Link>
+    och försöka igen.
+  </p>
+  <p>
+    Om du har glömt ditt lösenord kan du <Link href="/forgot-password"
+      >återställa det</Link
+    >.
+  </p>
 </div>

@@ -5,7 +5,7 @@
   import { toast } from "svelte-sonner";
   import { signInSchema } from "$lib/shared/models/user.js";
   import { Input } from "$lib/components/ui/input";
-
+  import { Terminal } from "lucide-svelte";
   import FormMessage from "$lib/components/molecules/form-message.svelte";
   import Label from "$lib/components/atoms/label.svelte";
   import { MessageId } from "$lib/shared/constants/constants";
@@ -35,6 +35,19 @@
     return sum / reviews.length;
   };
 
+  const getBlur = (i: number) => {
+    switch (i) {
+      case 0:
+        return "";
+      case 1:
+        return "blur-sm";
+      case 2:
+        return "blur-md";
+      default:
+        return "";
+    }
+  };
+
   const userForm = superForm(data.form, {
     validators: zodClient(signInSchema),
     onError: ({ result }) => {
@@ -51,11 +64,11 @@
 
 <AuthSplit>
   <svelte:fragment slot="aside">
-    <div class="grid grid-cols-6 gap-x-8">
-      <div class="col-span-2">
+    <div class="flex justify-around gap-x-8">
+      <div class="max-w-36 flex flex-col">
         <img
           alt="profile avatar"
-          class="rounded-lg"
+          class="rounded-lg mb-2 w-full"
           width="125"
           height="125"
           src="./images/pp.jpeg"
@@ -71,57 +84,40 @@
           {/if}
           <div>
             {#each subjects as subject, i}
-              <span
-                >{Subjects[subject]}{i < subjects.length - 1 ? ", " : ""}</span
-              >
+              {#if i < 10}
+                <div class="flex gap-x-2 items-end">
+                  <Terminal class="w-5 h-5 text-accent" />
+                  <p class="font-mono text-base">{Subjects[subject]}</p>
+                </div>
+              {/if}
             {/each}
           </div>
         </div>
       </div>
-      <!-- opacity-{100 - i * 40}  -->
-      <!-- z-{(reviews.length - index) * 10} -->
-      <div class="col-start-3 col-span-4 flex flex-col items-center">
+      <div class="flex flex-col items-center">
         {#if listings?.at(0)}
           <PrimaryTitle class="font-normal">{listings[0].title}</PrimaryTitle>
         {/if}
-        <div class="mt-6 flex flex-col gap-y-1">
+        <div class="mt-6 flex flex-col gap-y-2">
           {#each reviews as review, index}
-            <div
-              class="z-{(reviews.length - index) * 10 + 20} transp-background"
-            >
-              <ReviewCardExtra {review} />
-            </div>
+            <ReviewCardExtra
+              {review}
+              class="z-{(reviews.length - index) * 10 + 20} {getBlur(index)}"
+            />
+            <!-- + 20 because didnt work without it, will always work on 3 items but might act up on >3 -->
           {/each}
-          <!-- <div class="z-50">
-            <ReviewCardExtra review={reviews[0]} />
-          </div>
-          <div class="z-40 transp-background">
-            <ReviewCardExtra review={reviews[1]} />
-          </div>
-          <div class="z-30 transp-background">
-            <ReviewCardExtra review={reviews[2]} />
-          </div> -->
         </div>
       </div>
     </div>
   </svelte:fragment>
   <svelte:fragment slot="form">
     <form
-      class="text-start flex flex-col gap-y-4"
+      class="text-start flex flex-col gap-y-4 w-full max-w-[650px] p-4"
       action="?/signIn"
       method="POST"
       use:enhance
     >
-      <FormMessage {message} scroll>
-        {#if $message.id === MessageId.RateLimitExceeded}
-          <p class="mt-2">
-            Försökte skicka bekräftelsemail men misslyckades p.g.a. för många
-            e-postutskick.
-          </p>
-          <p>Försök igen lite senare.</p>
-        {/if}
-      </FormMessage>
-      <div class="space-y-1 mb-4">
+      <div class="space-y-1 mb-4 text-center lg:text-start">
         <PrimaryTitle class="text-2xl">Logga in</PrimaryTitle>
         <p class="text-muted-foreground">
           Har du inget konto?
@@ -150,23 +146,34 @@
         </Form.Field>
         <a
           href="/forgot-password"
-          class="underline text-muted-foreground text-sm justify-self-center"
+          class="underline text-muted-foreground text-sm justify-self-center text-center lg:text-start"
           >Glömt lösen?</a
         >
       </div>
+      <FormMessage {message} scroll>
+        {#if $message.id === MessageId.RateLimitExceeded}
+          <p class="mt-2">
+            Försökte skicka bekräftelsemail men misslyckades p.g.a. för många
+            e-postutskick.
+          </p>
+          <p>Försök igen lite senare.</p>
+        {/if}
+      </FormMessage>
       <FormSubmit
         {submitting}
         {allErrors}
-        text="Skapa konto"
-        class="self-center"
+        text="Logga in"
+        class="self-center wide"
       />
     </form>
   </svelte:fragment>
 </AuthSplit>
-
+<!-- 
 <style lang="css">
   .transp-background {
-    background-color: hsla(222.2, 84%, 4.9%, 0.5);
+    /* background-color: hsla(222.2, 84%, 4.9%, 0.5); */
+    background-color: hsla(0, 0%, 100%, 0.5);
+    --card: 0 0% 100%;
     /* i broke the transparancy somehow... */
   }
-</style>
+</style> -->

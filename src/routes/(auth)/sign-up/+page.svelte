@@ -47,7 +47,7 @@
             onClick={undefined}
             class="text-sm w-7 h-7"
           />
-          <cite class="not-italic text-md md:text-lg">
+          <cite class="not-italic text-lg">
             {review.sender.first_name}
           </cite>
           <ArrowRightIcon class="w-4 h-4" />
@@ -60,19 +60,19 @@
               class="text-sm w-7 h-7"
               onClick={undefined}
             />
-            <p class="text-md md:text-lg">{review.receiver.first_name}</p>
+            <p class="text-lg">{review.receiver.first_name}</p>
           </a>
         </div>
       {/if}
     </div>
   </svelte:fragment>
   <svelte:fragment slot="form">
-    <form class="text-start flex flex-col gap-y-4" method="POST" use:enhance>
+    <form class="text-start flex flex-col gap-y-4 w-full max-w-[650px] p-4" method="POST" use:enhance>
       <Tabs.Root
         value={role ?? "student"}
-        class="md:w-[300px] text-start flex flex-col gap-y-4"
+        class="text-start flex flex-col gap-y-4"
       >
-        <Tabs.List class=" self-center">
+        <Tabs.List class="self-center">
           <Tabs.Trigger
             value="student"
             class="data-[state=active]:bg-primary data-[state=inactive]:bg-secondary data-[state=inactive]:text-black data-[state=active]:text-red-300"
@@ -96,7 +96,7 @@
         {submitting}
         {allErrors}
         text="Skapa konto"
-        class="self-center"
+        class="self-center wide"
       />
     </form>
   </svelte:fragment>
