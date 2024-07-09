@@ -11,7 +11,7 @@
   export let formData;
 </script>
 
-<div class="space-y-1 mb-4">
+<div class="space-y-1 mb-4 text-center lg:text-start">
   <PrimaryTitle class="text-2xl">Skapa konto</PrimaryTitle>
   <p class="text-muted-foreground">
     Registrera dig som {#if type === "teacher"}

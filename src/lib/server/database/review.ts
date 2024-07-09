@@ -71,7 +71,7 @@ export const getReviewsByReceiver = async (
     return data as unknown as Review[];
 }
 
-export const getDisplayReview = async (supabase: SupabaseClient<Database>, max?: number) => {
+export const getDisplayReviews = async (supabase: SupabaseClient<Database>, max?: number) => {
     let query = supabase
         .from("reviews")
         .select(`

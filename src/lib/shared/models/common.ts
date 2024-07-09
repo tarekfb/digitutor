@@ -1,4 +1,4 @@
-import type { MessageId } from "../../constants";
+import type { MessageId } from "../constants/constants";
 
 export enum Subjects {
   JavaScript = 1,
