@@ -118,7 +118,7 @@ export const logout = (
   supabase: SupabaseClient<Database>,
   session: Session | null | undefined,
 ) => {
-  if (!session) redirect(303, "/auth");
+  if (!session) redirect(303, "/sign-in");
   supabase.auth.signOut();
   invalidate("supabase:auth");
 };

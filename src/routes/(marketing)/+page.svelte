@@ -33,7 +33,7 @@
     </div>
   </div>
   {#if !data.session}
-    <Button on:click={() => goto("/auth/sign-up")}>Skapa konto</Button>
+    <Button on:click={() => goto("/sign-up")}>Skapa konto</Button>
   {/if}
 </div>
 <div class="min-h-[60vh]">
@@ -54,7 +54,7 @@
 
     <div class="flex flex-col gap-y-4 mt-12">
       {#each data.listings as listing}
-        <ListingCard {listing} publicView={false} clickable />
+        <ListingCard {listing} publicView={true} clickable />
       {:else}
         <p class="text-center">Det finns inga annonser ännu.</p>
       {/each}

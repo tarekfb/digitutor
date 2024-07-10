@@ -8,7 +8,7 @@ export const load: LayoutServerLoad = async ({
   const { user } = await safeGetSession();
 
   if (!user)
-    throw redirect(303, "/auth");
+    throw redirect(303, "/sign-in");
 
   const profile = await getProfileByUser(supabase, user.id);
   return { profile };

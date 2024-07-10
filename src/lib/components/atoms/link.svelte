@@ -6,6 +6,10 @@
   export let href: string;
 </script>
 
-<Button class={cn("m-0 p-0 text-accent text-md", className)} variant="link" {href}>
+<Button
+  class={cn("m-0 p-0 text-accent text-base", className)}
+  variant="link"
+  {href}
+>
   <slot />
 </Button>

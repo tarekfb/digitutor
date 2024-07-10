@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { Star } from "lucide-svelte";
+  import Star from "src/lib/components/atoms/star.svelte";
   import * as Card from "$lib/components/ui/card/index.js";
   import Avatar from "$lib/components/atoms/avatar.svelte";
   import type { Review } from "src/lib/shared/models/review";

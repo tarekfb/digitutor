@@ -48,7 +48,7 @@ export const actions = {
   deleteListing: async ({ locals: { supabase, safeGetSession }, cookies, params: { slug } }) => {
     const { session } = await safeGetSession();
     if (!session)
-      throw redirect(303, "/auth");
+      throw redirect(303, "/sign-in");
     try {
       await deleteListing(supabase, slug, session);
     } catch (error) {
@@ -64,7 +64,7 @@ export const actions = {
     const { locals: { supabase, safeGetSession }, params: { slug } } = event;
     const { session } = await safeGetSession();
     if (!session)
-      throw redirect(303, "/auth");
+      throw redirect(303, "/sign-in");
 
     const form = await superValidate(event, zod(updateListingSchema));
 
@@ -85,7 +85,7 @@ export const actions = {
     const { locals: { supabase, safeGetSession }, params: { slug } } = event;
     const { session } = await safeGetSession();
     if (!session)
-      throw redirect(303, "/auth"); // todo: in the future should implement a redirect after login
+      throw redirect(303, "/sign-in"); // todo: in the future should implement a redirect after login
 
     const form = await superValidate(event, zod(requestContactSchema));
     if (!form.valid) {
@@ -113,7 +113,7 @@ export const actions = {
     const { locals: { supabase, safeGetSession }, params: { slug } } = event;
     const { session } = await safeGetSession();
     if (!session)
-      throw redirect(303, "/auth"); // todo: in the future should implement a redirect after login
+      throw redirect(303, "/sign-in"); // todo: in the future should implement a redirect after login
 
     const form = await superValidate(event, zod(startContactSchema));
     if (!form.valid) { // this will not work nicely if teacher or role is invalid, but not expecting this to be an issue

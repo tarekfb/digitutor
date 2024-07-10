@@ -1,9 +1,8 @@
 <script lang="ts">
   import { cn } from "$lib/utils.js";
+  import { Star } from "lucide-svelte";
   let className: string | null | undefined = undefined;
   export { className as class };
 </script>
 
-<h2 class={cn("text-xl md:text-2xl font-semibold whitespace-nowrap", className)}>
-  <slot />
-</h2>
+<Star class={cn("fill-yellow-300 text-yellow-400 w-7 h-7", className)} />

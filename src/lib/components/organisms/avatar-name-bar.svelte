@@ -22,7 +22,10 @@
   </a>
 {:else}
   <div class={cn("flex gap-x-2 items-center self-start", className)}>
-    <Avatar onClick={() => goto(`/profile/${profile.id}`)} {profile} />
+    <Avatar
+      onClick={profile.role === "teacher" && clickable ? () => goto(`/profile/${profile.id}`) : undefined}
+      {profile}
+    />
     <slot />
   </div>
 {/if}

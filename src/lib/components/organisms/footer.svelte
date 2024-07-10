@@ -16,7 +16,7 @@
   <nav class="flex flex-col space-y-1">
     <span class="font-semibold uppercase">Utforska</span>
     <Link href="/" class={linkStyle}>Hem</Link>
-    <Link href="/auth/sign-up" class={linkStyle}>Skapa konto</Link>
+    <Link href="/sign-up" class={linkStyle}>Skapa konto</Link>
     <Link href="/faq" class={linkStyle}>Vanliga frågor</Link>
     <Link href="/contact-us" class={linkStyle}>Kontakta oss</Link>
   </nav>
