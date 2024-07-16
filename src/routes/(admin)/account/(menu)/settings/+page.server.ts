@@ -1,15 +1,16 @@
-import { fail } from "@sveltejs/kit";
 import type { PageServerLoad } from "./$types";
 import { getGenericFormMessage } from "$lib/shared/constants/constants";
-import { message, superValidate } from "sveltekit-superforms";
+import { fail, message, superValidate } from "sveltekit-superforms";
 import { zod } from "sveltekit-superforms/adapters";
-import { emailSchema, nameSchema, type ProfileInput } from "$lib/shared/models/profile";
+import { avatarSchema, emailSchema, nameSchema, type ProfileInput } from "$lib/shared/models/profile";
 import { updateProfile } from "$lib/server/database/profiles";
 import { updateUserEmail } from "$lib/server/database/user";
 import { deleteAccountSchema, passwordSchema } from "$lib/shared/models/user";
 import { isAuthApiError } from "@supabase/supabase-js";
 import { redirect } from "sveltekit-flash-message/server";
+import { TINIFY_COMPRESSION_API_KEY } from '$env/static/private'
 
+import tinify from 'tinify'
 export const load: PageServerLoad = async ({ parent, locals: { safeGetSession } }) => {
     const { session } = await safeGetSession();
     if (!session)
@@ -24,8 +25,9 @@ export const load: PageServerLoad = async ({ parent, locals: { safeGetSession } 
     const updateEmailForm = await superValidate({ email: session.user.email }, zod(emailSchema));
     const deleteAccountForm = await superValidate(zod(deleteAccountSchema));
     const updatePasswordForm = await superValidate(zod(passwordSchema));
+    const uploadAvatarForm = await superValidate(zod(avatarSchema));
 
-    return { updateNameForm, updateEmailForm, deleteAccountForm, updatePasswordForm };
+    return { updateNameForm, updateEmailForm, deleteAccountForm, updatePasswordForm, uploadAvatarForm };
 };
 
 export const actions = {
@@ -63,7 +65,7 @@ export const actions = {
 
         const form = await superValidate(event, zod(emailSchema));
         if (!form.valid)
-            return fail(400, { nameForm: form });
+            return fail(400, { form });
 
         const { email } = form.data;
         try {
@@ -73,6 +75,57 @@ export const actions = {
             console.error(`Error on update profile in update name with userid ${session?.user.id}`, error);
             return message(form, getGenericFormMessage(), { status: 500 });
         }
+    },
+    avatar: async (event) => {
+        const { locals: { supabase, safeGetSession } } = event;
+        const { session } = await safeGetSession();
+        if (!session)
+            throw redirect(303, "/sign-in");
+
+        const form = await superValidate(event, zod(avatarSchema));
+        console.log(form)
+
+        if (!form.valid)
+            return fail(400, { form });
+
+        const { avatar } = form.data;
+
+
+        console.log(avatar);
+        // console.log(tinify);
+
+        tinify.key = TINIFY_COMPRESSION_API_KEY;
+        console.log(tinify.key)
+        console.log(TINIFY_COMPRESSION_API_KEY)
+        // TINIFY_COMPRESSION_API_KEY
+
+        // Assuming `avatar` is a File object from the form
+        const arrayBuffer = await avatar.arrayBuffer();
+        const sourceData = new Uint8Array(arrayBuffer);
+        
+        try {
+            // Read the uploaded file buffer
+            const arrayBuffer = await avatar.arrayBuffer();
+            const sourceData = new Uint8Array(arrayBuffer);
+    
+            // Compress the image using Tinify
+            const compressedBuffer = await new Promise((resolve, reject) => {
+                tinify.fromBuffer(sourceData).toBuffer((err, resultData) => {
+                    if (err) return reject(err);
+                    resolve(resultData);
+                });
+            });
+    
+            // Handle the compressedBuffer, e.g., upload it to a server, save it locally, etc.
+            console.log('File compressed successfully');
+    
+            return message(form, getGenericFormMessage("success", "Uppladdad", "Framgångsriksty."));
+        } catch (err) {
+            console.error('Compression error:', err);
+            return fail(500, { message: 'File compression failed' });
+        }
+
+        // return message(form, getGenericFormMessage("success", "Uppladdad", "Framgångsriksty."));
     },
     delete: async (event) => {
         const { locals: { supabase, safeGetSession, supabaseServiceRole }, cookies } = event;

@@ -96,7 +96,7 @@
         {submitting}
         {allErrors}
         text="Skapa konto"
-        class="self-center wide"
+        class="self-center min-w-wide"
       />
     </form>
   </svelte:fragment>
