@@ -1,6 +1,6 @@
 import type { PageServerLoad } from "./$types";
 import { getGenericFormMessage, maxFileSizeAvatar, maxUncompressedSize } from "$lib/shared/constants/constants";
-import { fail, message, superValidate } from "sveltekit-superforms";
+import { fail, message, superValidate, withFiles } from "sveltekit-superforms";
 import { zod } from "sveltekit-superforms/adapters";
 import { avatarSchema, emailSchema, nameSchema, type ProfileInput } from "$lib/shared/models/profile";
 import { updateProfile } from "$lib/server/database/profiles";
@@ -131,7 +131,7 @@ export const actions = {
             console.error(`Error on update profile with new avatar on path ${avatarPath} with userid ${user.id}`, error);
             return message(form, getGenericFormMessage(), { status: 500 });
         }
-        return message(form, getGenericFormMessage("success", "Ändrat profilbild", ""));
+        return withFiles({ form });
     },
     delete: async (event) => {
         const { locals: { supabase, safeGetSession, supabaseServiceRole }, cookies } = event;

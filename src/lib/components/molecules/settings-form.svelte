@@ -24,12 +24,12 @@
   use:enhance
   {action}
   class={cn("flex flex-col gap-y-4 generic-card", className)}
-  enctype="{enctype ?? 'application/x-www-form-urlencoded'}"
+  enctype={enctype ?? "application/x-www-form-urlencoded"}
 >
   <SecondaryTitle>{title}</SecondaryTitle>
-  <FormMessage {message} scroll />
   <slot />
   {#if shouldHaveSubmit}
+  <FormMessage {message} scroll />
     <FormSubmit
       {submitting}
       {allErrors}
