@@ -1,5 +1,5 @@
 import type { PageServerLoad } from "./$types";
-import { acceptedFileFormats, getGenericFormMessage, maxFileSizeAvatar, maxUncompressedSize } from "$lib/shared/constants/constants";
+import { getGenericFormMessage, maxFileSizeAvatar, maxUncompressedSize } from "$lib/shared/constants/constants";
 import { fail, message, superValidate, withFiles } from "sveltekit-superforms";
 import { zod } from "sveltekit-superforms/adapters";
 import { avatarSchema, emailSchema, nameSchema, type ProfileInput } from "$lib/shared/models/profile";
@@ -8,12 +8,11 @@ import { updateUserEmail } from "$lib/server/database/user";
 import { deleteAccountSchema, passwordSchema } from "$lib/shared/models/user";
 import { isAuthApiError } from "@supabase/supabase-js";
 import { redirect } from "sveltekit-flash-message/server";
-import { TINIFY_COMPRESSION_API_KEY } from '$env/static/private'
-// import tinify from 'tinify'
 import { uploadAvatar } from "src/lib/server/database/avatar";
 import { formatBytes, isStorageErrorCustom } from "src/lib/utils";
 import type { StorageErrorCustom } from "src/lib/shared/errors/storage-error-custom";
-import sharp from "sharp";
+// import sharp from "sharp";
+import Jimp from "jimp";
 
 export const load: PageServerLoad = async ({ parent, locals: { safeGetSession } }) => {
     const { session } = await safeGetSession();
@@ -93,43 +92,28 @@ export const actions = {
 
         const { avatar } = form.data;
 
-        const buffer = await avatar.arrayBuffer();
-        const uncompressedByteSize = Buffer.byteLength(buffer);
-        
-        let uploadBuffer;
-        if (uncompressedByteSize > maxUncompressedSize) {
-            try {
-                const image = sharp(buffer)
-                const { format } = await image.metadata()
-                const fileFormats = acceptedFileFormats.map(format => format.split('/')[1]);
-                if (!format || !fileFormats.includes(format)) {
-                    console.error('Unknown format on avatar compression', { format });
-                    return message(form, getGenericFormMessage("destructive", "Filformatet stöds inte för komprimering", `Testa välj ett annat filformat, eller ladda upp en bild under ${formatBytes(maxUncompressedSize)} så görs ingen komprimering.`), { status: 500 });
-                }
-                let formatChecked = format as "jpeg" | "webp" | "png";
-                const config = {
-                    jpeg: { quality: 80 },
-                    webp: { quality: 80 },
-                    png: { compressionLevel: 8 },
-                }
+        const arrayBuffer = await avatar.arrayBuffer();
+        const buffer = Buffer.from(arrayBuffer);
+        const uncompressedByteSize = Buffer.byteLength(arrayBuffer);
 
-                uploadBuffer = await image[formatChecked](config[formatChecked])
-                    .resize(500, 500)
-                    .toBuffer();
-            } catch (err) {
+        let uploadBuffer;
+        try {
+            let image = await Jimp.read(buffer);
+            if (uncompressedByteSize > maxUncompressedSize)
+                image = image.quality(80)
+
+            image = image.resize(500, 500);
+            uploadBuffer = await image.getBufferAsync(Jimp.MIME_PNG);
+        } catch (err) {
+            if (uncompressedByteSize > maxUncompressedSize) {
                 console.error('Unknown error on compression:', err);
                 return message(form, getGenericFormMessage("destructive", "Något gick fel vid komprimeringen", `Testa ladda upp en bild under ${formatBytes(maxUncompressedSize)} så görs ingen komprimering.`), { status: 500 });
-            }
-        } else {
-            try {
-                uploadBuffer = await sharp(buffer)
-                    .resize(500, 500)
-                    .toBuffer();
-            } catch (error) {
-                console.error('Unknown error on resize:', error);
+            } else {
+                console.error('Unknown error on resize:', err);
                 return message(form, getGenericFormMessage(), { status: 500 });
             }
         }
+
 
         let avatarPath;
         try {
