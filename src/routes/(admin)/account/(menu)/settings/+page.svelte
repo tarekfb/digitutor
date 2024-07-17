@@ -41,19 +41,40 @@
   const passwordForm = superForm(data.updatePasswordForm, {
     validators: zodClient(passwordSchema),
   });
-
+  const avatarForm = superForm(data.uploadAvatarForm, {
+    onUpdated({ form }) {
+      if (form.valid) {
+        toast.success(`Ändrat profilbild.`);
+      }
+    },
+  });
   const { form: nameData, reset: nameReset } = nameForm;
   const { form: emailData } = emailForm;
   const { form: passwordData } = passwordForm;
+  const { form: avatarData } = avatarForm;
+
+  const setAvatar = (
+    e: Event & {
+      currentTarget: EventTarget & HTMLInputElement;
+    },
+  ) => {
+    avatarForm.reset();
+    $avatarData.avatar = e.currentTarget?.files?.item(0) as File;
+  };
 </script>
 
 <svelte:head>
   <title>Settings</title>
 </svelte:head>
 
-<div class="flex flex-col gap-y-4 pb-8">
+<div class="flex flex-col gap-y-4 pb-8 max-w-[300px] md:max-w-xl">
   <PrimaryTitle>Inställningar</PrimaryTitle>
-  <SettingsForm form={nameForm} action="?/name" title="Namn">
+  <SettingsForm
+    form={nameForm}
+    action="?/name"
+    title="Namn"
+    submitText="Ändra namn"
+  >
     <Form.Field form={nameForm} name="firstName">
       <Form.Control let:attrs>
         <Form.Label>Förnamn</Form.Label>
@@ -80,7 +101,12 @@
     </Form.Field>
   </SettingsForm>
 
-  <SettingsForm form={emailForm} action="?/email" title="E-postadress">
+  <SettingsForm
+    form={emailForm}
+    action="?/email"
+    title="E-postadress"
+    submitText="Ändra e-post"
+  >
     <p class="text-muted-foreground">
       Du kommer behöva bekräfta den nya och den gamla adressen.
     </p>
@@ -98,7 +124,41 @@
     </Form.Field>
   </SettingsForm>
 
-  <SettingsForm form={passwordForm} action="?/password" title="Lösenord">
+  <SettingsForm
+    form={avatarForm}
+    action="?/avatar"
+    title="Profilbild"
+    submitText="Ändra profilbild"
+    enctype="multipart/form-data"
+  >
+    <p class="text-muted-foreground">
+      Maxstorlek är 49MB. Bilden kompimeras automatiskt.
+    </p>
+    <Form.Field form={avatarForm} name="avatar">
+      <Form.Control let:attrs>
+        <Label>Profilbild</Label>
+        <input
+          {...attrs}
+          type="file"
+          name="avatar"
+          bind:value={$avatarData.avatar}
+          accept="image/jpeg, image/png, image/webp"
+          class="overflow-hidden flex h-10 w-full border border-input rounded-md bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
+          on:input={(e) => setAvatar(e)}
+        />
+        <!-- bind:files={$file} -->
+      </Form.Control>
+      <Form.FieldErrors />
+    </Form.Field>
+  </SettingsForm>
+  <!-- placeholder="Email" -->
+
+  <SettingsForm
+    form={passwordForm}
+    action="?/password"
+    title="Lösenord"
+    submitText="Ändra lösenord"
+  >
     <Form.Field form={passwordForm} name="new">
       <Form.Control let:attrs>
         <Label>Nytt lösenord</Label>

@@ -1,14 +1,18 @@
-import { fail } from "@sveltejs/kit";
 import type { PageServerLoad } from "./$types";
-import { getGenericFormMessage } from "$lib/shared/constants/constants";
-import { message, superValidate } from "sveltekit-superforms";
+import { getGenericFormMessage, maxFileSizeAvatar, maxUncompressedSize } from "$lib/shared/constants/constants";
+import { fail, message, superValidate, withFiles } from "sveltekit-superforms";
 import { zod } from "sveltekit-superforms/adapters";
-import { emailSchema, nameSchema, type ProfileInput } from "$lib/shared/models/profile";
+import { avatarSchema, emailSchema, nameSchema, type ProfileInput } from "$lib/shared/models/profile";
 import { updateProfile } from "$lib/server/database/profiles";
 import { updateUserEmail } from "$lib/server/database/user";
 import { deleteAccountSchema, passwordSchema } from "$lib/shared/models/user";
 import { isAuthApiError } from "@supabase/supabase-js";
 import { redirect } from "sveltekit-flash-message/server";
+import { uploadAvatar } from "src/lib/server/database/avatar";
+import { formatBytes, isStorageErrorCustom } from "src/lib/utils";
+import type { StorageErrorCustom } from "src/lib/shared/errors/storage-error-custom";
+// import sharp from "sharp";
+import Jimp from "jimp";
 
 export const load: PageServerLoad = async ({ parent, locals: { safeGetSession } }) => {
     const { session } = await safeGetSession();
@@ -24,8 +28,9 @@ export const load: PageServerLoad = async ({ parent, locals: { safeGetSession } 
     const updateEmailForm = await superValidate({ email: session.user.email }, zod(emailSchema));
     const deleteAccountForm = await superValidate(zod(deleteAccountSchema));
     const updatePasswordForm = await superValidate(zod(passwordSchema));
+    const uploadAvatarForm = await superValidate(zod(avatarSchema));
 
-    return { updateNameForm, updateEmailForm, deleteAccountForm, updatePasswordForm };
+    return { updateNameForm, updateEmailForm, deleteAccountForm, updatePasswordForm, uploadAvatarForm };
 };
 
 export const actions = {
@@ -63,7 +68,7 @@ export const actions = {
 
         const form = await superValidate(event, zod(emailSchema));
         if (!form.valid)
-            return fail(400, { nameForm: form });
+            return fail(400, { form });
 
         const { email } = form.data;
         try {
@@ -73,6 +78,67 @@ export const actions = {
             console.error(`Error on update profile in update name with userid ${session?.user.id}`, error);
             return message(form, getGenericFormMessage(), { status: 500 });
         }
+    },
+    avatar: async (event) => {
+        const { locals: { supabase, safeGetSession } } = event;
+        const { session, user } = await safeGetSession();
+        if (!session)
+            throw redirect(303, "/sign-in");
+
+        const form = await superValidate(event, zod(avatarSchema));
+
+        if (!form.valid)
+            return fail(400, { form });
+
+        const { avatar } = form.data;
+
+        const arrayBuffer = await avatar.arrayBuffer();
+        const buffer = Buffer.from(arrayBuffer);
+        const uncompressedByteSize = Buffer.byteLength(arrayBuffer);
+
+        let uploadBuffer;
+        try {
+            let image = await Jimp.read(buffer);
+            if (uncompressedByteSize > maxUncompressedSize)
+                image = image.quality(80)
+
+            image = image.resize(500, 500);
+            uploadBuffer = await image.getBufferAsync(Jimp.MIME_PNG);
+        } catch (err) {
+            if (uncompressedByteSize > maxUncompressedSize) {
+                console.error('Unknown error on compression:', err);
+                return message(form, getGenericFormMessage("destructive", "Något gick fel vid komprimeringen", `Testa ladda upp en bild under ${formatBytes(maxUncompressedSize)} så görs ingen komprimering.`), { status: 500 });
+            } else {
+                console.error('Unknown error on resize:', err);
+                return message(form, getGenericFormMessage(), { status: 500 });
+            }
+        }
+
+
+        let avatarPath;
+        try {
+            const format = avatar.type.split("/")[1]; // example type: image/png
+            const fileName = `${user.id}---${crypto.randomUUID()}.${format}`
+            avatarPath = await uploadAvatar(supabase, fileName, uploadBuffer);
+        } catch (error) {
+            if (isStorageErrorCustom(error)) {
+                const storageError = error as unknown as StorageErrorCustom;
+                if (storageError.statusCode === '413') {
+                    const byteLength = Buffer.byteLength(uploadBuffer);
+                    return message(form, getGenericFormMessage("destructive", "Filen är för stor", `Din fil är ${formatBytes(byteLength)}, maxgränsen är ${formatBytes(maxFileSizeAvatar)}.`), { status: 413 });
+                }
+            }
+            console.error("Unknown error on upload avatar", error);
+            return message(form, getGenericFormMessage(), { status: 500 });
+        }
+
+        try {
+            await updateProfile(supabase, { id: user.id, avatar_url: avatarPath });
+        } catch (error) {
+            console.error(`Error on update profile with new avatar on path ${avatarPath} with userid ${user.id}`, error);
+            return message(form, getGenericFormMessage(), { status: 500 });
+        }
+        return withFiles({ form });
     },
     delete: async (event) => {
         const { locals: { supabase, safeGetSession, supabaseServiceRole }, cookies } = event;
