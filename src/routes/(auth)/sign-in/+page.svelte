@@ -66,13 +66,15 @@
   <svelte:fragment slot="aside">
     <div class="flex justify-around gap-x-8">
       <div class="max-w-36 flex flex-col">
-        <img
-          alt="profile avatar"
-          class="rounded-lg mb-2 w-full"
-          width="125"
-          height="125"
-          src={reviews[0].receiver.avatar_url}
-        />
+        {#if reviews[0].receiver.avatar_url}
+          <img
+            alt="profile avatar"
+            class="rounded-lg mb-2 w-full"
+            width="125"
+            height="125"
+            src={reviews[0].receiver.avatar_url}
+          />
+        {/if}
         <div
           class="flex flex-col gap-y-0.5 text-muted-foreground text-xl md:text-2xl"
         >
@@ -96,7 +98,9 @@
       </div>
       <div class="flex flex-col items-center">
         {#if listings?.at(0)}
-          <PrimaryTitle class="font-normal max-w-[400px] overflow-hidden">{listings[0].title}</PrimaryTitle>
+          <PrimaryTitle class="font-normal max-w-[400px] overflow-hidden"
+            >{listings[0].title}</PrimaryTitle
+          >
         {/if}
         <div class="mt-6 flex flex-col gap-y-2">
           {#each reviews as review, index}
