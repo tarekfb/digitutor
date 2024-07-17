@@ -1,5 +1,5 @@
 import type { PageServerLoad } from "./$types";
-import { getGenericFormMessage } from "$lib/shared/constants/constants";
+import { getGenericFormMessage, maxFileSizeAvatar, maxUncompressedSize } from "$lib/shared/constants/constants";
 import { fail, message, superValidate } from "sveltekit-superforms";
 import { zod } from "sveltekit-superforms/adapters";
 import { avatarSchema, emailSchema, nameSchema, type ProfileInput } from "$lib/shared/models/profile";
@@ -9,8 +9,11 @@ import { deleteAccountSchema, passwordSchema } from "$lib/shared/models/user";
 import { isAuthApiError } from "@supabase/supabase-js";
 import { redirect } from "sveltekit-flash-message/server";
 import { TINIFY_COMPRESSION_API_KEY } from '$env/static/private'
-
 import tinify from 'tinify'
+import { uploadAvatar } from "src/lib/server/database/avatar";
+import { formatBytes, isStorageErrorCustom } from "src/lib/utils";
+import type { StorageErrorCustom } from "src/lib/shared/errors/storage-error-custom";
+
 export const load: PageServerLoad = async ({ parent, locals: { safeGetSession } }) => {
     const { session } = await safeGetSession();
     if (!session)
@@ -78,54 +81,57 @@ export const actions = {
     },
     avatar: async (event) => {
         const { locals: { supabase, safeGetSession } } = event;
-        const { session } = await safeGetSession();
+        const { session, user } = await safeGetSession();
         if (!session)
             throw redirect(303, "/sign-in");
 
         const form = await superValidate(event, zod(avatarSchema));
-        console.log(form)
 
         if (!form.valid)
             return fail(400, { form });
 
         const { avatar } = form.data;
 
-
-        console.log(avatar);
-        // console.log(tinify);
-
-        tinify.key = TINIFY_COMPRESSION_API_KEY;
-        console.log(tinify.key)
-        console.log(TINIFY_COMPRESSION_API_KEY)
-        // TINIFY_COMPRESSION_API_KEY
-
-        // Assuming `avatar` is a File object from the form
         const arrayBuffer = await avatar.arrayBuffer();
-        const sourceData = new Uint8Array(arrayBuffer);
-        
-        try {
-            // Read the uploaded file buffer
-            const arrayBuffer = await avatar.arrayBuffer();
-            const sourceData = new Uint8Array(arrayBuffer);
-    
-            // Compress the image using Tinify
-            const compressedBuffer = await new Promise((resolve, reject) => {
-                tinify.fromBuffer(sourceData).toBuffer((err, resultData) => {
-                    if (err) return reject(err);
-                    resolve(resultData);
-                });
-            });
-    
-            // Handle the compressedBuffer, e.g., upload it to a server, save it locally, etc.
-            console.log('File compressed successfully');
-    
-            return message(form, getGenericFormMessage("success", "Uppladdad", "Framgångsriksty."));
-        } catch (err) {
-            console.error('Compression error:', err);
-            return fail(500, { message: 'File compression failed' });
+        const uncompressedByteSize = Buffer.byteLength(arrayBuffer);
+        let uploadBuffer;
+        if (uncompressedByteSize > maxUncompressedSize) {
+            try {
+                tinify.key = TINIFY_COMPRESSION_API_KEY;
+                const buffer = Buffer.from(arrayBuffer);
+                uploadBuffer = await tinify.fromBuffer(buffer).toBuffer();
+            } catch (err) {
+                console.error('Unknown error on compression:', err);
+                return message(form, getGenericFormMessage("destructive", "Något gick fel vid komprimeringen", `Testa ladda upp en bild under ${formatBytes(maxUncompressedSize)} så görs ingen komprimering.`), { status: 500 });
+            }
+        } else {
+            uploadBuffer = arrayBuffer;
         }
 
-        // return message(form, getGenericFormMessage("success", "Uppladdad", "Framgångsriksty."));
+        let avatarPath;
+        try {
+            const format = avatar.type.split("/")[1]; // example type: image/png
+            const fileName = `${user.id}---${crypto.randomUUID()}.${format}`
+            avatarPath = await uploadAvatar(supabase, fileName, uploadBuffer);
+        } catch (error) {
+            if (isStorageErrorCustom(error)) {
+                const storageError = error as unknown as StorageErrorCustom;
+                if (storageError.statusCode === '413') {
+                    const byteLength = Buffer.byteLength(uploadBuffer);
+                    return message(form, getGenericFormMessage("destructive", "Filen är för stor", `Din fil är ${formatBytes(byteLength)}, maxgränsen är ${formatBytes(maxFileSizeAvatar)}.`), { status: 413 });
+                }
+            }
+            console.error("Unknown error on upload avatar", error);
+            return message(form, getGenericFormMessage(), { status: 500 });
+        }
+
+        try {
+            await updateProfile(supabase, { id: user.id, avatar_url: avatarPath });
+        } catch (error) {
+            console.error(`Error on update profile with new avatar on path ${avatarPath} with userid ${user.id}`, error);
+            return message(form, getGenericFormMessage(), { status: 500 });
+        }
+        return message(form, getGenericFormMessage("success", "Ändrat profilbild", ""));
     },
     delete: async (event) => {
         const { locals: { supabase, safeGetSession, supabaseServiceRole }, cookies } = event;

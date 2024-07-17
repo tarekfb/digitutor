@@ -8,7 +8,7 @@ export const getGenericFormMessage = (variant?: "success" | "warning" | "destruc
   {
     variant: variant ?? "destructive",
     title: title ?? "Något gick fel",
-    description: description ?? "Kontakta oss om detta fortsätter.",
+    description: description === undefined ? "Kontakta oss om detta fortsätter." : "",
     id: messageId ?? MessageId.Unknown,
     data: data ?? undefined
   })
@@ -19,3 +19,6 @@ export enum MessageId {
 }
 
 export const initMessagesCount = 25;
+
+export const maxFileSizeAvatar = 2097152;
+export const maxUncompressedSize = 1048576;

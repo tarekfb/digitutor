@@ -31,11 +31,17 @@
     on:click={onClick}
   >
     <Avatar.Root class={base}>
+      {#if profile.avatar_url}
+        <Avatar.Image src={profile.avatar_url} alt="profilbild" />
+      {/if}
       <Avatar.Fallback class={fallback}>{initials}</Avatar.Fallback>
     </Avatar.Root>
   </Button>
 {:else}
   <Avatar.Root class={cn(`${size} ${base}`, className)}>
+    {#if profile.avatar_url}
+      <Avatar.Image src={profile.avatar_url} alt="profilbild" />
+    {/if}
     <Avatar.Fallback class={fallback}>{initials}</Avatar.Fallback>
   </Avatar.Root>
 {/if}
