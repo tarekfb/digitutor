@@ -22,3 +22,5 @@ export const initMessagesCount = 25;
 
 export const maxFileSizeAvatar = 2097152;
 export const maxUncompressedSize = 1048576;
+export const maxFileSizeSelection = 49000000;
+export const acceptedFileFormats = ["image/jpeg", "image/png", "image/webp"];

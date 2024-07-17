@@ -1,5 +1,5 @@
 import type { PageServerLoad } from "./$types";
-import { getGenericFormMessage, maxFileSizeAvatar, maxUncompressedSize } from "$lib/shared/constants/constants";
+import { acceptedFileFormats, getGenericFormMessage, maxFileSizeAvatar, maxUncompressedSize } from "$lib/shared/constants/constants";
 import { fail, message, superValidate, withFiles } from "sveltekit-superforms";
 import { zod } from "sveltekit-superforms/adapters";
 import { avatarSchema, emailSchema, nameSchema, type ProfileInput } from "$lib/shared/models/profile";
@@ -9,10 +9,11 @@ import { deleteAccountSchema, passwordSchema } from "$lib/shared/models/user";
 import { isAuthApiError } from "@supabase/supabase-js";
 import { redirect } from "sveltekit-flash-message/server";
 import { TINIFY_COMPRESSION_API_KEY } from '$env/static/private'
-import tinify from 'tinify'
+// import tinify from 'tinify'
 import { uploadAvatar } from "src/lib/server/database/avatar";
 import { formatBytes, isStorageErrorCustom } from "src/lib/utils";
 import type { StorageErrorCustom } from "src/lib/shared/errors/storage-error-custom";
+import sharp from "sharp";
 
 export const load: PageServerLoad = async ({ parent, locals: { safeGetSession } }) => {
     const { session } = await safeGetSession();
@@ -92,20 +93,42 @@ export const actions = {
 
         const { avatar } = form.data;
 
-        const arrayBuffer = await avatar.arrayBuffer();
-        const uncompressedByteSize = Buffer.byteLength(arrayBuffer);
+        const buffer = await avatar.arrayBuffer();
+        const uncompressedByteSize = Buffer.byteLength(buffer);
+        
         let uploadBuffer;
         if (uncompressedByteSize > maxUncompressedSize) {
             try {
-                tinify.key = TINIFY_COMPRESSION_API_KEY;
-                const buffer = Buffer.from(arrayBuffer);
-                uploadBuffer = await tinify.fromBuffer(buffer).toBuffer();
+                const image = sharp(buffer)
+                const { format } = await image.metadata()
+                const fileFormats = acceptedFileFormats.map(format => format.split('/')[1]);
+                if (!format || !fileFormats.includes(format)) {
+                    console.error('Unknown format on avatar compression', { format });
+                    return message(form, getGenericFormMessage("destructive", "Filformatet stöds inte för komprimering", `Testa välj ett annat filformat, eller ladda upp en bild under ${formatBytes(maxUncompressedSize)} så görs ingen komprimering.`), { status: 500 });
+                }
+                let formatChecked = format as "jpeg" | "webp" | "png";
+                const config = {
+                    jpeg: { quality: 80 },
+                    webp: { quality: 80 },
+                    png: { compressionLevel: 8 },
+                }
+
+                uploadBuffer = await image[formatChecked](config[formatChecked])
+                    .resize(500, 500)
+                    .toBuffer();
             } catch (err) {
                 console.error('Unknown error on compression:', err);
                 return message(form, getGenericFormMessage("destructive", "Något gick fel vid komprimeringen", `Testa ladda upp en bild under ${formatBytes(maxUncompressedSize)} så görs ingen komprimering.`), { status: 500 });
             }
         } else {
-            uploadBuffer = arrayBuffer;
+            try {
+                uploadBuffer = await sharp(buffer)
+                    .resize(500, 500)
+                    .toBuffer();
+            } catch (error) {
+                console.error('Unknown error on resize:', error);
+                return message(form, getGenericFormMessage(), { status: 500 });
+            }
         }
 
         let avatarPath;

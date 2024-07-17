@@ -71,7 +71,7 @@
           class="rounded-lg mb-2 w-full"
           width="125"
           height="125"
-          src="./images/pp.jpeg"
+          src={reviews[0].receiver.avatar_url}
         />
         <div
           class="flex flex-col gap-y-0.5 text-muted-foreground text-xl md:text-2xl"
