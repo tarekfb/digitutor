@@ -50,6 +50,7 @@
   },
   "type": "module",
   "dependencies": {
+    "@cf-wasm/photon": "^0.1.23",
     "@jimp/core": "^0.22.12",
     "@supabase/auth-ui-svelte": "^0.2.2",
     "@supabase/ssr": "^0.3.0",

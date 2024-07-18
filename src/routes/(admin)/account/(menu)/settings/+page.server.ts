@@ -11,6 +11,7 @@ import { redirect } from "sveltekit-flash-message/server";
 import { uploadAvatar } from "src/lib/server/database/avatar";
 import { formatBytes, isStorageErrorCustom } from "src/lib/utils";
 import type { StorageErrorCustom } from "src/lib/shared/errors/storage-error-custom";
+import { PhotonImage, SamplingFilter, resize } from "@cf-wasm/photon";
 
 
 // For some reason, Jimp attaches to self, even in Node.
@@ -99,17 +100,31 @@ export const actions = {
         const { avatar } = form.data;
 
         const arrayBuffer = await avatar.arrayBuffer();
-        const buffer = Buffer.from(arrayBuffer);
+        const inputBuffer = Buffer.from(arrayBuffer);
         const uncompressedByteSize = Buffer.byteLength(arrayBuffer);
 
-        let uploadBuffer;
+        let outputBuffer;
         try {
-            let image = await Jimp.read(buffer);
-            if (uncompressedByteSize > maxAvatarUncompressedSize)
-                image = image.quality(80)
+            const inputImage = PhotonImage.new_from_byteslice(inputBuffer);
 
-            image = image.resize(500, 500);
-            uploadBuffer = await image.getBufferAsync(Jimp.MIME_PNG);
+            // resize image using photon
+            const outputImage = resize(
+                inputImage,
+                500,
+                500,
+                SamplingFilter.Triangle
+            );
+
+            // get webp bytes
+            outputBuffer = outputImage.get_bytes_webp();
+
+            // let image = await Jimp.read(buffer);
+            // if (uncompressedByteSize > maxAvatarUncompressedSize)
+            //     image = image.quality(80)
+
+            // image = image.resize(500, 500);
+            // uploadBuffer = await image.getBufferAsync(Jimp.MIME_PNG);
+
         } catch (err) {
             if (uncompressedByteSize > maxAvatarUncompressedSize) {
                 console.error('Unknown error on compression:', err);
@@ -122,14 +137,15 @@ export const actions = {
 
         let avatarPath;
         try {
-            const format = avatar.type.split("/")[1]; // example type: image/png
+            // const format = avatar.type.split("/")[1]; // example type: image/png
+            const format = "webp"; // example type: image/png
             const fileName = `${user.id}---${crypto.randomUUID()}.${format}`
-            avatarPath = await uploadAvatar(supabase, fileName, uploadBuffer);
+            avatarPath = await uploadAvatar(supabase, fileName, outputBuffer);
         } catch (error) {
             if (isStorageErrorCustom(error)) {
                 const storageError = error as unknown as StorageErrorCustom;
                 if (storageError.statusCode === '413') {
-                    const byteLength = Buffer.byteLength(uploadBuffer);
+                    const byteLength = Buffer.byteLength(outputBuffer);
                     return message(form, getGenericFormMessage("destructive", "Filen är för stor", `Din fil är ${formatBytes(byteLength)}, maxgränsen är ${formatBytes(maxAvatarSize)}.`), { status: 413 });
                 }
             }
