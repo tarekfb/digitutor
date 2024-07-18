@@ -8,7 +8,7 @@ export const getGenericFormMessage = (variant?: "success" | "warning" | "destruc
   {
     variant: variant ?? "destructive",
     title: title ?? "Något gick fel",
-    description: description === undefined ? "Kontakta oss om detta fortsätter." : "",
+    description: description ?? "Kontakta oss om detta fortsätter.",
     id: messageId ?? MessageId.Unknown,
     data: data ?? undefined
   })
@@ -20,7 +20,7 @@ export enum MessageId {
 
 export const initMessagesCount = 25;
 
-export const maxFileSizeAvatar = 2097152;
-export const maxUncompressedSize = 1048576;
-export const maxFileSizeSelection = 49000000;
-export const acceptedFileFormats = ["image/jpeg", "image/png", "image/webp"];
+export const maxAvatarSize = 2097152; // not used?
+export const maxAvatarUncompressedSize = 1048576;
+export const maxAvatarSizeSelection = 51380224;
+export const acceptedAvatarFormats = ["image/jpeg", "image/png", "image/webp"]; // todo update with jimp

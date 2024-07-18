@@ -31,6 +31,7 @@
           variant="destructive"
           disabled={$submitting}
           aria-label="Delete account"
+          class="md:self-center md:min-w-wider"
         >
           {#if $submitting}
             <LoadingSpinner class="mr-2" /> <span>Laddar...</span>
@@ -84,6 +85,7 @@
           variant="destructive"
           disabled={$submitting}
           aria-label="Delete account"
+          class="md:self-center md:min-w-wider"
         >
           {#if $submitting}
             <LoadingSpinner class="mr-2" /> <span>Laddar...</span>

@@ -16,6 +16,8 @@
   } from "$lib/shared/models/user.js";
   import DeleteAccount from "$lib/components/atoms/delete-account.svelte";
   import PasswordInput from "$lib/components/molecules/password-input.svelte";
+  import { maxAvatarSizeSelection } from "src/lib/shared/constants/constants.js";
+  import { formatBytes } from "src/lib/utils.js";
 
   let adminSection: Writable<string> = getContext("adminSection");
   adminSection.set("settings");
@@ -132,7 +134,8 @@
     enctype="multipart/form-data"
   >
     <p class="text-muted-foreground">
-      Maxstorlek är 49MB. Bilden kompimeras automatiskt.
+      Maxstorlek är {formatBytes(maxAvatarSizeSelection)}. Bilden komprimeras
+      automatiskt.
     </p>
     <Form.Field form={avatarForm} name="avatar">
       <Form.Control let:attrs>
@@ -146,12 +149,10 @@
           class="overflow-hidden flex h-10 w-full border border-input rounded-md bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
           on:input={(e) => setAvatar(e)}
         />
-        <!-- bind:files={$file} -->
       </Form.Control>
       <Form.FieldErrors />
     </Form.Field>
   </SettingsForm>
-  <!-- placeholder="Email" -->
 
   <SettingsForm
     form={passwordForm}
