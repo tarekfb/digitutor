@@ -1,5 +1,5 @@
 import type { PageServerLoad } from "./$types";
-import { getGenericFormMessage, maxFileSizeAvatar, maxUncompressedSize } from "$lib/shared/constants/constants";
+import { getGenericFormMessage, maxAvatarSize, maxAvatarUncompressedSize } from "$lib/shared/constants/constants";
 import { fail, message, superValidate, withFiles } from "sveltekit-superforms";
 import { zod } from "sveltekit-superforms/adapters";
 import { avatarSchema, emailSchema, nameSchema, type ProfileInput } from "$lib/shared/models/profile";
@@ -12,7 +12,7 @@ import { uploadAvatar } from "src/lib/server/database/avatar";
 import { formatBytes, isStorageErrorCustom } from "src/lib/utils";
 import type { StorageErrorCustom } from "src/lib/shared/errors/storage-error-custom";
 // import sharp from "sharp";
-import Jimp from "jimp";
+import * as Jimp from "jimp"
 
 export const load: PageServerLoad = async ({ parent, locals: { safeGetSession } }) => {
     const { session } = await safeGetSession();
@@ -98,22 +98,21 @@ export const actions = {
 
         let uploadBuffer;
         try {
-            let image = await Jimp.read(buffer);
-            if (uncompressedByteSize > maxUncompressedSize)
+            let image = await Jimp.default.read(buffer);
+            if (uncompressedByteSize > maxAvatarUncompressedSize)
                 image = image.quality(80)
 
             image = image.resize(500, 500);
-            uploadBuffer = await image.getBufferAsync(Jimp.MIME_PNG);
+            uploadBuffer = await image.getBufferAsync(Jimp.default.MIME_PNG);
         } catch (err) {
-            if (uncompressedByteSize > maxUncompressedSize) {
+            if (uncompressedByteSize > maxAvatarUncompressedSize) {
                 console.error('Unknown error on compression:', err);
-                return message(form, getGenericFormMessage("destructive", "Något gick fel vid komprimeringen", `Testa ladda upp en bild under ${formatBytes(maxUncompressedSize)} så görs ingen komprimering.`), { status: 500 });
+                return message(form, getGenericFormMessage("destructive", "Något gick fel vid komprimeringen", `Testa ladda upp en bild under ${formatBytes(maxAvatarUncompressedSize)} så görs ingen komprimering.`), { status: 500 });
             } else {
                 console.error('Unknown error on resize:', err);
                 return message(form, getGenericFormMessage(), { status: 500 });
             }
         }
-
 
         let avatarPath;
         try {
@@ -125,7 +124,7 @@ export const actions = {
                 const storageError = error as unknown as StorageErrorCustom;
                 if (storageError.statusCode === '413') {
                     const byteLength = Buffer.byteLength(uploadBuffer);
-                    return message(form, getGenericFormMessage("destructive", "Filen är för stor", `Din fil är ${formatBytes(byteLength)}, maxgränsen är ${formatBytes(maxFileSizeAvatar)}.`), { status: 413 });
+                    return message(form, getGenericFormMessage("destructive", "Filen är för stor", `Din fil är ${formatBytes(byteLength)}, maxgränsen är ${formatBytes(maxAvatarSize)}.`), { status: 413 });
                 }
             }
             console.error("Unknown error on upload avatar", error);
