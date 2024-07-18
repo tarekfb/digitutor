@@ -1,7 +1,7 @@
 import type { RequestHandler } from "./$types";
 import { type RequestEvent } from '@sveltejs/kit';
 import { Buffer } from 'node:buffer';
-import { PhotonImage, SamplingFilter, resize } from "@cf-wasm/photon";
+import * as photon from "@cf-wasm/photon";
 import { maxAvatarUncompressedSize } from 'src/lib/shared/constants/constants';
 
 export const POST =  (async (requestEvent: RequestEvent): Promise<Response> => {
@@ -12,15 +12,16 @@ export const POST =  (async (requestEvent: RequestEvent): Promise<Response> => {
 
     // const uncompressedByteSize = Buffer.byteLength(arrayBuffer);
 
+    const moduleInstance = await WebAssembly.instantiate(photon);
 
-    const inputImage = PhotonImage.new_from_byteslice(inputBuffer);
+    const inputImage = photon.PhotonImage.new_from_byteslice(inputBuffer);
 
     // resize image using photon
-    const outputImage = resize(
+    const outputImage = photon.resize(
         inputImage,
         500,
         500,
-        SamplingFilter.Triangle
+        photon.SamplingFilter.Triangle
     );
 
     // get webp bytes
