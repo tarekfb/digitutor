@@ -11,8 +11,14 @@ import { redirect } from "sveltekit-flash-message/server";
 import { uploadAvatar } from "src/lib/server/database/avatar";
 import { formatBytes, isStorageErrorCustom } from "src/lib/utils";
 import type { StorageErrorCustom } from "src/lib/shared/errors/storage-error-custom";
-// import sharp from "sharp";
-import * as Jimp from "jimp"
+
+
+// For some reason, Jimp attaches to self, even in Node.
+// https://github.com/jimp-dev/jimp/issues/466
+import * as _Jimp from 'jimp';
+
+// @ts-ignore
+const Jimp = (typeof self !== 'undefined') ? (self.Jimp || _Jimp) : _Jimp;
 
 export const load: PageServerLoad = async ({ parent, locals: { safeGetSession } }) => {
     const { session } = await safeGetSession();
@@ -98,12 +104,12 @@ export const actions = {
 
         let uploadBuffer;
         try {
-            let image = await Jimp.default.read(buffer);
+            let image = await Jimp.read(buffer);
             if (uncompressedByteSize > maxAvatarUncompressedSize)
                 image = image.quality(80)
 
             image = image.resize(500, 500);
-            uploadBuffer = await image.getBufferAsync(Jimp.default.MIME_PNG);
+            uploadBuffer = await image.getBufferAsync(Jimp.MIME_PNG);
         } catch (err) {
             if (uncompressedByteSize > maxAvatarUncompressedSize) {
                 console.error('Unknown error on compression:', err);
