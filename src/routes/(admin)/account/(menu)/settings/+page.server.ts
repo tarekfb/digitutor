@@ -11,15 +11,14 @@ import { redirect } from "sveltekit-flash-message/server";
 import { uploadAvatar } from "src/lib/server/database/avatar";
 import { formatBytes, isStorageErrorCustom } from "src/lib/utils";
 import type { StorageErrorCustom } from "src/lib/shared/errors/storage-error-custom";
-import { PhotonImage, SamplingFilter, resize } from "@cf-wasm/photon";
 
 
 // For some reason, Jimp attaches to self, even in Node.
 // https://github.com/jimp-dev/jimp/issues/466
-import * as _Jimp from 'jimp';
+// import * as _Jimp from 'jimp';
 
 // @ts-ignore
-const Jimp = (typeof self !== 'undefined') ? (self.Jimp || _Jimp) : _Jimp;
+// const Jimp = (typeof self !== 'undefined') ? (self.Jimp || _Jimp) : _Jimp;
 
 export const load: PageServerLoad = async ({ parent, locals: { safeGetSession } }) => {
     const { session } = await safeGetSession();
@@ -105,18 +104,18 @@ export const actions = {
 
         let outputBuffer;
         try {
-            const inputImage = PhotonImage.new_from_byteslice(inputBuffer);
+            // const inputImage = PhotonImage.new_from_byteslice(inputBuffer);
 
-            // resize image using photon
-            const outputImage = resize(
-                inputImage,
-                500,
-                500,
-                SamplingFilter.Triangle
-            );
+            // // resize image using photon
+            // const outputImage = resize(
+            //     inputImage,
+            //     500,
+            //     500,
+            //     SamplingFilter.Triangle
+            // );
 
-            // get webp bytes
-            outputBuffer = outputImage.get_bytes_webp();
+            // // get webp bytes
+            // outputBuffer = outputImage.get_bytes_webp();
 
             // let image = await Jimp.read(buffer);
             // if (uncompressedByteSize > maxAvatarUncompressedSize)
@@ -124,6 +123,21 @@ export const actions = {
 
             // image = image.resize(500, 500);
             // uploadBuffer = await image.getBufferAsync(Jimp.MIME_PNG);
+            const result = await event.fetch('/api/avatar-resize', {
+                method: 'POST',
+                body: inputBuffer
+            })
+            console.log("result", result);
+
+            if (!result.ok) {
+                console.error("not ok", result)
+                return message(form, getGenericFormMessage(), { status: 500 });
+            }
+
+            console.log("Ok")
+            outputBuffer = await result.arrayBuffer();
+            console.log({outputBuffer})
+
 
         } catch (err) {
             if (uncompressedByteSize > maxAvatarUncompressedSize) {
