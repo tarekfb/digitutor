@@ -104,12 +104,12 @@ export const actions = {
 
         let uploadBuffer;
         try {
-            let image = await Jimp.read(buffer);
+            let image = await Jimp.default.read(buffer);
             if (uncompressedByteSize > maxAvatarUncompressedSize)
                 image = image.quality(80)
 
             image = image.resize(500, 500);
-            uploadBuffer = await image.getBufferAsync(Jimp.MIME_PNG);
+            uploadBuffer = await image.getBufferAsync(Jimp.default.MIME_PNG);
         } catch (err) {
             if (uncompressedByteSize > maxAvatarUncompressedSize) {
                 console.error('Unknown error on compression:', err);
