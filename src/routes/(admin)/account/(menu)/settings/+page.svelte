@@ -16,7 +16,7 @@
   } from "$lib/shared/models/user.js";
   import DeleteAccount from "$lib/components/atoms/delete-account.svelte";
   import PasswordInput from "$lib/components/molecules/password-input.svelte";
-  import { maxAvatarSizeSelection } from "src/lib/shared/constants/constants.js";
+  import { maxAvatarSize } from "src/lib/shared/constants/constants.js";
   import { formatBytes } from "src/lib/utils.js";
 
   let adminSection: Writable<string> = getContext("adminSection");
@@ -134,8 +134,7 @@
     enctype="multipart/form-data"
   >
     <p class="text-muted-foreground">
-      Maxstorlek är {formatBytes(maxAvatarSizeSelection)}. Bilden komprimeras
-      automatiskt.
+      Maxstorlek är {formatBytes(maxAvatarSize)}.
     </p>
     <Form.Field form={avatarForm} name="avatar">
       <Form.Control let:attrs>

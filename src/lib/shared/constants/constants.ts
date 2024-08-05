@@ -20,7 +20,5 @@ export enum MessageId {
 
 export const initMessagesCount = 25;
 
-export const maxAvatarSize = 2097152; // not used?
-export const maxAvatarUncompressedSize = 1048576;
-export const maxAvatarSizeSelection = 51380224;
+export const maxAvatarSize = 1048576;
 export const acceptedAvatarFormats = ["image/jpeg", "image/png", "image/webp"]; // todo update with jimp

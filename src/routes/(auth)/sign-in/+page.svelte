@@ -167,7 +167,7 @@
         {submitting}
         {allErrors}
         text="Logga in"
-        class="self-center min-w-wide"
+        class="self-center min-w-wider"
       />
     </form>
   </svelte:fragment>
