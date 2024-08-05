@@ -1,5 +1,5 @@
 import type { PageServerLoad } from "./$types";
-import { getGenericFormMessage, maxAvatarSize, maxAvatarUncompressedSize } from "$lib/shared/constants/constants";
+import { getGenericFormMessage, maxAvatarSize } from "$lib/shared/constants/constants";
 import { fail, message, superValidate, withFiles } from "sveltekit-superforms";
 import { zod } from "sveltekit-superforms/adapters";
 import { avatarSchema, emailSchema, nameSchema, type ProfileInput } from "$lib/shared/models/profile";
@@ -99,68 +99,20 @@ export const actions = {
         const { avatar } = form.data;
 
         const arrayBuffer = await avatar.arrayBuffer();
-        const inputBuffer = Buffer.from(arrayBuffer);
-        const uncompressedByteSize = Buffer.byteLength(arrayBuffer);
-
-        let outputBuffer;
-        try {
-            // const inputImage = PhotonImage.new_from_byteslice(inputBuffer);
-
-            // // resize image using photon
-            // const outputImage = resize(
-            //     inputImage,
-            //     500,
-            //     500,
-            //     SamplingFilter.Triangle
-            // );
-
-            // // get webp bytes
-            // outputBuffer = outputImage.get_bytes_webp();
-
-            // let image = await Jimp.read(buffer);
-            // if (uncompressedByteSize > maxAvatarUncompressedSize)
-            //     image = image.quality(80)
-
-            // image = image.resize(500, 500);
-            // uploadBuffer = await image.getBufferAsync(Jimp.MIME_PNG);
-            const result = await event.fetch('/api/avatar-resize', {
-                method: 'POST',
-                body: inputBuffer
-            })
-            console.log("result", result);
-
-            if (!result.ok) {
-                console.error("not ok", result)
-                return message(form, getGenericFormMessage(), { status: 500 });
-            }
-
-            console.log("Ok")
-            outputBuffer = await result.arrayBuffer();
-            console.log({outputBuffer})
-
-
-        } catch (err) {
-            if (uncompressedByteSize > maxAvatarUncompressedSize) {
-                console.error('Unknown error on compression:', err);
-                return message(form, getGenericFormMessage("destructive", "Något gick fel vid komprimeringen", `Testa ladda upp en bild under ${formatBytes(maxAvatarUncompressedSize)} så görs ingen komprimering.`), { status: 500 });
-            } else {
-                console.error('Unknown error on resize:', err);
-                return message(form, getGenericFormMessage(), { status: 500 });
-            }
-        }
+        const uncompressedInput = Buffer.from(arrayBuffer);
 
         let avatarPath;
         try {
-            // const format = avatar.type.split("/")[1]; // example type: image/png
-            const format = "webp"; // example type: image/png
+            const format = avatar.type.split("/")[1]; // example type property: image/png
+            console.log(avatar)
             const fileName = `${user.id}---${crypto.randomUUID()}.${format}`
-            avatarPath = await uploadAvatar(supabase, fileName, outputBuffer);
+            avatarPath = await uploadAvatar(supabase, fileName, uncompressedInput);
         } catch (error) {
             if (isStorageErrorCustom(error)) {
                 const storageError = error as unknown as StorageErrorCustom;
                 if (storageError.statusCode === '413') {
-                    const byteLength = Buffer.byteLength(outputBuffer);
-                    return message(form, getGenericFormMessage("destructive", "Filen är för stor", `Din fil är ${formatBytes(byteLength)}, maxgränsen är ${formatBytes(maxAvatarSize)}.`), { status: 413 });
+                    const bytes = Buffer.byteLength(uncompressedInput);
+                    return message(form, getGenericFormMessage("destructive", "Filen är för stor", `Din fil är ${formatBytes(bytes)}, maxgränsen är ${formatBytes(maxAvatarSize)}.`), { status: 413 });
                 }
             }
             console.error("Unknown error on upload avatar", error);
