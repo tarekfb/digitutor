@@ -37,11 +37,7 @@ export const actions = {
       throw redirect(303, "/sign-in");
 
     const form = await superValidate(event, zod(initCreateListingSchema));
-    if (!form.valid) {
-      return fail(400, {
-        form,
-      });
-    }
+    if (!form.valid) return fail(400, { form });
     const { title } = form.data;
 
     let listingId = "";

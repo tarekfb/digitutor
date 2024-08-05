@@ -47,11 +47,7 @@ export const actions: Actions = {
 
         const form = await superValidate(event, zod(signInSchema));
         const { email, password } = form.data;
-        if (!form.valid) {
-            return fail(400, {
-                form,
-            });
-        }
+        if (!form.valid) return fail(400, { form });
 
         try {
             const { data, error } = await supabase.auth.signInWithPassword({

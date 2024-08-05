@@ -52,11 +52,7 @@ export const actions = {
 
 
     const form = await superValidate(event, zod(sendMessageSchema));
-    if (!form.valid) {
-      return fail(400, {
-        form,
-      });
-    }
+    if (!form.valid) return fail(400, { form });
 
     const inputMessage: InputMessage = {
       content: form.data.content,

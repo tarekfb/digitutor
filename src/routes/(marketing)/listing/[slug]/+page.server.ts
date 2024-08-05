@@ -68,11 +68,7 @@ export const actions = {
 
     const form = await superValidate(event, zod(updateListingSchema));
 
-    if (!form.valid) {
-      return fail(400, {
-        form,
-      });
-    }
+    if (!form.valid) return fail(400, { form });
 
     try {
       await updateListing(supabase, form.data, slug, session);

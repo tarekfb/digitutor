@@ -32,12 +32,8 @@ export const actions = {
             throw redirect(303, "/account");
 
         const form = await superValidate(event, zod(signUpSchema));
-        if (!form.valid) {
-            return fail(400, {
-                form,
-            });
-        }
-
+        if (!form.valid) return fail(400, { form });
+        
         const { email, password, role, first_name, last_name } = form.data;
         let inputUser: CreateProfile;
         try {

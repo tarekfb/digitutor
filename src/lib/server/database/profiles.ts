@@ -97,3 +97,4 @@ export const updateProfile = async (
 
   return data;
 }
+

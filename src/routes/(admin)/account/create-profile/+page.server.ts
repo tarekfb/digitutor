@@ -43,11 +43,7 @@ export const actions = {
 
     const form = await superValidate(event, zod(nameSchema));
 
-    if (!form.valid) {
-      return fail(400, {
-        form,
-      });
-    }
+    if (!form.valid) return fail(400, { form });
 
     const { firstName, lastName } = form.data;
 
