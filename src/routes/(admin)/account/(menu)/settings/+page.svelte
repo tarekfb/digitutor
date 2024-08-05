@@ -134,8 +134,7 @@
     enctype="multipart/form-data"
   >
     <p class="text-muted-foreground">
-      Maxstorlek är {formatBytes(maxAvatarSize)}. Bilden komprimeras
-      automatiskt.
+      Maxstorlek är {formatBytes(maxAvatarSize)}.
     </p>
     <Form.Field form={avatarForm} name="avatar">
       <Form.Control let:attrs>

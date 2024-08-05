@@ -12,14 +12,6 @@ import { uploadAvatar } from "src/lib/server/database/avatar";
 import { formatBytes, isStorageErrorCustom } from "src/lib/utils";
 import type { StorageErrorCustom } from "src/lib/shared/errors/storage-error-custom";
 
-
-// For some reason, Jimp attaches to self, even in Node.
-// https://github.com/jimp-dev/jimp/issues/466
-// import * as _Jimp from 'jimp';
-
-// @ts-ignore
-// const Jimp = (typeof self !== 'undefined') ? (self.Jimp || _Jimp) : _Jimp;
-
 export const load: PageServerLoad = async ({ parent, locals: { safeGetSession } }) => {
     const { session } = await safeGetSession();
     if (!session)
