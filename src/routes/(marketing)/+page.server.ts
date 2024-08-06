@@ -3,15 +3,15 @@ import { getGenericFormMessage } from "src/lib/shared/constants/constants";
 import { fail, message, superValidate } from "sveltekit-superforms";
 import { zod } from "sveltekit-superforms/adapters";
 import { searchSchema, type SearchResult, } from "src/lib/shared/models/search";
-// import type { Actions, PageServerLoad } from "./$types";
+import type { Actions, PageServerLoad } from "./$types";
 
-export const load = async () => {
+export const load: PageServerLoad = async () => {
     const form = await superValidate(zod(searchSchema))
 
     return { form };
 }
 
-export const actions = {
+export const actions: Actions = {
     search: async (event) => {
         const { locals: { supabase } } = event;
 
@@ -34,7 +34,7 @@ export const actions = {
                 }
             });
 
-            if (formatted.length === 0) 
+            if (formatted.length === 0)
                 return message(form, getGenericFormMessage("default", "Inga träffar på din sökning", "Testa söka på en lärares namn, eller en annons titel, beskrivning eller pris."), { status: 404 });
 
             return { form, formatted }
