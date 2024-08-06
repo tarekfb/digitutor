@@ -49,7 +49,7 @@ export const languages = [
 export type Message = {
   title: string;
   description: string;
-  variant?: "success" | "warning" | "destructive";
+  variant?: "success" | "warning" | "destructive" | "default";
   id?: MessageId;
   data: any;
 };

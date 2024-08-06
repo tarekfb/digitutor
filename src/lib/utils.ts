@@ -103,14 +103,12 @@ export const timeAgo = (dateIsoString: string): string => {
   }
 }
 
-export const getRecipient = (self: "teacher" | "student" | "admin") => {
+export const getRecipient = (self: "teacher" | "student") => {
   switch (self) {
     case "teacher":
       return "student";
     case "student":
       return "teacher";
-    case "admin":
-      return "admin";
   }
 }
 
@@ -151,3 +149,11 @@ export const formatBytes = (bytes: number, decimals = 2) => {
 
   return `${parseFloat((bytes / Math.pow(k, i)).toFixed(dm))} ${sizes[i]}`
 }
+
+export const truncate = (text: string, limit: number) => {
+  if (text.split(' ').length > limit) {
+    const truncatedText = text.split(' ').slice(0, limit).join(' ');
+    return `${truncatedText}...`;
+  }
+  return text;
+};

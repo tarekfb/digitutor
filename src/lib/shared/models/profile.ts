@@ -1,5 +1,5 @@
 import type { Tables } from "src/supabase";
-import { z } from "zod";
+import { string, z } from "zod";
 import { signUpUserFields } from "./user";
 import { acceptedAvatarFormats, maxAvatarSize } from "../constants/constants";
 
@@ -27,7 +27,7 @@ export const emailSchema = z.object({
 
 export type CreateProfile = {
     id: string;
-    role: "teacher" | "student" | "admin";
+    role: "teacher" | "student";
     firstName: string;
     lastName: string;
 }
@@ -43,3 +43,4 @@ export const avatarSchema = z.object({
             "Accepterade filformat är .jpeg, .png och .webp."
         ),
 });
+

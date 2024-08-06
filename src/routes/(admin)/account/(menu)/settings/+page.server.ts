@@ -11,6 +11,7 @@ import { redirect } from "sveltekit-flash-message/server";
 import { uploadAvatar } from "src/lib/server/database/avatar";
 import { formatBytes, isStorageErrorCustom } from "src/lib/utils";
 import type { StorageErrorCustom } from "src/lib/shared/errors/storage-error-custom";
+import { Buffer } from 'node:buffer';
 
 export const load: PageServerLoad = async ({ parent, locals: { safeGetSession } }) => {
     const { session } = await safeGetSession();
@@ -39,9 +40,7 @@ export const actions = {
             throw redirect(303, "/sign-in");
 
         const form = await superValidate(event, zod(nameSchema));
-        if (!form.valid)
-            return fail(400, { form });
-
+        if (!form.valid) return fail(400, { form });
         const { firstName, lastName } = form.data;
 
         const profileInput: ProfileInput = {
@@ -65,8 +64,7 @@ export const actions = {
             throw redirect(303, "/sign-in");
 
         const form = await superValidate(event, zod(emailSchema));
-        if (!form.valid)
-            return fail(400, { form });
+        if (!form.valid) return fail(400, { form });
 
         const { email } = form.data;
         try {
@@ -85,9 +83,7 @@ export const actions = {
 
         const form = await superValidate(event, zod(avatarSchema));
 
-        if (!form.valid)
-            return fail(400, { form });
-
+        if (!form.valid) return fail(400, { form });
         const { avatar } = form.data;
 
         const arrayBuffer = await avatar.arrayBuffer();
@@ -96,7 +92,6 @@ export const actions = {
         let avatarPath;
         try {
             const format = avatar.type.split("/")[1]; // example type property: image/png
-            console.log(avatar)
             const fileName = `${user.id}---${crypto.randomUUID()}.${format}`
             avatarPath = await uploadAvatar(supabase, fileName, uncompressedInput);
         } catch (error) {
@@ -126,9 +121,7 @@ export const actions = {
             throw redirect(303, "/sign-in");
 
         const form = await superValidate(event, zod(deleteAccountSchema));
-        if (!form.valid)
-            return fail(400, { form });
-
+        if (!form.valid) return fail(400, { form });
         const { password } = form.data;
         const { id, email } = user;
         if (!email) {
@@ -171,8 +164,7 @@ export const actions = {
             throw redirect(303, "/sign-in");
 
         const form = await superValidate(event, zod(passwordSchema));
-        if (!form.valid)
-            return fail(400, { form });
+        if (!form.valid) return fail(400, { form });
 
         const { new: newPassword, current } = form.data;
 

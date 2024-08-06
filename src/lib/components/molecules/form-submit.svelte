@@ -21,7 +21,10 @@
   class={cn("", className)}
 >
   {#if $submitting}
-    <LoadingSpinner class="mr-2" /> <span>{loadingText}</span>
+    <LoadingSpinner class="{loadingText && 'mr-2'}" />
+    {#if loadingText}
+      <span>{loadingText}</span>
+    {/if}
   {:else}
     {text}
   {/if}

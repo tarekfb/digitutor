@@ -4,7 +4,7 @@ export const websiteName = "Mindic";
 
 export const unknownErrorMessage = "Något gick fel. Kontakta oss om detta fortsätter."
 
-export const getGenericFormMessage = (variant?: "success" | "warning" | "destructive", title?: string, description?: string, messageId?: MessageId, data?: any): Message => (
+export const getGenericFormMessage = (variant?: "success" | "warning" | "destructive" | "default", title?: string, description?: string, messageId?: MessageId, data?: any): Message => (
   {
     variant: variant ?? "destructive",
     title: title ?? "Något gick fel",

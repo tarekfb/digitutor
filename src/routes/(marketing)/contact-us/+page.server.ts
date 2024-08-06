@@ -16,11 +16,7 @@ export const actions: Actions = {
     const { locals: { supabaseServiceRole } } = event;
 
     const form = await superValidate(event, zod(contactUsSchema));
-    if (!form.valid) {
-      return fail(400, {
-        form,
-      });
-    }
+    if (!form.valid) return fail(400, { form });
 
     const { firstName, lastName, email, message: contactMessage } = form.data;
     try {

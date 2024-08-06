@@ -8,16 +8,14 @@ export type Review = Omit<Tables<"reviews">, "sender" | "receiver"> & {
 export type InputReview = Pick<Tables<"reviews">, 'description' | 'rating'>;
 
 const addReviewProperties = {
-
-    rating:
-        z
-            .coerce.number()
-            .min(1, "Måste vara minst 1.")
-            .max(5, "Får inte vara mer än 5."),
+    rating: z
+        .coerce.number()
+        .min(1, "Måste vara minst 1.")
+        .max(5, "Får inte vara mer än 5."),
     description: z
         .string()
         .min(1, "Får inte vara tom.")
-        .max(100, "Fär inte vara mer för 300 karaktärer.")
+        .max(100, "Får inte vara mer än 100 karaktärer.")
         .optional()
 }
 

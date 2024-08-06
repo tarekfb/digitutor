@@ -115,11 +115,8 @@ export const actions = {
             throw redirect(303, "/sign-in"); // todo: in the future should implement a redirect after login
 
         const form = await superValidate(event, zod(startContactSchema));
-        if (!form.valid) { // this will not work nicely if teacher or role is invalid, but not expecting this to be an issue
-            return fail(400, {
-                form,
-            });
-        }
+        // this will not work nicely if teacher or role is invalid, but not expecting this to be an issue
+        if (!form.valid) return fail(400, { form });
 
         const { role, firstMessage } = form.data;
 
@@ -152,12 +149,7 @@ export const actions = {
             throw redirect(303, "/sign-in"); // todo: in the future should implement a redirect after login
 
         const form = await superValidate(event, zod(addReviewSchema));
-        if (!form.valid) {
-            return fail(400, {
-                form,
-            });
-        }
-
+        if (!form.valid) return fail(400, { form });
         const { rating, description } = form.data;
 
         try {
