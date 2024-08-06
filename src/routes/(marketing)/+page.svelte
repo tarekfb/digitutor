@@ -93,11 +93,12 @@
       class="w-12"
     />
   </div>
-  <FormMessage {message} scroll scrollTo="end" />
 </form>
 
-{#if searchResults.length > 0}
-  <ul class="generic-card">
+{#if $message}
+  <FormMessage {message} scroll scrollTo="end" />
+{:else if searchResults.length > 0}
+  <ul class="flex flex-col gap-y-4 max-w-[650px] w-full">
     <SecondaryTitle>Sökresultat</SecondaryTitle>
     {#each searchResults as result}
       <li>

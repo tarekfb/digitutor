@@ -35,7 +35,7 @@ export const actions = {
             });
 
             if (formatted.length === 0) 
-                return message(form, getGenericFormMessage("info", "Inga träffar på din sökning", "Testa söka på en lärares namn, eller en annons titel, beskrivning eller pris."), { status: 404 });
+                return message(form, getGenericFormMessage("default", "Inga träffar på din sökning", "Testa söka på en lärares namn, eller en annons titel, beskrivning eller pris."), { status: 404 });
 
             return { form, formatted }
         } catch (error) {
