@@ -16,7 +16,7 @@ export const signUpUserFields: TypeToZod<SignUpUser> = {
         .string()
         .min(5, "Måste vara minst 5 karaktärer."),
     role: z
-        .enum(["student", "teacher", "admin"]),
+        .enum(["student", "teacher"]),
     first_name: z
         .string()
         .min(1, "Får inte vara tomt.")

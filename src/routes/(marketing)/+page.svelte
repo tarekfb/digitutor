@@ -4,27 +4,27 @@
   import { Button } from "$lib/components/ui/button";
   import { goto } from "$app/navigation";
   import type { PageData } from "./$types";
-  import { superForm, type FormResult } from "sveltekit-superforms";
+  import { superForm } from "sveltekit-superforms";
   import { zodClient } from "sveltekit-superforms/adapters";
   import FormMessage from "$lib/components/molecules/form-message.svelte";
   import * as Form from "$lib/components/ui/form/index.js";
   import { Input } from "$lib/components/ui/input/index.js";
   import FormSubmit from "$lib/components/molecules/form-submit.svelte";
-  import Label from "$lib/components/atoms/label.svelte";
+  import SearchResult from "$lib/components/molecules/search-result.svelte";
   import {
     searchSchema,
-    type SearchResult,
+    type SearchResult as SearchResultType,
   } from "src/lib/shared/models/search";
   import SecondaryTitle from "src/lib/components/atoms/secondary-title.svelte";
 
   export let data: PageData;
 
-  let searchResults: SearchResult[] = [];
+  let searchResults: SearchResultType[] = [];
   const searchForm = superForm(data.form, {
     validators: zodClient(searchSchema),
     onUpdate({ form, result }) {
       if (form.valid && result.data)
-        searchResults = result.data.formatted as SearchResult[];
+        searchResults = result.data.formatted as SearchResultType[];
     },
   });
   const {
@@ -93,15 +93,19 @@
       class="w-12"
     />
   </div>
-  <FormMessage {message} scroll scrollTo="start" />
+  <FormMessage {message} scroll scrollTo="end" />
 </form>
 
-<ul class="generic-card">
-  <SecondaryTitle>Sökresultat</SecondaryTitle>
-  {#each searchResults as result}
-    <li class="flex flex-col gap-y-4 p-2">{result.title}</li>
-  {/each}
-</ul>
+{#if searchResults.length > 0}
+  <ul class="generic-card">
+    <SecondaryTitle>Sökresultat</SecondaryTitle>
+    {#each searchResults as result}
+      <li>
+        <SearchResult listing={result} />
+      </li>
+    {/each}
+  </ul>
+{/if}
 
 <div class="min-h-[60vh]">
   <div class="pt-20 pb-8 px-7">

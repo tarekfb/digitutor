@@ -1,9 +1,10 @@
-import { searchListings, searchTeachers } from "src/lib/server/database/search";
+import { search } from "src/lib/server/database/search";
 import { getGenericFormMessage } from "src/lib/shared/constants/constants";
 import { fail, message, superValidate } from "sveltekit-superforms";
 import { zod } from "sveltekit-superforms/adapters";
-// import type { Actions, PageServerLoad } from "./$types";
 import { searchSchema, type SearchResult, } from "src/lib/shared/models/search";
+// import type { Actions, PageServerLoad } from "./$types";
+
 export const load = async () => {
     const form = await superValidate(zod(searchSchema))
 
@@ -20,9 +21,7 @@ export const actions = {
         const { query } = form.data;
 
         try {
-            const teachers = await searchTeachers(supabase, query);
-            const listings = await searchListings(supabase, query);
-
+            const listings = await search(supabase, query);
             const formatted: SearchResult[] = listings.map(listing => {
                 return {
                     id: listing.id,
@@ -35,6 +34,8 @@ export const actions = {
                 }
             });
 
+            if (formatted.length === 0) 
+                return message(form, getGenericFormMessage("info", "Inga träffar på din sökning", "Testa söka på en lärares namn, eller en annons titel, beskrivning eller pris."), { status: 404 });
 
             return { form, formatted }
         } catch (error) {

@@ -17,14 +17,25 @@
     aria-label="Gå till lärarens profil"
     class={cn("flex gap-x-2 items-center self-start", className)}
   >
-    <Avatar onClick={() => goto(`/profile/${profile.id}`)} {profile} />
+    <Avatar
+      onClick={() => goto(`/profile/${profile.id}`)}
+      url={profile.avatar_url ?? ""}
+      firstName={profile.first_name}
+      lastName={profile.last_name}
+      role={profile.role}
+    />
     <slot />
   </a>
 {:else}
   <div class={cn("flex gap-x-2 items-center self-start", className)}>
     <Avatar
-      onClick={profile.role === "teacher" && clickable ? () => goto(`/profile/${profile.id}`) : undefined}
-      {profile}
+      onClick={profile.role === "teacher" && clickable
+        ? () => goto(`/profile/${profile.id}`)
+        : undefined}
+      url={profile.avatar_url ?? ""}
+      firstName={profile.first_name}
+      lastName={profile.last_name}
+      role={profile.role}
     />
     <slot />
   </div>

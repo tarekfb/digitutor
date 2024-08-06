@@ -103,14 +103,12 @@ export const timeAgo = (dateIsoString: string): string => {
   }
 }
 
-export const getRecipient = (self: "teacher" | "student" | "admin") => {
+export const getRecipient = (self: "teacher" | "student") => {
   switch (self) {
     case "teacher":
       return "student";
     case "student":
       return "teacher";
-    case "admin":
-      return "admin";
   }
 }
 

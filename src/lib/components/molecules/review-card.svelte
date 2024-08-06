@@ -19,7 +19,10 @@
         <!-- if sender deleted account, sender will be null -->
         <div class="flex gap-x-2 items-center">
           <Avatar
-            profile={review.sender}
+            url={review.sender.avatar_url ?? ""}
+            firstName={review.sender.first_name}
+            lastName={review.sender.last_name}
+            role={review.sender.role}
             onClick={undefined}
             class="text-sm w-8 h-8"
           />

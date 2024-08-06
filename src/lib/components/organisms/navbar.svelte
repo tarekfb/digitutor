@@ -49,7 +49,10 @@
                 class="relative h-8 w-8 rounded-full"
               >
                 <Avatar
-                  {profile}
+                  url={profile.avatar_url ?? ""}
+                  firstName={profile.first_name}
+                  lastName={profile.last_name}
+                  role={profile.role}
                   onClick={undefined}
                   fallbackClass="bg-primary"
                 />

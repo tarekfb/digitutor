@@ -48,7 +48,10 @@
           <div class="flex flex-col justify-end">
             <Avatar
               onClick={undefined}
-              profile={receiver}
+              url={receiver.avatar_url}
+              firstName={receiver.first_name}
+              lastName={receiver.last_name}
+              role={receiver.role}
               class="text-sm w-7 h-7"
             />
           </div>
