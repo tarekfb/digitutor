@@ -112,12 +112,14 @@ export const actions = {
             // // get webp bytes
             // outputBuffer = outputImage.get_bytes_webp();
 
-            let image = await Jimp.default.read(input);
+            let image = await Jimp.read(input);
+            // let image = await Jimp.default.read(input);
             // if (uncompressedByteSize > maxAvatarUncompressedSize)
             image = image.quality(80)
 
             image = image.resize(500, 500);
-            input = await image.getBufferAsync(Jimp.default.MIME_PNG    );
+            // input = await image.getBufferAsync(Jimp.default.MIME_PNG);
+            input = await image.getBufferAsync(Jimp.MIME_PNG);
         } catch (err) {
             // if (uncompressedByteSize > maxAvatarUncompressedSize) {
             //     console.error('Unknown error on compression:', err);
