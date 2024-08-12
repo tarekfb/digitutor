@@ -112,6 +112,7 @@ export const actions = {
             // // get webp bytes
             // outputBuffer = outputImage.get_bytes_webp();
 
+            console.log("printed?")
             console.log(_Jimp)
             console.log(_Jimp)
             let image = await _Jimp.read(input);
