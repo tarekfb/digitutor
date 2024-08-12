@@ -12,6 +12,14 @@ import { uploadAvatar } from "src/lib/server/database/avatar";
 import { formatBytes, isStorageErrorCustom } from "src/lib/utils";
 import type { StorageErrorCustom } from "src/lib/shared/errors/storage-error-custom";
 import { Buffer } from 'node:buffer';
+// import { PhotonImage, SamplingFilter, resize } from "@cf-wasm/photon";
+
+// For some reason, Jimp attaches to self, even in Node.
+// https://github.com/jimp-dev/jimp/issues/466
+import * as _Jimp from 'jimp';
+
+// @ts-ignore
+const Jimp = (typeof self !== 'undefined') ? (self.Jimp || _Jimp) : _Jimp;
 
 export const load: PageServerLoad = async ({ parent, locals: { safeGetSession } }) => {
     const { session } = await safeGetSession();
@@ -87,18 +95,49 @@ export const actions = {
         const { avatar } = form.data;
 
         const arrayBuffer = await avatar.arrayBuffer();
-        const uncompressedInput = Buffer.from(arrayBuffer);
+        let input = Buffer.from(arrayBuffer);
+
+        // let outputBuffer;
+        try {
+            // const inputImage = PhotonImage.new_from_byteslice(inputBuffer);
+
+            // resize image using photon
+            // const outputImage = resize(
+            //     inputImage,
+            //     500,
+            //     500,
+            //     SamplingFilter.Triangle
+            // );
+
+            // // get webp bytes
+            // outputBuffer = outputImage.get_bytes_webp();
+
+            let image = await Jimp.default.read(input);
+            // if (uncompressedByteSize > maxAvatarUncompressedSize)
+            image = image.quality(80)
+
+            image = image.resize(500, 500);
+            input = await image.getBufferAsync(Jimp.default.MIME_PNG    );
+        } catch (err) {
+            // if (uncompressedByteSize > maxAvatarUncompressedSize) {
+            //     console.error('Unknown error on compression:', err);
+            //     return message(form, getGenericFormMessage("destructive", "Något gick fel vid komprimeringen", `Testa ladda upp en bild under ${formatBytes(maxAvatarUncompressedSize)} så görs ingen komprimering.`), { status: 500 });
+            // } else {
+            console.error('Unknown error on resize:', err);
+            return message(form, getGenericFormMessage(), { status: 500 });
+            // }
+        }
 
         let avatarPath;
         try {
             const format = avatar.type.split("/")[1]; // example type property: image/png
             const fileName = `${user.id}---${crypto.randomUUID()}.${format}`
-            avatarPath = await uploadAvatar(supabase, fileName, uncompressedInput);
+            avatarPath = await uploadAvatar(supabase, fileName, input);
         } catch (error) {
             if (isStorageErrorCustom(error)) {
                 const storageError = error as unknown as StorageErrorCustom;
                 if (storageError.statusCode === '413') {
-                    const bytes = Buffer.byteLength(uncompressedInput);
+                    const bytes = Buffer.byteLength(input);
                     return message(form, getGenericFormMessage("destructive", "Filen är för stor", `Din fil är ${formatBytes(bytes)}, maxgränsen är ${formatBytes(maxAvatarSize)}.`), { status: 413 });
                 }
             }
