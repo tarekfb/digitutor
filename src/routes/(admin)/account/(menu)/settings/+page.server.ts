@@ -112,6 +112,8 @@ export const actions = {
             // // get webp bytes
             // outputBuffer = outputImage.get_bytes_webp();
 
+            console.log(Jimp)
+            console.log(Jimp.default)
             let image = await Jimp.read(input);
             // let image = await Jimp.default.read(input);
             // if (uncompressedByteSize > maxAvatarUncompressedSize)
