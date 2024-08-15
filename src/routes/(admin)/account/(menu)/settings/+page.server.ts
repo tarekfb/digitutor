@@ -88,64 +88,67 @@ export const actions = {
         const { avatar } = form.data;
 
         const arrayBuffer = await avatar.arrayBuffer();
-        let input = Buffer.from(arrayBuffer);
+        // let input = Buffer.from(arrayBuffer);
 
-        // let outputBuffer;
-        // try {
 
-        //     let image = await _Jimp.default.read(input);
-        //     // let image = await _Jimp.default.read(input);
-        //     // if (uncompressedByteSize > maxAvatarUncompressedSize)
-        //     image = image.quality(80)
+        // console.log("KEY IS")
+        // console.log(AWS_SECRET_ACCESS_KEY, AWS_ACCESS_KEY)
+        // const AWS_S3_BUCKET = "avatars-123712738";
+        // const region = "eu-north-1";
+        // const objectKey = "example-image.png";
+        // const endpoint = `https://${AWS_S3_BUCKET}.s3.amazonaws.com/`;
+        // // const imageUrl = `https://${bucketName}.s3.${region}.amazonaws.com/${objectKey}`;
 
-        //     image = image.resize(500, 500);
-        //     // input = await image.getBufferAsync(_Jimp.default.MIME_PNG);
-        //     input = await image.getBufferAsync(_Jimp.default.MIME_PNG);
-        // } catch (err) {
-        //     // if (uncompressedByteSize > maxAvatarUncompressedSize) {
-        //     //     console.error('Unknown error on compression:', err);
-        //     //     return message(form, getGenericFormMessage("destructive", "Något gick fel vid komprimeringen", `Testa ladda upp en bild under ${formatBytes(maxAvatarUncompressedSize)} så görs ingen komprimering.`), { status: 500 });
-        //     // } else {
-        //     console.error('Unknown error on resize:', err);
-        //     return message(form, getGenericFormMessage(), { status: 500 });
-        //     // }
-        // }
-
-        // let avatarPath;
-        // try {
-        //     const format = avatar.type.split("/")[1]; // example type property: image/png
-        //     const fileName = `${user.id}---${crypto.randomUUID()}.${format}`
-        //     avatarPath = await uploadAvatar(supabase, fileName, input);
-        // } catch (error) {
-        //     if (isStorageErrorCustom(error)) {
-        //         const storageError = error as unknown as StorageErrorCustom;
-        //         if (storageError.statusCode === '413') {
-        //             const bytes = Buffer.byteLength(input);
-        //             return message(form, getGenericFormMessage("destructive", "Filen är för stor", `Din fil är ${formatBytes(bytes)}, maxgränsen är ${formatBytes(maxAvatarSize)}.`), { status: 413 });
-        //         }
-        //     }
-        //     console.error("Unknown error on upload avatar", error);
-        //     return message(form, getGenericFormMessage(), { status: 500 });
-        // }
-
-        // try {
-        //     await updateProfile(supabase, { id: user.id, avatar_url: avatarPath });
-        // } catch (error) {
-        //     console.error(`Error on update profile with new avatar on path ${avatarPath} with userid ${user.id}`, error);
-        //     return message(form, getGenericFormMessage(), { status: 500 });
-        // }
-        // return withFiles({ form });
-
+        let input;
         try {
-            const res = await event.fetch(`/api/image-transform`);
-            console.log("res is", res);
 
-            const data = await res.json();
-            console.log("data is", data);
+            const url = 'https://image-resizing.tarekfb69.workers.dev';
+            const res = await fetch(url, {
+                method: 'POST',
+                body: arrayBuffer
+            })
+            console.log({ res })
+            input = await res.arrayBuffer();
+            // console.log({ thing })
+
+            // const buf = Buffer.from(thing);
+            // console.log({ buf })
+
+
+
+            // const data = await res.json();
+            // console.log({ data })
+
         } catch (error) {
+            console.error('Error fetching:', error);
+            return message(form, getGenericFormMessage(), { status: 500 });
+        }
+
+        let avatarPath;
+        try {
+            const format = avatar.type.split("/")[1]; // example type property: image/png
+            const fileName = `${user.id}---${crypto.randomUUID()}.${format}`
+            avatarPath = await uploadAvatar(supabase, fileName, input);
+        } catch (error) {
+            if (isStorageErrorCustom(error)) {
+                const storageError = error as unknown as StorageErrorCustom;
+                if (storageError.statusCode === '413') {
+                    const bytes = Buffer.byteLength(input);
+                    return message(form, getGenericFormMessage("destructive", "Filen är för stor", `Din fil är ${formatBytes(bytes)}, maxgränsen är ${formatBytes(maxAvatarSize)}.`), { status: 413 });
+                }
+            }
             console.error("Unknown error on upload avatar", error);
             return message(form, getGenericFormMessage(), { status: 500 });
         }
+
+        try {
+            await updateProfile(supabase, { id: user.id, avatar_url: avatarPath });
+        } catch (error) {
+            console.error(`Error on update profile with new avatar on path ${avatarPath} with userid ${user.id}`, error);
+            return message(form, getGenericFormMessage(), { status: 500 });
+        }
+        return withFiles({ form });
+
         return withFiles({ form });
     },
     delete: async (event) => {
@@ -216,7 +219,6 @@ export const actions = {
             throw redirect(303, "/settings_password_error");
         // user was logged out because of bad password. Redirect to error page with explaination.
 
-
         const { error: updateError } = await supabase.auth.updateUser({
             password: newPassword,
         });
@@ -232,3 +234,53 @@ export const actions = {
         return message(form, getGenericFormMessage("success", "Lösenord ändrat", "Använd det nya lösenordet nästa gång du loggar in."));
     }
 }
+
+
+
+// let outputBuffer;
+// try {
+
+//     let image = await _Jimp.default.read(input);
+//     // let image = await _Jimp.default.read(input);
+//     // if (uncompressedByteSize > maxAvatarUncompressedSize)
+//     image = image.quality(80)
+
+//     image = image.resize(500, 500);
+//     // input = await image.getBufferAsync(_Jimp.default.MIME_PNG);
+//     input = await image.getBufferAsync(_Jimp.default.MIME_PNG);
+// } catch (err) {
+//     // if (uncompressedByteSize > maxAvatarUncompressedSize) {
+//     //     console.error('Unknown error on compression:', err);
+//     //     return message(form, getGenericFormMessage("destructive", "Något gick fel vid komprimeringen", `Testa ladda upp en bild under ${formatBytes(maxAvatarUncompressedSize)} så görs ingen komprimering.`), { status: 500 });
+//     // } else {
+//     console.error('Unknown error on resize:', err);
+//     return message(form, getGenericFormMessage(), { status: 500 });
+//     // }
+// }
+
+// let avatarPath;
+// try {
+//     const format = avatar.type.split("/")[1]; // example type property: image/png
+//     const fileName = `${user.id}---${crypto.randomUUID()}.${format}`
+//     avatarPath = await uploadAvatar(supabase, fileName, input);
+// } catch (error) {
+//     if (isStorageErrorCustom(error)) {
+//         const storageError = error as unknown as StorageErrorCustom;
+//         if (storageError.statusCode === '413') {
+//             const bytes = Buffer.byteLength(input);
+//             return message(form, getGenericFormMessage("destructive", "Filen är för stor", `Din fil är ${formatBytes(bytes)}, maxgränsen är ${formatBytes(maxAvatarSize)}.`), { status: 413 });
+//         }
+//     }
+//     console.error("Unknown error on upload avatar", error);
+//     return message(form, getGenericFormMessage(), { status: 500 });
+// }
+
+// try {
+//     await updateProfile(supabase, { id: user.id, avatar_url: avatarPath });
+// } catch (error) {
+//     console.error(`Error on update profile with new avatar on path ${avatarPath} with userid ${user.id}`, error);
+//     return message(form, getGenericFormMessage(), { status: 500 });
+// }
+// return withFiles({ form });
+
+// try {

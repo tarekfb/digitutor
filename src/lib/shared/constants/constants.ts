@@ -20,5 +20,5 @@ export enum MessageId {
 
 export const initMessagesCount = 25;
 
-export const maxAvatarSize = 1048576;
-export const acceptedAvatarFormats = ["image/jpeg", "image/png", "image/webp"]; // todo update with jimp
+export const maxAvatarSize = 10485760;
+export const acceptedAvatarFormats = ["image/jpeg", "image/png", "image/webp"]; // todo update to adapt to photon

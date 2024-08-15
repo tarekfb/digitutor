@@ -2,6 +2,7 @@ import type { Tables } from "src/supabase";
 import { string, z } from "zod";
 import { signUpUserFields } from "./user";
 import { acceptedAvatarFormats, maxAvatarSize } from "../constants/constants";
+import { formatBytes } from "src/lib/utils";
 
 export type FinishProfileInput = {
     firstName: string;
@@ -37,7 +38,7 @@ export type Role = Pick<Tables<"profiles">, "role">["role"];
 export const avatarSchema = z.object({
     avatar: z
         .instanceof(File, { message: 'Ladda upp en fil.' })
-        .refine((f) => f.size < maxAvatarSize, 'Max 1 MB filstorlek.')
+        .refine((f) => f.size < maxAvatarSize, `Max ${formatBytes(maxAvatarSize)} filstorlek.`)
         .refine(
             (f) => acceptedAvatarFormats.includes(f.type),
             "Accepterade filformat är .jpeg, .png och .webp."
