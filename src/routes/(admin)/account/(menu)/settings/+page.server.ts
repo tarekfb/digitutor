@@ -1,5 +1,5 @@
 import type { PageServerLoad } from "./$types";
-import { getGenericFormMessage, maxAvatarSize } from "$lib/shared/constants/constants";
+import { getGenericFormMessage, maxAvatarSize, maxAvatarUncompressedSize } from "$lib/shared/constants/constants";
 import { fail, message, superValidate, withFiles } from "sveltekit-superforms";
 import { zod } from "sveltekit-superforms/adapters";
 import { avatarSchema, emailSchema, nameSchema, type ProfileInput } from "$lib/shared/models/profile";
@@ -12,7 +12,7 @@ import { uploadAvatar } from "src/lib/server/database/avatar";
 import { formatBytes, isStorageErrorCustom } from "src/lib/utils";
 import type { StorageErrorCustom } from "src/lib/shared/errors/storage-error-custom";
 import { Buffer } from 'node:buffer';
-
+import { CF_IMAGE_RESIZE_URL } from '$env/static/private'
 
 export const load: PageServerLoad = async ({ parent, locals: { safeGetSession } }) => {
     const { session } = await safeGetSession();
@@ -87,41 +87,16 @@ export const actions = {
         if (!form.valid) return fail(400, { form });
         const { avatar } = form.data;
 
-        const arrayBuffer = await avatar.arrayBuffer();
-        // let input = Buffer.from(arrayBuffer);
-
-
-        // console.log("KEY IS")
-        // console.log(AWS_SECRET_ACCESS_KEY, AWS_ACCESS_KEY)
-        // const AWS_S3_BUCKET = "avatars-123712738";
-        // const region = "eu-north-1";
-        // const objectKey = "example-image.png";
-        // const endpoint = `https://${AWS_S3_BUCKET}.s3.amazonaws.com/`;
-        // // const imageUrl = `https://${bucketName}.s3.${region}.amazonaws.com/${objectKey}`;
-
-        let input;
+        let input = await avatar.arrayBuffer();
         try {
-
-            const url = 'https://image-resizing.tarekfb69.workers.dev';
-            const res = await fetch(url, {
+            const res = await fetch(CF_IMAGE_RESIZE_URL, {
                 method: 'POST',
-                body: arrayBuffer
+                body: input
             })
-            console.log({ res })
-            input = await res.arrayBuffer();
-            // console.log({ thing })
-
-            // const buf = Buffer.from(thing);
-            // console.log({ buf })
-
-
-
-            // const data = await res.json();
-            // console.log({ data })
-
+            input = await res.arrayBuffer()
         } catch (error) {
-            console.error('Error fetching:', error);
-            return message(form, getGenericFormMessage(), { status: 500 });
+            console.error('Unknown error on compression:', error);
+            return message(form, getGenericFormMessage("destructive", "Något gick fel vid komprimeringen", `Testa ladda upp en bild under ${formatBytes(maxAvatarUncompressedSize)} för att skippa komprimeringen.`), { status: 500 });
         }
 
         let avatarPath;
@@ -132,23 +107,21 @@ export const actions = {
         } catch (error) {
             if (isStorageErrorCustom(error)) {
                 const storageError = error as unknown as StorageErrorCustom;
-                if (storageError.statusCode === '413') {
-                    const bytes = Buffer.byteLength(input);
-                    return message(form, getGenericFormMessage("destructive", "Filen är för stor", `Din fil är ${formatBytes(bytes)}, maxgränsen är ${formatBytes(maxAvatarSize)}.`), { status: 413 });
-                }
+                if (storageError.statusCode === '413')
+                    return message(form, getGenericFormMessage("destructive", "Filen är för stor", `Din fil är ${formatBytes(Buffer.byteLength(input))}, maxgränsen är ${formatBytes(maxAvatarSize)}.`), { status: 413 });
             }
             console.error("Unknown error on upload avatar", error);
             return message(form, getGenericFormMessage(), { status: 500 });
         }
 
         try {
-            await updateProfile(supabase, { id: user.id, avatar_url: avatarPath });
+            await updateProfile(supabase, {
+                id: user.id, avatar_url: avatarPath
+            });
         } catch (error) {
             console.error(`Error on update profile with new avatar on path ${avatarPath} with userid ${user.id}`, error);
             return message(form, getGenericFormMessage(), { status: 500 });
         }
-        return withFiles({ form });
-
         return withFiles({ form });
     },
     delete: async (event) => {
