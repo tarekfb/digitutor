@@ -93,9 +93,11 @@ export const actions = {
                 method: 'POST',
                 body: input
             })
+            if (res.status !== 200)
+                throw new Error(`Failed to resize image: ${res.status} ${res.statusText}`)
             input = await res.arrayBuffer()
         } catch (error) {
-            console.error('Unknown error on compression:', error);
+            console.error('Error on compression:', error);
             return message(form, getGenericFormMessage("destructive", "Något gick fel vid komprimeringen", `Testa ladda upp en bild under ${formatBytes(maxAvatarUncompressedSize)} för att skippa komprimeringen.`), { status: 500 });
         }
 
