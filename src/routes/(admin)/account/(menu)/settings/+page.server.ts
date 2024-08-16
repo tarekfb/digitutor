@@ -98,7 +98,7 @@ export const actions = {
             input = await res.arrayBuffer()
         } catch (error) {
             console.error('Error on compression:', error);
-            return message(form, getGenericFormMessage("destructive", "Något gick fel vid komprimeringen", `Testa ladda upp en bild under ${formatBytes(maxAvatarUncompressedSize)} för att skippa komprimeringen.`), { status: 500 });
+            return message(form, getGenericFormMessage("destructive", "Något gick fel vid komprimeringen", `Testa med en annan bild, eller ett annat filformat.`), { status: 500 });
         }
 
         let avatarPath;
