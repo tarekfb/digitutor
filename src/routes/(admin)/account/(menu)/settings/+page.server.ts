@@ -83,7 +83,7 @@ export const actions = {
             throw redirect(303, "/sign-in");
 
         const form = await superValidate(event, zod(avatarSchema));
-
+        console.log(form.data.avatar.type)
         if (!form.valid) return fail(400, { form });
         const { avatar } = form.data;
 

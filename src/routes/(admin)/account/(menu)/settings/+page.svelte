@@ -16,7 +16,10 @@
   } from "$lib/shared/models/user.js";
   import DeleteAccount from "$lib/components/atoms/delete-account.svelte";
   import PasswordInput from "$lib/components/molecules/password-input.svelte";
-  import { maxAvatarSize } from "src/lib/shared/constants/constants.js";
+  import {
+    acceptedAvatarFormats,
+    maxAvatarSize,
+  } from "src/lib/shared/constants/constants.js";
   import { formatBytes } from "src/lib/utils.js";
 
   let adminSection: Writable<string> = getContext("adminSection");
@@ -63,6 +66,11 @@
     avatarForm.reset();
     $avatarData.avatar = e.currentTarget?.files?.item(0) as File;
   };
+
+  let formats = "";
+  acceptedAvatarFormats.forEach((format) => (formats += `${format}, `));
+  // formats = formats.substring(0, formats.length - 2);
+  console.log(formats);
 </script>
 
 <svelte:head>
@@ -144,7 +152,7 @@
           type="file"
           name="avatar"
           bind:value={$avatarData.avatar}
-          accept="image/jpeg, image/png, image/webp"
+          accept={formats}
           class="overflow-hidden flex h-10 w-full border border-input rounded-md bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
           on:input={(e) => setAvatar(e)}
         />

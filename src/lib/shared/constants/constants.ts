@@ -22,4 +22,4 @@ export const initMessagesCount = 25;
 
 export const maxAvatarSize = 10485760;
 export const maxAvatarUncompressedSize = 524288;
-export const acceptedAvatarFormats = ["image/jpeg", "image/png", "image/webp"]; // todo update to adapt to photon
+export const acceptedAvatarFormats = ["image/jpeg", "image/jpg", "image/png", "image/webp", "image/heic", "image/avif"];
