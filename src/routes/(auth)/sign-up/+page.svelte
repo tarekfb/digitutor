@@ -19,7 +19,7 @@
   const userForm = superForm(data.form, {
     validators: zodClient(signUpSchema),
   });
-  const { form: formData, enhance, submitting, message, allErrors } = userForm;
+  const { form: formData, enhance, delayed, message, allErrors } = userForm;
 
   const role = $page.url.searchParams.get("role");
 </script>
@@ -103,7 +103,7 @@
       </Tabs.Root>
       <FormMessage {message} scroll scrollTo="start" />
       <FormSubmit
-        {submitting}
+        {delayed}
         {allErrors}
         text="Skapa konto"
         class="self-center min-w-wider"

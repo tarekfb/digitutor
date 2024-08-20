@@ -16,7 +16,7 @@
   export let shouldHaveSubmit = true;
   export let enctype = "";
 
-  const { enhance, submitting, allErrors, message } = form;
+  const { enhance, delayed, allErrors, message } = form;
 </script>
 
 <form
@@ -31,7 +31,7 @@
   {#if shouldHaveSubmit}
     <FormMessage {message} scroll />
     <FormSubmit
-      {submitting}
+      {delayed}
       {allErrors}
       text={submitText}
       class="md:self-center md:min-w-wider {submitStyling}"

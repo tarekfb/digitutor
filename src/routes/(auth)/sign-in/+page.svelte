@@ -55,7 +55,7 @@
     },
     resetForm: false,
   });
-  const { form: formData, enhance, submitting, message, allErrors } = userForm;
+  const { form: formData, enhance, delayed, message, allErrors } = userForm;
 </script>
 
 <svelte:head>
@@ -164,7 +164,7 @@
         {/if}
       </FormMessage>
       <FormSubmit
-        {submitting}
+        {delayed}
         {allErrors}
         text="Logga in"
         class="self-center min-w-wider"

@@ -27,13 +27,7 @@
         searchResults = result.data.formatted as SearchResultType[];
     },
   });
-  const {
-    form: formData,
-    enhance,
-    submitting,
-    message,
-    allErrors,
-  } = searchForm;
+  const { form: formData, enhance, delayed, message, allErrors } = searchForm;
 </script>
 
 <svelte:head>
@@ -85,13 +79,7 @@
       </Form.Control>
       <Form.FieldErrors />
     </Form.Field>
-    <FormSubmit
-      {submitting}
-      {allErrors}
-      text="Sök"
-      loadingText=""
-      class="w-12"
-    />
+    <FormSubmit {delayed} {allErrors} text="Sök" loadingText="" class="w-12" />
   </div>
 </form>
 
