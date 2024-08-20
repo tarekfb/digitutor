@@ -54,8 +54,8 @@
   <title>Settings</title>
 </svelte:head>
 
-<div class="flex flex-col gap-y-4 pb-8 w-[275px] md:max-w-xl ">
-  <PrimaryTitle>Inställningar</PrimaryTitle>
+<div class="flex flex-col gap-y-4 pb-8 w-[275px] md:w-[600px] md:max-w-xl">
+  <PrimaryTitle class="text-center">Inställningar</PrimaryTitle>
   <SettingsForm form={nameForm} action="?/name" title="Namn" submitText="Ändra">
     <Form.Field form={nameForm} name="firstName">
       <Form.Control let:attrs>

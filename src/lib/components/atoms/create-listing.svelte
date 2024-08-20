@@ -30,6 +30,7 @@
           builders={[builder]}
           disabled={$delayed}
           aria-label="Skapa annons"
+          class="md:self-center md:min-w-wider"
         >
           {#if $delayed}
             <LoadingSpinner class="mr-2" /> <span>Laddar...</span>
@@ -87,6 +88,7 @@
           builders={[builder]}
           disabled={$delayed}
           aria-label="Skapa annons"
+          class="md:self-center md:min-w-wider"
         >
           {#if $delayed}
             <LoadingSpinner class="mr-2" /> <span>Laddar...</span>

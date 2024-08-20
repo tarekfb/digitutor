@@ -72,6 +72,7 @@
   <FormMessage {message} scroll />
   <Button
     type="submit"
+    class="md:self-center md:min-w-wider"
     disabled={$allErrors.length > 0 || $delayed}
   >
     {#if $timeout}
