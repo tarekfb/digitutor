@@ -55,7 +55,7 @@
     },
     resetForm: false,
   });
-  const { form: formData, enhance, submitting, message, allErrors } = userForm;
+  const { form: formData, enhance, delayed, message, allErrors } = userForm;
 </script>
 
 <svelte:head>
@@ -69,9 +69,9 @@
         {#if reviews[0].receiver.avatar_url}
           <img
             alt="profile avatar"
-            class="rounded-lg mb-2 w-full"
-            width="125"
-            height="125"
+            class="rounded-lg mb-2"
+            width="250"
+            height="250"
             src={reviews[0].receiver.avatar_url}
           />
         {/if}
@@ -164,7 +164,7 @@
         {/if}
       </FormMessage>
       <FormSubmit
-        {submitting}
+        {delayed}
         {allErrors}
         text="Logga in"
         class="self-center min-w-wider"

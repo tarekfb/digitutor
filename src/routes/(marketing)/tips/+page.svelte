@@ -3,5 +3,5 @@
   import SecondaryTitle from "src/lib/components/atoms/secondary-title.svelte";
 </script>
 
-<PrimaryTitle>Tips</PrimaryTitle>
+<PrimaryTitle>Frequently Asked Questions</PrimaryTitle>
 <SecondaryTitle>Not implemented</SecondaryTitle>

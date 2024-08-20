@@ -26,12 +26,7 @@
       toast.error(result.error.message);
     },
   });
-  const {
-    form: formData,
-    enhance,
-    submitting,
-    allErrors,
-  } = completeProfileForm;
+  const { form: formData, enhance, delayed, allErrors } = completeProfileForm;
 </script>
 
 <svelte:head>
@@ -77,8 +72,8 @@
         </Form.Field>
       </Card.Content>
       <Card.Footer class="justify-center">
-        <Button type="submit" disabled={$allErrors.length > 0 || $submitting}>
-          {#if $submitting}
+        <Button type="submit" disabled={$allErrors.length > 0 || $delayed}>
+          {#if $delayed}
             <LoadingSpinner class="mr-2" /> <span>Laddar...</span>
           {:else}
             Skapa profil

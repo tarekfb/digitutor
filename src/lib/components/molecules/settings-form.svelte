@@ -16,22 +16,22 @@
   export let shouldHaveSubmit = true;
   export let enctype = "";
 
-  const { enhance, submitting, allErrors, message } = form;
+  const { enhance, delayed, allErrors, message } = form;
 </script>
 
 <form
   method="POST"
   use:enhance
   {action}
-  class={cn("flex flex-col gap-y-4 generic-card", className)}
+  class={cn("flex flex-col gap-y-4 generic-card max-w-full w-full", className)}
   enctype={enctype ?? "application/x-www-form-urlencoded"}
 >
   <SecondaryTitle>{title}</SecondaryTitle>
   <slot />
   {#if shouldHaveSubmit}
-  <FormMessage {message} scroll />
+    <FormMessage {message} scroll />
     <FormSubmit
-      {submitting}
+      {delayed}
       {allErrors}
       text={submitText}
       class="md:self-center md:min-w-wider {submitStyling}"

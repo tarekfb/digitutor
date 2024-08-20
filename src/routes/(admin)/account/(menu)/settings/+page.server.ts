@@ -1,5 +1,5 @@
 import type { PageServerLoad } from "./$types";
-import { getGenericFormMessage, maxAvatarSize } from "$lib/shared/constants/constants";
+import { getGenericFormMessage, maxAvatarSize, maxAvatarUncompressedSize } from "$lib/shared/constants/constants";
 import { fail, message, superValidate, withFiles } from "sveltekit-superforms";
 import { zod } from "sveltekit-superforms/adapters";
 import { avatarSchema, emailSchema, nameSchema, type ProfileInput } from "$lib/shared/models/profile";
@@ -12,6 +12,7 @@ import { uploadAvatar } from "src/lib/server/database/avatar";
 import { formatBytes, isStorageErrorCustom } from "src/lib/utils";
 import type { StorageErrorCustom } from "src/lib/shared/errors/storage-error-custom";
 import { Buffer } from 'node:buffer';
+import { CF_IMAGE_RESIZE_URL } from '$env/static/private'
 
 export const load: PageServerLoad = async ({ parent, locals: { safeGetSession } }) => {
     const { session } = await safeGetSession();
@@ -82,36 +83,52 @@ export const actions = {
             throw redirect(303, "/sign-in");
 
         const form = await superValidate(event, zod(avatarSchema));
-
         if (!form.valid) return fail(400, { form });
         const { avatar } = form.data;
 
-        const arrayBuffer = await avatar.arrayBuffer();
-        const uncompressedInput = Buffer.from(arrayBuffer);
+        let failedCompression = false;
+        let input = await avatar.arrayBuffer();
+        try {
+            const res = await fetch(CF_IMAGE_RESIZE_URL, {
+                method: 'POST',
+                body: input
+            })
+            if (res.status !== 200)
+                throw new Error(`Failed to resize image: ${res.status} ${res.statusText}`)
+            input = await res.arrayBuffer()
+        } catch (error) {
+            failedCompression = true;
+            console.error('Error on compression:', error);
+        }
+
+        if (failedCompression && input.byteLength > maxAvatarUncompressedSize)
+            return message(form, getGenericFormMessage("destructive", "Komprimeringen misslyckades och bilden är för stor", `Din bild är ${formatBytes(Buffer.byteLength(input))} och maxgränsen för okomprimerade bilder är ${formatBytes(maxAvatarUncompressedSize)}. Testa med en mindre bild.`), { status: 500 });
 
         let avatarPath;
         try {
             const format = avatar.type.split("/")[1]; // example type property: image/png
             const fileName = `${user.id}---${crypto.randomUUID()}.${format}`
-            avatarPath = await uploadAvatar(supabase, fileName, uncompressedInput);
+            avatarPath = await uploadAvatar(supabase, fileName, input);
         } catch (error) {
             if (isStorageErrorCustom(error)) {
                 const storageError = error as unknown as StorageErrorCustom;
-                if (storageError.statusCode === '413') {
-                    const bytes = Buffer.byteLength(uncompressedInput);
-                    return message(form, getGenericFormMessage("destructive", "Filen är för stor", `Din fil är ${formatBytes(bytes)}, maxgränsen är ${formatBytes(maxAvatarSize)}.`), { status: 413 });
-                }
+                if (storageError.statusCode === '413')
+                    return message(form, getGenericFormMessage("destructive", "Filen är för stor", `Din fil är ${formatBytes(Buffer.byteLength(input))}, maxgränsen är ${formatBytes(maxAvatarSize)}.`), { status: 413 });
             }
             console.error("Unknown error on upload avatar", error);
             return message(form, getGenericFormMessage(), { status: 500 });
         }
 
         try {
-            await updateProfile(supabase, { id: user.id, avatar_url: avatarPath });
+            await updateProfile(supabase, {
+                id: user.id, avatar_url: avatarPath
+            });
         } catch (error) {
             console.error(`Error on update profile with new avatar on path ${avatarPath} with userid ${user.id}`, error);
             return message(form, getGenericFormMessage(), { status: 500 });
         }
+
+        await Promise.resolve(new Promise(resolve => setTimeout(resolve, 5000)));
         return withFiles({ form });
     },
     delete: async (event) => {
@@ -182,7 +199,6 @@ export const actions = {
             throw redirect(303, "/settings_password_error");
         // user was logged out because of bad password. Redirect to error page with explaination.
 
-
         const { error: updateError } = await supabase.auth.updateUser({
             password: newPassword,
         });
@@ -198,3 +214,53 @@ export const actions = {
         return message(form, getGenericFormMessage("success", "Lösenord ändrat", "Använd det nya lösenordet nästa gång du loggar in."));
     }
 }
+
+
+
+// let outputBuffer;
+// try {
+
+//     let image = await _Jimp.default.read(input);
+//     // let image = await _Jimp.default.read(input);
+//     // if (uncompressedByteSize > maxAvatarUncompressedSize)
+//     image = image.quality(80)
+
+//     image = image.resize(500, 500);
+//     // input = await image.getBufferAsync(_Jimp.default.MIME_PNG);
+//     input = await image.getBufferAsync(_Jimp.default.MIME_PNG);
+// } catch (err) {
+//     // if (uncompressedByteSize > maxAvatarUncompressedSize) {
+//     //     console.error('Unknown error on compression:', err);
+//     //     return message(form, getGenericFormMessage("destructive", "Något gick fel vid komprimeringen", `Testa ladda upp en bild under ${formatBytes(maxAvatarUncompressedSize)} så görs ingen komprimering.`), { status: 500 });
+//     // } else {
+//     console.error('Unknown error on resize:', err);
+//     return message(form, getGenericFormMessage(), { status: 500 });
+//     // }
+// }
+
+// let avatarPath;
+// try {
+//     const format = avatar.type.split("/")[1]; // example type property: image/png
+//     const fileName = `${user.id}---${crypto.randomUUID()}.${format}`
+//     avatarPath = await uploadAvatar(supabase, fileName, input);
+// } catch (error) {
+//     if (isStorageErrorCustom(error)) {
+//         const storageError = error as unknown as StorageErrorCustom;
+//         if (storageError.statusCode === '413') {
+//             const bytes = Buffer.byteLength(input);
+//             return message(form, getGenericFormMessage("destructive", "Filen är för stor", `Din fil är ${formatBytes(bytes)}, maxgränsen är ${formatBytes(maxAvatarSize)}.`), { status: 413 });
+//         }
+//     }
+//     console.error("Unknown error on upload avatar", error);
+//     return message(form, getGenericFormMessage(), { status: 500 });
+// }
+
+// try {
+//     await updateProfile(supabase, { id: user.id, avatar_url: avatarPath });
+// } catch (error) {
+//     console.error(`Error on update profile with new avatar on path ${avatarPath} with userid ${user.id}`, error);
+//     return message(form, getGenericFormMessage(), { status: 500 });
+// }
+// return withFiles({ form });
+
+// try {

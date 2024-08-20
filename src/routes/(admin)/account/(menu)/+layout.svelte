@@ -16,7 +16,7 @@
   });
 </script>
 
-<div class="flex p-8 ml-14 min-h-screen">
+<div class="flex justify-center p-8 ml-14 min-h-screen">
   <SidebarNav
     {conversations}
     role={profile?.role}

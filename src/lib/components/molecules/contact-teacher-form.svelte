@@ -42,7 +42,7 @@
   const {
     form: formData,
     enhance,
-    submitting,
+    delayed,
     allErrors,
     message,
   } = requestContactFormValues;
@@ -67,7 +67,7 @@
   <input type="hidden" name="teacher" value={$formData.teacher} />
   <input type="hidden" name="role" value={$formData.role} />
   <FormSubmit
-    {submitting}
+    {delayed}
     {allErrors}
     text="Kontakta {firstName}"
     class={buttonStyling}

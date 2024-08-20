@@ -69,6 +69,17 @@
                 <button
                   class="flex space-x-2 w-full"
                   disabled={logoutLoading}
+                  on:click={() => goto("/account")}
+                >
+                  <UserRound class="mr-2 h-4 w-4" />
+                  Konto
+                </button>
+              </DropdownMenu.Item>
+              <DropdownMenu.Separator />
+              <DropdownMenu.Item class="data-[highlighted]:bg-white">
+                <button
+                  class="flex space-x-2 w-full"
+                  disabled={logoutLoading}
                   on:click={wrappedLogout}
                 >
                   {#if logoutLoading}

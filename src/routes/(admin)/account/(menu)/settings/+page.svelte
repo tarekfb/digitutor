@@ -16,13 +16,14 @@
   } from "$lib/shared/models/user.js";
   import DeleteAccount from "$lib/components/atoms/delete-account.svelte";
   import PasswordInput from "$lib/components/molecules/password-input.svelte";
-  import { maxAvatarSize } from "src/lib/shared/constants/constants.js";
-  import { formatBytes } from "src/lib/utils.js";
+
+  import AvatarForm from "src/lib/components/molecules/avatar-form.svelte";
+  import type { PageData } from "./$types";
 
   let adminSection: Writable<string> = getContext("adminSection");
   adminSection.set("settings");
 
-  export let data;
+  export let data: PageData;
 
   const nameForm = superForm(data.updateNameForm, {
     validators: zodClient(nameSchema),
@@ -43,40 +44,19 @@
   const passwordForm = superForm(data.updatePasswordForm, {
     validators: zodClient(passwordSchema),
   });
-  const avatarForm = superForm(data.uploadAvatarForm, {
-    onUpdated({ form }) {
-      if (form.valid) {
-        toast.success(`Ändrat profilbild.`);
-      }
-    },
-  });
+
   const { form: nameData, reset: nameReset } = nameForm;
   const { form: emailData } = emailForm;
   const { form: passwordData } = passwordForm;
-  const { form: avatarData } = avatarForm;
-
-  const setAvatar = (
-    e: Event & {
-      currentTarget: EventTarget & HTMLInputElement;
-    },
-  ) => {
-    avatarForm.reset();
-    $avatarData.avatar = e.currentTarget?.files?.item(0) as File;
-  };
 </script>
 
 <svelte:head>
   <title>Settings</title>
 </svelte:head>
 
-<div class="flex flex-col gap-y-4 pb-8 max-w-[300px] md:max-w-xl">
-  <PrimaryTitle>Inställningar</PrimaryTitle>
-  <SettingsForm
-    form={nameForm}
-    action="?/name"
-    title="Namn"
-    submitText="Ändra namn"
-  >
+<div class="flex flex-col gap-y-4 pb-8 w-[275px] md:w-[600px] md:max-w-xl">
+  <PrimaryTitle class="text-center">Inställningar</PrimaryTitle>
+  <SettingsForm form={nameForm} action="?/name" title="Namn" submitText="Ändra">
     <Form.Field form={nameForm} name="firstName">
       <Form.Control let:attrs>
         <Form.Label>Förnamn</Form.Label>
@@ -107,7 +87,7 @@
     form={emailForm}
     action="?/email"
     title="E-postadress"
-    submitText="Ändra e-post"
+    submitText="Ändra"
   >
     <p class="text-muted-foreground">
       Du kommer behöva bekräfta den nya och den gamla adressen.
@@ -126,38 +106,13 @@
     </Form.Field>
   </SettingsForm>
 
-  <SettingsForm
-    form={avatarForm}
-    action="?/avatar"
-    title="Profilbild"
-    submitText="Ändra profilbild"
-    enctype="multipart/form-data"
-  >
-    <p class="text-muted-foreground">
-      Maxstorlek är {formatBytes(maxAvatarSize)}.
-    </p>
-    <Form.Field form={avatarForm} name="avatar">
-      <Form.Control let:attrs>
-        <Label>Profilbild</Label>
-        <input
-          {...attrs}
-          type="file"
-          name="avatar"
-          bind:value={$avatarData.avatar}
-          accept="image/jpeg, image/png, image/webp"
-          class="overflow-hidden flex h-10 w-full border border-input rounded-md bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
-          on:input={(e) => setAvatar(e)}
-        />
-      </Form.Control>
-      <Form.FieldErrors />
-    </Form.Field>
-  </SettingsForm>
+  <AvatarForm uploadAvatarForm={data.uploadAvatarForm} />
 
   <SettingsForm
     form={passwordForm}
     action="?/password"
     title="Lösenord"
-    submitText="Ändra lösenord"
+    submitText="Ändra"
   >
     <Form.Field form={passwordForm} name="new">
       <Form.Control let:attrs>

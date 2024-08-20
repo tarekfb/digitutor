@@ -7,7 +7,7 @@
 </script>
 
 <Button
-  class={cn("m-0 p-0 text-accent text-base", className)}
+  class={cn("m-0 p-0 text-accent text-base normal-case", className)}
   variant="link"
   {href}
 >

@@ -21,7 +21,7 @@
   let initials = convertToInitials(firstName, lastName);
 
   const base = "flex justify-center text-lg items-center font-normal";
-  const size = "h-10 w-10";
+  const size = "50";
   const fallback =
     "text-background bg-accent " + (fallbackClass ? ` ${fallbackClass}` : "");
 </script>
@@ -29,20 +29,20 @@
 {#if onClick && role === "teacher"}
   <Button
     variant="ghost"
-    class={cn(`relative rounded-full ${size}`, className)}
+    class={cn(`relative rounded-full`, className)}
     on:click={onClick}
   >
     <Avatar.Root class={base}>
       {#if url}
-        <Avatar.Image src={url} alt="profilbild" />
+        <Avatar.Image src={url} alt="profilbild" width={size} height={size} />
       {/if}
       <Avatar.Fallback class={fallback}>{initials}</Avatar.Fallback>
     </Avatar.Root>
   </Button>
 {:else}
-  <Avatar.Root class={cn(`${size} ${base}`, className)}>
+  <Avatar.Root class={cn(`${base}`, className)}>
     {#if url}
-      <Avatar.Image src={url} alt="profilbild" />
+      <Avatar.Image src={url} alt="profilbild" width={size} height={size} />
     {/if}
     <Avatar.Fallback class={fallback}>{initials}</Avatar.Fallback>
   </Avatar.Root>

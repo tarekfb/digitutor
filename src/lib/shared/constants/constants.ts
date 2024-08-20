@@ -20,5 +20,27 @@ export enum MessageId {
 
 export const initMessagesCount = 25;
 
-export const maxAvatarSize = 1048576;
-export const acceptedAvatarFormats = ["image/jpeg", "image/png", "image/webp"]; // todo update with jimp
+export const maxAvatarSize = 10485760;
+export const maxAvatarUncompressedSize = 512000;
+export const acceptedAvatarFormats = ["image/jpeg", "image/jpg", "image/png", "image/webp", "image/heic"];
+
+export const getMimeType = (): string => {
+  let formats = "";
+  acceptedAvatarFormats.forEach((format) => (formats += `${format}, `));
+  if (formats.length > 1)
+    formats = formats.substring(0, formats.length - 2);
+  return formats;
+}
+
+export const getFormatsHumanReadable = () => {
+  let acceptedFormatsHumanReadable = "";
+  acceptedAvatarFormats.forEach((format, i) => {
+    const formatFormatted = format.split("/")[1];
+    if (i === acceptedAvatarFormats.length - 1)
+      acceptedFormatsHumanReadable += `och .${formatFormatted}.`;
+    else
+      acceptedFormatsHumanReadable += `.${formatFormatted}, `;
+  })
+
+  return acceptedFormatsHumanReadable;
+}
