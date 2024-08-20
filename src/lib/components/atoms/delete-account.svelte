@@ -36,7 +36,7 @@
           {#if $submitting}
             <LoadingSpinner class="mr-2" /> <span>Laddar...</span>
           {:else}
-            Ta bort konto
+            Ta bort
           {/if}
         </Button>
       </Dialog.Trigger>
@@ -70,7 +70,7 @@
             <FormSubmit
               {submitting}
               {allErrors}
-              text="Ta bort konto"
+              text="Ta bort"
               variant="destructive"
             />
           </div>
@@ -90,7 +90,7 @@
           {#if $submitting}
             <LoadingSpinner class="mr-2" /> <span>Laddar...</span>
           {:else}
-            Ta bort konto
+            Ta bort
           {/if}
         </Button>
       </Drawer.Trigger>
@@ -125,7 +125,7 @@
               <FormSubmit
                 {submitting}
                 {allErrors}
-                text="Ta bort konto"
+                text="Ta bort"
                 variant="destructive"
               />
             </div>

@@ -69,9 +69,9 @@
         {#if reviews[0].receiver.avatar_url}
           <img
             alt="profile avatar"
-            class="rounded-lg mb-2 w-full"
-            width="125"
-            height="125"
+            class="rounded-lg mb-2"
+            width="250"
+            height="250"
             src={reviews[0].receiver.avatar_url}
           />
         {/if}

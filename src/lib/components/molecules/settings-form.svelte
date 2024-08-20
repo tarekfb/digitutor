@@ -29,7 +29,7 @@
   <SecondaryTitle>{title}</SecondaryTitle>
   <slot />
   {#if shouldHaveSubmit}
-  <FormMessage {message} scroll />
+    <FormMessage {message} scroll />
     <FormSubmit
       {submitting}
       {allErrors}

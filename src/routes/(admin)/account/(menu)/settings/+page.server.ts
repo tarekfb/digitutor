@@ -86,6 +86,7 @@ export const actions = {
         if (!form.valid) return fail(400, { form });
         const { avatar } = form.data;
 
+        let failedCompression = false;
         let input = await avatar.arrayBuffer();
         try {
             const res = await fetch(CF_IMAGE_RESIZE_URL, {
@@ -96,9 +97,12 @@ export const actions = {
                 throw new Error(`Failed to resize image: ${res.status} ${res.statusText}`)
             input = await res.arrayBuffer()
         } catch (error) {
+            failedCompression = true;
             console.error('Error on compression:', error);
-            return message(form, getGenericFormMessage("destructive", "Något gick fel vid komprimeringen", `Testa med en annan bild, eller ett annat filformat.`), { status: 500 });
         }
+
+        if (failedCompression && input.byteLength > maxAvatarUncompressedSize)
+            return message(form, getGenericFormMessage("destructive", "Komprimeringen misslyckades och bilden är för stor", `Din bild är ${formatBytes(Buffer.byteLength(input))} och maxgränsen för okomprimerade bilder är ${formatBytes(maxAvatarUncompressedSize)}. Testa med en mindre bild.`), { status: 500 });
 
         let avatarPath;
         try {
@@ -123,6 +127,8 @@ export const actions = {
             console.error(`Error on update profile with new avatar on path ${avatarPath} with userid ${user.id}`, error);
             return message(form, getGenericFormMessage(), { status: 500 });
         }
+
+        await Promise.resolve(new Promise(resolve => setTimeout(resolve, 5000)));
         return withFiles({ form });
     },
     delete: async (event) => {
