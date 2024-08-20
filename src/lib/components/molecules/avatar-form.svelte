@@ -27,7 +27,6 @@
 
   const {
     enhance,
-    submitting,
     allErrors,
     message,
     formData,
@@ -73,7 +72,7 @@
   <FormMessage {message} scroll />
   <Button
     type="submit"
-    disabled={$allErrors.length > 0 || $submitting || $delayed}
+    disabled={$allErrors.length > 0 || $delayed}
   >
     {#if $timeout}
       <LoadingSpinner class="mr-2" />
@@ -81,9 +80,6 @@
     {:else if $delayed}
       <LoadingSpinner class="mr-2" />
       Komprimerar... 
-    {:else if $submitting}
-      <LoadingSpinner class="mr-2" />
-      Komprimerar...
     {:else}
       Ändra
     {/if}
