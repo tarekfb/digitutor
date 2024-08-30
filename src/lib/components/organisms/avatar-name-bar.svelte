@@ -1,7 +1,6 @@
 <script lang="ts">
   import type { Tables } from "src/supabase";
   import Avatar from "../atoms/avatar.svelte";
-  import { goto } from "$app/navigation";
   import { cn } from "$lib/utils.js";
 
   let className: string | null | undefined = undefined;
