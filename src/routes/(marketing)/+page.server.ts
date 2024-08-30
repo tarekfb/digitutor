@@ -4,6 +4,7 @@ import { fail, message, superValidate } from "sveltekit-superforms";
 import { zod } from "sveltekit-superforms/adapters";
 import { searchSchema, type SearchResult, } from "src/lib/shared/models/search";
 import type { Actions, PageServerLoad } from "./$types";
+import type { PsqlError } from "src/lib/shared/models/common";
 
 export const load: PageServerLoad = async () => {
     const form = await superValidate(zod(searchSchema))
@@ -20,8 +21,10 @@ export const actions: Actions = {
 
         const { query } = form.data;
 
+        const cleanedQuery = query.trim();
+
         try {
-            const listings = await search(supabase, query);
+            const listings = await search(supabase, cleanedQuery);
             const formatted: SearchResult[] = listings.map(listing => {
                 return {
                     id: listing.id,
@@ -39,6 +42,11 @@ export const actions: Actions = {
 
             return { form, formatted }
         } catch (error) {
+            if (error && typeof error === "object") {
+                const psqlError = error as PsqlError;
+                if (psqlError.code && psqlError.code === "42601") // syntax error
+                    return message(form, getFailFormMessage("Ogiltiga karaktärer", "Testa söka på något annat."), { status: 400 });
+            }
             console.error("Error searching for teachers with following search: " + query, error);
             return message(form, getFailFormMessage(), { status: 500 });
         }
