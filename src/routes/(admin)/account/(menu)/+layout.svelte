@@ -22,7 +22,7 @@
     role={profile?.role}
     logout={() => logout(supabase, session)}
   />
-  <div class="flex-1 lg:max-w-2xl">
+  <div class="flex-1 flex justify-center lg:max-w-2xl">
     <slot />
   </div>
 </div>

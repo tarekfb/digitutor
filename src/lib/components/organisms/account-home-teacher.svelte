@@ -40,7 +40,7 @@
     </a>
   {:else}
     <p class="text-lg">Inga konversationer ännu.</p>
-    <p>
+    <p class="text-muted-foreground">
       Se våra <Link href="/tips">tips</Link> för att förbättra dina chanser att bli
       kontaktad.
     </p>
