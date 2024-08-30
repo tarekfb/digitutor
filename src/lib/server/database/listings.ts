@@ -31,11 +31,6 @@ export const getListings = async (
     throw error;
   }
 
-  if (!data) {
-    console.error(`Failed to get listings. Response was null`);
-    throw new Error("Unexpected null response");
-  }
-
   return data as unknown as Listing[];
 }
 
@@ -65,11 +60,6 @@ export const getListingsByTeacher = async (
   if (error) {
     console.error(`Failed to read listings ${teacherId ? "for userId" + teacherId : ''}`, { error });
     throw error;
-  }
-
-  if (!data) {
-    console.error(`Failed to get listings for teacher ${teacherId}. Response was null`);
-    throw new Error("Unexpected null response");
   }
 
   return data as unknown as Listing[];
@@ -139,11 +129,6 @@ export const createListing = async (
     throw error;
   }
 
-  if (!data) {
-    console.error("Failed to create listing. Response was null");
-    throw new Error("Unexpected null response");
-  }
-
   return data as unknown as Listing;
 };
 
@@ -166,11 +151,6 @@ export const deleteListing = async (
   if (error) {
     console.error("Failed to delete listing: " + listingId, { error });
     throw error;
-  }
-
-  if (!data) {
-    console.error("Failed to delete listing. Response was null");
-    throw new Error("Unexpected null response");
   }
 
   return data;
@@ -212,11 +192,6 @@ export const updateListing = async (
   if (error) {
     console.error("Failed to update listing", { error });
     throw error;
-  }
-
-  if (!data) {
-    console.error("Failed to update listing. Response was null.");
-    throw new Error("Unexpected null response");
   }
 
   return data as unknown as Listing;

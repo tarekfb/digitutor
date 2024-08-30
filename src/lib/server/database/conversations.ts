@@ -182,11 +182,6 @@ export const createConversation = async (
     throw error;
   }
 
-  if (!data) {
-    console.error("Failed to create conversation. Response was null.");
-    throw new Error("Unexpected null response");
-  }
-
   return data;
 };
 

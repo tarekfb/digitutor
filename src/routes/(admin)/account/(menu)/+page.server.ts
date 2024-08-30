@@ -1,6 +1,6 @@
 import { fail } from "@sveltejs/kit";
 import { createListing, getListings } from "$lib/server/database/listings";
-import type { PageServerLoad } from "./$types";
+import type { Actions, PageServerLoad } from "./$types";
 import { getGenericFormMessage } from "$lib/shared/constants/constants";
 import { message, superValidate } from "sveltekit-superforms";
 import { initCreateListingSchema } from "$lib/shared/models/listing";
@@ -29,7 +29,7 @@ export const load: PageServerLoad = async ({
   return { form, session, listings, profile };
 };
 
-export const actions = {
+export const actions: Actions = {
   createListing: async (event) => {
     const { locals: { supabase, safeGetSession } } = event;
     const { session } = await safeGetSession();
