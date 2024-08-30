@@ -6,7 +6,6 @@
   import type { PageData } from "./$types";
   import AddReview from "src/lib/components/molecules/add-review.svelte";
   import ReviewCard from "src/lib/components/molecules/review-card.svelte";
-  import AvatarNameBar from "src/lib/components/organisms/avatar-name-bar.svelte";
 
   export let data: PageData;
   $: ({
@@ -22,9 +21,12 @@
 </script>
 
 <div class="flex flex-col gap-y-4 pb-8 w-full max-w-[1000px]">
-  <AvatarNameBar profile={teacher}>
-    <PrimaryTitle>{teacher.first_name}</PrimaryTitle>
-  </AvatarNameBar>
+  <PrimaryTitle>Profil: {teacher.first_name}</PrimaryTitle>
+  <img
+    src={teacher.avatar_url}
+    alt="profile avatar"
+    class="object-cover w-max"
+  />
   <SecondaryTitle>Annonser</SecondaryTitle>
   <div class="flex flex-col gap-y-4 my-6">
     {#each listings as listing}
