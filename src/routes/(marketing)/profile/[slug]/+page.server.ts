@@ -1,5 +1,5 @@
 import { error } from "@sveltejs/kit";
-import { getGenericFormMessage, unknownErrorMessage } from "$lib/shared/constants/constants";
+import { getFailFormMessage, unknownErrorMessage } from "$lib/shared/constants/constants";
 import { getProfileByUser } from "$lib/server/database/profiles";
 import { getListingsByTeacher as getListingsByTeacher } from "$lib/server/database/listings";
 import { fail, message, superValidate } from "sveltekit-superforms";
@@ -89,17 +89,17 @@ export const actions = {
         const form = await superValidate(event, zod(requestContactSchema));
         if (!form.data.role) {
             console.error("Error when submitting request contact. Data that user does not submit manually is invalid: role") // user hasnt entered data theirselves, therefore send error message
-            return message(form, getGenericFormMessage(), { status: 500 });
+            return message(form, getFailFormMessage(), { status: 500 });
         }
 
         const { role } = form.data;
 
         if (slug === session.user.id)
-            return message(form, getGenericFormMessage(undefined, undefined, "Du kan inte kontakta dig själv."), { status: 403 });
+            return message(form, getFailFormMessage(undefined, "Du kan inte kontakta dig själv."), { status: 403 });
 
         if (role !== "student") {
             console.error("Non-student tried to contact teacher for profile slug: " + slug, error);
-            return message(form, getGenericFormMessage(), { status: 403 });
+            return message(form, getFailFormMessage(), { status: 403 });
         }
 
         const conversation = await getConversationForStudentAndTeacher(supabase, session.user.id, slug);
@@ -121,11 +121,11 @@ export const actions = {
         const { role, firstMessage } = form.data;
 
         if (slug === session.user.id)
-            return message(form, getGenericFormMessage(undefined, undefined, "Du kan inte kontakta dig själv."), { status: 403 });
+            return message(form, getFailFormMessage(undefined, "Du kan inte kontakta dig själv."), { status: 403 });
 
         if (role !== "student") {
             console.error("Non-student tried to contact teacher for profile slug: " + slug, error);
-            return message(form, getGenericFormMessage(), { status: 403 });
+            return message(form, getFailFormMessage(), { status: 403 });
         }
 
         let conversationId: string;
@@ -138,7 +138,7 @@ export const actions = {
                 // message is conversation id
             }
             console.error("Error when starting conversation for profile slug: " + slug, error);
-            return message(form, getGenericFormMessage(), { status: 500 });
+            return message(form, getFailFormMessage(), { status: 500 });
         }
         throw redirect(303, `/account/conversation/${conversationId}`);
     },
@@ -156,18 +156,18 @@ export const actions = {
             const conversation = await getConversationForStudentAndTeacher(supabase, session.user.id, slug);
             if (!conversation) {
                 console.error(`Error when adding review for profile slug ${slug}, teacher & student has no conversation.`);
-                return message(form, getGenericFormMessage('destructive', 'Något verkar ha gått snett', 'Har ni haft en lektion ihop? Isåfall kan ni kontakta oss för att få hjälp med att göra recensionen.'), { status: 403 });
+                return message(form, getFailFormMessage('Något verkar ha gått snett', 'Har ni haft en lektion ihop? Isåfall kan ni kontakta oss för att få hjälp med att göra recensionen.'), { status: 403 });
             }
         } catch (error) {
             console.error(`Error when adding review for profile slug ${slug}, unable to read conversation for teacher & student` + slug, error);
-            return message(form, getGenericFormMessage(), { status: 500 });
+            return message(form, getFailFormMessage(), { status: 500 });
         }
 
         try {
             await createReview(supabase, { rating, description: description ?? "" }, slug, session);
         } catch (error) {
             console.error("Error when adding review for profile slug: " + slug, error);
-            return message(form, getGenericFormMessage(), { status: 500 });
+            return message(form, getFailFormMessage(), { status: 500 });
         }
 
         setFlash({ message: "Din recension har skapats.", type: "success" }, event);

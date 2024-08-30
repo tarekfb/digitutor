@@ -1,5 +1,5 @@
 import { search } from "src/lib/server/database/search";
-import { getGenericFormMessage } from "src/lib/shared/constants/constants";
+import { getFailFormMessage, getInfoFormMessage } from "src/lib/shared/constants/constants";
 import { fail, message, superValidate } from "sveltekit-superforms";
 import { zod } from "sveltekit-superforms/adapters";
 import { searchSchema, type SearchResult, } from "src/lib/shared/models/search";
@@ -35,12 +35,12 @@ export const actions: Actions = {
             });
 
             if (formatted.length === 0)
-                return message(form, getGenericFormMessage("default", "Inga träffar på din sökning", "Testa söka på en lärares namn, eller en annons titel, beskrivning eller pris."), { status: 404 });
+                return message(form, getInfoFormMessage("Inga träffar på din sökning", "Testa söka på en lärares namn, eller en annons titel, beskrivning eller pris."), { status: 404 });
 
             return { form, formatted }
         } catch (error) {
             console.error("Error searching for teachers with following search: " + query, error);
-            return message(form, getGenericFormMessage(), { status: 500 });
+            return message(form, getFailFormMessage(), { status: 500 });
         }
     }
 }

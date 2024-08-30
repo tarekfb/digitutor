@@ -1,7 +1,7 @@
 import { fail } from "@sveltejs/kit";
 import { createListing, getListings } from "$lib/server/database/listings";
 import type { Actions, PageServerLoad } from "./$types";
-import { getGenericFormMessage } from "$lib/shared/constants/constants";
+import { getFailFormMessage } from "$lib/shared/constants/constants";
 import { message, superValidate } from "sveltekit-superforms";
 import { initCreateListingSchema } from "$lib/shared/models/listing";
 import { zod } from "sveltekit-superforms/adapters";
@@ -21,7 +21,7 @@ export const load: PageServerLoad = async ({
     listings = await getListings(supabase, 3, session.user.id);
   } catch (e) {
     console.error(e);
-    return message(form, { content: getGenericFormMessage(undefined, "Kunde inte hämta annonser", undefined), session }, { status: 429 });
+    return message(form, { content: getFailFormMessage("Kunde inte hämta annonser", undefined), session }, { status: 429 });
   }
 
   const { profile } = await parent();
@@ -46,7 +46,7 @@ export const actions: Actions = {
       listingId = id;
     } catch (error) {
       console.error("Failed to create listing", error);
-      return message(form, getGenericFormMessage(), { status: 500 });
+      return message(form, getFailFormMessage(), { status: 500 });
     }
     throw redirect(303, `/listing/${listingId}`);
   },
