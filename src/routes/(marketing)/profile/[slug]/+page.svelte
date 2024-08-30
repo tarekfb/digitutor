@@ -22,9 +22,19 @@
 </script>
 
 <div class="flex flex-col gap-y-4 pb-8 w-full max-w-[1000px]">
-  <AvatarNameBar profile={teacher}>
-    <PrimaryTitle>{teacher.first_name}</PrimaryTitle>
-  </AvatarNameBar>
+  {#if teacher.avatar_url}
+    <PrimaryTitle>Profil: {teacher.first_name}</PrimaryTitle>
+    <img
+      src={teacher.avatar_url}
+      alt="profile avatar"
+      class="object-cover w-max"
+    />
+  {:else}
+    <AvatarNameBar profile={teacher}>
+      <PrimaryTitle>Profil: {teacher.first_name}</PrimaryTitle>
+    </AvatarNameBar>
+  {/if}
+
   <SecondaryTitle>Annonser</SecondaryTitle>
   <div class="flex flex-col gap-y-4 my-6">
     {#each listings as listing}

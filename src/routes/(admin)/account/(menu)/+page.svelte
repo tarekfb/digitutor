@@ -35,8 +35,10 @@
 </svelte:head>
 <!-- need to add hasaccepted as bool field to db conversations -->
 
-{#if profile?.role === "teacher"}
-  <AccountHomeTeacher {conversations} {listings} {userForm} {profile} />
-{:else if profile?.role === "student"}
-  <AccountHomeStudent {conversations} {profile} />
-{/if}
+<div class="w-[275px] md:w-[600px] md:max-w-xl">
+  {#if profile?.role === "teacher"}
+    <AccountHomeTeacher {conversations} {listings} {userForm} {profile} />
+  {:else if profile?.role === "student"}
+    <AccountHomeStudent {conversations} {profile} />
+  {/if}
+</div>

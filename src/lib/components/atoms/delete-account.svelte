@@ -14,7 +14,7 @@
   let open = false;
   const isDesktop = mediaQuery("(min-width: 768px)");
   export let form;
-  const { form: formData, enhance, submitting, allErrors, message } = form;
+  const { form: formData, enhance, delayed, allErrors, message } = form;
   const description =
     "Detta går inte att ångra. Tar du bort ditt konto försvinner kontot och all relaterad information permanent.";
   const title = "Är du säker?";
@@ -29,13 +29,14 @@
         <Button
           builders={[builder]}
           variant="destructive"
-          disabled={$submitting}
+          disabled={$delayed}
           aria-label="Delete account"
+          class="md:self-center md:min-w-wider"
         >
-          {#if $submitting}
+          {#if $delayed}
             <LoadingSpinner class="mr-2" /> <span>Laddar...</span>
           {:else}
-            Ta bort konto
+            Ta bort
           {/if}
         </Button>
       </Dialog.Trigger>
@@ -67,9 +68,9 @@
               </Dialog.Close>
             </Dialog.Footer>
             <FormSubmit
-              {submitting}
+              {delayed}
               {allErrors}
-              text="Ta bort konto"
+              text="Ta bort"
               variant="destructive"
             />
           </div>
@@ -82,13 +83,14 @@
         <Button
           builders={[builder]}
           variant="destructive"
-          disabled={$submitting}
+          disabled={$delayed}
           aria-label="Delete account"
+          class="md:self-center md:min-w-wider"
         >
-          {#if $submitting}
+          {#if $delayed}
             <LoadingSpinner class="mr-2" /> <span>Laddar...</span>
           {:else}
-            Ta bort konto
+            Ta bort
           {/if}
         </Button>
       </Drawer.Trigger>
@@ -121,9 +123,9 @@
                 </Drawer.Close>
               </Drawer.Footer>
               <FormSubmit
-                {submitting}
+                {delayed}
                 {allErrors}
-                text="Ta bort konto"
+                text="Ta bort"
                 variant="destructive"
               />
             </div>

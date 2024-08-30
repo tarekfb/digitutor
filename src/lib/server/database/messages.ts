@@ -25,10 +25,6 @@ export const getMessages = async (
     throw error;
   }
 
-  if (!data) {
-    console.error("Failed to get messages. Response was null");
-    throw new Error("Unexpected null response");
-  }
   if (max) return data.reverse();
   return data;
 }
@@ -58,11 +54,6 @@ export const sendMessage = async (
   if (error) {
     console.error("Failed to send message: ", { dbMessage, error });
     throw error;
-  }
-
-  if (!data) {
-    console.error("Failed to send message. Response was null");
-    throw new Error("Unexpected null response");
   }
 
   return data;

@@ -23,13 +23,7 @@
     },
   });
 
-  const {
-    form: formData,
-    enhance,
-    submitting,
-    message,
-    allErrors,
-  } = contactForm;
+  const { form: formData, enhance, delayed, message, allErrors } = contactForm;
 </script>
 
 <div class="flex flex-col justify-center items-center gap-y-0.5">
@@ -110,5 +104,5 @@
     <Form.FieldErrors />
   </Form.Field>
 
-  <FormSubmit {submitting} {allErrors} text="Skicka" loadingText="Skickar..." />
+  <FormSubmit {delayed} {allErrors} text="Skicka" loadingText="Skickar..." />
 </form>

@@ -2,7 +2,7 @@ import { redirect, error, fail } from "@sveltejs/kit";
 import { initMessagesCount, unknownErrorMessage } from "$lib/shared/constants/constants";
 import { getMessages } from "$lib/server/database/messages";
 import { sendMessageSchema, type InputMessage } from "$lib/shared/models/conversation";
-import { getGenericFormMessage } from "$lib/shared/constants/constants";
+import { getFailFormMessage } from "$lib/shared/constants/constants";
 import { message, superValidate } from "sveltekit-superforms";
 import { zod } from "sveltekit-superforms/adapters";
 import { sendMessage } from "$lib/server/database/messages";
@@ -52,11 +52,7 @@ export const actions = {
 
 
     const form = await superValidate(event, zod(sendMessageSchema));
-    if (!form.valid) {
-      return fail(400, {
-        form,
-      });
-    }
+    if (!form.valid) return fail(400, { form });
 
     const inputMessage: InputMessage = {
       content: form.data.content,
@@ -68,7 +64,7 @@ export const actions = {
       return { form }
     } catch (error) {
       console.error(error);
-      return message(form, getGenericFormMessage("destructive", "Kunde ej skicka meddelandet"), { status: 500 });
+      return message(form, getFailFormMessage("Kunde ej skicka meddelandet"), { status: 500 });
     }
   },
 };

@@ -103,14 +103,12 @@ export const timeAgo = (dateIsoString: string): string => {
   }
 }
 
-export const getRecipient = (self: "teacher" | "student" | "admin") => {
+export const getRecipient = (self: "teacher" | "student") => {
   switch (self) {
     case "teacher":
       return "student";
     case "student":
       return "teacher";
-    case "admin":
-      return "admin";
   }
 }
 
@@ -133,3 +131,29 @@ export const isPostgrestError = (error: any): error is PostgrestError => (
   typeof error.details === 'string' &&
   typeof error.code === 'string'
 );
+
+export const isStorageErrorCustom = (error: any): error is PostgrestError => (
+  typeof error.error === 'string' &&
+  typeof error.message === 'string' &&
+  typeof error.statusCode === 'string'
+);
+
+export const formatBytes = (bytes: number, decimals = 2) => {
+  if (!+bytes) return '0 B'
+
+  const k = 1024
+  const dm = decimals < 0 ? 0 : decimals
+  const sizes = ['B', 'KB', 'MB', 'GB', 'TB', 'PB', 'EB', 'ZB', 'YB']
+
+  const i = Math.floor(Math.log(bytes) / Math.log(k))
+
+  return `${parseFloat((bytes / Math.pow(k, i)).toFixed(dm))} ${sizes[i]}`
+}
+
+export const truncate = (text: string, limit: number) => {
+  if (text.split(' ').length > limit) {
+    const truncatedText = text.split(' ').slice(0, limit).join(' ');
+    return `${truncatedText}...`;
+  }
+  return text;
+};

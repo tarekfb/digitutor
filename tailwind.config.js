@@ -65,6 +65,11 @@ const config = {
 			fontFamily: {
 				sans: [...fontFamily.sans],
 				custom: ['SpaceGrotesk', 'sans-serif'],
+			},
+			minWidth: {
+				"wide": "9rem",
+				"wider": "11rem",
+				"widest": "15rem",
 			}
 		}
 	},

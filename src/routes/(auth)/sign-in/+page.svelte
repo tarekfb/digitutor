@@ -55,7 +55,7 @@
     },
     resetForm: false,
   });
-  const { form: formData, enhance, submitting, message, allErrors } = userForm;
+  const { form: formData, enhance, delayed, message, allErrors } = userForm;
 </script>
 
 <svelte:head>
@@ -66,13 +66,15 @@
   <svelte:fragment slot="aside">
     <div class="flex justify-around gap-x-8">
       <div class="max-w-36 flex flex-col">
-        <img
-          alt="profile avatar"
-          class="rounded-lg mb-2 w-full"
-          width="125"
-          height="125"
-          src="./images/pp.jpeg"
-        />
+        {#if reviews[0].receiver.avatar_url}
+          <img
+            alt="profile avatar"
+            class="rounded-lg mb-2"
+            width="250"
+            height="250"
+            src={reviews[0].receiver.avatar_url}
+          />
+        {/if}
         <div
           class="flex flex-col gap-y-0.5 text-muted-foreground text-xl md:text-2xl"
         >
@@ -96,7 +98,9 @@
       </div>
       <div class="flex flex-col items-center">
         {#if listings?.at(0)}
-          <PrimaryTitle class="font-normal max-w-[400px] overflow-hidden">{listings[0].title}</PrimaryTitle>
+          <PrimaryTitle class="font-normal max-w-[400px] overflow-hidden"
+            >{listings[0].title}</PrimaryTitle
+          >
         {/if}
         <div class="mt-6 flex flex-col gap-y-2">
           {#each reviews as review, index}
@@ -160,10 +164,10 @@
         {/if}
       </FormMessage>
       <FormSubmit
-        {submitting}
+        {delayed}
         {allErrors}
         text="Logga in"
-        class="self-center wide"
+        class="self-center min-w-wider"
       />
     </form>
   </svelte:fragment>

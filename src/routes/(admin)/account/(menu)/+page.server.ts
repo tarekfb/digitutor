@@ -1,7 +1,7 @@
 import { fail } from "@sveltejs/kit";
 import { createListing, getListings } from "$lib/server/database/listings";
-import type { PageServerLoad } from "./$types";
-import { getGenericFormMessage } from "$lib/shared/constants/constants";
+import type { Actions, PageServerLoad } from "./$types";
+import { getFailFormMessage } from "$lib/shared/constants/constants";
 import { message, superValidate } from "sveltekit-superforms";
 import { initCreateListingSchema } from "$lib/shared/models/listing";
 import { zod } from "sveltekit-superforms/adapters";
@@ -21,7 +21,7 @@ export const load: PageServerLoad = async ({
     listings = await getListings(supabase, 3, session.user.id);
   } catch (e) {
     console.error(e);
-    return message(form, { content: getGenericFormMessage(undefined, "Kunde inte hämta annonser", undefined), session }, { status: 429 });
+    return message(form, { content: getFailFormMessage("Kunde inte hämta annonser", undefined), session }, { status: 429 });
   }
 
   const { profile } = await parent();
@@ -29,7 +29,7 @@ export const load: PageServerLoad = async ({
   return { form, session, listings, profile };
 };
 
-export const actions = {
+export const actions: Actions = {
   createListing: async (event) => {
     const { locals: { supabase, safeGetSession } } = event;
     const { session } = await safeGetSession();
@@ -37,11 +37,7 @@ export const actions = {
       throw redirect(303, "/sign-in");
 
     const form = await superValidate(event, zod(initCreateListingSchema));
-    if (!form.valid) {
-      return fail(400, {
-        form,
-      });
-    }
+    if (!form.valid) return fail(400, { form });
     const { title } = form.data;
 
     let listingId = "";
@@ -50,7 +46,7 @@ export const actions = {
       listingId = id;
     } catch (error) {
       console.error("Failed to create listing", error);
-      return message(form, getGenericFormMessage(), { status: 500 });
+      return message(form, getFailFormMessage(), { status: 500 });
     }
     throw redirect(303, `/listing/${listingId}`);
   },

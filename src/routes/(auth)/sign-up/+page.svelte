@@ -19,7 +19,7 @@
   const userForm = superForm(data.form, {
     validators: zodClient(signUpSchema),
   });
-  const { form: formData, enhance, submitting, message, allErrors } = userForm;
+  const { form: formData, enhance, delayed, message, allErrors } = userForm;
 
   const role = $page.url.searchParams.get("role");
 </script>
@@ -43,7 +43,10 @@
       {#if review.sender}
         <div class="flex items-center gap-x-2 self-start mt-2.5">
           <Avatar
-            profile={review.sender}
+            url={review.sender.avatar_url ?? ""}
+            firstName={review.sender.first_name}
+            lastName={review.sender.last_name}
+            role={review.sender.role}
             onClick={undefined}
             class="text-sm w-7 h-7"
           />
@@ -56,7 +59,10 @@
             href="/profile/{review.receiver.id}"
           >
             <Avatar
-              profile={review.receiver}
+              url={review.receiver.avatar_url ?? ""}
+              firstName={review.receiver.first_name}
+              lastName={review.receiver.last_name}
+              role={review.receiver.role}
               class="text-sm w-7 h-7"
               onClick={undefined}
             />
@@ -67,7 +73,11 @@
     </div>
   </svelte:fragment>
   <svelte:fragment slot="form">
-    <form class="text-start flex flex-col gap-y-4 w-full max-w-[650px] p-4" method="POST" use:enhance>
+    <form
+      class="text-start flex flex-col gap-y-4 w-full max-w-[650px] p-4"
+      method="POST"
+      use:enhance
+    >
       <Tabs.Root
         value={role ?? "student"}
         class="text-start flex flex-col gap-y-4"
@@ -93,10 +103,10 @@
       </Tabs.Root>
       <FormMessage {message} scroll scrollTo="start" />
       <FormSubmit
-        {submitting}
+        {delayed}
         {allErrors}
         text="Skapa konto"
-        class="self-center wide"
+        class="self-center min-w-wider"
       />
     </form>
   </svelte:fragment>

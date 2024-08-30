@@ -14,7 +14,7 @@
   let open = false;
   const isDesktop = mediaQuery("(min-width: 768px)");
   export let form;
-  const { form: formData, enhance, submitting, allErrors, message } = form;
+  const { form: formData, enhance, delayed, allErrors, message } = form;
   const description =
     "Du kan fylla i mer information om annonsen, eller ändra rubriken, i nästa steg.";
   const title = "Skapa annons";
@@ -28,10 +28,11 @@
       <Dialog.Trigger asChild let:builder>
         <Button
           builders={[builder]}
-          disabled={$submitting}
+          disabled={$delayed}
           aria-label="Skapa annons"
+          class="md:self-center md:min-w-wider"
         >
-          {#if $submitting}
+          {#if $delayed}
             <LoadingSpinner class="mr-2" /> <span>Laddar...</span>
           {:else}
             Skapa
@@ -71,7 +72,7 @@
               </Dialog.Close>
             </Dialog.Footer>
             <FormSubmit
-              {submitting}
+              {delayed}
               {allErrors}
               text="Skapa"
               loadingText="Skapar..."
@@ -85,10 +86,11 @@
       <Drawer.Trigger asChild let:builder>
         <Button
           builders={[builder]}
-          disabled={$submitting}
+          disabled={$delayed}
           aria-label="Skapa annons"
+          class="md:self-center md:min-w-wider"
         >
-          {#if $submitting}
+          {#if $delayed}
             <LoadingSpinner class="mr-2" /> <span>Laddar...</span>
           {:else}
             Skapa
@@ -129,7 +131,7 @@
                 </Drawer.Close>
               </Drawer.Footer>
               <FormSubmit
-                {submitting}
+                {delayed}
                 {allErrors}
                 text="Skapa"
                 loadingText="Skapar..."

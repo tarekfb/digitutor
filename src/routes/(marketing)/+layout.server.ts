@@ -7,6 +7,8 @@ export const load: LayoutServerLoad = async ({
 }) => {
   depends("supabase:auth");
   const { session, user } = await safeGetSession()
+
+
   const profile = session && await getProfileByUser(supabase, user.id);
   const listings = await getListings(supabase, 5, undefined, true);
 

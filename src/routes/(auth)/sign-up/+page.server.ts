@@ -1,12 +1,13 @@
 import { error, fail, redirect } from "@sveltejs/kit";
 import type { PageServerLoad } from "./$types";
-import { getGenericFormMessage, unknownErrorMessage } from "$lib/shared/constants/constants";
+import { getFailFormMessage, unknownErrorMessage } from "$lib/shared/constants/constants";
 import { message, setError, superValidate } from "sveltekit-superforms";
 import { zod } from "sveltekit-superforms/adapters";
 import { signUpSchema } from "$lib/shared/models/user";
 import { createProfile } from "$lib/server/database/profiles";
 import type { CreateProfile } from "$lib/shared/models/profile";
 import { getDisplayReviews } from "src/lib/server/database/review";
+import type { PsqlError } from "src/lib/shared/models/common";
 
 
 export const load: PageServerLoad = async ({ locals: { supabase } }) => {
@@ -32,11 +33,7 @@ export const actions = {
             throw redirect(303, "/account");
 
         const form = await superValidate(event, zod(signUpSchema));
-        if (!form.valid) {
-            return fail(400, {
-                form,
-            });
-        }
+        if (!form.valid) return fail(400, { form });
 
         const { email, password, role, first_name, last_name } = form.data;
         let inputUser: CreateProfile;
@@ -53,7 +50,7 @@ export const actions = {
 
             if (!data.user) {
                 console.error("User data was null on signup", error);
-                return message(form, getGenericFormMessage(), { status: 500 });
+                return message(form, getFailFormMessage(), { status: 500 });
             }
 
             // https://github.com/orgs/supabase/discussions/1282
@@ -62,7 +59,7 @@ export const actions = {
 
             if (error) {
                 console.error("Supabase error on signup", { error });
-                return message(form, getGenericFormMessage(), { status: 500 });
+                return message(form, getFailFormMessage(), { status: 500 });
             }
 
             inputUser = {
@@ -73,7 +70,7 @@ export const actions = {
             }
         } catch (error) {
             console.error("Error when creating supabase auth user", error);
-            return message(form, getGenericFormMessage(), { status: 500 });
+            return message(form, getFailFormMessage(), { status: 500 });
         }
 
         try {
@@ -81,15 +78,13 @@ export const actions = {
             return message(form, { variant: "success", title: "Verifiera e-postadress", description: "Kika i din inkorg för att verifiera e-post: " + email + ".", status: 201 });
         } catch (error) {
             if (error && typeof error === "object") {
-                const supabaseError = error as {
-                    code: string; message: string;
-                }
-                if (supabaseError.code && supabaseError.code === "23505") // duplicate key constraint violation - somehow profile exists but not user. Allow.
+                const psqlError = error as PsqlError;
+                if (psqlError.code && psqlError.code === "23505") // duplicate key constraint violation - somehow profile exists but not user. Allow.
                     return message(form, { variant: "success", title: "Verifiera e-postadress", description: "Kika i din inkorg för att verifiera e-post: " + email + ".", status: 201 });
             }
 
             console.error("Error when creating profile", error);
-            return message(form, getGenericFormMessage(), { status: 500 });
+            return message(form, getFailFormMessage(), { status: 500 });
         }
     }
 }

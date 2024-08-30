@@ -19,12 +19,6 @@ export const getProfileByUser = async (
     throw error;
   }
 
-
-  if (!data) {
-    console.error(`Failed to get profile by user id: ${userId}. Data was null`, { data, error });
-    throw new Error("Unexpected null response");
-  }
-
   return data;
 };
 
@@ -56,11 +50,6 @@ export const createProfile = async (
     throw error;
   }
 
-  if (!data) {
-    console.error(`Failed to create profile. Data was null`, { data, error });
-    throw new Error("Unexpected null response");
-  }
-
   return data;
 }
 
@@ -90,10 +79,6 @@ export const updateProfile = async (
     throw error;
   }
 
-  if (!data) {
-    console.error(`Failed to update profile for profile id ${profile.id}. Data was null`, { data, error });
-    throw new Error("Unexpected null response");
-  }
-
   return data;
 }
+

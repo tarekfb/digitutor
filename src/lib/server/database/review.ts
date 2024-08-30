@@ -32,11 +32,6 @@ export const createReview = async (
         throw error;
     }
 
-    if (!data) {
-        console.error("Failed to create review. Response was null.");
-        throw new Error("Unexpected null response");
-    }
-
     return data;
 };
 
@@ -63,11 +58,6 @@ export const getReviewsByReceiver = async (
         throw error;
     }
 
-    if (!data) {
-        console.error(`Failed to get reviews for teacher ${receiver}. Response was null`);
-        throw new Error("Unexpected null response");
-    }
-
     return data as unknown as Review[];
 }
 
@@ -90,11 +80,6 @@ export const getDisplayReviews = async (supabase: SupabaseClient<Database>, max?
     if (error) {
         console.error(`Failed to find review to display`, { error });
         throw error;
-    }
-
-    if (!data) {
-        console.error(`Failed to find review to display. Response was null`);
-        throw new Error("Unexpected null response");
     }
 
     return data as unknown as Review[];

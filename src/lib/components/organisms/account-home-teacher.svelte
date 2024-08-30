@@ -39,8 +39,8 @@
       ><ConversationCard {conversation} {profile} />
     </a>
   {:else}
-    <p>Inga konversationer ännu.</p>
-    <p class="text-lg">
+    <p class="text-lg">Inga konversationer ännu.</p>
+    <p class="text-muted-foreground">
       Se våra <Link href="/tips">tips</Link> för att förbättra dina chanser att bli
       kontaktad.
     </p>

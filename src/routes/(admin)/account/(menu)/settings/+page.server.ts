@@ -1,14 +1,18 @@
-import { fail } from "@sveltejs/kit";
 import type { PageServerLoad } from "./$types";
-import { getGenericFormMessage } from "$lib/shared/constants/constants";
-import { message, superValidate } from "sveltekit-superforms";
+import { getFailFormMessage, getSuccessFormMessage, maxAvatarSize } from "$lib/shared/constants/constants";
+import { fail, message, superValidate, withFiles } from "sveltekit-superforms";
 import { zod } from "sveltekit-superforms/adapters";
-import { emailSchema, nameSchema, type ProfileInput } from "$lib/shared/models/profile";
+import { avatarSchema, emailSchema, nameSchema, type ProfileInput } from "$lib/shared/models/profile";
 import { updateProfile } from "$lib/server/database/profiles";
 import { updateUserEmail } from "$lib/server/database/user";
 import { deleteAccountSchema, passwordSchema } from "$lib/shared/models/user";
 import { isAuthApiError } from "@supabase/supabase-js";
 import { redirect } from "sveltekit-flash-message/server";
+import { uploadAvatar } from "src/lib/server/database/avatar";
+import { formatBytes, isStorageErrorCustom } from "src/lib/utils";
+import type { StorageErrorCustom } from "src/lib/shared/errors/storage-error-custom";
+import { Buffer } from 'node:buffer';
+import { CF_IMAGE_RESIZE_URL } from '$env/static/private'
 
 export const load: PageServerLoad = async ({ parent, locals: { safeGetSession } }) => {
     const { session } = await safeGetSession();
@@ -24,8 +28,9 @@ export const load: PageServerLoad = async ({ parent, locals: { safeGetSession } 
     const updateEmailForm = await superValidate({ email: session.user.email }, zod(emailSchema));
     const deleteAccountForm = await superValidate(zod(deleteAccountSchema));
     const updatePasswordForm = await superValidate(zod(passwordSchema));
+    const uploadAvatarForm = await superValidate(zod(avatarSchema));
 
-    return { updateNameForm, updateEmailForm, deleteAccountForm, updatePasswordForm };
+    return { updateNameForm, updateEmailForm, deleteAccountForm, updatePasswordForm, uploadAvatarForm };
 };
 
 export const actions = {
@@ -36,9 +41,7 @@ export const actions = {
             throw redirect(303, "/sign-in");
 
         const form = await superValidate(event, zod(nameSchema));
-        if (!form.valid)
-            return fail(400, { form });
-
+        if (!form.valid) return fail(400, { form });
         const { firstName, lastName } = form.data;
 
         const profileInput: ProfileInput = {
@@ -52,7 +55,7 @@ export const actions = {
             return { form }
         } catch (error) {
             console.error(`Error on update profile in update name with userid ${user.id}`, error);
-            return message(form, getGenericFormMessage(), { status: 500 });
+            return message(form, getFailFormMessage(), { status: 500 });
         }
     },
     email: async (event) => {
@@ -62,17 +65,71 @@ export const actions = {
             throw redirect(303, "/sign-in");
 
         const form = await superValidate(event, zod(emailSchema));
-        if (!form.valid)
-            return fail(400, { nameForm: form });
+        if (!form.valid) return fail(400, { form });
 
         const { email } = form.data;
         try {
             await updateUserEmail(supabase, email);
-            return message(form, getGenericFormMessage("success", "Bekräfta e-postadresserna", "Bekräfta ändringen på både gamla och nya e-postadresserna. Tills dess loggar du in med din nuvarande e-postadress."));
+            return message(form, getSuccessFormMessage("Bekräfta e-postadresserna", "Bekräfta ändringen på både gamla och nya e-postadresserna. Tills dess loggar du in med din nuvarande e-postadress."));
         } catch (error) {
             console.error(`Error on update profile in update name with userid ${session?.user.id}`, error);
-            return message(form, getGenericFormMessage(), { status: 500 });
+            return message(form, getFailFormMessage(), { status: 500 });
         }
+    },
+    avatar: async (event) => {
+        const { locals: { supabase, safeGetSession } } = event;
+        const { session, user } = await safeGetSession();
+        if (!session)
+            throw redirect(303, "/sign-in");
+
+        const form = await superValidate(event, zod(avatarSchema));
+        if (!form.valid) return fail(400, { form });
+        const { avatar } = form.data;
+
+        let failedCompression = false;
+        let input = await avatar.arrayBuffer();
+        try {
+            const res = await fetch(CF_IMAGE_RESIZE_URL, {
+                method: 'POST',
+                body: input
+            })
+            if (res.status !== 200)
+                throw new Error(`Failed to resize image: ${res.status} ${res.statusText}`)
+            input = await res.arrayBuffer()
+        } catch (error) {
+            failedCompression = true;
+            console.error('Error on compression:', error);
+        }
+
+        if (failedCompression)
+            return message(form, getFailFormMessage("Bilden är för stor", `Komprimeringen misslyckades. Din bild är ${formatBytes(Buffer.byteLength(input))}. Testa med en mindre bild.`), { status: 500 });
+
+        let avatarPath;
+        try {
+            const format = avatar.type.split("/")[1]; // example type property: image/png
+            const fileName = `${user.id}---${crypto.randomUUID()}.${format}`
+            avatarPath = await uploadAvatar(supabase, fileName, input);
+        } catch (error) {
+            if (isStorageErrorCustom(error)) {
+                const storageError = error as unknown as StorageErrorCustom;
+                if (storageError.statusCode === '413')
+                    return message(form, getFailFormMessage("Filen är för stor", `Din fil är ${formatBytes(Buffer.byteLength(input))}, maxgränsen är ${formatBytes(maxAvatarSize)}.`), { status: 413 });
+            }
+            console.error("Unknown error on upload avatar", error);
+            return message(form, getFailFormMessage(), { status: 500 });
+        }
+
+        try {
+            await updateProfile(supabase, {
+                id: user.id, avatar_url: avatarPath
+            });
+        } catch (error) {
+            console.error(`Error on update profile with new avatar on path ${avatarPath} with userid ${user.id}`, error);
+            return message(form, getFailFormMessage(), { status: 500 });
+        }
+
+        await Promise.resolve(new Promise(resolve => setTimeout(resolve, 5000)));
+        return withFiles({ form });
     },
     delete: async (event) => {
         const { locals: { supabase, safeGetSession, supabaseServiceRole }, cookies } = event;
@@ -81,14 +138,12 @@ export const actions = {
             throw redirect(303, "/sign-in");
 
         const form = await superValidate(event, zod(deleteAccountSchema));
-        if (!form.valid)
-            return fail(400, { form });
-
+        if (!form.valid) return fail(400, { form });
         const { password } = form.data;
         const { id, email } = user;
         if (!email) {
             console.error(`User with id ${id} has no email and therefore password could not be verified`);
-            return message(form, getGenericFormMessage(), { status: 500 });
+            return message(form, getFailFormMessage(), { status: 500 });
         }
 
         // Check current password is correct before deleting account
@@ -108,13 +163,13 @@ export const actions = {
             );
             if (error) {
                 console.error(`Error on attempt to delete user with userid ${id}`, error);
-                return message(form, getGenericFormMessage(), { status: 500 });
+                return message(form, getFailFormMessage(), { status: 500 });
             }
 
             await supabase.auth.signOut();
         } catch (e) {
             console.error(`Error on attempt to delete & signout user with userid ${id}`, e);
-            return message(form, getGenericFormMessage(), { status: 500 });
+            return message(form, getFailFormMessage(), { status: 500 });
         }
 
         throw redirect(303, `/`, { message: 'Ditt konto har raderats.', type: 'success' }, cookies);
@@ -126,15 +181,14 @@ export const actions = {
             throw redirect(303, "/sign-in");
 
         const form = await superValidate(event, zod(passwordSchema));
-        if (!form.valid)
-            return fail(400, { form });
+        if (!form.valid) return fail(400, { form });
 
         const { new: newPassword, current } = form.data;
 
         const { id, email } = session.user;
         if (!email) {
             console.error(`User with id ${id} has no email and therefore password could not be verified`);
-            return message(form, getGenericFormMessage(), { status: 500 });
+            return message(form, getFailFormMessage(), { status: 500 });
         }
         const { error } = await supabase.auth.signInWithPassword({
             email,
@@ -145,7 +199,6 @@ export const actions = {
             throw redirect(303, "/settings_password_error");
         // user was logged out because of bad password. Redirect to error page with explaination.
 
-
         const { error: updateError } = await supabase.auth.updateUser({
             password: newPassword,
         });
@@ -153,11 +206,11 @@ export const actions = {
         if (updateError) {
             const isSameAsCurrent = isAuthApiError(updateError) && updateError.status === 422 && updateError.message.includes("different")
             if (isSameAsCurrent)
-                return message(form, getGenericFormMessage(undefined, "Ange ett nytt lösenord", "Det angivna lösenordet är samma som det nuvarande."), { status: 500 });
+                return message(form, getFailFormMessage("Ange ett nytt lösenord", "Det angivna lösenordet är samma som det nuvarande."), { status: 500 });
 
             console.error(`Error on attempt to update password with userid ${id}`, updateError);
-            return message(form, getGenericFormMessage(), { status: 500 });
+            return message(form, getFailFormMessage(), { status: 500 });
         }
-        return message(form, getGenericFormMessage("success", "Lösenord ändrat", "Använd det nya lösenordet nästa gång du loggar in."));
+        return message(form, getSuccessFormMessage("Lösenord ändrat", "Använd det nya lösenordet nästa gång du loggar in."));
     }
 }

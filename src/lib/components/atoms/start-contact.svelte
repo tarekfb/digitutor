@@ -14,7 +14,7 @@
   export let action: string;
 
   const isDesktop = mediaQuery("(min-width: 768px)");
-  const { form: formData, enhance, submitting, allErrors, message } = form;
+  const { form: formData, enhance, delayed, allErrors, message } = form;
   const description =
     "För att få snabba och tydliga svar från läraren kan det vara bra att nämna följande punkter:";
   const suggestions = [
@@ -71,7 +71,7 @@
             </Dialog.Close>
           </Dialog.Footer>
           <FormSubmit
-            {submitting}
+            {delayed}
             {allErrors}
             text="Skicka"
             loadingText="Skickar..."
@@ -119,7 +119,7 @@
               </Drawer.Close>
             </Drawer.Footer>
             <FormSubmit
-              {submitting}
+              {delayed}
               {allErrors}
               text="Skicka"
               loadingText="Skickar..."

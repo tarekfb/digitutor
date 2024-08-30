@@ -30,7 +30,7 @@
   const {
     form: formData,
     enhance,
-    submitting,
+    delayed,
     message,
     allErrors,
   } = sendMessageForm;
@@ -109,7 +109,7 @@
     <div class="flex justify-end">
       <FormSubmit
         {allErrors}
-        {submitting}
+        {delayed}
         text="Skicka"
         disabled={!isAllowedToReply}
         loadingText="Skickar..."

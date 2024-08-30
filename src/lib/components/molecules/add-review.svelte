@@ -33,13 +33,7 @@
     },
   });
 
-  const {
-    form: formData,
-    enhance,
-    submitting,
-    allErrors,
-    message,
-  } = formValues;
+  const { form: formData, enhance, delayed, allErrors, message } = formValues;
 </script>
 
 <Dialog.Root bind:open>
@@ -102,7 +96,7 @@
           </Dialog.Close>
         </Dialog.Footer>
         <FormSubmit
-          {submitting}
+          {delayed}
           {allErrors}
           text="Lägg till"
           loadingText="Laddar..."

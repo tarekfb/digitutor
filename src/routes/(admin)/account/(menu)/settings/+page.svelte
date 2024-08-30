@@ -17,10 +17,13 @@
   import DeleteAccount from "$lib/components/atoms/delete-account.svelte";
   import PasswordInput from "$lib/components/molecules/password-input.svelte";
 
+  import AvatarForm from "src/lib/components/molecules/avatar-form.svelte";
+  import type { PageData } from "./$types";
+
   let adminSection: Writable<string> = getContext("adminSection");
   adminSection.set("settings");
 
-  export let data;
+  export let data: PageData;
 
   const nameForm = superForm(data.updateNameForm, {
     validators: zodClient(nameSchema),
@@ -51,9 +54,9 @@
   <title>Settings</title>
 </svelte:head>
 
-<div class="flex flex-col gap-y-4 pb-8">
-  <PrimaryTitle>Inställningar</PrimaryTitle>
-  <SettingsForm form={nameForm} action="?/name" title="Namn">
+<div class="flex flex-col gap-y-4 pb-8 w-[275px] md:w-[600px] md:max-w-xl">
+  <PrimaryTitle class="text-center">Inställningar</PrimaryTitle>
+  <SettingsForm form={nameForm} action="?/name" title="Namn" submitText="Ändra">
     <Form.Field form={nameForm} name="firstName">
       <Form.Control let:attrs>
         <Form.Label>Förnamn</Form.Label>
@@ -80,7 +83,12 @@
     </Form.Field>
   </SettingsForm>
 
-  <SettingsForm form={emailForm} action="?/email" title="E-postadress">
+  <SettingsForm
+    form={emailForm}
+    action="?/email"
+    title="E-postadress"
+    submitText="Ändra"
+  >
     <p class="text-muted-foreground">
       Du kommer behöva bekräfta den nya och den gamla adressen.
     </p>
@@ -98,7 +106,14 @@
     </Form.Field>
   </SettingsForm>
 
-  <SettingsForm form={passwordForm} action="?/password" title="Lösenord">
+  <AvatarForm uploadAvatarForm={data.uploadAvatarForm} />
+
+  <SettingsForm
+    form={passwordForm}
+    action="?/password"
+    title="Lösenord"
+    submitText="Ändra"
+  >
     <Form.Field form={passwordForm} name="new">
       <Form.Control let:attrs>
         <Label>Nytt lösenord</Label>

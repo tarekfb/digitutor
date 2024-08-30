@@ -21,10 +21,10 @@
 </script>
 
 <header
-  class="sticky top-0 z-40 w-full bg-gradient-to-r from-primary to-accent text-background px-1"
+  class="sticky top-0 z-40 w-full bg-gradient-to-r from-primary to-accent text-background overflow-x-hidden"
 >
   <div
-    class="container flex h-16 items-center space-x-4 sm:justify-between sm:space-x-0"
+    class="container flex h-16 items-center space-x-3 sm:justify-between sm:space-x-0"
   >
     <a href="/" class="text-2xl font-semibold">
       {websiteName}
@@ -49,7 +49,10 @@
                 class="relative h-8 w-8 rounded-full"
               >
                 <Avatar
-                  {profile}
+                  url={profile.avatar_url ?? ""}
+                  firstName={profile.first_name}
+                  lastName={profile.last_name}
+                  role={profile.role}
                   onClick={undefined}
                   fallbackClass="bg-primary"
                 />
@@ -61,6 +64,17 @@
                   {profile.first_name}
                 </p>
               </DropdownMenu.Label>
+              <DropdownMenu.Separator />
+              <DropdownMenu.Item class="data-[highlighted]:bg-white">
+                <button
+                  class="flex space-x-2 w-full"
+                  disabled={logoutLoading}
+                  on:click={() => goto("/account")}
+                >
+                  <UserRound class="mr-2 h-4 w-4" />
+                  Konto
+                </button>
+              </DropdownMenu.Item>
               <DropdownMenu.Separator />
               <DropdownMenu.Item class="data-[highlighted]:bg-white">
                 <button

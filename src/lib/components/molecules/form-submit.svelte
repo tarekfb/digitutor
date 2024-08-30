@@ -6,7 +6,7 @@
 
   let className: string | null | undefined = undefined;
   export { className as class };
-  export let submitting;
+  export let delayed;
   export let allErrors;
   export let text: string;
   export let variant: Variant = "default";
@@ -17,11 +17,14 @@
 <Button
   type="submit"
   {variant}
-  disabled={$allErrors.length > 0 || $submitting || disabled}
+  disabled={$allErrors.length > 0 || $delayed || disabled}
   class={cn("", className)}
 >
-  {#if $submitting}
-    <LoadingSpinner class="mr-2" /> <span>{loadingText}</span>
+  {#if $delayed}
+    <LoadingSpinner class={loadingText && "mr-2"} />
+    {#if loadingText}
+      <span>{loadingText}</span>
+    {/if}
   {:else}
     {text}
   {/if}

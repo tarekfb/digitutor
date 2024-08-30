@@ -3,13 +3,36 @@
   import ListingCard from "$lib/components/molecules/listing-card.svelte";
   import { Button } from "$lib/components/ui/button";
   import { goto } from "$app/navigation";
+  import type { PageData } from "./$types";
+  import { superForm } from "sveltekit-superforms";
+  import { zodClient } from "sveltekit-superforms/adapters";
+  import FormMessage from "$lib/components/molecules/form-message.svelte";
+  import * as Form from "$lib/components/ui/form/index.js";
+  import { Input } from "$lib/components/ui/input/index.js";
+  import FormSubmit from "$lib/components/molecules/form-submit.svelte";
+  import SearchResult from "$lib/components/molecules/search-result.svelte";
+  import {
+    searchSchema,
+    type SearchResult as SearchResultType,
+  } from "src/lib/shared/models/search";
+  import SecondaryTitle from "src/lib/components/atoms/secondary-title.svelte";
 
-  export let data;
+  export let data: PageData;
+
+  let searchResults: SearchResultType[] = [];
+  const searchForm = superForm(data.form, {
+    validators: zodClient(searchSchema),
+    onUpdate({ form, result }) {
+      if (form.valid && result.data)
+        searchResults = result.data.formatted as SearchResultType[];
+    },
+  });
+  const { form: formData, enhance, delayed, message, allErrors } = searchForm;
 </script>
 
 <svelte:head>
   <title>{websiteName}</title>
-  <meta name="description" content="{websiteName} Home Page" />
+  <meta name="description" content="{websiteName} Startsida" />
 </svelte:head>
 
 <div class="flex flex-col items-center gap-y-4 text-center py-12 md:gap-y-8">
@@ -36,6 +59,43 @@
     <Button on:click={() => goto("/sign-up")}>Skapa konto</Button>
   {/if}
 </div>
+<form
+  class="text-center flex flex-col gap-y-4 p-4 w-full max-w-[650px]"
+  action="?/search"
+  method="POST"
+  use:enhance
+>
+  <SecondaryTitle>Sök efter lärare och annonser</SecondaryTitle>
+  <div class="flex justify-between gap-x-2 md:gap-x-4 items-start">
+    <Form.Field form={searchForm} name="query" class="flex-1">
+      <Form.Control let:attrs>
+        <Input
+          {...attrs}
+          type="text"
+          bind:value={$formData.query}
+          placeholder="Namn, titel, beskrivning, pris, etc."
+          class="text-lg bg-card"
+        />
+      </Form.Control>
+      <Form.FieldErrors />
+    </Form.Field>
+    <FormSubmit {delayed} {allErrors} text="Sök" loadingText="" class="w-12" />
+  </div>
+</form>
+
+{#if $message}
+  <FormMessage {message} scroll scrollTo="end" />
+{:else if searchResults.length > 0}
+  <ul class="flex flex-col gap-y-4 max-w-[650px] w-full">
+    <SecondaryTitle>Sökresultat</SecondaryTitle>
+    {#each searchResults as result}
+      <li>
+        <SearchResult listing={result} />
+      </li>
+    {/each}
+  </ul>
+{/if}
+
 <div class="min-h-[60vh]">
   <div class="pt-20 pb-8 px-7">
     <div class="max-w-lg mx-auto text-center">

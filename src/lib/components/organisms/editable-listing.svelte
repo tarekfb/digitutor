@@ -17,7 +17,7 @@
     form: formData,
     enhance,
     errors,
-    submitting,
+    delayed,
     allErrors,
     message,
   } = listingForm;
@@ -99,8 +99,8 @@
       <X class="mr-2 h-5 w-5" />
       Avbryt
     </Button>
-    <Button type="submit" disabled={$allErrors.length > 0 || $submitting}>
-      {#if $submitting}
+    <Button type="submit" disabled={$allErrors.length > 0 || $delayed}>
+      {#if $delayed}
         <LoadingSpinner class="mr-2" /> <span>Laddar...</span>
       {:else}
         <SaveIcon class="mr-2 h-5 w-5" />
