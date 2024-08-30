@@ -53,3 +53,8 @@ export type Message = {
   id?: MessageId;
   data: any;
 };
+
+export type PsqlError = {
+  code: string;
+  message: string;
+}

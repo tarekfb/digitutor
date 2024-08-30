@@ -7,6 +7,7 @@ import { signUpSchema } from "$lib/shared/models/user";
 import { createProfile } from "$lib/server/database/profiles";
 import type { CreateProfile } from "$lib/shared/models/profile";
 import { getDisplayReviews } from "src/lib/server/database/review";
+import type { PsqlError } from "src/lib/shared/models/common";
 
 
 export const load: PageServerLoad = async ({ locals: { supabase } }) => {
@@ -77,10 +78,8 @@ export const actions = {
             return message(form, { variant: "success", title: "Verifiera e-postadress", description: "Kika i din inkorg för att verifiera e-post: " + email + ".", status: 201 });
         } catch (error) {
             if (error && typeof error === "object") {
-                const supabaseError = error as {
-                    code: string; message: string;
-                }
-                if (supabaseError.code && supabaseError.code === "23505") // duplicate key constraint violation - somehow profile exists but not user. Allow.
+                const psqlError = error as PsqlError;
+                if (psqlError.code && psqlError.code === "23505") // duplicate key constraint violation - somehow profile exists but not user. Allow.
                     return message(form, { variant: "success", title: "Verifiera e-postadress", description: "Kika i din inkorg för att verifiera e-post: " + email + ".", status: 201 });
             }
 
