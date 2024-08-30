@@ -1,6 +1,6 @@
 import { fail, error } from "@sveltejs/kit";
 import { zod } from "sveltekit-superforms/adapters";
-import { getGenericFormMessage, unknownErrorMessage } from "$lib/shared/constants/constants";
+import { getFailFormMessage, unknownErrorMessage } from "$lib/shared/constants/constants";
 import { message, superValidate } from "sveltekit-superforms";
 import { deleteListing, getListing, updateListing } from "$lib/server/database/listings";
 import { updateListingSchema } from "$lib/shared/models/listing";
@@ -74,7 +74,7 @@ export const actions = {
       await updateListing(supabase, form.data, slug, session);
       return { form };
     } catch (error) {
-      return message(form, getGenericFormMessage(), { status: 500 });
+      return message(form, getFailFormMessage(), { status: 500 });
     }
   },
   requestContact: async (event) => {
@@ -86,17 +86,17 @@ export const actions = {
     const form = await superValidate(event, zod(requestContactSchema));
     if (!form.valid) {
       console.error("Error when submitting request contact. Data that user does not submit manually is invalid") // user hasnt entered data theirselves, therefore send error message
-      return message(form, getGenericFormMessage(), { status: 500 });
+      return message(form, getFailFormMessage(), { status: 500 });
     }
 
     const { teacher, role } = form.data;
 
     if (teacher === session.user.id)
-      return message(form, getGenericFormMessage(undefined, undefined, "Du kan inte kontakta dig själv."), { status: 400 });
+      return message(form, getFailFormMessage(undefined, "Du kan inte kontakta dig själv."), { status: 400 });
 
     if (role !== "student") {
       console.error("Non-student tried to contact teacher for listing slug: " + slug, error);
-      return message(form, getGenericFormMessage(), { status: 500 });
+      return message(form, getFailFormMessage(), { status: 500 });
     }
 
     const conversation = await getConversationForStudentAndTeacher(supabase, session.user.id, teacher);
@@ -121,15 +121,15 @@ export const actions = {
     const { teacher, role, firstMessage } = form.data;
 
     if (teacher === session.user.id)
-      return message(form, getGenericFormMessage(undefined, undefined, "Du kan inte kontakta dig själv."), { status: 400 });
+      return message(form, getFailFormMessage(undefined, "Du kan inte kontakta dig själv."), { status: 400 });
 
     if (role !== "student") {
       console.error("Non-student tried to contact teacher for listing slug: " + slug, error);
-      return message(form, getGenericFormMessage(), { status: 500 });
+      return message(form, getFailFormMessage(), { status: 500 });
     }
 
     if (teacher === session.user.id)
-      return message(form, getGenericFormMessage(undefined, undefined, "Du kan inte kontakta dig själv."), { status: 400 });
+      return message(form, getFailFormMessage(undefined, "Du kan inte kontakta dig själv."), { status: 400 });
 
     let conversationId: string;
     try {
@@ -140,7 +140,7 @@ export const actions = {
         throw redirect(303, `/account/conversation/${error.message}`); // message is conversation id
       }
       console.error("Error when starting conversation for listing slug: " + slug, error);
-      return message(form, getGenericFormMessage(), { status: 500 });
+      return message(form, getFailFormMessage(), { status: 500 });
     }
     throw redirect(303, `/account/conversation/${conversationId}`);
   }

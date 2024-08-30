@@ -1,5 +1,5 @@
 import type { PageServerLoad } from "./$types";
-import { getGenericFormMessage, maxAvatarSize, maxAvatarUncompressedSize } from "$lib/shared/constants/constants";
+import { getFailFormMessage, getSuccessFormMessage, maxAvatarSize } from "$lib/shared/constants/constants";
 import { fail, message, superValidate, withFiles } from "sveltekit-superforms";
 import { zod } from "sveltekit-superforms/adapters";
 import { avatarSchema, emailSchema, nameSchema, type ProfileInput } from "$lib/shared/models/profile";
@@ -55,7 +55,7 @@ export const actions = {
             return { form }
         } catch (error) {
             console.error(`Error on update profile in update name with userid ${user.id}`, error);
-            return message(form, getGenericFormMessage(), { status: 500 });
+            return message(form, getFailFormMessage(), { status: 500 });
         }
     },
     email: async (event) => {
@@ -70,10 +70,10 @@ export const actions = {
         const { email } = form.data;
         try {
             await updateUserEmail(supabase, email);
-            return message(form, getGenericFormMessage("success", "Bekräfta e-postadresserna", "Bekräfta ändringen på både gamla och nya e-postadresserna. Tills dess loggar du in med din nuvarande e-postadress."));
+            return message(form, getSuccessFormMessage("Bekräfta e-postadresserna", "Bekräfta ändringen på både gamla och nya e-postadresserna. Tills dess loggar du in med din nuvarande e-postadress."));
         } catch (error) {
             console.error(`Error on update profile in update name with userid ${session?.user.id}`, error);
-            return message(form, getGenericFormMessage(), { status: 500 });
+            return message(form, getFailFormMessage(), { status: 500 });
         }
     },
     avatar: async (event) => {
@@ -101,8 +101,8 @@ export const actions = {
             console.error('Error on compression:', error);
         }
 
-        if (failedCompression && input.byteLength > maxAvatarUncompressedSize)
-            return message(form, getGenericFormMessage("destructive", "Komprimeringen misslyckades och bilden är för stor", `Din bild är ${formatBytes(Buffer.byteLength(input))} och maxgränsen för okomprimerade bilder är ${formatBytes(maxAvatarUncompressedSize)}. Testa med en mindre bild.`), { status: 500 });
+        if (failedCompression)
+            return message(form, getFailFormMessage("Bilden är för stor", `Komprimeringen misslyckades. Din bild är ${formatBytes(Buffer.byteLength(input))}. Testa med en mindre bild.`), { status: 500 });
 
         let avatarPath;
         try {
@@ -113,10 +113,10 @@ export const actions = {
             if (isStorageErrorCustom(error)) {
                 const storageError = error as unknown as StorageErrorCustom;
                 if (storageError.statusCode === '413')
-                    return message(form, getGenericFormMessage("destructive", "Filen är för stor", `Din fil är ${formatBytes(Buffer.byteLength(input))}, maxgränsen är ${formatBytes(maxAvatarSize)}.`), { status: 413 });
+                    return message(form, getFailFormMessage("Filen är för stor", `Din fil är ${formatBytes(Buffer.byteLength(input))}, maxgränsen är ${formatBytes(maxAvatarSize)}.`), { status: 413 });
             }
             console.error("Unknown error on upload avatar", error);
-            return message(form, getGenericFormMessage(), { status: 500 });
+            return message(form, getFailFormMessage(), { status: 500 });
         }
 
         try {
@@ -125,7 +125,7 @@ export const actions = {
             });
         } catch (error) {
             console.error(`Error on update profile with new avatar on path ${avatarPath} with userid ${user.id}`, error);
-            return message(form, getGenericFormMessage(), { status: 500 });
+            return message(form, getFailFormMessage(), { status: 500 });
         }
 
         await Promise.resolve(new Promise(resolve => setTimeout(resolve, 5000)));
@@ -143,7 +143,7 @@ export const actions = {
         const { id, email } = user;
         if (!email) {
             console.error(`User with id ${id} has no email and therefore password could not be verified`);
-            return message(form, getGenericFormMessage(), { status: 500 });
+            return message(form, getFailFormMessage(), { status: 500 });
         }
 
         // Check current password is correct before deleting account
@@ -163,13 +163,13 @@ export const actions = {
             );
             if (error) {
                 console.error(`Error on attempt to delete user with userid ${id}`, error);
-                return message(form, getGenericFormMessage(), { status: 500 });
+                return message(form, getFailFormMessage(), { status: 500 });
             }
 
             await supabase.auth.signOut();
         } catch (e) {
             console.error(`Error on attempt to delete & signout user with userid ${id}`, e);
-            return message(form, getGenericFormMessage(), { status: 500 });
+            return message(form, getFailFormMessage(), { status: 500 });
         }
 
         throw redirect(303, `/`, { message: 'Ditt konto har raderats.', type: 'success' }, cookies);
@@ -188,7 +188,7 @@ export const actions = {
         const { id, email } = session.user;
         if (!email) {
             console.error(`User with id ${id} has no email and therefore password could not be verified`);
-            return message(form, getGenericFormMessage(), { status: 500 });
+            return message(form, getFailFormMessage(), { status: 500 });
         }
         const { error } = await supabase.auth.signInWithPassword({
             email,
@@ -206,61 +206,11 @@ export const actions = {
         if (updateError) {
             const isSameAsCurrent = isAuthApiError(updateError) && updateError.status === 422 && updateError.message.includes("different")
             if (isSameAsCurrent)
-                return message(form, getGenericFormMessage(undefined, "Ange ett nytt lösenord", "Det angivna lösenordet är samma som det nuvarande."), { status: 500 });
+                return message(form, getFailFormMessage("Ange ett nytt lösenord", "Det angivna lösenordet är samma som det nuvarande."), { status: 500 });
 
             console.error(`Error on attempt to update password with userid ${id}`, updateError);
-            return message(form, getGenericFormMessage(), { status: 500 });
+            return message(form, getFailFormMessage(), { status: 500 });
         }
-        return message(form, getGenericFormMessage("success", "Lösenord ändrat", "Använd det nya lösenordet nästa gång du loggar in."));
+        return message(form, getSuccessFormMessage("Lösenord ändrat", "Använd det nya lösenordet nästa gång du loggar in."));
     }
 }
-
-
-
-// let outputBuffer;
-// try {
-
-//     let image = await _Jimp.default.read(input);
-//     // let image = await _Jimp.default.read(input);
-//     // if (uncompressedByteSize > maxAvatarUncompressedSize)
-//     image = image.quality(80)
-
-//     image = image.resize(500, 500);
-//     // input = await image.getBufferAsync(_Jimp.default.MIME_PNG);
-//     input = await image.getBufferAsync(_Jimp.default.MIME_PNG);
-// } catch (err) {
-//     // if (uncompressedByteSize > maxAvatarUncompressedSize) {
-//     //     console.error('Unknown error on compression:', err);
-//     //     return message(form, getGenericFormMessage("destructive", "Något gick fel vid komprimeringen", `Testa ladda upp en bild under ${formatBytes(maxAvatarUncompressedSize)} så görs ingen komprimering.`), { status: 500 });
-//     // } else {
-//     console.error('Unknown error on resize:', err);
-//     return message(form, getGenericFormMessage(), { status: 500 });
-//     // }
-// }
-
-// let avatarPath;
-// try {
-//     const format = avatar.type.split("/")[1]; // example type property: image/png
-//     const fileName = `${user.id}---${crypto.randomUUID()}.${format}`
-//     avatarPath = await uploadAvatar(supabase, fileName, input);
-// } catch (error) {
-//     if (isStorageErrorCustom(error)) {
-//         const storageError = error as unknown as StorageErrorCustom;
-//         if (storageError.statusCode === '413') {
-//             const bytes = Buffer.byteLength(input);
-//             return message(form, getGenericFormMessage("destructive", "Filen är för stor", `Din fil är ${formatBytes(bytes)}, maxgränsen är ${formatBytes(maxAvatarSize)}.`), { status: 413 });
-//         }
-//     }
-//     console.error("Unknown error on upload avatar", error);
-//     return message(form, getGenericFormMessage(), { status: 500 });
-// }
-
-// try {
-//     await updateProfile(supabase, { id: user.id, avatar_url: avatarPath });
-// } catch (error) {
-//     console.error(`Error on update profile with new avatar on path ${avatarPath} with userid ${user.id}`, error);
-//     return message(form, getGenericFormMessage(), { status: 500 });
-// }
-// return withFiles({ form });
-
-// try {

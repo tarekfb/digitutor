@@ -1,6 +1,6 @@
 import { error, fail, redirect } from "@sveltejs/kit";
 import type { PageServerLoad } from "./$types";
-import { getGenericFormMessage, unknownErrorMessage } from "$lib/shared/constants/constants";
+import { getFailFormMessage, unknownErrorMessage } from "$lib/shared/constants/constants";
 import { message, setError, superValidate } from "sveltekit-superforms";
 import { zod } from "sveltekit-superforms/adapters";
 import { signUpSchema } from "$lib/shared/models/user";
@@ -33,7 +33,7 @@ export const actions = {
 
         const form = await superValidate(event, zod(signUpSchema));
         if (!form.valid) return fail(400, { form });
-        
+
         const { email, password, role, first_name, last_name } = form.data;
         let inputUser: CreateProfile;
         try {
@@ -49,7 +49,7 @@ export const actions = {
 
             if (!data.user) {
                 console.error("User data was null on signup", error);
-                return message(form, getGenericFormMessage(), { status: 500 });
+                return message(form, getFailFormMessage(), { status: 500 });
             }
 
             // https://github.com/orgs/supabase/discussions/1282
@@ -58,7 +58,7 @@ export const actions = {
 
             if (error) {
                 console.error("Supabase error on signup", { error });
-                return message(form, getGenericFormMessage(), { status: 500 });
+                return message(form, getFailFormMessage(), { status: 500 });
             }
 
             inputUser = {
@@ -69,7 +69,7 @@ export const actions = {
             }
         } catch (error) {
             console.error("Error when creating supabase auth user", error);
-            return message(form, getGenericFormMessage(), { status: 500 });
+            return message(form, getFailFormMessage(), { status: 500 });
         }
 
         try {
@@ -85,7 +85,7 @@ export const actions = {
             }
 
             console.error("Error when creating profile", error);
-            return message(form, getGenericFormMessage(), { status: 500 });
+            return message(form, getFailFormMessage(), { status: 500 });
         }
     }
 }

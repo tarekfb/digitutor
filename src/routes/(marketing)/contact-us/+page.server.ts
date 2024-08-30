@@ -4,7 +4,7 @@ import type { Actions, PageServerLoad } from "./$types";
 import { contactUsSchema } from "$lib/shared/models/contact-us";
 import { superValidate, message } from "sveltekit-superforms";
 import { zod } from "sveltekit-superforms/adapters";
-import { getGenericFormMessage } from "$lib/shared/constants/constants";
+import { getFailFormMessage } from "$lib/shared/constants/constants";
 
 export const load: PageServerLoad = async () => {
   const form = await superValidate(zod(contactUsSchema));
@@ -33,13 +33,13 @@ export const actions: Actions = {
 
       if (insertError) {
         console.error('Error when inserting contact request', insertError);
-        return message(form, getGenericFormMessage("destructive", undefined, "Kunde ej skicka meddelandet. Försök igen lite senare."), { status: 500 });
+        return message(form, getFailFormMessage(undefined, "Kunde ej skicka meddelandet. Försök igen lite senare."), { status: 500 });
       }
 
       return { form }
     } catch (error) {
       console.error('Unknown error when inserting contact request', error);
-      return message(form, getGenericFormMessage("destructive", undefined, "Kunde ej skicka meddelandet. Försök igen lite senare."), { status: 500 });
+      return message(form, getFailFormMessage(undefined, "Kunde ej skicka meddelandet. Försök igen lite senare."), { status: 500 });
     }
   },
 };

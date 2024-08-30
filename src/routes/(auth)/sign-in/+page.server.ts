@@ -1,6 +1,6 @@
 import { error, fail, redirect } from "@sveltejs/kit";
 import type { Actions, PageServerLoad } from "./$types";
-import { MessageId, getGenericFormMessage, unknownErrorMessage } from "$lib/shared/constants/constants";
+import { MessageId, getFailFormMessage, unknownErrorMessage } from "$lib/shared/constants/constants";
 import { message, superValidate } from "sveltekit-superforms";
 import { zod } from "sveltekit-superforms/adapters";
 import { resendSchema, signInSchema } from "$lib/shared/models/user";
@@ -74,16 +74,16 @@ export const actions: Actions = {
 
                     default:
                         console.error("Supabase error on signin", { error });
-                        return message(form, getGenericFormMessage(), { status: 500 });
+                        return message(form, getFailFormMessage(), { status: 500 });
                 }
             }
             if (!data.user) {
                 console.error("User data was null on signup", error);
-                return message(form, getGenericFormMessage(), { status: 500 });
+                return message(form, getFailFormMessage(), { status: 500 });
             }
         } catch (error) {
             console.error("Error on signin supabase auth user", error);
-            return message(form, getGenericFormMessage(), { status: 500 });
+            return message(form, getFailFormMessage(), { status: 500 });
         }
         throw redirect(302, "/account");
     },
