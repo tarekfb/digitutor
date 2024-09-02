@@ -52,7 +52,6 @@
   },
   "type": "module",
   "dependencies": {
-    "@jimp/core": "^0.22.12",
     "@supabase/auth-ui-svelte": "^0.2.2",
     "@supabase/ssr": "^0.3.0",
     "@supabase/supabase-js": "^2.33.0",
@@ -61,7 +60,6 @@
     "cmdk-sv": "^0.0.17",
     "dotenv": "^16.4.5",
     "formsnap": "^1.0.0",
-    "jimp": "^0.22.12",
     "lucide-svelte": "^0.376.1",
     "pg": "^8.11.5",
     "postgres": "^3.4.4",
