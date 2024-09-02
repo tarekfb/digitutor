@@ -23,8 +23,14 @@ jobs:
       - name: Start Supabase local development setup
         run: supabase start
 
-      - name: Start Supabase local development setup
+      - name: Start Supabase local development setup db
         run: supabase db start
+
+      - name: Check status
+        run: supabase status
+
+      - name: Reseed db
+        run: supabase db reset
 
       - name: Verify generated types are checked in
         run: |
