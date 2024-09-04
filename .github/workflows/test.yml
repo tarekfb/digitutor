@@ -1,6 +1,6 @@
 name: Tests
 
-on: [push, pull_request]
+on: [pull_request]
 
 jobs:
   build_and_test:
@@ -26,7 +26,7 @@ jobs:
           CLOUDFLARE_ACCOUNT_EMAIL: ${{ secrets.CLOUDFLARE_ACCOUNT_EMAIL }}
           CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
         with:
-          cloudflare_project_id: 'mindic.pro'
+          cloudflare_project_id: 'mindic'
           wait_until_ready: true
       - name: Get URL
         run: echo "https://${{ steps.cloudflare_preview_url.outputs.preview_url }}"
