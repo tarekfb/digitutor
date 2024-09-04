@@ -9,27 +9,40 @@ jobs:
     timeout-minutes: 10
 
     steps:
-      - uses: actions/checkout@v4
+      # - uses: actions/checkout@v4
 
-      - uses: supabase/setup-cli@v1
+      # - uses: supabase/setup-cli@v1
+      #   with:
+      #     version: latest
+
+      - run: sleep 180
+
+      - name: Deploy
+        id: deploy
+        uses: cloudflare/wrangler-action@v3
         with:
-          version: latest
+          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          # command: pages deploy --project-name=example
 
-      - run: sleep 300
-
-      - name: cloudflare-preview-url
-      # Use the latest version
-        uses: zentered/cloudflare-preview-url@v1.4.2
-        id: cloudflare_preview_url
+      - name: print deployment-url
         env:
-          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
-          CLOUDFLARE_ACCOUNT_EMAIL: ${{ secrets.CLOUDFLARE_ACCOUNT_EMAIL }}
-          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
-        with:
-          cloudflare_project_id: 'mindic'
-          wait_until_ready: true
-      - name: Get URL
-        run: echo "https://${{ steps.cloudflare_preview_url.outputs.preview_url }}"
+          DEPLOYMENT_URL: ${{ steps.deploy.outputs.deployment-url }}
+        run: echo $DEPLOYMENT_URL
+
+      # - name: cloudflare-preview-url
+      # # Use the latest version
+      #   uses: zentered/cloudflare-preview-url@v1.4.2
+      #   id: cloudflare_preview_url
+      #   env:
+      #     CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+      #     CLOUDFLARE_ACCOUNT_EMAIL: ${{ secrets.CLOUDFLARE_ACCOUNT_EMAIL }}
+      #     CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+      #   with:
+      #     cloudflare_project_id: 'mindic'
+      #     wait_until_ready: true
+      # - name: Get URL
+      #   run: echo "https://${{ steps.cloudflare_preview_url.outputs.preview_url }}"
 
       # - name: NPM install
       #   run: npm install
