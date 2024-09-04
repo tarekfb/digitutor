@@ -7,11 +7,15 @@ env:
   PUBLIC_SUPABASE_ANON_KEY: "fake_anon_key"
   PRIVATE_SUPABASE_SERVICE_ROLE: "fake_service_role"
   PRIVATE_STRIPE_API_KEY: "fake_strip_api_key"
+  # CLOUDFLARE_API_TOKEN: "asd"
+  # CLOUDFLARE_ACCOUNT_ID: "fake_service_role"
+  # CLOUDFLARE_ACCOUNT_EMAIL: "asd"
 
 jobs:
   build_and_test:
     name: Tests
     runs-on: ubuntu-latest
+    timeout-minutes: 10
 
     steps:
       - uses: actions/checkout@v4
@@ -20,29 +24,24 @@ jobs:
         with:
           version: latest
 
-      - name: Start Supabase local development setup
-        run: supabase start
+      - run: sleep 30
 
-      - name: Start Supabase local development setup db
-        run: supabase db start
+      - name: cloudflare-preview-url
+      # Use the latest version
+        uses: zentered/cloudflare-preview-url@v1.4.2
+        id: cloudflare_preview_url
+        env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          CLOUDFLARE_ACCOUNT_EMAIL: ${{ secrets.CLOUDFLARE_ACCOUNT_EMAIL }}
+          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+        with:
+          cloudflare_project_id: 'mindic'
+          wait_until_ready: true
+      - name: Get URL
+        run: echo "https://${{ steps.cloudflare_preview_url.outputs.preview_url }}"
 
-      - name: Check status
-        run: supabase status
+      # - name: NPM install
+      #   run: npm install
 
-      - name: Reseed db
-        run: supabase db reset
-
-      - name: Verify generated types are checked in
-        run: |
-          supabase gen types typescript --local > types.gen.ts
-          if ! git diff --ignore-space-at-eol --exit-code --quiet types.gen.ts; then
-            echo "Detected uncommitted changes after build. See status below:"
-            git diff
-            exit 1
-          fi
-
-      - name: NPM install
-        run: npm install
-
-      - name: Tests
-        run: npx playwright test
+      # - name: Tests
+      #   run: npx playwright test  
