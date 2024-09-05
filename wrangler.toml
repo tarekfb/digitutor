@@ -1,1 +1,1 @@
-main = "npm run dev"
+main = "./svelte-kit/root.svelte"
