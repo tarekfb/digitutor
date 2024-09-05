@@ -21,7 +21,7 @@ jobs:
         with:
           apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
-          command: pages dev -- npm run dev
+          command: pages dev -- npm run dev -- --proxy 3000
 
       - name: print deployment-url
         env:
