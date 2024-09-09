@@ -14,8 +14,6 @@ export const search = async (
     .join(' | ');
   // https://supabase.com/docs/guides/database/full-text-search?queryGroups=language&language=js#match-all-search-words
 
-
-  console.log(query)
   const { data, error } = await supabase
     .from('listings')
     .select(

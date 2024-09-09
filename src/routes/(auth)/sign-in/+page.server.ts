@@ -46,6 +46,7 @@ export const actions: Actions = {
             throw redirect(303, "/account");
 
         const form = await superValidate(event, zod(signInSchema));
+
         const { email, password } = form.data;
         if (!form.valid) return fail(400, { form });
 

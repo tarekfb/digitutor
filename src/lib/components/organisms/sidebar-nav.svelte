@@ -9,6 +9,7 @@
   import * as Avatar from "$lib/components/ui/avatar";
   import type { Role } from "$lib/shared/models/profile";
   import HomeNav from "./home-nav.svelte";
+  import { websiteName } from "$lib/shared/constants/constants";
   import ConversationsNav from "./conversations-nav.svelte";
   import Separator from "$lib/components/ui/separator/separator.svelte";
   import type { Conversation } from "src/lib/shared/models/conversation";
@@ -42,9 +43,9 @@
       <Link href="/" class="text-3xl px-2">
         <h1>
           {#if isMinimized}
-            M
+            {websiteName.substring(0, 1)}
           {:else}
-            Mindic
+            {websiteName}
           {/if}
         </h1>
       </Link>

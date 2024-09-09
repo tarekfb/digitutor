@@ -8,7 +8,6 @@ import type { PsqlError } from "src/lib/shared/models/common";
 
 export const load: PageServerLoad = async () => {
     const form = await superValidate(zod(searchSchema))
-
     return { form };
 }
 

@@ -1,6 +1,9 @@
 import type { Message } from "$lib/shared/models/common";
 
 export const websiteName = "Mindic";
+export const localBaseUrl = 'http://localhost:5173';
+export const testBaseUrl = 'https://dev.mindic.pages.dev';
+export const prodBaseUrl = 'https://mindic.pro';
 
 export const unknownErrorMessage = "Något gick fel. Kontakta oss om detta fortsätter."
 

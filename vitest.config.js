@@ -1,6 +1,3 @@
-// test: {
-//     include: ["src/**/*.{test,spec}.{js,ts}"],
-//   },
 import {defineConfig} from 'vitest/config'
 import {sveltekit} from '@sveltejs/kit/vite'
 import {svelteTesting} from '@testing-library/svelte/vite'
@@ -10,5 +7,6 @@ export default defineConfig({
   test: {
     environment: 'jsdom',
     setupFiles: ['./vitest-setup.js'],
+    include: ["src/**/*.{test,spec}.{js,ts}"],
   },
 })
