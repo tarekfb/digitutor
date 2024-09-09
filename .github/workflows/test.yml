@@ -11,49 +11,20 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      # - uses: supabase/setup-cli@v1
-      #   with:
-      #     version: latest
-
-      - name: Deploy
-        id: deploy
-        uses: cloudflare/wrangler-action@v3
-        with:
-          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
-          accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
-          command: pages dev -- npm run dev -- --proxy 3000
-
-      - name: print deployment-url
+  
+      - name: cloudflare-preview-url
+      # Use the latest version
+        uses: zentered/cloudflare-preview-url@v1.4.2
+        id: cloudflare_preview_url
         env:
-          DEPLOYMENT_URL: ${{ steps.deploy.outputs.deployment-url }}
-        run: echo $DEPLOYMENT_URL
-
-      # - name: Deploy
-      #   id: deploy
-      #   uses: cloudflare/wrangler-action@v3
-      #   with:
-      #     apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
-      #     accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
-      #     # command: pages deploy --project-name=example
-
-      # - name: print deployment-url
-      #   env:
-      #     DEPLOYMENT_URL: ${{ steps.deploy.outputs.deployment-url }}
-      #   run: echo $DEPLOYMENT_URL
-
-      # - name: cloudflare-preview-url
-      # # Use the latest version
-      #   uses: zentered/cloudflare-preview-url@v1.4.2
-      #   id: cloudflare_preview_url
-      #   env:
-      #     CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
-      #     CLOUDFLARE_ACCOUNT_EMAIL: ${{ secrets.CLOUDFLARE_ACCOUNT_EMAIL }}
-      #     CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
-      #   with:
-      #     cloudflare_project_id: 'mindic'
-      #     wait_until_ready: true
-      # - name: Get URL
-      #   run: echo "https://${{ steps.cloudflare_preview_url.outputs.preview_url }}"
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          CLOUDFLARE_ACCOUNT_EMAIL: ${{ secrets.CLOUDFLARE_ACCOUNT_EMAIL }}
+          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+        with:
+          cloudflare_project_id: 'mindic'
+          wait_until_ready: true
+      - name: Get URL
+        run: echo "https://${{ steps.cloudflare_preview_url.outputs.preview_url }}"
 
       # - name: NPM install
       #   run: npm install
