@@ -9,7 +9,6 @@ import { console } from "inspector/promises";
 
 export const load: PageServerLoad = async () => {
     const form = await superValidate(zod(searchSchema))
-
     return { form };
 }
 
