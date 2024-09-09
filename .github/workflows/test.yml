@@ -27,7 +27,7 @@ jobs:
         BRANCH_NAME: ${{ github.head_ref || github.ref_name }}
       with:
         cloudflare_project_id: 'mindic'
-        wait_until_ready: true
+        wait_until_ready: false
         branch: ${{ github.head_ref || github.ref_name }}
     - name: Get URL
       run: echo "https://${{ steps.cloudflare_preview_url.outputs.preview_url }}"
