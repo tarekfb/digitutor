@@ -9,36 +9,25 @@ jobs:
     timeout-minutes: 10
 
     steps:
-      # - uses: actions/checkout@v4
+      - uses: actions/checkout@v4
 
       # - uses: supabase/setup-cli@v1
       #   with:
       #     version: latest
 
-      - run: sleep 60
-
-      - name: Publish to Cloudflare Pages
-        uses: cloudflare/pages-action@v1
+      - name: Deploy
+        id: deploy
+        uses: cloudflare/wrangler-action@v3
         with:
           apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
-          projectName: mindic
-          directory: YOUR_BUILD_OUTPUT_DIRECTORY
-          # Optional: Enable this if you want to have GitHub Deployments triggered
-          # gitHubToken: ${{ secrets.GITHUB_TOKEN }}
-          # Optional: Switch what branch you are publishing to.
-          # By default this will be the branch which triggered this workflow
-          # branch: main
-          # Optional: Change the working directory
-          # workingDirectory: my-site
-          # Optional: Change the Wrangler version, allows you to point to a specific version or a tag such as `beta`
-          # wranglerVersion: '3'
-      
+          command: pages dev -- npm run dev -- --proxy 3000
+
       - name: print deployment-url
         env:
-          DEPLOYMENT_URL: ${{ steps.deploy.outputs.url }}
+          DEPLOYMENT_URL: ${{ steps.deploy.outputs.deployment-url }}
         run: echo $DEPLOYMENT_URL
-        
+
       # - name: Deploy
       #   id: deploy
       #   uses: cloudflare/wrangler-action@v3
