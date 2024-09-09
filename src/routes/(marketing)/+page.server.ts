@@ -5,6 +5,7 @@ import { zod } from "sveltekit-superforms/adapters";
 import { searchSchema, type SearchResult, } from "src/lib/shared/models/search";
 import type { Actions, PageServerLoad } from "./$types";
 import type { PsqlError } from "src/lib/shared/models/common";
+import { console } from "inspector/promises";
 
 export const load: PageServerLoad = async () => {
     const form = await superValidate(zod(searchSchema))

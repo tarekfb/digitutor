@@ -1,6 +1,7 @@
-import { test, expect } from '@playwright/test';
+import { expect } from '@playwright/test';
+import { test } from './env-options';
 
-test('fetched listing', async ({ page }) => {
-  await page.goto('/listing/550e8400-e29b-41d4-a716-446655440090');
+test('fetched listing', async ({ page, listingId }) => {
+  await page.goto(`/listing/${listingId}`);
   await expect(page.getByRole('heading', { name: 'SEK' })).toBeVisible();
 });

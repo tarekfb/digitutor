@@ -1,6 +1,9 @@
-import { test, expect } from '@playwright/test';
 
-test('fetched profile', async ({ page }) => {
-  await page.goto('/profile/550e8400-e29b-41d4-a716-446655440010');
-  await expect(page.getByRole('heading', { name: 'Annonser' })).toBeVisible();
+
+import { expect } from '@playwright/test';
+import { test } from './env-options';
+
+test('fetched profile', async ({ page, profileId }) => {
+    await page.goto(`/profile/${profileId}`);
+    await expect(page.getByRole('heading', { name: 'Annonser' })).toBeVisible();
 });

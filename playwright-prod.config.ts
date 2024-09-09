@@ -1,8 +1,7 @@
 import { defineConfig, devices } from '@playwright/test';
-import { localBaseUrl as baseUrl } from './src/lib/shared/constants/constants'
-import { EnvOptions } from './src/tests/playwright/env-options';
-import { localListingId, localProfileId } from './src/tests/playwright/data';
-
+import { type EnvOptions } from './src/tests/playwright/env-options'
+import { prodBaseUrl as baseUrl } from './src/lib/shared/constants/constants'
+import { prodProfileId, prodListingId } from './src/tests/playwright/data';
 /**
  * Read environment variables from file.
  * https://github.com/motdotla/dotenv
@@ -10,16 +9,15 @@ import { localListingId, localProfileId } from './src/tests/playwright/data';
 // import dotenv from 'dotenv';
 // dotenv.config({ path: path.resolve(__dirname, '.env') });
 
-
-const envOptions: EnvOptions = {
-  listingId: localListingId, profileId: localProfileId
-}
-
-
 /**
  * See https://playwright.dev/docs/test-configuration.
  */
-export default defineConfig({
+
+const envOptions: EnvOptions = {
+  listingId: prodListingId, profileId: prodProfileId
+}
+
+export default defineConfig<EnvOptions>({
   testDir: './src/tests/playwright',
   /* Run tests in files in parallel */
   fullyParallel: true,

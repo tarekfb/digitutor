@@ -1,25 +1,20 @@
 import { defineConfig, devices } from '@playwright/test';
-import { localBaseUrl as baseUrl } from './src/lib/shared/constants/constants'
-import { EnvOptions } from './src/tests/playwright/env-options';
-import { localListingId, localProfileId } from './src/tests/playwright/data';
-
+import { type EnvOptions } from './src/tests/playwright/env-options'
+import { testBaseUrl as baseUrl } from './src/lib/shared/constants/constants'
+import { testProfileId, testListingId } from './src/tests/playwright/data';
 /**
  * Read environment variables from file.
  * https://github.com/motdotla/dotenv
  */
-// import dotenv from 'dotenv';
-// dotenv.config({ path: path.resolve(__dirname, '.env') });
-
 
 const envOptions: EnvOptions = {
-  listingId: localListingId, profileId: localProfileId
+  listingId: testListingId, profileId: testProfileId
 }
-
 
 /**
  * See https://playwright.dev/docs/test-configuration.
  */
-export default defineConfig({
+export default defineConfig<EnvOptions>({
   testDir: './src/tests/playwright',
   /* Run tests in files in parallel */
   fullyParallel: true,
@@ -57,6 +52,25 @@ export default defineConfig({
       use: { ...devices['Desktop Safari'], ...envOptions },
     },
   ],
+  /* Test against mobile viewports. */
+  // {
+  //   name: 'Mobile Chrome',
+  //   use: { ...devices['Pixel 5'] },
+  // },
+  // {
+  //   name: 'Mobile Safari',
+  //   use: { ...devices['iPhone 12'] },
+  // },
+
+  /* Test against branded browsers. */
+  // {
+  //   name: 'Microsoft Edge',
+  //   use: { ...devices['Desktop Edge'], channel: 'msedge' },
+  // },
+  // {
+  //   name: 'Google Chrome',
+  //   use: { ...devices['Desktop Chrome'], channel: 'chrome' },
+  // },
 
   /* Run your local dev server before starting the tests */
   webServer: {
