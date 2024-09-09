@@ -15,7 +15,7 @@ jobs:
         node-version: lts/*
 
     # Sleep action to wait until deployment is ready
-    - run: sleep 30
+    - run: sleep 120
     - name: cloudflare-preview-url
       # Use the latest version
       uses: zentered/cloudflare-preview-url@v1.4.2
