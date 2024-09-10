@@ -36,9 +36,6 @@ export const actions: Actions = {
                 }
             });
 
-            if (formatted.length === 0)
-                return message(form, getInfoFormMessage("Inga träffar på din sökning", "Testa söka på en lärares namn, eller en annons titel, beskrivning eller pris."), { status: 404 });
-
             return { form, formatted }
         } catch (error) {
             if (error && typeof error === "object") {
