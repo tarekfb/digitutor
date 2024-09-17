@@ -2,20 +2,24 @@ import { defineConfig, devices } from '@playwright/test';
 import { type EnvOptions } from './src/tests/playwright/env-options'
 import { testBaseUrl as baseUrl } from './src/lib/shared/constants/constants'
 import { testProfileId, testListingId } from './src/tests/playwright/data';
-/**
- * Read environment variables from file.
- * https://github.com/motdotla/dotenv
- */
+import path from 'node:path';
+import { fileURLToPath } from 'url';
+import dotenv from 'dotenv';
+
+// https://iamwebwiz.medium.com/how-to-fix-dirname-is-not-defined-in-es-module-scope-34d94a86694d
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+dotenv.config({ path: path.resolve(__dirname, '.env') });
 
 const envOptions: EnvOptions = {
-  listingId: testListingId, profileId: testProfileId
+  listingId: testListingId, profileId: testProfileId, emailStudent: '', emailTeacher: '',
 }
 
 /**
  * See https://playwright.dev/docs/test-configuration.
  */
 export default defineConfig<EnvOptions>({
-  testDir: './src/tests/playwright',
+  testDir: './src/tests/playwright/tests',
   /* Run tests in files in parallel */
   fullyParallel: true,
   /* Fail the build on CI if you accidentally left test.only in the source code. */
@@ -76,6 +80,6 @@ export default defineConfig<EnvOptions>({
   webServer: {
     command: 'npm run dev',
     url: baseUrl,
-    reuseExistingServer: true,
+    reuseExistingServer: !process.env.CI,
   },
 });

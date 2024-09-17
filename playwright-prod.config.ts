@@ -14,11 +14,11 @@ import { prodProfileId, prodListingId } from './src/tests/playwright/data';
  */
 
 const envOptions: EnvOptions = {
-  listingId: prodListingId, profileId: prodProfileId
+  listingId: prodListingId, profileId: prodProfileId, emailTeacher: "", emailStudent: "",
 }
 
 export default defineConfig<EnvOptions>({
-  testDir: './src/tests/playwright',
+  testDir: './src/tests/playwright/tests',
   /* Run tests in files in parallel */
   fullyParallel: true,
   /* Fail the build on CI if you accidentally left test.only in the source code. */

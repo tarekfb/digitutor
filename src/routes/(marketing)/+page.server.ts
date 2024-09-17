@@ -20,6 +20,7 @@ export const actions: Actions = {
 
         const { query } = form.data;
 
+        // return { form, formatted: [] }
         const cleanedQuery = query.trim();
 
         try {

@@ -30,6 +30,7 @@
   <Button
     variant="ghost"
     class={cn(`relative rounded-full`, className)}
+    data-test-id="avatar"
     on:click={onClick}
   >
     <Avatar.Root class={base}>
@@ -40,7 +41,7 @@
     </Avatar.Root>
   </Button>
 {:else}
-  <Avatar.Root class={cn(`${base}`, className)}>
+  <Avatar.Root class={cn(`${base}`, className)} data-test-id="avatar">
     {#if url}
       <Avatar.Image src={url} alt="profilbild" width={size} height={size} />
     {/if}
