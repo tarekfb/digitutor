@@ -42,7 +42,7 @@ test('unsuccessful login', async ({ context }) => {
 });
 
 test('logout via navbar', async ({ emailStudent, context }) => {
-    const password = process.env.PASSWORD_TEACHER as string;
+    const password = process.env.PASSWORD_STUDENT as string;
     const email = emailStudent || process.env.EMAIL_STUDENT as string;
     expect(email).toBeTruthy();
     expect(password).toBeTruthy();
