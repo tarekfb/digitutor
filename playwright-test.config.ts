@@ -83,6 +83,6 @@ export default defineConfig<EnvOptions>({
   webServer: {
     command: 'npm run dev',
     url: baseUrl,
-    reuseExistingServer: !process.env.CI,
+    reuseExistingServer: !!process.env.CI,
   },
 });
