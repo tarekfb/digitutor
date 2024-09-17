@@ -39,7 +39,7 @@ jobs:
       run: npx playwright install --with-deps
 
     - name: Run Playwright tests
-      run: BASE_URL="${{ steps.cloudflare_preview_url.outputs.preview_url }}" EMAIL_STUDENT="${{ secrets.STAG_EMAIL_STUDENT }}" EMAIL_TEACHER="${{ secrets.STAG_EMAIL_TEACHER }}" npx playwright test --config=playwright-test.config.ts
+      run: CI=true BASE_URL="${{ steps.cloudflare_preview_url.outputs.preview_url }}" EMAIL_STUDENT="${{ secrets.STAG_EMAIL_STUDENT }}" EMAIL_TEACHER="${{ secrets.STAG_EMAIL_TEACHER }}" npx playwright test --config=playwright-test.config.ts
 
     - uses: actions/upload-artifact@v4
       if: always()
