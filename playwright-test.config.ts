@@ -1,6 +1,6 @@
 import { defineConfig, devices } from '@playwright/test';
 import { type EnvOptions } from './src/tests/playwright/env-options'
-import { testBaseUrl as baseUrl } from './src/lib/shared/constants/constants'
+import { testBaseUrl } from './src/lib/shared/constants/constants'
 import { testProfileId, testListingId } from './src/tests/playwright/data';
 import path from 'node:path';
 import { fileURLToPath } from 'url';
@@ -11,9 +11,12 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 dotenv.config({ path: path.resolve(__dirname, '.env') });
 
+const baseUrl = process.env.BASE_URL || testBaseUrl;
+
 const envOptions: EnvOptions = {
   listingId: testListingId, profileId: testProfileId, emailStudent: '', emailTeacher: '',
 }
+
 
 /**
  * See https://playwright.dev/docs/test-configuration.
