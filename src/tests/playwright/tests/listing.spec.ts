@@ -34,11 +34,9 @@ test('create, edit and delete listing', async ({ page, listingId, emailTeacher }
   await page.getByPlaceholder('Rubrik').press('Enter');
   await page.getByPlaceholder('Skriv några ord om din annons').click();
   await page.getByPlaceholder('Skriv några ord om din annons').fill('En test annons.');
-  const editableSubjects = await page.getByTestId("editable-subjects").all();
-  editableSubjects.forEach(async (subject, i) => {
-    if (i < 3)
-      await subject.click();
-  })
+
+  const editableSubjects = await page.getByTestId("editable-subjects").getByRole('checkbox').all();
+  editableSubjects.slice(0, 3).forEach(async (subject) => await subject.click())
   await page.getByRole('button', { name: 'Spara' }).click();
   await page.getByRole('button', { name: 'Ändra' }).click();
   await page.getByLabel('Delete listing').click();
