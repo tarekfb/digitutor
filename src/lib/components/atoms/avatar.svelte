@@ -31,7 +31,6 @@
     variant="ghost"
     data-test-id="avatar"
     class={cn(`relative rounded-full`, className)}
-    data-test-id="avatar"
     on:click={onClick}
   >
     <Avatar.Root class={base}>
