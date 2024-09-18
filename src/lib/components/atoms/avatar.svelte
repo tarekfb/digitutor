@@ -29,6 +29,7 @@
 {#if onClick && role === "teacher"}
   <Button
     variant="ghost"
+    data-test-id="avatar"
     class={cn(`relative rounded-full`, className)}
     on:click={onClick}
   >
@@ -40,7 +41,7 @@
     </Avatar.Root>
   </Button>
 {:else}
-  <Avatar.Root class={cn(`${base}`, className)}>
+  <Avatar.Root class={cn(`${base}`, className)} data-test-id="avatar">
     {#if url}
       <Avatar.Image src={url} alt="profilbild" width={size} height={size} />
     {/if}
