@@ -7,7 +7,7 @@
 
 <div
   class="flex gap-2 items-center flex-wrap max-w-full border rounded-lg p-2 bg-background"
-  data-test-id="editable-subjects"
+  data-testid="editable-subjects"
 >
   {#each languages as subject}
     <label class="bg-card p-2 rounded-lg">
