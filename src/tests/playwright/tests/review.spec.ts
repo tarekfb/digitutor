@@ -1,0 +1,46 @@
+// import { expect } from '@playwright/test';
+// import { test } from '../env-options';
+
+// test('create review', async ({ page, listingId, emailStudent }) => {
+//     const password = process.env.PASSWORD_STUDENT as string;
+//     const email = emailStudent || process.env.EMAIL_STUDENT as string;
+//     expect(email).toBeTruthy();
+//     expect(password).toBeTruthy();
+//     const baseUrl = process.env.BASE_URL || "";
+
+//     await page.goto(`${baseUrl}/listing/${listingId}`);
+//     await expect(page.getByRole('heading', { name: 'SEK' })).toBeVisible();
+
+//     await page.goto(`${baseUrl}/sign-in/`, { waitUntil: 'networkidle' })
+//     await page.getByPlaceholder('E-postadress').click();
+//     await page.getByPlaceholder('E-postadress').fill(email);
+//     await page.getByPlaceholder('Lösenord').click();
+//     await page.getByPlaceholder('Lösenord').fill(password);
+//     await page.locator('form').getByRole('button', { name: 'Logga in' }).click();
+//     await page.waitForURL(/account$/);
+//     expect(page.url()).toMatch(/account$/);
+
+//     await page.getByLabel('Skapa annons').click();
+//     await page.getByPlaceholder('Rubrik').fill('Test annons');
+//     await page.getByPlaceholder('Rubrik').press('Enter');
+//     await page.getByRole('button', { name: 'Ändra' }).click();
+//     await page.getByPlaceholder('Rubrik').click();
+//     await page.getByPlaceholder('Rubrik').fill('Test annons redigerad');
+//     await page.getByPlaceholder('Rubrik').press('Enter');
+//     await page.getByPlaceholder('Skriv några ord om din annons').click();
+//     await page.getByPlaceholder('Skriv några ord om din annons').fill('En test annons.');
+//     const editableSubjects = await page.getByTestId("editable-subjects").all();
+//     editableSubjects.forEach(async (subject, i) => {
+//         if (i < 3)
+//             await subject.click();
+//     })
+//     await page.getByRole('button', { name: 'Spara' }).click();
+//     await page.getByRole('button', { name: 'Ändra' }).click();
+//     await page.getByLabel('Delete listing').click();
+//     await page.getByRole('button', { name: 'Ta bort' }).click();
+
+//     await page.waitForURL(/account$/);
+//     expect(page.url()).toMatch(/account$/);
+// });
+
+// reenable this when you can delete reviews

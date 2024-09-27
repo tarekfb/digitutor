@@ -20,6 +20,7 @@ export const actions: Actions = {
 
         const { query } = form.data;
 
+        // return { form, formatted: [] }
         const cleanedQuery = query.trim();
 
         try {
@@ -35,9 +36,6 @@ export const actions: Actions = {
                     avatar: listing.profile.avatar_url ?? undefined
                 }
             });
-
-            if (formatted.length === 0)
-                return message(form, getInfoFormMessage("Inga träffar på din sökning", "Testa söka på en lärares namn, eller en annons titel, beskrivning eller pris."), { status: 404 });
 
             return { form, formatted }
         } catch (error) {

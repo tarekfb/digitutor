@@ -19,6 +19,5 @@
     <Link href="/sign-up" class={linkStyle}>Skapa konto</Link>
     <Link href="/faq" class={linkStyle}>Vanliga frågor</Link>
     <Link href="/contact-us" class={linkStyle}>Kontakta oss</Link>
-    <Link href="/tips" class={linkStyle}>Tips</Link>
   </nav>
 </footer>

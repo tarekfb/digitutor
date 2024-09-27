@@ -16,10 +16,11 @@
     type SearchResult as SearchResultType,
   } from "src/lib/shared/models/search";
   import SecondaryTitle from "src/lib/components/atoms/secondary-title.svelte";
+  import AlertMessage from "$lib/components/atoms/alert-message.svelte";
 
   export let data: PageData;
 
-  let searchResults: SearchResultType[] = [];
+  let searchResults: SearchResultType[];
   const searchForm = superForm(data.form, {
     validators: zodClient(searchSchema),
     onUpdate({ form, result }) {
@@ -59,42 +60,56 @@
     <Button on:click={() => goto("/sign-up")}>Skapa konto</Button>
   {/if}
 </div>
-<form
-  class="text-center flex flex-col gap-y-4 p-4 w-full max-w-[650px]"
-  action="?/search"
-  method="POST"
-  use:enhance
->
-  <SecondaryTitle>Sök efter lärare och annonser</SecondaryTitle>
-  <div class="flex justify-between gap-x-2 md:gap-x-4 items-start">
-    <Form.Field form={searchForm} name="query" class="flex-1">
-      <Form.Control let:attrs>
-        <Input
-          {...attrs}
-          type="text"
-          bind:value={$formData.query}
-          placeholder="Namn, titel, beskrivning, pris, etc."
-          class="text-lg bg-card"
-        />
-      </Form.Control>
-      <Form.FieldErrors />
-    </Form.Field>
-    <FormSubmit {delayed} {allErrors} text="Sök" loadingText="" class="w-12" />
-  </div>
-</form>
 
-{#if $message}
-  <FormMessage {message} scroll scrollTo="end" />
-{:else if searchResults.length > 0}
-  <ul class="flex flex-col gap-y-4 max-w-[650px] w-full">
-    <SecondaryTitle>Sökresultat</SecondaryTitle>
-    {#each searchResults as result}
-      <li>
-        <SearchResult listing={result} />
-      </li>
-    {/each}
-  </ul>
-{/if}
+<div class="flex flex-col justify-center items-center gap-y-4 w-full max-w-[650px]">
+  <form
+    class="text-center flex flex-col gap-y-4 w-full"
+    action="?/search"
+    method="POST"
+    use:enhance
+  >
+    <SecondaryTitle>Sök efter lärare och annonser</SecondaryTitle>
+    <div class="flex justify-between gap-x-2 md:gap-x-4 items-start">
+      <Form.Field form={searchForm} name="query" class="flex-1">
+        <Form.Control let:attrs>
+          <Input
+            {...attrs}
+            type="text"
+            bind:value={$formData.query}
+            placeholder="Namn, titel, beskrivning, pris, etc."
+            class="text-lg bg-card"
+          />
+        </Form.Control>
+        <Form.FieldErrors />
+      </Form.Field>
+      <FormSubmit
+        {delayed}
+        {allErrors}
+        text="Sök"
+        loadingText=""
+        class="w-12"
+      />
+    </div>
+  </form>
+
+  {#if $message}
+    <FormMessage {message} scroll scrollTo="end" />
+  {:else if searchResults?.length === 0}
+    <AlertMessage
+      title="Inga träffar på din sökning"
+      description="Testa söka på en lärares namn, eller en annons titel, beskrivning eller pris."
+    />
+  {:else if searchResults?.length > 0}
+    <ul class="flex flex-col gap-y-4 w-full">
+      <SecondaryTitle>Sökresultat</SecondaryTitle>
+      {#each searchResults as result}
+        <li>
+          <SearchResult listing={result} />
+        </li>
+      {/each}
+    </ul>
+  {/if}
+</div>
 
 <div class="min-h-[60vh]">
   <div class="pt-20 pb-8 px-7">
