@@ -1,6 +1,6 @@
 import type { Tables } from "src/supabase";
 import type { TypeToZod } from "$lib/utils";
-import { z, type ZodRawShape } from "zod";
+import { z } from "zod";
 
 export type SignUpUser = Pick<Tables<"profiles">, "role" | "first_name" | "last_name"> & {
     email: string;
