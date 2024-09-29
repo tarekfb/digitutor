@@ -106,7 +106,7 @@
     </Form.Field>
   </SettingsForm>
 
-  <AvatarForm uploadAvatarForm={data.uploadAvatarForm} />
+  <AvatarForm uploadAvatarForm={data.uploadAvatarForm} profile={data.profile} />
 
   <SettingsForm
     form={passwordForm}

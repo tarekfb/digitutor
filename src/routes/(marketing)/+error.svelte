@@ -3,7 +3,7 @@
   import Error from "$lib/components/organisms/error.svelte";
 
   const title =
-    $page.error?.message === "Internal error"
+    $page.error?.message === "Internal Error"
       ? undefined
       : $page.error?.message;
 </script>
