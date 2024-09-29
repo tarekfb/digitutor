@@ -1,6 +1,14 @@
 <script lang="ts">
   import { websiteName } from "$lib/shared/constants/constants";
   import Error from "$lib/components/organisms/error.svelte";
+  import { page } from "$app/stores";
+  $: console.log("error is", $page?.error?.message); // Internal error
+  $: console.log("error is", $page?.error); // Internal error
+
+  const title =
+    $page?.error?.message === "Internal error"
+      ? undefined
+      : $page?.error?.message;
 </script>
 
 <!-- todo: make component -->
@@ -16,4 +24,4 @@
   </div>
 </header>
 
-<Error />
+<Error {title} />
