@@ -11,7 +11,7 @@ export const load = async ({ data, url }) => {
     !_hasFullProfile(profile) &&
     url.pathname !== createProfilePath
   )
-    throw redirect(303, createProfilePath);
+    redirect(303, createProfilePath);
 
   return { profile }; // todo: available in parent? No need to return here?
 };

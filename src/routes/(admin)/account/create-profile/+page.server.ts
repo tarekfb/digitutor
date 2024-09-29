@@ -14,8 +14,8 @@ export async function load({ parent }) {
   // redirect to select plan if student
   if (_hasFullProfile(profile)) {
     if (profile.role === "student")
-      throw redirect(303, "/account/select_plan");
-    throw redirect(303, "/account");
+      redirect(303, "/account/select_plan");
+    redirect(303, "/account");
   }
 
   const initFormData = {
@@ -28,9 +28,9 @@ export async function load({ parent }) {
     return { form, data };
   } catch (e) {
     console.error("Error when loading createprofile", e);
-    throw error(500, {
-      message: unknownErrorMessage,
-    });
+    error(500, {
+            message: unknownErrorMessage,
+          });
   };
 }
 
@@ -39,7 +39,7 @@ export const actions = {
     const { locals: { supabase, safeGetSession } } = event;
     const { user } = await safeGetSession();
     if (!user)
-      throw redirect(303, "/sign-in");
+      redirect(303, "/sign-in");
 
     const form = await superValidate(event, zod(nameSchema));
 

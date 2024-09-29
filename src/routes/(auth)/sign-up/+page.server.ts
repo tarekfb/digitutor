@@ -18,9 +18,9 @@ export const load: PageServerLoad = async ({ locals: { supabase } }) => {
         review = longReviews[0] ?? reviews[0];
     } catch (e) { // todo this will never occcur but write a playwright test that checks signup page is loading 
         console.error("Error when reviews signup display, perhaps didnt find valid review", e);
-        throw error(500, {
-            message: unknownErrorMessage,
-        });
+        error(500, {
+                    message: unknownErrorMessage,
+                });
     };
     const form = await superValidate(zod(signUpSchema))
     return { form, review };
@@ -30,7 +30,7 @@ export const actions = {
     default: async (event) => {
         const { locals: { supabase, session } } = event;
         if (session)
-            throw redirect(303, "/account");
+            redirect(303, "/account");
 
         const form = await superValidate(event, zod(signUpSchema));
         if (!form.valid) return fail(400, { form });

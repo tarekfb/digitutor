@@ -19,16 +19,16 @@ export const load = async (event) => {
         teacher = await getProfileByUser(supabase, slug);
     } catch (e) {
         console.error("Error when reading profile with id: " + slug, e);
-        throw error(500, {
-            message: unknownErrorMessage,
-        });
+        error(500, {
+                    message: unknownErrorMessage,
+                });
     };
 
     if (teacher.role !== "teacher") {
         console.error("Attempted to read a non-teacher profile: " + slug);
-        throw error(500, {
-            message: unknownErrorMessage,
-        });
+        error(500, {
+                    message: unknownErrorMessage,
+                });
     }
 
     let listings;
@@ -36,9 +36,9 @@ export const load = async (event) => {
         listings = await getListingsByTeacher(supabase, slug, undefined, true);
     } catch (e) {
         console.error("Error when reading listings for profile with id: " + slug, e);
-        throw error(500, {
-            message: unknownErrorMessage,
-        });
+        error(500, {
+                    message: unknownErrorMessage,
+                });
     }
 
     let reviews;
@@ -46,9 +46,9 @@ export const load = async (event) => {
         reviews = await getReviewsByReceiver(supabase, slug);
     } catch (e) {
         console.error("Error when reading reviews for profile with id: " + slug, e);
-        throw error(500, {
-            message: unknownErrorMessage,
-        });
+        error(500, {
+                    message: unknownErrorMessage,
+                });
     }
 
     const { profile } = await parent();
