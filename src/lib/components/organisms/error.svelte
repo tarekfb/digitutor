@@ -4,12 +4,17 @@
   import ErrorNav from "$lib/components/atoms/error-nav.svelte";
   import { CircleHelp } from "lucide-svelte";
   import { UserRound } from "lucide-svelte";
+  import { unknownErrorTitle } from "src/lib/shared/constants/constants";
 
-  export let title: string = "Det här va lite pinsamt...";
+  export let title: string = unknownErrorTitle;
   export let description =
     "Ett oväntat fel uppstod. Du kan kontakta oss om detta fortsätter.";
   export let code: number = 0;
 
+  title = title || unknownErrorTitle;
+  description =
+    description ||
+    "Ett oväntat fel uppstod. Du kan kontakta oss om detta fortsätter.";
   const iconStyling = "w-4 h-4 md:w-5 md:h-5 text-accent";
 </script>
 

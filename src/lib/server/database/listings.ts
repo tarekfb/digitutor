@@ -26,8 +26,6 @@ export const getListings = async (
 
   const { data, error } = await query;
 
-  throw new Error("Fake failed to read listings")
-
   if (error) {
     console.error(`Failed to read listings ${userId ? "for userId" + userId : ''}`, { error });
     throw error;

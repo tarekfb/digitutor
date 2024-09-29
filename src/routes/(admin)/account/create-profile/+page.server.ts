@@ -1,4 +1,4 @@
-import { unknownErrorMessage } from "$lib/shared/constants/constants";
+import { unknownErrorTitle } from "$lib/shared/constants/constants";
 import { _hasFullProfile } from "src/routes/(admin)/account/+layout.js";
 import { error, fail, redirect } from "@sveltejs/kit";
 import { zod } from "sveltekit-superforms/adapters";
@@ -29,8 +29,8 @@ export async function load({ parent }) {
   } catch (e) {
     console.error("Error when loading createprofile", e);
     error(500, {
-            message: unknownErrorMessage,
-          });
+      message: unknownErrorTitle,
+    });
   };
 }
 
@@ -58,7 +58,7 @@ export const actions = {
       return message(form, 'Skapat profil.');
     } catch (error) {
       console.error("Error on complete profile for userid " + user.id, { error });
-      return fail(500, {
+      return fail(500, { // fail or error? todo fix
         message: unknownErrorMessage, form,
       });
     }

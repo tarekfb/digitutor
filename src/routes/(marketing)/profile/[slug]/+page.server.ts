@@ -1,5 +1,5 @@
 import { error } from "@sveltejs/kit";
-import { getFailFormMessage, unknownErrorMessage } from "$lib/shared/constants/constants";
+import { getFailFormMessage, unknownErrorTitle } from "$lib/shared/constants/constants";
 import { getProfileByUser } from "$lib/server/database/profiles";
 import { getListingsByTeacher as getListingsByTeacher } from "$lib/server/database/listings";
 import { fail, message, superValidate } from "sveltekit-superforms";
@@ -20,15 +20,15 @@ export const load = async (event) => {
     } catch (e) {
         console.error("Error when reading profile with id: " + slug, e);
         error(500, {
-                    message: unknownErrorMessage,
-                });
+            message: unknownErrorTitle,
+        });
     };
 
     if (teacher.role !== "teacher") {
         console.error("Attempted to read a non-teacher profile: " + slug);
         error(500, {
-                    message: unknownErrorMessage,
-                });
+            message: unknownErrorTitle,
+        });
     }
 
     let listings;
@@ -37,8 +37,8 @@ export const load = async (event) => {
     } catch (e) {
         console.error("Error when reading listings for profile with id: " + slug, e);
         error(500, {
-                    message: unknownErrorMessage,
-                });
+            message: unknownErrorTitle,
+        });
     }
 
     let reviews;
@@ -47,8 +47,8 @@ export const load = async (event) => {
     } catch (e) {
         console.error("Error when reading reviews for profile with id: " + slug, e);
         error(500, {
-                    message: unknownErrorMessage,
-                });
+            message: unknownErrorTitle,
+        });
     }
 
     const { profile } = await parent();

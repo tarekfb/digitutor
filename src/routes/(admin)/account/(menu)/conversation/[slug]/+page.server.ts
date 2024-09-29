@@ -1,5 +1,5 @@
 import { redirect, error, fail } from "@sveltejs/kit";
-import { initMessagesCount, unknownErrorMessage } from "$lib/shared/constants/constants";
+import { initMessagesCount, unknownErrorTitle } from "$lib/shared/constants/constants";
 import { getMessages } from "$lib/server/database/messages";
 import { sendMessageSchema, type InputMessage } from "$lib/shared/models/conversation";
 import { getFailFormMessage } from "$lib/shared/constants/constants";
@@ -14,8 +14,8 @@ export const load = async ({ locals: { supabase }, params: { slug }, parent }) =
   if (!conversation) {
     console.error("Conversation not found for slug: " + slug);
     error(404, {
-            message: 'Not found'
-          });
+      message: 'Not found'
+    });
   }
 
   let messages;
@@ -24,16 +24,16 @@ export const load = async ({ locals: { supabase }, params: { slug }, parent }) =
   } catch (e) {
     console.error("Error when fetching messages for slug: " + slug, e);
     error(500, {
-            message: unknownErrorMessage,
-          });
+      message: unknownErrorTitle,
+    });
   };
 
   messages = await getMessages(supabase, conversation.id, initMessagesCount);
   if (!messages) {
     console.error("Messages not found for slug: " + slug);
     error(404, {
-            message: 'Not found'
-          });
+      message: 'Not found'
+    });
   }
 
   const form = await superValidate(zod(sendMessageSchema))
