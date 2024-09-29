@@ -17,8 +17,8 @@ export const load: PageServerLoad = async ({ locals: { supabase } }) => {
     }
     catch (e) {
         console.error("Error when fetching signin display review, perhaps didnt find valid review", e);
-        throw error(500, {
-            message: unknownErrorMessage,
+        error(500, {
+            message: "",
         });
     }
 
@@ -43,7 +43,7 @@ export const actions: Actions = {
         const { locals: { supabase, session } } = event;
 
         if (session)
-            throw redirect(303, "/account");
+            redirect(303, "/account");
 
         const form = await superValidate(event, zod(signInSchema));
 
@@ -86,7 +86,7 @@ export const actions: Actions = {
             console.error("Error on signin supabase auth user", error);
             return message(form, getFailFormMessage(), { status: 500 });
         }
-        throw redirect(302, "/account");
+        redirect(302, "/account");
     },
 
 }

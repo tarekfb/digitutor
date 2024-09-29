@@ -10,7 +10,6 @@
   import { Textarea } from "$lib/components/ui/textarea";
   import FormMessage from "$lib/components/molecules/form-message.svelte";
   import PrimaryTitle from "$lib/components/atoms/primary-title.svelte";
-  import SecondaryTitle from "$lib/components/atoms/secondary-title.svelte";
   import Link from "$lib/components/atoms/link.svelte";
 
   export let data;
@@ -28,12 +27,12 @@
 
 <div class="flex flex-col justify-center items-center gap-y-0.5">
   <PrimaryTitle class="mb-2">Kontakta oss</PrimaryTitle>
-  <SecondaryTitle
+  <p class="text-lg md:text-xl"
     >Glöm inte att kika om din fråga finns i vår <Link
       class="text-lg"
       href="/faq">FAQ</Link
     >.
-  </SecondaryTitle>
+  </p>
 </div>
 <div class="flex flex-col gap-y-1 text-muted-foreground">
   <p>Kontakta oss om du har något på hjärtat, t.ex. om:</p>
@@ -44,7 +43,7 @@
     <li>Du har synpunkter, klagomål eller önskningar.</li>
     <li>Du bara vill säga hej!</li>
   </ul>
-  <p>Vi kontaktar dig så fort vi kan.</p>
+  <p>Vi svarar dig så fort vi kan.</p>
 </div>
 
 <FormMessage {message} scroll />
@@ -104,5 +103,5 @@
     <Form.FieldErrors />
   </Form.Field>
 
-  <FormSubmit {delayed} {allErrors} text="Skicka" loadingText="Skickar..." />
+  <FormSubmit {delayed} {allErrors} text="Skicka" loadingText="Skickar..." class="self-center md:min-w-wider" />
 </form>

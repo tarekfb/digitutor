@@ -8,7 +8,7 @@ export const load: LayoutServerLoad = async (event) => {
 
   const { session } = await safeGetSession();
   if (!session) {
-    throw redirect(303, "/sign-in");
+    redirect(303, "/sign-in");
   }
 
   const { profile } = await event.parent();
