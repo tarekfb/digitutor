@@ -8,7 +8,7 @@
 <!-- Spacer grows so the footer can be at bottom on short pages -->
 <div class="flex-grow"></div>
 <Separator />
-<footer class="flex justify-between py-10 px-16">
+<footer class="flex justify-between py-6 px-8 md:py-10 md:px-16">
   <Link href="/" class="self-center font-normal">
     <h1 class="text-4xl md:text-5xl text-gradient">{websiteName}</h1>
   </Link>

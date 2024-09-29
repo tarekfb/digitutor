@@ -35,7 +35,7 @@
           <Button variant="ghost" on:click={() => goto("/sign-in")}
             >Logga in</Button
           >
-          <Button on:click={() => goto("/sign-up")}>Skapa konto</Button>
+          <Button on:click={() => goto("/sign-up")} class="px-2.5 md:px-3">Skapa konto</Button>
         {:else}
           <Button on:click={() => goto("/account")}>
             <UserRound class="mr-2 h-4 w-4" />
