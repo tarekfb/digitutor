@@ -14,7 +14,6 @@ export const load: PageServerLoad = async ({ locals: { supabase } }) => {
         const reviews = await getDisplayReviews(supabase);
         const sorted = reviews.sort((a, b) => (b.description?.length ?? 0) - (a.description?.length ?? 0));
         longReviews = sorted.slice(0, 3);
-        throw new Error("Fake failed to load signin")
     }
     catch (e) {
         console.error("Error when fetching signin display review, perhaps didnt find valid review", e);
