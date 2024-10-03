@@ -45,3 +45,7 @@ export const avatarSchema = z.object({
         ),
 });
 
+
+export const deleteAvatarSchema = z.object({
+    path: z.string(),
+});

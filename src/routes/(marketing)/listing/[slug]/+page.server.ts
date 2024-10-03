@@ -23,7 +23,7 @@ export const load = async ({ locals: { supabase }, params: { slug }, parent }) =
     } else {
       console.error("Unknown error when reading listing with id: " + slug, e);
       error(500, {
-        message: "Hittade ingen annons", // todo: when have title + description, refactor to title: Hittade ingen annons.
+        message: "Hittade ingen annons"
       });
     }
   };
