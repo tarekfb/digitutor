@@ -12,7 +12,8 @@
   import { superForm } from "sveltekit-superforms/client";
   import DeleteAvatar from "$lib/components/molecules/delete-avatar.svelte";
   import Dropzone from "svelte-file-dropzone";
-
+import * as Form from "$lib/components/ui/form";
+  import { Label } from "$lib/components/ui/label/index.js";
   export let uploadAvatarForm;
   export let avatarUrl: string | null;
   export let deleteAvatarForm;
