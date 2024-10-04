@@ -26,8 +26,11 @@ export const load: PageServerLoad = async ({ locals: { supabase } }) => {
     let listings;
     let subjects: Subjects[] = [];
     try {
-        listings = await getListingsByTeacher(supabase, longReviews[0].receiver.id);
-        subjects = listings.flatMap(listing => listing.subjects)
+        if (longReviews[0]) {
+
+            listings = await getListingsByTeacher(supabase, longReviews[0].receiver.id);
+            subjects = listings.flatMap(listing => listing.subjects)
+        }
     }
     catch (e) {
         console.error("Error when fetching listings and subjects for signin", e);
