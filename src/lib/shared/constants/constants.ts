@@ -6,7 +6,7 @@ export const testBaseUrl = 'https://dev.mindic.pages.dev';
 export const prodBaseUrl = 'https://mindic.pro';
 
 export const unknownErrorMessage = "Något gick fel. Kontakta oss om detta fortsätter."
-export const unknownErrorTitle = "Det här va lite pinsamt...";
+export const unknownErrorTitle = "Något gick fel...";
 
 export const getFailFormMessage = (title?: string, description?: string, messageId?: MessageId, data?: any): Message => (
   {

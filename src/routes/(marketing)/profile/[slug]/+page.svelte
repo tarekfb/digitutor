@@ -1,11 +1,11 @@
 <script lang="ts">
   import ListingCard from "$lib/components/molecules/listing-card.svelte";
-  import PrimaryTitle from "$lib/components/atoms/primary-title.svelte";
   import SecondaryTitle from "$lib/components/atoms/secondary-title.svelte";
   import ContactTeacherForm from "$lib/components/molecules/contact-teacher-form.svelte";
   import type { PageData } from "./$types";
   import AddReview from "src/lib/components/molecules/add-review.svelte";
   import ReviewCard from "src/lib/components/molecules/review-card.svelte";
+  import PrimaryTitle from "$lib/components/atoms/primary-title.svelte";
   import AvatarNameBar from "src/lib/components/organisms/avatar-name-bar.svelte";
 
   export let data: PageData;

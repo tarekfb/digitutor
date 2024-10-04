@@ -4,7 +4,7 @@
   import { page } from "$app/stores";
 
   const title =
-    $page.error?.message === "Internal error"
+    $page.error?.message === "Internal Error"
       ? undefined
       : $page.error?.message;
 </script>

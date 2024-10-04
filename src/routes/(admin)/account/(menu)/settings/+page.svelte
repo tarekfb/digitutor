@@ -6,7 +6,6 @@
   import SettingsForm from "$lib/components/molecules/settings-form.svelte";
   import { superForm } from "sveltekit-superforms/client";
   import { zodClient } from "sveltekit-superforms/adapters";
-  import { emailSchema, nameSchema } from "$lib/shared/models/profile.js";
   import { Input } from "$lib/components/ui/input";
   import * as Form from "$lib/components/ui/form";
   import { toast } from "svelte-sonner";
@@ -14,6 +13,11 @@
     deleteAccountSchema as deleteSchema,
     passwordSchema,
   } from "$lib/shared/models/user.js";
+  import {
+    deleteAvatarSchema,
+    emailSchema,
+    nameSchema,
+  } from "$lib/shared/models/profile";
   import DeleteAccount from "$lib/components/atoms/delete-account.svelte";
   import PasswordInput from "$lib/components/molecules/password-input.svelte";
 
@@ -106,7 +110,11 @@
     </Form.Field>
   </SettingsForm>
 
-  <AvatarForm uploadAvatarForm={data.uploadAvatarForm} />
+  <AvatarForm
+    uploadAvatarForm={data.uploadAvatarForm}
+    deleteAvatarForm={data.deleteAvatarForm}
+    profile={data.profile}
+  />
 
   <SettingsForm
     form={passwordForm}

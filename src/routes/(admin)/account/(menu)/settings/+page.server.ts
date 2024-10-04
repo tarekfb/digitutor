@@ -2,17 +2,18 @@ import type { PageServerLoad } from "./$types";
 import { getFailFormMessage, getSuccessFormMessage, maxAvatarSize } from "$lib/shared/constants/constants";
 import { fail, message, superValidate, withFiles } from "sveltekit-superforms";
 import { zod } from "sveltekit-superforms/adapters";
-import { avatarSchema, emailSchema, nameSchema, type ProfileInput } from "$lib/shared/models/profile";
+import { avatarSchema, deleteAvatarSchema, emailSchema, nameSchema, type ProfileInput } from "$lib/shared/models/profile";
 import { updateProfile } from "$lib/server/database/profiles";
 import { updateUserEmail } from "$lib/server/database/user";
 import { deleteAccountSchema, passwordSchema } from "$lib/shared/models/user";
 import { isAuthApiError } from "@supabase/supabase-js";
 import { redirect } from "sveltekit-flash-message/server";
-import { uploadAvatar } from "src/lib/server/database/avatar";
-import { formatBytes, isStorageErrorCustom } from "src/lib/utils";
+import { deleteAvatar, uploadAvatar } from "src/lib/server/database/avatar";
+import { formatBytes, isStorageErrorCustom, verifyAvatarOwnership } from "src/lib/utils";
 import type { StorageErrorCustom } from "src/lib/shared/errors/storage-error-custom";
 import { Buffer } from 'node:buffer';
 import { CF_IMAGE_RESIZE_URL } from '$env/static/private'
+import { ResourceNotFoundError } from "src/lib/shared/errors/missing-error";
 
 export const load: PageServerLoad = async ({ parent, locals: { safeGetSession } }) => {
     const { session } = await safeGetSession();
@@ -29,8 +30,8 @@ export const load: PageServerLoad = async ({ parent, locals: { safeGetSession } 
     const deleteAccountForm = await superValidate(zod(deleteAccountSchema));
     const updatePasswordForm = await superValidate(zod(passwordSchema));
     const uploadAvatarForm = await superValidate(zod(avatarSchema));
-
-    return { updateNameForm, updateEmailForm, deleteAccountForm, updatePasswordForm, uploadAvatarForm };
+    const deleteAvatarForm = await superValidate({ path: profile.avatar_url ?? '' }, zod(deleteAvatarSchema));
+    return { updateNameForm, updateEmailForm, deleteAccountForm, updatePasswordForm, uploadAvatarForm, deleteAvatarForm };
 };
 
 export const actions = {
@@ -128,8 +129,47 @@ export const actions = {
             return message(form, getFailFormMessage(), { status: 500 });
         }
 
-        await Promise.resolve(new Promise(resolve => setTimeout(resolve, 5000)));
         return withFiles({ form });
+    },
+    deleteAvatar: async (event) => {
+        const { locals: { supabase, safeGetSession } } = event;
+        const { session, user } = await safeGetSession();
+        if (!session)
+            throw redirect(303, "/sign-in");
+
+        const form = await superValidate(event, zod(deleteAvatarSchema));
+        if (!form.valid) return fail(400, { form });
+
+        const { path } = form.data;
+
+        if (!verifyAvatarOwnership(path, user.id)) {
+            console.error(`User ${user.id} sent incorrect filename and might have tampered with form data. Filename is ${path}`)
+            return message(form, getFailFormMessage(), { status: 401 })
+        }
+
+        const dirs = path.split("/");
+        const fileName = dirs[dirs.length - 1];
+        try {
+            await deleteAvatar(supabase, fileName);
+        } catch (error) {
+            if (error instanceof ResourceNotFoundError)
+                console.error("No object deleted. Possible permission or path issue", error);
+            else
+                console.error("Unknown error on delete avatar from storage", error);
+
+            return message(form, getFailFormMessage(), { status: 500 });
+        }
+
+        try {
+            await updateProfile(supabase, {
+                id: user.id, avatar_url: ""
+            });
+        } catch (error) {
+            console.error(`Error on update profile with delete avatar for userid ${user.id}`, error);
+            return message(form, getFailFormMessage(), { status: 500 });
+        }
+
+        return { form };
     },
     delete: async (event) => {
         const { locals: { supabase, safeGetSession, supabaseServiceRole }, cookies } = event;

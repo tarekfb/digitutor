@@ -1,5 +1,11 @@
 <script>
+  import { page } from "$app/stores";
   import Error from "$lib/components/organisms/error.svelte";
+
+  const title =
+    $page.error?.message === "Internal Error"
+      ? undefined
+      : $page.error?.message;
 </script>
 
-<Error />
+<Error {title} code={$page.status} />
