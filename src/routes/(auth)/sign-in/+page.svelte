@@ -62,7 +62,7 @@
   <title>Logga in</title>
 </svelte:head>
 
-<AuthSplit>
+<AuthSplit condition={!!(reviews && listings && subjects)}>
   <svelte:fragment slot="aside">
     <div class="flex justify-around gap-x-8">
       <div class="max-w-36 flex flex-col">

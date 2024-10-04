@@ -113,7 +113,7 @@
   <AvatarForm
     uploadAvatarForm={data.uploadAvatarForm}
     deleteAvatarForm={data.deleteAvatarForm}
-    profile={data.profile}
+    avatarUrl={data.profile.avatar_url}
   />
 
   <SettingsForm

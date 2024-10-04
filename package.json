@@ -66,6 +66,7 @@
     "pg": "^8.11.5",
     "postgres": "^3.4.4",
     "supabase": "^1.163.6",
+    "svelte-file-dropzone": "^2.0.8",
     "svelte-legos": "^0.2.2",
     "svelte-sonner": "^0.3.22",
     "sveltekit-superforms": "^2.3.0",
