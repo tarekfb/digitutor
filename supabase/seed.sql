@@ -464,6 +464,14 @@ INSERT
         bucket_id = 'avatars'
         AND auth.role() = 'authenticated'
     );
+    
+create policy "User can delete their own objects"
+on storage.objects
+for delete
+TO authenticated
+USING (
+    owner = (select auth.uid())
+);
 
 CREATE OR REPLACE FUNCTION compound_search(listing RECORD) RETURNS TEXT AS $$
 DECLARE

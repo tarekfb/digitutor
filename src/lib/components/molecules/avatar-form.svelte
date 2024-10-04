@@ -13,10 +13,26 @@
   import { toast } from "svelte-sonner";
   import { superForm } from "sveltekit-superforms/client";
   import DeleteAvatar from "$lib/components/molecules/delete-avatar.svelte";
+  import Dropzone from "svelte-file-dropzone";
+  import Separator from "$lib/components/ui/separator/separator.svelte";
 
   export let uploadAvatarForm;
   export let profile;
   export let deleteAvatarForm;
+
+  let files = {
+    accepted: [] as File[],
+    rejected: [] as File[],
+  };
+
+  const handleFilesSelect = (e: any) => {
+    const { acceptedFiles } = e.detail;
+    if (acceptedFiles && acceptedFiles.length > 0) {
+      // files.accepted = [...files.accepted, ...acceptedFiles];
+      setAvatar(acceptedFiles[0]);
+    }
+    // files.rejected = [...files.rejected, ...fileRejections];
+  };
 
   const formRoot = superForm(uploadAvatarForm, {
     onUpdated({ form }) {
@@ -27,35 +43,18 @@
   });
 
   const { enhance, allErrors, message, form, delayed, timeout } = formRoot;
-  const setAvatar = (
-    e: Event & {
-      currentTarget: EventTarget & HTMLInputElement;
-    },
-  ) => {
+  const setAvatar = (avatar: File) => {
+    console.log(avatar);
     formRoot.reset();
-    $form.avatar = e.currentTarget?.files?.item(0) as File;
+    $form.avatar = avatar;
   };
 </script>
-
-<!-- move div  new form only for removal -->
 
 <div class="flex flex-col gap-y-4 generic-card">
   <SecondaryTitle>Profilbild</SecondaryTitle>
   <p class="text-muted-foreground">
     Maxstorlek är {formatBytes(maxAvatarSize)}.
   </p>
-  {#if profile.avatar_url}
-    <div class="relative self-center">
-      <img
-        src={profile.avatar_url}
-        alt="profilbild"
-        width="250"
-        height="250"
-        class="object-cover self-center rounded-md shadow-md"
-      />
-      <DeleteAvatar rootForm={deleteAvatarForm} />
-    </div>
-  {/if}
   <form
     method="POST"
     use:enhance
@@ -63,21 +62,51 @@
     class="flex flex-col gap-y-4"
     enctype="multipart/form-data"
   >
-    <Form.Field form={formRoot} name="avatar">
+    {#if profile.avatar_url}
+      <div class="relative self-center">
+        <img
+          src={profile.avatar_url}
+          alt="profilbild"
+          width="250"
+          height="250"
+          class="object-cover self-center rounded-md shadow-md"
+        />
+        <DeleteAvatar rootForm={deleteAvatarForm} />
+      </div>
+    {:else}
+      <Dropzone
+        on:drop={handleFilesSelect}
+        name="avatar"
+        multiple={false}
+        bind:value={$form.avatar}
+        accept={getMimeType()}
+      >
+        <p>Dra och släpp en bild här, eller klicka för att välja en bild</p>
+      </Dropzone>
+      {#if $form.avatar?.name}
+        <p>{$form.avatar.name}</p>
+      {/if}
+    {/if}
+    <!-- <Separator /> -->
+    <!-- <Form.Field form={formRoot} name="avatar">
       <Form.Control let:attrs>
-        <Label>Profilbild</Label>
+        <Label class="hidden">Profilbild</Label>
         <input
           {...attrs}
           type="file"
           name="avatar"
+          multiple={false}
           bind:value={$form.avatar}
           accept={getMimeType()}
           class="overflow-hidden flex h-10 w-full border border-input rounded-md bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
-          on:input={(e) => setAvatar(e)}
+          on:input={(e) => {
+            const file = e.currentTarget?.files?.item(0);
+            if (file instanceof File) setAvatar(file);
+          }}
         />
       </Form.Control>
       <Form.FieldErrors />
-    </Form.Field>
+    </Form.Field> -->
     <FormMessage {message} scroll />
     <Button
       type="submit"
