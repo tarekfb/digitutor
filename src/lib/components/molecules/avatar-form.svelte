@@ -2,8 +2,6 @@
   import { Button } from "$lib/components/ui/button";
   import FormMessage from "../molecules/form-message.svelte";
   import SecondaryTitle from "$lib/components/atoms/secondary-title.svelte";
-  import * as Form from "$lib/components/ui/form";
-  import { Label } from "$lib/components/ui/label/index.js";
   import LoadingSpinner from "$lib/components/atoms/loading-spinner.svelte";
   import { formatBytes } from "$lib/utils.js";
   import {
@@ -14,24 +12,16 @@
   import { superForm } from "sveltekit-superforms/client";
   import DeleteAvatar from "$lib/components/molecules/delete-avatar.svelte";
   import Dropzone from "svelte-file-dropzone";
-  import Separator from "$lib/components/ui/separator/separator.svelte";
 
   export let uploadAvatarForm;
-  export let profile;
+  export let avatarUrl: string | null;
   export let deleteAvatarForm;
-
-  let files = {
-    accepted: [] as File[],
-    rejected: [] as File[],
-  };
 
   const handleFilesSelect = (e: any) => {
     const { acceptedFiles } = e.detail;
     if (acceptedFiles && acceptedFiles.length > 0) {
-      // files.accepted = [...files.accepted, ...acceptedFiles];
       setAvatar(acceptedFiles[0]);
     }
-    // files.rejected = [...files.rejected, ...fileRejections];
   };
 
   const formRoot = superForm(uploadAvatarForm, {
@@ -62,10 +52,10 @@
     class="flex flex-col gap-y-4"
     enctype="multipart/form-data"
   >
-    {#if profile.avatar_url}
+    {#if avatarUrl}
       <div class="relative self-center">
         <img
-          src={profile.avatar_url}
+          src={avatarUrl}
           alt="profilbild"
           width="250"
           height="250"
@@ -87,31 +77,11 @@
         <p>{$form.avatar.name}</p>
       {/if}
     {/if}
-    <!-- <Separator /> -->
-    <!-- <Form.Field form={formRoot} name="avatar">
-      <Form.Control let:attrs>
-        <Label class="hidden">Profilbild</Label>
-        <input
-          {...attrs}
-          type="file"
-          name="avatar"
-          multiple={false}
-          bind:value={$form.avatar}
-          accept={getMimeType()}
-          class="overflow-hidden flex h-10 w-full border border-input rounded-md bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
-          on:input={(e) => {
-            const file = e.currentTarget?.files?.item(0);
-            if (file instanceof File) setAvatar(file);
-          }}
-        />
-      </Form.Control>
-      <Form.FieldErrors />
-    </Form.Field> -->
     <FormMessage {message} scroll />
     <Button
       type="submit"
       class="md:self-center md:min-w-wider"
-      disabled={$allErrors.length > 0 || $delayed}
+      disabled={$allErrors.length > 0 || $delayed || !$form.avatar}
     >
       {#if $timeout}
         <LoadingSpinner class="mr-2" />
