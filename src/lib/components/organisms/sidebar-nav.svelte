@@ -5,7 +5,7 @@
 </script>
 
 <Link
-  class="text-foreground hover:no-underline flex items-center gap-x-1 hover:text-accent active:text-accent"
+  class="text-foreground hover:no-underline flex items-center gap-x-1 hover:text-accent active:text-accent tracking-normal -my-1"
   {href}
 >
   <slot />

@@ -9,11 +9,12 @@
   import Avatar from "../atoms/avatar.svelte";
   import LoadingSpinner from "../atoms/loading-spinner.svelte";
 
-  export let profile: Tables<"profiles"> | null;
-  export let logout: () => void;
+  export let profile: Tables<"profiles"> | undefined | null | false;
+  export let logout: (() => void) | false;
 
   let logoutLoading = false;
   const wrappedLogout = () => {
+    if (!logout) return;
     logoutLoading = true;
     logout();
     logoutLoading = false;
@@ -26,17 +27,19 @@
   <div
     class="container flex h-16 items-center space-x-3 sm:justify-between sm:space-x-0"
   >
-    <a href="/" class="text-2xl font-semibold">
+    <a href="/" class="text-2xl font-semibold hover:text-accent active:text-accent">
       {websiteName}
     </a>
     <div class="flex flex-1 items-center justify-end space-x-4">
       <nav class="flex items-center space-x-4">
-        {#if !profile}
+        {#if profile === undefined || profile === null}
           <Button variant="ghost" on:click={() => goto("/sign-in")}
             >Logga in</Button
           >
-          <Button on:click={() => goto("/sign-up")} class="px-2.5 md:px-3">Skapa konto</Button>
-        {:else}
+          <Button on:click={() => goto("/sign-up")} class="px-2.5 md:px-3"
+            >Skapa konto</Button
+          >
+        {:else if profile !== false}
           <Button on:click={() => goto("/account")}>
             <UserRound class="mr-2 h-4 w-4" />
             Konto
@@ -93,6 +96,9 @@
             </DropdownMenu.Content>
           </DropdownMenu.Root>
         {/if}
+      </nav>
+      <nav>
+        <slot />
       </nav>
     </div>
   </div>
