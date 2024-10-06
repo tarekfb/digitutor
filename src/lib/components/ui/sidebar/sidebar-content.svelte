@@ -21,7 +21,7 @@
       {...$$restProps}
     >
       <div
-        class="my-auto mx-2 md:mx-4 w-1.5 h-3/5 rounded-full bg-muted-foreground/75 justify-self-start col-start-1"
+        class="my-auto mx-0.5 md:mx-4 w-2 h-20 rounded-full bg-muted-foreground/30 justify-self-start col-start-1"
       ></div>
       <div class="flex flex-col gap-y-4 col-start-2 col-span-4">
         <slot />

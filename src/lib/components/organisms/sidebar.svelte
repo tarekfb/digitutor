@@ -29,7 +29,7 @@
   };
 
   const title =
-    "text-lg font-semibold tracking-tight overflow-x-hidden text-ellipsis whitespace-nowrap mb-2";
+    "text-lg font-semibold tracking-tight overflow-x-hidden text-ellipsis whitespace-nowrap mb-2 px-1.5";
 </script>
 
 <Sidebar.Root direction="right" bind:open>
@@ -43,7 +43,7 @@
     class="rounded-none w-4/5 {$isDesktop ? 'w-1/5' : 'swipable'} px-2"
   >
     <div transition:fade={{ duration: 300 }}>
-      <Sidebar.Header class="relative flex items-center justify-center py-1">
+      <Sidebar.Header class="relative flex items-center justify-center py-2 mb-4">
         <Sidebar.Close
           class="absolute {$isDesktop
             ? 'left-0'
@@ -57,7 +57,7 @@
           <Sidebar.Title class="text-3xl">{websiteName}</Sidebar.Title>
         </Link>
       </Sidebar.Header>
-      <div class="flex flex-col items-start gap-y-2">
+      <div class="flex flex-col items-start gap-y-1">
         <SidebarNav href="/account" closeSidebar={() => (open = false)}>
           <Home class="h-5 w-5" />
           Dashboard
@@ -69,11 +69,7 @@
           <Settings class="h-5 w-5" />
           Inställningar
         </SidebarNav>
-        <SidebarNav
-          href="/account/settings"
-          disabled={logoutLoading}
-          onClick={wrappedLogout}
-        >
+        <SidebarNav disabled={logoutLoading} onClick={wrappedLogout}>
           {#if logoutLoading}
             <LoadingSpinner class="text-background" />
           {:else}
@@ -109,7 +105,7 @@
                   </SidebarNav>
                 </li>
               {:else}
-                <p class="text-md">Inga konversationer ännu.</p>
+                <p class="text-md px-1.5">Inga konversationer ännu.</p>
               {/each}
             </ul>
           </ScrollArea>
