@@ -1,7 +1,7 @@
 <script lang="ts">
   import { writable } from "svelte/store";
   import { setContext } from "svelte";
-  import SidebarNav from "$lib/components/organisms/sidebar-nav.svelte";
+  import SidebarNavCopy from "src/lib/components/organisms/sidebar.svelte";
   import type { PageData } from "./$types";
   import { logout } from "src/lib/utils";
 
@@ -16,8 +16,8 @@
   });
 </script>
 
-<div class="flex justify-center p-8 ml-14 min-h-screen">
-  <SidebarNav
+<div class="flex justify-center p-8 min-h-screen">
+  <SidebarNavCopy
     {conversations}
     role={profile?.role}
     logout={() => logout(supabase, session)}
