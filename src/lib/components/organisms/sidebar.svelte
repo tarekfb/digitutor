@@ -40,7 +40,7 @@
     <Menu class="h-7 w-7" />
   </Sidebar.Trigger>
   <Sidebar.Content
-    class="rounded-none w-4/5 {$isDesktop ? 'md:w-2/5 lg:w-1/5' : 'swipable'} px-2"
+    class="rounded-none w-4/5 {$isDesktop ? 'md:w-2/5 lg:w-1/5' : 'mobile'} px-2"
   >
     <div transition:fade={{ duration: 300 }}>
       <Sidebar.Header class="relative flex items-center justify-center py-2 mb-4">
