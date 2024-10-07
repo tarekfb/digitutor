@@ -38,7 +38,7 @@
   >
     <Menu class="h-7 w-7" />
   </Sidebar.Trigger>
-  <Sidebar.Content class="rounded-none px-2 w-4/5 md:w-2/5 lg:w-1/5">
+  <Sidebar.Content class="rounded-none px-2 w-3/5 md:w-2/5 lg:w-1/5">
     <div transition:fade={{ duration: 300 }} class="w-full">
       <Sidebar.Header
         class="relative flex items-center justify-center py-2 mb-4"
@@ -55,15 +55,15 @@
         </Link>
       </Sidebar.Header>
       <div class="flex flex-col items-start gap-y-1">
-        <SidebarNav
-          href="/account{role === 'teacher' ? '/conversations' : ''}"
-          closeSidebar={() => (open = false)}
-        >
+        <SidebarNav href="/account" closeSidebar={() => (open = false)}>
           <Mail class={icon} />
           Konversationer
         </SidebarNav>
         {#if role === "teacher"}
-          <SidebarNav href="/account" closeSidebar={() => (open = false)}>
+          <SidebarNav
+            href="/account/listings"
+            closeSidebar={() => (open = false)}
+          >
             <NotepadText class={icon} />
             Annonser
           </SidebarNav>
