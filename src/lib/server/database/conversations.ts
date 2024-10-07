@@ -5,41 +5,38 @@ import { getNow } from "$lib/utils";
 import { sendMessage } from "./messages";
 import { ResourceAlreadyExistsError } from "src/lib/shared/errors/resource-already-exists-error";
 
-// atm not needed but probably will be at some point. Delete if not used in future [2024-06-17]
-// export const getConversation = async (
-//   supabase: SupabaseClient<Database>,
-//   id: string,
-//   profile: Tables<"profiles">
-// ): Promise<Conversation> => {
+export const getConversation = async (
+  supabase: SupabaseClient<Database>,
+  id: string,
+  profile: Tables<"profiles">
+): Promise<Conversation> => {
+  let query = supabase
+    .from("conversations")
+    .select(
+      `
+                *,
+                teacher (
+                  *
+                ),
+                student (
+                  *
+                )
+              `,
+    )
+    .eq("id", id)
 
+  if (profile.role === "student") query = query.eq("student", profile.id)
+  else if (profile.role === "teacher") query = query.eq("teacher", profile.id)
 
-//   let query = supabase
-//     .from("conversations")
-//     .select(
-//       `
-//                 *,
-//                 teacher (
-//                   *
-//                 ),
-//                 student (
-//                   *
-//                 )
-//               `,
-//     )
-//     .eq("id", id)
+  const { data, error } = await query.limit(1).single();
 
-//   if (profile.role === "student") query = query.eq("student", profile.id)
-//   else if (profile.role === "teacher") query = query.eq("teacher", profile.id)
+  if (error) {
+    console.error("Failed to get conversation: " + id, { error });
+    throw error;
+  }
 
-//   const { data, error } = await query.limit(1).single();
-
-//   if (error) {
-//     console.error("Failed to get conversation: " + id, { error });
-//     throw error;
-//   }
-
-//   return data as unknown as Conversation;
-// }
+  return data as unknown as Conversation;
+}
 
 export const getConversationForStudentAndTeacher = async (
   supabase: SupabaseClient<Database>,
