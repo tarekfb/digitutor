@@ -7,7 +7,7 @@
   import Navbar from "src/lib/components/organisms/navbar.svelte";
 
   export let data: PageData;
-  $: ({ supabase, session, profile, conversations } = data);
+  $: ({ supabase, session, profile } = data);
 
   const adminSectionStore = writable("");
   setContext("adminSection", adminSectionStore);
@@ -18,14 +18,10 @@
 </script>
 
 <Navbar profile={false} logout={false}>
-  <Sidebar
-    {conversations}
-    role={profile?.role}
-    logout={() => logout(supabase, session)}
-  />
+  <Sidebar role={profile?.role} logout={() => logout(supabase, session)} />
 </Navbar>
 <div class="flex justify-center p-8 min-h-screen">
-  <div class="flex-1 flex justify-center lg:max-w-2xl">
+  <div class="flex-1 flex flex-col items-center lg:max-w-2xl">
     <slot />
   </div>
 </div>
