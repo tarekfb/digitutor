@@ -10,23 +10,13 @@
   import * as Form from "$lib/components/ui/form/index.js";
   import { Input } from "$lib/components/ui/input/index.js";
   import FormSubmit from "$lib/components/molecules/form-submit.svelte";
-  import SearchResult from "src/lib/components/molecules/search-result-item.svelte";
-  import {
-    searchSchema,
-    type SearchResult as SearchResultType,
-  } from "src/lib/shared/models/search";
+  import { searchSchema } from "src/lib/shared/models/search";
   import SecondaryTitle from "src/lib/components/atoms/secondary-title.svelte";
-  import AlertMessage from "$lib/components/atoms/alert-message.svelte";
 
   export let data: PageData;
 
-  // let searchResults: SearchResultType[];
   const searchForm = superForm(data.form, {
     validators: zodClient(searchSchema),
-    // onUpdate({ form, result }) {
-    //   if (form.valid && result.data)
-    //     searchResults = result.data.formatted as SearchResultType[];
-    // },
   });
   const { form: formData, enhance, delayed, message, allErrors } = searchForm;
 </script>
@@ -94,39 +84,7 @@
     </div>
   </form>
 
-  <!-- <form
-    class="text-center flex flex-col gap-y-4 w-full"
-    use:enhance
-    method="POST"
-  >
-    <SecondaryTitle>Sök efter lärare och annonser</SecondaryTitle>
-    <div class="flex justify-between gap-x-2 md:gap-x-4 items-start">
-      <Input
-        type="text"
-        placeholder="Namn, titel, beskrivning, pris, etc."
-        class="text-lg bg-card"
-      />
-      <Button class="w-12" type="submit">Sök</Button>
-    </div>
-  </form> -->
-  
   <FormMessage {message} scroll scrollTo="end" />
-  <!-- {#if $message}
-  {:else if searchResults?.length === 0}
-    <AlertMessage
-      title="Inga träffar på din sökning"
-      description="Testa söka på en lärares namn, eller en annons titel, beskrivning eller pris."
-    />
-  {:else if searchResults?.length > 0}
-    <ul class="flex flex-col gap-y-4 w-full">
-      <SecondaryTitle>Sökresultat</SecondaryTitle>
-      {#each searchResults as result}
-        <li>
-          <SearchResult listing={result} />
-        </li>
-      {/each}
-    </ul>
-  {/if} -->
 </div>
 
 <div class="min-h-[60vh]">
