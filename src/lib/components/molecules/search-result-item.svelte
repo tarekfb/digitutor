@@ -5,24 +5,24 @@
   import type { SearchResult } from "src/lib/shared/models/search";
   import { truncate } from "src/lib/utils";
 
-  export let listing: SearchResult;
+  export let result: SearchResult;
 </script>
 
-<a href="/listing/{listing.id}" aria-label="Gå till annons">
+<a href="/listing/{result.id}" aria-label="Gå till annons">
   <Card.Root>
     <Card.Header>
       <Card.Title class="flex justify-between gap-x-2 items-center">
-        {listing.title}
+        {result.title}
         <Avatar
-          url={listing.avatar ?? ""}
-          firstName={listing.firstName}
-          lastName={listing.lastName}
+          url={result.avatar ?? ""}
+          firstName={result.firstName}
+          lastName={result.lastName}
           onClick={undefined}
         />
       </Card.Title>
-      {#if listing.description}
+      {#if result.description}
         <Card.Description>
-          {truncate(listing.description, 10)}
+          {truncate(result.description, 10)}
         </Card.Description>
       {/if}
     </Card.Header>
@@ -41,8 +41,8 @@
         <Terminal class="mr-1 h-3 w-3 text-accent" />
         Typescript
       </span>
-      <p>{listing.hourlyPrice} SEK</p>
-      <p>{listing.firstName}</p>
+      <p>{result.hourlyPrice} SEK</p>
+      <p>{result.firstName}</p>
     </Card.Content>
   </Card.Root>
 </a>

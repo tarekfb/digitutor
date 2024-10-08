@@ -10,23 +10,13 @@
   import * as Form from "$lib/components/ui/form/index.js";
   import { Input } from "$lib/components/ui/input/index.js";
   import FormSubmit from "$lib/components/molecules/form-submit.svelte";
-  import SearchResult from "$lib/components/molecules/search-result.svelte";
-  import {
-    searchSchema,
-    type SearchResult as SearchResultType,
-  } from "src/lib/shared/models/search";
+  import { searchSchema } from "src/lib/shared/models/search";
   import SecondaryTitle from "src/lib/components/atoms/secondary-title.svelte";
-  import AlertMessage from "$lib/components/atoms/alert-message.svelte";
 
   export let data: PageData;
 
-  let searchResults: SearchResultType[];
   const searchForm = superForm(data.form, {
     validators: zodClient(searchSchema),
-    onUpdate({ form, result }) {
-      if (form.valid && result.data)
-        searchResults = result.data.formatted as SearchResultType[];
-    },
   });
   const { form: formData, enhance, delayed, message, allErrors } = searchForm;
 </script>
@@ -61,7 +51,9 @@
   {/if}
 </div>
 
-<div class="flex flex-col justify-center items-center gap-y-4 w-full max-w-[650px]">
+<div
+  class="flex flex-col justify-center items-center gap-y-4 w-full max-w-[650px]"
+>
   <form
     class="text-center flex flex-col gap-y-4 w-full"
     action="?/search"
@@ -92,23 +84,7 @@
     </div>
   </form>
 
-  {#if $message}
-    <FormMessage {message} scroll scrollTo="end" />
-  {:else if searchResults?.length === 0}
-    <AlertMessage
-      title="Inga träffar på din sökning"
-      description="Testa söka på en lärares namn, eller en annons titel, beskrivning eller pris."
-    />
-  {:else if searchResults?.length > 0}
-    <ul class="flex flex-col gap-y-4 w-full">
-      <SecondaryTitle>Sökresultat</SecondaryTitle>
-      {#each searchResults as result}
-        <li>
-          <SearchResult listing={result} />
-        </li>
-      {/each}
-    </ul>
-  {/if}
+  <FormMessage {message} scroll scrollTo="end" />
 </div>
 
 <div class="min-h-[60vh]">

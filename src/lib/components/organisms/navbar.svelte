@@ -29,7 +29,7 @@
   >
     <a
       href="/"
-      class="text-2xl font-semibold hover:text-accent active:text-accent"
+      class="text-2xl font-semibold hover:text-accent"
     >
       {websiteName}
     </a>

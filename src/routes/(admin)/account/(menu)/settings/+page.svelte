@@ -1,6 +1,4 @@
 <script lang="ts">
-  import { getContext } from "svelte";
-  import type { Writable } from "svelte/store";
   import PrimaryTitle from "$lib/components/atoms/primary-title.svelte";
   import Label from "$lib/components/atoms/label.svelte";
   import SettingsForm from "$lib/components/molecules/settings-form.svelte";
@@ -13,18 +11,11 @@
     deleteAccountSchema as deleteSchema,
     passwordSchema,
   } from "$lib/shared/models/user.js";
-  import {
-    emailSchema,
-    nameSchema,
-  } from "$lib/shared/models/profile";
+  import { emailSchema, nameSchema } from "$lib/shared/models/profile";
   import DeleteAccount from "$lib/components/atoms/delete-account.svelte";
   import PasswordInput from "$lib/components/molecules/password-input.svelte";
-
   import AvatarForm from "src/lib/components/molecules/avatar-form.svelte";
   import type { PageData } from "./$types";
-
-  let adminSection: Writable<string> = getContext("adminSection");
-  adminSection.set("settings");
 
   export let data: PageData;
 
