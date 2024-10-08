@@ -63,7 +63,7 @@
   });
 </script>
 
-<div class="flex flex-col justify-between gap-y-4 h-full">
+<div class="flex flex-col justify-between gap-y-4 h-full w-full">
   <div class="flex flex-col gap-y-4">
     <AvatarNameBar clickable profile={recipient}>
       <PrimaryTitle>{recipient.first_name}</PrimaryTitle>

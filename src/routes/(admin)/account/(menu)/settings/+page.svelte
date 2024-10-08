@@ -14,7 +14,6 @@
     passwordSchema,
   } from "$lib/shared/models/user.js";
   import {
-    deleteAvatarSchema,
     emailSchema,
     nameSchema,
   } from "$lib/shared/models/profile";

@@ -1,33 +1,15 @@
 <script lang="ts">
   import { getContext } from "svelte";
   import type { Writable } from "svelte/store";
-  import { initCreateListingSchema } from "$lib/shared/models/listing.js";
-  import AccountHomeStudent from "$lib/components/organisms/account-home-student.svelte";
-  import { superForm, type SuperValidated } from "sveltekit-superforms";
-  import { zodClient } from "sveltekit-superforms/adapters";
-  import AccountHomeTeacher from "$lib/components/organisms/account-home-teacher.svelte";
+  import PrimaryTitle from "$lib/components/atoms/primary-title.svelte";
+  import ConversationCard from "$lib/components/molecules/conversation-card.svelte";
+  import Link from "$lib/components/atoms/link.svelte";
 
   let adminSection: Writable<string> = getContext("adminSection");
   adminSection.set("dashboard");
 
   export let data;
-  $: ({ listings, conversations, profile } = data);
-
-  const form = data.form as SuperValidated<
-    {
-      title: string;
-    },
-    any,
-    {
-      title: string;
-    }
-  >;
-  // this is complaining about potential undefined. Maybe there's an issue with parent serving data?
-  // anyway, proceeding with this dirty hack...
-
-  const userForm = superForm(form, {
-    validators: zodClient(initCreateListingSchema),
-  });
+  $: ({ conversations, profile } = data);
 </script>
 
 <svelte:head>
@@ -35,10 +17,25 @@
 </svelte:head>
 <!-- need to add hasaccepted as bool field to db conversations -->
 
-<div class="w-[275px] md:w-[600px] md:max-w-xl">
-  {#if profile?.role === "teacher"}
-    <AccountHomeTeacher {conversations} {listings} {userForm} {profile} />
-  {:else if profile?.role === "student"}
-    <AccountHomeStudent {conversations} {profile} />
-  {/if}
+<PrimaryTitle class="text-center">Dina konversationer</PrimaryTitle>
+<div class="flex flex-col items-center text-center gap-y-4 my-6 w-full">
+  {#each conversations as conversation}
+    <a
+      href={"/account/conversation/" + conversation.id}
+      aria-label="Gå till konversation"
+      class="w-full"
+    >
+      <ConversationCard {conversation} {profile} />
+    </a>
+  {:else}
+    {#if profile.role === "teacher"}
+      <p class="text-lg">Inga konversationer ännu.</p>
+      <p class="text-muted-foreground">
+        Se våra <Link href="/tips">tips</Link> för att förbättra dina chanser att
+        bli kontaktad.
+      </p>
+    {:else}
+      <p>Inga konversationer. Testa söka efter en lärare!</p>
+    {/if}
+  {/each}
 </div>

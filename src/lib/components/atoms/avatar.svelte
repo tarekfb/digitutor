@@ -14,7 +14,7 @@
 
   export let onClick: OnClick["onClick"];
   export let url: string;
-  export let role: "teacher" | "student" | "" = "";
+  export let role: "teacher" | "student" | "admin" | "" = "";
   export let firstName: string;
   export let lastName: string;
 

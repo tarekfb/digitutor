@@ -6,15 +6,18 @@ import { getFailFormMessage } from "$lib/shared/constants/constants";
 import { message, superValidate } from "sveltekit-superforms";
 import { zod } from "sveltekit-superforms/adapters";
 import { sendMessage } from "$lib/server/database/messages";
+import { getConversation } from "src/lib/server/database/conversations";
 
 export const load = async ({ locals: { supabase }, params: { slug }, parent }) => {
-  const { conversations } = await parent();
+  const { profile } = await parent();
 
-  const conversation = conversations.find((c) => c.id === slug);
-  if (!conversation) {
-    console.error("Conversation not found for slug: " + slug);
-    error(404, {
-      message: 'Not found'
+  let conversation;
+  try {
+    conversation = await getConversation(supabase, slug, profile);
+  } catch (e) {
+    console.error("Unable to find conversation for slug " + slug, e);
+    error(500, {
+      message: unknownErrorTitle,
     });
   }
 
