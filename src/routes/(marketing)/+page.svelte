@@ -10,7 +10,7 @@
   import * as Form from "$lib/components/ui/form/index.js";
   import { Input } from "$lib/components/ui/input/index.js";
   import FormSubmit from "$lib/components/molecules/form-submit.svelte";
-  import SearchResult from "$lib/components/molecules/search-result.svelte";
+  import SearchResult from "src/lib/components/molecules/search-result-item.svelte";
   import {
     searchSchema,
     type SearchResult as SearchResultType,
@@ -20,13 +20,13 @@
 
   export let data: PageData;
 
-  let searchResults: SearchResultType[];
+  // let searchResults: SearchResultType[];
   const searchForm = superForm(data.form, {
     validators: zodClient(searchSchema),
-    onUpdate({ form, result }) {
-      if (form.valid && result.data)
-        searchResults = result.data.formatted as SearchResultType[];
-    },
+    // onUpdate({ form, result }) {
+    //   if (form.valid && result.data)
+    //     searchResults = result.data.formatted as SearchResultType[];
+    // },
   });
   const { form: formData, enhance, delayed, message, allErrors } = searchForm;
 </script>
@@ -61,7 +61,9 @@
   {/if}
 </div>
 
-<div class="flex flex-col justify-center items-center gap-y-4 w-full max-w-[650px]">
+<div
+  class="flex flex-col justify-center items-center gap-y-4 w-full max-w-[650px]"
+>
   <form
     class="text-center flex flex-col gap-y-4 w-full"
     action="?/search"
@@ -92,8 +94,24 @@
     </div>
   </form>
 
-  {#if $message}
-    <FormMessage {message} scroll scrollTo="end" />
+  <!-- <form
+    class="text-center flex flex-col gap-y-4 w-full"
+    use:enhance
+    method="POST"
+  >
+    <SecondaryTitle>Sök efter lärare och annonser</SecondaryTitle>
+    <div class="flex justify-between gap-x-2 md:gap-x-4 items-start">
+      <Input
+        type="text"
+        placeholder="Namn, titel, beskrivning, pris, etc."
+        class="text-lg bg-card"
+      />
+      <Button class="w-12" type="submit">Sök</Button>
+    </div>
+  </form> -->
+  
+  <FormMessage {message} scroll scrollTo="end" />
+  <!-- {#if $message}
   {:else if searchResults?.length === 0}
     <AlertMessage
       title="Inga träffar på din sökning"
@@ -108,7 +126,7 @@
         </li>
       {/each}
     </ul>
-  {/if}
+  {/if} -->
 </div>
 
 <div class="min-h-[60vh]">
