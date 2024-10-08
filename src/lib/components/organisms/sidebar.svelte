@@ -33,7 +33,7 @@
 
 <Sidebar.Root direction="right" bind:open>
   <Sidebar.Trigger
-    class="absolute right-5 top-5 hover:text-accent active:text-accent"
+    class="absolute right-5 top-5 hover:text-primary"
     aria-label="Öppna meny"
   >
     <Menu class="h-7 w-7" />
