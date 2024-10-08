@@ -17,13 +17,17 @@
 
   export let data: PageData;
   $: ({ initResults, initMessage } = data);
-  let manualSearchResults: SearchResultType[] = [];
+
+  let isInit = true;
+  let results: SearchResultType[] = [];
 
   const searchForm = superForm(data.form, {
     validators: zodClient(searchSchema),
     onUpdate({ form, result }) {
-      if (form.valid && result.data)
-        manualSearchResults = result.data.formatted as SearchResultType[];
+      if (form.valid && result.data) {
+        results = result.data.formatted as SearchResultType[];
+        isInit = false;
+      }
     },
   });
   const { form: formData, enhance, delayed, message, allErrors } = searchForm;
@@ -62,7 +66,9 @@
     </div>
   </form>
 
-  {#if initMessage}
+  {#if isInit && initResults.length > 0}
+    <SearchResultList results={initResults} />
+  {:else if initMessage}
     <AlertMessage
       title={initMessage.title}
       description={initMessage.description}
@@ -70,10 +76,8 @@
     />
   {:else if $message}
     <FormMessage {message} scroll scrollTo="end" />
-  {:else if initResults.length > 0}
-    <SearchResultList results={initResults} />
-  {:else if manualSearchResults.length > 0}
-    <SearchResultList results={manualSearchResults} />
+  {:else if results.length > 0}
+    <SearchResultList {results} />
   {:else}
     <AlertMessage
       title="Inga träffar på din sökning"
