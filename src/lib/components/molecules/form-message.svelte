@@ -1,7 +1,7 @@
 <script lang="ts">
   import type { Message } from "$lib/shared/models/common";
   import type { Writable } from "svelte/store";
-  import AlertMessage from "../atoms/alert-message.svelte";
+  import AlertMessage from "$lib/components/atoms/alert-message.svelte";
 
   let className: string | null | undefined = undefined;
   export { className as class };
@@ -13,8 +13,7 @@
   $: $message, scrollIntoView();
 
   const scrollIntoView = () => {
-    if (!scroll) return;
-    if (!$message) return;
+    if (!scroll || !element || !$message) return; // fail proofing
     setTimeout(
       () => element.scrollIntoView({ behavior: "smooth", block: scrollTo }),
       1,

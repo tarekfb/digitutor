@@ -14,7 +14,7 @@
 
   export let onClick: OnClick["onClick"];
   export let url: string;
-  export let role: "teacher" | "student" | "" = "";
+  export let role: "teacher" | "student" | "admin" | "" = "";
   export let firstName: string;
   export let lastName: string;
 
@@ -29,6 +29,7 @@
 {#if onClick && role === "teacher"}
   <Button
     variant="ghost"
+    data-testid="avatar"
     class={cn(`relative rounded-full`, className)}
     on:click={onClick}
   >
@@ -40,7 +41,7 @@
     </Avatar.Root>
   </Button>
 {:else}
-  <Avatar.Root class={cn(`${base}`, className)}>
+  <Avatar.Root class={cn(`${base}`, className)} data-testid="avatar">
     {#if url}
       <Avatar.Image src={url} alt="profilbild" width={size} height={size} />
     {/if}

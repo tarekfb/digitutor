@@ -1,4 +1,4 @@
-import { unknownErrorMessage } from "$lib/shared/constants/constants";
+import { unknownErrorTitle } from "$lib/shared/constants/constants";
 import { _hasFullProfile } from "src/routes/(admin)/account/+layout.js";
 import { error, fail, redirect } from "@sveltejs/kit";
 import { zod } from "sveltekit-superforms/adapters";
@@ -14,8 +14,8 @@ export async function load({ parent }) {
   // redirect to select plan if student
   if (_hasFullProfile(profile)) {
     if (profile.role === "student")
-      throw redirect(303, "/account/select_plan");
-    throw redirect(303, "/account");
+      redirect(303, "/account/select_plan");
+    redirect(303, "/account");
   }
 
   const initFormData = {
@@ -28,8 +28,8 @@ export async function load({ parent }) {
     return { form, data };
   } catch (e) {
     console.error("Error when loading createprofile", e);
-    throw error(500, {
-      message: unknownErrorMessage,
+    error(500, {
+      message: unknownErrorTitle,
     });
   };
 }
@@ -39,7 +39,7 @@ export const actions = {
     const { locals: { supabase, safeGetSession } } = event;
     const { user } = await safeGetSession();
     if (!user)
-      throw redirect(303, "/sign-in");
+      redirect(303, "/sign-in");
 
     const form = await superValidate(event, zod(nameSchema));
 
@@ -58,7 +58,7 @@ export const actions = {
       return message(form, 'Skapat profil.');
     } catch (error) {
       console.error("Error on complete profile for userid " + user.id, { error });
-      return fail(500, {
+      return fail(500, { // fail or error? todo fix
         message: unknownErrorMessage, form,
       });
     }

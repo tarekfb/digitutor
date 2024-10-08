@@ -40,16 +40,16 @@ export const load: PageServerLoad = async (event) => {
 
         if (!user) {
             console.error("User data was null on verify otp on email confirmation", e);
-            throw error(500, unknownErrorMessage);
+            error(500, unknownErrorMessage);
         }
 
         redirectTo.searchParams.delete('next')
         return { email: user.email };
     }
 
-    throw error(500, {
-        message: "Det saknas lite info för att verifiera dig. Försök igen senare.",
-    });
+    error(500, {
+            message: "Det saknas lite info för att verifiera dig. Försök igen senare.",
+        });
     // redirectTo.pathname = '/error'
     // return redirect(303, redirectTo)
 

@@ -28,7 +28,7 @@
   <title>Skapa konto</title>
 </svelte:head>
 
-<AuthSplit>
+<AuthSplit condition={!!review}>
   <svelte:fragment slot="aside">
     <div class="relative flex flex-col gap-3">
       <div class="absolute select-none -top-32 -left-11 rotate-180">

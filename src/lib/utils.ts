@@ -157,3 +157,9 @@ export const truncate = (text: string, limit: number) => {
   }
   return text;
 };
+
+export const verifyAvatarOwnership = (avatarUrl: string, userId: string) => {
+  const dirs = avatarUrl.split("/");
+  const expectedUserId = dirs[dirs.length - 1].split("---")[0];
+  return expectedUserId === userId;
+}

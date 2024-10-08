@@ -23,7 +23,7 @@ export const load = async ({ locals: { supabase }, params: { slug }, parent }) =
     } else {
       console.error("Unknown error when reading listing with id: " + slug, e);
       error(500, {
-        message: unknownErrorMessage, // todo: when have title + description, refactor to title: Hittade ingen annons.
+        message: "Hittade ingen annons"
       });
     }
   };
@@ -54,7 +54,7 @@ export const actions = {
     } catch (error) {
       console.error("Error when deleting listing slug id: " + slug, error);
       return fail(500, {
-        errorMessage: unknownErrorMessage,
+        errorMessage: unknownErrorMessage, // error or fail? todo fix
       });
     }
 

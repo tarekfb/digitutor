@@ -2,7 +2,7 @@ name: Deploy Migrations to Production
 
 on:
   workflow_run:
-    workflows: ["Tests", "Build", "CI"]
+    workflows: ["Test Prod", "Build", "CI"]
     types:
       - completed
 
