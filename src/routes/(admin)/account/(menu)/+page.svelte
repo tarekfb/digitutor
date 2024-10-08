@@ -18,7 +18,7 @@
 <!-- need to add hasaccepted as bool field to db conversations -->
 
 <PrimaryTitle class="text-center">Dina konversationer</PrimaryTitle>
-<div class="flex flex-col items-center text-center gap-y-4 my-6">
+<div class="flex flex-col items-center text-center gap-y-4 my-6 w-full">
   {#each conversations as conversation}
     <a
       href={"/account/conversation/" + conversation.id}
