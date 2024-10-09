@@ -34,6 +34,7 @@ export const getListings = async (
   return data as unknown as Listing[];
 }
 
+
 export const getListingsByTeacher = async (
   supabase: SupabaseClient<Database>,
   teacherId: string,

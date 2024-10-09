@@ -4,14 +4,14 @@ import { MessageId, getFailFormMessage, unknownErrorMessage } from "$lib/shared/
 import { message, superValidate } from "sveltekit-superforms";
 import { zod } from "sveltekit-superforms/adapters";
 import { resendSchema, signInSchema } from "$lib/shared/models/user";
-import { getDisplayReviews } from "src/lib/server/database/review";
+import { getHighQualityReviews } from "src/lib/server/database/review";
 import { getListingsByTeacher } from "src/lib/server/database/listings";
 import { Subjects } from "src/lib/shared/models/common";
 
 export const load: PageServerLoad = async ({ locals: { supabase } }) => {
     let longReviews;
     try {
-        const reviews = await getDisplayReviews(supabase);
+        const reviews = await getHighQualityReviews(supabase);
         const sorted = reviews.sort((a, b) => (b.description?.length ?? 0) - (a.description?.length ?? 0));
         longReviews = sorted.slice(0, 3);
     }

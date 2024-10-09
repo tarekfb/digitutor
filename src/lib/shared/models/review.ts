@@ -21,3 +21,30 @@ const addReviewProperties = {
 
 export const addReviewSchema = z.object(addReviewProperties)
 export type AddReviewSchema = typeof addReviewSchema;
+
+export type DbDisplayReview = {
+    id: string;
+    first_name: string;
+    last_name: string;
+    avatar_url: string | null;
+    avg_rating: number | null;
+}
+
+
+export type DisplayReview = {
+    id: string;
+    firstName: string;
+    lastName: string;
+    avatarUrl: string | null;
+    avgRating: number;
+}
+
+export const formatDisplayReview = (review: DbDisplayReview): DisplayReview => {
+    return {
+        id: review.id,
+        firstName: review.first_name,
+        lastName: review.last_name,
+        avatarUrl: review.avatar_url,
+        avgRating: review.avg_rating || 0,
+    };
+}

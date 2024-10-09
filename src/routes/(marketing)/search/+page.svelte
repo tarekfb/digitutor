@@ -6,7 +6,6 @@
   import * as Form from "$lib/components/ui/form/index.js";
   import { Input } from "$lib/components/ui/input/index.js";
   import FormSubmit from "$lib/components/molecules/form-submit.svelte";
-  import SearchResult from "src/lib/components/molecules/search-result-item.svelte";
   import {
     searchSchema,
     type SearchResult as SearchResultType,

@@ -1,8 +1,6 @@
 <script lang="ts">
   import { websiteName } from "$lib/shared/constants/constants";
   import ListingCard from "$lib/components/molecules/listing-card.svelte";
-  import { Button } from "$lib/components/ui/button";
-  import { goto } from "$app/navigation";
   import type { PageData } from "./$types";
   import { superForm } from "sveltekit-superforms";
   import { zodClient } from "sveltekit-superforms/adapters";
@@ -11,9 +9,12 @@
   import { Input } from "$lib/components/ui/input/index.js";
   import FormSubmit from "$lib/components/molecules/form-submit.svelte";
   import { searchSchema } from "src/lib/shared/models/search";
-  import SecondaryTitle from "src/lib/components/atoms/secondary-title.svelte";
+  import * as Card from "$lib/components/ui/card/index.js";
+  import * as Carousel from "$lib/components/ui/carousel/index.js";
+  import Autoplay from "embla-carousel-autoplay";
 
   export let data: PageData;
+  $: ({ displayReviews } = data);
 
   const searchForm = superForm(data.form, {
     validators: zodClient(searchSchema),
@@ -26,29 +27,23 @@
   <meta name="description" content="{websiteName} Startsida" />
 </svelte:head>
 
-<div class="flex flex-col items-center gap-y-4 text-center py-12 md:gap-y-8">
-  <div class="max-w-xl">
-    <div class="text-3xl md:text-4xl font-bold text-gradient">
-      {websiteName}
-    </div>
-
-    <div class="text-4xl md:text-6xl font-bold px-2" style="line-height: 1.2;">
-      Den
-      <span class="underline decoration-accent decoration-4 md:decoration-[6px]"
-        >största</span
-      >,
-      <span class="underline decoration-accent decoration-4 md:decoration-[6px]"
-        >bästa</span
-      >, och
-      <span class="underline decoration-accent decoration-4 md:decoration-[6px]"
-        >vackraste</span
-      >
-      <span> placeholdern för blabla</span>
-    </div>
+<div
+  class="flex flex-col items-center gap-y-8 mb-4 text-center md:gap-y-8 max-w-xl"
+>
+  <div class="text-4xl md:text-6xl font-bold px-2" style="line-height: 1.2;">
+    Vill du bli
+    <span class="underline decoration-accent decoration-4 md:decoration-[6px]"
+      >utvecklare</span
+    >,
+    <span class="underline decoration-accent decoration-4 md:decoration-[6px]"
+      >slipa på din javascript</span
+    >
+    eller bara
+    <span class="underline decoration-accent decoration-4 md:decoration-[6px]"
+      >klara tentan</span
+    >?
   </div>
-  {#if !data.session}
-    <Button on:click={() => goto("/sign-up")}>Skapa konto</Button>
-  {/if}
+  <h2 class="text-4xl font-bold px-2 text-gradient">Spana in våra lärare</h2>
 </div>
 
 <div
@@ -60,7 +55,6 @@
     method="POST"
     use:enhance
   >
-    <SecondaryTitle>Sök efter lärare och annonser</SecondaryTitle>
     <div class="flex justify-between gap-x-2 md:gap-x-4 items-start">
       <Form.Field form={searchForm} name="query" class="flex-1">
         <Form.Control let:attrs>
@@ -86,6 +80,35 @@
 
   <FormMessage {message} scroll scrollTo="end" />
 </div>
+
+{#if displayReviews.length > 0}
+  <Carousel.Root
+    class="w-5/6 max-w-xs p-8"
+    plugins={[
+      Autoplay({
+        delay: 2000,
+      }),
+    ]}
+  >
+    <Carousel.Content>
+      {#each Array(5) as _, i (i)}
+        <Carousel.Item class="md:basis-1/2 lg:basis-1/3">
+          <div class="p-1">
+            <Card.Root>
+              <Card.Content
+                class="flex aspect-square items-center justify-center p-6"
+              >
+                <span class="text-4xl font-semibold">{i + 1}</span>
+              </Card.Content>
+            </Card.Root>
+          </div>
+        </Carousel.Item>
+      {/each}
+    </Carousel.Content>
+    <Carousel.Previous />
+    <Carousel.Next />
+  </Carousel.Root>
+{/if}
 
 <div class="min-h-[60vh]">
   <div class="pt-20 pb-8 px-7">
