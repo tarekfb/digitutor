@@ -13,6 +13,7 @@ export const load: PageServerLoad = async ({ locals: { supabase } }) => {
     try {
         const unformatted = await getTopTeacherByReviews(supabase, 5);
         displayReviews = unformatted.map(r => formatDisplayReview(r));
+        // displayReviews = displayReviews.filter(r => r.avgRating > 0 && r.avatarUrl);
         displayReviews = displayReviews.filter(r => r.avgRating > 0);
         if (displayReviews.length > 4) displayReviews = displayReviews.slice(0, 4);
     }

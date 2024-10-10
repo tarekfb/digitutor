@@ -12,6 +12,9 @@
   import * as Card from "$lib/components/ui/card/index.js";
   import * as Carousel from "$lib/components/ui/carousel/index.js";
   import Autoplay from "embla-carousel-autoplay";
+  import Stars from "src/lib/components/atoms/stars.svelte";
+  import SecondaryTitle from "src/lib/components/atoms/secondary-title.svelte";
+  import { Subjects } from "src/lib/shared/models/common";
 
   export let data: PageData;
   $: ({ displayReviews } = data);
@@ -81,6 +84,11 @@
   <FormMessage {message} scroll scrollTo="end" />
 </div>
 
+<!-- <div class="p-1">
+ <div class="flex aspect-square items-center justify-center p-6">
+
+ </div>
+</div> -->
 {#if displayReviews.length > 0}
   <Carousel.Root
     class="w-5/6 max-w-xs p-8"
@@ -91,16 +99,24 @@
     ]}
   >
     <Carousel.Content>
-      {#each Array(5) as _, i (i)}
+      {#each displayReviews as review}
         <Carousel.Item class="md:basis-1/2 lg:basis-1/3">
-          <div class="p-1">
-            <Card.Root>
-              <Card.Content
-                class="flex aspect-square items-center justify-center p-6"
+          <div class="max-w-36 flex flex-col">
+            <img
+              alt="profile avatar"
+              class="rounded-lg mb-2"
+              width="250"
+              height="250"
+              src={review.avatarUrl}
+            />
+            <div
+              class="flex flex-col gap-y-0.5 text-muted-foreground text-xl md:text-2xl"
+            >
+              <SecondaryTitle class="font-semibold"
+                >{review.firstName}</SecondaryTitle
               >
-                <span class="text-4xl font-semibold">{i + 1}</span>
-              </Card.Content>
-            </Card.Root>
+              <Stars size={5} rating={review.avgRating} />
+            </div>
           </div>
         </Carousel.Item>
       {/each}
