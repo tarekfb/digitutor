@@ -2,9 +2,12 @@ name: Deploy to Cloudflare
 
 on:
   workflow_run:
-    workflows: ["Test Prod", "Build", "Deploy Migrations to Production", "CI"]
+    workflows: ["Build", "Deploy Migrations to Production", "CI"]
     types:
       - completed
+  push:
+    branches:
+      - master
 
 jobs:
   deploy_to_cloudflare:
