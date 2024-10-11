@@ -84,16 +84,16 @@
           {#if avgRating !== undefined}
             <Stars size={5} rating={avgRating} />
           {/if}
-          <div>
+          <ul>
             {#each subjects as subject, i}
               {#if i < 10}
-                <div class="flex gap-x-2 items-end">
+                <li class="flex gap-x-2 items-end">
                   <Terminal class="w-5 h-5 text-accent" />
                   <p class="font-mono text-base">{Subjects[subject]}</p>
-                </div>
+                </li>
               {/if}
             {/each}
-          </div>
+          </ul>
         </div>
       </div>
       <div class="flex flex-col items-center">

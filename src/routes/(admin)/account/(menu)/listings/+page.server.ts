@@ -12,7 +12,7 @@ export const load: PageServerLoad = async ({
 }) => {
   const { session } = await safeGetSession();
   if (!session)
-    throw redirect(303, "/sign-in");
+    redirect(303, "/sign-in");
 
   const { profile } = await parent();
   if (profile.role !== 'teacher')
@@ -24,7 +24,7 @@ export const load: PageServerLoad = async ({
   try {
     listings = await getListings(supabase, 3, session.user.id);
   } catch (e) {
-    console.error(e);
+    console.error("Unable to get listings for id " + session.user.id, e);
     return message(form, getFailFormMessage("Kunde inte hämta konversationer"), { status: 500 });
   }
 

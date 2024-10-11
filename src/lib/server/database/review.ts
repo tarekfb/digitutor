@@ -98,5 +98,7 @@ export const getTopTeacherByReviews = async (supabase: SupabaseClient<Database>,
         throw error;
     }
 
+    console.log(data)
+
     return data as unknown as DbDisplayReview[];
 }

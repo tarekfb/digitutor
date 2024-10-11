@@ -28,6 +28,7 @@ export type DbDisplayReview = {
     last_name: string;
     avatar_url: string | null;
     avg_rating: number | null;
+    subjects: number[];
 }
 
 
@@ -37,14 +38,16 @@ export type DisplayReview = {
     lastName: string;
     avatarUrl: string | null;
     avgRating: number;
+    subjects: number[];
 }
 
-export const formatDisplayReview = (review: DbDisplayReview): DisplayReview => {
+export const formatDisplayReview = ({ id, first_name, last_name, avatar_url, avg_rating, subjects }: DbDisplayReview): DisplayReview => {
     return {
-        id: review.id,
-        firstName: review.first_name,
-        lastName: review.last_name,
-        avatarUrl: review.avatar_url,
-        avgRating: review.avg_rating || 0,
+        id,
+        firstName: first_name,
+        lastName: last_name,
+        avatarUrl: avatar_url,
+        avgRating: avg_rating || 0,
+        subjects,
     };
 }
