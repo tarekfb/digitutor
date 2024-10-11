@@ -1,5 +1,5 @@
 import type { Session, SupabaseClient } from "@supabase/supabase-js";
-import type { InputReview, Review } from "src/lib/shared/models/review";
+import type { DbDisplayProfile, InputReview, Review } from "src/lib/shared/models/review";
 import { getNow } from "src/lib/utils";
 import type { Database, Tables } from "src/supabase";
 
@@ -61,7 +61,7 @@ export const getReviewsByReceiver = async (
     return data as unknown as Review[];
 }
 
-export const getDisplayReviews = async (supabase: SupabaseClient<Database>, max?: number) => {
+export const getHighQualityReviews = async (supabase: SupabaseClient<Database>, max?: number) => {
     let query = supabase
         .from("reviews")
         .select(`
@@ -83,4 +83,22 @@ export const getDisplayReviews = async (supabase: SupabaseClient<Database>, max?
     }
 
     return data as unknown as Review[];
+}
+
+
+export const getTopTeacherByReviews = async (supabase: SupabaseClient<Database>, max?: number): Promise<DbDisplayProfile[]> => {
+    // @ts-ignore
+    let query = supabase.rpc('get_top_teacher_by_reviews')
+
+    if (max) query = query.limit(max);
+    const { data, error } = await query;
+
+    if (error) {
+        console.error(`Failed to find reviews`, { error });
+        throw error;
+    }
+
+    console.log(data)
+
+    return data as unknown as DbDisplayProfile[];
 }

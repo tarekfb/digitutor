@@ -12,7 +12,7 @@
   import { superForm } from "sveltekit-superforms/client";
   import DeleteAvatar from "$lib/components/molecules/delete-avatar.svelte";
   import Dropzone from "svelte-file-dropzone";
-import * as Form from "$lib/components/ui/form";
+  import * as Form from "$lib/components/ui/form";
   import { Label } from "$lib/components/ui/label/index.js";
   export let uploadAvatarForm;
   export let avatarUrl: string | null;
@@ -33,11 +33,19 @@ import * as Form from "$lib/components/ui/form";
     timeoutMs: 4000,
   });
 
-  const { enhance, allErrors, message, form, delayed, timeout } = formRoot;
-  const setAvatar = (avatar: File) => {
-    console.log(avatar);
+  const { enhance, allErrors, errors, message, form, delayed, timeout } =
+    formRoot;
+  const setAvatar = (avatar?: File | null) => {
+    if (!avatar) return;
+    if (!avatar.type) return;
     formRoot.reset();
     $form.avatar = avatar;
+  };
+
+  const isBadHeic = (avatar?: File) => {
+    if (!avatar) return false;
+    if (avatar.type === "" && avatar.name.endsWith(".heic")) return true;
+    return false;
   };
 </script>
 
@@ -63,22 +71,24 @@ import * as Form from "$lib/components/ui/form";
           class="object-cover self-center rounded-md shadow-md"
         />
         <DeleteAvatar rootForm={deleteAvatarForm} />
-</div>
-    <Form.Field form={formRoot} name="avatar">
-      <Form.Control let:attrs>
-        <Label>Profilbild</Label>
-        <input
-          {...attrs}
-          type="file"
-          name="avatar"
-          bind:value={$form.avatar}
-          accept={getMimeType()}
-          class="overflow-hidden flex h-10 w-full border border-input rounded-md bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
-          on:input={(e) => setAvatar(e)}
-      />
-</Form.Control>
-      <Form.FieldErrors />
-    </Form.Field>
+      </div>
+      <Form.Field form={formRoot} name="avatar">
+        <Form.Control let:attrs>
+          <Label>Profilbild</Label>
+          <input
+            {...attrs}
+            type="file"
+            name="avatar"
+            bind:value={$form.avatar}
+            accept={getMimeType()}
+            class="overflow-hidden flex h-10 w-full border border-input rounded-md bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
+            on:input={(e) => setAvatar(e.currentTarget?.files?.item(0))}
+          />
+        </Form.Control>
+        {#if $errors.avatar && isBadHeic($form.avatar)}
+          <Form.FieldErrors />
+        {/if}
+      </Form.Field>
     {:else}
       <Dropzone
         on:drop={handleFilesSelect}
@@ -89,9 +99,14 @@ import * as Form from "$lib/components/ui/form";
       >
         <p>Dra och släpp en bild här, eller klicka för att välja en bild</p>
       </Dropzone>
-      {#if $form.avatar?.name}
-        <p>{$form.avatar.name}</p>
-      {/if}
+      <div class="space-y-2">
+        {#if $form.avatar?.name}
+          <p>{$form.avatar.name}</p>
+        {/if}
+        {#if $errors.avatar && isBadHeic($form.avatar)}
+          <Form.FieldErrors />
+        {/if}
+      </div>
     {/if}
     <FormMessage {message} scroll />
     <Button

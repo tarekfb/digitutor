@@ -7,7 +7,7 @@
   import { initCreateListingSchema } from "$lib/shared/models/listing.js";
   import { superForm, type SuperValidated } from "sveltekit-superforms";
   import { zodClient } from "sveltekit-superforms/adapters";
-  
+
   export let data: PageData;
   const listings = data.listings as Listing[];
 
@@ -29,7 +29,7 @@
 </script>
 
 <PrimaryTitle class="text-center">Dina annonser</PrimaryTitle>
-<div class="flex flex-col gap-y-4 my-6">
+<div class="flex flex-col gap-y-4 my-6 w-full">
   {#each listings as listing}
     <ListingCard {listing} publicView={false} clickable />
   {:else}

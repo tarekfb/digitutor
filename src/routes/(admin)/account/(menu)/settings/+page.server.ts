@@ -84,6 +84,8 @@ export const actions = {
             throw redirect(303, "/sign-in");
 
         const form = await superValidate(event, zod(avatarSchema));
+        if (!form.data || !form.data.avatar) return fail(400, { form });    
+        if (form.data.avatar.type.endsWith("octet-stream")) return message(form, getFailFormMessage("Filformatet är inte giltigt", `Filformatet är "octet-stream". Testa med en annan bild.`), { status: 400 });
         if (!form.valid) return fail(400, { form });
         const { avatar } = form.data;
 
