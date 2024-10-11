@@ -4,28 +4,21 @@ import { searchSchema, } from "src/lib/shared/models/search";
 import type { Actions, PageServerLoad } from "./$types";
 import { redirect } from "@sveltejs/kit";
 import { getTopTeacherByReviews } from "src/lib/server/database/review";
-import { formatDisplayReview, type DisplayReview } from "src/lib/shared/models/review";
+import { formatDisplayProfile, type DisplayProfile } from "src/lib/shared/models/review";
 
 export const load: PageServerLoad = async ({ locals: { supabase } }) => {
     const form = await superValidate(zod(searchSchema))
 
-    let displayReviews: DisplayReview[] = [];
+    let displayProfiles: DisplayProfile[] = [];
     try {
         const unformatted = await getTopTeacherByReviews(supabase, 5);
-        displayReviews = unformatted.map(r => formatDisplayReview(r));
-        // displayReviews = displayReviews.filter(r => r.avgRating > 0 && r.avatarUrl);
-        displayReviews = displayReviews.filter(r => r.avgRating > 0);
-        displayReviews = displayReviews.map(r => {
-            return {
-                ...r,
-                subjects: [...r.subjects, 5, 6, 7, 8, 10, 12],
-            }
-        });
-        if (displayReviews.length > 4) displayReviews = displayReviews.slice(0, 4);
+        displayProfiles = unformatted.map(r => formatDisplayProfile(r));
+        displayProfiles = displayProfiles.filter(r => r.avgRating > 0 && r.avatarUrl);
+        if (displayProfiles.length > 4) displayProfiles = displayProfiles.slice(0, 4);
     }
     catch (e) {
         console.error("Error when fetching top teacher by reviews", e);
-        displayReviews = [];
+        displayProfiles = [];
     }
 
 
@@ -42,7 +35,7 @@ export const load: PageServerLoad = async ({ locals: { supabase } }) => {
     //     });
     // };
 
-    return { form, displayReviews };
+    return { form, displayProfiles };
 }
 
 export const actions: Actions = {

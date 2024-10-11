@@ -1,5 +1,5 @@
 import type { Session, SupabaseClient } from "@supabase/supabase-js";
-import type { DbDisplayReview, InputReview, Review } from "src/lib/shared/models/review";
+import type { DbDisplayProfile, InputReview, Review } from "src/lib/shared/models/review";
 import { getNow } from "src/lib/utils";
 import type { Database, Tables } from "src/supabase";
 
@@ -86,7 +86,7 @@ export const getHighQualityReviews = async (supabase: SupabaseClient<Database>, 
 }
 
 
-export const getTopTeacherByReviews = async (supabase: SupabaseClient<Database>, max?: number): Promise<DbDisplayReview[]> => {
+export const getTopTeacherByReviews = async (supabase: SupabaseClient<Database>, max?: number): Promise<DbDisplayProfile[]> => {
     // @ts-ignore
     let query = supabase.rpc('get_top_teacher_by_reviews')
 
@@ -100,5 +100,5 @@ export const getTopTeacherByReviews = async (supabase: SupabaseClient<Database>,
 
     console.log(data)
 
-    return data as unknown as DbDisplayReview[];
+    return data as unknown as DbDisplayProfile[];
 }
