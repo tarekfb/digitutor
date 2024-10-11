@@ -9,9 +9,13 @@
   import FormSubmit from "$lib/components/molecules/form-submit.svelte";
   import { searchSchema } from "src/lib/shared/models/search";
   import ProfileCarousel from "src/lib/components/organisms/profile-carousel.svelte";
+  import { ArrowRightIcon } from "lucide-svelte";
+  import Stars from "src/lib/components/atoms/stars.svelte";
+  import Avatar from "src/lib/components/atoms/avatar.svelte";
+  import ReviewCardExtra from "src/lib/components/molecules/review-card-extra.svelte";
 
   export let data: PageData;
-  $: ({ displayProfiles } = data);
+  $: ({ displayProfiles, displayReviews } = data);
 
   const searchForm = superForm(data.form, {
     validators: zodClient(searchSchema),
@@ -79,6 +83,15 @@
 </div>
 
 <ProfileCarousel profiles={displayProfiles} />
+
+<div class="text-3xl md:text-5xl font-bold text-center text-gradient my-4">
+  Bevis på att det här är inte är skräp
+</div>
+<div>
+  {#each displayReviews as review}
+    <ReviewCardExtra {review} class="w-64" />
+  {/each}
+</div>
 
 <!-- <div class="min-h-[60vh]">
   <div class="pt-20 pb-8 px-7">

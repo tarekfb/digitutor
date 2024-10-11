@@ -62,7 +62,7 @@ export const getReviewsByReceiver = async (
 }
 
 export const getHighQualityReviews = async (supabase: SupabaseClient<Database>, max?: number) => {
-    let query = supabase
+    let query = supabase                                                                                                                                                                       
         .from("reviews")
         .select(`
             *,
@@ -97,8 +97,6 @@ export const getTopTeacherByReviews = async (supabase: SupabaseClient<Database>,
         console.error(`Failed to find reviews`, { error });
         throw error;
     }
-
-    console.log(data)
 
     return data as unknown as DbDisplayProfile[];
 }

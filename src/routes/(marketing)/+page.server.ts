@@ -3,8 +3,8 @@ import { zod } from "sveltekit-superforms/adapters";
 import { searchSchema, } from "src/lib/shared/models/search";
 import type { Actions, PageServerLoad } from "./$types";
 import { redirect } from "@sveltejs/kit";
-import { getTopTeacherByReviews } from "src/lib/server/database/review";
-import { formatDisplayProfile, type DisplayProfile } from "src/lib/shared/models/review";
+import { getHighQualityReviews, getTopTeacherByReviews } from "src/lib/server/database/review";
+import { formatDisplayProfile, type DisplayProfile, type Review } from "src/lib/shared/models/review";
 
 export const load: PageServerLoad = async ({ locals: { supabase } }) => {
     const form = await superValidate(zod(searchSchema))
@@ -23,19 +23,17 @@ export const load: PageServerLoad = async ({ locals: { supabase } }) => {
 
 
     // also get some good reviews
-    // let review;
-    // try {
-    //     const reviews = await getHighQualityReviews(supabase, 1);
-    //     const longReviews = reviews.filter(r => r.description && r.description.length > 15);
-    //     review = longReviews[0] ?? reviews[0];
-    // } catch (e) {
-    //     console.error("Error when reviews signup display, perhaps didnt find valid review", e);
-    //     error(500, {
-    //         message: unknownErrorTitle,
-    //     });
-    // };
+    let displayReviews: Review[] = [];
+    try {
+        const reviews = await getHighQualityReviews(supabase, 1);
+        displayReviews = reviews.filter(r => r.description && r.description.length > 15);
+        if (displayReviews.length > 4) displayReviews = displayReviews.slice(0, 4);
+    } catch (e) {
+        console.error("Error when fetching display reviews", e);
+        displayReviews = [];
+    };
 
-    return { form, displayProfiles };
+    return { form, displayProfiles, displayReviews };
 }
 
 export const actions: Actions = {
