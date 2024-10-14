@@ -372,35 +372,35 @@ VALUES
         '550e8400-e29b-41d4-a716-446655440020',
         '550e8400-e29b-41d4-a716-446655440000',
         5,
-        'Tarek is fantastic!'
+        'Tarek is a great instructor. He is very knowledgeable and explains things clearly.'
     ),
     (
         uuid_generate_v4(),
         '550e8400-e29b-41d4-a716-446655440040',
         '550e8400-e29b-41d4-a716-446655440000',
         4,
-        'Tarek is knowledgeable.'
+        'Tarek is a good teacher. He is patient and helpful.'
     ),
     (
         uuid_generate_v4(),
         '550e8400-e29b-41d4-a716-446655440050',
         '550e8400-e29b-41d4-a716-446655440000',
         5,
-        'Excellent teacher.'
+        'Tarek is an excellent teacher. He is very knowledgeable and explains things clearly.'
     ),
     (
         uuid_generate_v4(),
         '550e8400-e29b-41d4-a716-446655440060',
         '550e8400-e29b-41d4-a716-446655440000',
         5,
-        'Learned a lot from Tarek.'
+        'Tarek is a great teacher. I have learned a lot from him. He is very patient and takes the time to explain things clearly. He is also very knowledgeable and knows how to break down complex topics into simpler terms. He is a great communicator and is always available to answer questions.'
     ),
     (
         uuid_generate_v4(),
         '550e8400-e29b-41d4-a716-446655440070',
         '550e8400-e29b-41d4-a716-446655440000',
         4,
-        'Good teacher, but sometimes unclear.'
+        'Tarek is a good teacher, but sometimes his explanations are unclear.'
     ),
     -- Reviews for Bob
     (

@@ -19,7 +19,7 @@
     class="w-5/6 max-w-xs md:max-w-md p-2"
     plugins={[
       Autoplay({
-        delay: 3000,
+        delay: 4000,
       }),
     ]}
   >

@@ -21,13 +21,10 @@ export const load: PageServerLoad = async ({ locals: { supabase } }) => {
         displayProfiles = [];
     }
 
-
-    // also get some good reviews
     let displayReviews: Review[] = [];
     try {
-        const reviews = await getHighQualityReviews(supabase, 1);
+        const reviews = await getHighQualityReviews(supabase, 4);
         displayReviews = reviews.filter(r => r.description && r.description.length > 15);
-        if (displayReviews.length > 4) displayReviews = displayReviews.slice(0, 4);
     } catch (e) {
         console.error("Error when fetching display reviews", e);
         displayReviews = [];
