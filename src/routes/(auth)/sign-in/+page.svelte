@@ -121,7 +121,7 @@
       method="POST"
       use:enhance
     >
-      <div class="space-y-1 mb-4 text-center lg:text-start">
+      <div class="flex flex-col gap-y-2 mb-4 text-center lg:text-start">
         <PrimaryTitle class="text-2xl">Logga in</PrimaryTitle>
         <p class="text-muted-foreground">
           Har du inget konto?

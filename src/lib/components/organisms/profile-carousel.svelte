@@ -14,7 +14,7 @@
   export let profiles: DisplayProfile[];
 </script>
 
-{#if profiles.length > 0}
+{#if profiles.length > 1}
   <Carousel.Root
     class="w-5/6 max-w-xs md:max-w-md p-2"
     plugins={[

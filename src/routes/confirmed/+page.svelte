@@ -1,43 +1,40 @@
 <script lang="ts">
   import { websiteName } from "$lib/shared/constants/constants";
-  import * as Alert from "$lib/components/ui/alert/index.js";
   import { Button } from "$lib/components/ui/button";
   import { CheckCircle2 } from "lucide-svelte";
   import { goto } from "$app/navigation";
+  import Navbar from "src/lib/components/organisms/navbar.svelte";
+  import { UserRound } from "lucide-svelte";
+  import PrimaryTitle from "src/lib/components/atoms/primary-title.svelte";
+  import SecondaryTitle from "src/lib/components/atoms/secondary-title.svelte";
 </script>
 
 <svelte:head>
-  <title>{websiteName} | Verifiera e-post</title>
+  <title>{websiteName} | E-post verifiering</title>
   <meta name="description" content="{websiteName} email confirmation" />
 </svelte:head>
 
-<!-- todo: make component -->
-<header
-  class="sticky top-0 z-40 w-full bg-gradient-to-r from-primary to-accent text-background px-1"
->
-  <div
-    class="container flex h-16 items-center space-x-4 sm:justify-between sm:space-x-0"
-  >
-    <a href="/" class="text-2xl font-semibold">
-      {websiteName}
-    </a>
-  </div>
-</header>
-<div class="m-8 text-center flex flex-col gap-y-8 items-center">
-  <CheckCircle2 size="120" class="text-success" />
-  <Alert.Root
-    variant="success"
-    class="bg-card flex flex-col space-y-4 text-center items-center"
-  >
-    <Alert.Title class="flex items-center gap-x-2 text-3xl md:text-6xl"
-      >E-post verifierad!</Alert.Title
-    >
-    <Alert.Description
-      class="text-xl md:text-2xl flex flex-col gap-y-4 justify-center"
-      >Du kan nu fortsätta.
+<Navbar profile={false} logout={false}>
+  <Button on:click={() => goto("/account")}>
+    <UserRound class="mr-2 h-4 w-4" />
+    Konto
+  </Button>
+</Navbar>
 
-      <!-- todo apply btn-wide --></Alert.Description
+<div
+  class="m-8 text-center flex flex-col gap-y-6 md:gap-y-8 items-center max-w-xl self-center"
+>
+  <CheckCircle2 size="100" class="text-success" />
+  <div class="space-y-2 md:space-y-4">
+    <PrimaryTitle class="text-3xl md:text-6xl font-semibold">
+      E-post verifierad!
+    </PrimaryTitle>
+    <SecondaryTitle class="text-muted-foreground"
+      >Du kan nu fortsätta.</SecondaryTitle
     >
-  </Alert.Root>
-  <Button on:click={() => goto("/account")}>Gå till ditt konto</Button>
+  </div>
+
+  <Button on:click={() => goto("/account")} class="md:min-w-wider"
+    >Gå till ditt konto</Button
+  >
 </div>
