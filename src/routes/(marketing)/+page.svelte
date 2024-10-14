@@ -45,7 +45,7 @@
           class="inline-flex items-center content w-60"
           plugins={[
             Autoplay({
-              delay: 2000,
+              delay: 3000,
             }),
           ]}
         >
