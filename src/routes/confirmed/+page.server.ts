@@ -48,7 +48,7 @@ export const load: PageServerLoad = async (event) => {
     }
 
     error(500, {
-            message: "Det saknas lite info för att verifiera dig. Försök igen senare.",
+            message: "Det saknas lite info för att verifiera dig.",
         });
     // redirectTo.pathname = '/error'
     // return redirect(303, redirectTo)

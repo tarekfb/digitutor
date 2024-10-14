@@ -2,6 +2,7 @@
   import { websiteName } from "$lib/shared/constants/constants";
   import Error from "$lib/components/organisms/error.svelte";
   import { page } from "$app/stores";
+  import Navbar from "src/lib/components/organisms/navbar.svelte";
 
   const title =
     $page.error?.message === "Internal Error"
@@ -9,17 +10,5 @@
       : $page.error?.message;
 </script>
 
-<!-- todo: make component -->
-<header
-  class="sticky top-0 z-40 w-full bg-gradient-to-r from-primary to-accent text-background px-1"
->
-  <div
-    class="flex h-16 items-center space-x-4 sm:justify-between sm:space-x-0"
-  >
-    <a href="/" class="text-2xl font-semibold">
-      {websiteName}
-    </a>
-  </div>
-</header>
-
+<Navbar profile={false} logout={false} />
 <Error {title} code={$page.status} />

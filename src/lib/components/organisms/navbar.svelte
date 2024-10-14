@@ -73,7 +73,7 @@
                 <DropdownMenu.Separator />
                 <DropdownMenu.Item class="data-[highlighted]:bg-white">
                   <button
-                    class="flex space-x-2 w-full"
+                    class="flex gap-x-2 w-full items-center"
                     disabled={logoutLoading}
                     on:click={() => goto("/account")}
                   >
@@ -84,7 +84,7 @@
                 <DropdownMenu.Separator />
                 <DropdownMenu.Item class="data-[highlighted]:bg-white">
                   <button
-                    class="flex space-x-2 w-full"
+                    class="flex gap-x-2 w-full items-center"
                     disabled={logoutLoading}
                     on:click={wrappedLogout}
                   >

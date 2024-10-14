@@ -19,15 +19,16 @@
 </script>
 
 <div
-  class="max-w-[42rem] text-center flex flex-col items-center gap-y-4 md:gap-y-6 self-center m-8"
+  class="max-w-[42rem] md:max-w-[60rem] text-center flex flex-col items-center gap-y-4 md:gap-y-6 self-center m-8"
 >
-  <div class="max-w-md flex flex-col items-center gap-y-4 md:gap-y-6">
-    <PrimaryTitle class="text-4xl md:text-5xl font-normal">{title}</PrimaryTitle
+  <div class=" flex flex-col items-center gap-y-4 md:gap-y-6">
+    <PrimaryTitle class="text-4xl md:text-5xl font-normal whitespace-normal"
+      >{title}</PrimaryTitle
     >
     {#if code !== 0}
       <p class="text-3xl md:text-4xl text-accent font-mono">{code}</p>
     {/if}
-    <p class="text-xl md:text-2xl text-muted-foreground">
+    <p class="text-xl md:text-2xl text-muted-foreground max-w-md">
       {description}
     </p>
   </div>
