@@ -34,7 +34,7 @@
   <div
     class="flex flex-col items-center gap-y-8 mb-4 text-center md:gap-y-8 text-background"
   >
-    <div class="text-3xl md:text-5xl font-bold px-2" style="line-height: 1.2;">
+    <div class="text-3xl md:text-5xl font-semibold px-2" style="line-height: 1.2;">
       Vill du bli
       <span
         class="underline decoration-primary decoration-4 md:decoration-[6px]"
@@ -67,7 +67,7 @@
       >?
     </div>
     <div>
-      <h2 class="text-3xl md:text-5xl font-bold px-2">Spana in våra lärare</h2>
+      <h2 class="text-3xl md:text-5xl font-semibold px-2">Spana in våra lärare</h2>
       <h3>
         <span
           class="flex justify-center items-center gap-y-2 text-2xl md:text-4xl py-2"
@@ -126,16 +126,18 @@
 
 <ProfileCarousel profiles={displayProfiles} />
 
-<p class="text-3xl md:text-5xl font-bold text-center text-gradient my-4">
-  Vad våra användare säger
-</p>
-<div
-  class="flex flex-col gap-y-4 md:flex-row md:grid md:grid-cols-2 gap-x-8 md:gap-y-6"
->
-  {#each displayReviews as review}
-    <ReviewCardExtra {review} class="w-64" />
-  {/each}
-</div>
+{#if displayReviews.length > 0}
+  <p class="text-3xl md:text-5xl font-bold text-center text-gradient my-4">
+    Vad våra användare säger
+  </p>
+  <div
+    class="flex flex-col gap-y-4 md:flex-row md:grid md:grid-cols-2 gap-x-8 md:gap-y-6 md:mb-6"
+  >
+    {#each displayReviews as review}
+      <ReviewCardExtra {review} class="w-64" />
+    {/each}
+  </div>
+{/if}
 <p class="text-xl md:text-3xl font-bold text-center text-gradient mt-4">
   Vill du lära ut på {websiteName}?
 </p>
