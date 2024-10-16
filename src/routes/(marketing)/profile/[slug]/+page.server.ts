@@ -1,18 +1,20 @@
 import { error } from "@sveltejs/kit";
 import { getFailFormMessage, unknownErrorTitle } from "$lib/shared/constants/constants";
 import { getProfileByUser } from "$lib/server/database/profiles";
-import { getListingsByTeacher as getListingsByTeacher } from "$lib/server/database/listings";
+import { getListing, getListingsByTeacher as getListingsByTeacher } from "$lib/server/database/listings";
 import { fail, message, superValidate } from "sveltekit-superforms";
 import { requestContactSchema, startContactSchema } from "$lib/shared/models/conversation";
-import { addReviewSchema } from "$lib/shared/models/review";
+import { addReviewSchema, type Review } from "$lib/shared/models/review";
 import { zod } from "sveltekit-superforms/adapters";
 import { getConversationForStudentAndTeacher, startConversation } from "$lib/server/database/conversations";
 import { redirect, setFlash } from "sveltekit-flash-message/server";
 import { ResourceAlreadyExistsError } from "src/lib/shared/errors/resource-already-exists-error.js";
 import { createReview, getReviewsByReceiver } from "src/lib/server/database/review.js";
+import type { Listing } from "src/lib/shared/models/listing.js";
+import type { Message } from "src/lib/shared/models/common.js";
 
 export const load = async (event) => {
-    const { locals: { supabase, safeGetSession }, params: { slug }, parent } = event;
+    const { locals: { supabase, safeGetSession }, params: { slug }, parent, url: { searchParams } } = event;
 
     let teacher;
     try {
@@ -31,32 +33,47 @@ export const load = async (event) => {
         });
     }
 
-    let listings;
-    try {
-        listings = await getListingsByTeacher(supabase, slug, undefined, true);
-    } catch (e) {
-        console.error("Error when reading listings for profile with id: " + slug, e);
-        error(500, {
-            message: unknownErrorTitle,
-        });
+    const listingId = searchParams.get('id') || '';
+    let listing: Listing | undefined = undefined;
+    let listingMessage: Message | undefined = undefined;
+    if (listingId) {
+        try {
+            listing = await getListing(supabase, listingId);
+        } catch (e) {
+            console.error("Error when reading listings for profile with id: " + slug, e);
+            listingMessage = getFailFormMessage("Kunde inte hämta annonsen", "Något gick fel. Kontakta oss om detta fortsätter.");
+        }
     }
 
-    let reviews;
+    // let listings;
+    // try {
+    //     listings = await getListingsByTeacher(supabase, slug, undefined, true);
+    // } catch (e) {
+    //     console.error("Error when reading listings for profile with id: " + slug, e);
+    //     error(500, {
+    //         message: unknownErrorTitle,
+    //     });
+    // }
+
+    let reviews: Review[] = [];
+    let reviewsMessage: Message | undefined = undefined;
     try {
         reviews = await getReviewsByReceiver(supabase, slug);
     } catch (e) {
         console.error("Error when reading reviews for profile with id: " + slug, e);
-        error(500, {
-            message: unknownErrorTitle,
-        });
+        const { user: { id } } = await safeGetSession();
+        const isOwner = id === slug;
+        if (isOwner) // only show error info to owner
+            reviewsMessage = getFailFormMessage("Kunde inte hämta recensioner", "Något gick fel. Kontakta oss om detta fortsätter.");
+
     }
 
     const { profile } = await parent();
-    const role = profile?.role ?? "";
+    const role = profile?.role ?? ""
 
     let allowCreateReview: boolean = false;
     if (role === "student") {
-        const hasExistingReview = reviews.find((r) => r.sender?.id === profile?.id)
+        const hasExistingReview = reviews.find((r) => r.sender?.id === profile?.id);
         if (!hasExistingReview) {
             const { session } = await safeGetSession();
             if (session) {
@@ -66,17 +83,21 @@ export const load = async (event) => {
                 } catch (error) {
                     console.error(`Error when adding review for profile slug ${slug}, unable to read conversation for teacher & student` + slug, error);
                     allowCreateReview = true;
-                    // allow in off-chance it's permitted for better UX
+                    // incase of error do allow anyway in off-chance it would've been permitted
+                    // for better UX
                     // backend will block bad request anyhow
                 }
             }
         }
     }
 
+    // replace all these fetches with 1 db query RPC function
+    // plus if query param do that one seperately
+
     const requestContactForm = await superValidate({ teacher: teacher.id, role }, zod(requestContactSchema))
     const startContactForm = await superValidate({ teacher: teacher.id, role }, zod(startContactSchema))
     const addReviewForm = await superValidate({ rating: 5 }, zod(addReviewSchema))
-    return { teacher, listings, reviews, requestContactForm, startContactForm, addReviewForm, allowCreateReview };
+    return { teacher, reviews, reviewsMessage, listing, listingMessage, requestContactForm, startContactForm, addReviewForm, allowCreateReview };
 }
 
 export const actions = {

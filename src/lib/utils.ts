@@ -7,6 +7,8 @@ import { invalidate } from "$app/navigation";
 import type { SupabaseClient, Session, PostgrestError } from "@supabase/supabase-js";
 import { redirect } from "@sveltejs/kit";
 import type { Database } from "lucide-svelte";
+import type { Review } from "./shared/models/review";
+import type { Tables } from "src/supabase";
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
