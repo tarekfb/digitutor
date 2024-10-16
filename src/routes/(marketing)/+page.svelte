@@ -141,7 +141,7 @@
       class="flex flex-col gap-y-4 md:flex-row md:grid md:grid-cols-2 gap-x-8 md:gap-y-6 md:mb-6"
     >
       {#each displayReviews as review}
-        <ReviewCardExtra {review} class="w-64" />
+        <ReviewCardExtra {review} class="w-64 h-fit" />
       {/each}
     </div>
   {/if}
