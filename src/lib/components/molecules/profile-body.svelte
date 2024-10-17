@@ -14,7 +14,7 @@
   export let addReviewForm: SuperValidated<Infer<typeof addReviewSchema>>;
 </script>
 
-<PrimaryTitle class="text-wrap">Om mig</PrimaryTitle>
+<PrimaryTitle class="text-wrap">Om {teacher.first_name}</PrimaryTitle>
 <p class={cn("text-muted-foreground", pStyle)}>
   <!-- {#if profile.bio}
           {profile.bio}
