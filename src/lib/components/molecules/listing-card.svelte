@@ -10,7 +10,7 @@
 </script>
 
 {#if clickable}
-  <a href="/listing/{listing.id}" aria-label="Gå till annons">
+  <a href="/profile/{listing.profile.id}?id={listing.id}" aria-label="Gå till annons">
     <Card.Root>
       <Card.Header>
         <Card.Title class="flex justify-between gap-x-2 items-center">
