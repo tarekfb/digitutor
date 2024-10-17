@@ -22,7 +22,7 @@ export const load: PageServerLoad = async ({
 
   let listings;
   try {
-    listings = await getListings(supabase, 3, session.user.id);
+    listings = await getListings(supabase, 10, session.user.id);
   } catch (e) {
     console.error("Unable to get listings for id " + session.user.id, e);
     return message(form, getFailFormMessage("Kunde inte hämta konversationer"), { status: 500 });

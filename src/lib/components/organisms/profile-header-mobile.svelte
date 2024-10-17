@@ -9,6 +9,7 @@
     requestContactSchema,
     startContactSchema,
   } from "src/lib/shared/models/conversation";
+  import NotPublished from "../atoms/not-published.svelte";
 
   export let teacher: Tables<"profiles">;
   export let listing: Listing | undefined;
@@ -36,8 +37,8 @@
       requestContactAction="?/requestContact"
       startContactAction="?/startContact"
       firstName={teacher.first_name}
-      buttonStyling="self-end"
     />
+    <NotPublished visible={listing?.visible} />
   </div>
 {:else}
   <div class="w-screen bg-accent flex flex-col items-center text-foreground">
@@ -54,8 +55,8 @@
       requestContactAction="?/requestContact"
       startContactAction="?/startContact"
       firstName={teacher.first_name}
-      buttonStyling="self-end"
     />
+    <NotPublished visible={listing?.visible} />
   </div>
 
   <Wavy class="-mt-4 overflow-x-hidden " />

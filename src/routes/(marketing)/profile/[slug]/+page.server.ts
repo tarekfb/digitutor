@@ -12,7 +12,6 @@ import { ResourceAlreadyExistsError } from "src/lib/shared/errors/resource-alrea
 import { createReview, getReviewsByReceiver } from "src/lib/server/database/review.js";
 import type { Listing } from "src/lib/shared/models/listing.js";
 import type { Message, PsqlError } from "src/lib/shared/models/common.js";
-import { ResourceNotFoundError } from "src/lib/shared/errors/missing-error.js";
 
 export const load = async (event) => {
     const { locals: { supabase, safeGetSession }, params: { slug }, parent, url: { searchParams } } = event;
@@ -79,7 +78,7 @@ export const load = async (event) => {
     if (role === "student") {
         const hasExistingReview = reviews.find((r) => r.sender?.id === profile?.id);
         if (!hasExistingReview) {
-            if (session) {
+            if (userId) {
                 try {
                     const hasExistingConversation = await getConversationForStudentAndTeacher(supabase, userId, slug);
                     allowCreateReview = hasExistingConversation?.has_replied ? true : false;
@@ -94,6 +93,7 @@ export const load = async (event) => {
         }
     }
 
+    // todo: below
     // replace all these fetches with 1 db query RPC function
     // plus if query param do that one seperately
 
