@@ -21,12 +21,7 @@
         {:else}
           Den här läraren har ingen beskrivning just nu.
         {/if} -->
-  Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec placerat aliquet
-  porta. Fusce sagittis blandit porttitor. Proin sed lacus eget dolor dignissim luctus.
-  In congue fermentum orci, eu cursus lacus rhoncus et. Nunc id magna at orci suscipit
-  bibendum sit amet ut augue. Ut ac nisl neque. Quisque eget luctus lectus. Pellentesque
-  ac volutpat tellus. Cras risus massa, eleifend vel diam et, rutrum volutpat sapien.
-  In rhoncus nisl ut libero placerat porta.
+  Den här läraren har ingen beskrivning just nu.
 </p>
 <PrimaryTitle class="text-wrap">Recensioner</PrimaryTitle>
 {#if reviews.length > 0}

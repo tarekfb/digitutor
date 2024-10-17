@@ -154,36 +154,7 @@
             {/if}
           </p>
         {/if}
-        <PrimaryTitle class="text-wrap">Om mig</PrimaryTitle>
-        <p class="text-xl text-muted-foreground">
-          <!-- {#if profile.bio}
-          {profile.bio}
-        {:else}
-          Den här läraren har ingen beskrivning just nu.
-        {/if} -->
-          Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec placerat
-          aliquet porta. Fusce sagittis blandit porttitor. Proin sed lacus eget dolor
-          dignissim luctus. In congue fermentum orci, eu cursus lacus rhoncus et.
-          Nunc id magna at orci suscipit bibendum sit amet ut augue. Ut ac nisl neque.
-          Quisque eget luctus lectus. Pellentesque ac volutpat tellus. Cras risus
-          massa, eleifend vel diam et, rutrum volutpat sapien. In rhoncus nisl ut
-          libero placerat porta.
-        </p>
-        <PrimaryTitle class="text-wrap">Recensioner</PrimaryTitle>
-        {#if reviews.length > 0}
-          <ul class="flex flex-col gap-y-4">
-            {#each reviews as review}
-              <ProfileReviewCard {review} />
-            {/each}
-          </ul>
-        {:else}
-          <p>
-            {teacher.first_name} har inga recensioner ännu.
-          </p>
-        {/if}
-        {#if allowCreateReview}
-          <AddReview form={addReviewForm} {teacher} />
-        {/if}
+        <ProfileBody {teacher} {allowCreateReview} {reviews} {addReviewForm} />
       </main>
     </div>
   </div>
