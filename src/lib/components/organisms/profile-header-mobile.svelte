@@ -38,7 +38,7 @@
       startContactAction="?/startContact"
       firstName={teacher.first_name}
     />
-    <NotPublished visible={listing?.visible} />
+    <NotPublished visible={listing?.visible} class="self-center" />
   </div>
 {:else}
   <div class="w-screen bg-accent flex flex-col items-center text-foreground">
@@ -56,7 +56,7 @@
       startContactAction="?/startContact"
       firstName={teacher.first_name}
     />
-    <NotPublished visible={listing?.visible} />
+    <NotPublished visible={listing?.visible} class="self-center"/>
   </div>
 
   <Wavy class="-mt-4 overflow-x-hidden " />
