@@ -130,7 +130,7 @@
           startContactAction="?/startContact"
           firstName={teacher.first_name}
         />
-        <NotPublished visible={listing?.visible} />
+        <NotPublished visible={listing?.visible} class="self-center"/>
         {#if session?.user.id === teacher.id && listingMessage}
           <AlertMessage
             title={listingMessage.title}
