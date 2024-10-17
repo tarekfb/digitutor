@@ -5,21 +5,13 @@
   import ListingCard from "$lib/components/molecules/listing-card.svelte";
   import type { Listing } from "$lib/shared/models/listing";
   import { initCreateListingSchema } from "$lib/shared/models/listing.js";
-  import { superForm, type SuperValidated } from "sveltekit-superforms";
+  import { superForm, type SuperValidated, type Infer } from "sveltekit-superforms";
   import { zodClient } from "sveltekit-superforms/adapters";
 
   export let data: PageData;
   const listings = data.listings as Listing[];
 
-  const form = data.form as SuperValidated<
-    {
-      title: string;
-    },
-    any,
-    {
-      title: string;
-    }
-  >;
+  const form = data.form as SuperValidated<Infer<typeof initCreateListingSchema>>;
   // this is complaining about potential undefined. Maybe there's an issue with parent serving data?
   // anyway, proceeding with this dirty hack...
 

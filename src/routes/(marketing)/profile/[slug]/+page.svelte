@@ -1,11 +1,9 @@
 <script lang="ts">
   import type { PageData } from "./$types";
-  import AddReview from "src/lib/components/molecules/add-review.svelte";
   import PrimaryTitle from "$lib/components/atoms/primary-title.svelte";
   import { mediaQuery } from "svelte-legos";
   import RootContainer from "src/lib/components/molecules/root-container.svelte";
   import ProfileHeaderMobile from "src/lib/components/organisms/profile-header-mobile.svelte";
-  import ProfileReviewCard from "src/lib/components/molecules/profile-review-card.svelte";
   import ContactTeacherForm from "src/lib/components/molecules/contact-teacher-form.svelte";
   import SecondaryTitle from "src/lib/components/atoms/secondary-title.svelte";
   import { Terminal } from "lucide-svelte";
@@ -31,7 +29,7 @@
 </script>
 
 {#if !$isDesktop}
-  <RootContainer class="w-full m-0">
+  <RootContainer class="w-full m-0 ">
     <ProfileHeaderMobile
       {teacher}
       {listing}
@@ -39,7 +37,7 @@
       {startContactForm}
     />
     {#if session?.user.id === teacher.id && listingMessage}
-      <div class="mx-8 -mb-8">
+      <div class="mx-8">
         <AlertMessage
           title={listingMessage.title}
           description={listingMessage.description}
@@ -51,7 +49,7 @@
         </AlertMessage>
       </div>
     {/if}
-    <div class="flex flex-col gap-y-4 my-4 p-8">
+    <div class="flex flex-col gap-y-4 p-8 w-full max-w-lg">
       {#if listing}
         <PrimaryTitle class="text-wrap">{listing.title}</PrimaryTitle>
         <p class="text-muted-foreground">

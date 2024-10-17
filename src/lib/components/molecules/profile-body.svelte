@@ -2,8 +2,8 @@
   import AddReview from "src/lib/components/molecules/add-review.svelte";
   import PrimaryTitle from "$lib/components/atoms/primary-title.svelte";
   import ProfileReviewCard from "src/lib/components/molecules/profile-review-card.svelte";
-  import type { Review } from "src/lib/shared/models/review";
-  import type { SuperValidated } from "sveltekit-superforms/client";
+  import type { addReviewSchema, Review } from "src/lib/shared/models/review";
+  import type { SuperValidated, Infer } from "sveltekit-superforms/client";
   import type { Tables } from "src/supabase";
   import { cn } from "src/lib/utils";
 
@@ -11,7 +11,7 @@
   export let reviews: Review[];
   export let allowCreateReview: boolean;
   export let teacher: Tables<"profiles">;
-  export let addReviewForm: SuperValidated<any, any, any>;
+  export let addReviewForm: SuperValidated<Infer<typeof addReviewSchema>>;
 </script>
 
 <PrimaryTitle class="text-wrap">Om mig</PrimaryTitle>
