@@ -12,6 +12,7 @@ import { ResourceAlreadyExistsError } from "src/lib/shared/errors/resource-alrea
 import { createReview, getReviewsByReceiver } from "src/lib/server/database/review.js";
 import type { Listing } from "src/lib/shared/models/listing.js";
 import type { Message, PsqlError } from "src/lib/shared/models/common.js";
+import { ResourceNotFoundError } from "src/lib/shared/errors/missing-error.js";
 
 export const load = async (event) => {
     const { locals: { supabase, safeGetSession }, params: { slug }, parent, url: { searchParams } } = event;
@@ -33,17 +34,26 @@ export const load = async (event) => {
         });
     }
 
+    const { profile } = await parent();
+    const role = profile?.role ?? ""
+    const { session } = await safeGetSession();
+    const userId = session?.user.id;
+
     const listingId = searchParams.get('id') || '';
     let listing: Listing | undefined = undefined;
     let listingMessage: Message | undefined = undefined;
     if (listingId) {
         try {
             listing = await getListing(supabase, listingId);
+            if (!listing.visible && userId !== listing.profile.id) {
+                listingMessage = getFailFormMessage("Kunde inte hämta annonsen", "Denna annonsen är inte tillgänglig just nu.")
+                listing = undefined;
+            }
         } catch (error) {
             if (error && typeof error === "object") {
                 const psqlError = error as PsqlError;
                 if (psqlError.code && psqlError.code === "22P02") // invalid input syntax for type uuid - syntax for listing id query param is faulty 
-                    listingMessage = getFailFormMessage("Kunde inte hämta annonsen", "Annonsen hittadedes inte. Kontakta oss om detta fortsätter.");
+                    listingMessage = getFailFormMessage("Kunde inte hämta annonsen", "Annonsen hittades inte. Kontakta oss om detta fortsätter.");
             }
             else {
                 console.error("Error when reading listings for profile with id: " + slug, error);
@@ -51,16 +61,6 @@ export const load = async (event) => {
             }
         }
     }
-
-    // let listings;
-    // try {
-    //     listings = await getListingsByTeacher(supabase, slug, undefined, true);
-    // } catch (e) {
-    //     console.error("Error when reading listings for profile with id: " + slug, e);
-    //     error(500, {
-    //         message: unknownErrorTitle,
-    //     });
-    // }
 
     let reviews: Review[] = [];
     let reviewsMessage: Message | undefined = undefined;
@@ -75,17 +75,13 @@ export const load = async (event) => {
 
     }
 
-    const { profile } = await parent();
-    const role = profile?.role ?? ""
-
     let allowCreateReview: boolean = false;
     if (role === "student") {
         const hasExistingReview = reviews.find((r) => r.sender?.id === profile?.id);
         if (!hasExistingReview) {
-            const { session } = await safeGetSession();
             if (session) {
                 try {
-                    const hasExistingConversation = await getConversationForStudentAndTeacher(supabase, session.user.id, slug);
+                    const hasExistingConversation = await getConversationForStudentAndTeacher(supabase, userId, slug);
                     allowCreateReview = hasExistingConversation?.has_replied ? true : false;
                 } catch (error) {
                     console.error(`Error when adding review for profile slug ${slug}, unable to read conversation for teacher & student` + slug, error);
