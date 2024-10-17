@@ -5,14 +5,12 @@
   import { mediaQuery } from "svelte-legos";
   import RootContainer from "src/lib/components/molecules/root-container.svelte";
   import ProfileHeaderMobile from "src/lib/components/organisms/profile-header-mobile.svelte";
-  import ReviewCardProfile from "src/lib/components/molecules/review-card-profile.svelte";
+  import ProfileReviewCard from "src/lib/components/molecules/profile-review-card.svelte";
   import ContactTeacherForm from "src/lib/components/molecules/contact-teacher-form.svelte";
   import SecondaryTitle from "src/lib/components/atoms/secondary-title.svelte";
   import { Terminal } from "lucide-svelte";
   import Stars from "src/lib/components/atoms/stars.svelte";
   import { Subjects } from "src/lib/shared/models/common";
-  import { AlertDialog } from "src/lib/components/ui/alert-dialog";
-  import { Alert } from "src/lib/components/ui/alert";
   import AlertMessage from "src/lib/components/atoms/alert-message.svelte";
 
   export let data: PageData;
@@ -87,7 +85,7 @@
         {#if reviews.length > 0}
           <ul class="flex flex-col items-center gap-y-4">
             {#each reviews as review}
-              <ReviewCardProfile {review} />
+              <ProfileReviewCard {review} />
             {/each}
           </ul>
         {:else}
@@ -208,7 +206,7 @@
         {#if reviews.length > 0}
           <ul class="flex flex-col gap-y-4">
             {#each reviews as review}
-              <ReviewCardProfile {review} />
+              <ProfileReviewCard {review} />
             {/each}
           </ul>
         {:else}

@@ -16,6 +16,7 @@
   import * as Carousel from "$lib/components/ui/carousel/index.js";
   import { languages } from "src/lib/shared/models/common";
   import RootContainer from "src/lib/components/molecules/root-container.svelte";
+  import Wavy from "src/lib/components/atoms/wavy.svelte";
 
   export let data: PageData;
   $: ({ displayProfiles, displayReviews } = data);
@@ -125,11 +126,7 @@
       <FormMessage {message} scroll scrollTo="end" />
     </div>
   </div>
-  <svg class="fill-current text-accent -mx-8 -mt-8" viewBox="0 0 900 100"
-    ><path
-      d="M0 51L10 51.5C20 52 40 53 60 58.2C80 63.3 100 72.7 120 72.7C140 72.7 160 63.3 180 57C200 50.7 220 47.3 240 49.8C260 52.3 280 60.7 300 62.2C320 63.7 340 58.3 360 58.3C380 58.3 400 63.7 420 61.5C440 59.3 460 49.7 480 50.7C500 51.7 520 63.3 540 68.5C560 73.7 580 72.3 600 73.5C620 74.7 640 78.3 660 77.3C680 76.3 700 70.7 720 65.5C740 60.3 760 55.7 780 58.2C800 60.7 820 70.3 840 73.8C860 77.3 880 74.7 890 73.3L900 72L900 0L890 0C880 0 860 0 840 0C820 0 800 0 780 0C760 0 740 0 720 0C700 0 680 0 660 0C640 0 620 0 600 0C580 0 560 0 540 0C520 0 500 0 480 0C460 0 440 0 420 0C400 0 380 0 360 0C340 0 320 0 300 0C280 0 260 0 240 0C220 0 200 0 180 0C160 0 140 0 120 0C100 0 80 0 60 0C40 0 20 0 10 0L0 0Z"
-    /></svg
-  >
+  <Wavy class="-mx-8 -mt-8" />
 
   <ProfileCarousel profiles={displayProfiles} />
 
@@ -151,18 +148,4 @@
   <Button on:click={() => goto("/sign-up?role=teacher")}
     >Skapa konto som lärare</Button
   >
-  <!-- 
-<div class="font-bold text-center my-4">
-  <span
-    class="flex justify-center items-center gap-y-2 text-2xl md:text-4xl py-2"
-  >
-    Kom igång och <Button
-      variant="ghost"
-      on:click={() => goto("/sign-up")}
-      class="p-4 text-2xl md:text-4xl lowercase  text-gradient "
-      >skapa ett konto</Button
-    >
-  </span>
-  <p class="text-xl md:text-2xl">Helt gratis och inget betalkort behövs</p>
-</div> -->
 </RootContainer>
