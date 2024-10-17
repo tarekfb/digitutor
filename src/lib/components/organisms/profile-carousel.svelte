@@ -30,7 +30,7 @@
             <a href="/profile/{profile.id}" class="h-full w-full">
               <img
                 alt="profile avatar"
-                class="rounded-lg object-cover h-full w-full"
+                class="rounded-sm object-cover h-full w-full"
                 src={profile.avatarUrl}
               />
             </a>
@@ -65,7 +65,7 @@
             <a href="/profile/{profile.id}" class="h-full w-full">
               <img
                 alt="profile avatar"
-                class="rounded-lg object-cover h-full w-full"
+                class="rounded-sm object-cover h-full w-full"
                 src={profile.avatarUrl}
               />
             </a>

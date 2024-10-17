@@ -165,3 +165,31 @@ export const verifyAvatarOwnership = (avatarUrl: string, userId: string) => {
   const expectedUserId = dirs[dirs.length - 1].split("---")[0];
   return expectedUserId === userId;
 }
+
+export const formatDateReadable = (date: string) => {
+	const rawDate = new Date(date);
+	const year = rawDate.getFullYear().toString();
+	const month = getSwedishMonthName(rawDate.getMonth() + 1).substring(0, 3);
+	let day = rawDate.getDate().toString().padStart(2, '0');
+	if (day.substring(0, 1) === '0') day = day.substring(1);
+	const formattedDate = `${day} ${month} ${year}`;
+	return formattedDate;
+};
+
+const getSwedishMonthName = (monthNumber: number) => {
+	const monthNames = [
+		'Januari',
+		'Februari',
+		'Mars',
+		'April',
+		'Maj',
+		'Juni',
+		'Juli',
+		'Augusti',
+		'September',
+		'Oktober',
+		'November',
+		'December',
+	];
+	return monthNames[monthNumber - 1];
+};

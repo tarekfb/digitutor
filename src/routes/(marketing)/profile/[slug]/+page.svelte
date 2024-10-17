@@ -1,22 +1,11 @@
 <script lang="ts">
-  import ListingCard from "$lib/components/molecules/listing-card.svelte";
-  import SecondaryTitle from "$lib/components/atoms/secondary-title.svelte";
-  import ContactTeacherForm from "$lib/components/molecules/contact-teacher-form.svelte";
   import type { PageData } from "./$types";
   import AddReview from "src/lib/components/molecules/add-review.svelte";
-  import ReviewCard from "src/lib/components/molecules/review-card.svelte";
   import PrimaryTitle from "$lib/components/atoms/primary-title.svelte";
-  import AvatarNameBar from "src/lib/components/organisms/avatar-name-bar.svelte";
   import { mediaQuery } from "svelte-legos";
-  import Stars from "src/lib/components/atoms/stars.svelte";
   import RootContainer from "src/lib/components/molecules/root-container.svelte";
-  import { Subjects } from "src/lib/shared/models/common";
-  import { Terminal } from "lucide-svelte";
-  import { Button } from "$lib/components/ui/button/index.js";
-  import { Input } from "$lib/components/ui/input/index.js";
-  import { Label } from "$lib/components/ui/label/index.js";
-  import * as Popover from "$lib/components/ui/popover/index.js";
   import ProfileHeaderMobile from "src/lib/components/organisms/profile-header-mobile.svelte";
+  import ReviewCardProfile from "src/lib/components/molecules/review-card-profile.svelte";
 
   export let data: PageData;
   $: ({
@@ -74,7 +63,7 @@
       <div class="flex flex-col items-center gap-y-4 px-8 w-full">
         <PrimaryTitle class="text-wrap">Recensioner</PrimaryTitle>
         {#each reviews as review}
-          <ReviewCard {review} />
+          <ReviewCardProfile {review} />
         {:else}
           <p class="text-center">
             {teacher.first_name} har inga recensioner ännu.
