@@ -58,7 +58,7 @@
             <ul class="flex flex-col gap-y-2">
               {#each subjects.splice(3) as subject, i}
                 {#if i > 2}
-                  <li class="flex gap-x-2 items-end">
+                  <li class="flex gap-x-2 items-center">
                     <Terminal class="w-5 h-5 text-accent" />
                     <p class="font-mono text-base">
                       {Subjects[subject]}

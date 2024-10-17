@@ -11,7 +11,7 @@ import { redirect, setFlash } from "sveltekit-flash-message/server";
 import { ResourceAlreadyExistsError } from "src/lib/shared/errors/resource-already-exists-error.js";
 import { createReview, getReviewsByReceiver } from "src/lib/server/database/review.js";
 import type { Listing } from "src/lib/shared/models/listing.js";
-import type { Message } from "src/lib/shared/models/common.js";
+import type { Message, PsqlError } from "src/lib/shared/models/common.js";
 
 export const load = async (event) => {
     const { locals: { supabase, safeGetSession }, params: { slug }, parent, url: { searchParams } } = event;
@@ -39,9 +39,16 @@ export const load = async (event) => {
     if (listingId) {
         try {
             listing = await getListing(supabase, listingId);
-        } catch (e) {
-            console.error("Error when reading listings for profile with id: " + slug, e);
-            listingMessage = getFailFormMessage("Kunde inte hämta annonsen", "Något gick fel. Kontakta oss om detta fortsätter.");
+        } catch (error) {
+            if (error && typeof error === "object") {
+                const psqlError = error as PsqlError;
+                if (psqlError.code && psqlError.code === "22P02") // invalid input syntax for type uuid - syntax for listing id query param is faulty 
+                    listingMessage = getFailFormMessage("Kunde inte hämta annonsen", "Annonsen hittadedes inte. Kontakta oss om detta fortsätter.");
+            }
+            else {
+                console.error("Error when reading listings for profile with id: " + slug, error);
+                listingMessage = getFailFormMessage("Kunde inte hämta annonsen", "Något gick fel. Kontakta oss om detta fortsätter.");
+            }
         }
     }
 
