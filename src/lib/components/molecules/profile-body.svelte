@@ -1,56 +1,45 @@
 <script lang="ts">
-  import * as Card from "$lib/components/ui/card/index.js";
-  import Avatar from "$lib/components/atoms/avatar.svelte";
+  import AddReview from "src/lib/components/molecules/add-review.svelte";
+  import PrimaryTitle from "$lib/components/atoms/primary-title.svelte";
+  import ProfileReviewCard from "src/lib/components/molecules/profile-review-card.svelte";
   import type { Review } from "src/lib/shared/models/review";
+  import type { SuperValidated } from "sveltekit-superforms/client";
+  import type { Tables } from "src/supabase";
+  import { cn } from "src/lib/utils";
 
-  import { cn, formatDateReadable } from "$lib/utils.js";
-  import Stars from "../atoms/stars.svelte";
-  let className: string | null | undefined = undefined;
-  export { className as class };
-  export let review: Review;
+  export let pStyle: string | null | undefined = undefined;
+  export let reviews: Review[];
+  export let allowCreateReview: boolean;
+  export let teacher: Tables<"profiles">;
+  export let addReviewForm: SuperValidated<any, any, any>;
 </script>
 
-<li class="list-none w-full">
-  <Card.Root class={cn(`shadow-md w-full`, className)}>
-    <Card.Header
-      class="gap-y-2 pb-4 {!review.description
-        ? 'flex-row justify-between gap-x-6'
-        : ''}"
-    >
-      <div class="flex gap-x-2 justify-between items-center">
-        <div class="flex gap-x-2 items-center justify-center">
-          <!-- if sender deleted account, sender will be null -->
-          {#if review.sender}
-            <Avatar
-              url={review.sender.avatar_url ?? ""}
-              firstName={review.sender.first_name}
-              lastName={review.sender.last_name}
-              role={review.sender.role}
-              onClick={undefined}
-              class="text-sm w-8 h-8"
-            />
-            <Card.Title>
-              <h4 class="font-semibold">{review.sender.first_name}</h4>
-            </Card.Title>
-          {:else}
-            <Card.Title>
-              <h4 class="font-normal font-mono">[konto raderat]</h4>
-            </Card.Title>
-          {/if}
-        </div>
-        {#if review.description}
-          <small>{formatDateReadable(review.created_at)}</small>
-        {/if}
-      </div>
-      <Stars rating={review.rating} size={5} />
-      {#if !review.description}
-        <small>{formatDateReadable(review.created_at)}</small>
-      {/if}
-    </Card.Header>
-    {#if review.description}
-      <Card.Content class="text-muted-foreground pt-2 pb-4">
-        {review.description}
-      </Card.Content>
-    {/if}
-  </Card.Root>
-</li>
+<PrimaryTitle class="text-wrap">Om mig</PrimaryTitle>
+<p class={cn("text-muted-foreground", pStyle)}>
+  <!-- {#if profile.bio}
+          {profile.bio}
+        {:else}
+          Den här läraren har ingen beskrivning just nu.
+        {/if} -->
+  Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec placerat aliquet
+  porta. Fusce sagittis blandit porttitor. Proin sed lacus eget dolor dignissim luctus.
+  In congue fermentum orci, eu cursus lacus rhoncus et. Nunc id magna at orci suscipit
+  bibendum sit amet ut augue. Ut ac nisl neque. Quisque eget luctus lectus. Pellentesque
+  ac volutpat tellus. Cras risus massa, eleifend vel diam et, rutrum volutpat sapien.
+  In rhoncus nisl ut libero placerat porta.
+</p>
+<PrimaryTitle class="text-wrap">Recensioner</PrimaryTitle>
+{#if reviews.length > 0}
+  <ul class="flex flex-col items-center gap-y-4">
+    {#each reviews as review}
+      <ProfileReviewCard {review} />
+    {/each}
+  </ul>
+{:else}
+  <p class={cn("text-muted-foreground", pStyle)}>
+    {teacher.first_name} har inga recensioner ännu.
+  </p>
+{/if}
+{#if allowCreateReview}
+  <AddReview form={addReviewForm} {teacher} />
+{/if}

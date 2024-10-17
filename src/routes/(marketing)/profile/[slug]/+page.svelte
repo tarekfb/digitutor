@@ -12,6 +12,7 @@
   import Stars from "src/lib/components/atoms/stars.svelte";
   import { Subjects } from "src/lib/shared/models/common";
   import AlertMessage from "src/lib/components/atoms/alert-message.svelte";
+  import ProfileBody from "src/lib/components/molecules/profile-body.svelte";
 
   export let data: PageData;
   $: ({
@@ -37,66 +38,32 @@
       {requestContactForm}
       {startContactForm}
     />
-    <div class="flex flex-col gap-y-4 my-4">
+    {#if session?.user.id === teacher.id && listingMessage}
+      <div class="mx-8 -mb-8">
+        <AlertMessage
+          title={listingMessage.title}
+          description={listingMessage.description}
+          variant={listingMessage.variant}
+          class="text-lg"
+          descriptionClass="text-md"
+        >
+          <p class="italic text-md mt-2">Bara du kan se detta</p>
+        </AlertMessage>
+      </div>
+    {/if}
+    <div class="flex flex-col gap-y-4 my-4 p-8">
       {#if listing}
-        <div class="flex flex-col gap-y-4 px-8">
-          <PrimaryTitle class="text-wrap">{listing.title}</PrimaryTitle>
-          <p class="text-muted-foreground">
-            {#if listing.description}
-              {listing.description}
-            {:else}
-              Den här annonsen har ingen beskrivning just nu.
-            {/if}
-          </p>
-        </div>
-      {/if}
-      {#if session?.user.id === teacher.id && listingMessage}
-        <div class="mx-8">
-          <AlertMessage
-            title={listingMessage.title}
-            description={listingMessage.description}
-            variant={listingMessage.variant}
-            class="text-lg"
-            descriptionClass="text-md"
-          >
-            <p class="italic text-md mt-2">Bara du kan se detta</p>
-          </AlertMessage>
-        </div>
-      {/if}
-      <div class="flex flex-col gap-y-4 px-8">
-        <PrimaryTitle class="text-wrap">Om mig</PrimaryTitle>
+        <PrimaryTitle class="text-wrap">{listing.title}</PrimaryTitle>
         <p class="text-muted-foreground">
-          <!-- {#if profile.bio}
-          {profile.bio}
-        {:else}
-          Den här läraren har ingen beskrivning just nu.
-        {/if} -->
-          Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec placerat
-          aliquet porta. Fusce sagittis blandit porttitor. Proin sed lacus eget dolor
-          dignissim luctus. In congue fermentum orci, eu cursus lacus rhoncus et.
-          Nunc id magna at orci suscipit bibendum sit amet ut augue. Ut ac nisl neque.
-          Quisque eget luctus lectus. Pellentesque ac volutpat tellus. Cras risus
-          massa, eleifend vel diam et, rutrum volutpat sapien. In rhoncus nisl ut
-          libero placerat porta.
+          {#if listing.description}
+            {listing.description}
+          {:else}
+            Den här annonsen har ingen beskrivning just nu.
+          {/if}
         </p>
-      </div>
-      <div class="flex flex-col gap-y-4 px-8 w-full">
-        <PrimaryTitle class="text-wrap">Recensioner</PrimaryTitle>
-        {#if reviews.length > 0}
-          <ul class="flex flex-col items-center gap-y-4">
-            {#each reviews as review}
-              <ProfileReviewCard {review} />
-            {/each}
-          </ul>
-        {:else}
-          <p class="text-center">
-            {teacher.first_name} har inga recensioner ännu.
-          </p>
-        {/if}
-        {#if allowCreateReview}
-          <AddReview form={addReviewForm} {teacher} />
-        {/if}
-      </div>
+      {/if}
+
+      <ProfileBody {teacher} {allowCreateReview} {reviews} {addReviewForm} />
 
       {#if session?.user.id === teacher.id}
         <small
@@ -124,7 +91,7 @@
 {:else}
   <div class="flex">
     <div class="grid grid-cols-3 w-full gap-x-8 p-8">
-      <aside class="flex flex-col items-center gap-y-6 w-full">
+      <aside class="flex flex-col items-center gap-y-6 w-full max-w-md">
         <div class="p-8 rounded-md shadow-sm bg-accent w-full text-background">
           {#if teacher.avatar_url}
             <img
@@ -210,7 +177,7 @@
             {/each}
           </ul>
         {:else}
-          <p class="text-center">
+          <p>
             {teacher.first_name} har inga recensioner ännu.
           </p>
         {/if}
