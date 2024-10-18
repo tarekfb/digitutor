@@ -36,7 +36,7 @@
           {#if profile === undefined || profile === null}
             <Button
               variant="ghost"
-              class="px-2 md:px-3"
+              class="px-2 md:px-3"  
               on:click={() => goto("/sign-in")}>Logga in</Button
             >
             <Button on:click={() => goto("/sign-up")} class="px-2 md:px-3"
@@ -52,7 +52,7 @@
                 <Button
                   variant="ghost"
                   builders={[builder]}
-                  class="relative h-8 w-8 rounded-full"
+                  class="relative h-8 w-8 rounded-full mx-1"
                 >
                   <Avatar
                     url={profile.avatar_url ?? ""}

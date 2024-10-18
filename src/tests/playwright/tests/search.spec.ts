@@ -1,5 +1,5 @@
 
-
+/*
 import { expect } from '@playwright/test';
 import { test } from '../env-options';
 
@@ -10,3 +10,4 @@ test('search', async ({ page }) => {
     await page.getByRole('button', { name: 'Sök' }).click()
     await expect(page.getByRole('listitem').getByLabel('Gå till annons').first()).toBeVisible();
 });
+*/

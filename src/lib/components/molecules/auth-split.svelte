@@ -12,7 +12,6 @@
     >
       <slot name="aside" />
     </aside>
-    <!-- content here -->
   {/if}
   <main
     class="bg-white flex flex-col items-center lg:justify-center p-4 {cols}"

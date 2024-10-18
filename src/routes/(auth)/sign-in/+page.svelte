@@ -69,7 +69,7 @@
         {#if reviews[0].receiver.avatar_url}
           <img
             alt="profile avatar"
-            class="rounded-lg mb-2"
+            class="rounded-sm mb-2"
             width="250"
             height="250"
             src={reviews[0].receiver.avatar_url}
@@ -87,7 +87,7 @@
           <ul>
             {#each subjects as subject, i}
               {#if i < 10}
-                <li class="flex gap-x-2 items-end">
+              <li class="flex gap-x-2 items-center">
                   <Terminal class="w-5 h-5 text-accent" />
                   <p class="font-mono text-base">{Subjects[subject]}</p>
                 </li>

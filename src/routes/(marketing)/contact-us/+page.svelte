@@ -11,6 +11,7 @@
   import FormMessage from "$lib/components/molecules/form-message.svelte";
   import PrimaryTitle from "$lib/components/atoms/primary-title.svelte";
   import Link from "$lib/components/atoms/link.svelte";
+  import RootContainer from "src/lib/components/molecules/root-container.svelte";
 
   export let data;
 
@@ -25,83 +26,92 @@
   const { form: formData, enhance, delayed, message, allErrors } = contactForm;
 </script>
 
-<div class="flex flex-col justify-center items-center gap-y-0.5">
-  <PrimaryTitle class="mb-2">Kontakta oss</PrimaryTitle>
-  <p class="text-lg md:text-xl"
-    >Glöm inte att kika om din fråga finns i vår <Link
-      class="text-lg"
-      href="/faq">FAQ</Link
-    >.
-  </p>
-</div>
-<div class="flex flex-col gap-y-1 text-muted-foreground">
-  <p>Kontakta oss om du har något på hjärtat, t.ex. om:</p>
-  <ul class="list-disc list-outside space-y-0.5 mx-6">
-    <li>
-      Din fråga inte täcks av vår <Link class="text-lg" href="/faq">FAQ</Link>.
-    </li>
-    <li>Du har synpunkter, klagomål eller önskningar.</li>
-    <li>Du bara vill säga hej!</li>
-  </ul>
-  <p>Vi svarar dig så fort vi kan.</p>
-</div>
+<RootContainer>
+  <div class="flex flex-col justify-center items-center gap-y-0.5">
+    <PrimaryTitle class="mb-2">Kontakta oss</PrimaryTitle>
+    <p class="text-lg md:text-xl">
+      Glöm inte att kika om din fråga finns i vår <Link
+        class="text-lg"
+        href="/faq">FAQ</Link
+      >.
+    </p>
+  </div>
+  <div class="flex flex-col gap-y-1 text-muted-foreground">
+    <p>Kontakta oss om du har något på hjärtat, t.ex. om:</p>
+    <ul class="list-disc list-outside space-y-0.5 mx-6">
+      <li>
+        Din fråga inte täcks av vår <Link class="text-lg" href="/faq">FAQ</Link
+        >.
+      </li>
+      <li>Du har synpunkter, klagomål eller önskningar.</li>
+      <li>Du bara vill säga hej!</li>
+    </ul>
+    <p>Vi svarar dig så fort vi kan.</p>
+  </div>
 
-<FormMessage {message} scroll />
-<form
-  class="flex flex-col gap-y-4 generic-card w-full max-w-xl"
-  method="POST"
-  action="?/submit"
-  use:enhance
->
-  <Form.Field form={contactForm} name="email">
-    <Form.Control let:attrs>
-      <Label>E-postadress</Label>
-      <Input
-        {...attrs}
-        type="email"
-        bind:value={$formData.email}
-        placeholder="E-postadress"
-      />
-    </Form.Control>
-    <Form.FieldErrors />
-  </Form.Field>
-  <Form.Field form={contactForm} name="firstName">
-    <Form.Control let:attrs>
-      <Label>Förnamn</Label>
-      <Input
-        {...attrs}
-        type="text"
-        bind:value={$formData.firstName}
-        placeholder="Förnamn"
-      />
-    </Form.Control>
-    <Form.FieldErrors />
-  </Form.Field>
-  <Form.Field form={contactForm} name="lastName">
-    <Form.Control let:attrs>
-      <Label>Efternamn</Label>
-      <Input
-        {...attrs}
-        type="text"
-        bind:value={$formData.lastName}
-        placeholder="Efternamn"
-      />
-    </Form.Control>
-    <Form.FieldErrors />
-  </Form.Field>
+  <FormMessage {message} scroll />
+  <form
+    class="flex flex-col gap-y-4 generic-card w-full max-w-xl"
+    method="POST"
+    action="?/submit"
+    use:enhance
+  >
+    <Form.Field form={contactForm} name="email">
+      <Form.Control let:attrs>
+        <Label>E-postadress</Label>
+        <Input
+          {...attrs}
+          type="email"
+          bind:value={$formData.email}
+          placeholder="E-postadress"
+        />
+      </Form.Control>
+      <Form.FieldErrors />
+    </Form.Field>
+    <Form.Field form={contactForm} name="firstName">
+      <Form.Control let:attrs>
+        <Label>Förnamn</Label>
+        <Input
+          {...attrs}
+          type="text"
+          bind:value={$formData.firstName}
+          placeholder="Förnamn"
+        />
+      </Form.Control>
+      <Form.FieldErrors />
+    </Form.Field>
+    <Form.Field form={contactForm} name="lastName">
+      <Form.Control let:attrs>
+        <Label>Efternamn</Label>
+        <Input
+          {...attrs}
+          type="text"
+          bind:value={$formData.lastName}
+          placeholder="Efternamn"
+        />
+      </Form.Control>
+      <Form.FieldErrors />
+    </Form.Field>
 
-  <Form.Field form={contactForm} name="message">
-    <Form.Control let:attrs>
-      <Label>Ditt meddelande</Label>
-      <Textarea
-        {...attrs}
-        placeholder="Skriv ett meddelande till oss..."
-        class="resize-y"
-        bind:value={$formData.message}
-      />
-    </Form.Control>
-    <Form.FieldErrors />
-  </Form.Field>
+    <Form.Field form={contactForm} name="message">
+      <Form.Control let:attrs>
+        <Label>Ditt meddelande</Label>
+        <Textarea
+          {...attrs}
+          placeholder="Skriv ett meddelande till oss..."
+          class="resize-y"
+          bind:value={$formData.message}
+        />
+      </Form.Control>
+      <Form.FieldErrors />
+    </Form.Field>
 
-  <FormSubmit {delayed} {allErrors} text="Skicka" loadingText="Skickar..." class="self-center md:min-w-wider" />
-</form>
+    <FormSubmit
+      {delayed}
+      {allErrors}
+      text="Skicka"
+      loadingText="Skickar..."
+      class="self-center md:min-w-wider"
+    />
+  </form>
+</RootContainer>

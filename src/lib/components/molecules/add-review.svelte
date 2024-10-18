@@ -2,7 +2,7 @@
   import FormSubmit from "$lib/components/molecules/form-submit.svelte";
   import FormMessage from "$lib/components/molecules/form-message.svelte";
   import { cn } from "$lib/utils.js";
-  import SuperDebug, {
+  import  {
     superForm,
     type Infer,
     type SuperValidated,
@@ -70,7 +70,7 @@
               type="number"
               bind:value={$formData.rating}
               placeholder="Välj timpris"
-              class="p-2 border bg-gray-100 rounded-lg w-14"
+              class="p-2 border bg-gray-100 rounded-sm w-14"
             />
             <Star class="text-yellow-500" />
           </div>

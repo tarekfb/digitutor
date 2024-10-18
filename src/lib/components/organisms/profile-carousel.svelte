@@ -30,7 +30,7 @@
             <a href="/profile/{profile.id}" class="h-full w-full">
               <img
                 alt="profile avatar"
-                class="rounded-lg object-cover h-full w-full"
+                class="rounded-sm object-cover h-full w-full"
                 src={profile.avatarUrl}
               />
             </a>
@@ -47,7 +47,7 @@
                 <ul>
                   {#each profile.subjects as subject, i}
                     {#if i < 4}
-                      <li class="flex gap-x-2 items-end">
+                      <li class="flex gap-x-2 items-center">
                         <Terminal class="w-5 h-5 text-accent" />
                         <p class="font-mono text-base">{Subjects[subject]}</p>
                       </li>
@@ -65,7 +65,7 @@
             <a href="/profile/{profile.id}" class="h-full w-full">
               <img
                 alt="profile avatar"
-                class="rounded-lg object-cover h-full w-full"
+                class="rounded-sm object-cover h-full w-full"
                 src={profile.avatarUrl}
               />
             </a>
@@ -80,7 +80,7 @@
                 <ul>
                   {#each profile.subjects as subject, i}
                     {#if i < 6}
-                      <li class="flex gap-x-2 items-end">
+                      <li class="flex gap-x-2 items-center">
                         <Terminal class="w-5 h-5 text-accent" />
                         <p class="font-mono text-base">{Subjects[subject]}</p>
                       </li>

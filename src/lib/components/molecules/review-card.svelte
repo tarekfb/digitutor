@@ -4,11 +4,16 @@
   import Avatar from "$lib/components/atoms/avatar.svelte";
   import type { Review } from "src/lib/shared/models/review";
 
+  import { cn } from "$lib/utils.js";
+  let className: string | null | undefined = undefined;
+  export { className as class };
   export let review: Review;
 </script>
 
 <Card.Root>
-  <Card.Header class="{review.description ? 'pb-2' : 'pb-4'} pt-4 px-4">
+  <Card.Header
+    class={cn(`${review.description ? "pb-2" : "pb-4"} pt-4 px-4`, className)}
+  >
     <div class="flex gap-x-2 justify-between items-center">
       <Card.Title>
         <div class="flex gap-x-2 items-center">

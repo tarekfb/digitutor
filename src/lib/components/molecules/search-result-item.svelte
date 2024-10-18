@@ -8,7 +8,7 @@
   export let result: SearchResult;
 </script>
 
-<a href="/listing/{result.id}" aria-label="Gå till annons">
+<a href="/profile/{result.profile.id}?id={result.id}" aria-label="Gå till annons">
   <Card.Root>
     <Card.Header>
       <Card.Title class="flex justify-between gap-x-2 items-center">
