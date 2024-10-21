@@ -16,7 +16,7 @@
   import RootContainer from "src/lib/components/molecules/root-container.svelte";
 
   export let data: PageData;
-  $: ({ initResults, initMessage } = data);
+  $: ({ initResults, initMessage} = data);
 
   let isInit = true;
   let results: SearchResultType[] = [];

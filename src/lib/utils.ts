@@ -9,6 +9,7 @@ import { redirect } from "@sveltejs/kit";
 import type { Database } from "lucide-svelte";
 import type { Review } from "./shared/models/review";
 import type { Tables } from "src/supabase";
+import type { Profile } from "./shared/models/profile";
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
@@ -167,29 +168,34 @@ export const verifyAvatarOwnership = (avatarUrl: string, userId: string) => {
 }
 
 export const formatDateReadable = (date: string) => {
-	const rawDate = new Date(date);
-	const year = rawDate.getFullYear().toString();
-	const month = getSwedishMonthName(rawDate.getMonth() + 1).substring(0, 3);
-	let day = rawDate.getDate().toString().padStart(2, '0');
-	if (day.substring(0, 1) === '0') day = day.substring(1);
-	const formattedDate = `${day} ${month} ${year}`;
-	return formattedDate;
+  const rawDate = new Date(date);
+  const year = rawDate.getFullYear().toString();
+  const month = getSwedishMonthName(rawDate.getMonth() + 1).substring(0, 3);
+  let day = rawDate.getDate().toString().padStart(2, '0');
+  if (day.substring(0, 1) === '0') day = day.substring(1);
+  const formattedDate = `${day} ${month} ${year}`;
+  return formattedDate;
 };
 
 const getSwedishMonthName = (monthNumber: number) => {
-	const monthNames = [
-		'Januari',
-		'Februari',
-		'Mars',
-		'April',
-		'Maj',
-		'Juni',
-		'Juli',
-		'Augusti',
-		'September',
-		'Oktober',
-		'November',
-		'December',
-	];
-	return monthNames[monthNumber - 1];
+  const monthNames = [
+    'Januari',
+    'Februari',
+    'Mars',
+    'April',
+    'Maj',
+    'Juni',
+    'Juli',
+    'Augusti',
+    'September',
+    'Oktober',
+    'November',
+    'December',
+  ];
+  return monthNames[monthNumber - 1];
 };
+
+export const formatProfile = ({ id, role, first_name: firstName, last_name: lastName, avatar_url: avatarUrl }: Tables<"profiles">): Profile => ({
+  id, role, firstName, lastName, avatarUrl
+});
+

@@ -33,7 +33,7 @@
   const { reset } = listingForm;
 </script>
 
-<div class="flex flex-col gap-y-4 pb-8 w-full max-w-[1000px]">
+<div class="self-center flex flex-col m-8 gap-y-4 pb-8 w-full max-w-[1000px]">
   <AvatarNameBar clickable profile={listing.profile}>
     <PrimaryTitle>{listing.profile.first_name}</PrimaryTitle>
   </AvatarNameBar>

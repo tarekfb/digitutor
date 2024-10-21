@@ -50,14 +50,17 @@
       {#if subjects.length > maxSubjectsLength}
         <Popover.Root portal={null}>
           <Popover.Trigger asChild let:builder>
-            <Button builders={[builder]} variant="ghost" class="m-0 self-start"
+            <Button
+              builders={[builder]}
+              variant="ghost"
+              class="m-0 self-start"
               >...se {subjects.length - maxSubjectsLength} till</Button
             >
           </Popover.Trigger>
           <Popover.Content class="w-40 max-h-72 overflow-y-scroll">
             <ul class="flex flex-col gap-y-2">
-              {#each subjects.splice(3) as subject, i}
-                {#if i > 2}
+              {#each subjects as subject, i}
+                {#if i > maxSubjectsLength - 1}
                   <li class="flex gap-x-2 items-center">
                     <Terminal class="w-5 h-5 text-accent" />
                     <p class="font-mono text-base">
