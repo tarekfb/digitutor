@@ -49,3 +49,11 @@ export const avatarSchema = z.object({
 export const deleteAvatarSchema = z.object({
     path: z.string(),
 });
+
+export type Profile = {
+    id: string;
+    firstName: string;
+    lastName: string;
+    avatarUrl: string | null | undefined;
+    role: "teacher" | "student";
+}

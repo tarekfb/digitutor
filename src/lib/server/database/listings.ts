@@ -2,6 +2,7 @@ import type { Session, SupabaseClient } from "@supabase/supabase-js";
 import type { InputListing, Listing } from "$lib/shared/models/listing";
 import type { Database, Tables } from "src/supabase"
 import { getNow } from '$lib/utils'
+import { ResourceNotFoundError } from "src/lib/shared/errors/missing-error";
 
 export const getListings = async (
   supabase: SupabaseClient<Database>,
@@ -33,6 +34,7 @@ export const getListings = async (
 
   return data as unknown as Listing[];
 }
+
 
 export const getListingsByTeacher = async (
   supabase: SupabaseClient<Database>,
@@ -68,10 +70,10 @@ export const getListingsByTeacher = async (
 export const getListing = async (
   supabase: SupabaseClient<Database>,
   id: string,
+  visible?: boolean,
 ): Promise<Listing> => {
   const { data, error } = await supabase
     .from("listings")
-
     .select(
       `
             *,
@@ -88,6 +90,8 @@ export const getListing = async (
     console.error("Failed to read listing: " + id, { error });
     throw error;
   }
+
+  if (visible && !data.visible) throw new ResourceNotFoundError(400, `Listing ${data.id} is not visible`)
 
   return data as unknown as Listing;
 };
@@ -116,10 +120,10 @@ export const createListing = async (
     .select(
       `
     *,
-    profile (
+    profile(
       *
     )
-  `,
+      `,
     )
     .limit(1)
     .single();
@@ -180,11 +184,11 @@ export const updateListing = async (
     .eq('profile', session.user.id)
     .select(
       `
-      *,
-      profile (
+    *,
+    profile(
         *
       )
-    `)
+      `)
     .limit(1)
     .order('id')
     .single();

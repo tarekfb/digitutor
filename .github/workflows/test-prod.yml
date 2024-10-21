@@ -1,9 +1,6 @@
 name: Test Prod
 
 on:
-  push:
-    branches:
-      - master
   pull_request:
     branches:
       - master

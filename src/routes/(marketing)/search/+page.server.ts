@@ -7,6 +7,7 @@ import { zod } from "sveltekit-superforms/adapters";
 import { searchSchema, type SearchResult, } from "src/lib/shared/models/search";
 import type { Actions, PageServerLoad } from "./$types";
 import type { Message, PsqlError } from "src/lib/shared/models/common";
+import { formatProfile } from "src/lib/utils";
 
 export const load = (async ({ url, locals: { supabase } }) => {
     const query = url.searchParams.get('q') || '';
@@ -26,8 +27,10 @@ export const load = (async ({ url, locals: { supabase } }) => {
             hourlyPrice: listing.hourly_price,
             firstName: listing.profile.first_name,
             lastName: listing.profile.last_name,
-            avatar: listing.profile.avatar_url ?? undefined
+            avatar: listing.profile.avatar_url ?? undefined,
+            profile: formatProfile(listing.profile),
         }));
+
     } catch (error) {
         if (error && typeof error === "object") {
             const psqlError = error as PsqlError;
@@ -62,7 +65,8 @@ export const actions: Actions = {
                     hourlyPrice: listing.hourly_price,
                     firstName: listing.profile.first_name,
                     lastName: listing.profile.last_name,
-                    avatar: listing.profile.avatar_url ?? undefined
+                    avatar: listing.profile.avatar_url ?? undefined,
+                    profile: formatProfile(listing.profile),
                 }
             });
 

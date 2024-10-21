@@ -4,12 +4,24 @@ on:
   workflow_run:
     workflows: ["Test Prod", "Build", "CI"]
     types:
-      - completed
+      - completed 
 
 jobs:
   deploy:
-    if: ${{ github.event.workflow_run.conclusion == 'success' && github.event.workflow_run.head_branch == 'master' }}
     runs-on: ubuntu-latest
+    if: |
+      (github.event.workflow_run.conclusion == 'success') &&
+      (
+        # Conditions for push to master
+        (github.event.workflow_run.head_branch == 'master' && 
+         github.event.workflow_run.event == 'push' &&
+         github.event.workflow_run.name in ['Build', 'CI'])
+        ||
+        # Conditions for pull request to master
+        (github.event.workflow_run.head_branch == 'master' && 
+         github.event.workflow_run.event == 'pull_request' &&
+         github.event.workflow_run.name in ['Test Prod', 'Build', 'CI'])
+      )
 
     env:
       SUPABASE_ACCESS_TOKEN: ${{ secrets.SUPABASE_ACCESS_TOKEN }}

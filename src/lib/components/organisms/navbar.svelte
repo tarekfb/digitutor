@@ -22,26 +22,24 @@
 </script>
 
 <header
-  class="sticky top-0 z-40 w-full bg-gradient-to-r from-primary to-accent text-background overflow-x-hidden"
+  class="sticky top-0 z-40 w-full bg-accent text-background overflow-x-hidden"
 >
   <div
-    class="container flex h-16 items-center space-x-3 sm:justify-between sm:space-x-0"
+    class="h-16 md:h-20 flex items-center gap-x-3 sm:justify-between sm:space-x-0 px-2 md:px-4 lg:px-8"
   >
-    <a
-      href="/"
-      class="text-2xl font-semibold hover:text-accent"
-    >
+    <a href="/" class="text-3xl md:text-5xl font-semibold hover:text-primary">
       {websiteName}
     </a>
-    <div class="flex flex-1 items-center justify-end space-x-4">
-      <nav class="flex items-center space-x-4">
+    <div class="flex-1 flex items-center justify-end">
+      <nav class="flex items-center gap-x-2 md:gap-x-4">
         {#if profile !== false}
-          <!-- content here -->
           {#if profile === undefined || profile === null}
-            <Button variant="ghost" on:click={() => goto("/sign-in")}
-              >Logga in</Button
+            <Button
+              variant="ghost"
+              class="px-2 md:px-3"  
+              on:click={() => goto("/sign-in")}>Logga in</Button
             >
-            <Button on:click={() => goto("/sign-up")} class="px-2.5 md:px-3"
+            <Button on:click={() => goto("/sign-up")} class="px-2 md:px-3"
               >Skapa konto</Button
             >
           {:else if profile}
@@ -54,7 +52,7 @@
                 <Button
                   variant="ghost"
                   builders={[builder]}
-                  class="relative h-8 w-8 rounded-full"
+                  class="relative h-8 w-8 rounded-full mx-1"
                 >
                   <Avatar
                     url={profile.avatar_url ?? ""}
@@ -75,7 +73,7 @@
                 <DropdownMenu.Separator />
                 <DropdownMenu.Item class="data-[highlighted]:bg-white">
                   <button
-                    class="flex space-x-2 w-full"
+                    class="flex gap-x-2 w-full items-center"
                     disabled={logoutLoading}
                     on:click={() => goto("/account")}
                   >
@@ -86,7 +84,7 @@
                 <DropdownMenu.Separator />
                 <DropdownMenu.Item class="data-[highlighted]:bg-white">
                   <button
-                    class="flex space-x-2 w-full"
+                    class="flex gap-x-2 w-full items-center"
                     disabled={logoutLoading}
                     on:click={wrappedLogout}
                   >

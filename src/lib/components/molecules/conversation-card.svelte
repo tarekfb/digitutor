@@ -17,7 +17,7 @@
 </script>
 
 <div
-  class="card-generic bg-card p-6 rounded-lg {isNewRequest(
+  class="card-generic bg-card p-6 {isNewRequest(
     profile,
     conversation,
   )

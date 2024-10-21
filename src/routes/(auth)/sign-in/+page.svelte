@@ -69,7 +69,7 @@
         {#if reviews[0].receiver.avatar_url}
           <img
             alt="profile avatar"
-            class="rounded-lg mb-2"
+            class="rounded-sm mb-2"
             width="250"
             height="250"
             src={reviews[0].receiver.avatar_url}
@@ -84,16 +84,16 @@
           {#if avgRating !== undefined}
             <Stars size={5} rating={avgRating} />
           {/if}
-          <div>
+          <ul>
             {#each subjects as subject, i}
               {#if i < 10}
-                <div class="flex gap-x-2 items-end">
+              <li class="flex gap-x-2 items-center">
                   <Terminal class="w-5 h-5 text-accent" />
                   <p class="font-mono text-base">{Subjects[subject]}</p>
-                </div>
+                </li>
               {/if}
             {/each}
-          </div>
+          </ul>
         </div>
       </div>
       <div class="flex flex-col items-center">
@@ -121,7 +121,7 @@
       method="POST"
       use:enhance
     >
-      <div class="space-y-1 mb-4 text-center lg:text-start">
+      <div class="flex flex-col gap-y-2 mb-4 text-center lg:text-start">
         <PrimaryTitle class="text-2xl">Logga in</PrimaryTitle>
         <p class="text-muted-foreground">
           Har du inget konto?

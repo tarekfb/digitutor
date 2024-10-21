@@ -2,7 +2,7 @@
   import PrimaryTitle from "$lib/components/atoms/primary-title.svelte";
   import ConversationCard from "$lib/components/molecules/conversation-card.svelte";
   import Link from "$lib/components/atoms/link.svelte";
-
+ 
   export let data;
   $: ({ conversations, profile } = data);
 </script>

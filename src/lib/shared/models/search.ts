@@ -1,4 +1,6 @@
+import type { Tables } from "src/supabase";
 import { z } from "zod";
+import type { Profile } from "./profile";
 
 export const searchSchema = z.object({
     query: z
@@ -15,4 +17,5 @@ export type SearchResult = {
     firstName: string;
     lastName: string;
     avatar?: string;
+    profile: Profile
 }

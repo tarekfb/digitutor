@@ -21,3 +21,33 @@ const addReviewProperties = {
 
 export const addReviewSchema = z.object(addReviewProperties)
 export type AddReviewSchema = typeof addReviewSchema;
+
+export type DbDisplayProfile = {
+    id: string;
+    first_name: string;
+    last_name: string;
+    avatar_url: string | null;
+    avg_rating: number | null;
+    subjects: number[];
+}
+
+
+export type DisplayProfile = {
+    id: string;
+    firstName: string;
+    lastName: string;
+    avatarUrl: string | null;
+    avgRating: number;
+    subjects: number[];
+}
+
+export const formatDisplayProfile = ({ id, first_name, last_name, avatar_url, avg_rating, subjects }: DbDisplayProfile): DisplayProfile => {
+    return {
+        id,
+        firstName: first_name,
+        lastName: last_name,
+        avatarUrl: avatar_url,
+        avgRating: avg_rating || 0,
+        subjects,
+    };
+}
