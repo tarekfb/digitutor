@@ -7,7 +7,7 @@ import { zod } from "sveltekit-superforms/adapters";
 import { searchSchema, type SearchResult, } from "src/lib/shared/models/search";
 import type { Actions, PageServerLoad } from "./$types";
 import type { Message, PsqlError } from "src/lib/shared/models/common";
-import { formatProfile } from "src/lib/utils";
+import { formatProfile, loadContactTeacherForms } from "src/lib/utils";
 
 export const load = (async ({ url, locals: { supabase } }) => {
     const query = url.searchParams.get('q') || '';
@@ -28,6 +28,7 @@ export const load = (async ({ url, locals: { supabase } }) => {
             firstName: listing.profile.first_name,
             lastName: listing.profile.last_name,
             avatar: listing.profile.avatar_url ?? undefined,
+            subjects: listing.subjects,
             profile: formatProfile(listing.profile),
         }));
 
@@ -42,7 +43,8 @@ export const load = (async ({ url, locals: { supabase } }) => {
         }
     }
 
-    return { form, initResults, initMessage }
+    const { requestContactForm, startContactForm } = await loadContactTeacherForms()
+    return { form, initResults, initMessage, requestContactForm, startContactForm }
 }) satisfies PageServerLoad;
 
 
@@ -66,6 +68,7 @@ export const actions: Actions = {
                     firstName: listing.profile.first_name,
                     lastName: listing.profile.last_name,
                     avatar: listing.profile.avatar_url ?? undefined,
+                    subjects: listing.subjects,
                     profile: formatProfile(listing.profile),
                 }
             });

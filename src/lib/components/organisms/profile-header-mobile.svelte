@@ -17,6 +17,7 @@
     Infer<typeof requestContactSchema>
   >;
   export let startContactForm: SuperValidated<Infer<typeof startContactSchema>>;
+  export let initSubmit = false;
 </script>
 
 {#if teacher.avatar_url}
@@ -37,6 +38,7 @@
       requestContactAction="?/requestContact"
       startContactAction="?/startContact"
       firstName={teacher.first_name}
+      {initSubmit}
     />
     <NotPublished visible={listing?.visible} class="self-center" />
   </div>
@@ -55,8 +57,9 @@
       requestContactAction="?/requestContact"
       startContactAction="?/startContact"
       firstName={teacher.first_name}
+      {initSubmit}
     />
-    <NotPublished visible={listing?.visible} class="self-center"/>
+    <NotPublished visible={listing?.visible} class="self-center" />
   </div>
 
   <Wavy class="-mt-4 overflow-x-hidden " />

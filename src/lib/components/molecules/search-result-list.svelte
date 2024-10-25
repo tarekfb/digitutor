@@ -1,16 +1,24 @@
 <script lang="ts">
   import type { SearchResult } from "src/lib/shared/models/search";
-  import SecondaryTitle from "../atoms/secondary-title.svelte";
-  import SearchResultItem from "./search-result-item.svelte";
-
+  // import SearchResultItem from "./search-result-item.svelte";
+  import SearchResultItemTemp from "./search-result-item-mobile.svelte";
+  import type {
+    requestContactSchema,
+    startContactSchema,
+  } from "src/lib/shared/models/conversation";
+  import type { Infer } from "sveltekit-superforms";
+  import type { SuperValidated } from "sveltekit-superforms/client";
   export let results: SearchResult[];
+  export let requestContactForm: SuperValidated<
+    Infer<typeof requestContactSchema>
+  >;
+  export let startContactForm: SuperValidated<Infer<typeof startContactSchema>>;
 </script>
 
 <ul class="flex flex-col gap-y-4 w-full">
-  <SecondaryTitle>Sökresultat</SecondaryTitle>
   {#each results as result}
     <li>
-      <SearchResultItem {result} />
+      <SearchResultItemTemp {result} {requestContactForm} {startContactForm} />
     </li>
   {/each}
 </ul>

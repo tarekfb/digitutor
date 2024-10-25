@@ -12,7 +12,7 @@
   const listings = data.listings as Listing[];
 
   const form = data.form as SuperValidated<Infer<typeof initCreateListingSchema>>;
-  // this is complaining about potential undefined. Maybe there's an issue with parent serving data?
+  // this is complaining about potential undefined. Maybe there's an issue with +page.server.ts?
   // anyway, proceeding with this dirty hack...
 
   const userForm = superForm(form, {

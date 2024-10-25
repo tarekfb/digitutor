@@ -10,6 +10,7 @@
   import { zodClient } from "sveltekit-superforms/adapters";
   import StartContact from "../atoms/start-contact.svelte";
   import { isStartingContact } from "src/stores/start-contact";
+  import { onMount } from "svelte";
 
   let className: string | null | undefined = undefined;
   export { className as class };
@@ -19,6 +20,7 @@
   export let startContactForm;
   export let startContactAction: string;
   export let firstName;
+  export let initSubmit = false;
 
   let wasGrantedContact = false;
 
@@ -56,6 +58,10 @@
     // },
     validators: zodClient(startContactSchema),
   });
+
+  onMount(() => {
+    // if (initSubmit) requestContactFormValues.submit();
+  });
 </script>
 
 <form
@@ -74,5 +80,6 @@
   />
   <FormMessage message={$message} scroll />
 </form>
+<button on:click={() => requestContactFormValues.submit()}>asd</button>
 
 <StartContact form={startContactFormValues} action={startContactAction} />
