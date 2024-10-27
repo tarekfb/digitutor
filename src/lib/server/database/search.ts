@@ -25,7 +25,6 @@ export const search = async (
     `).eq('visible', true)
     .textSearch('compound_search', query)
 
-    console.log(data);
   if (error) {
     console.error(`Error on search. Query: ${query}`, { error });
     throw error;

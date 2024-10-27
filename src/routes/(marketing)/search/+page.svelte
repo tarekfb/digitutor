@@ -45,8 +45,8 @@
     validators: zodClient(searchSchema),
     onUpdate({ form, result }) {
       if (form.valid && result.data) {
-        requestContact.data.teacher = result.data.teacher.id;
-        requestContact.data.role = result.data.teacher.role;
+        // requestContact.data.teacher = result.data.teacher.id;
+        // requestContact.data.role = result.data.teacher.role;
         results = result.data.formatted as SearchResultType[];
         isInit = false;
       }
@@ -86,32 +86,34 @@
     </div>
   </form>
   <Separator />
-  {#if isInit && initResults.length > 0}
-    <SearchResultList
-      results={initResults}
-      requestContactForm={requestContact}
-      startContactForm={startContact}
-    />
-  {:else if initMessage}
-    <AlertMessage
-      title={initMessage.title}
-      description={initMessage.description}
-      variant={initMessage.variant}
-    />
-  {:else if $message}
-    <FormMessage {message} scroll scrollTo="end" />
-  {:else if results.length > 0}
-    <SearchResultList
-      {results}
-      requestContactForm={requestContact}
-      startContactForm={startContact}
-    />
-  {:else}
-    <AlertMessage
-      title="Inga träffar på din sökning"
-      description="Testa söka på en lärares namn, eller en annons titel, beskrivning eller pris."
-    />
-  {/if}
+  <div class="p-4">
+    {#if isInit && initResults.length > 0}
+      <SearchResultList
+        results={initResults}
+        requestContactForm={requestContact}
+        startContactForm={startContact}
+      />
+    {:else if initMessage}
+      <AlertMessage
+        title={initMessage.title}
+        description={initMessage.description}
+        variant={initMessage.variant}
+      />
+    {:else if $message}
+      <FormMessage {message} scroll scrollTo="end" />
+    {:else if results.length > 0}
+      <SearchResultList
+        {results}
+        requestContactForm={requestContact}
+        startContactForm={startContact}
+      />
+    {:else}
+      <AlertMessage
+        title="Inga träffar på din sökning"
+        description="Testa söka på en lärares namn, eller en annons titel, beskrivning eller pris."
+      />
+    {/if}
+  </div>
 {:else}
   <RootContainer>
     <div
