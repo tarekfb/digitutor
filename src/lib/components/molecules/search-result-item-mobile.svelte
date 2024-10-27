@@ -1,35 +1,19 @@
 <script lang="ts">
-  import * as Card from "$lib/components/ui/card/index.js";
-  import { Contact, Terminal } from "lucide-svelte";
-  import Avatar from "../atoms/avatar.svelte";
   import type { SearchResult } from "src/lib/shared/models/search";
-  import { Subjects } from "src/lib/shared/models/common";
-  import { ChevronRight } from "lucide-svelte";
-  // import { mediaQuery } from "svelte-legos";
   import PrimaryTitle from "../atoms/primary-title.svelte";
   import Stars from "../atoms/stars.svelte";
-  import ContactTeacherForm from "./contact-teacher-form.svelte";
-  import type {
-    requestContactSchema,
-    startContactSchema,
-  } from "src/lib/shared/models/conversation";
-  import type { Infer } from "sveltekit-superforms";
-  import type { SuperValidated } from "sveltekit-superforms/client";
   import Button from "../ui/button/button.svelte";
   import SubjectItem from "../atoms/subject-item.svelte";
   import Link from "../atoms/link.svelte";
+  import * as Popover from "$lib/components/ui/popover/index.js";
 
-  // const isDesktop = mediaQuery("(min-width: 768px)");
-  const rating = 4.7;
+  const rating = 4.3;
   const nbrOfReviews = 11;
+  const rowItemStyling = "flex flex-col gap-y-2 items-center";
   export let result: SearchResult;
-  export let requestContactForm: SuperValidated<
-    Infer<typeof requestContactSchema>
-  >;
-  export let startContactForm: SuperValidated<Infer<typeof startContactSchema>>;
   export let searchTerm = 10;
-  const subject =
-    result.subjects.find((s) => s === searchTerm) ?? result.subjects.at(0);
+  const searchedSubject =
+    result.subjects.find((s) => s == searchTerm) ?? result.subjects.at(0);
 </script>
 
 <div class="flex flex-col gap-y-4 gap-x-4">
@@ -38,6 +22,7 @@
       <a
         href="/profile/{result.profile.id}?id={result.id}"
         aria-label="Gå till profil"
+        class="flex-shrink-0"
       >
         <img
           src={result.avatar}
@@ -46,7 +31,7 @@
         />
       </a>
       <div class="flex flex-col items-start gap-y-2 flex-grow">
-        <PrimaryTitle>
+        <PrimaryTitle class="whitespace-normal">
           {result.profile.firstName}
         </PrimaryTitle>
         <div class="flex flex-col gap-y-1">
@@ -55,63 +40,81 @@
             {nbrOfReviews} recension{nbrOfReviews > 1 ? "er" : ""}
           </p>
         </div>
-        <Button
-          class="self-center place-self-end mt-auto"
-          href="/profile/{result.profile.id}?id={result.id}"
-          >Kontakta läraren</Button
-        >
+        <div class="flex flex-col">
+          <SubjectItem
+            subject={searchedSubject}
+            class="p-0 m-0 h-8 gap-x-1 overflow-x-hidden"
+          />
+          <Button variant="secondary" class="m-0 p-2 max-h-6 self-start "
+            >...se {result.subjects.length - 1} till</Button
+          >
+        </div>
       </div>
     </div>
-  {:else}
-    <div class="flex justify-between gap-x-2">
-      <div class="flex flex-col gap-y-2 items-start">
-        <Link
-          class="text-foreground"
-          href="/profile/{result.profile.id}?id={result.id}"
-        >
-          <PrimaryTitle>
-            {result.profile.firstName}
-          </PrimaryTitle>
-        </Link>
-        <div class="flex flex-col gap-y-1">
-          <Stars {rating} size={4} class="p-0 m-0 " />
-          <p class="text-muted-foreground">
-            {nbrOfReviews} recension{nbrOfReviews > 1 ? "er" : ""}
-          </p>
-        </div>
+    <div class="flex justify-evenly">
+      <div class="flex flex-col gap-y-2 items-center">
+        <h3 class="text-2xl p-0 m-0 h-8">{result.hourlyPrice} SEK</h3>
+        <p class="text-muted-foreground">60 minuter</p>
       </div>
       <Button
         class="self-center"
         href="/profile/{result.profile.id}?id={result.id}"
-        >Kontakta läraren</Button
+        >Gå till profil</Button
       >
     </div>
+  {:else}
+    <div class="flex flex-col">
+      <Link
+        class="text-foreground self-start"
+        href="/profile/{result.profile.id}?id={result.id}"
+      >
+        <PrimaryTitle class="whitespace-normal">
+          {result.profile.firstName}
+        </PrimaryTitle>
+      </Link>
+      <div class="flex justify-between items-center gap-x-2">
+        <div class={rowItemStyling}>
+          <Stars {rating} size={4} class="p-0 m-0 h-8 items-center " />
+          <p class="text-muted-foreground">
+            {nbrOfReviews} recension{nbrOfReviews > 1 ? "er" : ""}
+          </p>
+        </div>
+        <div class={rowItemStyling}>
+          <h3 class="text-2xl p-0 m-0 h-8">{result.hourlyPrice} SEK</h3>
+          <p class="text-muted-foreground">60 minuter</p>
+        </div>
+        <div class={rowItemStyling}>
+          <SubjectItem
+            subject={searchedSubject}
+            class="p-0 m-0 h-8 gap-x-1 overflow-x-hidden self-start"
+          />
+          <!-- <Button variant="secondary" class="m-0 p-2 max-h-6 self-start "
+            >...se {result.subjects.length - 1} till</Button
+          > -->
+          {#if result.subjects.length > 1}
+            <Popover.Root portal={null}>
+              <Popover.Trigger asChild let:builder>
+                <Button variant="secondary" class="m-0 p-2 max-h-6 self-start "
+                  >...se {result.subjects.length - 1} till</Button
+                >
+              </Popover.Trigger>
+              <Popover.Content class="w-40 max-h-72 overflow-y-scroll">
+                <ul class="flex flex-col gap-y-2">
+                  {#each result.subjects as subject, i}
+                    {#if subject !== searchedSubject}
+                      <SubjectItem {subject} />
+                    {/if}
+                  {/each}
+                </ul>
+              </Popover.Content>
+            </Popover.Root>
+          {/if}
+        </div>
+      </div>
+    </div>
+    <Button
+      class="self-center"
+      href="/profile/{result.profile.id}?id={result.id}">Gå till profil</Button
+    >
   {/if}
-  <div class="flex justify-evenly">
-    <div class="flex flex-col gap-y-2 items-center col-start-5 col-span-4">
-      <h3 class="text-2xl p-0 m-0 h-8">220 SEK</h3>
-      <p class="text-muted-foreground">60 minuter</p>
-    </div>
-    <div class="flex flex-col gap-y-2 items-center col-start-9 col-span-4">
-      <SubjectItem
-        {subject}
-        class="p-0 m-0 h-8 gap-x-1 overflow-x-hidden self-start"
-      />
-      <Button
-        variant="ghost"
-        class="underline decoration-accent font-normal tracking-normal text-md lowercase m-0 p-2  max-h-6 "
-        >...se {result.subjects.length - 1} till</Button
-      >
-    </div>
-  </div>
-
-  <PrimaryTitle class="text-wrap">{result.title}</PrimaryTitle>
-  <p class="text-muted-foreground">
-    {#if result.description}
-      {result.description}
-    {:else}
-      Den här annonsen har ingen beskrivning just nu.
-    {/if}
-  </p>
-  <!-- todo if not avatar -->
 </div>

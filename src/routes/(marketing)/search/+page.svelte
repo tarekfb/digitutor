@@ -15,28 +15,12 @@
   import SearchResultList from "src/lib/components/molecules/search-result-list.svelte";
   import RootContainer from "src/lib/components/molecules/root-container.svelte";
   import { mediaQuery } from "svelte-legos";
-  import { Separator } from "src/lib/components/ui/separator";
-  import type { Infer } from "sveltekit-superforms";
-  import type { SuperValidated } from "sveltekit-superforms/client";
-  import {
-    requestContactSchema,
-    startContactSchema,
-  } from "src/lib/shared/models/conversation";
+  import Wavy from "src/lib/components/atoms/wavy.svelte";
 
   const isDesktop = mediaQuery("(min-width: 768px)");
 
   export let data: PageData;
-  $: ({ initResults, initMessage, requestContactForm, startContactForm } =
-    data);
-
-  // this is complaining about potential undefined. Maybe there's an issue with +page.server.ts?
-  // anyway, proceeding with this dirty hack...
-  $: requestContact = requestContactForm as SuperValidated<
-    Infer<typeof requestContactSchema>
-  >;
-  $: startContact = startContactForm as SuperValidated<
-    Infer<typeof startContactSchema>
-  >;
+  $: ({ initResults, initMessage } = data);
 
   let isInit = true;
   let results: SearchResultType[] = [];
@@ -45,8 +29,6 @@
     validators: zodClient(searchSchema),
     onUpdate({ form, result }) {
       if (form.valid && result.data) {
-        // requestContact.data.teacher = result.data.teacher.id;
-        // requestContact.data.role = result.data.teacher.role;
         results = result.data.formatted as SearchResultType[];
         isInit = false;
       }
@@ -56,57 +38,53 @@
 </script>
 
 {#if !$isDesktop}
-  <form
-    class="text-center flex flex-col gap-y-4 w-full p-8"
-    action="?/search"
-    method="POST"
-    use:enhance
-  >
-    <SecondaryTitle>Sök efter lärare och annonser</SecondaryTitle>
-    <div class="flex justify-between gap-x-2 md:gap-x-4 items-start">
-      <Form.Field form={searchForm} name="query" class="flex-1">
-        <Form.Control let:attrs>
-          <Input
-            {...attrs}
-            type="text"
-            bind:value={$formData.query}
-            placeholder="Namn, titel, beskrivning, pris, etc."
-            class="text-lg bg-card"
-          />
-        </Form.Control>
-        <Form.FieldErrors />
-      </Form.Field>
-      <FormSubmit
-        {delayed}
-        {allErrors}
-        text="Sök"
-        loadingText=""
-        class="w-12"
-      />
-    </div>
-  </form>
-  <Separator />
+  <div class="bg-accent min-h-44">
+    <form
+      class="text-center flex flex-col gap-y-4 w-full p-8"
+      action="?/search"
+      method="POST"
+      use:enhance
+    >
+      <SecondaryTitle class="text-background"
+        >Sök efter lärare och annonser</SecondaryTitle
+      >
+      <div class="flex justify-between gap-x-2 md:gap-x-4 items-start">
+        <Form.Field form={searchForm} name="query" class="flex-1">
+          <Form.Control let:attrs>
+            <Input
+              {...attrs}
+              type="text"
+              bind:value={$formData.query}
+              placeholder="Namn, titel, beskrivning, pris, etc."
+              class="text-lg bg-card"
+            />
+          </Form.Control>
+          <Form.FieldErrors class="text-destructive-secondary" />
+        </Form.Field>
+        <FormSubmit
+          {delayed}
+          {allErrors}
+          text="Sök"
+          loadingText=""
+          class="w-12"
+        />
+      </div>
+    </form>
+  </div>
+  <Wavy class="overflow-x-hidden -mt-4" />
   <div class="p-4">
-    {#if isInit && initResults.length > 0}
-      <SearchResultList
-        results={initResults}
-        requestContactForm={requestContact}
-        startContactForm={startContact}
-      />
+    {#if $message}
+      <FormMessage {message} scroll scrollTo="end" />
+    {:else if isInit && initResults.length > 0}
+      <SearchResultList results={initResults} />
     {:else if initMessage}
       <AlertMessage
         title={initMessage.title}
         description={initMessage.description}
         variant={initMessage.variant}
       />
-    {:else if $message}
-      <FormMessage {message} scroll scrollTo="end" />
     {:else if results.length > 0}
-      <SearchResultList
-        {results}
-        requestContactForm={requestContact}
-        startContactForm={startContact}
-      />
+      <SearchResultList {results} />
     {:else}
       <AlertMessage
         title="Inga träffar på din sökning"
@@ -150,11 +128,7 @@
       </form>
 
       {#if isInit && initResults.length > 0}
-        <SearchResultList
-          results={initResults}
-          requestContactForm={requestContact}
-          startContactForm={startContact}
-        />
+        <SearchResultList results={initResults} />
       {:else if initMessage}
         <AlertMessage
           title={initMessage.title}
@@ -164,11 +138,7 @@
       {:else if $message}
         <FormMessage {message} scroll scrollTo="end" />
       {:else if results.length > 0}
-        <SearchResultList
-          {results}
-          requestContactForm={requestContact}
-          startContactForm={startContact}
-        />
+        <SearchResultList {results} />
       {:else}
         <AlertMessage
           title="Inga träffar på din sökning"

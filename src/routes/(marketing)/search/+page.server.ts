@@ -7,7 +7,7 @@ import { zod } from "sveltekit-superforms/adapters";
 import { searchSchema, type SearchResult, } from "src/lib/shared/models/search";
 import type { Actions, PageServerLoad } from "./$types";
 import type { Message, PsqlError } from "src/lib/shared/models/common";
-import { formatProfile, loadContactTeacherForms } from "src/lib/utils";
+import { formatProfile } from "src/lib/utils";
 
 export const load = (async ({ url, locals: { supabase } }) => {
     const query = url.searchParams.get('q') || '';
@@ -35,7 +35,7 @@ export const load = (async ({ url, locals: { supabase } }) => {
     } catch (error) {
         if (error && typeof error === "object") {
             const psqlError = error as PsqlError;
-            if (psqlError.code && psqlError.code === "42601") // syntax error
+            if (psqlError.code == "42601") // syntax error
                 initMessage = getFailFormMessage("Ogiltiga karaktärer", "Testa söka på något annat.");
         } else {
             console.error("Error searching for teachers with following search: " + query, error);
@@ -43,8 +43,7 @@ export const load = (async ({ url, locals: { supabase } }) => {
         }
     }
 
-    const { requestContactForm, startContactForm } = await loadContactTeacherForms()
-    return { form, initResults, initMessage, requestContactForm, startContactForm }
+    return { form, initResults, initMessage }
 }) satisfies PageServerLoad;
 
 
@@ -57,6 +56,7 @@ export const actions: Actions = {
         const { query } = form.data;
 
         const cleanedQuery = query.trim();
+
         try {
             const listings = await search(supabase, cleanedQuery);
             const formatted: SearchResult[] = listings.map(listing => {
