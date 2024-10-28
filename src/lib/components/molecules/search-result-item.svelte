@@ -5,11 +5,13 @@
   import Button from "../ui/button/button.svelte";
   import SubjectItem from "../atoms/subject-item.svelte";
   import Link from "../atoms/link.svelte";
-  import * as Popover from "$lib/components/ui/popover/index.js";
+  import SeeMore from "./see-more.svelte";
 
   const rating = 4.3;
   const nbrOfReviews = 11;
   const rowItemStyling = "flex flex-col gap-y-2 items-center";
+  const boxStyling = "p-0 m-0 h-8";
+
   export let result: SearchResult;
   export let searchTerm = 10;
   const searchedSubject =
@@ -49,36 +51,17 @@
           <SubjectItem
             subject={searchedSubject}
             muted={false}
-            class="p-0 m-0 h-8 gap-x-1 overflow-x-hidden"
+            class="{boxStyling} gap-x-1 overflow-x-hidden"
           />
-
           {#if result.subjects.length > 1}
-            <Popover.Root portal={null}>
-              <Popover.Trigger let:builder asChild>
-                <Button
-                  variant="secondary"
-                  builders={[builder]}
-                  class="m-0 p-2 max-h-6 self-start "
-                  >...se {result.subjects.length - 1} till</Button
-                >
-              </Popover.Trigger>
-              <Popover.Content class="w-40 max-h-72 overflow-y-auto">
-                <ul class="flex flex-col gap-y-2">
-                  {#each result.subjects as subject}
-                    {#if subject !== searchedSubject}
-                      <SubjectItem {subject} muted={false} />
-                    {/if}
-                  {/each}
-                </ul>
-              </Popover.Content>
-            </Popover.Root>
+            <SeeMore subjects={result.subjects} {searchedSubject} />
           {/if}
         </div>
       </div>
     </div>
     <div class="flex justify-evenly">
-      <div class="flex flex-col gap-y-2 items-center">
-        <h3 class="text-2xl p-0 m-0 h-8">{result.hourlyPrice} SEK</h3>
+      <div class="flex flex-col gap-y-1 items-center">
+        <h3 class="text-2xl {boxStyling}">{result.hourlyPrice} SEK</h3>
         <p class="text-muted-foreground">60 minuter</p>
       </div>
       <Button
@@ -99,41 +82,23 @@
       </Link>
       <div class="flex justify-between items-center gap-x-2">
         <div class={rowItemStyling}>
-          <Stars {rating} size={4} class="p-0 m-0 h-8 items-center " />
+          <Stars {rating} size={4} class="{boxStyling} items-center " />
           <p class="text-muted-foreground">
             {nbrOfReviews} recension{nbrOfReviews > 1 ? "er" : ""}
           </p>
         </div>
         <div class={rowItemStyling}>
-          <h3 class="text-2xl p-0 m-0 h-8">{result.hourlyPrice} SEK</h3>
+          <h3 class="text-2xl {boxStyling}">{result.hourlyPrice} SEK</h3>
           <p class="text-muted-foreground">60 minuter</p>
         </div>
         <div class={rowItemStyling}>
           <SubjectItem
             subject={searchedSubject}
             muted={false}
-            class="p-0 m-0 h-8 gap-x-1 overflow-x-hidden self-start"
+            class="{boxStyling} gap-x-1 overflow-x-hidden self-start"
           />
           {#if result.subjects.length > 1}
-            <Popover.Root portal={null}>
-              <Popover.Trigger asChild let:builder>
-                <Button
-                  variant="secondary"
-                  builders={[builder]}
-                  class="m-0 p-2 max-h-6 self-start "
-                  >...se {result.subjects.length - 1} till</Button
-                >
-              </Popover.Trigger>
-              <Popover.Content class="w-40 max-h-72 overflow-y-scroll">
-                <ul class="flex flex-col gap-y-2">
-                  {#each result.subjects as subject}
-                    {#if subject !== searchedSubject}
-                      <SubjectItem {subject} muted={false} />
-                    {/if}
-                  {/each}
-                </ul>
-              </Popover.Content>
-            </Popover.Root>
+            <SeeMore subjects={result.subjects} {searchedSubject} />
           {/if}
         </div>
       </div>

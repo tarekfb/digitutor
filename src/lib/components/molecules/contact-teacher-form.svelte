@@ -10,7 +10,6 @@
   import { zodClient } from "sveltekit-superforms/adapters";
   import StartContact from "../atoms/start-contact.svelte";
   import { isStartingContact } from "src/stores/start-contact";
-  import { onMount } from "svelte";
 
   let className: string | null | undefined = undefined;
   export { className as class };

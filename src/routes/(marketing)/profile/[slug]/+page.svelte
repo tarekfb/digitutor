@@ -12,7 +12,6 @@
   import AlertMessage from "src/lib/components/atoms/alert-message.svelte";
   import ProfileBody from "src/lib/components/molecules/profile-body.svelte";
   import NotPublished from "src/lib/components/atoms/not-published.svelte";
-  import { page } from "$app/stores";
 
   export let data: PageData;
   $: ({
