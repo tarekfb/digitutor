@@ -19,7 +19,7 @@ export const load = (async ({ url, locals: { supabase } }) => {
     if (!query) return { form, initResults, initMessage }
 
     try {
-        const listings = await search(supabase, query);
+        let listings = await search(supabase, query);
         initResults = listings.map(listing => ({
             id: listing.id,
             title: listing.title,
@@ -31,7 +31,6 @@ export const load = (async ({ url, locals: { supabase } }) => {
             subjects: listing.subjects,
             profile: formatProfile(listing.profile),
         }));
-
     } catch (error) {
         if (error && typeof error === "object") {
             const psqlError = error as PsqlError;

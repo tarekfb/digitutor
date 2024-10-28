@@ -131,7 +131,9 @@
         </div>
       </form>
 
-      {#if isInit && initResults.length > 0}
+      {#if $message}
+        <FormMessage {message} scroll scrollTo="end" />
+      {:else if isInit && initResults.length > 0}
         <SearchResultList results={initResults} />
       {:else if initMessage}
         <AlertMessage
@@ -139,8 +141,6 @@
           description={initMessage.description}
           variant={initMessage.variant}
         />
-      {:else if $message}
-        <FormMessage {message} scroll scrollTo="end" />
       {:else if results.length > 0}
         <SearchResultList {results} />
       {:else}

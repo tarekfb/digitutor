@@ -352,6 +352,16 @@ VALUES
         TRUE
     ),
     (
+        '550e8400-e29b-41d4-a716-446655440081',
+        'JavaScript Tutoring',
+        'JavaScript for intermediate learners',
+        '{2,3}',
+        70,
+        'SEK',
+        '550e8400-e29b-41d4-a716-446655440000',
+        TRUE
+    ),
+    (
         '550e8400-e29b-41d4-a716-446655440090',
         'Java Tutoring',
         'Java for intermediate learners',
@@ -479,17 +489,19 @@ BEGIN
   listing_description := '';
   listing_hourly_price := 0;
 
-  -- Retrieve the profile information
-  SELECT p.first_name, p.last_name, p.role
-  INTO profile_first_name, profile_last_name, profile_role
-  FROM profiles p
-  WHERE p.id = listing.profile;
-
-  -- Retrieve the title, description, and hourly_price from the listings table for visible listings
-  SELECT l.title, l.description, l.hourly_price 
-  INTO listing_title, listing_description, listing_hourly_price
-  FROM listings l
-  WHERE l.id = listing.id AND l.visible = TRUE;
+  -- Retrieve profile and listing information, ensuring one listing per unique profile.id
+  SELECT p.first_name, p.last_name, p.role, 
+         l.title, l.description, l.hourly_price
+  INTO profile_first_name, profile_last_name, profile_role, 
+       listing_title, listing_description, listing_hourly_price
+  FROM (
+    SELECT DISTINCT ON (p.id) l.*, p.first_name, p.last_name, p.role
+    FROM listings l
+    JOIN profiles p ON l.profile = p.id
+    WHERE l.visible = TRUE AND p.role = 'teacher'
+    ORDER BY p.id, l.id  -- Ensures we get the first listing per unique profile.id
+  ) AS unique_listings
+  WHERE unique_listings.id = listing.id;
 
   -- Check if the role is 'teacher' and if the listing is visible
   IF profile_role = 'teacher' AND listing_title IS NOT NULL THEN
@@ -502,3 +514,4 @@ BEGIN
   END IF;
 END;
 $$ LANGUAGE plpgsql IMMUTABLE;
+    
