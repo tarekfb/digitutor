@@ -28,8 +28,6 @@
   } = data);
 
   const isDesktop = mediaQuery("(min-width: 768px)");
-
-  let initSubmit = $page.url.searchParams.get("contact") ? true : false;
 </script>
 
 {#if !$isDesktop}
@@ -38,7 +36,6 @@
       {teacher}
       {listing}
       {requestContactForm}
-      {initSubmit}
       {startContactForm}
     />
     {#if session?.user.id === teacher.id && listingMessage}
@@ -133,7 +130,6 @@
           requestContactAction="?/requestContact"
           startContactAction="?/startContact"
           firstName={teacher.first_name}
-          {initSubmit}
         />
         <NotPublished visible={listing?.visible} class="self-center" />
         {#if session?.user.id === teacher.id && listingMessage}

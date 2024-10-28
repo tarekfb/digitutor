@@ -17,7 +17,7 @@
 </script>
 
 <div class="flex flex-col gap-y-4 gap-x-4">
-  {#if !result.avatar}
+  {#if result.avatar}
     <div class="flex gap-x-4">
       <a
         href="/profile/{result.profile.id}?id={result.id}"
@@ -45,9 +45,28 @@
             subject={searchedSubject}
             class="p-0 m-0 h-8 gap-x-1 overflow-x-hidden"
           />
-          <Button variant="secondary" class="m-0 p-2 max-h-6 self-start "
-            >...se {result.subjects.length - 1} till</Button
-          >
+
+          {#if result.subjects.length > 1}
+            <Popover.Root portal={null}>
+              <Popover.Trigger let:builder asChild>
+                <Button
+                  variant="secondary"
+                  builders={[builder]}
+                  class="m-0 p-2 max-h-6 self-start "
+                  >...se {result.subjects.length - 1} till</Button
+                >
+              </Popover.Trigger>
+              <Popover.Content class="w-40 max-h-72 overflow-y-auto">
+                <ul class="flex flex-col gap-y-2">
+                  {#each result.subjects as subject}
+                    {#if subject !== searchedSubject}
+                      <SubjectItem {subject} />
+                    {/if}
+                  {/each}
+                </ul>
+              </Popover.Content>
+            </Popover.Root>
+          {/if}
         </div>
       </div>
     </div>
@@ -86,23 +105,24 @@
         <div class={rowItemStyling}>
           <SubjectItem
             subject={searchedSubject}
+            muted={false}
             class="p-0 m-0 h-8 gap-x-1 overflow-x-hidden self-start"
           />
-          <!-- <Button variant="secondary" class="m-0 p-2 max-h-6 self-start "
-            >...se {result.subjects.length - 1} till</Button
-          > -->
           {#if result.subjects.length > 1}
             <Popover.Root portal={null}>
               <Popover.Trigger asChild let:builder>
-                <Button variant="secondary" class="m-0 p-2 max-h-6 self-start "
+                <Button
+                  variant="secondary"
+                  builders={[builder]}
+                  class="m-0 p-2 max-h-6 self-start "
                   >...se {result.subjects.length - 1} till</Button
                 >
               </Popover.Trigger>
               <Popover.Content class="w-40 max-h-72 overflow-y-scroll">
                 <ul class="flex flex-col gap-y-2">
-                  {#each result.subjects as subject, i}
+                  {#each result.subjects as subject}
                     {#if subject !== searchedSubject}
-                      <SubjectItem {subject} />
+                      <SubjectItem {subject} muted={false} />
                     {/if}
                   {/each}
                 </ul>

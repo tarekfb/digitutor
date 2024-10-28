@@ -8,9 +8,28 @@
   export let iconStyling = "";
   export let textStyling = "";
   export let subject;
+  export let li = true;
+  export let muted = true;
 </script>
 
-<li class={cn("flex gap-x-2 items-center", className)}>
-  <Terminal class={cn("w-5 h-5 text-accent", iconStyling)} />
-  <p class={cn("font-mono md:text-lg", textStyling)}>{Subjects[subject]}</p>
-</li>
+{#if li}
+  <li
+    class={cn(
+      `flex gap-x-2 items-center ${muted ? "text-muted-foreground" : ""}  overflow-x-hidden`,
+      className,
+    )}
+  >
+    <Terminal class={cn("w-5 h-5 text-accent", iconStyling)} />
+    <p class={cn("font-mono md:text-lg", textStyling)}>{Subjects[subject]}</p>
+  </li>
+{:else}
+  <div
+    class={cn(
+      `flex gap-x-2 items-center ${muted ? "text-muted-foreground" : ""}  overflow-x-hidden`,
+      className,
+    )}
+  >
+    <Terminal class={cn("w-5 h-5 text-accent", iconStyling)} />
+    <p class={cn("font-mono md:text-lg", textStyling)}>{Subjects[subject]}</p>
+  </div>
+{/if}

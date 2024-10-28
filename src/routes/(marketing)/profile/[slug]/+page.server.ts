@@ -98,7 +98,7 @@ export const load = async (event) => {
     // replace all these fetches with 1 db query RPC function
     // plus if query param do that one seperately
 
-    const { requestContactForm, startContactForm } = await loadContactTeacherForms(listing?.profile)
+    const { requestContactForm, startContactForm } = await loadContactTeacherForms(teacher);
     const addReviewForm = await superValidate({ rating: 5 }, zod(addReviewSchema))
     return { teacher, reviews, reviewsMessage, listing, listingMessage, requestContactForm, startContactForm, addReviewForm, allowCreateReview };
 }

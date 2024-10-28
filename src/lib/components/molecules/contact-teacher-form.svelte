@@ -20,7 +20,6 @@
   export let startContactForm;
   export let startContactAction: string;
   export let firstName;
-  export let initSubmit = false;
 
   let wasGrantedContact = false;
 
@@ -49,6 +48,8 @@
     message,
   } = requestContactFormValues;
 
+  $: console.log($allErrors), $allErrors;
+
   const startContactFormValues = superForm(startContactForm, {
     // onUpdated({ form }) {
     //   if (form.valid) { // this prevents opening the modal again if navigates back to this page
@@ -57,10 +58,6 @@
     //   }
     // },
     validators: zodClient(startContactSchema),
-  });
-
-  onMount(() => {
-    // if (initSubmit) requestContactFormValues.submit();
   });
 </script>
 
@@ -80,6 +77,5 @@
   />
   <FormMessage message={$message} scroll />
 </form>
-<button on:click={() => requestContactFormValues.submit()}>asd</button>
 
 <StartContact form={startContactFormValues} action={startContactAction} />
