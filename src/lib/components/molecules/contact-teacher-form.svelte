@@ -48,8 +48,6 @@
     message,
   } = requestContactFormValues;
 
-  $: console.log($allErrors), $allErrors;
-
   const startContactFormValues = superForm(startContactForm, {
     // onUpdated({ form }) {
     //   if (form.valid) { // this prevents opening the modal again if navigates back to this page

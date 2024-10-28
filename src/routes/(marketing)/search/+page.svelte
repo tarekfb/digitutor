@@ -72,26 +72,30 @@
     </form>
   </div>
   <Wavy class="overflow-x-hidden -mt-4" />
-  <div class="p-4">
-    {#if $message}
+  {#if $message}
+    <div class="p-4">
       <FormMessage {message} scroll scrollTo="end" />
-    {:else if isInit && initResults.length > 0}
-      <SearchResultList results={initResults} />
-    {:else if initMessage}
+    </div>
+  {:else if isInit && initResults.length > 0}
+    <SearchResultList results={initResults} />
+  {:else if initMessage}
+    <div class="p-4">
       <AlertMessage
         title={initMessage.title}
         description={initMessage.description}
         variant={initMessage.variant}
       />
-    {:else if results.length > 0}
-      <SearchResultList {results} />
-    {:else}
+    </div>
+  {:else if results.length > 0}
+    <SearchResultList {results} />
+  {:else}
+    <div class="p-4">
       <AlertMessage
         title="Inga träffar på din sökning"
         description="Testa söka på en lärares namn, eller en annons titel, beskrivning eller pris."
       />
-    {/if}
-  </div>
+    </div>
+  {/if}
 {:else}
   <RootContainer>
     <div

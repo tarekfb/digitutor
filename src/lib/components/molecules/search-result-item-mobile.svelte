@@ -31,9 +31,14 @@
         />
       </a>
       <div class="flex flex-col items-start gap-y-2 flex-grow">
-        <PrimaryTitle class="whitespace-normal">
-          {result.profile.firstName}
-        </PrimaryTitle>
+        <a
+          href="/profile/{result.profile.id}?id={result.id}"
+          aria-label="Gå till profil"
+        >
+          <PrimaryTitle class="whitespace-normal">
+            {result.profile.firstName}
+          </PrimaryTitle>
+        </a>
         <div class="flex flex-col gap-y-1">
           <Stars {rating} size={4} class="p-0 m-0 " />
           <p class="text-muted-foreground">
@@ -43,6 +48,7 @@
         <div class="flex flex-col">
           <SubjectItem
             subject={searchedSubject}
+            muted={false}
             class="p-0 m-0 h-8 gap-x-1 overflow-x-hidden"
           />
 
@@ -60,7 +66,7 @@
                 <ul class="flex flex-col gap-y-2">
                   {#each result.subjects as subject}
                     {#if subject !== searchedSubject}
-                      <SubjectItem {subject} />
+                      <SubjectItem {subject} muted={false} />
                     {/if}
                   {/each}
                 </ul>

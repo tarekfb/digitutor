@@ -2,18 +2,21 @@
   import type { SearchResult } from "src/lib/shared/models/search";
   import SearchResultItemMobile from "./search-result-item-mobile.svelte";
   import { Separator } from "src/lib/components/ui/separator";
+
   export let results: SearchResult[];
+
+  const hasMultiple = results.length > 1;
 </script>
 
 <ul class="flex flex-col gap-y-4 w-full">
   {#each results as result, i}
-    <li>
+    {@const isLast = results.length - 1 === i}
+    {@const hasBelow = results.length !== 1 && !isLast}
+    <li class="p-4">
       <SearchResultItemMobile {result} />
     </li>
-    {#if results.length === 1 || (results.length > 1 && i !== results.length - 1) || (i !== results.length - 1 && results.length > 2)}
-      <Separator
-        class="-mx-4 {results.length === 1 ? 'hidden md:block' : ''} "
-      />
+    {#if (hasMultiple && !isLast) || hasBelow}
+      <Separator />
     {/if}
   {/each}
 </ul>

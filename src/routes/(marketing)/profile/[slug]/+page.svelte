@@ -100,8 +100,8 @@
               class="object-cover w-full rounded-sm mb-8"
             />
           {/if}
-          <div class="flex flex-col gap-y-4 {!listing ? ' items-center' : ''}">
-            <SecondaryTitle class="font-normal md:text-4xl  "
+          <div class="flex flex-col gap-y-4">
+            <SecondaryTitle class="font-normal md:text-4xl whitespace-normal"
               >{teacher.first_name}</SecondaryTitle
             >
             <Stars size={5} rating={4.7} />
