@@ -10,6 +10,9 @@ import type { Database } from "lucide-svelte";
 import type { Review } from "./shared/models/review";
 import type { Tables } from "src/supabase";
 import type { Profile } from "./shared/models/profile";
+import { superValidate } from "sveltekit-superforms";
+import { zod } from "sveltekit-superforms/adapters";
+import { requestContactSchema, startContactSchema } from "./shared/models/conversation";
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
@@ -199,3 +202,9 @@ export const formatProfile = ({ id, role, first_name: firstName, last_name: last
   id, role, firstName, lastName, avatarUrl
 });
 
+export const loadContactTeacherForms = async (teacher?: Tables<"profiles">) => {
+  const initValues = { teacher: teacher?.id, role: teacher?.role }
+  const requestContactForm = await superValidate(initValues, zod(requestContactSchema))
+  const startContactForm = await superValidate(initValues, zod(startContactSchema))
+  return { requestContactForm, startContactForm }
+}

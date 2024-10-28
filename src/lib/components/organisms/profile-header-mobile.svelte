@@ -56,7 +56,7 @@
       startContactAction="?/startContact"
       firstName={teacher.first_name}
     />
-    <NotPublished visible={listing?.visible} class="self-center"/>
+    <NotPublished visible={listing?.visible} class="self-center" />
   </div>
 
   <Wavy class="-mt-4 overflow-x-hidden " />

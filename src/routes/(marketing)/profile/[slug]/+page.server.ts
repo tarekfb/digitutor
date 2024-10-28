@@ -12,6 +12,7 @@ import { ResourceAlreadyExistsError } from "src/lib/shared/errors/resource-alrea
 import { createReview, getReviewsByReceiver } from "src/lib/server/database/review.js";
 import type { Listing } from "src/lib/shared/models/listing.js";
 import type { Message, PsqlError } from "src/lib/shared/models/common.js";
+import { loadContactTeacherForms } from "src/lib/utils";
 
 export const load = async (event) => {
     const { locals: { supabase, safeGetSession }, params: { slug }, parent, url: { searchParams } } = event;
@@ -97,8 +98,7 @@ export const load = async (event) => {
     // replace all these fetches with 1 db query RPC function
     // plus if query param do that one seperately
 
-    const requestContactForm = await superValidate({ teacher: teacher.id, role }, zod(requestContactSchema))
-    const startContactForm = await superValidate({ teacher: teacher.id, role }, zod(startContactSchema))
+    const { requestContactForm, startContactForm } = await loadContactTeacherForms(teacher);
     const addReviewForm = await superValidate({ rating: 5 }, zod(addReviewSchema))
     return { teacher, reviews, reviewsMessage, listing, listingMessage, requestContactForm, startContactForm, addReviewForm, allowCreateReview };
 }

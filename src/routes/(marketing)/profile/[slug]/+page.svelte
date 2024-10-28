@@ -99,8 +99,8 @@
               class="object-cover w-full rounded-sm mb-8"
             />
           {/if}
-          <div class="flex flex-col gap-y-4 {!listing ? ' items-center' : ''}">
-            <SecondaryTitle class="font-normal md:text-4xl  "
+          <div class="flex flex-col gap-y-4">
+            <SecondaryTitle class="font-normal md:text-4xl whitespace-normal"
               >{teacher.first_name}</SecondaryTitle
             >
             <Stars size={5} rating={4.7} />
@@ -130,7 +130,7 @@
           startContactAction="?/startContact"
           firstName={teacher.first_name}
         />
-        <NotPublished visible={listing?.visible} class="self-center"/>
+        <NotPublished visible={listing?.visible} class="self-center" />
         {#if session?.user.id === teacher.id && listingMessage}
           <AlertMessage
             title={listingMessage.title}

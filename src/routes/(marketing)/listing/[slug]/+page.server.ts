@@ -10,7 +10,7 @@ import { redirect } from "sveltekit-flash-message/server";
 import { ResourceAlreadyExistsError } from "src/lib/shared/errors/resource-already-exists-error";
 import { getReviewsByReceiver } from "src/lib/server/database/review";
 import type { Review } from "src/lib/shared/models/review.js";
-import { isPostgrestError } from "src/lib/utils";
+import { isPostgrestError, loadContactTeacherForms } from "src/lib/utils";
 
 export const load = async ({ locals: { supabase }, params: { slug }, parent }) => {
   let listing;
@@ -39,8 +39,7 @@ export const load = async ({ locals: { supabase }, params: { slug }, parent }) =
   }
 
   const updateListingForm = await superValidate({ ...listing, hourlyPrice: listing.hourly_price }, zod(updateListingSchema))
-  const requestContactForm = await superValidate({ teacher: listing.profile.id, role }, zod(requestContactSchema))
-  const startContactForm = await superValidate({ teacher: listing.profile.id, role }, zod(startContactSchema))
+  const { requestContactForm, startContactForm } = await loadContactTeacherForms(listing.profile)
   return { listing, reviews, updateListingForm, requestContactForm, startContactForm };
 }
 

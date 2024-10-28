@@ -28,13 +28,14 @@ export const load = (async ({ url, locals: { supabase } }) => {
             firstName: listing.profile.first_name,
             lastName: listing.profile.last_name,
             avatar: listing.profile.avatar_url ?? undefined,
+            subjects: listing.subjects,
             profile: formatProfile(listing.profile),
         }));
 
     } catch (error) {
         if (error && typeof error === "object") {
             const psqlError = error as PsqlError;
-            if (psqlError.code && psqlError.code === "42601") // syntax error
+            if (psqlError.code == "42601") // syntax error
                 initMessage = getFailFormMessage("Ogiltiga karaktärer", "Testa söka på något annat.");
         } else {
             console.error("Error searching for teachers with following search: " + query, error);
@@ -55,6 +56,7 @@ export const actions: Actions = {
         const { query } = form.data;
 
         const cleanedQuery = query.trim();
+
         try {
             const listings = await search(supabase, cleanedQuery);
             const formatted: SearchResult[] = listings.map(listing => {
@@ -66,6 +68,7 @@ export const actions: Actions = {
                     firstName: listing.profile.first_name,
                     lastName: listing.profile.last_name,
                     avatar: listing.profile.avatar_url ?? undefined,
+                    subjects: listing.subjects,
                     profile: formatProfile(listing.profile),
                 }
             });
