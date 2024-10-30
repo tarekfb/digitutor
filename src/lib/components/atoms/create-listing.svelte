@@ -20,7 +20,7 @@
   const title = "Skapa annons";
 </script>
 
-<div class="flex flex-col gap-y-4 generic-card text-center">
+<div class="flex flex-col gap-y-4 generic-card text-center w-full">
   <SecondaryTitle>Skapa ny annons</SecondaryTitle>
   <FormMessage {message} scroll />
   {#if $isDesktop}

@@ -1,4 +1,4 @@
-import { unknownErrorTitle } from "$lib/shared/constants/constants";
+import { unknownErrorMessage, unknownErrorTitle } from "$lib/shared/constants/constants";
 import { _hasFullProfile } from "src/routes/(admin)/account/+layout.js";
 import { error, fail, redirect } from "@sveltejs/kit";
 import { zod } from "sveltekit-superforms/adapters";
@@ -11,12 +11,12 @@ export async function load({ parent }) {
   const profile = data.profile;
 
   // user completed their profile
-  // redirect to select plan if student
-  if (_hasFullProfile(profile)) {
-    if (profile.role === "student")
-      redirect(303, "/account/select_plan");
+  if (_hasFullProfile(profile))
     redirect(303, "/account");
-  }
+
+  // redirect to select plan if student
+  // if (profile.role === "student")
+  //   redirect(303, "/account/select_plan");
 
   const initFormData = {
     firstName: profile.first_name ?? "",
@@ -58,8 +58,8 @@ export const actions = {
       return message(form, 'Skapat profil.');
     } catch (error) {
       console.error("Error on complete profile for userid " + user.id, { error });
-      return fail(500, { // fail or error? todo fix
-        message: unknownErrorMessage, form,
+      return fail(500, {
+        errorMessage: unknownErrorMessage, // error or fail? todo fix
       });
     }
 

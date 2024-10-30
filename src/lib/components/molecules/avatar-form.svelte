@@ -49,7 +49,7 @@
   };
 </script>
 
-<div class="flex flex-col gap-y-4 generic-card">
+<div class="flex flex-col gap-y-4 generic-card w-full">
   <SecondaryTitle>Profilbild</SecondaryTitle>
   <p class="text-muted-foreground">
     Maxstorlek är {formatBytes(maxAvatarSize)}.

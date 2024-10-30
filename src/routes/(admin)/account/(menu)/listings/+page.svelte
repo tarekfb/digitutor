@@ -5,13 +5,20 @@
   import ListingCard from "$lib/components/molecules/listing-card.svelte";
   import type { Listing } from "$lib/shared/models/listing";
   import { initCreateListingSchema } from "$lib/shared/models/listing.js";
-  import { superForm, type SuperValidated, type Infer } from "sveltekit-superforms";
+  import {
+    superForm,
+    type SuperValidated,
+    type Infer,
+  } from "sveltekit-superforms";
   import { zodClient } from "sveltekit-superforms/adapters";
+  import RootContainer from "src/lib/components/molecules/root-container.svelte";
 
   export let data: PageData;
   const listings = data.listings as Listing[];
 
-  const form = data.form as SuperValidated<Infer<typeof initCreateListingSchema>>;
+  const form = data.form as SuperValidated<
+    Infer<typeof initCreateListingSchema>
+  >;
   // this is complaining about potential undefined. Maybe there's an issue with +page.server.ts?
   // anyway, proceeding with this dirty hack...
 
@@ -21,11 +28,11 @@
 </script>
 
 <PrimaryTitle class="text-center">Dina annonser</PrimaryTitle>
-<div class="flex flex-col gap-y-4 my-6 w-full">
+<RootContainer class="my-6 w-full">
   {#each listings as listing}
-    <ListingCard {listing} publicView={false}  />
+    <ListingCard {listing} publicView={false} />
   {:else}
     <p class="text-center">Inga annonser. Testa skapa en!</p>
   {/each}
   <CreateListing form={userForm} />
-</div>
+</RootContainer>
