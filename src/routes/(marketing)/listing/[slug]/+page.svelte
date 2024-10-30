@@ -12,6 +12,7 @@
   import type { PageData } from "./$types";
   import ReviewCard from "src/lib/components/molecules/review-card.svelte";
   import AvatarNameBar from "src/lib/components/organisms/avatar-name-bar.svelte";
+  import RootContainer from "src/lib/components/molecules/root-container.svelte";
 
   export let data: PageData;
   $: ({ profile, listing, requestContactForm, startContactForm, reviews } =
@@ -33,7 +34,7 @@
   const { reset } = listingForm;
 </script>
 
-<div class="self-center flex flex-col m-8 gap-y-4 pb-8 w-full max-w-[1000px]">
+<RootContainer class="max-w-[1000px]">
   <AvatarNameBar clickable profile={listing.profile}>
     <PrimaryTitle>{listing.profile.first_name}</PrimaryTitle>
   </AvatarNameBar>
@@ -58,7 +59,7 @@
     <NonEditableListing {listing} />
     <SecondaryTitle>Recensioner</SecondaryTitle>
     {#each reviews as review}
-      <ReviewCard {review} />
+      <ReviewCard {review} class="" />
     {:else}
       <p>{listing.profile.first_name} har inga recensioner ännu.</p>
     {/each}
@@ -71,4 +72,4 @@
       buttonStyling="self-end"
     />
   {/if}
-</div>
+</RootContainer>
