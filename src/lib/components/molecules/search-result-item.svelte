@@ -82,7 +82,7 @@
       </Link>
       <div class="flex justify-between items-center gap-x-2">
         <div class={rowItemStyling}>
-          <Stars {rating} size={4} class="{boxStyling} items-center " />
+          <Stars {rating} size={4} class="{boxStyling} items-center self-start " />
           <p class="text-muted-foreground">
             {nbrOfReviews} recension{nbrOfReviews > 1 ? "er" : ""}
           </p>
