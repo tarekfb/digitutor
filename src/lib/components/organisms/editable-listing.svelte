@@ -94,7 +94,7 @@
     <Form.FieldErrors />
   </Form.Field>
 
-  <div class="flex justify-end gap-x-2">
+  <div class="flex justify-evenly md:justify-end gap-x-2">
     <Button on:click={stopEditing} variant="secondary">
       <X class="mr-2 h-5 w-5" />
       Avbryt
@@ -108,7 +108,7 @@
       {/if}
     </Button>
   </div>
-  <div class="self-end">
+  <div class="self-center md:self-end">
     <DeleteListing />
   </div>
 </form>

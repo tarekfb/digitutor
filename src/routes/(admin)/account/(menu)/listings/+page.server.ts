@@ -36,7 +36,7 @@ export const actions: Actions = {
     const { locals: { supabase, safeGetSession } } = event;
     const { session } = await safeGetSession();
     if (!session)
-      throw redirect(303, "/sign-in");
+      redirect(303, "/sign-in");
 
     const form = await superValidate(event, zod(initCreateListingSchema));
     if (!form.valid) return fail(400, { form });
@@ -50,6 +50,6 @@ export const actions: Actions = {
       console.error("Failed to create listing", error);
       return message(form, getFailFormMessage(), { status: 500 });
     }
-    throw redirect(303, `/listing/${listingId}`);
+    redirect(303, `/account/edit-listing/${listingId}`);
   },
 };

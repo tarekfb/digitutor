@@ -77,8 +77,8 @@
           {#if listing}
             <p>
               Vill du göra ändringar på din annons? <a
-                href="/listing/{listing.id}"
-                class="underline">Gå till annonsen.</a
+              href="/account/edit-listing/{listing.id}"
+              class="underline">Gå till annonsen.</a
               >
             </p>
           {/if}
@@ -131,8 +131,8 @@
           firstName={teacher.first_name}
         />
         {#if !listing?.visible}
-        <Published isPublished={listing?.visible} class="self-center" />
-      {/if}
+          <Published isPublished={listing?.visible} class="self-center" />
+        {/if}
         {#if session?.user.id === teacher.id && listingMessage}
           <AlertMessage
             title={listingMessage.title}
@@ -173,7 +173,7 @@
       {#if listing}
         <p>
           Vill du göra ändringar på din annons? <a
-            href="/listing/{listing.id}"
+            href="/account/edit-listing/{listing.id}"
             class="underline">Gå till annonsen.</a
           >
         </p>

@@ -18,14 +18,14 @@
   class="w-full"
 >
   <Card.Root>
-    <Card.Header class="flex-row gap-x-2 gap-y-0 justify-between ">
+    <Card.Header class="flex-row gap-x-2 gap-y-0 justify-between items-center">
       <Card.Title
-        class="overflow-hidden overflow-ellipsis max-w-40 md:max-w-96    "
+        class="overflow-hidden overflow-ellipsis max-w-40 md:max-w-96 "
       >
         {listing.title}
       </Card.Title>
       {#if !publicView}
-        <Published isPublished={listing.visible} />
+        <Published isPublished={listing.visible} class="" />
       {/if}
     </Card.Header>
     <Separator />
@@ -45,7 +45,7 @@
           href="/profile/{listing.profile.id}?id={listing.id}"
           class="flex gap-x-2"><Eye class="h-4 w-4" />SE ANNONS</Button
         >
-        <Button href="/listing/{listing.id}" class="flex gap-x-2">
+        <Button href="/account/edit-listing/{listing.id}" class="flex gap-x-2">
           <Pen class="h-4 w-4" />Redigera</Button
         >
       </div>
