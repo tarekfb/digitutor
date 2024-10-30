@@ -11,7 +11,7 @@
   import { Subjects } from "src/lib/shared/models/common";
   import AlertMessage from "src/lib/components/atoms/alert-message.svelte";
   import ProfileBody from "src/lib/components/molecules/profile-body.svelte";
-  import NotPublished from "src/lib/components/atoms/not-published.svelte";
+  import Published from "src/lib/components/atoms/published.svelte";
 
   export let data: PageData;
   $: ({
@@ -130,7 +130,9 @@
           startContactAction="?/startContact"
           firstName={teacher.first_name}
         />
-        <NotPublished visible={listing?.visible} class="self-center" />
+        {#if !listing?.visible}
+        <Published isPublished={listing?.visible} class="self-center" />
+      {/if}
         {#if session?.user.id === teacher.id && listingMessage}
           <AlertMessage
             title={listingMessage.title}

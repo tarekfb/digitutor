@@ -1,4 +1,3 @@
--- Insert additional users into auth.users table (2 teachers and 5 students)
 INSERT INTO
     auth.users (
         instance_id,
@@ -328,7 +327,6 @@ VALUES
         NOW()
     );
 
--- Insert additional listings for new teachers
 INSERT INTO
     public.listings (
         id,
@@ -343,8 +341,8 @@ INSERT INTO
 VALUES
     (
         '550e8400-e29b-41d4-a716-446655440080',
-        'Python Tutoring',
-        'Python for beginners',
+        'Programmering nybörjare',
+        'Hej, jag lär ut python. När jag inte kodar så gillar jag att springa, cykla, eller bara sitta i soffan och läsa en bra bok. Det är roligt att träffa nya människor och höra deras historier. Jag är bra på att förklara saker på ett enkelt sätt och jag har tålamod med de som behöver en extra förklaring. Secret ',
         '{1,2}',
         60,
         'SEK',
@@ -352,9 +350,20 @@ VALUES
         TRUE
     ),
     (
+
+        '550e8400-e29b-41d4-a716-446655440081',
+        'Webbutveckling när det är som roligast',
+        'Jag lär ut något. Text på svenska. Text på svenska. Text på svenska. Text på svenska. Text på svenska. Secret',
+        '{2,3}',
+        70,
+        'SEK',
+        '550e8400-e29b-41d4-a716-446655440000',
+        TRUE
+    ),
+    (
         '550e8400-e29b-41d4-a716-446655440090',
-        'Java Tutoring',
-        'Java for intermediate learners',
+        'Testa Java! 😍',
+        'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Praesent non nulla a magna aliquam mollis. Mauris vitae tortor nec erat lacinia dignissim. Morbi non nulla a magna aliquam mollis. Mauris vitae tortor nec erat lacinia dignissim. ',
         '{1,2,3}',
         70,
         'SEK',
@@ -362,7 +371,6 @@ VALUES
         TRUE
     );
 
--- Insert additional reviews to ensure each teacher has at least 5 reviews
 INSERT INTO
     public.reviews (id, sender, receiver, rating, description)
 VALUES
@@ -465,6 +473,7 @@ INSERT
         AND auth.role() = 'authenticated'
     );
 
+
 CREATE OR REPLACE FUNCTION compound_search(listing RECORD) RETURNS TEXT AS $$
 DECLARE
   profile_first_name TEXT;
@@ -501,4 +510,5 @@ BEGIN
     RETURN NULL; -- or you can return '' for an empty string
   END IF;
 END;
+
 $$ LANGUAGE plpgsql IMMUTABLE;

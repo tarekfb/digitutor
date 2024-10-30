@@ -37,6 +37,9 @@ export const load = (async ({ url, locals: { supabase } }) => {
             const psqlError = error as PsqlError;
             if (psqlError.code == "42601") // syntax error
                 initMessage = getFailFormMessage("Ogiltiga karaktärer", "Testa söka på något annat.");
+            else
+                initMessage = getFailFormMessage("Något gick fel", "Testa söka på något annat, eller försök igen senare.");
+
         } else {
             console.error("Error searching for teachers with following search: " + query, error);
             initMessage = getFailFormMessage();
