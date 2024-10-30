@@ -23,7 +23,7 @@
 <PrimaryTitle class="text-center">Dina annonser</PrimaryTitle>
 <div class="flex flex-col gap-y-4 my-6 w-full">
   {#each listings as listing}
-    <ListingCard {listing} publicView={false} clickable />
+    <ListingCard {listing} publicView={false}  />
   {:else}
     <p class="text-center">Inga annonser. Testa skapa en!</p>
   {/each}
