@@ -8,7 +8,7 @@
   import SecondaryTitle from "src/lib/components/atoms/secondary-title.svelte";
   import { Terminal } from "lucide-svelte";
   import Stars from "src/lib/components/atoms/stars.svelte";
-  import { Subjects } from "src/lib/shared/models/common";
+  import { languages } from "src/lib/shared/models/common";
   import AlertMessage from "src/lib/components/atoms/alert-message.svelte";
   import ProfileBody from "src/lib/components/molecules/profile-body.svelte";
   import Published from "src/lib/components/atoms/published.svelte";
@@ -110,7 +110,7 @@
                   {#if i < 6}
                     <li class="flex gap-x-2 items-center">
                       <Terminal class="w-5 h-5 text-primary" />
-                      <p class="font-mono text-2xl">{Subjects[subject]}</p>
+                      <p class="font-mono text-2xl">{languages[subject].label}</p>
                     </li>
                   {/if}
                 {/each}

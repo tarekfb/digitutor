@@ -15,7 +15,7 @@
   import PrimaryTitle from "src/lib/components/atoms/primary-title.svelte";
   import SecondaryTitle from "src/lib/components/atoms/secondary-title.svelte";
   import type { PageData } from "./$types";
-  import { Subjects } from "src/lib/shared/models/common";
+  import { languages } from "src/lib/shared/models/common";
   import type { Review } from "src/lib/shared/models/review";
   import Stars from "src/lib/components/atoms/stars.svelte";
   import ReviewCardExtra from "src/lib/components/molecules/review-card-extra.svelte";
@@ -89,7 +89,7 @@
               {#if i < 10}
               <li class="flex gap-x-2 items-center">
                   <Terminal class="w-5 h-5 text-accent" />
-                  <p class="font-mono text-base">{Subjects[subject]}</p>
+                  <p class="font-mono text-base">{languages[subject].label}</p>
                 </li>
               {/if}
             {/each}

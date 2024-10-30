@@ -1,23 +1,23 @@
 <script lang="ts">
-  import { Subjects, languages } from "$lib/shared/models/common";
+  import { languages } from "$lib/shared/models/common";
 
   export let formData;
   export let errors;
 </script>
 
 <div
-  class="flex gap-2 items-center flex-wrap max-w-full border rounded-lg p-2 bg-background"
+  class="flex gap-2 items-center flex-wrap max-w-full border rounded-sm p-5 bg-card"
   data-testid="editable-subjects"
 >
-  {#each languages as subject}
-    <label class="bg-card p-2 rounded-lg">
+  {#each languages as language}
+    <label class="bg-background p-2 rounded-sm">
       <input
         type="checkbox"
         bind:group={$formData.subjects}
         name="subjects"
-        value={subject.id}
+        value={language.id}
       />
-      {Subjects[Number(subject.id)]}
+      {language.label}
     </label>
   {/each}
 </div>
