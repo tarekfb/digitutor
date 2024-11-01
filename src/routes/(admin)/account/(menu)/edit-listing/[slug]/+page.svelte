@@ -15,16 +15,23 @@
   import * as Form from "$lib/components/ui/form/index.js";
   import { Input } from "$lib/components/ui/input/index.js";
   import { Checkbox } from "src/lib/components/ui/checkbox";
+  import { toast } from "svelte-sonner";
+  import { page } from "$app/stores";
+  import { ExternalLink } from "lucide-svelte";
+  import { secondaryAltButtonVariant } from "src/lib/shared/constants/constants";
+
   export let data: PageData;
 
-  // $: ({ profile, listing, requestContactForm, startContactForm, reviews } =
-  //   data);
+  $: ({ subjects, profile } = data);
+
+  const { slug } = $page.params;
 
   const listingForm = superForm(data.updateListingForm, {
     validators: zodClient(updateListingSchema),
     onUpdated({ form }) {
       if (form.valid) {
         reset({ newState: data.updateListingForm.data });
+        toast.success(`Annons uppdaterad.`);
       }
     },
     resetForm: false,
@@ -48,7 +55,7 @@
     method="POST"
     use:enhance
     action="?/updateListing"
-    class=" flex flex-col items-center gap-y-4"
+    class="flex flex-col gap-y-4 items-stretch"
   >
     <Form.Field form={listingForm} name="title">
       <Form.Control let:attrs>
@@ -91,41 +98,48 @@
       <Form.FieldErrors />
     </Form.Field>
 
-    <SubjectsEditable {formData} {errors} />
+    <SubjectsEditable {formData} {errors} {subjects} />
 
-    <Form.Field form={listingForm} name="visible">
-      <Form.Control let:attrs>
-        <div class="flex gap-x-2 items-center">
-          <Checkbox
-            {...attrs}
-            bind:checked={$formData.visible}
-            class="w-5 h-5 flex items-center justify-center"
-          />
-          <Form.Label class="text-xl">Synlig</Form.Label>
-        </div>
-        <input
-          name={attrs.name}
-          bind:checked={$formData.visible}
-          type="checkbox"
-          value={$formData.visible}
-          hidden
-        />
-      </Form.Control>
-      <Form.FieldErrors />
-    </Form.Field>
-
-    <div class="flex justify-evenly md:justify-end gap-x-2">
-      <Button type="submit" disabled={$allErrors.length > 0 || $delayed}>
-        {#if $delayed}
-          <LoadingSpinner class="mr-2" /> <span>Laddar...</span>
-        {:else}
-          <SaveIcon class="mr-2 h-5 w-5" />
-          Spara
-        {/if}
-      </Button>
-    </div>
-    <div class="self-center md:self-end">
-      <DeleteListing />
+    <div class="flex flex-col gap-y-4 mt-4 md:items-end">
+      <div class="flex justify-between gap-x-2 items-center md:gap-x-6">
+        <Form.Field form={listingForm} name="visible">
+          <Form.Control let:attrs>
+            <div class="flex gap-x-2 items-center">
+              <Checkbox
+                {...attrs}
+                bind:checked={$formData.visible}
+                class="w-5 h-5 flex items-center justify-center"
+              />
+              <Form.Label class="text-xl">Synlig</Form.Label>
+            </div>
+            <input
+              name={attrs.name}
+              bind:checked={$formData.visible}
+              type="checkbox"
+              value={$formData.visible}
+              hidden
+            />
+          </Form.Control>
+          <Form.FieldErrors />
+        </Form.Field>
+        <Button
+          variant="secondary"
+          href="/profile/{profile.id}?id={slug}"
+          class="flex gap-x-2 {secondaryAltButtonVariant()}"
+          ><ExternalLink class="h-4 w-4" />visa annons</Button
+        >
+      </div>
+      <div class="flex justify-between gap-x-2 md:gap-x-6">
+        <DeleteListing />
+        <Button type="submit" disabled={$allErrors.length > 0 || $delayed}>
+          {#if $delayed}
+            <LoadingSpinner class="mr-2" /> <span>Laddar...</span>
+          {:else}
+            <SaveIcon class="mr-2 h-5 w-5" />
+            Spara
+          {/if}
+        </Button>
+      </div>
     </div>
   </form>
 </RootContainer>

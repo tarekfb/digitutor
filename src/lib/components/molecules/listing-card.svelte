@@ -2,10 +2,10 @@
   import * as Card from "$lib/components/ui/card/index.js";
   import type { Listing } from "$lib/shared/models/listing";
   import { formatDateReadable, truncate } from "src/lib/utils";
-  import Published from "../atoms/published.svelte";
+  import IsPublished from "../atoms/is-published.svelte";
   import { Button } from "../ui/button";
   import { Pen } from "lucide-svelte";
-  import { Eye } from "lucide-svelte";
+  import { ExternalLink } from "lucide-svelte";
   import Separator from "../ui/separator/separator.svelte";
 
   export let listing: Listing;
@@ -25,7 +25,7 @@
         {listing.title}
       </Card.Title>
       {#if !publicView}
-        <Published isPublished={listing.visible} class="" />
+        <IsPublished isPublished={listing.visible} />
       {/if}
     </Card.Header>
     <Separator />
@@ -43,7 +43,7 @@
         <Button
           variant="secondary"
           href="/profile/{listing.profile.id}?id={listing.id}"
-          class="flex gap-x-2"><Eye class="h-4 w-4" />SE ANNONS</Button
+          class="flex gap-x-2"><ExternalLink class="h-4 w-4" />visa annons</Button
         >
         <Button href="/account/edit-listing/{listing.id}" class="flex gap-x-2">
           <Pen class="h-4 w-4" />Redigera</Button

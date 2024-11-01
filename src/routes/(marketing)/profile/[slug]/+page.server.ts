@@ -29,7 +29,6 @@ export const load = async (event) => {
     if (teacher.role !== "teacher") {
         console.error("Attempted to read a non-teacher profile: " + slug);
         error(500, unknownErrorTitle);
-
     }
 
     const { profile } = await parent();
@@ -70,7 +69,6 @@ export const load = async (event) => {
         const isOwner = id === slug;
         if (isOwner) // only show error info to owner
             reviewsMessage = getFailFormMessage("Kunde inte hämta recensioner", "Något gick fel. Kontakta oss om detta fortsätter.");
-
     }
 
     let allowCreateReview: boolean = false;

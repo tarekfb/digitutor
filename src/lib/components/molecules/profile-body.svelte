@@ -15,7 +15,7 @@
 </script>
 
 <PrimaryTitle class="text-wrap">Om {teacher.first_name}</PrimaryTitle>
-<p class={cn("text-muted-foreground", pStyle)}>
+<p class={cn("text-muted-foreground md:text-lg", pStyle)}>
   <!-- {#if profile.bio}
           {profile.bio}
         {:else}

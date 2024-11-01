@@ -67,3 +67,5 @@ export const getFormatsHumanReadable = () => {
 
   return acceptedFormatsHumanReadable;
 }
+
+export const secondaryAltButtonVariant = (color: "primary" | "accent" = "primary") => `bg-card hover:bg-card/80 border border-solid border-${color}`

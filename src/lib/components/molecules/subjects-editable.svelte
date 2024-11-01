@@ -1,23 +1,24 @@
 <script lang="ts">
-  import { languages } from "$lib/shared/models/common";
+  import type { Subject } from "src/lib/shared/models/subject";
 
   export let formData;
   export let errors;
+  export let subjects: Subject[] = [];
 </script>
 
 <div
   class="flex gap-2 items-center flex-wrap max-w-full border rounded-sm p-5 bg-card"
   data-testid="editable-subjects"
 >
-  {#each languages as language}
+  {#each subjects as subject}
     <label class="bg-background p-2 rounded-sm">
       <input
         type="checkbox"
         bind:group={$formData.subjects}
         name="subjects"
-        value={language.id}
+        value={subject.id}
       />
-      {language.label}
+      {subject.title}
     </label>
   {/each}
 </div>

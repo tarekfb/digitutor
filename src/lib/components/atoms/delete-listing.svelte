@@ -14,7 +14,8 @@
     <Button
       builders={[builder]}
       variant="destructive"
-      aria-label="Delete listing"
+      aria-label="Ta bort annons"
+      class="self-end "
     >
       <Trash2 class="h-5 w-5 mr-2" /> Ta bort annons
     </Button>

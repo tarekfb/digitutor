@@ -6,6 +6,8 @@ import { deleteListing, getListing, updateListing } from "$lib/server/database/l
 import { updateListingSchema } from "$lib/shared/models/listing";
 import { redirect } from "sveltekit-flash-message/server";
 import { isPostgrestError } from "src/lib/utils";
+import { formatSubject, type Subject } from "src/lib/shared/models/subject.js";
+import { getSubjects } from "src/lib/server/database/subjects";
 
 export const load = async ({ locals: { supabase }, params: { slug }, parent }) => {
 
@@ -34,9 +36,17 @@ export const load = async ({ locals: { supabase }, params: { slug }, parent }) =
     error(400, unknownErrorTitle);
   }
 
+  let subjects: Subject[] = [];
+  try {
+    const rawSubjects = await getSubjects(supabase);
+    subjects = rawSubjects.map(s => formatSubject(s));
+  } catch (e) {
+    console.error("Unknown error when reading subjects", e);
+    error(500, unknownErrorTitle);
+  };
 
   const updateListingForm = await superValidate({ ...listing, hourlyPrice: listing.hourly_price }, zod(updateListingSchema))
-  return { listing, updateListingForm };
+  return { subjects, updateListingForm };
 }
 
 export const actions = {
