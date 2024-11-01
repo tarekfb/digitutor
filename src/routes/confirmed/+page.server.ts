@@ -1,7 +1,7 @@
 import type { EmailOtpType } from '@supabase/supabase-js'
 import { error } from '@sveltejs/kit';
 import type { PageServerLoad } from './$types';
-import { unknownErrorMessage } from '$lib/shared/constants/constants';
+import { unknownErrorTitle } from '$lib/shared/constants/constants';
 
 export const load: PageServerLoad = async (event) => {
     const { url, locals: { supabase } } = event;
@@ -34,23 +34,21 @@ export const load: PageServerLoad = async (event) => {
             console.error("Unknown error on verify otp on email confirmation", e);
             // redirect(303, '/sign-in', { message: 'Test', type: 'error' }, event)
             error(500, {
-                message: "Oväntat fel uppstod.",
+                message: "Oväntat fel uppstod",
                 description: "Vi försökte verifiera dig men någonting gick fel. Försök igen senare.",
             });
         }
 
         if (!user) {
             console.error("User data was null on verify otp on email confirmation", e);
-            error(500, unknownErrorMessage);
+            error(500, unknownErrorTitle);
         }
 
         redirectTo.searchParams.delete('next')
         return { email: user.email };
     }
 
-    error(500, {
-        message: "Det saknas lite info för att verifiera dig.",
-    });
+    error(500, "Det saknas lite info för att verifiera dig");
     // redirectTo.pathname = '/error'
     // return redirect(303, redirectTo)
 

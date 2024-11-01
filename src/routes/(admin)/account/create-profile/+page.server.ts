@@ -28,9 +28,8 @@ export async function load({ parent }) {
     return { form, data };
   } catch (e) {
     console.error("Error when loading createprofile", e);
-    error(500, {
-      message: unknownErrorTitle,
-    });
+    error(500, unknownErrorTitle);
+
   };
 }
 

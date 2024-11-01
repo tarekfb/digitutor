@@ -1,6 +1,6 @@
 import { fail, error } from "@sveltejs/kit";
 import { zod } from "sveltekit-superforms/adapters";
-import { getFailFormMessage, unknownErrorMessage } from "$lib/shared/constants/constants";
+import { getFailFormMessage, unknownErrorMessage, unknownErrorTitle } from "$lib/shared/constants/constants";
 import { message, superValidate } from "sveltekit-superforms";
 import { deleteListing, getListing, updateListing } from "$lib/server/database/listings";
 import { updateListingSchema } from "$lib/shared/models/listing";
@@ -31,9 +31,7 @@ export const load = async ({ locals: { supabase }, params: { slug }, parent }) =
 
   if (session?.user.id !== listing.profile.id) {
     console.error("Tried to read listing that is not theirs. listingid: " + listing.id + " userid: " + session?.user.id);
-    error(400, {
-      message: "Något gick fel."
-    });
+    error(400, unknownErrorTitle);
   }
 
 

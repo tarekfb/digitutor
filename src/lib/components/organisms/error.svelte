@@ -10,9 +10,9 @@
   export let code: number | undefined | null = undefined;
 
   const description =
-    error?.description ??
+    error?.description ||
     "Ett oväntat fel uppstod. Du kan kontakta oss om detta fortsätter.";
-  const title = error?.message ?? unknownErrorTitle;
+  const title = error?.message || unknownErrorTitle;
 
   // const {id, data} = error; // not using atm, implement when needed
 

@@ -18,9 +18,8 @@ export const load: PageServerLoad = async ({ locals: { supabase } }) => {
         review = longReviews[0] ?? reviews[0];
     } catch (e) {
         console.error("Error when reviews signup display, perhaps didnt find valid review", e);
-        error(500, {
-            message: unknownErrorTitle,
-        });
+        error(500, unknownErrorTitle);
+
     };
     const form = await superValidate(zod(signUpSchema))
     return { form, review };

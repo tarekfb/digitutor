@@ -22,16 +22,14 @@ export const load = async (event) => {
         teacher = await getProfileByUser(supabase, slug);
     } catch (e) {
         console.error("Error when reading profile with id: " + slug, e);
-        error(500, {
-            message: unknownErrorTitle,
-        });
+        error(500, unknownErrorTitle);
+
     };
 
     if (teacher.role !== "teacher") {
         console.error("Attempted to read a non-teacher profile: " + slug);
-        error(500, {
-            message: unknownErrorTitle,
-        });
+        error(500, unknownErrorTitle);
+
     }
 
     const { profile } = await parent();
