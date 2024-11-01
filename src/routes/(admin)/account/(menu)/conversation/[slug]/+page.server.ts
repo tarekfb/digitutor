@@ -35,7 +35,7 @@ export const load = async ({ locals: { supabase }, params: { slug }, parent }) =
   if (!messages) {
     console.error("Messages not found for slug: " + slug);
     error(404, {
-      message: 'Not found'
+      message: 'Hittade inga meddelanden'
     });
   }
 

@@ -23,7 +23,8 @@ export const load = async ({ locals: { supabase }, params: { slug }, parent }) =
     } else {
       console.error("Unknown error when reading listing with id: " + slug, e);
       error(500, {
-        message: "Hittade ingen annons"
+        message: "Annonsen hittades inte",
+        description: "Du kan kontakta oss om detta fortsätter."
       });
     }
   };
@@ -31,10 +32,11 @@ export const load = async ({ locals: { supabase }, params: { slug }, parent }) =
   if (session?.user.id !== listing.profile.id) {
     console.error("Tried to read listing that is not theirs. listingid: " + listing.id + " userid: " + session?.user.id);
     error(400, {
-      message: "Något gick fel. Kontakta oss om detta fortsätter."
+      message: "Något gick fel."
     });
-
   }
+
+
   const updateListingForm = await superValidate({ ...listing, hourlyPrice: listing.hourly_price }, zod(updateListingSchema))
   return { listing, updateListingForm };
 }

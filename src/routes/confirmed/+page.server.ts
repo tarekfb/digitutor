@@ -34,7 +34,8 @@ export const load: PageServerLoad = async (event) => {
             console.error("Unknown error on verify otp on email confirmation", e);
             // redirect(303, '/sign-in', { message: 'Test', type: 'error' }, event)
             error(500, {
-                message: "Vi försökte verifiera dig men någonting gick fel. Försök igen senare.",
+                message: "Oväntat fel uppstod.",
+                description: "Vi försökte verifiera dig men någonting gick fel. Försök igen senare.",
             });
         }
 
@@ -48,8 +49,8 @@ export const load: PageServerLoad = async (event) => {
     }
 
     error(500, {
-            message: "Det saknas lite info för att verifiera dig.",
-        });
+        message: "Det saknas lite info för att verifiera dig.",
+    });
     // redirectTo.pathname = '/error'
     // return redirect(303, redirectTo)
 

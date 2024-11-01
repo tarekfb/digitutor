@@ -17,7 +17,7 @@ export const load: PageServerLoad = async ({ locals: { supabase } }) => {
     catch (e) {
         console.error("Error when fetching signin display review, perhaps didnt find valid review", e);
         error(500, {
-            message: "",
+            message: "", // todo: as in auth, dont fail the page. just skip displaying the review
         });
     }
 
