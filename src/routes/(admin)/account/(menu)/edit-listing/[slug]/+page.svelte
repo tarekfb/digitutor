@@ -165,7 +165,7 @@
         <DeleteListing />
         <Button type="submit" disabled={$allErrors.length > 0 || $delayed}>
           {#if $delayed}
-            <LoadingSpinner class="mr-2" /> <span>Laddar...</span>
+            <LoadingSpinner class="mr-2" /> <span>Sparar</span>
           {:else}
             <SaveIcon class="mr-2 h-5 w-5" />
             Spara
