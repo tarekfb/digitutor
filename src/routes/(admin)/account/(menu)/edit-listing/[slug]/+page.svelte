@@ -121,6 +121,8 @@
           options={subjects}
           highlightFirstItem={false}
           labelField="title"
+          name="subjects"
+          clearable
         />
       </Form.Control>
       <Form.FieldErrors>
