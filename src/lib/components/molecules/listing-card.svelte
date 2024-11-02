@@ -19,13 +19,11 @@
 >
   <Card.Root>
     <Card.Header class="flex-row gap-x-2 gap-y-0 justify-between items-center">
-      <Card.Title
-        class="overflow-hidden overflow-ellipsis max-w-40 md:max-w-96 "
-      >
+      <Card.Title class="overflow-ellipsis max-w-40 md:max-w-96 ">
         {listing.title}
       </Card.Title>
       {#if !publicView}
-        <IsPublished isPublished={listing.visible} />
+        <IsPublished isPublished={listing.visible} class="text-xs" />
       {/if}
     </Card.Header>
     <Separator />
