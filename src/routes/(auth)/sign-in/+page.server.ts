@@ -1,12 +1,11 @@
 import { error, fail, redirect } from "@sveltejs/kit";
 import type { Actions, PageServerLoad } from "./$types";
-import { MessageId, getFailFormMessage, unknownErrorMessage } from "$lib/shared/constants/constants";
+import { MessageId, getFailFormMessage } from "$lib/shared/constants/constants";
 import { message, superValidate } from "sveltekit-superforms";
 import { zod } from "sveltekit-superforms/adapters";
 import { resendSchema, signInSchema } from "$lib/shared/models/user";
 import { getHighQualityReviews } from "src/lib/server/database/review";
 import { getListingsByTeacher } from "src/lib/server/database/listings";
-import { Subjects } from "src/lib/shared/models/common";
 
 export const load: PageServerLoad = async ({ locals: { supabase } }) => {
     let longReviews;
@@ -18,13 +17,16 @@ export const load: PageServerLoad = async ({ locals: { supabase } }) => {
     catch (e) {
         console.error("Error when fetching signin display review, perhaps didnt find valid review", e);
         error(500, {
-            message: "",
+            message: "", // todo: as in auth, dont fail the page. just skip displaying the review
         });
     }
 
+    enum Subjects { // Todo fix with new suibjects system
+        JavaScript = 0,
+    }
 
-    let listings;
     let subjects: Subjects[] = [];
+    let listings;
     try {
         if (longReviews[0]) {
 

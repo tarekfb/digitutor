@@ -16,6 +16,7 @@
   import PasswordInput from "$lib/components/molecules/password-input.svelte";
   import AvatarForm from "src/lib/components/molecules/avatar-form.svelte";
   import type { PageData } from "./$types";
+  import RootContainer from "src/lib/components/molecules/root-container.svelte";
 
   export let data: PageData;
 
@@ -48,8 +49,8 @@
   <title>Settings</title>
 </svelte:head>
 
-<div class="flex flex-col gap-y-4 pb-8 w-[275px] md:w-[600px] md:max-w-xl">
-  <PrimaryTitle class="text-center">Inställningar</PrimaryTitle>
+<PrimaryTitle class="text-center">Inställningar</PrimaryTitle>
+<RootContainer class="my-6 w-full">
   <SettingsForm form={nameForm} action="?/name" title="Namn" submitText="Ändra">
     <Form.Field form={nameForm} name="firstName">
       <Form.Control let:attrs>
@@ -139,4 +140,4 @@
   </SettingsForm>
 
   <DeleteAccount form={deleteForm} />
-</div>
+</RootContainer>

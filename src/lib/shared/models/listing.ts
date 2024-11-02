@@ -19,7 +19,7 @@ const updateListingProps: TypeToZod<InputListing> = {
     hourlyPrice: z
         .coerce
         .number()
-        .min(0, "Får inte vara negativt.")
+        .min(0, "Måste vara minst 0.")
         .max(100000, "Självinsikt och självsäkerhet är en hårfin balansgång."),
     subjects: z.number().array().min(1, "Du måste välja minst ett ämne."),
     title: z

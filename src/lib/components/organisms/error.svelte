@@ -6,15 +6,16 @@
   import { UserRound } from "lucide-svelte";
   import { unknownErrorTitle } from "src/lib/shared/constants/constants";
 
-  export let title: string = unknownErrorTitle;
-  export let description =
-    "Ett oväntat fel uppstod. Du kan kontakta oss om detta fortsätter.";
-  export let code: number = 0;
+  export let error: App.Error | null;
+  export let code: number | undefined | null = undefined;
 
-  title = title || unknownErrorTitle;
-  description =
-    description ||
+  const description =
+    error?.description ||
     "Ett oväntat fel uppstod. Du kan kontakta oss om detta fortsätter.";
+  const title = error?.message || unknownErrorTitle;
+
+  // const {id, data} = error; // not using atm, implement when needed
+
   const iconStyling = "w-4 h-4 md:w-5 md:h-5 text-accent";
 </script>
 
@@ -25,7 +26,7 @@
     <PrimaryTitle class="text-4xl md:text-5xl font-normal whitespace-normal"
       >{title}</PrimaryTitle
     >
-    {#if code !== 0}
+    {#if code}
       <p class="text-3xl md:text-4xl text-accent font-mono">{code}</p>
     {/if}
     <p class="text-xl md:text-2xl text-muted-foreground max-w-md">

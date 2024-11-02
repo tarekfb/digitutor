@@ -67,6 +67,11 @@ const config = {
 				"wide": "9rem",
 				"wider": "11rem",
 				"widest": "15rem",
+			},
+			maxWidth: {
+				"wide": "9rem",
+				"wider": "11rem",
+				"widest": "15rem",
 			}
 		}
 	},

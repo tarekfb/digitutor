@@ -16,9 +16,8 @@ export const load: PageServerLoad = async ({
     conversations = await getConversations(supabase, session.user.id);
   } catch (e) {
     console.error(e);
-    error(500, {
-      message: unknownErrorTitle,
-    });
+    error(500, unknownErrorTitle);
+
   }
 
   const { profile } = await parent();

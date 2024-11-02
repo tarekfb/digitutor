@@ -2,10 +2,11 @@
   import * as Card from "$lib/components/ui/card/index.js";
   import type { Listing } from "$lib/shared/models/listing";
   import { formatDateReadable, truncate } from "src/lib/utils";
-  import Published from "../atoms/published.svelte";
+  import IsPublished from "../atoms/is-published.svelte";
   import { Button } from "../ui/button";
   import { Pen } from "lucide-svelte";
-  import { Eye } from "lucide-svelte";
+  import { ExternalLink } from "lucide-svelte";
+  import Separator from "../ui/separator/separator.svelte";
 
   export let listing: Listing;
   export let publicView = true;
@@ -14,18 +15,20 @@
 <a
   href="/profile/{listing.profile.id}?id={listing.id}"
   aria-label="Gå till annons"
+  class="w-full overflow-x-hidden"
 >
   <Card.Root>
-    <Card.Header>
-      <Card.Title class="flex justify-between gap-x-2 items-center">
+    <Card.Header class="flex-row gap-x-2 gap-y-0 justify-between items-center">
+      <Card.Title class="overflow-ellipsis max-w-40 md:max-w-96 ">
         {listing.title}
-        {#if !publicView}
-          <Published isPublished={listing.visible} />
-        {/if}
       </Card.Title>
+      {#if !publicView}
+        <IsPublished isPublished={listing.visible} class="text-xs" />
+      {/if}
     </Card.Header>
+    <Separator />
     <Card.Content
-      class="flex flex-col gap-y-4 text-muted-foreground text-sm md:text-md"
+      class="pt-5 flex flex-col gap-y-4 text-muted-foreground  text-sm md:text-md"
     >
       <p>
         {#if listing.description}
@@ -34,17 +37,18 @@
           Den här annonsen har ingen beskrivning just nu
         {/if}
       </p>
-      <div class="flex justify-end gap-x-2">
+      <div class="flex flex-col gap-y-4 md:flex-row md:justify-end md:gap-x-4">
         <Button
           variant="secondary"
           href="/profile/{listing.profile.id}?id={listing.id}"
-          class="flex gap-x-2"><Eye class="h-4 w-4" />SE ANNONS</Button
+          class="flex gap-x-2"
+          ><ExternalLink class="h-4 w-4" />visa annons</Button
         >
-        <Button href="/listing/{listing.id}" class="flex gap-x-2">
+        <Button href="/account/edit-listing/{listing.id}" class="flex gap-x-2">
           <Pen class="h-4 w-4" />Redigera</Button
         >
       </div>
-      <div class="flex justify-between gap-x-2">
+      <div class="flex flex-col gap-y-2">
         <p>Skapad {formatDateReadable(listing.created_at)}</p>
         {#if listing.updated_at}
           <p>

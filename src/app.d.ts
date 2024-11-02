@@ -1,5 +1,6 @@
 import { SupabaseClient, Session } from "@supabase/supabase-js";
 import { Database } from "./supabase";
+import type { MessageId } from "./lib/shared/constants/constants";
 
 // See https://kit.svelte.dev/docs/types#app
 // for information about these interfaces
@@ -15,10 +16,15 @@ declare global {
     interface PageData {
       flash?: { type: 'success' | 'error' | 'info' | 'warning'; message: string };
     }
+    interface Error {
+      message: string,
+      description?: string,
+      id?: MessageId,
+      data?: any,
+    }
     // interface PageData {
     //   session: Session | null;
     // }
-    // interface Error {}
     // interface Platform {}
   }
 }

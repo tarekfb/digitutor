@@ -23,7 +23,7 @@
   method="POST"
   use:enhance
   {action}
-  class={cn("flex flex-col gap-y-4 generic-card max-w-full w-full", className)}
+  class={cn("flex flex-col gap-y-4 generic-card w-full", className)}
   enctype={enctype ?? "application/x-www-form-urlencoded"}
 >
   <SecondaryTitle>{title}</SecondaryTitle>
