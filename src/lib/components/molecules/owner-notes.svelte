@@ -13,7 +13,7 @@
   />
   <p class="text-muted-foreground">
     Vill du göra ändringar på informationen om dig själv? <a
-      href="/account"
+      href="/account/settings"
       class="underline font-mono whitespace-nowrap">Gå till din profil</a
     >
   </p>
