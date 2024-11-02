@@ -10,7 +10,6 @@ import { formatSubject, type Subject } from "src/lib/shared/models/subject.js";
 import { getSubjects } from "src/lib/server/database/subjects";
 
 export const load = async ({ locals: { supabase }, params: { slug }, parent }) => {
-
   const { session } = await parent();
   if (!session)
     redirect(303, "/sign-in");
@@ -45,7 +44,7 @@ export const load = async ({ locals: { supabase }, params: { slug }, parent }) =
     error(500, unknownErrorTitle);
   };
 
-  const updateListingForm = await superValidate({ ...listing, hourlyPrice: listing.hourly_price }, zod(updateListingSchema))
+  const updateListingForm = await superValidate({ ...listing, hourlyPrice: listing.hourly_price }, zod(updateListingSchema), { errors: false })
   return { subjects, updateListingForm };
 }
 

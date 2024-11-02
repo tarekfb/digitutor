@@ -7,10 +7,9 @@
   import RootContainer from "src/lib/components/molecules/root-container.svelte";
   import DeleteListing from "$lib/components/atoms/delete-listing.svelte";
   import { Button } from "$lib/components/ui/button";
-  import SubjectsEditable from "$lib/components/molecules/subjects-editable.svelte";
   import LoadingSpinner from "$lib/components/atoms/loading-spinner.svelte";
   import { Textarea } from "$lib/components/ui/textarea/index.js";
-  import { SaveIcon, X } from "lucide-svelte";
+  import { SaveIcon } from "lucide-svelte";
   import FormMessage from "$lib/components/molecules/form-message.svelte";
   import * as Form from "$lib/components/ui/form/index.js";
   import { Input } from "$lib/components/ui/input/index.js";
@@ -19,6 +18,9 @@
   import { page } from "$app/stores";
   import { ExternalLink } from "lucide-svelte";
   import { secondaryAltButtonVariant } from "src/lib/shared/constants/constants";
+  import Svelecte from "svelecte";
+  import { arrayProxy } from "sveltekit-superforms/client";
+  import Label from "src/lib/components/atoms/label.svelte";
 
   export let data: PageData;
 
@@ -27,6 +29,7 @@
   const { slug } = $page.params;
 
   const listingForm = superForm(data.updateListingForm, {
+    // clearOnSubmit: "none",
     validators: zodClient(updateListingSchema),
     onUpdated({ form }) {
       if (form.valid) {
@@ -37,15 +40,17 @@
     resetForm: false,
   });
 
-  const {
-    form: formData,
-    enhance,
-    errors,
-    delayed,
-    allErrors,
-    message,
-    reset,
-  } = listingForm;
+  const { form, message, errors, enhance, delayed, reset, allErrors } =
+    listingForm;
+  const { values, errors: subjectsErrors } = arrayProxy(
+    listingForm,
+    "subjects",
+    {
+      taint: true,
+    },
+  );
+
+  const labelStyling = "text-xl md:text-2xl";
 </script>
 
 <PrimaryTitle class="text-center">Redigera annons</PrimaryTitle>
@@ -55,14 +60,15 @@
     method="POST"
     use:enhance
     action="?/updateListing"
-    class="flex flex-col gap-y-4 items-stretch"
+    class="flex flex-col gap-y-4 items-stretch w-full"
   >
     <Form.Field form={listingForm} name="title">
       <Form.Control let:attrs>
+        <Label class={labelStyling}>Rubrik</Label>
         <Input
           {...attrs}
           type="text"
-          bind:value={$formData.title}
+          bind:value={$form.title}
           placeholder="Rubrik"
           class="text-lg bg-card"
         />
@@ -72,11 +78,12 @@
 
     <Form.Field form={listingForm} name="hourlyPrice">
       <Form.Control let:attrs>
+        <Label class={labelStyling}>Timpris</Label>
         <div class="flex gap-x-2 items-center text-xl">
           <Input
             {...attrs}
             type="number"
-            bind:value={$formData.hourlyPrice}
+            bind:value={$form.hourlyPrice}
             placeholder="Ange timpris"
             class="w-32 bg-card"
           />
@@ -88,17 +95,40 @@
 
     <Form.Field form={listingForm} name="description">
       <Form.Control let:attrs>
+        <Label class={labelStyling}>Beskrivning</Label>
         <Textarea
           {...attrs}
           placeholder="Skriv några ord om din annons..."
           class="resize-y bg-card"
-          bind:value={$formData.description}
+          bind:value={$form.description}
         />
       </Form.Control>
-      <Form.FieldErrors />
+      <Form.FieldErrors>
+        {#if $errors.description?.at(0)}
+          {$errors.description?.at(0)}
+        {/if}
+      </Form.FieldErrors>
     </Form.Field>
 
-    <SubjectsEditable {formData} {errors} {subjects} />
+    <Form.Field form={listingForm} name="subjects">
+      <Form.Control let:attrs>
+        <Label class={labelStyling}>Språk</Label>
+        <Svelecte
+          {...attrs}
+          bind:value={$values}
+          multiple
+          placeholder="Välj språk"
+          options={subjects}
+          highlightFirstItem={false}
+          labelField="title"
+        />
+      </Form.Control>
+      <Form.FieldErrors>
+        {#if $subjectsErrors}
+          {$subjectsErrors}
+        {/if}
+      </Form.FieldErrors>
+    </Form.Field>
 
     <div class="flex flex-col gap-y-4 mt-4 md:items-end">
       <div class="flex justify-between gap-x-2 items-center md:gap-x-6">
@@ -107,16 +137,16 @@
             <div class="flex gap-x-2 items-center">
               <Checkbox
                 {...attrs}
-                bind:checked={$formData.visible}
+                bind:checked={$form.visible}
                 class="w-5 h-5 flex items-center justify-center"
               />
               <Form.Label class="text-xl">Synlig</Form.Label>
             </div>
             <input
               name={attrs.name}
-              bind:checked={$formData.visible}
+              bind:checked={$form.visible}
               type="checkbox"
-              value={$formData.visible}
+              value={$form.visible}
               hidden
             />
           </Form.Control>

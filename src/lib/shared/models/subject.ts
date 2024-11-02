@@ -1,11 +1,11 @@
 export type DbSubject = {
-    id: string;
+    id: number;
     title: string;
     alt_title: string | null | undefined;
 }
 
 export type Subject = {
-    id: string;
+    id: number;
     title: string;
     altTitle?: string;
 }
