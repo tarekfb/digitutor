@@ -49,6 +49,7 @@
           () => toast.success(`Skickat in förslaget. ${actionText} `),
           500,
         );
+        // timeout to avoid visual bug
       }
     },
   });
@@ -198,7 +199,12 @@
                 <Button variant="outline" builders={[builder]}>Avbryt</Button>
               </Drawer.Close>
             </Drawer.Footer>
-            <FormSubmit {delayed} {allErrors} text={submitText} disabled={checked && !$form.email} />
+            <FormSubmit
+              {delayed}
+              {allErrors}
+              text={submitText}
+              disabled={checked && !$form.email}
+            />
           </div>
         </form>
       </div>
