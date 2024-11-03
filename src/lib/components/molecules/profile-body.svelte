@@ -5,7 +5,7 @@
   import type { addReviewSchema, Review } from "src/lib/shared/models/review";
   import type { SuperValidated, Infer } from "sveltekit-superforms/client";
   import type { Tables } from "src/supabase";
-  import { cn } from "src/lib/utils";
+  import { cn } from "src/lib/shared/utils/utils";
 
   export let pStyle: string | null | undefined = undefined;
   export let reviews: Review[];

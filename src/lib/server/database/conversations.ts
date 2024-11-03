@@ -1,7 +1,7 @@
 import type { Session, SupabaseClient } from "@supabase/supabase-js";
 import type { Database, Tables } from "src/supabase"
 import type { Conversation } from "$lib/shared/models/conversation";
-import { getNow } from "$lib/utils";
+import { getNow } from "src/lib/shared/utils/utils";
 import { sendMessage } from "./messages";
 import { ResourceAlreadyExistsError } from "src/lib/shared/errors/resource-already-exists-error";
 

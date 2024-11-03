@@ -1,6 +1,6 @@
 <script lang="ts">
   import * as Alert from "$lib/components/ui/alert/index.js";
-  import { cn } from "$lib/utils.js";
+  import { cn } from "src/lib/shared/utils/utils.js";
 
   export let title: string;
   export let description: string;

@@ -2,7 +2,7 @@ import type { Tables } from "src/supabase";
 import { z } from "zod";
 import { signUpUserFields } from "./user";
 import { acceptedAvatarFormats, getFormatsHumanReadable, maxAvatarSize } from "../constants/constants";
-import { formatBytes } from "src/lib/utils";
+import { formatBytes } from "src/lib/shared/utils/utils";
 
 export type FinishProfileInput = {
     firstName: string;

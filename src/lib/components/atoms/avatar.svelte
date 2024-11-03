@@ -1,8 +1,8 @@
 <script lang="ts">
   import * as Avatar from "$lib/components/ui/avatar";
   import { Button } from "$lib/components/ui/button";
-  import { convertToInitials } from "$lib/utils";
-  import { cn } from "$lib/utils.js";
+  import { convertToInitials } from "src/lib/shared/utils/utils";
+  import { cn } from "src/lib/shared/utils/utils.js";
 
   interface OnClick {
     onClick?: () => void;

@@ -4,7 +4,8 @@ import { searchSchema, } from "src/lib/shared/models/search";
 import type { Actions, PageServerLoad } from "./$types";
 import { redirect } from "@sveltejs/kit";
 import { getHighQualityReviews, getTopTeacherByReviews } from "src/lib/server/database/review";
-import { formatDisplayProfile, type DisplayProfile, type Review } from "src/lib/shared/models/review";
+import { type DisplayProfile, type Review } from "src/lib/shared/models/review";
+import { formatDisplayProfile } from "src/lib/shared/utils/profile/utils";
 
 export const load: PageServerLoad = async ({ locals: { supabase } }) => {
     const form = await superValidate(zod(searchSchema))

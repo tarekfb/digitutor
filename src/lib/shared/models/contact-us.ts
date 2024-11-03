@@ -1,9 +1,7 @@
 import { z } from "zod"
 
 export const contactUsSchema = z.object({
-    email: z
-        .string()
-        .min(1, "Får inte vara tom."),
+    email: z.string().email("Ogiltig e-postadress."),
     firstName: z
         .string()
         .min(1, "Får inte vara tomt.")

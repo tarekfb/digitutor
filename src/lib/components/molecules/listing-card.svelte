@@ -1,7 +1,7 @@
 <script lang="ts">
   import * as Card from "$lib/components/ui/card/index.js";
   import type { Listing } from "$lib/shared/models/listing";
-  import { formatDateReadable, truncate } from "src/lib/utils";
+  import { formatDateReadable, truncate } from "src/lib/shared/utils/utils";
   import IsPublished from "../atoms/is-published.svelte";
   import { Button } from "../ui/button";
   import { Pen } from "lucide-svelte";

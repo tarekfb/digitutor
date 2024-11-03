@@ -1,5 +1,5 @@
 import type { Tables } from "src/supabase";
-import type { TypeToZod } from "$lib/utils";
+import type { TypeToZod } from "src/lib/shared/utils/utils";
 import { z } from "zod";
 
 export type SignUpUser = Pick<Tables<"profiles">, "role" | "first_name" | "last_name"> & {
@@ -9,9 +9,9 @@ export type SignUpUser = Pick<Tables<"profiles">, "role" | "first_name" | "last_
 };
 
 export const signUpUserFields: TypeToZod<SignUpUser> = {
-    email: z
-        .string()
-        .email("Ogiltig e-postadress."),
+    email: z.
+        string().
+        email("Ogiltig e-postadress."),
     password: z
         .string()
         .min(5, "Måste vara minst 5 karaktärer."),
@@ -41,9 +41,7 @@ export type SignInUser = {
 }
 
 const signInProperties = {
-    email: z
-        .string()
-        .min(1, "Får inte vara tom."),
+    email: z.string().email("Ogiltig e-postadress."),
     password: z
         .string()
         .min(1, "Får inte vara tomt."),

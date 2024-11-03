@@ -1,7 +1,7 @@
 <script lang="ts">
   import type { Tables } from "src/supabase";
   import Avatar from "../atoms/avatar.svelte";
-  import { cn } from "$lib/utils.js";
+  import { cn } from "src/lib/shared/utils/utils.js";
 
   let className: string | null | undefined = undefined;
   export { className as class };

@@ -1,6 +1,8 @@
 # Mindic
 ## Gen types with
-supabase gen types typescript --project-id "$PROJECT_REF" > src/supabase.ts
+* supabase gen types typescript --project-id "$PROJECT_REF" > src/supabase.ts
+### Gen types locally with
+* supabase gen types typescript --local > src/supabase.ts
 
 ### Migrate with
 * supabase migration new <insert-name-here>

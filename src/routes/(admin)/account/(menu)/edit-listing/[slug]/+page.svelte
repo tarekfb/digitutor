@@ -22,11 +22,10 @@
   import { arrayProxy } from "sveltekit-superforms/client";
   import Label from "src/lib/components/atoms/label.svelte";
   import FormSubmit from "src/lib/components/molecules/form-submit.svelte";
+  import SuggestSubject from "src/lib/components/molecules/suggest-subject.svelte";
 
   export let data: PageData;
-
   $: ({ subjects, profile } = data);
-
   const { slug } = $page.params;
 
   const listingForm = superForm(data.updateListingForm, {
@@ -135,6 +134,7 @@
         {/if}
       </Form.FieldErrors>
     </Form.Field>
+    <SuggestSubject suggestSubjectForm={data.suggestSubjectForm} />
 
     <div class="flex flex-col gap-y-4 mt-4 md:items-end">
       <div class="flex justify-between gap-x-2 items-center md:gap-x-6">
@@ -167,16 +167,8 @@
       </div>
       <div class="flex justify-between gap-x-2 md:gap-x-6">
         <DeleteListing />
-        <!-- <Button type="submit" disabled={$allErrors.length > 0 || $delayed}>
-          {#if $delayed}
-            <LoadingSpinner class="mr-2" /> <span>Sparar</span>
-          {:else}
-            <SaveIcon class="mr-2 h-5 w-5" />
-            Spara
-          {/if}
-        </Button> -->
         <FormSubmit {delayed} {allErrors} text="Spara">
-            <SaveIcon slot="icon" class="h-5 w-5" />
+          <SaveIcon slot="icon" class="h-5 w-5" />
         </FormSubmit>
       </div>
     </div>

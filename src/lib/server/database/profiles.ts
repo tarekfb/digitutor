@@ -1,6 +1,6 @@
 import type { SupabaseClient } from "@supabase/supabase-js";
 import type { CreateProfile, ProfileInput } from "$lib/shared/models/profile";
-import { getNow, removeUndefined } from "$lib/utils";
+import { getNow, removeUndefined } from "src/lib/shared/utils/utils";
 import type { Database, Tables } from "src/supabase";
 import { InvalidInputError } from "src/lib/shared/errors/invalid-input-error";
 

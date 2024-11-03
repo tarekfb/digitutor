@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { cn } from "$lib/utils.js";
+  import { cn } from "src/lib/shared/utils/utils.js";
   import { Terminal } from "lucide-svelte";
   import { languages } from "src/lib/shared/models/common";
 

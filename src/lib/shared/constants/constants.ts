@@ -8,9 +8,9 @@ export const prodBaseUrl = 'https://mindic.pro';
 export const unknownErrorMessage = "Något gick fel. Kontakta oss om detta fortsätter."
 export const unknownErrorTitle = "Något gick fel...";
 
-export const getFailFormMessage = (title?: string, description?: string, messageId?: MessageId, data?: any): Message => (
+export const getFailFormMessage = (title?: string, description?: string, messageId?: MessageId, data?: any, variant: "destructive" | "default" | "warning" = "destructive"): Message => (
   {
-    variant: "destructive",
+    variant,
     title: title ?? "Något gick fel",
     description: description ?? "Kontakta oss om detta fortsätter.",
     id: messageId ?? MessageId.Unknown,
@@ -26,19 +26,10 @@ export const getSuccessFormMessage = (title: string, description?: string, messa
     data: data ?? undefined
   })
 
-export const getInfoFormMessage = (title: string, description?: string, messageId?: MessageId, data?: any): Message => (
-  {
-    variant: "default",
-    title,
-    description: description ?? "",
-    id: messageId ?? MessageId.Unknown,
-    data: data ?? undefined
-  })
-
-
 export enum MessageId {
   Unknown = 0,
   RateLimitExceeded = 1,
+  ResourceAlreadyExists = 2,
 }
 
 export const initMessagesCount = 25;

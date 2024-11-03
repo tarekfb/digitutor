@@ -9,7 +9,7 @@ import { deleteAccountSchema, passwordSchema } from "$lib/shared/models/user";
 import { isAuthApiError } from "@supabase/supabase-js";
 import { redirect } from "sveltekit-flash-message/server";
 import { deleteAvatar, uploadAvatar } from "src/lib/server/database/avatar";
-import { formatBytes, isStorageErrorCustom, verifyAvatarOwnership } from "src/lib/utils";
+import { formatBytes, isStorageErrorCustom, verifyAvatarOwnership } from "src/lib/shared/utils/utils";
 import type { StorageErrorCustom } from "src/lib/shared/errors/storage-error-custom";
 import { Buffer } from 'node:buffer';
 import { CF_IMAGE_RESIZE_URL } from '$env/static/private'
@@ -84,7 +84,7 @@ export const actions = {
             throw redirect(303, "/sign-in");
 
         const form = await superValidate(event, zod(avatarSchema));
-        if (!form.data || !form.data.avatar) return fail(400, { form });    
+        if (!form.data || !form.data.avatar) return fail(400, { form });
         if (form.data.avatar.type.endsWith("octet-stream")) return message(form, getFailFormMessage("Filformatet är inte giltigt", `Filformatet är "octet-stream". Testa med en annan bild.`), { status: 400 });
         if (!form.valid) return fail(400, { form });
         const { avatar } = form.data;

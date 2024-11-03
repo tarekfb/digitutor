@@ -1,5 +1,5 @@
 import type { Tables } from "src/supabase";
-import type { TypeToZod } from "$lib/utils";
+import type { TypeToZod } from "src/lib/shared/utils/utils";
 import { z } from "zod";
 
 export type Listing = Omit<Tables<"listings">, "profile"> & {

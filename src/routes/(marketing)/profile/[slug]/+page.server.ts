@@ -12,7 +12,7 @@ import { ResourceAlreadyExistsError } from "src/lib/shared/errors/resource-alrea
 import { createReview, getReviewsByReceiver } from "src/lib/server/database/review.js";
 import type { Listing } from "src/lib/shared/models/listing.js";
 import type { Message, PsqlError } from "src/lib/shared/models/common.js";
-import { loadContactTeacherForms } from "src/lib/utils";
+import { loadContactTeacherForms } from "src/lib/shared/utils/utils";
 
 export const load = async (event) => {
     const { locals: { supabase, safeGetSession }, params: { slug }, parent, url: { searchParams } } = event;
