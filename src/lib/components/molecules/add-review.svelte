@@ -99,7 +99,6 @@
           {delayed}
           {allErrors}
           text="Lägg till"
-          loadingText="Laddar..."
         />
       </div>
     </form>

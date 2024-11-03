@@ -14,14 +14,14 @@
   <p class="text-muted-foreground">
     Vill du göra ändringar på informationen om dig själv? <a
       href="/account/settings"
-      class="underline font-mono whitespace-nowrap">Gå till din profil</a
+      class="underline whitespace-nowrap">Gå till din profil</a
     >
   </p>
   {#if listing}
     <p class="text-muted-foreground">
       Vill du göra ändringar på din annons? <a
         href="/account/edit-listing/{listing.id}"
-        class="underline font-mono whitespace-nowrap">Gå till redigera annons</a
+        class="underline whitespace-nowrap">Gå till redigera annons</a
       >
     </p>
   {/if}

@@ -21,6 +21,7 @@
   import Svelecte from "svelecte";
   import { arrayProxy } from "sveltekit-superforms/client";
   import Label from "src/lib/components/atoms/label.svelte";
+  import FormSubmit from "src/lib/components/molecules/form-submit.svelte";
 
   export let data: PageData;
 
@@ -37,6 +38,7 @@
         toast.success(`Annons uppdaterad.`);
       }
     },
+    taintedMessage: "Lämna sidan? Ändringarna har inte sparats ännu.",
     resetForm: false,
   });
 
@@ -83,6 +85,8 @@
           <Input
             {...attrs}
             type="number"
+            inputmode="numeric"
+            pattern="[0-9]+"
             bind:value={$form.hourlyPrice}
             placeholder="Ange timpris"
             class="w-32 bg-card"
@@ -163,14 +167,17 @@
       </div>
       <div class="flex justify-between gap-x-2 md:gap-x-6">
         <DeleteListing />
-        <Button type="submit" disabled={$allErrors.length > 0 || $delayed}>
+        <!-- <Button type="submit" disabled={$allErrors.length > 0 || $delayed}>
           {#if $delayed}
             <LoadingSpinner class="mr-2" /> <span>Sparar</span>
           {:else}
             <SaveIcon class="mr-2 h-5 w-5" />
             Spara
           {/if}
-        </Button>
+        </Button> -->
+        <FormSubmit {delayed} {allErrors} text="Spara">
+            <SaveIcon slot="icon" class="h-5 w-5" />
+        </FormSubmit>
       </div>
     </div>
   </form>

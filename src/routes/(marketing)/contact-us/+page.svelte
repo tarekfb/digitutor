@@ -110,7 +110,6 @@
       {delayed}
       {allErrors}
       text="Skicka"
-      loadingText="Skickar..."
       class="self-center md:min-w-wider"
     />
   </form>

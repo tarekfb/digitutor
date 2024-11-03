@@ -112,7 +112,6 @@
         {delayed}
         text="Skicka"
         disabled={!isAllowedToReply}
-        loadingText="Skickar..."
       />
     </div>
   </form>

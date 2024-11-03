@@ -75,7 +75,6 @@
               {delayed}
               {allErrors}
               text="Skapa"
-              loadingText="Skapar..."
             />
           </div>
         </form>
@@ -134,7 +133,6 @@
                 {delayed}
                 {allErrors}
                 text="Skapa"
-                loadingText="Skapar..."
               />
             </div>
           </form>

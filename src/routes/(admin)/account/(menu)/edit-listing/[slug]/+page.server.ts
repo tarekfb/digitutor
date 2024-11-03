@@ -70,12 +70,15 @@ export const actions = {
     if (!session)
       throw redirect(303, "/sign-in");
 
-    const form = await superValidate(event, zod(updateListingSchema));
 
+    await Promise.resolve(setTimeout(() => { }, 2000));
+    const form = await superValidate(event, zod(updateListingSchema))
     if (!form.valid) return fail(400, { form });
 
     try {
-      await updateListing(supabase, form.data, slug, session);
+      await Promise.resolve(setTimeout(() => updateListing(supabase, form.data, slug, session), 2000))
+      // await updateListing(supabase, form.data, slug, session);
+
       return { form };
     } catch (error) {
       return message(form, getFailFormMessage(), { status: 500 });

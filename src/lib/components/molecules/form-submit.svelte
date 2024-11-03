@@ -10,7 +10,7 @@
   export let allErrors;
   export let text: string;
   export let variant: Variant = "default";
-  export let loadingText = "Laddar...";
+  export let loadingText = text;
   export let disabled = false;
 </script>
 
@@ -18,14 +18,15 @@
   type="submit"
   {variant}
   disabled={$allErrors.length > 0 || $delayed || disabled}
-  class={cn("", className)}
+  class={cn("flex gap-x-2 items-center", className)}
 >
   {#if $delayed}
-    <LoadingSpinner class={loadingText && "mr-2"} />
+    <LoadingSpinner />
     {#if loadingText}
       <span>{loadingText}</span>
     {/if}
   {:else}
+    <slot name="icon" />
     {text}
   {/if}
 </Button>
