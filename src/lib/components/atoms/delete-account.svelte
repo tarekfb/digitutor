@@ -20,7 +20,7 @@
   const title = "Är du säker?";
 </script>
 
-<div class="flex flex-col gap-y-4 generic-card">
+<div class="flex flex-col gap-y-4 generic-card w-full">
   <SecondaryTitle>Ta bort konto</SecondaryTitle>
   <FormMessage {message} scroll />
   {#if $isDesktop}
