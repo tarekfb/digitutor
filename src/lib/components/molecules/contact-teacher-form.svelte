@@ -72,7 +72,7 @@
     text="Kontakta {firstName}"
     class={buttonStyling}
   />
-  <FormMessage message={$message} scroll />
+  <FormMessage {message} scroll />
 </form>
 
 <StartContact form={startContactFormValues} action={startContactAction} />

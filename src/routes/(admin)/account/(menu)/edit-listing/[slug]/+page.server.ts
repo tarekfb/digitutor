@@ -115,7 +115,7 @@ export const actions = {
 
 
     // send email to admin here
-    console.log("fake sending email", { suggestion })
+    console.info("fake sending email", { suggestion })
     return { form };
 
   },
