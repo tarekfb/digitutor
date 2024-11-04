@@ -11,7 +11,8 @@
   import { languages } from "src/lib/shared/models/common";
   import AlertMessage from "src/lib/components/atoms/alert-message.svelte";
   import ProfileBody from "src/lib/components/molecules/profile-body.svelte";
-  import OwnerNotes from "src/lib/components/molecules/owner-notes.svelte";
+  import OwnerSection from "src/lib/components/molecules/owner-section.svelte";
+  import { page } from "$app/stores";
 
   export let data: PageData;
   $: ({
@@ -27,8 +28,10 @@
   } = data);
 
   const isDesktop = mediaQuery("(min-width: 768px)");
-
-  $: isOwner = session?.user.id === teacher.id;
+  
+  const preview = $page.url.searchParams.get("preview") === "true";
+  let isOwner = false;
+  $: if (!preview) isOwner = session?.user.id === teacher.id;
 </script>
 
 {#if !$isDesktop}
@@ -67,7 +70,7 @@
       <ProfileBody {teacher} {allowCreateReview} {reviews} {addReviewForm} />
 
       {#if isOwner}
-        <OwnerNotes {listing} />
+        <OwnerSection {listing} />
       {/if}
     </div>
   </RootContainer>
@@ -144,6 +147,6 @@
     </div>
   </div>
   {#if isOwner}
-    <OwnerNotes {listing} />
+    <OwnerSection {listing} />
   {/if}
 {/if}

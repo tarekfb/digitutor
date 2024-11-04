@@ -115,12 +115,10 @@ export const actions = {
         const { role } = form.data;
 
         if (slug === session.user.id)
-            return message(form, getFailFormMessage(undefined, "Du kan inte kontakta dig själv."), { status: 403 });
+            return message(form, getFailFormMessage(undefined, "Du kan inte kontakta dig själv.", undefined, undefined, "default"), { status: 403 });
 
-        if (role !== "student") {
-            console.error("Non-student tried to contact teacher for profile slug: " + slug, error);
-            return message(form, getFailFormMessage(), { status: 403 });
-        }
+        if (role !== "student")
+            return message(form, getFailFormMessage("Detta går ej att göra som lärare", "Skapa ett konto som student om du vill kontakta en annan lärare.", undefined, undefined, "default"), { status: 403 });
 
         const conversation = await getConversationForStudentAndTeacher(supabase, session.user.id, slug);
         if (conversation)
@@ -141,12 +139,11 @@ export const actions = {
         const { role, firstMessage } = form.data;
 
         if (slug === session.user.id)
-            return message(form, getFailFormMessage(undefined, "Du kan inte kontakta dig själv."), { status: 403 });
+            return message(form, getFailFormMessage(undefined, "Du kan inte kontakta dig själv.", undefined, undefined, "default"), { status: 403 });
 
-        if (role !== "student") {
-            console.error("Non-student tried to contact teacher for profile slug: " + slug, error);
-            return message(form, getFailFormMessage(), { status: 403 });
-        }
+        if (role !== "student")
+            return message(form, getFailFormMessage("Detta går ej att göra som lärare", "Skapa ett konto som student om du vill kontakta en annan lärare.", undefined, undefined, "default"), { status: 403 });
+
 
         let conversationId: string;
         try {
