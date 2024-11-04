@@ -2,7 +2,7 @@
   import Avatar from "$lib/components/atoms/avatar.svelte";
   import type { Review } from "src/lib/shared/models/review";
   import Stars from "../atoms/stars.svelte";
-  import { cn } from "$lib/utils.js";
+  import { cn } from "src/lib/shared/utils/utils.js";
 
   let className: string | null | undefined = undefined;
   export { className as class };

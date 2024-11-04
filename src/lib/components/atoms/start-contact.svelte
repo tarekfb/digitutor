@@ -74,7 +74,6 @@
             {delayed}
             {allErrors}
             text="Skicka"
-            loadingText="Skickar..."
           />
         </div>
       </form>
@@ -122,7 +121,6 @@
               {delayed}
               {allErrors}
               text="Skicka"
-              loadingText="Skickar..."
             />
           </div>
         </form>

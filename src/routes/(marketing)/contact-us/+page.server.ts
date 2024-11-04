@@ -1,5 +1,5 @@
 import { fail } from "@sveltejs/kit";
-import { getNow } from "$lib/utils.js";
+import { getNow } from "src/lib/shared/utils/utils.js";
 import type { Actions, PageServerLoad } from "./$types";
 import { contactUsSchema } from "$lib/shared/models/contact-us";
 import { superValidate, message } from "sveltekit-superforms";

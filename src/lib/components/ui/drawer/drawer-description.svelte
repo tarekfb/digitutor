@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { Drawer as DrawerPrimitive } from "vaul-svelte";
-	import { cn } from "$lib/utils.js";
+	import { cn } from "src/lib/shared/utils/utils.js";
 
 	type $$Props = DrawerPrimitive.DescriptionProps;
 

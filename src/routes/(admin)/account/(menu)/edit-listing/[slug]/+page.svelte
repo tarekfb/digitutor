@@ -7,7 +7,6 @@
   import RootContainer from "src/lib/components/molecules/root-container.svelte";
   import DeleteListing from "$lib/components/atoms/delete-listing.svelte";
   import { Button } from "$lib/components/ui/button";
-  import LoadingSpinner from "$lib/components/atoms/loading-spinner.svelte";
   import { Textarea } from "$lib/components/ui/textarea/index.js";
   import { SaveIcon } from "lucide-svelte";
   import FormMessage from "$lib/components/molecules/form-message.svelte";
@@ -21,11 +20,11 @@
   import Svelecte from "svelecte";
   import { arrayProxy } from "sveltekit-superforms/client";
   import Label from "src/lib/components/atoms/label.svelte";
+  import FormSubmit from "src/lib/components/molecules/form-submit.svelte";
+  import SuggestSubject from "src/lib/components/molecules/suggest-subject.svelte";
 
   export let data: PageData;
-
   $: ({ subjects, profile } = data);
-
   const { slug } = $page.params;
 
   const listingForm = superForm(data.updateListingForm, {
@@ -37,6 +36,7 @@
         toast.success(`Annons uppdaterad.`);
       }
     },
+    taintedMessage: "Lämna sidan? Ändringarna har inte sparats ännu.",
     resetForm: false,
   });
 
@@ -83,6 +83,8 @@
           <Input
             {...attrs}
             type="number"
+            inputmode="numeric"
+            pattern="[0-9]+"
             bind:value={$form.hourlyPrice}
             placeholder="Ange timpris"
             class="w-32 bg-card"
@@ -131,6 +133,7 @@
         {/if}
       </Form.FieldErrors>
     </Form.Field>
+    <SuggestSubject suggestSubjectForm={data.suggestSubjectForm} />
 
     <div class="flex flex-col gap-y-4 mt-4 md:items-end">
       <div class="flex justify-between gap-x-2 items-center md:gap-x-6">
@@ -163,14 +166,9 @@
       </div>
       <div class="flex justify-between gap-x-2 md:gap-x-6">
         <DeleteListing />
-        <Button type="submit" disabled={$allErrors.length > 0 || $delayed}>
-          {#if $delayed}
-            <LoadingSpinner class="mr-2" /> <span>Sparar</span>
-          {:else}
-            <SaveIcon class="mr-2 h-5 w-5" />
-            Spara
-          {/if}
-        </Button>
+        <FormSubmit {delayed} {allErrors} text="Spara">
+          <SaveIcon slot="icon" class="h-5 w-5" />
+        </FormSubmit>
       </div>
     </div>
   </form>

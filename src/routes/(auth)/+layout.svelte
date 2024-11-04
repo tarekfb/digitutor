@@ -2,7 +2,7 @@
   import type { LayoutData } from "./$types";
   import Navbar from "$lib/components/organisms/navbar.svelte";
   import "src/app.pcss";
-  import { logout } from "src/lib/utils";
+  import { logout } from "src/lib/shared/utils/utils";
   export let data: LayoutData;
   $: ({ supabase, session, profile } = data);
 </script>

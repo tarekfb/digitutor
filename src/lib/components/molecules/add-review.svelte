@@ -1,7 +1,7 @@
 <script lang="ts">
   import FormSubmit from "$lib/components/molecules/form-submit.svelte";
   import FormMessage from "$lib/components/molecules/form-message.svelte";
-  import { cn } from "$lib/utils.js";
+  import { cn } from "src/lib/shared/utils/utils.js";
   import  {
     superForm,
     type Infer,
@@ -99,7 +99,6 @@
           {delayed}
           {allErrors}
           text="Lägg till"
-          loadingText="Laddar..."
         />
       </div>
     </form>

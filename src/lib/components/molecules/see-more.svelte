@@ -3,7 +3,7 @@
   import Button from "../ui/button/button.svelte";
   import SubjectItem from "../atoms/subject-item.svelte";
   import * as Popover from "$lib/components/ui/popover/index.js";
-  import { cn } from "src/lib/utils";
+  import { cn } from "src/lib/shared/utils/utils";
 
   export let subjects: SearchResult["subjects"];
   export let searchedSubject: number | undefined = undefined;

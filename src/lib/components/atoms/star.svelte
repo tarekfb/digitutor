@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { cn } from "$lib/utils.js";
+  import { cn } from "src/lib/shared/utils/utils.js";
   import { Star } from "lucide-svelte";
   let className: string | null | undefined = undefined;
   export { className as class };

@@ -3,7 +3,7 @@
   import FormMessage from "../molecules/form-message.svelte";
   import SecondaryTitle from "$lib/components/atoms/secondary-title.svelte";
   import LoadingSpinner from "$lib/components/atoms/loading-spinner.svelte";
-  import { formatBytes } from "$lib/utils.js";
+  import { formatBytes } from "src/lib/shared/utils/utils.js";
   import {
     getMimeType,
     maxAvatarSize,

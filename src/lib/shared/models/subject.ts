@@ -1,3 +1,5 @@
+import { z } from "zod";
+
 export type DbSubject = {
     id: number;
     title: string;
@@ -15,3 +17,12 @@ export const formatSubject = (dbSubject: DbSubject): Subject => ({
     title: dbSubject.title,
     altTitle: dbSubject.alt_title || undefined,
 });
+
+export const suggestSubjectSchema = z.object({
+    subject: z
+        .string()
+        .min(1, "Måste vara minst 1 karaktär.")
+        .max(50, "För många karaktärer."),
+    email: z.string().email("Ogiltig e-postadress.").optional(),
+    isRetry: z.boolean().default(false).optional(),
+})

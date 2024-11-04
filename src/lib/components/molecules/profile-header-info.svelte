@@ -6,7 +6,7 @@
   import * as Popover from "$lib/components/ui/popover/index.js";
   import type { Tables } from "src/supabase";
   import type { Listing } from "src/lib/shared/models/listing";
-  import { cn } from "$lib/utils.js";
+  import { cn } from "src/lib/shared/utils/utils.js";
   import SubjectItem from "../atoms/subject-item.svelte";
 
   let className: string | null | undefined = undefined;
@@ -38,7 +38,7 @@
     <div class="flex flex-col gap-y-2 justify-start overflow-x-hidden">
       {#each subjects as subject, i}
         {#if i < maxSubjectsLength}
-          <SubjectItem {subject} />
+          <SubjectItem {subject}  textStyling="text-background" iconStyling="text-primary"/>
         {/if}
       {/each}
       {#if subjects.length > maxSubjectsLength}

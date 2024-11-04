@@ -1,6 +1,6 @@
 import type { Session, SupabaseClient } from "@supabase/supabase-js";
 import type { DbDisplayProfile, InputReview, Review } from "src/lib/shared/models/review";
-import { getNow } from "src/lib/utils";
+import { getNow } from "src/lib/shared/utils/utils";
 import type { Database, Tables } from "src/supabase";
 
 
@@ -62,7 +62,7 @@ export const getReviewsByReceiver = async (
 }
 
 export const getHighQualityReviews = async (supabase: SupabaseClient<Database>, max?: number) => {
-    let query = supabase                                                                                                                                                                       
+    let query = supabase
         .from("reviews")
         .select(`
             *,

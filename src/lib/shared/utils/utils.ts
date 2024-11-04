@@ -7,12 +7,11 @@ import { invalidate } from "$app/navigation";
 import type { SupabaseClient, Session, PostgrestError } from "@supabase/supabase-js";
 import { redirect } from "@sveltejs/kit";
 import type { Database } from "lucide-svelte";
-import type { Review } from "./shared/models/review";
 import type { Tables } from "src/supabase";
-import type { Profile } from "./shared/models/profile";
+import type { Profile } from "../models/profile";
 import { superValidate } from "sveltekit-superforms";
 import { zod } from "sveltekit-superforms/adapters";
-import { requestContactSchema, startContactSchema } from "./shared/models/conversation";
+import { requestContactSchema, startContactSchema } from "../models/conversation";
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
@@ -198,9 +197,12 @@ const getSwedishMonthName = (monthNumber: number) => {
   return monthNames[monthNumber - 1];
 };
 
-export const formatProfile = ({ id, role, first_name: firstName, last_name: lastName, avatar_url: avatarUrl }: Tables<"profiles">): Profile => ({
-  id, role, firstName, lastName, avatarUrl
-});
+export const formatProfile = ({ id, role, first_name: firstName, last_name: lastName, avatar_url: avatarUrl }: Tables<"profiles">): Profile => {
+  if (role === "admin")
+    throw new Error("Unsupported role")
+
+  return { id, role, firstName, lastName, avatarUrl }
+}
 
 export const loadContactTeacherForms = async (teacher?: Tables<"profiles">) => {
   const initValues = { teacher: teacher?.id, role: teacher?.role }

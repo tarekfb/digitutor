@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { timeAgo } from "$lib/utils";
+  import { timeAgo } from "src/lib/shared/utils/utils";
   import { chat, loadChat } from "src/stores/chat";
   import { ScrollArea } from "$lib/components/ui/scroll-area/index.js";
   import type { Tables } from "src/supabase";
