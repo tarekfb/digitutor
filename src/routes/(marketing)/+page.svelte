@@ -39,7 +39,6 @@
     >
       <div
         class="text-3xl md:text-5xl font-semibold px-2"
-        style="line-height: 1.2;"
       >
         Vill du bli
         <span

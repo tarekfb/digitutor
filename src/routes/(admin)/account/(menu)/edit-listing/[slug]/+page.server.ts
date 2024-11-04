@@ -105,7 +105,6 @@ export const actions = {
       }
     }
 
-
     let suggestion: Tables<"subjects_suggestions">;
     try {
       suggestion = await suggestSubject(supabase, session.user.id, subject, email);

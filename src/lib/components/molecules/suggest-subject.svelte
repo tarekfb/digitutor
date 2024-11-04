@@ -82,7 +82,12 @@
           {description}
         </Dialog.Description>
       </Dialog.Header>
-      <FormMessage {message} class="bg-background" />
+      <FormMessage
+        {message}
+        class={$message?.variant === "destructive"
+          ? "bg-card"
+          : "bg-background"}
+      />
       <form
         method="POST"
         action="?/suggestSubject"
@@ -153,8 +158,12 @@
         </Drawer.Description>
       </Drawer.Header>
       <div class="flex flex-col gap-y-4 mx-4 mb-4">
-        <FormMessage {message} class="bg-background" />
-        <form
+        <FormMessage
+        {message}
+        class={$message?.variant === "destructive"
+          ? "bg-card"
+          : "bg-background"}
+      />        <form
           method="POST"
           action="?/suggestSubject"
           use:enhance

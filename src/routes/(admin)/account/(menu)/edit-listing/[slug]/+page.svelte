@@ -7,7 +7,6 @@
   import RootContainer from "src/lib/components/molecules/root-container.svelte";
   import DeleteListing from "$lib/components/atoms/delete-listing.svelte";
   import { Button } from "$lib/components/ui/button";
-  import LoadingSpinner from "$lib/components/atoms/loading-spinner.svelte";
   import { Textarea } from "$lib/components/ui/textarea/index.js";
   import { SaveIcon } from "lucide-svelte";
   import FormMessage from "$lib/components/molecules/form-message.svelte";
