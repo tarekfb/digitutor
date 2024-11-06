@@ -1,9 +1,9 @@
 import { error } from "@sveltejs/kit";
 import { getFailFormMessage, unknownErrorTitle } from "$lib/shared/constants/constants";
 import { getProfileByUser } from "$lib/server/database/profiles";
-import { getListing, getListingsByTeacher as getListingsByTeacher } from "$lib/server/database/listings";
+import { getListing } from "$lib/server/database/listings";
 import { fail, message, superValidate } from "sveltekit-superforms";
-import { requestContactSchema, startContactSchema } from "$lib/shared/models/conversation";
+import { requestContactSchema, startContactSchema, type Conversation } from "$lib/shared/models/conversation";
 import { addReviewSchema, type Review } from "$lib/shared/models/review";
 import { zod } from "sveltekit-superforms/adapters";
 import { getConversationForStudentAndTeacher, startConversation } from "$lib/server/database/conversations";
@@ -14,9 +14,7 @@ import type { Listing } from "src/lib/shared/models/listing.js";
 import type { Message, PsqlError } from "src/lib/shared/models/common.js";
 import { loadContactTeacherForms } from "src/lib/shared/utils/utils";
 
-export const load = async (event) => {
-    const { locals: { supabase, safeGetSession }, params: { slug }, parent, url: { searchParams } } = event;
-
+export const load = async ({ locals: { supabase, safeGetSession }, params: { slug }, parent, url: { searchParams } }) => {
     let teacher;
     try {
         teacher = await getProfileByUser(supabase, slug);
@@ -31,8 +29,9 @@ export const load = async (event) => {
         error(500, unknownErrorTitle);
     }
 
-    const { profile } = await parent();
-    const role = profile?.role ?? ""
+    const parentData = await parent();
+    const student = parentData?.profile ?? undefined;
+    const role = student?.role ?? ""
     const { session } = await safeGetSession();
     const userId = session?.user.id;
 
@@ -73,7 +72,7 @@ export const load = async (event) => {
 
     let allowCreateReview: boolean = false;
     if (role === "student") {
-        const hasExistingReview = reviews.find((r) => r.sender?.id === profile?.id);
+        const hasExistingReview = reviews.find((r) => r.sender?.id === student?.id);
         if (!hasExistingReview) {
             if (userId) {
                 try {
@@ -94,56 +93,77 @@ export const load = async (event) => {
     // replace all these fetches with 1 db query RPC function
     // plus if query param do that one seperately
 
-    const { requestContactForm, startContactForm } = await loadContactTeacherForms(teacher);
+    const { requestContactForm, startContactForm } = await loadContactTeacherForms(teacher, student);
     const addReviewForm = await superValidate({ rating: 5 }, zod(addReviewSchema))
     return { teacher, reviews, reviewsMessage, listing, listingMessage, requestContactForm, startContactForm, addReviewForm, allowCreateReview };
 }
 
 export const actions = {
     requestContact: async (event) => {
-        const { locals: { supabase, safeGetSession }, params: { slug } } = event;
+        const { locals: { supabase, safeGetSession }, params: { slug }, cookies } = event;
         const { session } = await safeGetSession();
         if (!session)
-            throw redirect(303, "/sign-in"); // todo: in the future should implement a redirect after login
+            throw redirect(303, "/sign-up", { type: 'info', message: "Skapa ett konto eller logga in för att kontakta en lärare." }, cookies); // todo: in the future should implement a redirect after login
 
         const form = await superValidate(event, zod(requestContactSchema));
-        if (!form.data.role) {
-            console.error("Error when submitting request contact. Data that user does not submit manually is invalid: role") // user hasnt entered data theirselves, therefore send error message
-            return message(form, getFailFormMessage(), { status: 500 });
-        }
-
         const { role } = form.data;
+
+        if (!role) {
+            console.error("Error when submitting request contact. Data that user does not submit manually is invalid: role") // user hasnt entered data theirselves, therefore send error message
+            throw redirect(303, "/sign-up", { type: 'info', message: "Skapa ett konto eller logga in för att kontakta en lärare." }, cookies); // todo: in the future should implement a redirect after login
+        }
 
         if (slug === session.user.id)
             return message(form, getFailFormMessage(undefined, "Du kan inte kontakta dig själv.", undefined, undefined, "default"), { status: 403 });
 
-        if (role !== "student")
+        if (role === "teacher")
             return message(form, getFailFormMessage("Detta går ej att göra som lärare", "Skapa ett konto som student om du vill kontakta en annan lärare.", undefined, undefined, "default"), { status: 403 });
 
-        const conversation = await getConversationForStudentAndTeacher(supabase, session.user.id, slug);
-        if (conversation)
-            redirect(303, `/account/conversation/${conversation.id}`, { message: 'Du har redan kontaktat läraren.', type: 'info' }, event);
+        if (role !== "student") {
+            console.error("Role was invalid: " + role);
+            return message(form, getFailFormMessage(), { status: 500 });
+        }
+
+
+        let conversation: Conversation | null
+        try {
+            conversation = await getConversationForStudentAndTeacher(supabase, session.user.id, slug);
+            if (conversation)
+                redirect(303, `/account/conversation/${conversation.id}`, { message: 'Du har redan kontaktat läraren.', type: 'info' }, event);
+        } catch (error) {
+            console.error(`unable to read conversation for teacher: ${slug} & student: ${session.user.id}, allowing student to contact` + slug, error);
+        }
 
         return { form };
     },
     startContact: async (event) => {
-        const { locals: { supabase, safeGetSession }, params: { slug } } = event;
+        const { locals: { supabase, safeGetSession }, params: { slug }, cookies } = event;
         const { session } = await safeGetSession();
         if (!session)
-            throw redirect(303, "/sign-in"); // todo: in the future should implement a redirect after login
+            throw redirect(303, "/sign-up", { type: 'info', message: "Skapa ett konto eller logga in för att kontakta en lärare." }, cookies); // todo: in the future should implement a redirect after login
 
         const form = await superValidate(event, zod(startContactSchema));
         // this will not work nicely if teacher or role is invalid, but not expecting this to be an issue
-        if (!form.valid) return fail(400, { form });
+        if (!form.valid) return message(form, getFailFormMessage(undefined, "Om du inte är inloggad, testa att logga in och försöka igen. Om detta fortsätter kan du kontakta oss."), { status: 403 });
+
 
         const { role, firstMessage } = form.data;
+
+        if (!role) {
+            console.error("Error when submitting request contact. Data that user does not submit manually is invalid: role") // user hasnt entered data theirselves, therefore send error message
+            throw redirect(303, "/sign-up", { type: 'info', message: "Skapa ett konto eller logga in för att kontakta en lärare." }, cookies); // todo: in the future should implement a redirect after login
+        }
 
         if (slug === session.user.id)
             return message(form, getFailFormMessage(undefined, "Du kan inte kontakta dig själv.", undefined, undefined, "default"), { status: 403 });
 
-        if (role !== "student")
+        if (role === "teacher")
             return message(form, getFailFormMessage("Detta går ej att göra som lärare", "Skapa ett konto som student om du vill kontakta en annan lärare.", undefined, undefined, "default"), { status: 403 });
 
+        if (role !== "student") {
+            console.error("Role was invalid: " + role);
+            return message(form, getFailFormMessage(), { status: 500 });
+        }
 
         let conversationId: string;
         try {
@@ -160,10 +180,10 @@ export const actions = {
         throw redirect(303, `/account/conversation/${conversationId}`);
     },
     addReview: async (event) => {
-        const { locals: { supabase, safeGetSession }, params: { slug } } = event;
+        const { locals: { supabase, safeGetSession }, params: { slug }, cookies } = event;
         const { session } = await safeGetSession();
         if (!session)
-            throw redirect(303, "/sign-in"); // todo: in the future should implement a redirect after login
+            throw redirect(303, "/sign-up", { type: 'info', message: "Skapa ett konto eller logga in för att göra en recension." }, cookies); // todo: in the future should implement a redirect after login
 
         const form = await superValidate(event, zod(addReviewSchema));
         if (!form.valid) return fail(400, { form });
