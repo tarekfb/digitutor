@@ -118,6 +118,7 @@
           requestContactAction="?/requestContact"
           startContactAction="?/startContact"
           firstName={teacher.first_name}
+          buttonStyling="self-center"
         />
         {#if isOwner && listingMessage}
           <AlertMessage

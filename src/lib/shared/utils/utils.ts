@@ -204,8 +204,8 @@ export const formatProfile = ({ id, role, first_name: firstName, last_name: last
   return { id, role, firstName, lastName, avatarUrl }
 }
 
-export const loadContactTeacherForms = async (teacher?: Tables<"profiles">) => {
-  const initValues = { teacher: teacher?.id, role: teacher?.role }
+export const loadContactTeacherForms = async (teacher?: Tables<"profiles">, student?: Tables<"profiles">) => {
+  const initValues = { teacher: teacher?.id, role: student?.role ?? "" }
   const requestContactForm = await superValidate(initValues, zod(requestContactSchema))
   const startContactForm = await superValidate(initValues, zod(startContactSchema))
   return { requestContactForm, startContactForm }
