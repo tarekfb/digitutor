@@ -13,6 +13,8 @@
   import ProfileBody from "src/lib/components/molecules/profile-body.svelte";
   import OwnerSection from "src/lib/components/molecules/owner-section.svelte";
   import { page } from "$app/stores";
+  import type { Tables } from "src/supabase";
+  import type { Session } from "@supabase/supabase-js";
 
   export let data: PageData;
   $: ({
@@ -28,10 +30,21 @@
   } = data);
 
   const isDesktop = mediaQuery("(min-width: 768px)");
+
   
-  const preview = $page.url.searchParams.get("preview") === "true";
   let isOwner = false;
-  $: if (!preview) isOwner = session?.user.id === teacher.id;
+  let preview = false;
+  $: preview = $page.url.searchParams.get("preview") === "true";
+  $: isOwner = checkIsOwner(session, teacher, preview);
+
+  const checkIsOwner = (
+    session: Session | null,
+    teacher: Tables<"profiles">,
+    preview: boolean,
+  ) => {
+    if (preview) return false;
+    return session?.user.id === teacher.id;
+  };
 </script>
 
 {#if !$isDesktop}
