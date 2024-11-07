@@ -74,7 +74,7 @@
   </svelte:fragment>
   <svelte:fragment slot="form">
     <form
-      class="text-start flex flex-col gap-y-4 w-full max-w-[650px] p-4"
+      class="text-start flex flex-col gap-y-4 w-full max-w-screen-sm p-4"
       method="POST"
       use:enhance
     >

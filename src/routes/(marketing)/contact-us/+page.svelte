@@ -38,13 +38,12 @@
   </div>
   <div class="flex flex-col gap-y-1 text-muted-foreground">
     <p>Kontakta oss om du har något på hjärtat, t.ex. om:</p>
-    <ul class="list-disc list-outside space-y-0.5 mx-6">
+    <ul class="list-disc list-outside space-y-0.5 mx-6 mb-2">
       <li>
         Din fråga inte täcks av vår <Link class="text-lg" href="/faq">FAQ</Link
         >.
       </li>
       <li>Du har synpunkter, klagomål eller önskningar.</li>
-      <li>Du bara vill säga hej!</li>
     </ul>
     <p>Vi svarar dig så fort vi kan.</p>
   </div>

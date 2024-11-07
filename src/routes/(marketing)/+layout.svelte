@@ -10,7 +10,7 @@
 </script>
 
 <Navbar {profile} logout={() => logout(supabase, session)} />
-<div class="overflow-x-hidden">
+<div class="overflow-x-hidden flex flex-col items-center">
   <slot />
 </div>
 <Footer />

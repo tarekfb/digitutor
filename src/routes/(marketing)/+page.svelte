@@ -91,7 +91,7 @@
     </div>
 
     <div
-      class="flex flex-col justify-center items-center gap-y-4 w-full max-w-[650px]"
+      class="flex flex-col justify-center items-center gap-y-4 w-full max-w-screen-sm"
     >
       <form
         class="text-center flex flex-col gap-y-4 w-full"

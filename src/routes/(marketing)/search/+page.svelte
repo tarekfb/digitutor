@@ -38,7 +38,7 @@
 </script>
 
 {#if !$isDesktop}
-  <div class="bg-accent min-h-44">
+  <div class="bg-accent min-h-44 w-full">
     <form
       class="text-center flex flex-col gap-y-4 w-full p-8"
       action="?/search"
@@ -97,58 +97,58 @@
     </div>
   {/if}
 {:else}
-  <RootContainer>
-    <div
-      class="flex flex-col justify-center items-center gap-y-4 w-full max-w-[650px]"
+  <div class="w-full bg-accent flex flex-col items-center">
+    <form
+      class="text-center flex flex-col gap-y-4 w-full bg-accent max-w-screen-sm"
+      action="?/search"
+      method="POST"
+      use:enhance
     >
-      <form
-        class="text-center flex flex-col gap-y-4 w-full"
-        action="?/search"
-        method="POST"
-        use:enhance
+      <SecondaryTitle class="text-background"
+        >Sök efter lärare och annonser</SecondaryTitle
       >
-        <SecondaryTitle>Sök efter lärare och annonser</SecondaryTitle>
-        <div class="flex justify-between gap-x-2 md:gap-x-4 items-start">
-          <Form.Field form={searchForm} name="query" class="flex-1">
-            <Form.Control let:attrs>
-              <Input
-                {...attrs}
-                type="text"
-                bind:value={$formData.query}
-                placeholder="Namn, titel, beskrivning, pris, etc."
-                class="text-lg bg-card"
-              />
-            </Form.Control>
-            <Form.FieldErrors />
-          </Form.Field>
-          <FormSubmit
-            {delayed}
-            {allErrors}
-            text="Sök"
-            loadingText=""
-            class="w-12"
-          />
-        </div>
-      </form>
-
-      {#if isInit && initResults.length > 0}
-        <SearchResultList results={initResults} />
-      {:else if initMessage}
-        <AlertMessage
-          title={initMessage.title}
-          description={initMessage.description}
-          variant={initMessage.variant}
+      <div class="flex justify-between gap-x-2 md:gap-x-4 items-start">
+        <Form.Field form={searchForm} name="query" class="flex-1">
+          <Form.Control let:attrs>
+            <Input
+              {...attrs}
+              type="text"
+              bind:value={$formData.query}
+              placeholder="Namn, titel, beskrivning, pris, etc."
+              class="text-lg bg-card"
+            />
+          </Form.Control>
+          <Form.FieldErrors />
+        </Form.Field>
+        <FormSubmit
+          {delayed}
+          {allErrors}
+          text="Sök"
+          loadingText=""
+          class="w-12"
         />
-      {:else if $message}
-        <FormMessage {message} scroll scrollTo="end" />
-      {:else if results.length > 0}
-        <SearchResultList {results} />
-      {:else}
-        <AlertMessage
-          title="Inga träffar på din sökning"
-          description="Testa söka på en lärares namn, eller en annons titel, beskrivning eller pris."
-        />
-      {/if}
-    </div>
+      </div>
+    </form>
+  </div>
+  <Wavy />
+  <RootContainer class="w-full md:max-w-sm lg:max-w-screen-md">
+    {#if isInit && initResults.length > 0}
+      <SearchResultList results={initResults} />
+    {:else if initMessage}
+      <AlertMessage
+        title={initMessage.title}
+        description={initMessage.description}
+        variant={initMessage.variant}
+      />
+    {:else if $message}
+      <FormMessage {message} />
+    {:else if results.length > 0}
+      <SearchResultList {results} />
+    {:else}
+      <AlertMessage
+        title="Inga träffar på din sökning"
+        description="Testa söka på en lärares namn, eller en annons titel, beskrivning eller pris."
+      />
+    {/if}
   </RootContainer>
 {/if}
