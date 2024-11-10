@@ -447,6 +447,20 @@ VALUES
         'Bob made learning fun.'
     );
 
+INSERT INTO
+    public.conversations (id, teacher, student, has_replied, created_at)
+VALUES
+    ('550e8400-e29b-41d4-a716-100000000000', '550e8400-e29b-41d4-a716-446655440000', '550e8400-e29b-41d4-a716-446655440020', true, current_timestamp),
+    ('550e8400-e29b-41d4-a716-200000000000', '550e8400-e29b-41d4-a716-446655440000', '550e8400-e29b-41d4-a716-446655440050', false, current_timestamp);
+
+INSERT INTO
+    public.messages (id, sender, conversation, content, created_at)
+VALUES
+    ('550e8400-e29b-41d4-0000-100000000000', '550e8400-e29b-41d4-a716-446655440020', '550e8400-e29b-41d4-a716-100000000000', 'Hej där kan jag få hjälp?', current_timestamp - INTERVAL '1 hour'),
+    ('550e8400-e29b-41d4-0000-200000000000', '550e8400-e29b-41d4-a716-446655440000', '550e8400-e29b-41d4-a716-100000000000', 'ja det kan du', current_timestamp),
+
+    ('550e8400-e29b-41d4-1000-100000000000', '550e8400-e29b-41d4-a716-446655440050', '550e8400-e29b-41d4-a716-200000000000', 'Tjena tarek, kan du javascript? mvh frank', current_timestamp);
+
 insert into
     storage.buckets (id, name, public, file_size_limit)
 values

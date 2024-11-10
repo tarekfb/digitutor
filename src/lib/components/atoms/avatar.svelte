@@ -13,7 +13,7 @@
   export { className as class };
 
   export let onClick: OnClick["onClick"];
-  export let url: string;
+  export let url: string | null;
   export let role: "teacher" | "student" | "admin" | "" = "";
   export let firstName: string;
   export let lastName: string;

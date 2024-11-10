@@ -8,17 +8,21 @@
   import PrimaryTitle from "$lib/components/atoms/primary-title.svelte";
   import FormSubmit from "$lib/components/molecules/form-submit.svelte";
   import { invalidate } from "$app/navigation";
-  import { sendMessageSchema } from "src/lib/shared/models/conversation.js";
+  import {
+    sendMessageSchema,
+    type Message,
+  } from "src/lib/shared/models/conversation.js";
   import { Textarea } from "$lib/components/ui/textarea/index.js";
   import Separator from "$lib/components/ui/separator/separator.svelte";
   import ChatWindow from "$lib/components/molecules/chat-window.svelte";
-  import { chat } from "src/stores/chat";
+  import { initChat } from "src/stores/chat";
   import type { Tables } from "src/supabase.js";
   import type { PageData } from "./$types";
   import AvatarNameBar from "src/lib/components/organisms/avatar-name-bar.svelte";
+  import { Button } from "src/lib/components/ui/button";
 
   export let data: PageData;
-  $: ({ profile, messages, conversation, supabase } = data);
+  $: ({ profile, conversation, supabase, session } = data);
 
   const sendMessageForm = superForm(data.form, {
     validators: zodClient(sendMessageSchema),
@@ -45,22 +49,36 @@
     return false;
   };
 
+  $: chatStore = initChat(conversation.id, supabase, session);
+
   $: recipient =
     profile.role == "teacher" ? conversation.student : conversation.teacher;
-  $: isAllowedToReply = getAllowedToReply(messages, profile);
-  $: chat.subscribe((messages) => {
-    // if already allowed to reply - skip for performance reasons
-    // also not interested on init execution
-    if (!isAllowedToReply && messages.length > 0)
-      isAllowedToReply = getAllowedToReply($chat, profile);
-    if (
-      profile.role === "teacher" &&
-      !conversation.has_replied &&
-      messages[messages.length - 1]?.sender === profile.id
-    ) {
-      invalidate("conversations:has_replied");
-    }
-  });
+
+  $: isAllowedToReply = true;
+  // $: isAllowedToReply = getAllowedToReply(messages, profile);
+  // $: chat.subscribe((messages) => {
+  //   // if already allowed to reply - skip for performance reasons
+  //   // also not interested on init execution
+  //   if (!isAllowedToReply && messages.length > 0)
+  //     isAllowedToReply = getAllowedToReply($chat, profile);
+  //   if (
+  //     profile.role === "teacher" &&
+  //     !conversation.has_replied &&
+  //     messages[messages.length - 1]?.sender === profile.id
+  //   ) {
+  //     invalidate("conversations:has_replied");
+  //   }
+  // });
+
+  const getDummyMessage = () => {
+    return {
+      id: crypto.randomUUID(),
+      sender: profile.id,
+      createdAt: new Date().toString(),
+      content: "Test message",
+      conversation: conversation.id,
+    };
+  };
 </script>
 
 <div class="flex flex-col justify-between gap-y-4 h-full w-full">
@@ -70,13 +88,12 @@
     </AvatarNameBar>
 
     <Separator />
-    <ChatWindow
-      {supabase}
-      {profile}
-      {messages}
-      receiver={recipient}
-      conversationId={conversation.id}
-    />
+    <!-- {supabase}
+    conversationId={conversation.id}
+      {messages} -->
+
+    <ChatWindow {chatStore} {profile} receiver={recipient} />
+
     <Separator />
   </div>
 
@@ -94,7 +111,12 @@
       />
     {/if}
     <FormMessage {message} class="mt-2" scroll />
-    <Form.Field form={sendMessageForm} name="content">
+    <Button
+      on:click={() =>
+        chatStore.update((messages) => [...messages, getDummyMessage()])}
+      disabled={!isAllowedToReply}>Skicka</Button
+    >
+    <!-- <Form.Field form={sendMessageForm} name="content">
       <Form.Control let:attrs>
         <Textarea
           {...attrs}
@@ -113,6 +135,6 @@
         text="Skicka"
         disabled={!isAllowedToReply}
       />
-    </div>
+    </div> -->
   </form>
 </div>
