@@ -9,6 +9,7 @@ export type Conversation = Omit<Tables<"conversations">, "teacher" | "student"> 
 
 export type InputMessage = Pick<Tables<"messages">, "content" | "conversation">;
 
+
 export type Message = {
     id: string,
     sender: string,

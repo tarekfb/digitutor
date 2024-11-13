@@ -15,14 +15,14 @@
   import { Textarea } from "$lib/components/ui/textarea/index.js";
   import Separator from "$lib/components/ui/separator/separator.svelte";
   import ChatWindow from "$lib/components/molecules/chat-window.svelte";
-  import { initChat } from "src/stores/chat";
+  import { initChat, sendMessageToStore } from "src/stores/chat";
   import type { Tables } from "src/supabase.js";
   import type { PageData } from "./$types";
   import AvatarNameBar from "src/lib/components/organisms/avatar-name-bar.svelte";
   import { Button } from "src/lib/components/ui/button";
 
   export let data: PageData;
-  $: ({ profile, conversation, supabase, session } = data);
+  $: ({ profile: self, conversation, supabase, session } = data);
 
   const sendMessageForm = superForm(data.form, {
     validators: zodClient(sendMessageSchema),
@@ -37,25 +37,28 @@
     delayed,
     message,
     allErrors,
+    constraints,
   } = sendMessageForm;
 
-  const getAllowedToReply = (
-    msgs: Tables<"messages">[],
-    profile: Tables<"profiles">,
-  ) => {
+  const getAllowedToReply = async (profile: Tables<"profiles">) => {
+    const messages = await chatStore.load();
     if (profile.role === "teacher") return true; // always allow
-    if (msgs.length === 0) return true; // shouldn't happen but allow for error proofing
-    if (msgs.some((msg) => msg.sender !== profile.id)) return true; // has recieved reply
+    if (messages.length === 0) return true; // shouldn't happen but allow for error proofing
+    if (messages.some((msg) => msg.sender !== profile.id)) return true; // has recieved reply
     return false;
   };
 
   $: chatStore = initChat(conversation.id, supabase, session);
 
   $: recipient =
-    profile.role == "teacher" ? conversation.student : conversation.teacher;
+    self.role == "teacher" ? conversation.student : conversation.teacher;
 
-  $: isAllowedToReply = true;
-  // $: isAllowedToReply = getAllowedToReply(messages, profile);
+  let isAllowedToReply: boolean = true;
+
+  // $: isAllowedToReply = getAllowedToReply(profile).then((allowed) => {
+  //   isAllowedToReply = allowed;
+  // });
+
   // $: chat.subscribe((messages) => {
   //   // if already allowed to reply - skip for performance reasons
   //   // also not interested on init execution
@@ -70,14 +73,23 @@
   //   }
   // });
 
-  const getDummyMessage = () => {
-    return {
-      id: crypto.randomUUID(),
-      sender: profile.id,
-      createdAt: new Date().toString(),
-      content: "Test message",
-      conversation: conversation.id,
-    };
+  const sendMessage = async () => {
+    const isAllowedToReply = await getAllowedToReply(self);
+    if (!isAllowedToReply) {
+      return toast.info(
+        `När du fått svar från ${recipient.first_name} kan du skicka fler meddelanden`,
+      );
+    }
+    const message = $formData.content;
+    if (!message) return toast.info("Skriv ett meddelande först");
+
+    if (!session)
+      return toast.error(
+        "Logga in först. Du kan kontakta oss om detta fortsätter.",
+      );
+
+    sendMessageToStore(chatStore, message, conversation.id, session);
+    sendMessageForm.reset();
   };
 </script>
 
@@ -86,23 +98,12 @@
     <AvatarNameBar clickable profile={recipient}>
       <PrimaryTitle>{recipient.first_name}</PrimaryTitle>
     </AvatarNameBar>
-
     <Separator />
-    <!-- {supabase}
-    conversationId={conversation.id}
-      {messages} -->
-
-    <ChatWindow {chatStore} {profile} receiver={recipient} />
-
+    <ChatWindow {chatStore} profile={self} receiver={recipient} />
     <Separator />
   </div>
 
-  <form
-    method="POST"
-    action="?/sendMessage"
-    use:enhance
-    class="flex flex-col gap-y-2"
-  >
+  <form method="POST" use:enhance class="flex flex-col gap-y-2">
     {#if !isAllowedToReply}
       <AlertMessage
         title="Väntar på svar"
@@ -111,30 +112,17 @@
       />
     {/if}
     <FormMessage {message} class="mt-2" scroll />
+
+    <Textarea
+      {...$constraints.content}
+      placeholder="Skriv ett meddelande..."
+      class="resize-y bg-card"
+      bind:value={$formData.content}
+      disabled={!isAllowedToReply}
+    />
     <Button
-      on:click={() =>
-        chatStore.update((messages) => [...messages, getDummyMessage()])}
-      disabled={!isAllowedToReply}>Skicka</Button
+      on:click={sendMessage}
+      disabled={!isAllowedToReply || $allErrors.length > 0}>Skicka</Button
     >
-    <!-- <Form.Field form={sendMessageForm} name="content">
-      <Form.Control let:attrs>
-        <Textarea
-          {...attrs}
-          placeholder="Skriv ett meddelande..."
-          class="resize-y bg-card"
-          bind:value={$formData.content}
-          disabled={!isAllowedToReply}
-        />
-      </Form.Control>
-      <Form.FieldErrors />
-    </Form.Field>
-    <div class="flex justify-end">
-      <FormSubmit
-        {allErrors}
-        {delayed}
-        text="Skicka"
-        disabled={!isAllowedToReply}
-      />
-    </div> -->
   </form>
 </div>

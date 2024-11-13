@@ -30,15 +30,15 @@ export const getMessages = async (
 
 export const sendMessage = async (
     supabase: SupabaseClient<Database>,
-    { conversation, content }: InputMessage,
+    { createdAt, content, id, conversation }: Message,
     session: Session
 ): Promise<Tables<"messages">> => {
     const dbMessage: Tables<"messages"> = {
-        id: crypto.randomUUID(),
+        id,
         sender: session.user.id,
-        conversation: conversation,
-        content: content,
-        created_at: getNow(),
+        conversation,
+        content,
+        created_at: createdAt
     };
 
     const { data, error } = await supabase
@@ -57,39 +57,38 @@ export const sendMessage = async (
     return data;
 }
 
+export const sendMessageToStore = async (store: WritableLoadable<Message[]>, content: string, conversation: string, session: Session) => {
+    const newMessage: Message = { content, createdAt: getNow(), id: crypto.randomUUID(), conversation, sender: session.user.id };
+    store.update((messages) => [...messages, newMessage]);
+    return true;
+}
+
+const newMessageListener = async (store: WritableLoadable<Message[]>, payload: RealtimePostgresInsertPayload<{
+    [key: string]: any;
+}>) => {
+    const newMessage = payload.new as Tables<"messages">;
+    const formatted = formatMessage(newMessage);
+    const storeValues = await store.load();
+    const exists = storeValues.find(m => m.id === formatted.id)
+    if (!exists) store.update((messages) => [...messages, formatted]);
+}
+
 export const initChat = (conversationId: string, supabase: SupabaseClient<Database>, session: Session | null, loadMore = 0): WritableLoadable<Message[]> => {
     const chatStore = asyncWritable<[], Message[]>(
         [],
         () => getMessages(supabase, conversationId, loadMore),
         async (messages) => {
-            persistMessage(messages, supabase, session);
+            await persistMessage(messages, supabase, session);
         },
         false
     );
-
-    const newMessageListener = (payload: RealtimePostgresInsertPayload<{
-        [key: string]: any;
-    }>) => {
-        const newMessage = payload.new as Tables<"messages">;
-        const formatted = formatMessage(newMessage);
-        chatStore.update((messages) => {
-            console.log("running update on new message listener")
-            console.log("new message is: ", formatted);
-            console.log("last message is : ", messages.at(-1));
-            console.log("find", messages.find((m) => m.id === formatted.id));
-            console.log("messages", messages)
-            // if (messages.find((m) => m.id === formatted.id)) return messages;
-            // return [...messages, formatted];
-            return [...messages]
-        });
-    }
 
     supabase
         .channel('schema-db-changes')
         .on('postgres_changes', {
             event: 'INSERT',
             schema: 'public',
-        }, (payload) => newMessageListener(payload)
+        }, (payload) => newMessageListener(chatStore, payload)
         )
         .subscribe()
 
@@ -97,11 +96,10 @@ export const initChat = (conversationId: string, supabase: SupabaseClient<Databa
 };
 
 const persistMessage = async (message: Message[], supabase: SupabaseClient<Database>, session: Session | null) => {
-    if (!session) return; // todo: handle error here
-
+    if (!session) return;
     const newMessage = message.at(-1);
-    if (!newMessage) return; // todo: handle error here
-    const { conversation, content } = newMessage;
+    if (!newMessage) return;
 
-    await sendMessage(supabase, { conversation, content }, session);
+    // only persist your own messages
+    if (newMessage.sender === session.user.id) await sendMessage(supabase, newMessage, session);
 }

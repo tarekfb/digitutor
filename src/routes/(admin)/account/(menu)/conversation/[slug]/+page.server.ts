@@ -8,6 +8,8 @@ import { zod } from "sveltekit-superforms/adapters";
 import { sendMessage } from "$lib/server/database/messages";
 import { getConversation } from "src/lib/server/database/conversations";
 
+export const ssr = false;
+
 export const load = async ({ locals: { supabase }, params: { slug }, parent }) => {
   const { profile } = await parent();
 
@@ -39,31 +41,3 @@ export const load = async ({ locals: { supabase }, params: { slug }, parent }) =
 
   return { conversation, form }; // todo stream messages and skeleton load them
 }
-
-
-export const actions = {
-  sendMessage: async (event) => {
-    const { locals: { supabase, safeGetSession } } = event;
-
-    const { session } = await safeGetSession();
-    if (!session)
-      redirect(303, "/sign-in");
-
-
-    const form = await superValidate(event, zod(sendMessageSchema));
-    if (!form.valid) return fail(400, { form });
-
-    const inputMessage: InputMessage = {
-      content: form.data.content,
-      conversation: event.params.slug,
-    }
-
-    try {
-      await sendMessage(supabase, inputMessage, session);
-      return { form }
-    } catch (error) {
-      console.error(error);
-      return message(form, getFailFormMessage("Kunde ej skicka meddelandet"), { status: 500 });
-    }
-  },
-};
