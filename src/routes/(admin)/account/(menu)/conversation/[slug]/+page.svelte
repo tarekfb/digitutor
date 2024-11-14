@@ -20,6 +20,7 @@
   import type { PageData } from "./$types";
   import AvatarNameBar from "src/lib/components/organisms/avatar-name-bar.svelte";
   import { Button } from "src/lib/components/ui/button";
+  import Avatar from "src/lib/components/atoms/avatar.svelte";
 
   export let data: PageData;
   $: ({ profile: self, conversation, supabase, session } = data);
@@ -93,17 +94,14 @@
   };
 </script>
 
-<div class="flex flex-col justify-between gap-y-4 h-full w-full">
-  <div class="flex flex-col gap-y-4">
-    <AvatarNameBar clickable profile={recipient}>
-      <PrimaryTitle>{recipient.first_name}</PrimaryTitle>
-    </AvatarNameBar>
-    <Separator />
-    <ChatWindow {chatStore} profile={self} receiver={recipient} />
-    <Separator />
-  </div>
+<div class="flex flex-col gap-y-4 justify-end w-full h-full " >
+  <ChatWindow {chatStore} {self} other={recipient} />
 
-  <form method="POST" use:enhance class="flex flex-col gap-y-2">
+  <form
+    method="POST"
+    use:enhance
+    class="flex flex-col gap-y-2 px-8 py-4 -m-8 mt-0 sticky bottom-0 bg-accent" 
+  >
     {#if !isAllowedToReply}
       <AlertMessage
         title="Väntar på svar"
@@ -112,7 +110,6 @@
       />
     {/if}
     <FormMessage {message} class="mt-2" scroll />
-
     <Textarea
       {...$constraints.content}
       placeholder="Skriv ett meddelande..."

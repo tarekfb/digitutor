@@ -39,11 +39,10 @@
 <Navbar profile={false} logout={false}>
   <Sidebar role={profile?.role} logout={() => logout(supabase, session)} />
 </Navbar>
-<div class="flex justify-center p-8 min-h-screen">
-  <div
-    class="flex flex-col items-center w-full max-w-[340px] md:max-w-xl lg:max-w-2xl"
-  >
+<div class="flex justify-center m-8 min-h-screen">
+  <!-- max-w-[340px] -->
+  <div class="flex flex-col items-center w-full md:max-w-xl lg:max-w-2xl">
     <slot />
   </div>
 </div>
-<Footer />
+<!-- <Footer /> -->
