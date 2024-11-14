@@ -38,7 +38,11 @@
     <div class="flex flex-col gap-y-2 justify-start overflow-x-hidden">
       {#each subjects as subject, i}
         {#if i < maxSubjectsLength}
-          <SubjectItem {subject}  textStyling="text-background" iconStyling="text-primary"/>
+          <SubjectItem
+            {subject}
+            textStyling={light ? "text-background" : ""}
+            iconStyling="text-primary"
+          />
         {/if}
       {/each}
       {#if subjects.length > maxSubjectsLength}

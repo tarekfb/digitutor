@@ -59,6 +59,7 @@
           </Form.Control>
           <Form.FieldErrors />
         </Form.Field>
+        <input type="hidden" class="hidden" value={$formData.nbrOfListings}>
         <div class="flex justify-end gap-x-4">
           <Dialog.Footer>
             <Dialog.Close asChild let:builder>

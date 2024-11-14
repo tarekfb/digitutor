@@ -38,4 +38,4 @@ const updateListingProps: TypeToZod<InputListing> = {
 
 export const updateListingSchema = z.object(updateListingProps)
 
-export const initCreateListingSchema = z.object({ title: updateListingProps.title })
+export const initCreateListingSchema = z.object({ title: updateListingProps.title, nbrOfListings: z.number() })
