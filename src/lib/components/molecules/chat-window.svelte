@@ -76,6 +76,6 @@
     {:catch error}
       {`Error :(`}
     {/await}
-    <div class="h-20" use:scroll={$chatStore}></div>
+    <div class="h-30" use:scroll={$chatStore}></div>
   </ul>
 </div>
