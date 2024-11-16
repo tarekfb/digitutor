@@ -11,7 +11,7 @@
   import FormMessage from "$lib/components/molecules/form-message.svelte";
   import PrimaryTitle from "$lib/components/atoms/primary-title.svelte";
   import Link from "$lib/components/atoms/link.svelte";
-  import RootContainer from "src/lib/components/molecules/root-container.svelte";
+  import RootContainer from "src/lib/components/templates/root-container.svelte";
 
   export let data;
 

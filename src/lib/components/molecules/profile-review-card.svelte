@@ -21,16 +21,16 @@
         <div class="flex gap-x-2 items-center justify-center">
           <!-- if sender deleted account, sender will be null -->
           {#if review.sender}
+          {@const { sender } = review}
             <Avatar
-              url={review.sender.avatar_url ?? ""}
-              firstName={review.sender.first_name}
-              lastName={review.sender.last_name}
-              role={review.sender.role}
-              onClick={undefined}
+              url={sender.avatar_url ?? ""}
+              firstName={sender.first_name}
+              lastName={sender.last_name}
+              role={sender.role}
               class="text-sm w-8 h-8"
             />
             <Card.Title>
-              <h4 class="font-semibold">{review.sender.first_name}</h4>
+              <h4 class="font-semibold">{sender.first_name}</h4>
             </Card.Title>
           {:else}
             <Card.Title>

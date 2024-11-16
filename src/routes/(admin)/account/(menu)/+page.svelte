@@ -2,8 +2,8 @@
   import PrimaryTitle from "$lib/components/atoms/primary-title.svelte";
   import ConversationCard from "$lib/components/molecules/conversation-card.svelte";
   import Link from "$lib/components/atoms/link.svelte";
-  import RootContainer from "src/lib/components/molecules/root-container.svelte";
-  import AccountLayout from "./account-layout.svelte";
+  import RootContainer from "src/lib/components/templates/root-container.svelte";
+  import AccountLayout from "../../../../lib/components/templates/account-layout.svelte";
 
   export let data;
   $: ({ conversations, profile } = data);

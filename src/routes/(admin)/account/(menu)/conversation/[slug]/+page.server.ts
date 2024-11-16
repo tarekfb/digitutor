@@ -19,25 +19,10 @@ export const load = async ({ locals: { supabase }, params: { slug }, parent }) =
   } catch (e) {
     console.error("Unable to find conversation for slug " + slug, e);
     error(500, unknownErrorTitle);
-
   }
 
-  // let messages;
-  // try {
-  //   messages = await getMessages(supabase, conversation.id, initMessagesCount);
-  // } catch (e) {
-  //   console.error("Error when fetching messages for slug: " + slug, e);
-  //   error(500, unknownErrorTitle);
-
-  // };
-
-  // messages = await getMessages(supabase, conversation.id, initMessagesCount);
-  // if (!messages) {
-  //   console.error("Messages not found for slug: " + slug);
-  //   error(404, 'Hittade inga meddelanden');
-  // }
 
   const form = await superValidate(zod(sendMessageSchema))
 
-  return { conversation, form }; // todo stream messages and skeleton load them
+  return { conversation, form };
 }

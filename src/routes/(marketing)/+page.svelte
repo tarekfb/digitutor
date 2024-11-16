@@ -15,7 +15,7 @@
   import { goto } from "$app/navigation";
   import * as Carousel from "$lib/components/ui/carousel/index.js";
   import { languages } from "src/lib/shared/models/common";
-  import RootContainer from "src/lib/components/molecules/root-container.svelte";
+  import RootContainer from "src/lib/components/templates/root-container.svelte";
   import Wavy from "src/lib/components/atoms/wavy.svelte";
 
   export let data: PageData;

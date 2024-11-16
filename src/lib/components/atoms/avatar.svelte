@@ -12,39 +12,40 @@
   export let fallbackClass: string | null | undefined = undefined;
   export { className as class };
 
-  export let onClick: OnClick["onClick"];
-  export let url: string | null;
+  export let href: string = "";
+  export let url: string | null = "";
   export let role: "teacher" | "student" | "admin" | "" = "";
   export let firstName: string;
   export let lastName: string;
+  export let size = "10";
 
   let initials = convertToInitials(firstName, lastName);
 
-  const base = "flex justify-center text-lg items-center font-normal";
-  const size = "50";
-  const fallback =
-    "text-background bg-accent " + (fallbackClass ? ` ${fallbackClass}` : "");
+  const fallback = "text-background bg-accent w-full h-full";
 </script>
 
-{#if onClick && role === "teacher"}
-  <Button
-    variant="ghost"
-    data-testid="avatar"
-    class={cn(`relative rounded-full`, className)}
-    on:click={onClick}
-  >
-    <Avatar.Root class={base}>
+<Avatar.Root
+  data-testid="avatar"
+  class={cn(
+    `flex justify-center text-lg items-center font-normal h-${size} w-${size}`,
+    className,
+  )}
+>
+  {#if href && role === "teacher"}
+    <a {href}>
       {#if url}
-        <Avatar.Image src={url} alt="profilbild" width={size} height={size} />
+        <Avatar.Image src={url} alt="profilbild" />
+      {:else}
+        <Avatar.Fallback class={cn(fallback, fallbackClass)}
+          >{initials}</Avatar.Fallback
+        >
       {/if}
-      <Avatar.Fallback class={fallback}>{initials}</Avatar.Fallback>
-    </Avatar.Root>
-  </Button>
-{:else}
-  <Avatar.Root class={cn(`${base}`, className)} data-testid="avatar">
-    {#if url}
-      <Avatar.Image src={url} alt="profilbild" width={size} height={size} />
-    {/if}
-    <Avatar.Fallback class={fallback}>{initials}</Avatar.Fallback>
-  </Avatar.Root>
-{/if}
+    </a>
+  {:else if url}
+    <Avatar.Image src={url} alt="profilbild" />
+  {:else}
+    <Avatar.Fallback class={cn(fallback, fallbackClass)}
+      >{initials}</Avatar.Fallback
+    >
+  {/if}
+</Avatar.Root>

@@ -17,7 +17,6 @@
     class={cn("flex gap-x-2 items-center self-start", className)}
   >
     <Avatar
-      onClick={undefined}
       url={profile.avatar_url ?? ""}
       firstName={profile.first_name}
       lastName={profile.last_name}
@@ -28,7 +27,6 @@
 {:else}
   <div class={cn("flex gap-x-2 items-center self-start", className)}>
     <Avatar
-      onClick={undefined}
       url={profile.avatar_url ?? ""}
       firstName={profile.first_name}
       lastName={profile.last_name}

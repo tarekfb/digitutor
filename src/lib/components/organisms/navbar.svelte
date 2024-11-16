@@ -56,7 +56,6 @@
                   firstName={profile.first_name}
                   lastName={profile.last_name}
                   role={profile.role}
-                  onClick={undefined}
                   fallbackClass="bg-primary"
                 />
               </Button>

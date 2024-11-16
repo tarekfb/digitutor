@@ -16,8 +16,8 @@
   import PasswordInput from "$lib/components/molecules/password-input.svelte";
   import AvatarForm from "src/lib/components/molecules/avatar-form.svelte";
   import type { PageData } from "./$types";
-  import RootContainer from "src/lib/components/molecules/root-container.svelte";
-  import AccountLayout from "../account-layout.svelte";
+  import RootContainer from "src/lib/components/templates/root-container.svelte";
+  import AccountLayout from "../../../../../lib/components/templates/account-layout.svelte";
 
   export let data: PageData;
 

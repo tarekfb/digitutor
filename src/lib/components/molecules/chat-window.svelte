@@ -1,30 +1,27 @@
 <script lang="ts">
   import { timeAgo } from "src/lib/shared/utils/utils";
-  import { ScrollArea } from "$lib/components/ui/scroll-area/index.js";
   import type { Tables } from "src/supabase";
   import Avatar from "../atoms/avatar.svelte";
   import type { Message } from "src/lib/shared/models/conversation";
   import type { WritableLoadable } from "@square/svelte-store";
   import PrimaryTitle from "../atoms/primary-title.svelte";
-  import AvatarNameBar from "../organisms/avatar-name-bar.svelte";
 
   export let chatStore: WritableLoadable<Message[]>;
   export let self: Tables<"profiles">;
   export let other: Tables<"profiles">;
 
-  let bottomOffset = 150; // The height of the fixed form element.
-
-  const scrollFunc = (element: HTMLElement) => {
-    element.scrollIntoView({ behavior: "smooth", block: "end" });
-  };
-
   const scroll = (element: HTMLElement, messages: Message[]) => {
-    //  node?.scrollIntoView({ behavior: "smooth", block: "end" });
-    // node.scrollTop = node.scrollHeight;
-    scrollFunc(element);
+    // messages is not needed, just to provide reactivity dependancy
+    setTimeout(
+      () => element.scrollIntoView({ behavior: "smooth", block: "end" }),
+      250,
+    );
     return {
       update() {
-        scrollFunc(element);
+        setTimeout(
+          () => element.scrollIntoView({ behavior: "smooth", block: "end" }),
+          250,
+        );
       },
     };
   };
@@ -32,16 +29,22 @@
 
 <div class="flex flex-col gap-y-4 overflow-y-auto">
   <div class="flex flex-col items-center gap-y-2 mb-4">
-    <AvatarNameBar profile={other} class="self-center">
-      <PrimaryTitle>{other.first_name}</PrimaryTitle>
-    </AvatarNameBar>
+    <Avatar
+      url={other.avatar_url ?? ""}
+      href="/profile/{other.id}"
+      firstName={other.first_name}
+      lastName={other.last_name}
+      role={other.role}
+      class="h-20 w-20 {other.avatar_url && 'md:h-28 md:w-28 lg:h-36 lg:w-36'}"
+      fallbackClass="h-20 w-20 text-3xl"
+    />
+    <PrimaryTitle>{other.first_name}</PrimaryTitle>
   </div>
-  <!-- use:scroll={$chatStore} -->
   <ul class="flex flex-col gap-y-4 justify-end">
     {#await chatStore.load()}
       Loading...
     {:then}
-      {#each $chatStore as message, index}
+      {#each $chatStore as message}
         {#if message.sender === self.id}
           <li class="flex flex-col gap-y-2 bg-card p-2 rounded-md self-end">
             <p>{message.content}</p>
@@ -52,7 +55,7 @@
           <li class="flex gap-x-4">
             <div class="flex flex-col justify-end">
               <Avatar
-                onClick={undefined}
+                href="/profile/{other.id}"
                 url={other.avatar_url}
                 firstName={other.first_name}
                 lastName={other.last_name}
@@ -76,6 +79,7 @@
     {:catch error}
       {`Error :(`}
     {/await}
+    <!-- this div acts as a scroll helper to newest message is visible -->
     <div class="h-36" use:scroll={$chatStore}></div>
   </ul>
 </div>

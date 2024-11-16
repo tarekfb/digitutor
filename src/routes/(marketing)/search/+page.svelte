@@ -13,7 +13,7 @@
   import SecondaryTitle from "src/lib/components/atoms/secondary-title.svelte";
   import AlertMessage from "$lib/components/atoms/alert-message.svelte";
   import SearchResultList from "src/lib/components/molecules/search-result-list.svelte";
-  import RootContainer from "src/lib/components/molecules/root-container.svelte";
+  import RootContainer from "src/lib/components/templates/root-container.svelte";
   import { mediaQuery } from "svelte-legos";
   import Wavy from "src/lib/components/atoms/wavy.svelte";
 

@@ -4,7 +4,7 @@
   import { updateListingSchema } from "$lib/shared/models/listing.js";
   import PrimaryTitle from "$lib/components/atoms/primary-title.svelte";
   import type { PageData } from "./$types";
-  import RootContainer from "src/lib/components/molecules/root-container.svelte";
+  import RootContainer from "src/lib/components/templates/root-container.svelte";
   import DeleteListing from "$lib/components/atoms/delete-listing.svelte";
   import { Button } from "$lib/components/ui/button";
   import { Textarea } from "$lib/components/ui/textarea/index.js";
@@ -22,7 +22,7 @@
   import Label from "src/lib/components/atoms/label.svelte";
   import FormSubmit from "src/lib/components/molecules/form-submit.svelte";
   import SuggestSubject from "src/lib/components/molecules/suggest-subject.svelte";
-  import AccountLayout from "../../account-layout.svelte";
+  import AccountLayout from "../../../../../../lib/components/templates/account-layout.svelte";
 
   export let data: PageData;
   $: ({ subjects, profile } = data);
