@@ -21,6 +21,9 @@
   import AvatarNameBar from "src/lib/components/organisms/avatar-name-bar.svelte";
   import { Button } from "src/lib/components/ui/button";
   import Avatar from "src/lib/components/atoms/avatar.svelte";
+  import AccountLayout from "../../account-layout.svelte";
+  import { SendHorizontal } from "lucide-svelte";
+  import { Input } from "src/lib/components/ui/input";
 
   export let data: PageData;
   $: ({ profile: self, conversation, supabase, session } = data);
@@ -94,13 +97,17 @@
   };
 </script>
 
-<div class="flex flex-col gap-y-4 justify-end w-full h-full " >
+<div
+  class="mt-8 mx-8 my-8 flex flex-col justify-end flex-1 md:self-center md:w-full md:max-w-xl lg:max-w-2xl"
+>
+  <!-- <div class="my-8 flex flex-col items-center w-full md:max-w-xl lg:max-w-2xl"> -->
   <ChatWindow {chatStore} {self} other={recipient} />
 
+  <!-- bg-accent md:bg-foreground  -->
   <form
     method="POST"
     use:enhance
-    class="flex flex-col gap-y-2 px-8 py-4 -m-8 mt-0 sticky bottom-0 bg-accent" 
+    class="flex flex-col gap-y-2 px-4 justify-center -mx-8 fixed bottom-0 w-full h-20 bg-accent md:bg-foreground"
   >
     {#if !isAllowedToReply}
       <AlertMessage
@@ -110,16 +117,19 @@
       />
     {/if}
     <FormMessage {message} class="mt-2" scroll />
-    <Textarea
-      {...$constraints.content}
-      placeholder="Skriv ett meddelande..."
-      class="resize-y bg-card"
-      bind:value={$formData.content}
-      disabled={!isAllowedToReply}
-    />
-    <Button
-      on:click={sendMessage}
-      disabled={!isAllowedToReply || $allErrors.length > 0}>Skicka</Button
-    >
+    <div class="flex justify-between gap-x-2 items-center">
+      <Input
+        {...$constraints.content}
+        placeholder="Skriv ett meddelande..."
+        class="bg-card"
+        bind:value={$formData.content}
+        disabled={!isAllowedToReply}
+      />
+      <Button
+        on:click={sendMessage}
+        disabled={!isAllowedToReply || $allErrors.length > 0}
+        ><SendHorizontal />
+      </Button>
+    </div>
   </form>
 </div>

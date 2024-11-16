@@ -8,41 +8,29 @@
   import PrimaryTitle from "../atoms/primary-title.svelte";
   import AvatarNameBar from "../organisms/avatar-name-bar.svelte";
 
-  // export let supabase;
-  // export let conversationId;
   export let chatStore: WritableLoadable<Message[]>;
   export let self: Tables<"profiles">;
   export let other: Tables<"profiles">;
 
-  const scroll = (node: HTMLElement, index: number) => {
-    // setTimeout(() => {
-    //   node?.scrollIntoView({ behavior: "smooth", block: "end" });
-    // }, 750);
-    // the node contains all messages
-    // scroll still doesn't work without this settimeout hack
-    // todo: fix
-    console.log("index", index);
-    console.log("last inedex", $chatStore.length - 1);
-    if (index === $chatStore.length - 1) {
-      console.log("scrolling");
-      node?.scrollIntoView({ behavior: "smooth", block: "end" });
-      console.log(node.innerHTML);
-    }
+  let bottomOffset = 150; // The height of the fixed form element.
+
+  const scrollFunc = (element: HTMLElement) => {
+    element.scrollIntoView({ behavior: "smooth", block: "end" });
+  };
+
+  const scroll = (element: HTMLElement, messages: Message[]) => {
+    //  node?.scrollIntoView({ behavior: "smooth", block: "end" });
+    // node.scrollTop = node.scrollHeight;
+    scrollFunc(element);
     return {
       update() {
-        console.log("ran uopdate");
-        if (index === $chatStore.length - 1) {
-          console.log("scrolling");
-          node?.scrollIntoView({ behavior: "smooth", block: "end" });
-        }
+        scrollFunc(element);
       },
     };
   };
-
-  // $: listElement?.scrol({top: listElement.scrollHeight, behavior: "smooth"}), $chatStore;
 </script>
 
-<ScrollArea class="flex flex-col gap-y-4 max-h-screen">
+<div class="flex flex-col gap-y-4 overflow-y-auto">
   <div class="flex flex-col items-center gap-y-2 mb-4">
     <AvatarNameBar profile={other} class="self-center">
       <PrimaryTitle>{other.first_name}</PrimaryTitle>
@@ -55,16 +43,13 @@
     {:then}
       {#each $chatStore as message, index}
         {#if message.sender === self.id}
-          <li
-            class="flex flex-col gap-y-2 bg-card p-2 rounded-md self-end"
-            use:scroll={index}
-          >
+          <li class="flex flex-col gap-y-2 bg-card p-2 rounded-md self-end">
             <p>{message.content}</p>
             {timeAgo(message.createdAt)} sedan
             <p class="text-xs text-muted-foreground"></p>
           </li>
         {:else}
-          <li class="flex gap-x-4" use:scroll={index}>
+          <li class="flex gap-x-4">
             <div class="flex flex-col justify-end">
               <Avatar
                 onClick={undefined}
@@ -91,5 +76,6 @@
     {:catch error}
       {`Error :(`}
     {/await}
+    <div class="h-20" use:scroll={$chatStore}></div>
   </ul>
-</ScrollArea>
+</div>

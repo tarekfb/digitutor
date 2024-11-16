@@ -86,11 +86,13 @@
           {/if}
           <ul>
             {#each subjects as subject, i}
-              {#if i < 10}
-              <li class="flex gap-x-2 items-center">
-                  <Terminal class="w-5 h-5 text-accent" />
-                  <p class="font-mono text-base">{languages[subject].label}</p>
-                </li>
+              {#if i < 10 && languages[subject]?.label}
+                  <li class="flex gap-x-2 items-center">
+                    <Terminal class="w-5 h-5 text-accent" />
+                    <p class="font-mono text-base">
+                      {languages[subject].label}
+                    </p>
+                  </li>
               {/if}
             {/each}
           </ul>

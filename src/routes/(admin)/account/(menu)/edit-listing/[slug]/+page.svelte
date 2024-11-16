@@ -22,6 +22,7 @@
   import Label from "src/lib/components/atoms/label.svelte";
   import FormSubmit from "src/lib/components/molecules/form-submit.svelte";
   import SuggestSubject from "src/lib/components/molecules/suggest-subject.svelte";
+  import AccountLayout from "../../account-layout.svelte";
 
   export let data: PageData;
   $: ({ subjects, profile } = data);
@@ -53,123 +54,125 @@
   const labelStyling = "text-xl md:text-2xl";
 </script>
 
-<PrimaryTitle class="text-center">Redigera annons</PrimaryTitle>
-<RootContainer class="w-full">
-  <FormMessage {message} scroll />
-  <form
-    method="POST"
-    use:enhance
-    action="?/updateListing"
-    class="flex flex-col gap-y-4 items-stretch w-full"
-  >
-    <Form.Field form={listingForm} name="title">
-      <Form.Control let:attrs>
-        <Label class={labelStyling}>Rubrik</Label>
-        <Input
-          {...attrs}
-          type="text"
-          bind:value={$form.title}
-          placeholder="Rubrik"
-          class="text-lg bg-card"
-        />
-      </Form.Control>
-      <Form.FieldErrors />
-    </Form.Field>
-
-    <Form.Field form={listingForm} name="hourlyPrice">
-      <Form.Control let:attrs>
-        <Label class={labelStyling}>Timpris</Label>
-        <div class="flex gap-x-2 items-center text-xl">
+<AccountLayout>
+  <PrimaryTitle class="text-center">Redigera annons</PrimaryTitle>
+  <RootContainer class="w-full">
+    <FormMessage {message} scroll />
+    <form
+      method="POST"
+      use:enhance
+      action="?/updateListing"
+      class="flex flex-col gap-y-4 items-stretch w-full"
+    >
+      <Form.Field form={listingForm} name="title">
+        <Form.Control let:attrs>
+          <Label class={labelStyling}>Rubrik</Label>
           <Input
             {...attrs}
-            type="number"
-            inputmode="numeric"
-            pattern="[0-9]+"
-            bind:value={$form.hourlyPrice}
-            placeholder="Ange timpris"
-            class="w-32 bg-card"
+            type="text"
+            bind:value={$form.title}
+            placeholder="Rubrik"
+            class="text-lg bg-card"
           />
-          SEK
-        </div>
-      </Form.Control>
-      <Form.FieldErrors />
-    </Form.Field>
+        </Form.Control>
+        <Form.FieldErrors />
+      </Form.Field>
 
-    <Form.Field form={listingForm} name="description">
-      <Form.Control let:attrs>
-        <Label class={labelStyling}>Beskrivning</Label>
-        <Textarea
-          {...attrs}
-          placeholder="Skriv några ord om din annons..."
-          class="resize-y bg-card"
-          bind:value={$form.description}
-        />
-      </Form.Control>
-      <Form.FieldErrors>
-        {#if $errors.description?.at(0)}
-          {$errors.description?.at(0)}
-        {/if}
-      </Form.FieldErrors>
-    </Form.Field>
-
-    <Form.Field form={listingForm} name="subjects">
-      <Form.Control let:attrs>
-        <Label class={labelStyling}>Språk</Label>
-        <Svelecte
-          {...attrs}
-          bind:value={$values}
-          multiple
-          placeholder="Välj språk"
-          options={subjects}
-          highlightFirstItem={false}
-          labelField="title"
-          name="subjects"
-          clearable
-        />
-      </Form.Control>
-      <Form.FieldErrors>
-        {#if $subjectsErrors}
-          {$subjectsErrors}
-        {/if}
-      </Form.FieldErrors>
-    </Form.Field>
-    <SuggestSubject suggestSubjectForm={data.suggestSubjectForm} />
-
-    <div class="flex flex-col gap-y-4 mt-4 md:items-end">
-      <div class="flex justify-between gap-x-2 items-center md:gap-x-6">
-        <Form.Field form={listingForm} name="visible">
-          <Form.Control let:attrs>
-            <div class="flex gap-x-2 items-center">
-              <Checkbox
-                {...attrs}
-                bind:checked={$form.visible}
-                class="w-5 h-5 flex items-center justify-center"
-              />
-              <Form.Label class="text-xl">Synlig</Form.Label>
-            </div>
-            <input
-              name={attrs.name}
-              bind:checked={$form.visible}
-              type="checkbox"
-              value={$form.visible}
-              hidden
+      <Form.Field form={listingForm} name="hourlyPrice">
+        <Form.Control let:attrs>
+          <Label class={labelStyling}>Timpris</Label>
+          <div class="flex gap-x-2 items-center text-xl">
+            <Input
+              {...attrs}
+              type="number"
+              inputmode="numeric"
+              pattern="[0-9]+"
+              bind:value={$form.hourlyPrice}
+              placeholder="Ange timpris"
+              class="w-32 bg-card"
             />
-          </Form.Control>
-          <Form.FieldErrors />
-        </Form.Field>
-        <Button
-          variant="secondary"
-          href="/profile/{profile.id}?id={slug}"
-          class="flex gap-x-2 {secondaryAltButtonVariant()}"
-          ><ExternalLink class="h-4 w-4" />visa annons</Button
-        >
+            SEK
+          </div>
+        </Form.Control>
+        <Form.FieldErrors />
+      </Form.Field>
+
+      <Form.Field form={listingForm} name="description">
+        <Form.Control let:attrs>
+          <Label class={labelStyling}>Beskrivning</Label>
+          <Textarea
+            {...attrs}
+            placeholder="Skriv några ord om din annons..."
+            class="resize-y bg-card"
+            bind:value={$form.description}
+          />
+        </Form.Control>
+        <Form.FieldErrors>
+          {#if $errors.description?.at(0)}
+            {$errors.description?.at(0)}
+          {/if}
+        </Form.FieldErrors>
+      </Form.Field>
+
+      <Form.Field form={listingForm} name="subjects">
+        <Form.Control let:attrs>
+          <Label class={labelStyling}>Språk</Label>
+          <Svelecte
+            {...attrs}
+            bind:value={$values}
+            multiple
+            placeholder="Välj språk"
+            options={subjects}
+            highlightFirstItem={false}
+            labelField="title"
+            name="subjects"
+            clearable
+          />
+        </Form.Control>
+        <Form.FieldErrors>
+          {#if $subjectsErrors}
+            {$subjectsErrors}
+          {/if}
+        </Form.FieldErrors>
+      </Form.Field>
+      <SuggestSubject suggestSubjectForm={data.suggestSubjectForm} />
+
+      <div class="flex flex-col gap-y-4 mt-4 md:items-end">
+        <div class="flex justify-between gap-x-2 items-center md:gap-x-6">
+          <Form.Field form={listingForm} name="visible">
+            <Form.Control let:attrs>
+              <div class="flex gap-x-2 items-center">
+                <Checkbox
+                  {...attrs}
+                  bind:checked={$form.visible}
+                  class="w-5 h-5 flex items-center justify-center"
+                />
+                <Form.Label class="text-xl">Synlig</Form.Label>
+              </div>
+              <input
+                name={attrs.name}
+                bind:checked={$form.visible}
+                type="checkbox"
+                value={$form.visible}
+                hidden
+              />
+            </Form.Control>
+            <Form.FieldErrors />
+          </Form.Field>
+          <Button
+            variant="secondary"
+            href="/profile/{profile.id}?id={slug}"
+            class="flex gap-x-2 {secondaryAltButtonVariant()}"
+            ><ExternalLink class="h-4 w-4" />visa annons</Button
+          >
+        </div>
+        <div class="flex justify-between gap-x-2 md:gap-x-6">
+          <DeleteListing />
+          <FormSubmit {delayed} {allErrors} text="Spara">
+            <SaveIcon slot="icon" class="h-5 w-5" />
+          </FormSubmit>
+        </div>
       </div>
-      <div class="flex justify-between gap-x-2 md:gap-x-6">
-        <DeleteListing />
-        <FormSubmit {delayed} {allErrors} text="Spara">
-          <SaveIcon slot="icon" class="h-5 w-5" />
-        </FormSubmit>
-      </div>
-    </div>
-  </form>
-</RootContainer>
+    </form>
+  </RootContainer>
+</AccountLayout>

@@ -12,6 +12,7 @@
   } from "sveltekit-superforms";
   import { zodClient } from "sveltekit-superforms/adapters";
   import RootContainer from "src/lib/components/molecules/root-container.svelte";
+  import AccountLayout from "../account-layout.svelte";
 
   export let data: PageData;
   const listings = data.listings as Listing[];
@@ -27,12 +28,14 @@
   });
 </script>
 
-<PrimaryTitle class="text-center">Dina annonser</PrimaryTitle>
-<RootContainer class="my-6 w-full">
-  {#each listings as listing}
-    <ListingCard {listing} publicView={false} />
-  {:else}
-    <p class="text-center">Inga annonser. Testa skapa en!</p>
-  {/each}
-  <CreateListing form={userForm} />
-</RootContainer>
+<AccountLayout>
+  <PrimaryTitle class="text-center">Dina annonser</PrimaryTitle>
+  <RootContainer class="my-6 w-full">
+    {#each listings as listing}
+      <ListingCard {listing} publicView={false} />
+    {:else}
+      <p class="text-center">Inga annonser. Testa skapa en!</p>
+    {/each}
+    <CreateListing form={userForm} />
+  </RootContainer>
+</AccountLayout>
