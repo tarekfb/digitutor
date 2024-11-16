@@ -107,7 +107,7 @@
   <form
     method="POST"
     use:enhance
-    class="flex flex-col gap-y-2 px-4 justify-center -mx-8 fixed bottom-0 w-full h-20 bg-accent md:bg-foreground"
+    class="flex flex-col gap-y-2 px-4 justify-center -mx-8 fixed bottom-0 w-full h-20"
   >
     {#if !isAllowedToReply}
       <AlertMessage
