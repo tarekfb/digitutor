@@ -54,7 +54,33 @@ export const getReviewsByReceiver = async (
     const { data, error } = await query;
 
     if (error) {
-        console.error(`Failed to read reviews ${receiver ? "for userId" + receiver : ''}`, { error });
+        console.error(`Failed to read reviews"for userId" + receiver`, { error });
+        throw error;
+    }
+
+    return data as unknown as Review[];
+}
+
+export const getReviewsBySender = async (
+    supabase: SupabaseClient<Database>,
+    sender: string,
+    max?: number,
+): Promise<Review[]> => {
+    let query = supabase
+        .from("reviews")
+        .select(`
+            *,
+            sender ("*"),
+            receiver ("*")
+          `)
+        .eq("receiver", sender)
+
+    if (max) query = query.limit(max);
+
+    const { data, error } = await query;
+
+    if (error) {
+        console.error(`Failed to read reviews "for userId" sender`, { error });
         throw error;
     }
 

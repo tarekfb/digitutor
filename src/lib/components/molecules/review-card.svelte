@@ -28,7 +28,6 @@
             firstName={review.sender.first_name}
             lastName={review.sender.last_name}
             role={review.sender.role}
-            onClick={undefined}
             class="text-sm w-8 h-8"
           />
           <h4 class="font-semibold">{review.sender.first_name}</h4>

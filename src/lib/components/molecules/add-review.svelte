@@ -2,7 +2,7 @@
   import FormSubmit from "$lib/components/molecules/form-submit.svelte";
   import FormMessage from "$lib/components/molecules/form-message.svelte";
   import { cn } from "src/lib/shared/utils/utils.js";
-  import  {
+  import {
     superForm,
     type Infer,
     type SuperValidated,
@@ -20,6 +20,7 @@
   import { Button, buttonVariants } from "$lib/components/ui/button";
   import type { Tables } from "src/supabase";
   import { Textarea } from "../ui/textarea";
+  import { secondaryAltButtonVariant } from "src/lib/shared/constants/constants";
 
   export let form: SuperValidated<Infer<AddReviewSchema>>;
   export let teacher: Tables<"profiles">;
@@ -41,7 +42,7 @@
     class={cn(
       buttonVariants({
         variant: "white",
-        className: "flex gap-x-2 self-center",
+        className: `flex gap-x-2 self-center ${secondaryAltButtonVariant()}`,
       }),
     )}
   >
@@ -54,7 +55,6 @@
         Här kan du göra en recension till {teacher.first_name}.
       </Dialog.Description>
     </Dialog.Header>
-    <FormMessage {message} scroll />
     <form
       action="?/addReview"
       use:enhance
@@ -89,17 +89,14 @@
         </Form.Control>
         <Form.FieldErrors />
       </Form.Field>
+      <FormMessage {message} scroll />
       <div class="flex justify-end gap-x-4">
         <Dialog.Footer>
           <Dialog.Close asChild let:builder>
             <Button variant="outline" builders={[builder]}>Avbryt</Button>
           </Dialog.Close>
         </Dialog.Footer>
-        <FormSubmit
-          {delayed}
-          {allErrors}
-          text="Lägg till"
-        />
+        <FormSubmit {delayed} {allErrors} text="Lägg till" />
       </div>
     </form>
   </Dialog.Content>

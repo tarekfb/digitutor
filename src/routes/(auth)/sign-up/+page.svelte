@@ -47,7 +47,6 @@
             firstName={review.sender.first_name}
             lastName={review.sender.last_name}
             role={review.sender.role}
-            onClick={undefined}
             class="text-sm w-7 h-7"
           />
           <cite class="not-italic text-lg">
@@ -64,7 +63,6 @@
               lastName={review.receiver.last_name}
               role={review.receiver.role}
               class="text-sm w-7 h-7"
-              onClick={undefined}
             />
             <p class="text-lg">{review.receiver.first_name}</p>
           </a>
@@ -74,7 +72,7 @@
   </svelte:fragment>
   <svelte:fragment slot="form">
     <form
-      class="text-start flex flex-col gap-y-4 w-full max-w-[650px] p-4"
+      class="text-start flex flex-col gap-y-4 w-full max-w-screen-sm p-4"
       method="POST"
       use:enhance
     >

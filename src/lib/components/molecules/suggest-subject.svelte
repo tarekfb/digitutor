@@ -69,7 +69,7 @@
       >Saknar du något i listan? <Button
         variant="link"
         class="px-0"
-        builders={[builder]}>Lägg till</Button
+        builders={[builder]}>Ge förslag</Button
       ></small
     >
   </Dialog.Trigger>

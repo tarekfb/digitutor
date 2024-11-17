@@ -19,7 +19,6 @@
     <div class="absolute select-none -top-3 -left-3">
       <span class="text-[120px] leading-none text-primary/40">
         <Avatar
-          onClick={undefined}
           url={review.sender.avatar_url ?? ""}
           firstName={review.sender.first_name}
           lastName={review.sender.last_name}

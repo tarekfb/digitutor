@@ -9,6 +9,23 @@ export type Conversation = Omit<Tables<"conversations">, "teacher" | "student"> 
 
 export type InputMessage = Pick<Tables<"messages">, "content" | "conversation">;
 
+
+export type Message = {
+    id: string,
+    sender: string,
+    content: string,
+    createdAt: string,
+    conversation: string,
+}
+
+export const formatMessage = ({id, sender, content, created_at, conversation}: Tables<"messages">): Message => ({
+    id, 
+    sender,
+    content,
+    createdAt: created_at,
+    conversation
+})
+
 const sendMessageProperties = {
     content: z
         .string()
@@ -22,6 +39,9 @@ const requestContactProperties = {
     role: z
         .string(),
 }
+
+
+
 export const requestContactSchema = z.object(requestContactProperties)
 
 export const startContactSchema = z.object({

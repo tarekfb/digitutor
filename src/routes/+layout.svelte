@@ -57,6 +57,11 @@
     // Clear the flash message to avoid double-toasting.
     $flash = undefined;
   }
+
+  let position: "top-center" | "bottom-center" = "bottom-center";
+  $: position = $page.url.pathname.includes("/account/conversation/")
+    ? "top-center"
+    : position; // this page needs visibility in bottom center area
 </script>
 
 {#if $navigating}
@@ -72,5 +77,5 @@
     in:slide={{ delay: 100, duration: 12000, axis: "x", easing: expoOut }}
   ></div>
 {/if}
-<Toaster />
+<Toaster {position} />
 <slot />

@@ -86,11 +86,13 @@
           {/if}
           <ul>
             {#each subjects as subject, i}
-              {#if i < 10}
-              <li class="flex gap-x-2 items-center">
-                  <Terminal class="w-5 h-5 text-accent" />
-                  <p class="font-mono text-base">{languages[subject].label}</p>
-                </li>
+              {#if i < 10 && languages[subject]?.label}
+                  <li class="flex gap-x-2 items-center">
+                    <Terminal class="w-5 h-5 text-accent" />
+                    <p class="font-mono text-base">
+                      {languages[subject].label}
+                    </p>
+                  </li>
               {/if}
             {/each}
           </ul>
@@ -116,7 +118,7 @@
   </svelte:fragment>
   <svelte:fragment slot="form">
     <form
-      class="text-start flex flex-col gap-y-4 w-full max-w-[650px] p-4"
+      class="text-start flex flex-col gap-y-4 w-full max-w-screen-sm p-4"
       action="?/signIn"
       method="POST"
       use:enhance
