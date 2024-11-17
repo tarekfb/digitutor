@@ -54,12 +54,21 @@
               {...attrs}
               type="text"
               bind:value={$formData.title}
-              placeholder="Rubrik"
+              placeholder="Skriv en rubrik..."
             />
           </Form.Control>
           <Form.FieldErrors />
         </Form.Field>
-        <input type="hidden" class="hidden" value={$formData.nbrOfListings}>
+        <Form.Field {form} name="nbrOfListings" hidden>
+          <Form.Control let:attrs>
+            <Input
+              {...attrs}
+              type="hidden"
+              bind:value={$formData.nbrOfListings}
+              placeholder="Rubrik"
+            />
+          </Form.Control>
+        </Form.Field>
         <div class="flex justify-end gap-x-4">
           <Dialog.Footer>
             <Dialog.Close asChild let:builder>

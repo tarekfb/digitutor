@@ -30,7 +30,7 @@ export const load: PageServerLoad = async ({
     });
   }
 
-  const form = await superValidate({ nbrOfListings: listings.length }, zod(initCreateListingSchema))
+  const form = await superValidate({ nbrOfListings: listings.length }, zod(initCreateListingSchema), { errors: false })
 
   return { form, listings };
 };
@@ -49,13 +49,13 @@ export const actions: Actions = {
     const { title } = form.data;
     let { nbrOfListings } = form.data;
 
-    if (nbrOfListings === undefined){
+    if (nbrOfListings === undefined) {
       console.error("User had undefined nbr of listings and tried to create listing, allow creation.")
       nbrOfListings = 0;
     }
 
-    if (nbrOfListings > 5)
-      return message(form, getFailFormMessage("Du har för många annonser", "Ta bort en annons innan du skapar en ny.", undefined, undefined, 'default'), { status: 400 })
+    if (nbrOfListings > 4)
+      return message(form, getFailFormMessage("Du har för många annonser", "Ta bort en annons innan du skapar en ny.", undefined, undefined, 'warning'), { status: 400 })
 
     let listingId = "";
     try {
