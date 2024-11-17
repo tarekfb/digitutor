@@ -1,12 +1,7 @@
 <script lang="ts">
   import * as Avatar from "$lib/components/ui/avatar";
-  import { Button } from "$lib/components/ui/button";
   import { convertToInitials } from "src/lib/shared/utils/utils";
   import { cn } from "src/lib/shared/utils/utils.js";
-
-  interface OnClick {
-    onClick?: () => void;
-  }
 
   let className: string | null | undefined = undefined;
   export let fallbackClass: string | null | undefined = undefined;

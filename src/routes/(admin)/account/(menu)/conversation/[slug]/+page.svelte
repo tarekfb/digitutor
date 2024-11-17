@@ -21,7 +21,7 @@
     },
     invalidateAll: false,
   });
-  const { form: formData, enhance, allErrors, constraints } = sendMessageForm;
+  const { form, allErrors } = sendMessageForm;
 
   $: chatStore = initChat(conversation.id, supabase, session);
 
@@ -49,7 +49,7 @@
         `När du fått svar från ${recipient.first_name} kan du skicka fler meddelanden`,
       );
     }
-    const message = $formData.content;
+    const message = $form.content;
     if (!message) return toast.info("Skriv ett meddelande först");
 
     if (!session)
@@ -59,7 +59,6 @@
 
     sendMessageToStore(chatStore, message, conversation.id, session);
     sendMessageForm.reset();
-
   };
 </script>
 
@@ -69,20 +68,18 @@
   <ChatWindow {chatStore} {self} other={recipient} />
 
   <form
-    method="POST"
-    use:enhance
-    class="flex flex-col gap-y-2 px-4 justify-center -mx-8 fixed bottom-0 w-full md:self-center md:w-2/4 h-20"
+    class="flex flex-col gap-y-2 px-4 justify-center -mx-8 fixed bottom-0 w-full md:self-center md:w-2/4 lg:w-1/3 h-20"
   >
     <div class="flex justify-between gap-x-2 items-center">
       <Input
-        {...$constraints.content}
         placeholder="Skriv ett meddelande..."
         class="bg-card"
-        bind:value={$formData.content}
+        bind:value={$form.content}
       />
       <Button
         on:click={sendMessage}
-        disabled={$allErrors.length > 0}
+        type="submit"
+        disabled={$allErrors.length > 0 || !$form.content}
         aria-label="Skicka meddelande"
         ><SendHorizontal />
       </Button>
