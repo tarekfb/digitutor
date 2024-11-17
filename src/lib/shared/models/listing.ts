@@ -14,8 +14,7 @@ const updateListingProps: TypeToZod<InputListing> = {
     description: z
         .string()
         .min(10, "Måste vara minst 10 karaktärer.")
-        .max(160, "Får inte vara mer än 160 karaktärer.")
-        .refine((s) => s.trim() !== "", "Får inte vara tom."),
+        .max(160, "Får inte vara mer än 160 karaktärer."),
     hourlyPrice: z
         .coerce
         .number()
@@ -25,8 +24,7 @@ const updateListingProps: TypeToZod<InputListing> = {
     title: z
         .string()
         .min(3, "Måste vara minst 3 bokstäver.")
-        .max(80, "Måste vara maximalt 100 bokstäver.")
-        .refine((s) => s.trim() !== "", "Får inte vara tom."),
+        .max(80, "Måste vara maximalt 100 bokstäver."),
     visible: z
         .boolean()
     // currency: z
@@ -38,4 +36,4 @@ const updateListingProps: TypeToZod<InputListing> = {
 
 export const updateListingSchema = z.object(updateListingProps)
 
-export const initCreateListingSchema = z.object({ title: updateListingProps.title })
+export const initCreateListingSchema = z.object({ title: updateListingProps.title, nbrOfListings: z.number() })

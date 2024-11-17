@@ -78,7 +78,7 @@
         <div
           class="flex flex-col gap-y-0.5 text-muted-foreground text-xl md:text-2xl"
         >
-          <SecondaryTitle class=" font-semibold"
+          <SecondaryTitle class="whitespace-normal font-semibold"
             >{reviews[0].receiver.first_name}</SecondaryTitle
           >
           {#if avgRating !== undefined}
@@ -86,6 +86,7 @@
           {/if}
           <ul>
             {#each subjects as subject, i}
+
               {#if i < 10 && languages[subject]?.label}
                   <li class="flex gap-x-2 items-center">
                     <Terminal class="w-5 h-5 text-accent" />
@@ -93,6 +94,7 @@
                       {languages[subject].label}
                     </p>
                   </li>
+
               {/if}
             {/each}
           </ul>
