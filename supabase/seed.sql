@@ -389,13 +389,13 @@ VALUES
         4,
         'Tarek is a good teacher. He is patient and helpful.'
     ),
-    (
-        uuid_generate_v4(),
-        '550e8400-e29b-41d4-a716-446655440050',
-        '550e8400-e29b-41d4-a716-446655440000',
-        5,
-        'Tarek is an excellent teacher. He is very knowledgeable and explains things clearly.'
-    ),
+    -- (
+    --     uuid_generate_v4(),
+    --     '550e8400-e29b-41d4-a716-446655440050',
+    --     '550e8400-e29b-41d4-a716-446655440000',
+    --     5,
+    --     'Tarek is an excellent teacher. He is very knowledgeable and explains things clearly.'
+    -- ),
     (
         uuid_generate_v4(),
         '550e8400-e29b-41d4-a716-446655440060',

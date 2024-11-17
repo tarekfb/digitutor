@@ -60,7 +60,6 @@
     sendMessageToStore(chatStore, message, conversation.id, session);
     sendMessageForm.reset();
 
-    toast.info("test", )
   };
 </script>
 

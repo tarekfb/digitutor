@@ -21,7 +21,7 @@
 
   let initials = convertToInitials(firstName, lastName);
 
-  const fallback = "text-background bg-accent w-full h-full";
+  const fallback = `text-background bg-accent w-${size} h-${size}`;
 </script>
 
 <Avatar.Root

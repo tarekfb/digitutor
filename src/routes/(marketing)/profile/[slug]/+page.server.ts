@@ -9,7 +9,7 @@ import { zod } from "sveltekit-superforms/adapters";
 import { getConversationForStudentAndTeacher, startConversation } from "$lib/server/database/conversations";
 import { redirect, setFlash } from "sveltekit-flash-message/server";
 import { ResourceAlreadyExistsError } from "src/lib/shared/errors/resource-already-exists-error.js";
-import { createReview, getReviewsByReceiver } from "src/lib/server/database/review.js";
+import { createReview, getReviewsByReceiver, getReviewsBySender } from "src/lib/server/database/review.js";
 import type { Listing } from "src/lib/shared/models/listing.js";
 import type { Message, PsqlError } from "src/lib/shared/models/common.js";
 import { loadContactTeacherForms } from "src/lib/shared/utils/utils";
@@ -125,14 +125,14 @@ export const actions = {
         }
 
 
-        let conversation: Conversation | null
+        let conversation: Conversation | null = null;
         try {
             conversation = await getConversationForStudentAndTeacher(supabase, session.user.id, slug);
-            if (conversation)
-                redirect(303, `/account/conversation/${conversation.id}`, { message: 'Du har redan kontaktat läraren.', type: 'info' }, event);
         } catch (error) {
             console.error(`unable to read conversation for teacher: ${slug} & student: ${session.user.id}, allowing student to contact` + slug, error);
         }
+        if (conversation)
+            redirect(303, `/account/conversation/${conversation.id}`, { message: 'Du har redan kontaktat läraren.', type: 'info' }, event);
 
         return { form };
     },
@@ -193,11 +193,18 @@ export const actions = {
             const conversation = await getConversationForStudentAndTeacher(supabase, session.user.id, slug);
             if (!conversation) {
                 console.error(`Error when adding review for profile slug ${slug}, teacher & student has no conversation.`);
-                return message(form, getFailFormMessage('Något verkar ha gått snett', 'Har ni haft en lektion ihop? Isåfall kan ni kontakta oss för att få hjälp med att göra recensionen.'), { status: 403 });
+                return message(form, getFailFormMessage(undefined, 'Har ni haft en lektion ihop? Isåfall kan ni kontakta oss för att få hjälp med att göra recensionen.'), { status: 403 });
             }
         } catch (error) {
-            console.error(`Error when adding review for profile slug ${slug}, unable to read conversation for teacher & student` + slug, error);
-            return message(form, getFailFormMessage(), { status: 500 });
+            console.error(`Error when adding review for profile slug ${slug}, unable to read conversation for teacher & student. Proceeding` + slug, error);
+        }
+
+        try {
+            const reviews = await getReviewsBySender(supabase, session.user.id, 1);
+            if (reviews.length > 0)
+                return message(form, getFailFormMessage(undefined, 'Du har redan gjort en recension.'), { status: 403 });
+        } catch (error) {
+            console.error("Error when checking if user has already made a review for profile slug: " + slug, error);
         }
 
         try {
