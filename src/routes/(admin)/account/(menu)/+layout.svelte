@@ -7,6 +7,7 @@
   import { toast } from "svelte-sonner";
   import { getFlash } from "sveltekit-flash-message/client";
   import Footer from "src/lib/components/organisms/footer.svelte";
+  import AccountLayout from "../../../../lib/components/templates/account-layout.svelte";
 
   export let data: PageData;
   $: ({ supabase, session, profile } = data);
@@ -39,11 +40,5 @@
 <Navbar profile={false} logout={false}>
   <Sidebar role={profile?.role} logout={() => logout(supabase, session)} />
 </Navbar>
-<div class="flex justify-center p-8 min-h-screen">
-  <div
-    class="flex flex-col items-center w-full max-w-[340px] md:max-w-xl lg:max-w-2xl"
-  >
-    <slot />
-  </div>
-</div>
-<Footer />
+<!-- <AccountLayout><slot /></AccountLayout> -->
+<slot />

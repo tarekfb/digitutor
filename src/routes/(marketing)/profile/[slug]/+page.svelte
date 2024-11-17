@@ -2,7 +2,7 @@
   import type { PageData } from "./$types";
   import PrimaryTitle from "$lib/components/atoms/primary-title.svelte";
   import { mediaQuery } from "svelte-legos";
-  import RootContainer from "src/lib/components/molecules/root-container.svelte";
+  import RootContainer from "src/lib/components/templates/root-container.svelte";
   import ProfileHeaderMobile from "src/lib/components/organisms/profile-header-mobile.svelte";
   import ContactTeacherForm from "src/lib/components/molecules/contact-teacher-form.svelte";
   import SecondaryTitle from "src/lib/components/atoms/secondary-title.svelte";

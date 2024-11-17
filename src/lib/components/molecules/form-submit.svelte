@@ -12,6 +12,7 @@
   export let variant: Variant = "default";
   export let loadingText = text;
   export let disabled = false;
+  
 </script>
 
 <Button

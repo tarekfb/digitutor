@@ -24,6 +24,9 @@
   Den här läraren har ingen beskrivning just nu.
 </p>
 <PrimaryTitle class="text-wrap">Recensioner</PrimaryTitle>
+{#if allowCreateReview}
+  <AddReview form={addReviewForm} {teacher} />
+{/if}
 {#if reviews.length > 0}
   <ul class="flex flex-col items-center gap-y-4">
     {#each reviews as review}
@@ -34,7 +37,4 @@
   <p class={cn("text-muted-foreground", pStyle)}>
     {teacher.first_name} har inga recensioner ännu.
   </p>
-{/if}
-{#if allowCreateReview}
-  <AddReview form={addReviewForm} {teacher} />
 {/if}
