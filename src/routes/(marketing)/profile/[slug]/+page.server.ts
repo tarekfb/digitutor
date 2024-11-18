@@ -23,7 +23,7 @@ export const load = async ({ locals: { supabase, safeGetSession }, params: { slu
             if (e.code === ExternalErrorCodes.InvalidInputSyntax)
                 error(404, {
                     message: "Vi kunde inte hitta profilen",
-                    description: "Profilen finns inte eller har tagits bort. Du kan kontakta oss om detta fortsätter"
+                    description: "Profilen finns inte eller har tagits bort. Du kan kontakta oss om detta fortsätter."
                 });
 
             if (e.code === ExternalErrorCodes.ContainsZeroRows)

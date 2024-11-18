@@ -24,14 +24,14 @@ export const load = async ({ locals: { supabase }, params: { slug }, parent }) =
     if (isErrorWithCode(e)) {
       if (e.code === ExternalErrorCodes.InvalidInputSyntax)
         error(404, {
-          message: "Vi kunde inte hitta profilen",
-          description: "Profilen finns inte eller har tagits bort. Du kan kontakta oss om detta fortsätter"
+          message: "Vi kunde inte hitta annonsen",
+          description: "Annonsen finns inte eller har tagits bort. Du kan kontakta oss om detta fortsätter."
         });
 
       if (e.code === ExternalErrorCodes.ContainsZeroRows)
         error(404, {
-          message: "Vi kunde inte hitta profilen",
-          description: "Profilen finns inte eller har tagits bort."
+          message: "Vi kunde inte hitta annonsen",
+          description: "Annonsen finns inte eller har tagits bort."
         });
     }
     console.error("Unknown error when reading listing with id: " + slug, e);
