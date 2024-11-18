@@ -77,7 +77,7 @@
       <FormMessage {message} scroll scrollTo="end" />
     </div>
   {:else if isInit && initResults.length > 0}
-    <SearchResultList results={initResults} />
+    <SearchResultList results={initResults} searchTerm={$formData.query} />
   {:else if initMessage}
     <div class="p-4">
       <AlertMessage
@@ -87,7 +87,7 @@
       />
     </div>
   {:else if results.length > 0}
-    <SearchResultList {results} />
+    <SearchResultList {results} searchTerm={$formData.query} />
   {:else}
     <div class="p-4">
       <AlertMessage
@@ -133,7 +133,7 @@
   <Wavy />
   <RootContainer class="w-full md:max-w-sm lg:max-w-screen-md">
     {#if isInit && initResults.length > 0}
-      <SearchResultList results={initResults} />
+      <SearchResultList results={initResults} searchTerm={$formData.query} />
     {:else if initMessage}
       <AlertMessage
         title={initMessage.title}
@@ -143,7 +143,7 @@
     {:else if $message}
       <FormMessage {message} />
     {:else if results.length > 0}
-      <SearchResultList {results} />
+      <SearchResultList {results} searchTerm={$formData.query} />
     {:else}
       <AlertMessage
         title="Inga träffar på din sökning"
