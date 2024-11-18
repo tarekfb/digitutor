@@ -1,5 +1,5 @@
 <script lang="ts">
-  import type { Listing } from "src/lib/shared/models/listing";
+  import type { DbListingWithProfile } from "src/lib/shared/models/listing";
   import IsPublished from "../atoms/is-published.svelte";
   import { Button } from "../ui/button";
   import { page } from "$app/stores";
@@ -7,7 +7,7 @@
   import { ExternalLink } from "lucide-svelte";
   import { secondaryAltButtonVariant } from "src/lib/shared/constants/constants";
 
-  export let listing: Listing | undefined = undefined;
+  export let listing: DbListingWithProfile | undefined = undefined;
 
   const { slug } = $page.params;
   const url = `/profile/${slug}?${listing && `id=${listing.id}`}${listing ? "&" : "?"}preview=true`;

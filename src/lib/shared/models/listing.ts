@@ -1,12 +1,25 @@
 import type { Tables } from "src/supabase";
 import type { TypeToZod } from "src/lib/shared/utils/utils";
 import { z } from "zod";
+import type { DbProfile, Profile } from "./profile";
 
-export type Listing = Omit<Tables<"listings">, "profile"> & {
-    profile: Tables<"profiles">;
+export type DbListingBase = Tables<"listings">
+
+export type DbListingWithProfile = Omit<Tables<"listings">, "profile"> & {
+    profile: DbProfile;
 };
 
-export type InputListing = Pick<Tables<"listings">, 'description' | 'subjects' | 'title' | 'visible'> & {
+export type ListingBase = Omit<DbListingBase, "created_at" | "updated_at" | "hourly_price"> & {
+    hourlyPrice: number
+    createdAt: string,
+    updatedAt?: string
+}
+
+export type ListingWithProfile = Omit<ListingBase, "profile"> & {
+    profile: Profile;
+};
+
+export type InputListing = Pick<DbListingBase, 'description' | 'subjects' | 'title' | 'visible'> & {
     hourlyPrice: number
 };
 

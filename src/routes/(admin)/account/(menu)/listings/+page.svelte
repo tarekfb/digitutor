@@ -3,7 +3,6 @@
   import PrimaryTitle from "$lib/components/atoms/primary-title.svelte";
   import CreateListing from "$lib/components/atoms/create-listing.svelte";
   import ListingCard from "$lib/components/molecules/listing-card.svelte";
-  import type { Listing } from "$lib/shared/models/listing";
   import { initCreateListingSchema } from "$lib/shared/models/listing.js";
   import {
     superForm,
@@ -12,10 +11,10 @@
   } from "sveltekit-superforms";
   import { zodClient } from "sveltekit-superforms/adapters";
   import RootContainer from "src/lib/components/templates/root-container.svelte";
-  import AccountLayout from "../../../../../lib/components/templates/account-layout.svelte";
+  import AccountLayout from "src/lib/components/templates/account-layout.svelte";
 
   export let data: PageData;
-  const listings = data.listings as Listing[];
+  $: ({ listings } = data);
 
   const form = data.form as SuperValidated<
     Infer<typeof initCreateListingSchema>

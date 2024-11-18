@@ -1,15 +1,15 @@
 <script lang="ts">
   import { Clock, CircleAlert } from "lucide-svelte";
-  import type { Conversation } from "src/lib/shared/models/conversation";
+  import type { DbConversationWithReferences } from "src/lib/shared/models/conversation";
   import { timeAgo } from "src/lib/shared/utils/utils";
   import type { Tables } from "src/supabase";
 
-  export let conversation: Conversation;
+  export let conversation: DbConversationWithReferences;
   export let profile: Tables<"profiles">;
 
   const isNewRequest = (
     profile: Tables<"profiles">,
-    conversation: Conversation,
+    conversation: DbConversationWithReferences,
   ) => (profile.role === "teacher" && !conversation.has_replied ? true : false);
 
   $: recipient =

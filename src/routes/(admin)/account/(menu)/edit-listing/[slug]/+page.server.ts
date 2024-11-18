@@ -1,9 +1,9 @@
 import { fail, error } from "@sveltejs/kit";
 import { zod } from "sveltekit-superforms/adapters";
-import { defaultErrorInfo, getFailFormMessage, MessageId, defaultErrorDescription, defaultErrorTitle, getDefaultErrorInfo } from "$lib/shared/constants/constants";
+import { defaultErrorInfo, getFailFormMessage, MessageId, defaultErrorDescription, getDefaultErrorInfo } from "$lib/shared/constants/constants";
 import { message, superValidate } from "sveltekit-superforms";
 import { deleteListing, getListing, updateListing } from "$lib/server/database/listings";
-import { updateListingSchema } from "$lib/shared/models/listing";
+import { updateListingSchema, type ListingWithProfile } from "$lib/shared/models/listing";
 import { redirect } from "sveltekit-flash-message/server";
 import { isErrorWithCode } from "src/lib/shared/utils/utils";
 import { formatSubject, suggestSubjectSchema, type Subject } from "src/lib/shared/models/subject.js";
@@ -11,15 +11,17 @@ import { getSubjects, suggestSubject } from "src/lib/server/database/subjects";
 import type { Tables } from "src/supabase";
 import { findSimilarSubjects } from "src/lib/shared/utils/subjects/utils";
 import { ExternalErrorCodes } from "src/lib/shared/models/common.js";
+import { formatListingWithProfile } from "src/lib/shared/utils/listing/utils.js";
 
 export const load = async ({ locals: { supabase }, params: { slug }, parent }) => {
   const { session } = await parent();
   if (!session)
     redirect(303, "/sign-in");
 
-  let listing;
+  let listing: ListingWithProfile;
   try {
-    listing = await getListing(supabase, slug);
+    const dbListing = await getListing(supabase, slug);
+    listing = formatListingWithProfile(dbListing);
   } catch (e) {
     if (isErrorWithCode(e)) {
       if (e.code === ExternalErrorCodes.InvalidInputSyntax)
@@ -52,7 +54,7 @@ export const load = async ({ locals: { supabase }, params: { slug }, parent }) =
     error(500, { ...defaultErrorInfo });
   };
 
-  const updateListingForm = await superValidate({ ...listing, hourlyPrice: listing.hourly_price }, zod(updateListingSchema), { errors: false })
+  const updateListingForm = await superValidate({ ...listing, hourlyPrice: listing.hourlyPrice }, zod(updateListingSchema), { errors: false })
   const suggestSubjectForm = await superValidate(zod(suggestSubjectSchema))
   return { subjects, updateListingForm, suggestSubjectForm };
 }

@@ -20,6 +20,11 @@
   import AccountLayout from "../../../../../lib/components/templates/account-layout.svelte";
 
   export let data: PageData;
+  $: ({
+    profile,
+    uploadAvatarForm,
+    deleteAvatarForm,
+  } = data);
 
   const nameForm = superForm(data.updateNameForm, {
     validators: zodClient(nameSchema),
@@ -108,9 +113,9 @@
     </SettingsForm>
 
     <AvatarForm
-      uploadAvatarForm={data.uploadAvatarForm}
-      deleteAvatarForm={data.deleteAvatarForm}
-      avatarUrl={data.profile.avatar_url}
+      {uploadAvatarForm}
+      {deleteAvatarForm}
+      avatarUrl={profile.avatarUrl ?? ""}
     />
 
     <SettingsForm

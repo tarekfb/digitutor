@@ -1,7 +1,7 @@
 <script lang="ts">
   import ContactTeacherForm from "$lib/components/molecules/contact-teacher-form.svelte";
   import type { Tables } from "src/supabase";
-  import type { Listing } from "src/lib/shared/models/listing";
+  import type { DbListingWithProfile } from "src/lib/shared/models/listing";
   import type { SuperValidated, Infer } from "sveltekit-superforms/client";
   import ProfileHeaderInfo from "$lib/components/molecules/profile-header-info.svelte";
   import Wavy from "$lib/components/atoms/wavy.svelte";
@@ -11,7 +11,7 @@
   } from "src/lib/shared/models/conversation";
 
   export let teacher: Tables<"profiles">;
-  export let listing: Listing | undefined;
+  export let listing: DbListingWithProfile | undefined;
   export let requestContactForm: SuperValidated<
     Infer<typeof requestContactSchema>
   >;

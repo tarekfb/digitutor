@@ -3,14 +3,14 @@ import { getFailFormMessage, defaultErrorInfo } from "$lib/shared/constants/cons
 import { getProfileByUser } from "$lib/server/database/profiles";
 import { getListing } from "$lib/server/database/listings";
 import { fail, message, superValidate } from "sveltekit-superforms";
-import { requestContactSchema, startContactSchema, type Conversation } from "$lib/shared/models/conversation";
+import { requestContactSchema, startContactSchema, type DbConversationWithReferences } from "$lib/shared/models/conversation";
 import { addReviewSchema, type Review } from "$lib/shared/models/review";
 import { zod } from "sveltekit-superforms/adapters";
 import { getConversationForStudentAndTeacher, startConversation } from "$lib/server/database/conversations";
 import { redirect, setFlash } from "sveltekit-flash-message/server";
 import { ResourceAlreadyExistsError } from "src/lib/shared/errors/resource-already-exists-error.js";
 import { createReview, getReviewsByReceiver, getReviewsBySender } from "src/lib/server/database/review.js";
-import type { Listing } from "src/lib/shared/models/listing.js";
+import type { DbListingWithProfile } from "src/lib/shared/models/listing.js";
 import { type Message, ExternalErrorCodes } from "src/lib/shared/models/common.js";
 import { isErrorWithCode, loadContactTeacherForms } from "src/lib/shared/utils/utils";
 
@@ -48,7 +48,7 @@ export const load = async ({ locals: { supabase, safeGetSession }, params: { slu
     const userId = session?.user.id;
 
     const listingId = searchParams.get('id') || '';
-    let listing: Listing | undefined = undefined;
+    let listing: DbListingWithProfile | undefined = undefined;
     let listingMessage: Message | undefined = undefined;
     if (listingId) {
         try {
@@ -144,7 +144,7 @@ export const actions = {
         }
 
 
-        let conversation: Conversation | null = null;
+        let conversation: DbConversationWithReferences | null = null;
         try {
             conversation = await getConversationForStudentAndTeacher(supabase, session.user.id, slug);
         } catch (error) {

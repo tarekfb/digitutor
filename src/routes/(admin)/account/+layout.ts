@@ -1,26 +1,22 @@
 
-import type { Tables } from "src/supabase.js";
 import { redirect } from "@sveltejs/kit";
+import type { Profile } from "src/lib/shared/models/profile.js";
 
 export const load = async ({ data, url }) => {
-  const profile: Tables<"profiles"> | null = data.profile;
+  const { profile } = data;
 
   const createProfilePath = "/account/create-profile";
-  if (
-    profile &&
-    !_hasFullProfile(profile) &&
-    url.pathname !== createProfilePath
-  )
+  if (!_hasFullProfile(profile) && url.pathname !== createProfilePath)
     redirect(303, createProfilePath);
 
   return { profile }; // todo: available in parent? No need to return here?
 };
 
-export const _hasFullProfile = (profile: Tables<"profiles"> | null) => {
+export const _hasFullProfile = (profile: Profile) => {
   if (!profile)
     return false;
 
-  if (!profile.first_name || !profile.last_name)
+  if (!profile.firstName || !profile.lastName)
     return false;
 
   return true;

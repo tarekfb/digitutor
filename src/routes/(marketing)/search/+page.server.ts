@@ -7,7 +7,8 @@ import { zod } from "sveltekit-superforms/adapters";
 import { searchSchema, type SearchResult, } from "src/lib/shared/models/search";
 import type { Actions, PageServerLoad } from "./$types";
 import { type Message, ExternalErrorCodes } from "src/lib/shared/models/common";
-import { formatProfile, isErrorWithCode } from "src/lib/shared/utils/utils";
+import { isErrorWithCode } from "src/lib/shared/utils/utils";
+import { formatProfile } from "src/lib/shared/utils/profile/utils";
 
 export const load = (async ({ url, locals: { supabase } }) => {
     const query = url.searchParams.get('q') || '';

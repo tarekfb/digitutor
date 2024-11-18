@@ -19,8 +19,8 @@ export async function load({ parent }) {
   //   redirect(303, "/account/select_plan");
 
   const initFormData = {
-    firstName: profile.first_name ?? "",
-    lastName: profile.last_name ?? "",
+    firstName: profile.firstName ?? "",
+    lastName: profile.lastName ?? "",
   }
 
   try {

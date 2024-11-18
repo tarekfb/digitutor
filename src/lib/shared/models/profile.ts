@@ -4,6 +4,14 @@ import { signUpUserFields } from "./user";
 import { acceptedAvatarFormats, getFormatsHumanReadable, maxAvatarSize } from "../constants/constants";
 import { formatBytes } from "src/lib/shared/utils/utils";
 
+export type DbProfile = Tables<"profiles">
+
+export type Profile = Omit<DbProfile, "created_at" | "updated_at" | "first_name" | "last_name" | "avatar_url"> & {
+    firstName: string;
+    lastName: string;
+    avatarUrl: string | null | undefined;
+}
+
 export type FinishProfileInput = {
     firstName: string;
     lastName: string;
@@ -33,7 +41,7 @@ export type CreateProfile = {
     lastName: string;
 }
 
-export type Role = Pick<Tables<"profiles">, "role">["role"];
+export type Role = DbProfile["role"];
 
 export const avatarSchema = z.object({
     avatar: z
@@ -49,11 +57,3 @@ export const avatarSchema = z.object({
 export const deleteAvatarSchema = z.object({
     path: z.string(),
 });
-
-export type Profile = {
-    id: string;
-    firstName: string;
-    lastName: string;
-    avatarUrl: string | null | undefined;
-    role: "teacher" | "student";
-}

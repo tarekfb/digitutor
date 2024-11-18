@@ -1,11 +1,11 @@
 import type { SupabaseClient } from "@supabase/supabase-js";
 import type { Database } from "lucide-svelte";
-import type { Listing } from "src/lib/shared/models/listing";
+import type { DbListingWithProfile } from "src/lib/shared/models/listing";
 
 export const search = async (
   supabase: SupabaseClient<Database>,
   query: string,
-): Promise<Listing[]> => {
+): Promise<DbListingWithProfile[]> => {
 
   query = query
     .trim()
@@ -30,5 +30,5 @@ export const search = async (
     throw error;
   }
 
-  return data as unknown as Listing[];
+  return data as unknown as DbListingWithProfile[];
 };

@@ -1,13 +1,11 @@
-import { redirect, error, fail } from "@sveltejs/kit";
-import { defaultErrorInfo, initMessagesCount, defaultErrorTitle } from "$lib/shared/constants/constants";
-import { getMessages } from "$lib/server/database/messages";
-import { sendMessageSchema, type InputMessage } from "$lib/shared/models/conversation";
-import { getFailFormMessage } from "$lib/shared/constants/constants";
-import { message, superValidate } from "sveltekit-superforms";
+import { error } from "@sveltejs/kit";
+import { defaultErrorInfo } from "$lib/shared/constants/constants";
+import { sendMessageSchema, type ConversationWithReferences } from "$lib/shared/models/conversation";
+import { superValidate } from "sveltekit-superforms";
 import { zod } from "sveltekit-superforms/adapters";
-import { sendMessage } from "$lib/server/database/messages";
 import { getConversation } from "src/lib/server/database/conversations";
 import { ExternalErrorCodes } from "src/lib/shared/models/common";
+import { formatConversationWithReferences } from "src/lib/shared/utils/conversation/utils";
 import { isErrorWithCode } from "src/lib/shared/utils/utils";
 
 export const ssr = false;
@@ -15,9 +13,11 @@ export const ssr = false;
 export const load = async ({ locals: { supabase }, params: { slug }, parent }) => {
   const { profile } = await parent();
 
-  let conversation;
+  let conversation: ConversationWithReferences;
   try {
-    conversation = await getConversation(supabase, slug, profile);
+    const { role, id } = profile;
+    const dbConversation = await getConversation(supabase, slug, role, id);
+    conversation = formatConversationWithReferences(dbConversation);
   } catch (e) {
     if (isErrorWithCode(e)) {
       if (e.code === ExternalErrorCodes.InvalidInputSyntax)

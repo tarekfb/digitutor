@@ -20,17 +20,17 @@ export const load: PageServerLoad = async ({ parent, locals: { safeGetSession } 
     if (!session)
         throw redirect(303, "/sign-in");
 
-    const { profile } = await parent();
+    const { profile: { avatarUrl, firstName, lastName } } = await parent();
     const initName = {
-        firstName: profile.first_name,
-        lastName: profile.last_name
+        firstName,
+        lastName
     }
     const updateNameForm = await superValidate(initName, zod(nameSchema));
     const updateEmailForm = await superValidate({ email: session.user.email }, zod(emailSchema));
     const deleteAccountForm = await superValidate(zod(deleteAccountSchema));
     const updatePasswordForm = await superValidate(zod(passwordSchema));
     const uploadAvatarForm = await superValidate(zod(avatarSchema));
-    const deleteAvatarForm = await superValidate({ path: profile.avatar_url ?? '' }, zod(deleteAvatarSchema));
+    const deleteAvatarForm = await superValidate({ path: avatarUrl ?? '' }, zod(deleteAvatarSchema));
     return { updateNameForm, updateEmailForm, deleteAccountForm, updatePasswordForm, uploadAvatarForm, deleteAvatarForm };
 };
 

@@ -1,14 +1,15 @@
 import { error, fail } from "@sveltejs/kit";
 import { createListing, getListings } from "$lib/server/database/listings";
 import type { Actions, PageServerLoad } from "./$types";
-import { getFailFormMessage, defaultErrorDescription, getDefaultErrorInfo } from "$lib/shared/constants/constants";
+import { getFailFormMessage, getDefaultErrorInfo } from "$lib/shared/constants/constants";
 import { message, superValidate } from "sveltekit-superforms";
-import { initCreateListingSchema } from "$lib/shared/models/listing";
+import { initCreateListingSchema, type ListingWithProfile } from "$lib/shared/models/listing";
 import { zod } from "sveltekit-superforms/adapters";
 import { redirect } from "sveltekit-flash-message/server";
+import { formatListingWithProfile } from "src/lib/shared/utils/listing/utils";
 
 export const load: PageServerLoad = async ({
-  locals: { supabase, safeGetSession }, parent,
+  locals: { supabase, safeGetSession }, parent, depends
 }) => {
   const { session } = await safeGetSession();
   if (!session)
@@ -18,10 +19,11 @@ export const load: PageServerLoad = async ({
   if (profile.role !== 'teacher')
     redirect(303, '/account');
 
-
-  let listings;
+  let listings: ListingWithProfile[];
   try {
-    listings = await getListings(supabase, 10, session.user.id);
+    const dbListings = await getListings(supabase, 4, session.user.id);
+    listings = dbListings.map(listing => formatListingWithProfile(listing));
+    console.log(listings);
   } catch (e) {
     console.error("Unable to get listings for id " + session.user.id, e);
     error(500, getDefaultErrorInfo("Kunde inte hämta konversationer"));
@@ -39,7 +41,6 @@ export const actions: Actions = {
       redirect(303, "/sign-in");
 
     const form = await superValidate(event, zod(initCreateListingSchema));
-
 
     if (!form.valid) return fail(400, { form });
     const { title } = form.data;

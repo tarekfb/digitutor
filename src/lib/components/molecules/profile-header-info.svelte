@@ -5,7 +5,7 @@
   import { Button } from "$lib/components/ui/button/index.js";
   import * as Popover from "$lib/components/ui/popover/index.js";
   import type { Tables } from "src/supabase";
-  import type { Listing } from "src/lib/shared/models/listing";
+  import type { DbListingWithProfile } from "src/lib/shared/models/listing";
   import { cn } from "src/lib/shared/utils/utils.js";
   import SubjectItem from "../atoms/subject-item.svelte";
 
@@ -13,7 +13,7 @@
   export { className as class };
 
   export let teacher: Tables<"profiles">;
-  export let listing: Listing | undefined;
+  export let listing: DbListingWithProfile | undefined;
   export let light = false;
   export let maxSubjectsLength = 3;
 </script>
@@ -41,7 +41,7 @@
           <SubjectItem
             {subject}
             textStyling={light ? "text-background" : ""}
-            iconStyling="{light ? "text-primary" : "text-accent"}"
+            iconStyling={light ? "text-primary" : "text-accent"}
           />
         {/if}
       {/each}

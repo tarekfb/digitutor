@@ -6,8 +6,6 @@
   import { page } from "$app/stores";
   import { toast } from "svelte-sonner";
   import { getFlash } from "sveltekit-flash-message/client";
-  import Footer from "src/lib/components/organisms/footer.svelte";
-  import AccountLayout from "../../../../lib/components/templates/account-layout.svelte";
 
   export let data: PageData;
   $: ({ supabase, session, profile } = data);

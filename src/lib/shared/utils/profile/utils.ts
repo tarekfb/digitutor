@@ -1,3 +1,4 @@
+import type { DbProfile, Profile } from "../../models/profile";
 import type { DbDisplayProfile, DisplayProfile } from "../../models/review";
 
 export const formatDisplayProfile = ({ id, first_name, last_name, avatar_url, avg_rating, subjects }: DbDisplayProfile): DisplayProfile => {
@@ -9,4 +10,11 @@ export const formatDisplayProfile = ({ id, first_name, last_name, avatar_url, av
         avgRating: avg_rating || 0,
         subjects,
     };
+}
+
+export const formatProfile = ({ id, role, first_name, last_name, avatar_url }: DbProfile): Profile => {
+    if (role === "admin")
+        throw new Error("Unsupported role")
+
+    return { id, role, firstName: first_name, lastName: last_name, avatarUrl: avatar_url }
 }

@@ -8,7 +8,7 @@ import type { SupabaseClient, Session } from "@supabase/supabase-js";
 import { redirect } from "@sveltejs/kit";
 import type { Database } from "lucide-svelte";
 import type { Tables } from "src/supabase";
-import type { Profile } from "../models/profile";
+import type { DbProfile, Profile } from "../models/profile";
 import { superValidate } from "sveltekit-superforms";
 import { zod } from "sveltekit-superforms/adapters";
 import { requestContactSchema, startContactSchema } from "../models/conversation";
@@ -189,13 +189,6 @@ const getSwedishMonthName = (monthNumber: number) => {
   ];
   return monthNames[monthNumber - 1];
 };
-
-export const formatProfile = ({ id, role, first_name: firstName, last_name: lastName, avatar_url: avatarUrl }: Tables<"profiles">): Profile => {
-  if (role === "admin")
-    throw new Error("Unsupported role")
-
-  return { id, role, firstName, lastName, avatarUrl }
-}
 
 export const loadContactTeacherForms = async (teacher?: Tables<"profiles">, student?: Tables<"profiles">) => {
   const initValues = { teacher: teacher?.id, role: student?.role ?? "" }
