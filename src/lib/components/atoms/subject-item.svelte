@@ -7,7 +7,7 @@
   export { className as class };
   export let iconStyling = "";
   export let textStyling = "";
-  export let subject;
+  export let subject: number;
   export let li = true;
   export let muted = true;
 </script>

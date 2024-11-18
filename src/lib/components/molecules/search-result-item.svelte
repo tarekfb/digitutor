@@ -6,6 +6,7 @@
   import SubjectItem from "../atoms/subject-item.svelte";
   import Link from "../atoms/link.svelte";
   import SeeMore from "./see-more.svelte";
+  import { languages } from "src/lib/shared/models/common";
 
   const rating = 4.3;
   const nbrOfReviews = 11;
@@ -13,9 +14,7 @@
   const boxStyling = "p-0 m-0 h-8";
 
   export let result: SearchResult;
-  export let searchTerm = 10;
-  const searchedSubject =
-    result.subjects.find((s) => s == searchTerm) ?? result.subjects.at(0);
+  export let searchedSubject: number;
 </script>
 
 <div class="flex flex-col gap-y-4 gap-x-4">
