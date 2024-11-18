@@ -54,20 +54,24 @@ export const load = async ({ locals: { supabase, safeGetSession }, params: { slu
         try {
             listing = await getListing(supabase, listingId);
             if (!listing.visible && userId !== listing.profile.id) {
-                listingMessage = getFailFormMessage("Vi kunde inte hämta annonsen", "Denna annonsen är inte tillgänglig just nu.")
+                listingMessage = getFailFormMessage("Vi kunde inte hämta din annons", "Denna annonsen är inte tillgänglig just nu.")
+                listing = undefined;
+            }
+            if (listing?.profile.id !== teacher.id) {
+                listingMessage = getFailFormMessage("Vi kunde inte hämta din annons")
                 listing = undefined;
             }
         } catch (error) {
             if (isErrorWithCode(error)) {
                 if (error.code === ExternalErrorCodes.InvalidInputSyntax)
-                    listingMessage = getFailFormMessage("Vi kunde inte hitta annonsen");
+                    listingMessage = getFailFormMessage("Vi kunde inte hitta din annons");
 
                 if (error.code === ExternalErrorCodes.ContainsZeroRows)
-                    listingMessage = getFailFormMessage("Vi kunde inte hitta annonsen");
+                    listingMessage = getFailFormMessage("Vi kunde inte hitta din annons");
             }
-            else 
-                listingMessage = getFailFormMessage("Vi kunde inte hämta annonsen", "Något gick fel. Kontakta oss om detta fortsätter.");
-            
+            else
+                listingMessage = getFailFormMessage("Vi kunde inte hämta din annons", "Något gick fel. Kontakta oss om detta fortsätter.");
+
             listing = undefined;
             console.error("Error when reading listings for profile with id: " + slug, error);
         }
