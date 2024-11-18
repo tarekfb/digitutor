@@ -35,7 +35,7 @@ export const load = async ({ locals: { supabase }, params: { slug }, parent }) =
         });
     }
     console.error("Unknown error when reading listing with id: " + slug, e);
-    error(500, getDefaultErrorInfo("Kunde inte hämta annonsen"));
+    error(500, getDefaultErrorInfo("Vi kunde inte hämta annonsen"));
   }
 
   if (session?.user.id !== listing.profile.id) {

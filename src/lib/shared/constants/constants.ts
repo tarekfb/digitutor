@@ -24,7 +24,7 @@ export const getFailFormMessage = (title?: string, description?: string, message
   {
     variant,
     title: title ?? "Något gick fel",
-    description: description ?? "Kontakta oss om detta fortsätter.",
+    description: description ?? "Du kan kontakta oss om detta fortsätter.",
     id: messageId ?? MessageId.Unknown,
     data: data ?? undefined
   })

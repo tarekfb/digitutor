@@ -60,12 +60,16 @@ export const load = async ({ locals: { supabase, safeGetSession }, params: { slu
         } catch (error) {
             if (isErrorWithCode(error)) {
                 if (error.code === ExternalErrorCodes.InvalidInputSyntax)
-                    listingMessage = getFailFormMessage("Vi kunde inte hitta annonsen", "Annonsen hittades inte. Kontakta oss om detta fortsätter.");
+                    listingMessage = getFailFormMessage("Vi kunde inte hitta annonsen");
+
+                if (error.code === ExternalErrorCodes.ContainsZeroRows)
+                    listingMessage = getFailFormMessage("Vi kunde inte hitta annonsen");
             }
-            else {
-                console.error("Error when reading listings for profile with id: " + slug, error);
+            else 
                 listingMessage = getFailFormMessage("Vi kunde inte hämta annonsen", "Något gick fel. Kontakta oss om detta fortsätter.");
-            }
+            
+            listing = undefined;
+            console.error("Error when reading listings for profile with id: " + slug, error);
         }
     }
 
