@@ -1,13 +1,14 @@
 import { error, fail, redirect } from "@sveltejs/kit";
 import type { PageServerLoad } from "./$types";
-import { getFailFormMessage, unknownErrorTitle } from "$lib/shared/constants/constants";
+import { getFailFormMessage, defaultErrorInfo } from "$lib/shared/constants/constants";
 import { message, setError, superValidate } from "sveltekit-superforms";
 import { zod } from "sveltekit-superforms/adapters";
 import { signUpSchema } from "$lib/shared/models/user";
 import { createProfile } from "$lib/server/database/profiles";
 import type { CreateProfile } from "$lib/shared/models/profile";
 import { getHighQualityReviews } from "src/lib/server/database/review";
-import type { PsqlError } from "src/lib/shared/models/common";
+import { ExternalErrorCodes } from "src/lib/shared/models/common";
+import { isErrorWithCode } from "src/lib/shared/utils/utils";
 
 
 export const load: PageServerLoad = async ({ locals: { supabase } }) => {
@@ -18,8 +19,7 @@ export const load: PageServerLoad = async ({ locals: { supabase } }) => {
         review = longReviews[0] ?? reviews[0];
     } catch (e) {
         console.error("Error when reviews signup display, perhaps didnt find valid review", e);
-        error(500, unknownErrorTitle);
-
+        error(500, { ...defaultErrorInfo });
     };
     const form = await superValidate(zod(signUpSchema))
     return { form, review };
@@ -76,9 +76,8 @@ export const actions = {
             await createProfile(supabase, inputUser)
             return message(form, { variant: "success", title: "Verifiera e-postadress", description: "Kika i din inkorg för att verifiera e-post: " + email + ".", status: 201 });
         } catch (error) {
-            if (error && typeof error === "object") {
-                const psqlError = error as PsqlError;
-                if (psqlError.code && psqlError.code === "23505") // duplicate key constraint violation - somehow profile exists but not user. Allow.
+            if (isErrorWithCode(error)) {
+                if (error.code === ExternalErrorCodes.DuplicateKeyConstraintViolation) // somehow profile exists but not user. Allow.
                     return message(form, { variant: "success", title: "Verifiera e-postadress", description: "Kika i din inkorg för att verifiera e-post: " + email + ".", status: 201 });
             }
 

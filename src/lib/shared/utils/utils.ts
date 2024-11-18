@@ -4,7 +4,7 @@ import { cubicOut } from "svelte/easing";
 import type { TransitionConfig } from "svelte/transition";
 import type { z } from "zod";
 import { invalidate } from "$app/navigation";
-import type { SupabaseClient, Session, PostgrestError } from "@supabase/supabase-js";
+import type { SupabaseClient, Session } from "@supabase/supabase-js";
 import { redirect } from "@sveltejs/kit";
 import type { Database } from "lucide-svelte";
 import type { Tables } from "src/supabase";
@@ -12,6 +12,8 @@ import type { Profile } from "../models/profile";
 import { superValidate } from "sveltekit-superforms";
 import { zod } from "sveltekit-superforms/adapters";
 import { requestContactSchema, startContactSchema } from "../models/conversation";
+import type { ErrorWithCode } from "../errors/error-with-code";
+import type { ErrorWithStatusCode } from "../errors/error-with-statuscode";
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
@@ -131,17 +133,8 @@ export const removeUndefined = (fields: Record<string, any>) =>
     Object.entries(fields).filter(([_, v]) => v !== undefined)
   );
 
-export const isPostgrestError = (error: any): error is PostgrestError => (
-  typeof error.message === 'string' &&
-  typeof error.details === 'string' &&
-  typeof error.code === 'string'
-);
-
-export const isStorageErrorCustom = (error: any): error is PostgrestError => (
-  typeof error.error === 'string' &&
-  typeof error.message === 'string' &&
-  typeof error.statusCode === 'string'
-);
+export const isErrorWithCode = (error: any): error is ErrorWithCode => 'code' in error && typeof error.code === 'string';
+export const isErrorWithStatusCode = (error: any): error is ErrorWithStatusCode => 'statusCode' in error && typeof error.statusCode === 'string';
 
 export const formatBytes = (bytes: number, decimals = 2) => {
   if (!+bytes) return '0 B'

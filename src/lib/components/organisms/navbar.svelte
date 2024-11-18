@@ -40,10 +40,6 @@
             >Skapa konto</Button
           >
         {:else if profile}
-          <Button on:click={() => goto("/account")}>
-            <UserRound class="mr-2 h-4 w-4" />
-            Konto
-          </Button>
           <DropdownMenu.Root>
             <DropdownMenu.Trigger asChild let:builder>
               <Button

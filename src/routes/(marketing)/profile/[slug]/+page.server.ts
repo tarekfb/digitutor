@@ -1,5 +1,5 @@
 import { error } from "@sveltejs/kit";
-import { getFailFormMessage, unknownErrorTitle } from "$lib/shared/constants/constants";
+import { getFailFormMessage, defaultErrorInfo } from "$lib/shared/constants/constants";
 import { getProfileByUser } from "$lib/server/database/profiles";
 import { getListing } from "$lib/server/database/listings";
 import { fail, message, superValidate } from "sveltekit-superforms";
@@ -11,22 +11,34 @@ import { redirect, setFlash } from "sveltekit-flash-message/server";
 import { ResourceAlreadyExistsError } from "src/lib/shared/errors/resource-already-exists-error.js";
 import { createReview, getReviewsByReceiver, getReviewsBySender } from "src/lib/server/database/review.js";
 import type { Listing } from "src/lib/shared/models/listing.js";
-import type { Message, PsqlError } from "src/lib/shared/models/common.js";
-import { loadContactTeacherForms } from "src/lib/shared/utils/utils";
+import { type Message, ExternalErrorCodes } from "src/lib/shared/models/common.js";
+import { isErrorWithCode, loadContactTeacherForms } from "src/lib/shared/utils/utils";
 
 export const load = async ({ locals: { supabase, safeGetSession }, params: { slug }, parent, url: { searchParams } }) => {
     let teacher;
     try {
         teacher = await getProfileByUser(supabase, slug);
     } catch (e) {
-        console.error("Error when reading profile with id: " + slug, e);
-        error(500, unknownErrorTitle);
+        if (isErrorWithCode(e)) {
+            if (e.code === ExternalErrorCodes.InvalidInputSyntax)
+                error(404, {
+                    message: "Vi kunde inte hitta profilen",
+                    description: "Profilen finns inte eller har tagits bort. Du kan kontakta oss om detta fortsätter"
+                });
 
+            if (e.code === ExternalErrorCodes.ContainsZeroRows)
+                error(404, {
+                    message: "Vi kunde inte hitta profilen",
+                    description: "Profilen finns inte eller har tagits bort."
+                });
+        }
+        console.error("Error when reading profile with id: " + slug, e);
+        error(500, { ...defaultErrorInfo });
     };
 
     if (teacher.role !== "teacher") {
         console.error("Attempted to read a non-teacher profile: " + slug);
-        error(500, unknownErrorTitle);
+        error(500, { ...defaultErrorInfo });
     }
 
     const parentData = await parent();
@@ -42,18 +54,17 @@ export const load = async ({ locals: { supabase, safeGetSession }, params: { slu
         try {
             listing = await getListing(supabase, listingId);
             if (!listing.visible && userId !== listing.profile.id) {
-                listingMessage = getFailFormMessage("Kunde inte hämta annonsen", "Denna annonsen är inte tillgänglig just nu.")
+                listingMessage = getFailFormMessage("Vi kunde inte hämta annonsen", "Denna annonsen är inte tillgänglig just nu.")
                 listing = undefined;
             }
         } catch (error) {
-            if (error && typeof error === "object") {
-                const psqlError = error as PsqlError;
-                if (psqlError.code && psqlError.code === "22P02") // invalid input syntax for type uuid - syntax for listing id query param is faulty 
-                    listingMessage = getFailFormMessage("Kunde inte hämta annonsen", "Annonsen hittades inte. Kontakta oss om detta fortsätter.");
+            if (isErrorWithCode(error)) {
+                if (error.code === ExternalErrorCodes.InvalidInputSyntax)
+                    listingMessage = getFailFormMessage("Vi kunde inte hitta annonsen", "Annonsen hittades inte. Kontakta oss om detta fortsätter.");
             }
             else {
                 console.error("Error when reading listings for profile with id: " + slug, error);
-                listingMessage = getFailFormMessage("Kunde inte hämta annonsen", "Något gick fel. Kontakta oss om detta fortsätter.");
+                listingMessage = getFailFormMessage("Vi kunde inte hämta annonsen", "Något gick fel. Kontakta oss om detta fortsätter.");
             }
         }
     }
@@ -67,7 +78,7 @@ export const load = async ({ locals: { supabase, safeGetSession }, params: { slu
         const { user: { id } } = await safeGetSession();
         const isOwner = id === slug;
         if (isOwner) // only show error info to owner
-            reviewsMessage = getFailFormMessage("Kunde inte hämta recensioner", "Något gick fel. Kontakta oss om detta fortsätter.");
+            reviewsMessage = getFailFormMessage("Vi kunde inte hämta recensioner", "Något gick fel. Kontakta oss om detta fortsätter.");
     }
 
     let allowCreateReview: boolean = false;

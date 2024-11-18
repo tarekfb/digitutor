@@ -1,7 +1,7 @@
 import { error, fail } from "@sveltejs/kit";
 import { createListing, getListings } from "$lib/server/database/listings";
 import type { Actions, PageServerLoad } from "./$types";
-import { getFailFormMessage } from "$lib/shared/constants/constants";
+import { getFailFormMessage, defaultErrorDescription, getDefaultErrorInfo } from "$lib/shared/constants/constants";
 import { message, superValidate } from "sveltekit-superforms";
 import { initCreateListingSchema } from "$lib/shared/models/listing";
 import { zod } from "sveltekit-superforms/adapters";
@@ -24,14 +24,10 @@ export const load: PageServerLoad = async ({
     listings = await getListings(supabase, 10, session.user.id);
   } catch (e) {
     console.error("Unable to get listings for id " + session.user.id, e);
-    error(500, {
-      message: "Kunde inte hämta konversationer",
-      description: "Du kan kontakta oss om detta fortsätter."
-    });
+    error(500, getDefaultErrorInfo("Kunde inte hämta konversationer"));
   }
 
   const form = await superValidate({ nbrOfListings: listings.length }, zod(initCreateListingSchema), { errors: false })
-
   return { form, listings };
 };
 

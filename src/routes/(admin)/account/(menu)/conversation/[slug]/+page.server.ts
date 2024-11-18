@@ -1,5 +1,5 @@
 import { redirect, error, fail } from "@sveltejs/kit";
-import { initMessagesCount, unknownErrorTitle } from "$lib/shared/constants/constants";
+import { defaultErrorInfo, initMessagesCount, defaultErrorTitle } from "$lib/shared/constants/constants";
 import { getMessages } from "$lib/server/database/messages";
 import { sendMessageSchema, type InputMessage } from "$lib/shared/models/conversation";
 import { getFailFormMessage } from "$lib/shared/constants/constants";
@@ -18,7 +18,7 @@ export const load = async ({ locals: { supabase }, params: { slug }, parent }) =
     conversation = await getConversation(supabase, slug, profile);
   } catch (e) {
     console.error("Unable to find conversation for slug " + slug, e);
-    error(500, unknownErrorTitle);
+    error(500, { ...defaultErrorInfo });
   }
 
 

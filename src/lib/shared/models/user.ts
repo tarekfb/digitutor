@@ -16,7 +16,7 @@ export const signUpUserFields: TypeToZod<SignUpUser> = {
         .string()
         .min(5, "Måste vara minst 5 karaktärer."),
     role: z
-        .enum(["student", "teacher"]),
+        .enum(["student", "teacher", "admin"]),
     first_name: z
         .string()
         .min(1, "Får inte vara tomt.")
@@ -30,10 +30,7 @@ export const signUpUserFields: TypeToZod<SignUpUser> = {
         .refine((s) => s === true, "Villkoren är obligatoriska.")
 }
 
-export const signUpSchema = z.object(signUpUserFields).refine((data) => data.first_name.trim() !== "", {
-    message: "Får inte vara tomt.",
-    path: ["first_name"],
-});
+export const signUpSchema = z.object(signUpUserFields);
 
 export type SignInUser = {
     email: string;
