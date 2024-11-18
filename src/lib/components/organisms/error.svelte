@@ -20,9 +20,9 @@
 </script>
 
 <div
-  class="max-w-[42rem] md:max-w-[60rem] text-center flex flex-col items-center gap-y-4 md:gap-y-6 self-center m-8"
+  class="max-w-[42rem] md:min-w-[48rem] lg:min-w-[60rem] text-center flex flex-col items-center gap-y-4 md:gap-y-6 self-center m-8"
 >
-  <div class=" flex flex-col items-center gap-y-4 md:gap-y-6">
+  <div class="flex flex-col items-center gap-y-4 md:gap-y-6">
     <PrimaryTitle class="text-4xl md:text-5xl font-normal whitespace-normal"
       >{title}</PrimaryTitle
     >
@@ -33,7 +33,9 @@
       {description}
     </p>
   </div>
-  <ul class="flex flex-col w-full h-62 gap-4 md:flex-row mt-4 md:mt-6">
+  <ul
+    class="flex flex-col w-3/4 md:w-full h-62 gap-4 md:flex-row mt-4 md:mt-6"
+  >
     <ErrorNav text="Tillbaka till startsidan" href="/">
       <Home class={iconStyling} />
     </ErrorNav>
