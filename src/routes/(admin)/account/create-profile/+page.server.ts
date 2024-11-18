@@ -1,4 +1,4 @@
-import { unknownErrorMessage, unknownErrorTitle } from "$lib/shared/constants/constants";
+import { defaultErrorInfo, defaultErrorTitle } from "$lib/shared/constants/constants";
 import { _hasFullProfile } from "src/routes/(admin)/account/+layout.js";
 import { error, fail, redirect } from "@sveltejs/kit";
 import { zod } from "sveltekit-superforms/adapters";
@@ -28,8 +28,7 @@ export async function load({ parent }) {
     return { form, data };
   } catch (e) {
     console.error("Error when loading createprofile", e);
-    error(500, unknownErrorTitle);
-
+    error(500, { ...defaultErrorInfo });
   };
 }
 
@@ -58,7 +57,7 @@ export const actions = {
     } catch (error) {
       console.error("Error on complete profile for userid " + user.id, { error });
       return fail(500, {
-        errorMessage: unknownErrorMessage, // error or fail? todo fix
+        errorMessage: defaultErrorTitle, // error or fail? todo fix
       });
     }
 

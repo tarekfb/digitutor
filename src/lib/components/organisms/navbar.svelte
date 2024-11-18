@@ -24,9 +24,13 @@
 <header
   class="sticky top-0 z-40 w-full bg-accent text-background overflow-x-hidden h-16 md:h-20 flex items-center gap-x-3 sm:justify-between sm:space-x-0 px-2 md:px-4 lg:px-8"
 >
-  <a href="/" class="text-3xl md:text-5xl font-semibold hover:text-primary">
+  <a
+    href="/"
+    class="text-3xl md:text-5xl font-semibold hover:text-foreground md:hover:text-primary"
+  >
     {websiteName}
   </a>
+
   <div class="flex-1 flex items-center justify-end">
     <nav class="flex items-center gap-x-2 md:gap-x-4">
       {#if profile !== false}
@@ -40,10 +44,6 @@
             >Skapa konto</Button
           >
         {:else if profile}
-          <Button on:click={() => goto("/account")}>
-            <UserRound class="mr-2 h-4 w-4" />
-            Konto
-          </Button>
           <DropdownMenu.Root>
             <DropdownMenu.Trigger asChild let:builder>
               <Button

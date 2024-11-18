@@ -6,8 +6,8 @@ import { fail, message, superValidate } from "sveltekit-superforms";
 import { zod } from "sveltekit-superforms/adapters";
 import { searchSchema, type SearchResult, } from "src/lib/shared/models/search";
 import type { Actions, PageServerLoad } from "./$types";
-import type { Message, PsqlError } from "src/lib/shared/models/common";
-import { formatProfile } from "src/lib/shared/utils/utils";
+import { type Message, ExternalErrorCodes } from "src/lib/shared/models/common";
+import { formatProfile, isErrorWithCode } from "src/lib/shared/utils/utils";
 
 export const load = (async ({ url, locals: { supabase } }) => {
     const query = url.searchParams.get('q') || '';
@@ -33,9 +33,8 @@ export const load = (async ({ url, locals: { supabase } }) => {
         }));
 
     } catch (error) {
-        if (error && typeof error === "object") {
-            const psqlError = error as PsqlError;
-            if (psqlError.code == "42601") // syntax error
+        if (isErrorWithCode(error)) {
+            if (error.code == ExternalErrorCodes.SyntaxError)
                 initMessage = getFailFormMessage("Ogiltiga karaktärer", "Testa söka på något annat.");
             else
                 initMessage = getFailFormMessage("Något gick fel", "Testa söka på något annat, eller försök igen senare.");
@@ -78,9 +77,8 @@ export const actions: Actions = {
 
             return { form, formatted }
         } catch (error) {
-            if (error && typeof error === "object") {
-                const psqlError = error as PsqlError;
-                if (psqlError.code && psqlError.code === "42601") // syntax error
+            if (isErrorWithCode(error)) {
+                if (error.code === ExternalErrorCodes.SyntaxError)
                     return message(form, getFailFormMessage("Ogiltiga karaktärer", "Testa söka på något annat."), { status: 400 });
             }
             console.error("Error searching for teachers with following search: " + query, error);

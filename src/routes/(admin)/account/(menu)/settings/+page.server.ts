@@ -9,11 +9,11 @@ import { deleteAccountSchema, passwordSchema } from "$lib/shared/models/user";
 import { isAuthApiError } from "@supabase/supabase-js";
 import { redirect } from "sveltekit-flash-message/server";
 import { deleteAvatar, uploadAvatar } from "src/lib/server/database/avatar";
-import { formatBytes, isStorageErrorCustom, verifyAvatarOwnership } from "src/lib/shared/utils/utils";
-import type { StorageErrorCustom } from "src/lib/shared/errors/storage-error-custom";
+import { formatBytes, isErrorWithStatusCode, verifyAvatarOwnership } from "src/lib/shared/utils/utils";
 import { Buffer } from 'node:buffer';
 import { CF_IMAGE_RESIZE_URL } from '$env/static/private'
 import { ResourceNotFoundError } from "src/lib/shared/errors/missing-error";
+import { ExternalErrorCodes } from "src/lib/shared/models/common";
 
 export const load: PageServerLoad = async ({ parent, locals: { safeGetSession } }) => {
     const { session } = await safeGetSession();
@@ -113,9 +113,8 @@ export const actions = {
             const fileName = `${user.id}---${crypto.randomUUID()}.${format}`
             avatarPath = await uploadAvatar(supabase, fileName, input);
         } catch (error) {
-            if (isStorageErrorCustom(error)) {
-                const storageError = error as unknown as StorageErrorCustom;
-                if (storageError.statusCode === '413')
+            if (isErrorWithStatusCode(error)) {
+                if (error.statusCode === ExternalErrorCodes.FileTooLargeStorageError)
                     return message(form, getFailFormMessage("Filen är för stor", `Din fil är ${formatBytes(Buffer.byteLength(input))}, maxgränsen är ${formatBytes(maxAvatarSize)}.`), { status: 413 });
             }
             console.error("Unknown error on upload avatar", error);

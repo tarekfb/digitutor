@@ -28,7 +28,7 @@ export const emailSchema = z.object({
 
 export type CreateProfile = {
     id: string;
-    role: "teacher" | "student";
+    role: "teacher" | "student" | "admin";
     firstName: string;
     lastName: string;
 }

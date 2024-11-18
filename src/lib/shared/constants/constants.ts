@@ -5,14 +5,26 @@ export const localBaseUrl = 'http://localhost:5173';
 export const testBaseUrl = 'https://dev.mindic.pages.dev';
 export const prodBaseUrl = 'https://mindic.pro';
 
-export const unknownErrorMessage = "Något gick fel. Kontakta oss om detta fortsätter."
-export const unknownErrorTitle = "Något gick fel...";
+export const defaultErrorDescription = "Något gick fel. Du kan kontakta oss om detta fortsätter."
+export const defaultErrorTitle = "Något gick fel...";
+export const defaultErrorInfo: App.Error = {
+  message: defaultErrorTitle,
+  description: "Ett oväntat fel uppstod. Du kan kontakta oss om detta fortsätter."
+}
+
+export const getDefaultErrorInfo = (message?: string, description?: string, id?: MessageId, data?: any): App.Error => (
+  {
+    message: message ?? defaultErrorTitle,
+    description: description ?? defaultErrorDescription,
+    id: id ?? MessageId.Unknown,
+    data: data ?? undefined
+  })
 
 export const getFailFormMessage = (title?: string, description?: string, messageId?: MessageId, data?: any, variant: "destructive" | "default" | "warning" = "destructive"): Message => (
   {
     variant,
     title: title ?? "Något gick fel",
-    description: description ?? "Kontakta oss om detta fortsätter.",
+    description: description ?? "Du kan kontakta oss om detta fortsätter.",
     id: messageId ?? MessageId.Unknown,
     data: data ?? undefined
   })

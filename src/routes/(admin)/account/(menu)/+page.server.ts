@@ -1,6 +1,6 @@
 import { error } from "@sveltejs/kit";
 import type { PageServerLoad } from "./$types";
-import { unknownErrorTitle } from "$lib/shared/constants/constants";
+import { defaultErrorInfo, defaultErrorTitle } from "$lib/shared/constants/constants";
 import { redirect } from "sveltekit-flash-message/server";
 import { getConversations } from "src/lib/server/database/conversations";
 
@@ -16,8 +16,7 @@ export const load: PageServerLoad = async ({
     conversations = await getConversations(supabase, session.user.id);
   } catch (e) {
     console.error(e);
-    error(500, unknownErrorTitle);
-
+    error(500, { ...defaultErrorInfo });
   }
 
   const { profile } = await parent();

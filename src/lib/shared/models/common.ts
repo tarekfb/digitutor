@@ -59,8 +59,6 @@ export const languages = [
   { label: "SQLite", id: 55, altLabel: "" }
 ];
 
-
-
 export type Message = {
   title: string;
   description: string;
@@ -69,7 +67,10 @@ export type Message = {
   data: any;
 };
 
-export type PsqlError = {
-  code: string;
-  message: string;
-}
+export enum ExternalErrorCodes {
+  InvalidInputSyntax = "22P02",
+  ContainsZeroRows = "PGRST116",
+  FileTooLargeStorageError = "413",
+  DuplicateKeyConstraintViolation = "23505",
+  SyntaxError = "42601"
+} 

@@ -10,6 +10,7 @@
   import { Button } from "../ui/button";
   import { goto } from "$app/navigation";
   import { Skeleton } from "$lib/components/ui/skeleton/index.js";
+  import { defaultErrorDescription } from "$lib/shared/constants/constants";
 
   export let chatStore: WritableLoadable<Message[]>;
   export let self: Tables<"profiles">;
@@ -100,8 +101,8 @@
       {/each}
     {:catch error}
       <AlertMessage
-        title="Kunde inte hämta meddelanden"
-        description="Något gick fel, kontakta oss om detta fortsätter."
+        title="Vi kunde inte hämta några meddelanden"
+        description={defaultErrorDescription}
         variant="destructive"
         descriptionClass="text-md"
       />

@@ -1,6 +1,6 @@
 import { error, fail, redirect } from "@sveltejs/kit";
 import type { Actions, PageServerLoad } from "./$types";
-import { MessageId, getFailFormMessage } from "$lib/shared/constants/constants";
+import { MessageId, getDefaultErrorInfo, getFailFormMessage } from "$lib/shared/constants/constants";
 import { message, superValidate } from "sveltekit-superforms";
 import { zod } from "sveltekit-superforms/adapters";
 import { resendSchema, signInSchema } from "$lib/shared/models/user";
@@ -16,9 +16,8 @@ export const load: PageServerLoad = async ({ locals: { supabase } }) => {
     }
     catch (e) {
         console.error("Error when fetching signin display review, perhaps didnt find valid review", e);
-        error(500, {
-            message: "", // todo: as in auth, dont fail the page. just skip displaying the review
-        });
+        error(500, getDefaultErrorInfo(""));
+        // todo: as in auth, dont fail the page. just skip displaying the review
     }
 
     enum Subjects { // Todo fix with new suibjects system

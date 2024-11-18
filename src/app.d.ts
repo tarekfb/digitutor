@@ -18,7 +18,7 @@ declare global {
     }
     interface Error {
       message: string,
-      description?: string,
+      description: string,
       id?: MessageId,
       data?: any,
     }

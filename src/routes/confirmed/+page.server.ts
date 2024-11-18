@@ -1,7 +1,7 @@
 import type { EmailOtpType } from '@supabase/supabase-js'
 import { error } from '@sveltejs/kit';
 import type { PageServerLoad } from './$types';
-import { unknownErrorTitle } from '$lib/shared/constants/constants';
+import { defaultErrorDescription, defaultErrorInfo, getDefaultErrorInfo } from '$lib/shared/constants/constants';
 
 export const load: PageServerLoad = async (event) => {
     const { url, locals: { supabase } } = event;
@@ -41,14 +41,14 @@ export const load: PageServerLoad = async (event) => {
 
         if (!user) {
             console.error("User data was null on verify otp on email confirmation", e);
-            error(500, unknownErrorTitle);
+            error(500, { ...defaultErrorInfo });
         }
 
         redirectTo.searchParams.delete('next')
         return { email: user.email };
     }
 
-    error(500, "Det saknas lite info för att verifiera dig");
+    error(500, getDefaultErrorInfo("Det saknas lite info för att verifiera dig"));
     // redirectTo.pathname = '/error'
     // return redirect(303, redirectTo)
 

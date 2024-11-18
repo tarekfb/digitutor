@@ -2,7 +2,6 @@ import { expect } from '@playwright/test';
 import { test } from '../env-options';
 
 test('fetch listing', async ({ page, listingId, profileId }) => {
-  console.log(profileId);
   await page.goto(`${process.env.BASE_URL || ""}/profile/${profileId}?id=${listingId}`);
   await expect(page.getByText('SEK')).toBeVisible();
 });
