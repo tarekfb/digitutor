@@ -4,16 +4,16 @@
   import Stars from "src/lib/components/atoms/stars.svelte";
   import { Button } from "$lib/components/ui/button/index.js";
   import * as Popover from "$lib/components/ui/popover/index.js";
-  import type { Tables } from "src/supabase";
-  import type { DbListingWithProfile } from "src/lib/shared/models/listing";
+  import type { ListingWithProfile } from "src/lib/shared/models/listing";
   import { cn } from "src/lib/shared/utils/utils.js";
   import SubjectItem from "../atoms/subject-item.svelte";
+  import type { Profile } from "src/lib/shared/models/profile";
 
   let className: string | null | undefined = undefined;
   export { className as class };
 
-  export let teacher: Tables<"profiles">;
-  export let listing: DbListingWithProfile | undefined;
+  export let teacher: Profile;
+  export let listing: ListingWithProfile | undefined;
   export let light = false;
   export let maxSubjectsLength = 3;
 </script>
@@ -25,11 +25,11 @@
   )}
 >
   <div class="flex flex-col gap-y-2">
-    <PrimaryTitle class="font-semibold">{teacher.first_name}</PrimaryTitle>
+    <PrimaryTitle class="font-semibold">{teacher.firstName}</PrimaryTitle>
     <Stars rating={4.7} size={5} />
     {#if listing}
       <SecondaryTitle>
-        {listing.hourly_price} SEK
+        {listing.hourlyPrice} SEK
       </SecondaryTitle>
     {/if}
   </div>

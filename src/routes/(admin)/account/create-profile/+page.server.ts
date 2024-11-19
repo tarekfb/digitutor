@@ -1,17 +1,17 @@
 import { defaultErrorInfo, defaultErrorTitle } from "$lib/shared/constants/constants";
-import { _hasFullProfile } from "src/routes/(admin)/account/+layout.js";
 import { error, fail, redirect } from "@sveltejs/kit";
 import { zod } from "sveltekit-superforms/adapters";
 import { message, superValidate } from "sveltekit-superforms/client";
 import { nameSchema, type ProfileInput } from "$lib/shared/models/profile";
 import { updateProfile } from "$lib/server/database/profiles.js";
+import { hasFullProfile } from "src/lib/shared/utils/profile/utils";
 
 export async function load({ parent }) {
   const data = await parent();
   const profile = data.profile;
 
   // user completed their profile
-  if (_hasFullProfile(profile))
+  if (hasFullProfile(profile))
     redirect(303, "/account");
 
   // redirect to select plan if student

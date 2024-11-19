@@ -4,12 +4,12 @@
   import { UserRound, LogOutIcon } from "lucide-svelte";
   // import Logo from "$lib/components/atoms/logo.svelte";
   import { goto } from "$app/navigation";
-  import type { Tables } from "src/supabase";
+  import type { Profile } from "src/lib/shared/models/profile";
   import { websiteName } from "../../shared/constants/constants";
   import Avatar from "../atoms/avatar.svelte";
   import LoadingSpinner from "../atoms/loading-spinner.svelte";
 
-  export let profile: Tables<"profiles"> | undefined | null | false;
+  export let profile: Profile | undefined | null | false;
   export let logout: (() => void) | false;
 
   let logoutLoading = false;
@@ -52,9 +52,9 @@
                 class="relative h-8 w-8 rounded-full mx-1"
               >
                 <Avatar
-                  url={profile.avatar_url ?? ""}
-                  firstName={profile.first_name}
-                  lastName={profile.last_name}
+                  url={profile.avatarUrl ?? ""}
+                  firstName={profile.firstName}
+                  lastName={profile.lastName}
                   role={profile.role}
                   fallbackClass="bg-primary"
                 />
@@ -63,7 +63,7 @@
             <DropdownMenu.Content class="w-56" align="end">
               <DropdownMenu.Label class="font-normal">
                 <p class="text-sm font-medium leading-none">
-                  {profile.first_name}
+                  {profile.firstName}
                 </p>
               </DropdownMenu.Label>
               <DropdownMenu.Separator />

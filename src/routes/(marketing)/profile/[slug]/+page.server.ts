@@ -4,20 +4,25 @@ import { getProfileByUser } from "$lib/server/database/profiles";
 import { getListing } from "$lib/server/database/listings";
 import { fail, message, superValidate } from "sveltekit-superforms";
 import { requestContactSchema, startContactSchema, type DbConversationWithReferences } from "$lib/shared/models/conversation";
-import { addReviewSchema, type Review } from "$lib/shared/models/review";
+import { addReviewSchema, type ReviewWithReferences } from "$lib/shared/models/review";
 import { zod } from "sveltekit-superforms/adapters";
 import { getConversationForStudentAndTeacher, startConversation } from "$lib/server/database/conversations";
 import { redirect, setFlash } from "sveltekit-flash-message/server";
 import { ResourceAlreadyExistsError } from "src/lib/shared/errors/resource-already-exists-error.js";
 import { createReview, getReviewsByReceiver, getReviewsBySender } from "src/lib/server/database/review.js";
-import type { DbListingWithProfile } from "src/lib/shared/models/listing.js";
+import type { DbListingWithProfile, ListingWithProfile } from "src/lib/shared/models/listing.js";
 import { type Message, ExternalErrorCodes } from "src/lib/shared/models/common.js";
 import { isErrorWithCode, loadContactTeacherForms } from "src/lib/shared/utils/utils";
+import type { Profile } from "src/lib/shared/models/profile.js";
+import { formatProfile } from "src/lib/shared/utils/profile/utils.js";
+import { formatListingWithProfile } from "src/lib/shared/utils/listing/utils.js";
+import { formatReviewWithReferences } from "src/lib/shared/utils/reviews/utils";
 
 export const load = async ({ locals: { supabase, safeGetSession }, params: { slug }, parent, url: { searchParams } }) => {
-    let teacher;
+    let teacher: Profile;
     try {
-        teacher = await getProfileByUser(supabase, slug);
+        const dbTeacher = await getProfileByUser(supabase, slug);
+        teacher = formatProfile(dbTeacher);
     } catch (e) {
         if (isErrorWithCode(e)) {
             if (e.code === ExternalErrorCodes.InvalidInputSyntax)
@@ -47,12 +52,14 @@ export const load = async ({ locals: { supabase, safeGetSession }, params: { slu
     const { session } = await safeGetSession();
     const userId = session?.user.id;
 
-    const listingId = searchParams.get('id') || '';
-    let listing: DbListingWithProfile | undefined = undefined;
+    let listing: ListingWithProfile | undefined = undefined;
     let listingMessage: Message | undefined = undefined;
+
+    const listingId = searchParams.get('id') || '';
     if (listingId) {
         try {
-            listing = await getListing(supabase, listingId);
+            const dbListing = await getListing(supabase, listingId);
+            listing = formatListingWithProfile(dbListing);
             if (!listing.visible && userId !== listing.profile.id) {
                 listingMessage = getFailFormMessage("Vi kunde inte hämta din annons", "Denna annonsen är inte tillgänglig just nu.")
                 listing = undefined;
@@ -77,10 +84,11 @@ export const load = async ({ locals: { supabase, safeGetSession }, params: { slu
         }
     }
 
-    let reviews: Review[] = [];
+    let reviews: ReviewWithReferences[] = [];
     let reviewsMessage: Message | undefined = undefined;
     try {
-        reviews = await getReviewsByReceiver(supabase, slug);
+        const dbReviews = await getReviewsByReceiver(supabase, slug);
+        reviews = dbReviews.map(review => formatReviewWithReferences(review)); 
     } catch (e) {
         console.error("Error when reading reviews for profile with id: " + slug, e);
         const { user: { id } } = await safeGetSession();
@@ -164,7 +172,6 @@ export const actions = {
         const form = await superValidate(event, zod(startContactSchema));
         // this will not work nicely if teacher or role is invalid, but not expecting this to be an issue
         if (!form.valid) return message(form, getFailFormMessage(undefined, "Om du inte är inloggad, testa att logga in och försöka igen. Om detta fortsätter kan du kontakta oss."), { status: 403 });
-
 
         const { role, firstMessage } = form.data;
 

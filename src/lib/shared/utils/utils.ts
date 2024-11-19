@@ -79,7 +79,11 @@ export type TypeToZod<T> = {
   : z.ZodObject<TypeToZod<T[K]>>
 };
 
-export const convertToInitials = (firstName: string, lastName: string): string => (firstName[0] + lastName[0]).toUpperCase();
+export const convertToInitials = (firstName: string, lastName: string): string => {
+  if (!lastName && firstName) return firstName[0].toUpperCase();
+  if (!firstName && !lastName) return "?";
+  return (firstName[0] + lastName[0]).toUpperCase()
+};
 
 export const getNow = () => new Date().toISOString();
 
@@ -190,7 +194,7 @@ const getSwedishMonthName = (monthNumber: number) => {
   return monthNames[monthNumber - 1];
 };
 
-export const loadContactTeacherForms = async (teacher?: Tables<"profiles">, student?: Tables<"profiles">) => {
+export const loadContactTeacherForms = async (teacher?: Profile, student?: Profile) => {
   const initValues = { teacher: teacher?.id, role: student?.role ?? "" }
   const requestContactForm = await superValidate(initValues, zod(requestContactSchema))
   const startContactForm = await superValidate(initValues, zod(startContactSchema))

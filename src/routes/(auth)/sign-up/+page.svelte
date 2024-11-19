@@ -43,14 +43,14 @@
       {#if review.sender}
         <div class="flex items-center gap-x-2 self-start mt-2.5">
           <Avatar
-            url={review.sender.avatar_url ?? ""}
-            firstName={review.sender.first_name}
-            lastName={review.sender.last_name}
+            url={review.sender.avatarUrl ?? ""}
+            firstName={review.sender.firstName}
+            lastName={review.sender.lastName}
             role={review.sender.role}
             class="text-sm w-7 h-7"
           />
           <cite class="not-italic text-lg">
-            {review.sender.first_name}
+            {review.sender.firstName}
           </cite>
           <ArrowRightIcon class="w-4 h-4" />
           <a
@@ -58,13 +58,13 @@
             href="/profile/{review.receiver.id}"
           >
             <Avatar
-              url={review.receiver.avatar_url ?? ""}
-              firstName={review.receiver.first_name}
-              lastName={review.receiver.last_name}
+              url={review.receiver.avatarUrl ?? ""}
+              firstName={review.receiver.firstName}
+              lastName={review.receiver.lastName}
               role={review.receiver.role}
               class="text-sm w-7 h-7"
             />
-            <p class="text-lg">{review.receiver.first_name}</p>
+            <p class="text-lg">{review.receiver.firstName}</p>
           </a>
         </div>
       {/if}

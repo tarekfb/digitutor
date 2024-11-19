@@ -16,5 +16,15 @@ export const formatProfile = ({ id, role, first_name, last_name, avatar_url }: D
     if (role === "admin")
         throw new Error("Unsupported role")
 
-    return { id, role, firstName: first_name, lastName: last_name, avatarUrl: avatar_url }
+    return { id, role, firstName: first_name, lastName: last_name, avatarUrl: avatar_url ?? undefined };
 }
+
+export const hasFullProfile = (profile: Profile | null) => {
+    if (!profile)
+        return false;
+
+    if (!profile.firstName || profile.lastName)
+        return false;
+
+    return true;
+};

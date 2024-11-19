@@ -20,8 +20,8 @@ export const load = (async ({ url, locals: { supabase } }) => {
     if (!query) return { form, initResults, initMessage }
 
     try {
-        const listings = await search(supabase, query);
-        initResults = listings.map(listing => ({
+        const dbLlistings = await search(supabase, query);
+        initResults = dbLlistings.map(listing => ({
             id: listing.id,
             title: listing.title,
             description: listing.description ?? undefined,
@@ -48,7 +48,6 @@ export const load = (async ({ url, locals: { supabase } }) => {
 
     return { form, initResults, initMessage }
 }) satisfies PageServerLoad;
-
 
 export const actions: Actions = {
     search: async (event) => {

@@ -4,8 +4,9 @@ import { searchSchema, } from "src/lib/shared/models/search";
 import type { Actions, PageServerLoad } from "./$types";
 import { redirect } from "@sveltejs/kit";
 import { getHighQualityReviews, getTopTeacherByReviews } from "src/lib/server/database/review";
-import { type DisplayProfile, type Review } from "src/lib/shared/models/review";
+import { type DisplayProfile, type ReviewWithReferences } from "src/lib/shared/models/review";
 import { formatDisplayProfile } from "src/lib/shared/utils/profile/utils";
+import { formatReviewWithReferences } from "src/lib/shared/utils/reviews/utils";
 
 export const load: PageServerLoad = async ({ locals: { supabase } }) => {
     const form = await superValidate(zod(searchSchema))
@@ -22,10 +23,12 @@ export const load: PageServerLoad = async ({ locals: { supabase } }) => {
         displayProfiles = [];
     }
 
-    let displayReviews: Review[] = [];
+    let displayReviews: ReviewWithReferences[] = [];
     try {
-        const reviews = await getHighQualityReviews(supabase, 4);
-        displayReviews = reviews.filter(r => r.description && r.description.length > 15);
+
+        const dbReviews = await getHighQualityReviews(supabase, 4);
+        const dbDisplayReviews = dbReviews.filter(r => r.description && r.description.length > 15);
+        displayReviews = dbDisplayReviews.map(review => formatReviewWithReferences(review));
     } catch (e) {
         console.error("Error when fetching display reviews", e);
         displayReviews = [];

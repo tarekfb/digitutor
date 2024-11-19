@@ -1,11 +1,26 @@
 import type { Tables } from "src/supabase";
 import { z } from "zod"
+import type { DbProfile, Profile } from "./profile";
 
-export type Review = Omit<Tables<"reviews">, "sender" | "receiver"> & {
-    sender: Tables<"profiles"> | null;
-    receiver: Tables<"profiles">;
+export type DbReviewBase = Tables<"reviews">;
+
+export type DbReviewWithReferences = Omit<DbReviewBase, "sender" | "receiver"> & {
+    sender: DbProfile | null;
+    receiver: DbProfile;
 };
-export type InputReview = Pick<Tables<"reviews">, 'description' | 'rating'>;
+
+export type ReviewBase = Omit<DbReviewBase, "created_at" | "description" | "sender"> & {
+    createdAt: string;
+    description: string;
+    sender: string;
+}
+
+export type ReviewWithReferences = Omit<ReviewBase, "receiver" | "sender"> & {
+    sender?: Profile;
+    receiver: Profile;
+}
+
+export type InputReview = Pick<DbReviewBase, 'description' | 'rating'>;
 
 const addReviewProperties = {
     rating: z
@@ -30,7 +45,6 @@ export type DbDisplayProfile = {
     avg_rating: number | null;
     subjects: number[];
 }
-
 
 export type DisplayProfile = {
     id: string;

@@ -6,13 +6,15 @@ import { zod } from "sveltekit-superforms/adapters";
 import { resendSchema, signInSchema } from "$lib/shared/models/user";
 import { getHighQualityReviews } from "src/lib/server/database/review";
 import { getListingsByTeacher } from "src/lib/server/database/listings";
+import { formatReviewWithReferences } from "src/lib/shared/utils/reviews/utils";
 
 export const load: PageServerLoad = async ({ locals: { supabase } }) => {
     let longReviews;
     try {
-        const reviews = await getHighQualityReviews(supabase);
-        const sorted = reviews.sort((a, b) => (b.description?.length ?? 0) - (a.description?.length ?? 0));
-        longReviews = sorted.slice(0, 3);
+        const dbReviews = await getHighQualityReviews(supabase);
+        let sorted = dbReviews.sort((a, b) => (b.description?.length ?? 0) - (a.description?.length ?? 0));
+        sorted = sorted.slice(0, 3);
+        longReviews = sorted.map(s => formatReviewWithReferences(s));
     }
     catch (e) {
         console.error("Error when fetching signin display review, perhaps didnt find valid review", e);
@@ -20,15 +22,12 @@ export const load: PageServerLoad = async ({ locals: { supabase } }) => {
         // todo: as in auth, dont fail the page. just skip displaying the review
     }
 
-    enum Subjects { // Todo fix with new suibjects system
-        JavaScript = 0,
-    }
 
-    let subjects: Subjects[] = [];
+
+    let subjects: number[] = [];
     let listings;
     try {
         if (longReviews[0]) {
-
             listings = await getListingsByTeacher(supabase, longReviews[0].receiver.id);
             subjects = listings.flatMap(listing => listing.subjects)
         }
