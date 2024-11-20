@@ -12,12 +12,13 @@
   export let error: App.Error;
   export let code: number | undefined | null = undefined;
 
-  const getTitle = () => {
+  const getTitle = (): string => {
     if (!error.message || error.message === "Internal Error")
       return defaultErrorTitle;
+    return error.message;
   };
 
-  const getDescription = () => {
+  const getDescription = (): string => {
     if (error.message === "Internal Error")
       return "Ett oväntat fel uppstod. Du kan kontakta oss om detta fortsätter.";
     return error.description ?? defaultErrorDescription;
