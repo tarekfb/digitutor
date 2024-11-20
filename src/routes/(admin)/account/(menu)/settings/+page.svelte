@@ -20,6 +20,7 @@
   import AccountLayout from "../../../../../lib/components/templates/account-layout.svelte";
 
   export let data: PageData;
+  $: ({ profile, uploadAvatarForm, deleteAvatarForm } = data);
 
   const nameForm = superForm(data.updateNameForm, {
     validators: zodClient(nameSchema),
@@ -91,7 +92,7 @@
       submitText="Ändra"
     >
       <p class="text-muted-foreground">
-        Du kommer behöva bekräfta den nya och den gamla adressen.
+        Du kommer behöva bekräfta den nya <span class="italic">och</span> den gamla adressen.
       </p>
       <Form.Field form={emailForm} name="email">
         <Form.Control let:attrs>
@@ -108,9 +109,9 @@
     </SettingsForm>
 
     <AvatarForm
-      uploadAvatarForm={data.uploadAvatarForm}
-      deleteAvatarForm={data.deleteAvatarForm}
-      avatarUrl={data.profile.avatar_url}
+      {uploadAvatarForm}
+      {deleteAvatarForm}
+      avatarUrl={profile.avatarUrl ?? ""}
     />
 
     <SettingsForm

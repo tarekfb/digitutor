@@ -8,7 +8,7 @@ import type { SupabaseClient, Session } from "@supabase/supabase-js";
 import { redirect } from "@sveltejs/kit";
 import type { Database } from "lucide-svelte";
 import type { Tables } from "src/supabase";
-import type { Profile } from "../models/profile";
+import type { DbProfile, Profile } from "../models/profile";
 import { superValidate } from "sveltekit-superforms";
 import { zod } from "sveltekit-superforms/adapters";
 import { requestContactSchema, startContactSchema } from "../models/conversation";
@@ -79,7 +79,11 @@ export type TypeToZod<T> = {
   : z.ZodObject<TypeToZod<T[K]>>
 };
 
-export const convertToInitials = (firstName: string, lastName: string): string => (firstName[0] + lastName[0]).toUpperCase();
+export const convertToInitials = (firstName: string, lastName: string): string => {
+  if (!lastName && firstName) return firstName[0].toUpperCase();
+  if (!firstName && !lastName) return "?";
+  return (firstName[0] + lastName[0]).toUpperCase()
+};
 
 export const getNow = () => new Date().toISOString();
 
@@ -190,14 +194,7 @@ const getSwedishMonthName = (monthNumber: number) => {
   return monthNames[monthNumber - 1];
 };
 
-export const formatProfile = ({ id, role, first_name: firstName, last_name: lastName, avatar_url: avatarUrl }: Tables<"profiles">): Profile => {
-  if (role === "admin")
-    throw new Error("Unsupported role")
-
-  return { id, role, firstName, lastName, avatarUrl }
-}
-
-export const loadContactTeacherForms = async (teacher?: Tables<"profiles">, student?: Tables<"profiles">) => {
+export const loadContactTeacherForms = async (teacher?: Profile, student?: Profile) => {
   const initValues = { teacher: teacher?.id, role: student?.role ?? "" }
   const requestContactForm = await superValidate(initValues, zod(requestContactSchema))
   const startContactForm = await superValidate(initValues, zod(startContactSchema))

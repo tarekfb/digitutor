@@ -3,7 +3,7 @@
   import ConversationCard from "$lib/components/molecules/conversation-card.svelte";
   import Link from "$lib/components/atoms/link.svelte";
   import RootContainer from "src/lib/components/templates/root-container.svelte";
-  import AccountLayout from "../../../../lib/components/templates/account-layout.svelte";
+  import AccountLayout from "src/lib/components/templates/account-layout.svelte";
 
   export let data;
   $: ({ conversations, profile } = data);

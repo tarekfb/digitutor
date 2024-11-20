@@ -2,12 +2,12 @@
   import Star from "src/lib/components/atoms/star.svelte";
   import * as Card from "$lib/components/ui/card/index.js";
   import Avatar from "$lib/components/atoms/avatar.svelte";
-  import type { Review } from "src/lib/shared/models/review";
-
+  import type { ReviewWithReferences } from "src/lib/shared/models/review";
   import { cn } from "src/lib/shared/utils/utils.js";
+  
   let className: string | null | undefined = undefined;
   export { className as class };
-  export let review: Review;
+  export let review: ReviewWithReferences;
 </script>
 
 <Card.Root>
@@ -24,13 +24,13 @@
         <!-- if sender deleted account, sender will be null -->
         <div class="flex gap-x-2 items-center">
           <Avatar
-            url={review.sender.avatar_url ?? ""}
-            firstName={review.sender.first_name}
-            lastName={review.sender.last_name}
+            url={review.sender.avatarUrl ?? ""}
+            firstName={review.sender.firstName}
+            lastName={review.sender.lastName}
             role={review.sender.role}
             class="text-sm w-8 h-8"
           />
-          <h4 class="font-semibold">{review.sender.first_name}</h4>
+          <h4 class="font-semibold">{review.sender.firstName}</h4>
         </div>
       {/if}
     </div>

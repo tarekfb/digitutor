@@ -1,5 +1,5 @@
 import type { Session, SupabaseClient } from "@supabase/supabase-js";
-import type { DbDisplayProfile, InputReview, Review } from "src/lib/shared/models/review";
+import type { DbDisplayProfile, InputReview, DbReviewWithReferences } from "src/lib/shared/models/review";
 import { getNow } from "src/lib/shared/utils/utils";
 import type { Database, Tables } from "src/supabase";
 
@@ -39,7 +39,7 @@ export const getReviewsByReceiver = async (
     supabase: SupabaseClient<Database>,
     receiver: string,
     max?: number,
-): Promise<Review[]> => {
+): Promise<DbReviewWithReferences[]> => {
     let query = supabase
         .from("reviews")
         .select(`
@@ -58,14 +58,14 @@ export const getReviewsByReceiver = async (
         throw error;
     }
 
-    return data as unknown as Review[];
+    return data as unknown as DbReviewWithReferences[];
 }
 
 export const getReviewsBySender = async (
     supabase: SupabaseClient<Database>,
     sender: string,
     max?: number,
-): Promise<Review[]> => {
+): Promise<DbReviewWithReferences[]> => {
     let query = supabase
         .from("reviews")
         .select(`
@@ -84,7 +84,7 @@ export const getReviewsBySender = async (
         throw error;
     }
 
-    return data as unknown as Review[];
+    return data as unknown as DbReviewWithReferences[];
 }
 
 export const getHighQualityReviews = async (supabase: SupabaseClient<Database>, max?: number) => {
@@ -108,7 +108,7 @@ export const getHighQualityReviews = async (supabase: SupabaseClient<Database>, 
         throw error;
     }
 
-    return data as unknown as Review[];
+    return data as unknown as DbReviewWithReferences[];
 }
 
 

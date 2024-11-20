@@ -1,6 +1,6 @@
 import type { Session, SupabaseClient } from "@supabase/supabase-js";
 import type { Database, Tables } from "src/supabase"
-import type { Conversation } from "$lib/shared/models/conversation";
+import type { DbConversationWithReferences } from "$lib/shared/models/conversation";
 import { getNow } from "src/lib/shared/utils/utils";
 import { sendMessage } from "./messages";
 import { ResourceAlreadyExistsError } from "src/lib/shared/errors/resource-already-exists-error";
@@ -8,8 +8,9 @@ import { ResourceAlreadyExistsError } from "src/lib/shared/errors/resource-alrea
 export const getConversation = async (
   supabase: SupabaseClient<Database>,
   id: string,
-  profile: Tables<"profiles">
-): Promise<Conversation> => {
+  role: "student" | "teacher" | "admin",
+  profileId: string
+): Promise<DbConversationWithReferences> => {
   let query = supabase
     .from("conversations")
     .select(
@@ -25,8 +26,8 @@ export const getConversation = async (
     )
     .eq("id", id)
 
-  if (profile.role === "student") query = query.eq("student", profile.id)
-  else if (profile.role === "teacher") query = query.eq("teacher", profile.id)
+  if (role === "student") query = query.eq("student", profileId)
+  else if (role === "teacher") query = query.eq("teacher", profileId)
 
   const { data, error } = await query.limit(1).single();
 
@@ -35,14 +36,14 @@ export const getConversation = async (
     throw error;
   }
 
-  return data as unknown as Conversation;
+  return data as unknown as DbConversationWithReferences;
 }
 
 export const getConversationForStudentAndTeacher = async (
   supabase: SupabaseClient<Database>,
   student: string,
   teacher: string
-): Promise<Conversation | null> => {
+): Promise<DbConversationWithReferences | null> => {
   const { data, error } = await supabase
     .from("conversations")
     .select(
@@ -61,7 +62,7 @@ export const getConversationForStudentAndTeacher = async (
     .limit(1)
     .single();
 
-  return error ? null : data as unknown as Conversation; // error means no existing convo, return null
+  return error ? null : data as unknown as DbConversationWithReferences; // error means no existing convo, return null
 }
 
 export const startConversation = async (
@@ -70,7 +71,7 @@ export const startConversation = async (
   student: string,
   firstMessage: string,
   session: Session,
-): Promise<Conversation> => {
+): Promise<DbConversationWithReferences> => {
   const { data, error } = await supabase
     .from("conversations")
     .select(
@@ -101,7 +102,7 @@ export const startConversation = async (
   if (data.length === 0) { // no existing convo, create new
     const newConversation = await createConversation(supabase, teacher);
     await sendMessage(supabase, { content: firstMessage, conversation: newConversation.id }, session); // does this need to be awaited? todo: remove if not needed
-    return newConversation as unknown as Conversation;
+    return newConversation as unknown as DbConversationWithReferences;
   }
 
   if (data.length === 1) {
@@ -117,7 +118,7 @@ export const getConversations = async (
   supabase: SupabaseClient<Database>,
   userId: string,
   max?: number,
-): Promise<Conversation[]> => {
+): Promise<DbConversationWithReferences[]> => {
   let query = supabase
     .from("conversations")
     .select(
@@ -143,7 +144,7 @@ export const getConversations = async (
     throw error;
   }
 
-  return data as unknown as Conversation[];
+  return data as unknown as DbConversationWithReferences[];
 }
 
 export const createConversation = async (

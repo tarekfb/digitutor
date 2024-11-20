@@ -6,7 +6,6 @@
   import SubjectItem from "../atoms/subject-item.svelte";
   import Link from "../atoms/link.svelte";
   import SeeMore from "./see-more.svelte";
-  import { languages } from "src/lib/shared/models/common";
 
   const rating = 4.3;
   const nbrOfReviews = 11;

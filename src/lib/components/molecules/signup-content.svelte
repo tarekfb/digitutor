@@ -24,25 +24,25 @@
   </p>
 </div>
 <div class="flex flex-col gap-4">
-  <Form.Field form={userForm} name="first_name">
+  <Form.Field form={userForm} name="firstName">
     <Form.Control let:attrs>
       <Label>Förnamn</Label>
       <Input
         {...attrs}
         type="text"
-        bind:value={$formData.first_name}
+        bind:value={$formData.firstName}
         placeholder="Förnamn"
       />
     </Form.Control>
     <Form.FieldErrors />
   </Form.Field>
-  <Form.Field form={userForm} name="last_name">
+  <Form.Field form={userForm} name="lastName">
     <Form.Control let:attrs>
       <Label>Efternamn</Label>
       <Input
         {...attrs}
         type="text"
-        bind:value={$formData.last_name}
+        bind:value={$formData.lastName}
         placeholder="Efternamn"
       />
     </Form.Control>

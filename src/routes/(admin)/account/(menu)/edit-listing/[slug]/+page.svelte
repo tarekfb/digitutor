@@ -22,7 +22,7 @@
   import Label from "src/lib/components/atoms/label.svelte";
   import FormSubmit from "src/lib/components/molecules/form-submit.svelte";
   import SuggestSubject from "src/lib/components/molecules/suggest-subject.svelte";
-  import AccountLayout from "../../../../../../lib/components/templates/account-layout.svelte";
+  import AccountLayout from "src/lib/components/templates/account-layout.svelte";
 
   export let data: PageData;
   $: ({ subjects, profile } = data);
@@ -37,7 +37,7 @@
         toast.success(`Annons uppdaterad.`);
       }
     },
-    taintedMessage: "Lämna sidan? Ändringarna har inte sparats ännu.",
+    taintedMessage: "Vill du lämna sidan? Ändringarna har inte sparats ännu.",
     resetForm: false,
   });
 

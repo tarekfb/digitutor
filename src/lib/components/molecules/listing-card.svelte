@@ -1,6 +1,6 @@
 <script lang="ts">
   import * as Card from "$lib/components/ui/card/index.js";
-  import type { Listing } from "$lib/shared/models/listing";
+  import type { ListingWithProfile } from "$lib/shared/models/listing";
   import { formatDateReadable, truncate } from "src/lib/shared/utils/utils";
   import IsPublished from "../atoms/is-published.svelte";
   import { Button } from "../ui/button";
@@ -8,7 +8,7 @@
   import { ExternalLink } from "lucide-svelte";
   import Separator from "../ui/separator/separator.svelte";
 
-  export let listing: Listing;
+  export let listing: ListingWithProfile;
   export let publicView = true;
 </script>
 
@@ -49,10 +49,10 @@
         >
       </div>
       <div class="flex flex-col gap-y-2">
-        <p>Skapad {formatDateReadable(listing.created_at)}</p>
-        {#if listing.updated_at}
+        <p>Skapad {formatDateReadable(listing.createdAt)}</p>
+        {#if listing.updatedAt}
           <p>
-            Uppdaterad {formatDateReadable(listing.updated_at)}
+            Uppdaterad {formatDateReadable(listing.updatedAt)}
           </p>
         {/if}
       </div>

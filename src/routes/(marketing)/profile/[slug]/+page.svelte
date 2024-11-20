@@ -13,8 +13,8 @@
   import ProfileBody from "src/lib/components/molecules/profile-body.svelte";
   import OwnerSection from "src/lib/components/molecules/owner-section.svelte";
   import { page } from "$app/stores";
-  import type { Tables } from "src/supabase";
   import type { Session } from "@supabase/supabase-js";
+  import type { Profile } from "src/lib/shared/models/profile";
 
   export let data: PageData;
   $: ({
@@ -31,7 +31,6 @@
 
   const isDesktop = mediaQuery("(min-width: 768px)");
 
-  
   let isOwner = false;
   let preview = false;
   $: preview = $page.url.searchParams.get("preview") === "true";
@@ -39,7 +38,7 @@
 
   const checkIsOwner = (
     session: Session | null,
-    teacher: Tables<"profiles">,
+    teacher: Profile,
     preview: boolean,
   ) => {
     if (preview) return false;
@@ -92,16 +91,16 @@
     <div class="grid grid-cols-3 w-full gap-x-8 p-8">
       <aside class="flex flex-col items-center gap-y-6 w-full max-w-md">
         <div class="p-8 rounded-md shadow-sm bg-accent w-full text-background">
-          {#if teacher.avatar_url}
+          {#if teacher.avatarUrl}
             <img
-              src={teacher.avatar_url}
+              src={teacher.avatarUrl}
               alt="profile avatar"
               class="object-cover w-full rounded-sm mb-8"
             />
           {/if}
           <div class="flex flex-col gap-y-4">
             <SecondaryTitle class="font-normal md:text-4xl whitespace-normal"
-              >{teacher.first_name}</SecondaryTitle
+              >{teacher.firstName}</SecondaryTitle
             >
             <Stars size={5} rating={4.7} />
             {#if listing}
@@ -122,7 +121,7 @@
         </div>
         {#if listing}
           <p class="text-4xl">
-            {listing.hourly_price} SEK
+            {listing.hourlyPrice} SEK
           </p>
         {/if}
         <ContactTeacherForm
@@ -130,7 +129,7 @@
           {startContactForm}
           requestContactAction="?/requestContact"
           startContactAction="?/startContact"
-          firstName={teacher.first_name}
+          firstName={teacher.firstName}
           buttonStyling="self-center"
         />
         {#if isOwner && listingMessage}

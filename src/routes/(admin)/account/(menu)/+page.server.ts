@@ -1,8 +1,10 @@
 import { error } from "@sveltejs/kit";
 import type { PageServerLoad } from "./$types";
-import { defaultErrorInfo, defaultErrorTitle } from "$lib/shared/constants/constants";
+import { defaultErrorInfo } from "$lib/shared/constants/constants";
 import { redirect } from "sveltekit-flash-message/server";
 import { getConversations } from "src/lib/server/database/conversations";
+import type { ConversationWithReferences } from "src/lib/shared/models/conversation";
+import { formatConversationWithReferences } from "src/lib/shared/utils/conversation/utils";
 
 export const load: PageServerLoad = async ({
   locals: { supabase, safeGetSession }, parent,
@@ -11,9 +13,10 @@ export const load: PageServerLoad = async ({
   if (!session)
     throw redirect(303, "/sign-in");
 
-  let conversations;
+  let conversations: ConversationWithReferences[];
   try {
-    conversations = await getConversations(supabase, session.user.id);
+    const dbConversations = await getConversations(supabase, session.user.id);
+    conversations = dbConversations.map(c => formatConversationWithReferences(c));
   } catch (e) {
     console.error(e);
     error(500, { ...defaultErrorInfo });

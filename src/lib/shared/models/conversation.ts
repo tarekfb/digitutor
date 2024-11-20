@@ -1,14 +1,25 @@
 import type { Tables } from "src/supabase";
 import { z } from "zod";
-import type { Role } from "./profile";
+import type { Profile } from "./profile";
 
-export type Conversation = Omit<Tables<"conversations">, "teacher" | "student"> & {
+export type DbConversationBase = Tables<"conversations">;
+
+export type DbConversationWithReferences = Omit<Tables<"conversations">, "teacher" | "student"> & {
     teacher: Tables<"profiles">;
     student: Tables<"profiles">;
 };
 
-export type InputMessage = Pick<Tables<"messages">, "content" | "conversation">;
+export type ConversationBase = Omit<DbConversationBase, "created_at" | "has_replied"> & {
+    createdAt: string;
+    hasReplied: boolean;
+};
 
+export type ConversationWithReferences = Omit<ConversationBase, "teacher" | "student"> & {
+    teacher: Profile;
+    student: Profile;
+};
+
+export type InputMessage = Pick<Tables<"messages">, "content" | "conversation">;
 
 export type Message = {
     id: string,
@@ -18,29 +29,27 @@ export type Message = {
     conversation: string,
 }
 
-export const formatMessage = ({id, sender, content, created_at, conversation}: Tables<"messages">): Message => ({
-    id, 
+export const formatMessage = ({ id, sender, content, created_at, conversation }: Tables<"messages">): Message => ({
+    id,
     sender,
     content,
     createdAt: created_at,
     conversation
 })
 
-const sendMessageProperties = {
+export const sendMessageSchema = z.object({
     content: z
         .string()
         .min(1, "Måste vara minst 1 karaktär.")
         .max(300, "Får inte vara mer än 300 karaktärer.")
-}
-export const sendMessageSchema = z.object(sendMessageProperties)
+})
+
 const requestContactProperties = {
     teacher: z
         .string(),
     role: z
         .string(),
 }
-
-
 
 export const requestContactSchema = z.object(requestContactProperties)
 

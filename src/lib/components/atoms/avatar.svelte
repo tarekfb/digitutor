@@ -8,7 +8,7 @@
   export { className as class };
 
   export let href: string = "";
-  export let url: string | null = "";
+  export let url: string = "";
   export let role: "teacher" | "student" | "admin" | "" = "";
   export let firstName: string;
   export let lastName: string;

@@ -58,10 +58,16 @@
     $flash = undefined;
   }
 
+  const setPosition = (pathname: string): "top-center" | "bottom-center" => {
+    const conversationPage = new RegExp(
+      /\/account\/conversation\/([0-9a-f\-]{36})$/,
+    );
+    return new RegExp(conversationPage).test(pathname)
+      ? "top-center"
+      : "bottom-center";
+  };
   let position: "top-center" | "bottom-center" = "bottom-center";
-  $: position = $page.url.pathname.includes("/account/conversation/")
-    ? "top-center"
-    : position; // this page needs visibility in bottom center area
+  $: position = setPosition($page.url.pathname);
 </script>
 
 {#if $navigating}

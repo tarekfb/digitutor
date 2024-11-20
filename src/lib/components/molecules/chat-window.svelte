@@ -1,6 +1,5 @@
 <script lang="ts">
   import { timeAgo } from "src/lib/shared/utils/utils";
-  import type { Tables } from "src/supabase";
   import Avatar from "../atoms/avatar.svelte";
   import type { Message } from "src/lib/shared/models/conversation";
   import type { WritableLoadable } from "@square/svelte-store";
@@ -11,10 +10,11 @@
   import { goto } from "$app/navigation";
   import { Skeleton } from "$lib/components/ui/skeleton/index.js";
   import { defaultErrorDescription } from "$lib/shared/constants/constants";
+  import type { Profile } from "src/lib/shared/models/profile";
 
   export let chatStore: WritableLoadable<Message[]>;
-  export let self: Tables<"profiles">;
-  export let other: Tables<"profiles">;
+  export let self: Profile;
+  export let other: Profile;
 
   const scroll = (element: HTMLElement, messages: Message[]) => {
     // messages is not needed, just to provide reactivity dependancy
@@ -36,20 +36,22 @@
 <div class="flex flex-col gap-y-4 overflow-y-auto">
   <div class="flex flex-col items-center gap-y-2 mb-4">
     <Avatar
-      url={other.avatar_url ?? ""}
+      url={other.avatarUrl ?? ""}
       href="/profile/{other.id}"
-      firstName={other.first_name}
-      lastName={other.last_name}
+      firstName={other.firstName}
+      lastName={other.lastName}
       role={other.role}
-      class="h-20 w-20 {other.avatar_url && 'md:h-28 md:w-28 lg:h-36 lg:w-36'}"
+      class="h-20 w-20 {other.avatarUrl && 'md:h-28 md:w-28 lg:h-36 lg:w-36'}"
       fallbackClass="h-20 w-20 text-3xl"
     />
-    <PrimaryTitle>{other.first_name}</PrimaryTitle>
-    <Button
-      on:click={() => goto(`/profile/${other.id}`)}
-      variant="secondary"
-      class={secondaryAltButtonVariant()}>Se profil</Button
-    >
+    <PrimaryTitle>{other.firstName}</PrimaryTitle>
+    {#if other.role === "teacher"}
+      <Button
+        on:click={() => goto(`/profile/${other.id}`)}
+        variant="secondary"
+        class={secondaryAltButtonVariant()}>Se profil</Button
+      >
+    {/if}
   </div>
   <ul class="flex flex-col gap-y-4 justify-end">
     {#await chatStore.load()}
@@ -78,9 +80,9 @@
             <div class="flex flex-col justify-end">
               <Avatar
                 href="/profile/{other.id}"
-                url={other.avatar_url}
-                firstName={other.first_name}
-                lastName={other.last_name}
+                url={other.avatarUrl}
+                firstName={other.firstName}
+                lastName={other.lastName}
                 role={other.role}
                 size="8"
                 class="text-sm"

@@ -2,19 +2,19 @@
   import AddReview from "src/lib/components/molecules/add-review.svelte";
   import PrimaryTitle from "$lib/components/atoms/primary-title.svelte";
   import ProfileReviewCard from "src/lib/components/molecules/profile-review-card.svelte";
-  import type { addReviewSchema, Review } from "src/lib/shared/models/review";
+  import type { addReviewSchema, ReviewWithReferences } from "src/lib/shared/models/review";
   import type { SuperValidated, Infer } from "sveltekit-superforms/client";
-  import type { Tables } from "src/supabase";
   import { cn } from "src/lib/shared/utils/utils";
+  import type { Profile } from "src/lib/shared/models/profile";
 
   export let pStyle: string | null | undefined = undefined;
-  export let reviews: Review[];
+  export let reviews: ReviewWithReferences[];
   export let allowCreateReview: boolean;
-  export let teacher: Tables<"profiles">;
+  export let teacher: Profile;
   export let addReviewForm: SuperValidated<Infer<typeof addReviewSchema>>;
 </script>
 
-<PrimaryTitle class="text-wrap">Om {teacher.first_name}</PrimaryTitle>
+<PrimaryTitle class="text-wrap">Om {teacher.firstName}</PrimaryTitle>
 <p class={cn("text-muted-foreground md:text-lg", pStyle)}>
   <!-- {#if profile.bio}
           {profile.bio}
@@ -35,6 +35,6 @@
   </ul>
 {:else}
   <p class={cn("text-muted-foreground", pStyle)}>
-    {teacher.first_name} har inga recensioner ännu.
+    {teacher.firstName} har inga recensioner ännu.
   </p>
 {/if}

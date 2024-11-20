@@ -1,15 +1,15 @@
 <script lang="ts">
-  import { toast, Toaster } from "svelte-sonner";
+  import { toast } from "svelte-sonner";
   import { zodClient } from "sveltekit-superforms/adapters";
   import { superForm } from "sveltekit-superforms";
   import { sendMessageSchema } from "src/lib/shared/models/conversation.js";
   import ChatWindow from "$lib/components/molecules/chat-window.svelte";
   import { initChat, sendMessageToStore } from "src/stores/chat";
-  import type { Tables } from "src/supabase.js";
   import type { PageData } from "./$types";
   import { Button } from "src/lib/components/ui/button";
   import { SendHorizontal } from "lucide-svelte";
   import { Input } from "src/lib/components/ui/input";
+  import type { Profile } from "src/lib/shared/models/profile";
 
   export let data: PageData;
   $: ({ profile: self, conversation, supabase, session } = data);
@@ -28,7 +28,7 @@
   $: recipient =
     self.role == "teacher" ? conversation.student : conversation.teacher;
 
-  const getAllowedToReply = async (profile: Tables<"profiles">) => {
+  const getAllowedToReply = async (profile: Profile) => {
     const messages = await chatStore.load();
     if (profile.role === "teacher") return true; // always allow
     if (messages.length === 0) return true; // shouldn't happen but allow for error proofing
@@ -46,7 +46,7 @@
 
     if (!isAllowedToReply) {
       return toast.info(
-        `När du fått svar från ${recipient.first_name} kan du skicka fler meddelanden`,
+        `När du fått svar från ${recipient.firstName} kan du skicka fler meddelanden`,
       );
     }
     const message = $form.content;
@@ -59,6 +59,8 @@
 
     sendMessageToStore(chatStore, message, conversation.id, session);
     sendMessageForm.reset();
+
+    toast.info("hej")
   };
 </script>
 

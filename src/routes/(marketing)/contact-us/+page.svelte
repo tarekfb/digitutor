@@ -12,8 +12,9 @@
   import PrimaryTitle from "$lib/components/atoms/primary-title.svelte";
   import Link from "$lib/components/atoms/link.svelte";
   import RootContainer from "src/lib/components/templates/root-container.svelte";
+  import type { PageData } from "./$types";
 
-  export let data;
+  export let data: PageData;
 
   const contactForm = superForm(data.form, {
     validators: zodClient(contactUsSchema),

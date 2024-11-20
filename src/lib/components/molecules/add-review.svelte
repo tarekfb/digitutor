@@ -18,12 +18,12 @@
   import * as Dialog from "$lib/components/ui/dialog";
   import { Plus, Star } from "lucide-svelte";
   import { Button, buttonVariants } from "$lib/components/ui/button";
-  import type { Tables } from "src/supabase";
   import { Textarea } from "../ui/textarea";
   import { secondaryAltButtonVariant } from "src/lib/shared/constants/constants";
+  import type { Profile } from "src/lib/shared/models/profile";
 
   export let form: SuperValidated<Infer<AddReviewSchema>>;
-  export let teacher: Tables<"profiles">;
+  export let teacher: Profile;
 
   let open = false;
 
@@ -52,7 +52,7 @@
     <Dialog.Header>
       <Dialog.Title>Lägg till recension</Dialog.Title>
       <Dialog.Description>
-        Här kan du göra en recension till {teacher.first_name}.
+        Här kan du göra en recension till {teacher.firstName}.
       </Dialog.Description>
     </Dialog.Header>
     <form
@@ -79,7 +79,7 @@
       </Form.Field>
       <Form.Field form={formValues} name="description">
         <Form.Control let:attrs>
-          <Label>Beskriv din lektion med {teacher.first_name}</Label>
+          <Label>Beskriv din lektion med {teacher.firstName}</Label>
           <Textarea
             {...attrs}
             placeholder="Vad stack ut?"
