@@ -23,7 +23,6 @@ export const load: PageServerLoad = async ({
   try {
     const dbListings = await getListings(supabase, 4, session.user.id);
     listings = dbListings.map(listing => formatListingWithProfile(listing));
-    console.log(listings);
   } catch (e) {
     console.error("Unable to get listings for id " + session.user.id, e);
     error(500, getDefaultErrorInfo("Kunde inte hämta konversationer"));

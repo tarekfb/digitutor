@@ -23,7 +23,7 @@ export const hasFullProfile = (profile: Profile | null) => {
     if (!profile)
         return false;
 
-    if (!profile.firstName || profile.lastName)
+    if (!profile.firstName || !profile.lastName)
         return false;
 
     return true;
