@@ -8,9 +8,8 @@ export const load: LayoutServerLoad = async ({ locals: { safeGetSession, supabas
     // depends("supabase:auth");
     const { session, user } = await safeGetSession()
 
-    // this doesn't work. it hits the if check but doesn't show flash
     if (session && url.pathname.includes("/sign-up") && (url.searchParams.get("role") === 'teacher'))
-        redirect(303, `/account`, { message: 'Du är redan inloggad. Om du vill skapa konto som lärare, logga ut först.', type: 'info' }, cookies);
+        redirect(303, `/account`, { message: `Du är redan inloggad. Om du vill skapa konto som lärare, logga ut först.`, type: 'info' }, cookies);
 
     if (session)
         redirect(303, "/account");
