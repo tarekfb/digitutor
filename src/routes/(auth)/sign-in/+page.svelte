@@ -62,7 +62,7 @@
   <title>Logga in</title>
 </svelte:head>
 
-<AuthSplit condition={!!(reviews && listings && subjects)}>
+<AuthSplit shouldShowAside={!!(reviews && listings && subjects)}>
   <svelte:fragment slot="aside">
     <div class="flex justify-around gap-x-8">
       <div class="max-w-36 flex flex-col">
@@ -84,18 +84,20 @@
           {#if avgRating !== undefined}
             <Stars size={5} rating={avgRating} />
           {/if}
-          <ul>
-            {#each subjects as subject, i}
-              {#if i < 10 && languages[subject]?.label}
-                <li class="flex gap-x-2 items-center">
-                  <Terminal class="w-5 h-5 text-accent" />
-                  <p class="font-mono text-base">
-                    {languages[subject].label}
-                  </p>
-                </li>
-              {/if}
-            {/each}
-          </ul>
+          {#if subjects}
+            <ul>
+              {#each subjects as subject, i}
+                {#if i < 10 && languages[subject]?.label}
+                  <li class="flex gap-x-2 items-center">
+                    <Terminal class="w-5 h-5 text-accent" />
+                    <p class="font-mono text-base">
+                      {languages[subject].label}
+                    </p>
+                  </li>
+                {/if}
+              {/each}
+            </ul>
+          {/if}
         </div>
       </div>
       <div class="flex flex-col items-center">

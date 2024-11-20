@@ -9,14 +9,17 @@ import type { CreateProfile } from "$lib/shared/models/profile";
 import { getHighQualityReviews } from "src/lib/server/database/review";
 import { ExternalErrorCodes } from "src/lib/shared/models/common";
 import { isErrorWithCode } from "src/lib/shared/utils/utils";
+import type { ReviewWithReferences } from "src/lib/shared/models/review";
+import { formatReviewWithReferences } from "src/lib/shared/utils/reviews/utils";
 
 
 export const load: PageServerLoad = async ({ locals: { supabase } }) => {
-    let review;
+    let review: ReviewWithReferences;
     try {
         const reviews = await getHighQualityReviews(supabase, 1);
         const longReviews = reviews.filter(r => r.description && r.description.length > 15);
-        review = longReviews[0] ?? reviews[0];
+        const dbReview = longReviews[0] ?? reviews[0];
+        review = formatReviewWithReferences(dbReview);
     } catch (e) {
         console.error("Error when reviews signup display, perhaps didnt find valid review", e);
         error(500, { ...defaultErrorInfo });

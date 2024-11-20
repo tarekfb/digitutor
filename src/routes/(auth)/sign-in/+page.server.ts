@@ -7,9 +7,12 @@ import { resendSchema, signInSchema } from "$lib/shared/models/user";
 import { getHighQualityReviews } from "src/lib/server/database/review";
 import { getListingsByTeacher } from "src/lib/server/database/listings";
 import { formatReviewWithReferences } from "src/lib/shared/utils/reviews/utils";
+import type { ReviewWithReferences } from "src/lib/shared/models/review";
+import type { ListingWithProfile } from "src/lib/shared/models/listing";
+import { formatListingWithProfile } from "src/lib/shared/utils/listing/utils";
 
 export const load: PageServerLoad = async ({ locals: { supabase } }) => {
-    let longReviews;
+    let longReviews: ReviewWithReferences[];
     try {
         const dbReviews = await getHighQualityReviews(supabase);
         let sorted = dbReviews.sort((a, b) => (b.description?.length ?? 0) - (a.description?.length ?? 0));
@@ -22,13 +25,12 @@ export const load: PageServerLoad = async ({ locals: { supabase } }) => {
         // todo: as in auth, dont fail the page. just skip displaying the review
     }
 
-
-
-    let subjects: number[] = [];
-    let listings;
+    let subjects: number[] | undefined;
+    let listings: ListingWithProfile[] | undefined;
     try {
         if (longReviews[0]) {
-            listings = await getListingsByTeacher(supabase, longReviews[0].receiver.id);
+            const dbListings = await getListingsByTeacher(supabase, longReviews[0].receiver.id);
+            listings = dbListings.map(listing => formatListingWithProfile(listing));
             subjects = listings.flatMap(listing => listing.subjects)
         }
     }

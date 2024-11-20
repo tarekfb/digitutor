@@ -30,7 +30,6 @@ export const actions: Actions = {
           updated_at: getNow(),
         });
 
-
       if (insertError) {
         console.error('Error when inserting contact request', insertError);
         return message(form, getFailFormMessage(undefined, "Kunde ej skicka meddelandet. Försök igen lite senare."), { status: 500 });

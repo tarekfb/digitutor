@@ -18,12 +18,3 @@ export const load: LayoutServerLoad = async ({ locals: { safeGetSession, supabas
     const profile = session && await getProfileByUser(supabase, user.id);
     return { profile }
 }
-
-
-// export const load: LayoutServerLoad = async ({
-//     locals: { supabase, safeGetSession }, depends,
-// }) => {
-
-
-//     return { session, profile, listings }; // TODO: stream these
-// };

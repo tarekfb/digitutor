@@ -10,7 +10,7 @@ import { getConversationForStudentAndTeacher, startConversation } from "$lib/ser
 import { redirect, setFlash } from "sveltekit-flash-message/server";
 import { ResourceAlreadyExistsError } from "src/lib/shared/errors/resource-already-exists-error.js";
 import { createReview, getReviewsByReceiver, getReviewsBySender } from "src/lib/server/database/review.js";
-import type { DbListingWithProfile, ListingWithProfile } from "src/lib/shared/models/listing.js";
+import type { ListingWithProfile } from "src/lib/shared/models/listing.js";
 import { type Message, ExternalErrorCodes } from "src/lib/shared/models/common.js";
 import { isErrorWithCode, loadContactTeacherForms } from "src/lib/shared/utils/utils";
 import type { Profile } from "src/lib/shared/models/profile.js";
@@ -88,7 +88,7 @@ export const load = async ({ locals: { supabase, safeGetSession }, params: { slu
     let reviewsMessage: Message | undefined = undefined;
     try {
         const dbReviews = await getReviewsByReceiver(supabase, slug);
-        reviews = dbReviews.map(review => formatReviewWithReferences(review)); 
+        reviews = dbReviews.map(review => formatReviewWithReferences(review));
     } catch (e) {
         console.error("Error when reading reviews for profile with id: " + slug, e);
         const { user: { id } } = await safeGetSession();
