@@ -92,7 +92,7 @@
       submitText="Ändra"
     >
       <p class="text-muted-foreground">
-        Du kommer behöva bekräfta den nya och den gamla adressen.
+        Du kommer behöva bekräfta den nya <span class="italic">och</span> den gamla adressen.
       </p>
       <Form.Field form={emailForm} name="email">
         <Form.Control let:attrs>
