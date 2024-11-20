@@ -45,11 +45,13 @@
       fallbackClass="h-20 w-20 text-3xl"
     />
     <PrimaryTitle>{other.firstName}</PrimaryTitle>
-    <Button
-      on:click={() => goto(`/profile/${other.id}`)}
-      variant="secondary"
-      class={secondaryAltButtonVariant()}>Se profil</Button
-    >
+    {#if other.role === "teacher"}
+      <Button
+        on:click={() => goto(`/profile/${other.id}`)}
+        variant="secondary"
+        class={secondaryAltButtonVariant()}>Se profil</Button
+      >
+    {/if}
   </div>
   <ul class="flex flex-col gap-y-4 justify-end">
     {#await chatStore.load()}

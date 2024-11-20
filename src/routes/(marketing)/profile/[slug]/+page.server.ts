@@ -1,5 +1,5 @@
 import { error } from "@sveltejs/kit";
-import { getFailFormMessage, defaultErrorInfo } from "$lib/shared/constants/constants";
+import { getFailFormMessage, defaultErrorInfo, getDefaultErrorInfo } from "$lib/shared/constants/constants";
 import { getProfileByUser } from "$lib/server/database/profiles";
 import { getListing } from "$lib/server/database/listings";
 import { fail, message, superValidate } from "sveltekit-superforms";
@@ -43,7 +43,7 @@ export const load = async ({ locals: { supabase, safeGetSession }, params: { slu
 
     if (teacher.role !== "teacher") {
         console.error("Attempted to read a non-teacher profile: " + slug);
-        error(500, { ...defaultErrorInfo });
+        error(400, getDefaultErrorInfo("Denna profilen är inte tillgänglig just nu", "Du kan kontakta oss om detta fortsätter."));
     }
 
     const parentData = await parent();
