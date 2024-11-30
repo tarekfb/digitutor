@@ -59,8 +59,6 @@
 
     sendMessageToStore(chatStore, message, conversation.id, session);
     sendMessageForm.reset();
-
-    toast.info("hej")
   };
 </script>
 
