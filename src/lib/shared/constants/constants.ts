@@ -1,6 +1,6 @@
 import type { Message } from "$lib/shared/models/common";
 
-export const websiteName = "Mindic";
+export const websiteName = "Digitutor";
 export const localBaseUrl = 'http://localhost:5173';
 export const testBaseUrl = 'https://dev.mindic.pages.dev';
 export const prodBaseUrl = 'https://mindic.pro';
