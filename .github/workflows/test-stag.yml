@@ -1,6 +1,9 @@
 name: Test Stag
 
-on: [pull_request]
+on:
+  pull_request:
+    branches-ignore:
+      - master
 
 jobs:
   build_and_test:
