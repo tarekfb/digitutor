@@ -26,10 +26,11 @@
 >
   <a
     href="/"
-    class="text-3xl md:text-5xl font-semibold hover:text-foreground md:hover:text-primary"
+    class="text-xl md:text-3xl hover:text-foreground md:hover:text-primary uppercase"
   >
     {websiteName}
   </a>
+  
 
   <div class="flex-1 flex items-center justify-end">
     <nav class="flex items-center gap-x-2 md:gap-x-4">
