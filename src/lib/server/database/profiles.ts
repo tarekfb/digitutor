@@ -1,13 +1,13 @@
 import type { SupabaseClient } from "@supabase/supabase-js";
-import type { CreateProfile, ProfileInput } from "$lib/shared/models/profile";
-import { getNow, removeUndefined } from "$lib/utils";
-import type { Database, Tables } from "src/supabase";
+import type { CreateProfile, DbProfile, ProfileInput } from "$lib/shared/models/profile";
+import { getNow, removeUndefined } from "src/lib/shared/utils/utils";
+import type { Database } from "src/supabase";
 import { InvalidInputError } from "src/lib/shared/errors/invalid-input-error";
 
 export const getProfileByUser = async (
   supabase: SupabaseClient<Database>,
   userId: string,
-): Promise<Tables<"profiles">> => {
+): Promise<DbProfile> => {
   const { data, error } = await supabase
     .from("profiles")
     .select(`*`)
@@ -22,13 +22,12 @@ export const getProfileByUser = async (
   return data;
 };
 
-
 export const createProfile = async (
   supabase: SupabaseClient<Database>,
   profileInput: CreateProfile,
-): Promise<Tables<"profiles">> => {
+): Promise<DbProfile> => {
 
-  const dbProfile: Tables<"profiles"> = {
+  const dbProfile: DbProfile = {
     id: profileInput.id,
     role: profileInput.role,
     created_at: getNow(),
@@ -56,7 +55,7 @@ export const createProfile = async (
 export const updateProfile = async (
   supabase: SupabaseClient<Database>,
   profile: ProfileInput,
-): Promise<Tables<"profiles">> => {
+): Promise<DbProfile> => {
   const { id, ...fieldsToUpdate } = profile;
   const dbProfile = removeUndefined(fieldsToUpdate);
 

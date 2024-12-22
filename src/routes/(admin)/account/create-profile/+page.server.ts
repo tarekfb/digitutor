@@ -1,26 +1,26 @@
-import { unknownErrorTitle } from "$lib/shared/constants/constants";
-import { _hasFullProfile } from "src/routes/(admin)/account/+layout.js";
+import { defaultErrorInfo, defaultErrorTitle } from "$lib/shared/constants/constants";
 import { error, fail, redirect } from "@sveltejs/kit";
 import { zod } from "sveltekit-superforms/adapters";
 import { message, superValidate } from "sveltekit-superforms/client";
 import { nameSchema, type ProfileInput } from "$lib/shared/models/profile";
 import { updateProfile } from "$lib/server/database/profiles.js";
+import { hasFullProfile } from "src/lib/shared/utils/profile/utils";
 
 export async function load({ parent }) {
   const data = await parent();
   const profile = data.profile;
 
   // user completed their profile
-  // redirect to select plan if student
-  if (_hasFullProfile(profile)) {
-    if (profile.role === "student")
-      redirect(303, "/account/select_plan");
+  if (hasFullProfile(profile))
     redirect(303, "/account");
-  }
+
+  // redirect to select plan if student
+  // if (profile.role === "student")
+  //   redirect(303, "/account/select_plan");
 
   const initFormData = {
-    firstName: profile.first_name ?? "",
-    lastName: profile.last_name ?? "",
+    firstName: profile.firstName ?? "",
+    lastName: profile.lastName ?? "",
   }
 
   try {
@@ -28,9 +28,7 @@ export async function load({ parent }) {
     return { form, data };
   } catch (e) {
     console.error("Error when loading createprofile", e);
-    error(500, {
-      message: unknownErrorTitle,
-    });
+    error(500, { ...defaultErrorInfo });
   };
 }
 
@@ -58,8 +56,8 @@ export const actions = {
       return message(form, 'Skapat profil.');
     } catch (error) {
       console.error("Error on complete profile for userid " + user.id, { error });
-      return fail(500, { // fail or error? todo fix
-        message: unknownErrorMessage, form,
+      return fail(500, {
+        errorMessage: defaultErrorTitle, // error or fail? todo fix
       });
     }
 

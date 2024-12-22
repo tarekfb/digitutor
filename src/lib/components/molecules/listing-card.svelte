@@ -1,92 +1,61 @@
 <script lang="ts">
-  import { Circle } from "lucide-svelte";
-  import { Star } from "lucide-svelte";
   import * as Card from "$lib/components/ui/card/index.js";
-  import type { Listing } from "$lib/shared/models/listing";
+  import type { ListingWithProfile } from "$lib/shared/models/listing";
+  import { formatDateReadable, truncate } from "src/lib/shared/utils/utils";
+  import IsPublished from "../atoms/is-published.svelte";
+  import { Button } from "../ui/button";
+  import { Pen } from "lucide-svelte";
+  import { ExternalLink } from "lucide-svelte";
+  import Separator from "../ui/separator/separator.svelte";
 
-  export let listing: Listing;
+  export let listing: ListingWithProfile;
   export let publicView = true;
-  export let clickable = false;
 </script>
 
-{#if clickable}
-  <a href="/profile/{listing.profile.id}?id={listing.id}" aria-label="Gå till annons">
-    <Card.Root>
-      <Card.Header>
-        <Card.Title class="flex justify-between gap-x-2 items-center">
-          {listing.title}
-          {#if !publicView}
-            <div
-              class="{listing.visible
-                ? 'bg-green-300'
-                : 'bg-slate-100'} p-1 font-normal text-sm rounded-md self-start border-black border-solid border"
-            >
-              {#if listing.visible}
-                Publicerad
-              {:else}
-                Ej publicerad
-              {/if}
-            </div>
-          {/if}
-        </Card.Title>
-        <Card.Description>
-          {#if listing.description}
-            {listing.description}
-          {/if}
-        </Card.Description>
-      </Card.Header>
-      <Card.Content>
-        <div class="flex space-x-4 text-sm text-muted-foreground">
-          <div class="flex items-center">
-            <Circle class="mr-1 h-3 w-3 fill-sky-400 text-sky-400" />
-            TypeScript
-          </div>
-          <div class="flex items-center">
-            <Star class="mr-1 h-3 w-3" />
-            15
-          </div>
-          <div>Skapad {listing.created_at.substring(2, 10)}</div>
-        </div>
-      </Card.Content>
-    </Card.Root>
-  </a>
-{:else}
+<a
+  href="/profile/{listing.profile.id}?id={listing.id}"
+  aria-label="Gå till annons"
+  class="w-full overflow-x-hidden"
+>
   <Card.Root>
-    <Card.Header>
-      <Card.Title class="flex justify-between gap-x-2 items-center">
+    <Card.Header class="flex-row gap-x-2 gap-y-0 justify-between items-center">
+      <Card.Title class="overflow-ellipsis max-w-40 md:max-w-96 ">
         {listing.title}
-        {#if !publicView}
-          <div
-            class="{listing.visible
-              ? 'bg-green-300'
-              : 'bg-slate-100'} p-1 font-normal text-sm rounded-md self-start border-black border-solid border"
-          >
-            {#if listing.visible}
-              Publicerad
-            {:else}
-              Ej publicerad
-            {/if}
-          </div>
-        {/if}
       </Card.Title>
-      <Card.Description>
-        {#if listing.description}
-          {listing.description}
-        {/if}
-      </Card.Description>
+      {#if !publicView}
+        <IsPublished isPublished={listing.visible} class="text-xs" />
+      {/if}
     </Card.Header>
-    <Card.Content>
-      <div class="flex space-x-4 text-sm text-muted-foreground">
-        <div class="flex items-center">
-          <Circle class="mr-1 h-3 w-3 fill-sky-400 text-sky-400" />
-          TypeScript
-        </div>
-        <div class="flex items-center">
-          <Star class="mr-1 h-3 w-3" />
-          15
-        </div>
-        <div>Skapad {listing.created_at.substring(2, 10)}</div>
+    <Separator />
+    <Card.Content
+      class="pt-5 flex flex-col gap-y-4 text-muted-foreground  text-sm md:text-md"
+    >
+      <p>
+        {#if listing.description}
+          {truncate(listing.description, 50)}
+        {:else}
+          Den här annonsen har ingen beskrivning just nu
+        {/if}
+      </p>
+      <div class="flex flex-col gap-y-4 md:flex-row md:justify-end md:gap-x-4">
+        <Button
+          variant="secondary"
+          href="/profile/{listing.profile.id}?id={listing.id}"
+          class="flex gap-x-2"
+          ><ExternalLink class="h-4 w-4" />visa annons</Button
+        >
+        <Button href="/account/edit-listing/{listing.id}" class="flex gap-x-2">
+          <Pen class="h-4 w-4" />Redigera</Button
+        >
+      </div>
+      <div class="flex flex-col gap-y-2">
+        <p>Skapad {formatDateReadable(listing.createdAt)}</p>
+        {#if listing.updatedAt}
+          <p>
+            Uppdaterad {formatDateReadable(listing.updatedAt)}
+          </p>
+        {/if}
       </div>
     </Card.Content>
   </Card.Root>
-{/if}
+</a>

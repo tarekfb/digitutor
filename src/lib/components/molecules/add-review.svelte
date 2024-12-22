@@ -1,8 +1,8 @@
 <script lang="ts">
   import FormSubmit from "$lib/components/molecules/form-submit.svelte";
   import FormMessage from "$lib/components/molecules/form-message.svelte";
-  import { cn } from "$lib/utils.js";
-  import  {
+  import { cn } from "src/lib/shared/utils/utils.js";
+  import {
     superForm,
     type Infer,
     type SuperValidated,
@@ -18,11 +18,12 @@
   import * as Dialog from "$lib/components/ui/dialog";
   import { Plus, Star } from "lucide-svelte";
   import { Button, buttonVariants } from "$lib/components/ui/button";
-  import type { Tables } from "src/supabase";
   import { Textarea } from "../ui/textarea";
+  import { secondaryAltButtonVariant } from "src/lib/shared/constants/constants";
+  import type { Profile } from "src/lib/shared/models/profile";
 
   export let form: SuperValidated<Infer<AddReviewSchema>>;
-  export let teacher: Tables<"profiles">;
+  export let teacher: Profile;
 
   let open = false;
 
@@ -41,7 +42,7 @@
     class={cn(
       buttonVariants({
         variant: "white",
-        className: "flex gap-x-2 self-center",
+        className: `flex gap-x-2 self-center ${secondaryAltButtonVariant()}`,
       }),
     )}
   >
@@ -51,10 +52,9 @@
     <Dialog.Header>
       <Dialog.Title>Lägg till recension</Dialog.Title>
       <Dialog.Description>
-        Här kan du göra en recension till {teacher.first_name}.
+        Här kan du göra en recension till {teacher.firstName}.
       </Dialog.Description>
     </Dialog.Header>
-    <FormMessage {message} scroll />
     <form
       action="?/addReview"
       use:enhance
@@ -79,7 +79,7 @@
       </Form.Field>
       <Form.Field form={formValues} name="description">
         <Form.Control let:attrs>
-          <Label>Beskriv din lektion med {teacher.first_name}</Label>
+          <Label>Beskriv din lektion med {teacher.firstName}</Label>
           <Textarea
             {...attrs}
             placeholder="Vad stack ut?"
@@ -89,18 +89,14 @@
         </Form.Control>
         <Form.FieldErrors />
       </Form.Field>
+      <FormMessage {message} scroll />
       <div class="flex justify-end gap-x-4">
         <Dialog.Footer>
           <Dialog.Close asChild let:builder>
             <Button variant="outline" builders={[builder]}>Avbryt</Button>
           </Dialog.Close>
         </Dialog.Footer>
-        <FormSubmit
-          {delayed}
-          {allErrors}
-          text="Lägg till"
-          loadingText="Laddar..."
-        />
+        <FormSubmit {delayed} {allErrors} text="Lägg till" />
       </div>
     </form>
   </Dialog.Content>

@@ -16,8 +16,11 @@
   import PasswordInput from "$lib/components/molecules/password-input.svelte";
   import AvatarForm from "src/lib/components/molecules/avatar-form.svelte";
   import type { PageData } from "./$types";
+  import RootContainer from "src/lib/components/templates/root-container.svelte";
+  import AccountLayout from "../../../../../lib/components/templates/account-layout.svelte";
 
   export let data: PageData;
+  $: ({ profile, uploadAvatarForm, deleteAvatarForm } = data);
 
   const nameForm = superForm(data.updateNameForm, {
     validators: zodClient(nameSchema),
@@ -47,96 +50,102 @@
 <svelte:head>
   <title>Settings</title>
 </svelte:head>
-
-<div class="flex flex-col gap-y-4 pb-8 w-[275px] md:w-[600px] md:max-w-xl">
+<AccountLayout>
   <PrimaryTitle class="text-center">Inställningar</PrimaryTitle>
-  <SettingsForm form={nameForm} action="?/name" title="Namn" submitText="Ändra">
-    <Form.Field form={nameForm} name="firstName">
-      <Form.Control let:attrs>
-        <Form.Label>Förnamn</Form.Label>
-        <Input
-          {...attrs}
-          type="text"
-          bind:value={$nameData.firstName}
-          placeholder="Förnamn"
-        />
-      </Form.Control>
-      <Form.FieldErrors />
-    </Form.Field>
-    <Form.Field form={nameForm} name="lastName">
-      <Form.Control let:attrs>
-        <Form.Label>Efternamn</Form.Label>
-        <Input
-          {...attrs}
-          type="text"
-          bind:value={$nameData.lastName}
-          placeholder="Efternamn"
-        />
-      </Form.Control>
-      <Form.FieldErrors />
-    </Form.Field>
-  </SettingsForm>
+  <RootContainer class="my-6 w-full">
+    <SettingsForm
+      form={nameForm}
+      action="?/name"
+      title="Namn"
+      submitText="Ändra"
+    >
+      <Form.Field form={nameForm} name="firstName">
+        <Form.Control let:attrs>
+          <Form.Label>Förnamn</Form.Label>
+          <Input
+            {...attrs}
+            type="text"
+            bind:value={$nameData.firstName}
+            placeholder="Förnamn"
+          />
+        </Form.Control>
+        <Form.FieldErrors />
+      </Form.Field>
+      <Form.Field form={nameForm} name="lastName">
+        <Form.Control let:attrs>
+          <Form.Label>Efternamn</Form.Label>
+          <Input
+            {...attrs}
+            type="text"
+            bind:value={$nameData.lastName}
+            placeholder="Efternamn"
+          />
+        </Form.Control>
+        <Form.FieldErrors />
+      </Form.Field>
+    </SettingsForm>
 
-  <SettingsForm
-    form={emailForm}
-    action="?/email"
-    title="E-postadress"
-    submitText="Ändra"
-  >
-    <p class="text-muted-foreground">
-      Du kommer behöva bekräfta den nya och den gamla adressen.
-    </p>
-    <Form.Field form={emailForm} name="email">
-      <Form.Control let:attrs>
-        <Label>E-postadress</Label>
-        <Input
-          {...attrs}
-          type="email"
-          bind:value={$emailData.email}
-          placeholder="Email"
-        />
-      </Form.Control>
-      <Form.FieldErrors />
-    </Form.Field>
-  </SettingsForm>
+    <SettingsForm
+      form={emailForm}
+      action="?/email"
+      title="E-postadress"
+      submitText="Ändra"
+    >
+      <p class="text-muted-foreground">
+        Du kommer behöva bekräfta den nya <span class="italic">och</span> den gamla adressen.
+      </p>
+      <Form.Field form={emailForm} name="email">
+        <Form.Control let:attrs>
+          <Label>E-postadress</Label>
+          <Input
+            {...attrs}
+            type="email"
+            bind:value={$emailData.email}
+            placeholder="Email"
+          />
+        </Form.Control>
+        <Form.FieldErrors />
+      </Form.Field>
+    </SettingsForm>
 
-  <AvatarForm
-    uploadAvatarForm={data.uploadAvatarForm}
-    deleteAvatarForm={data.deleteAvatarForm}
-    avatarUrl={data.profile.avatar_url}
-  />
+    <AvatarForm
+      {uploadAvatarForm}
+      {deleteAvatarForm}
+      avatarUrl={profile.avatarUrl ?? ""}
+    />
 
-  <SettingsForm
-    form={passwordForm}
-    action="?/password"
-    title="Lösenord"
-    submitText="Ändra"
-  >
-    <Form.Field form={passwordForm} name="new">
-      <Form.Control let:attrs>
-        <Label>Nytt lösenord</Label>
-        <PasswordInput formData={passwordData} {attrs} placeholder="" />
-      </Form.Control>
-      <Form.Description />
-      <Form.FieldErrors />
-    </Form.Field>
-    <Form.Field form={passwordForm} name="confirm">
-      <Form.Control let:attrs>
-        <Label>Bekräfta nytt lösenord</Label>
-        <PasswordInput formData={passwordData} {attrs} placeholder="" />
-      </Form.Control>
-      <Form.Description />
-      <Form.FieldErrors />
-    </Form.Field>
-    <Form.Field form={passwordForm} name="current">
-      <Form.Control let:attrs>
-        <Label>Nuvarande lösenord</Label>
-        <PasswordInput formData={passwordData} {attrs} placeholder="" />
-      </Form.Control>
-      <Form.Description />
-      <Form.FieldErrors />
-    </Form.Field>
-  </SettingsForm>
+    <SettingsForm
+      form={passwordForm}
+      action="?/password"
+      title="Lösenord"
+      submitText="Ändra"
+    >
+      <Form.Field form={passwordForm} name="new">
+        <Form.Control let:attrs>
+          <Label>Nytt lösenord</Label>
+          <PasswordInput formData={passwordData} {attrs} placeholder="" />
+        </Form.Control>
+        <Form.Description />
+        <Form.FieldErrors />
+      </Form.Field>
+      <Form.Field form={passwordForm} name="confirm">
+        <Form.Control let:attrs>
+          <Label>Bekräfta nytt lösenord</Label>
+          <PasswordInput formData={passwordData} {attrs} placeholder="" />
+        </Form.Control>
+        <Form.Description />
+        <Form.FieldErrors />
+      </Form.Field>
+      <Form.Field form={passwordForm} name="current">
+        <Form.Control let:attrs>
+          <Label>Nuvarande lösenord</Label>
+          <PasswordInput formData={passwordData} {attrs} placeholder="" />
+        </Form.Control>
+        <Form.Description />
+        <Form.FieldErrors />
+      </Form.Field>
+    </SettingsForm>
 
-  <DeleteAccount form={deleteForm} />
-</div>
+    <DeleteAccount form={deleteForm} />
+  </RootContainer>
+</AccountLayout>

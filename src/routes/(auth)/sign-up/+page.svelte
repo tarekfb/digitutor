@@ -28,7 +28,7 @@
   <title>Skapa konto</title>
 </svelte:head>
 
-<AuthSplit condition={!!review}>
+<AuthSplit shouldShowAside={!!review}>
   <svelte:fragment slot="aside">
     <div class="relative flex flex-col gap-3">
       <div class="absolute select-none -top-32 -left-11 rotate-180">
@@ -43,15 +43,14 @@
       {#if review.sender}
         <div class="flex items-center gap-x-2 self-start mt-2.5">
           <Avatar
-            url={review.sender.avatar_url ?? ""}
-            firstName={review.sender.first_name}
-            lastName={review.sender.last_name}
+            url={review.sender.avatarUrl ?? ""}
+            firstName={review.sender.firstName}
+            lastName={review.sender.lastName}
             role={review.sender.role}
-            onClick={undefined}
             class="text-sm w-7 h-7"
           />
           <cite class="not-italic text-lg">
-            {review.sender.first_name}
+            {review.sender.firstName}
           </cite>
           <ArrowRightIcon class="w-4 h-4" />
           <a
@@ -59,14 +58,13 @@
             href="/profile/{review.receiver.id}"
           >
             <Avatar
-              url={review.receiver.avatar_url ?? ""}
-              firstName={review.receiver.first_name}
-              lastName={review.receiver.last_name}
+              url={review.receiver.avatarUrl ?? ""}
+              firstName={review.receiver.firstName}
+              lastName={review.receiver.lastName}
               role={review.receiver.role}
               class="text-sm w-7 h-7"
-              onClick={undefined}
             />
-            <p class="text-lg">{review.receiver.first_name}</p>
+            <p class="text-lg">{review.receiver.firstName}</p>
           </a>
         </div>
       {/if}
@@ -74,7 +72,7 @@
   </svelte:fragment>
   <svelte:fragment slot="form">
     <form
-      class="text-start flex flex-col gap-y-4 w-full max-w-[650px] p-4"
+      class="text-start flex flex-col gap-y-4 w-full max-w-screen-sm p-4"
       method="POST"
       use:enhance
     >

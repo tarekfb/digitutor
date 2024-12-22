@@ -1,14 +1,15 @@
-import { fail } from "@sveltejs/kit";
+import { error, fail } from "@sveltejs/kit";
 import { createListing, getListings } from "$lib/server/database/listings";
 import type { Actions, PageServerLoad } from "./$types";
-import { getFailFormMessage } from "$lib/shared/constants/constants";
+import { getFailFormMessage, getDefaultErrorInfo } from "$lib/shared/constants/constants";
 import { message, superValidate } from "sveltekit-superforms";
-import { initCreateListingSchema } from "$lib/shared/models/listing";
+import { initCreateListingSchema, type ListingWithProfile } from "$lib/shared/models/listing";
 import { zod } from "sveltekit-superforms/adapters";
 import { redirect } from "sveltekit-flash-message/server";
+import { formatListingWithProfile } from "src/lib/shared/utils/listing/utils";
 
 export const load: PageServerLoad = async ({
-  locals: { supabase, safeGetSession }, parent,
+  locals: { supabase, safeGetSession }, parent, depends
 }) => {
   const { session } = await safeGetSession();
   if (!session)
@@ -18,16 +19,16 @@ export const load: PageServerLoad = async ({
   if (profile.role !== 'teacher')
     redirect(303, '/account');
 
-  const form = await superValidate(zod(initCreateListingSchema))
-
-  let listings;
+  let listings: ListingWithProfile[];
   try {
-    listings = await getListings(supabase, 10, session.user.id);
+    const dbListings = await getListings(supabase, 4, session.user.id);
+    listings = dbListings.map(listing => formatListingWithProfile(listing));
   } catch (e) {
     console.error("Unable to get listings for id " + session.user.id, e);
-    return message(form, getFailFormMessage("Kunde inte hämta konversationer"), { status: 500 });
+    error(500, getDefaultErrorInfo("Kunde inte hämta konversationer"));
   }
 
+  const form = await superValidate({ nbrOfListings: listings.length }, zod(initCreateListingSchema), { errors: false })
   return { form, listings };
 };
 
@@ -36,11 +37,21 @@ export const actions: Actions = {
     const { locals: { supabase, safeGetSession } } = event;
     const { session } = await safeGetSession();
     if (!session)
-      throw redirect(303, "/sign-in");
+      redirect(303, "/sign-in");
 
     const form = await superValidate(event, zod(initCreateListingSchema));
+
     if (!form.valid) return fail(400, { form });
     const { title } = form.data;
+    let { nbrOfListings } = form.data;
+
+    if (nbrOfListings === undefined) {
+      console.error("User had undefined nbr of listings and tried to create listing, allow creation.")
+      nbrOfListings = 0;
+    }
+
+    if (nbrOfListings > 4)
+      return message(form, getFailFormMessage("Du har för många annonser", "Ta bort en annons innan du skapar en ny.", undefined, undefined, 'warning'), { status: 400 })
 
     let listingId = "";
     try {
@@ -50,6 +61,6 @@ export const actions: Actions = {
       console.error("Failed to create listing", error);
       return message(form, getFailFormMessage(), { status: 500 });
     }
-    throw redirect(303, `/listing/${listingId}`);
+    redirect(303, `/account/edit-listing/${listingId}`);
   },
 };

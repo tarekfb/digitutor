@@ -9,28 +9,28 @@ import { deleteAccountSchema, passwordSchema } from "$lib/shared/models/user";
 import { isAuthApiError } from "@supabase/supabase-js";
 import { redirect } from "sveltekit-flash-message/server";
 import { deleteAvatar, uploadAvatar } from "src/lib/server/database/avatar";
-import { formatBytes, isStorageErrorCustom, verifyAvatarOwnership } from "src/lib/utils";
-import type { StorageErrorCustom } from "src/lib/shared/errors/storage-error-custom";
+import { formatBytes, isErrorWithStatusCode, verifyAvatarOwnership } from "src/lib/shared/utils/utils";
 import { Buffer } from 'node:buffer';
 import { CF_IMAGE_RESIZE_URL } from '$env/static/private'
 import { ResourceNotFoundError } from "src/lib/shared/errors/missing-error";
+import { ExternalErrorCodes } from "src/lib/shared/models/common";
 
 export const load: PageServerLoad = async ({ parent, locals: { safeGetSession } }) => {
     const { session } = await safeGetSession();
     if (!session)
         throw redirect(303, "/sign-in");
 
-    const { profile } = await parent();
+    const { profile: { avatarUrl, firstName, lastName } } = await parent();
     const initName = {
-        firstName: profile.first_name,
-        lastName: profile.last_name
+        firstName,
+        lastName
     }
     const updateNameForm = await superValidate(initName, zod(nameSchema));
     const updateEmailForm = await superValidate({ email: session.user.email }, zod(emailSchema));
     const deleteAccountForm = await superValidate(zod(deleteAccountSchema));
     const updatePasswordForm = await superValidate(zod(passwordSchema));
     const uploadAvatarForm = await superValidate(zod(avatarSchema));
-    const deleteAvatarForm = await superValidate({ path: profile.avatar_url ?? '' }, zod(deleteAvatarSchema));
+    const deleteAvatarForm = await superValidate({ path: avatarUrl ?? '' }, zod(deleteAvatarSchema));
     return { updateNameForm, updateEmailForm, deleteAccountForm, updatePasswordForm, uploadAvatarForm, deleteAvatarForm };
 };
 
@@ -84,7 +84,7 @@ export const actions = {
             throw redirect(303, "/sign-in");
 
         const form = await superValidate(event, zod(avatarSchema));
-        if (!form.data || !form.data.avatar) return fail(400, { form });    
+        if (!form.data || !form.data.avatar) return fail(400, { form });
         if (form.data.avatar.type.endsWith("octet-stream")) return message(form, getFailFormMessage("Filformatet är inte giltigt", `Filformatet är "octet-stream". Testa med en annan bild.`), { status: 400 });
         if (!form.valid) return fail(400, { form });
         const { avatar } = form.data;
@@ -113,9 +113,8 @@ export const actions = {
             const fileName = `${user.id}---${crypto.randomUUID()}.${format}`
             avatarPath = await uploadAvatar(supabase, fileName, input);
         } catch (error) {
-            if (isStorageErrorCustom(error)) {
-                const storageError = error as unknown as StorageErrorCustom;
-                if (storageError.statusCode === '413')
+            if (isErrorWithStatusCode(error)) {
+                if (error.statusCode === ExternalErrorCodes.FileTooLargeStorageError)
                     return message(form, getFailFormMessage("Filen är för stor", `Din fil är ${formatBytes(Buffer.byteLength(input))}, maxgränsen är ${formatBytes(maxAvatarSize)}.`), { status: 413 });
             }
             console.error("Unknown error on upload avatar", error);

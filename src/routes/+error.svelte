@@ -1,14 +1,9 @@
 <script lang="ts">
-  import { websiteName } from "$lib/shared/constants/constants";
   import Error from "$lib/components/organisms/error.svelte";
   import { page } from "$app/stores";
   import Navbar from "src/lib/components/organisms/navbar.svelte";
-
-  const title =
-    $page.error?.message === "Internal Error"
-      ? undefined
-      : $page.error?.message;
+  import { defaultErrorInfo } from "src/lib/shared/constants/constants";
 </script>
 
 <Navbar profile={false} logout={false} />
-<Error {title} code={$page.status} />
+<Error error={$page.error ?? defaultErrorInfo} code={$page.status} />

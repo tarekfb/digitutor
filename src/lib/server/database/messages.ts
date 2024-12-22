@@ -1,7 +1,7 @@
 import type { Session, SupabaseClient } from "@supabase/supabase-js";
 import type { Database, Tables } from "src/supabase"
 import type { InputMessage } from "$lib/shared/models/conversation"
-import { getNow } from '$lib/utils'
+import { getNow } from 'src/lib/shared/utils/utils'
 
 export const getMessages = async (
   supabase: SupabaseClient<Database>,
@@ -32,14 +32,14 @@ export const getMessages = async (
 
 export const sendMessage = async (
   supabase: SupabaseClient<Database>,
-  input: InputMessage,
+  { conversation, content }: InputMessage,
   session: Session
 ): Promise<Tables<"messages">> => {
   const dbMessage: Tables<"messages"> = {
     id: crypto.randomUUID(),
     sender: session.user.id,
-    conversation: input.conversation,
-    content: input.content,
+    conversation: conversation,
+    content: content,
     created_at: getNow(),
   };
 

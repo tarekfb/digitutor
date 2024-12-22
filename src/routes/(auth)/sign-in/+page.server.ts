@@ -1,34 +1,36 @@
 import { error, fail, redirect } from "@sveltejs/kit";
 import type { Actions, PageServerLoad } from "./$types";
-import { MessageId, getFailFormMessage, unknownErrorMessage } from "$lib/shared/constants/constants";
+import { MessageId, getDefaultErrorInfo, getFailFormMessage } from "$lib/shared/constants/constants";
 import { message, superValidate } from "sveltekit-superforms";
 import { zod } from "sveltekit-superforms/adapters";
 import { resendSchema, signInSchema } from "$lib/shared/models/user";
 import { getHighQualityReviews } from "src/lib/server/database/review";
 import { getListingsByTeacher } from "src/lib/server/database/listings";
-import { Subjects } from "src/lib/shared/models/common";
+import { formatReviewWithReferences } from "src/lib/shared/utils/reviews/utils";
+import type { ReviewWithReferences } from "src/lib/shared/models/review";
+import type { ListingWithProfile } from "src/lib/shared/models/listing";
+import { formatListingWithProfile } from "src/lib/shared/utils/listing/utils";
 
 export const load: PageServerLoad = async ({ locals: { supabase } }) => {
-    let longReviews;
+    let longReviews: ReviewWithReferences[];
     try {
-        const reviews = await getHighQualityReviews(supabase);
-        const sorted = reviews.sort((a, b) => (b.description?.length ?? 0) - (a.description?.length ?? 0));
-        longReviews = sorted.slice(0, 3);
+        const dbReviews = await getHighQualityReviews(supabase);
+        let sorted = dbReviews.sort((a, b) => (b.description?.length ?? 0) - (a.description?.length ?? 0));
+        sorted = sorted.slice(0, 3);
+        longReviews = sorted.map(s => formatReviewWithReferences(s));
     }
     catch (e) {
         console.error("Error when fetching signin display review, perhaps didnt find valid review", e);
-        error(500, {
-            message: "",
-        });
+        error(500, getDefaultErrorInfo(""));
+        // todo: as in auth, dont fail the page. just skip displaying the review
     }
 
-
-    let listings;
-    let subjects: Subjects[] = [];
+    let subjects: number[] | undefined;
+    let listings: ListingWithProfile[] | undefined;
     try {
         if (longReviews[0]) {
-
-            listings = await getListingsByTeacher(supabase, longReviews[0].receiver.id);
+            const dbListings = await getListingsByTeacher(supabase, longReviews[0].receiver.id);
+            listings = dbListings.map(listing => formatListingWithProfile(listing));
             subjects = listings.flatMap(listing => listing.subjects)
         }
     }

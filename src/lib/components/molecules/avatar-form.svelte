@@ -3,7 +3,7 @@
   import FormMessage from "../molecules/form-message.svelte";
   import SecondaryTitle from "$lib/components/atoms/secondary-title.svelte";
   import LoadingSpinner from "$lib/components/atoms/loading-spinner.svelte";
-  import { formatBytes } from "$lib/utils.js";
+  import { formatBytes } from "src/lib/shared/utils/utils.js";
   import {
     getMimeType,
     maxAvatarSize,
@@ -15,7 +15,7 @@
   import * as Form from "$lib/components/ui/form";
   import { Label } from "$lib/components/ui/label/index.js";
   export let uploadAvatarForm;
-  export let avatarUrl: string | null;
+  export let avatarUrl: string
   export let deleteAvatarForm;
 
   const handleFilesSelect = (e: any) => {
@@ -49,7 +49,7 @@
   };
 </script>
 
-<div class="flex flex-col gap-y-4 generic-card">
+<div class="flex flex-col gap-y-4 generic-card w-full">
   <SecondaryTitle>Profilbild</SecondaryTitle>
   <p class="text-muted-foreground">
     Maxstorlek är {formatBytes(maxAvatarSize)}.

@@ -2,7 +2,7 @@
   import Navbar from "$lib/components/organisms/navbar.svelte";
   import "src/app.pcss";
   import type { PageData } from "./$types";
-  import { logout } from "src/lib/utils";
+  import { logout } from "src/lib/shared/utils/utils";
   import Footer from "src/lib/components/organisms/footer.svelte";
 
   export let data: PageData;
@@ -10,5 +10,7 @@
 </script>
 
 <Navbar {profile} logout={() => logout(supabase, session)} />
-<slot />
+<div class="overflow-x-hidden flex flex-col items-center">
+  <slot />
+</div>
 <Footer />

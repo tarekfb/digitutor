@@ -1,7 +1,7 @@
 <script lang="ts">
   import { Button as ButtonPrimitive } from "bits-ui";
   import { type Events, type Props, buttonVariants } from "./index.js";
-  import { cn } from "$lib/utils.js";
+  import { cn } from "src/lib/shared/utils/utils.js";
 
   type $$Props = Props;
   type $$Events = Events;
@@ -17,7 +17,7 @@
   {builders}
   class={cn(
     "tracking-wider uppercase",
-    buttonVariants({ variant, size, className }),
+    buttonVariants({ variant, size, className})
   )}
   type="button"
   {...$$restProps}

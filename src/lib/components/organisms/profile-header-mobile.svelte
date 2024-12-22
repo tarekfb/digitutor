@@ -1,7 +1,9 @@
 <script lang="ts">
   import ContactTeacherForm from "$lib/components/molecules/contact-teacher-form.svelte";
-  import type { Tables } from "src/supabase";
-  import type { Listing } from "src/lib/shared/models/listing";
+  import type {
+    DbListingWithProfile,
+    ListingWithProfile,
+  } from "src/lib/shared/models/listing";
   import type { SuperValidated, Infer } from "sveltekit-superforms/client";
   import ProfileHeaderInfo from "$lib/components/molecules/profile-header-info.svelte";
   import Wavy from "$lib/components/atoms/wavy.svelte";
@@ -9,24 +11,24 @@
     requestContactSchema,
     startContactSchema,
   } from "src/lib/shared/models/conversation";
-  import NotPublished from "../atoms/not-published.svelte";
+  import type { Profile } from "src/lib/shared/models/profile";
 
-  export let teacher: Tables<"profiles">;
-  export let listing: Listing | undefined;
+  export let teacher: Profile;
+  export let listing: ListingWithProfile | undefined;
   export let requestContactForm: SuperValidated<
     Infer<typeof requestContactSchema>
   >;
   export let startContactForm: SuperValidated<Infer<typeof startContactSchema>>;
 </script>
 
-{#if teacher.avatar_url}
+{#if teacher.avatarUrl}
   <!-- this div creates some height to wavy background -->
   <div class="{listing ? 'h-28' : 'h-28'} w-screen bg-accent"></div>
 
   <Wavy class="-mt-8 overflow-x-hidden" />
   <div class="flex flex-col gap-y-4 items-center w-full max-w-md">
     <img
-      src={teacher.avatar_url}
+      src={teacher.avatarUrl}
       alt="profile avatar"
       class="object-cover w-max h-60 -mt-36 rounded-sm"
     />
@@ -36,9 +38,8 @@
       {startContactForm}
       requestContactAction="?/requestContact"
       startContactAction="?/startContact"
-      firstName={teacher.first_name}
+      firstName={teacher.firstName}
     />
-    <NotPublished visible={listing?.visible} class="self-center" />
   </div>
 {:else}
   <div class="w-screen bg-accent flex flex-col items-center text-foreground">
@@ -54,9 +55,8 @@
       {startContactForm}
       requestContactAction="?/requestContact"
       startContactAction="?/startContact"
-      firstName={teacher.first_name}
+      firstName={teacher.firstName}
     />
-    <NotPublished visible={listing?.visible} class="self-center"/>
   </div>
 
   <Wavy class="-mt-4 overflow-x-hidden " />

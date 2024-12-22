@@ -15,8 +15,8 @@
   import PrimaryTitle from "src/lib/components/atoms/primary-title.svelte";
   import SecondaryTitle from "src/lib/components/atoms/secondary-title.svelte";
   import type { PageData } from "./$types";
-  import { Subjects } from "src/lib/shared/models/common";
-  import type { Review } from "src/lib/shared/models/review";
+  import { languages } from "src/lib/shared/models/common";
+  import type { ReviewWithReferences } from "src/lib/shared/models/review";
   import Stars from "src/lib/components/atoms/stars.svelte";
   import ReviewCardExtra from "src/lib/components/molecules/review-card-extra.svelte";
 
@@ -26,7 +26,7 @@
 
   $: avgRating = getAvgRating(reviews);
 
-  const getAvgRating = (reviews: Review[]) => {
+  const getAvgRating = (reviews: ReviewWithReferences[]) => {
     if (reviews.length === 0) return undefined;
     let sum = 0;
     reviews?.forEach((review) => {
@@ -62,38 +62,42 @@
   <title>Logga in</title>
 </svelte:head>
 
-<AuthSplit condition={!!(reviews && listings && subjects)}>
+<AuthSplit shouldShowAside={!!(reviews && listings && subjects)}>
   <svelte:fragment slot="aside">
     <div class="flex justify-around gap-x-8">
       <div class="max-w-36 flex flex-col">
-        {#if reviews[0].receiver.avatar_url}
+        {#if reviews[0].receiver.avatarUrl}
           <img
             alt="profile avatar"
             class="rounded-sm mb-2"
             width="250"
             height="250"
-            src={reviews[0].receiver.avatar_url}
+            src={reviews[0].receiver.avatarUrl}
           />
         {/if}
         <div
           class="flex flex-col gap-y-0.5 text-muted-foreground text-xl md:text-2xl"
         >
-          <SecondaryTitle class=" font-semibold"
-            >{reviews[0].receiver.first_name}</SecondaryTitle
+          <SecondaryTitle class="whitespace-normal font-semibold"
+            >{reviews[0].receiver.firstName}</SecondaryTitle
           >
           {#if avgRating !== undefined}
             <Stars size={5} rating={avgRating} />
           {/if}
-          <ul>
-            {#each subjects as subject, i}
-              {#if i < 10}
-              <li class="flex gap-x-2 items-center">
-                  <Terminal class="w-5 h-5 text-accent" />
-                  <p class="font-mono text-base">{Subjects[subject]}</p>
-                </li>
-              {/if}
-            {/each}
-          </ul>
+          {#if subjects}
+            <ul>
+              {#each subjects as subject, i}
+                {#if i < 10 && languages[subject]?.label}
+                  <li class="flex gap-x-2 items-center">
+                    <Terminal class="w-5 h-5 text-accent" />
+                    <p class="font-mono text-base">
+                      {languages[subject].label}
+                    </p>
+                  </li>
+                {/if}
+              {/each}
+            </ul>
+          {/if}
         </div>
       </div>
       <div class="flex flex-col items-center">
@@ -116,7 +120,7 @@
   </svelte:fragment>
   <svelte:fragment slot="form">
     <form
-      class="text-start flex flex-col gap-y-4 w-full max-w-[650px] p-4"
+      class="text-start flex flex-col gap-y-4 w-full max-w-screen-sm p-4"
       action="?/signIn"
       method="POST"
       use:enhance

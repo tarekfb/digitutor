@@ -11,9 +11,10 @@
   import FormMessage from "$lib/components/molecules/form-message.svelte";
   import PrimaryTitle from "$lib/components/atoms/primary-title.svelte";
   import Link from "$lib/components/atoms/link.svelte";
-  import RootContainer from "src/lib/components/molecules/root-container.svelte";
+  import RootContainer from "src/lib/components/templates/root-container.svelte";
+  import type { PageData } from "./$types";
 
-  export let data;
+  export let data: PageData;
 
   const contactForm = superForm(data.form, {
     validators: zodClient(contactUsSchema),
@@ -38,13 +39,12 @@
   </div>
   <div class="flex flex-col gap-y-1 text-muted-foreground">
     <p>Kontakta oss om du har något på hjärtat, t.ex. om:</p>
-    <ul class="list-disc list-outside space-y-0.5 mx-6">
+    <ul class="list-disc list-outside space-y-0.5 mx-6 mb-2">
       <li>
         Din fråga inte täcks av vår <Link class="text-lg" href="/faq">FAQ</Link
         >.
       </li>
       <li>Du har synpunkter, klagomål eller önskningar.</li>
-      <li>Du bara vill säga hej!</li>
     </ul>
     <p>Vi svarar dig så fort vi kan.</p>
   </div>
@@ -110,7 +110,6 @@
       {delayed}
       {allErrors}
       text="Skicka"
-      loadingText="Skickar..."
       class="self-center md:min-w-wider"
     />
   </form>

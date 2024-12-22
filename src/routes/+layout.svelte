@@ -57,6 +57,17 @@
     // Clear the flash message to avoid double-toasting.
     $flash = undefined;
   }
+
+  const setPosition = (pathname: string): "top-center" | "bottom-center" => {
+    const conversationPage = new RegExp(
+      /\/account\/conversation\/([0-9a-f\-]{36})$/,
+    );
+    return new RegExp(conversationPage).test(pathname)
+      ? "top-center"
+      : "bottom-center";
+  };
+  let position: "top-center" | "bottom-center" = "bottom-center";
+  $: position = setPosition($page.url.pathname);
 </script>
 
 {#if $navigating}
@@ -72,5 +83,5 @@
     in:slide={{ delay: 100, duration: 12000, axis: "x", easing: expoOut }}
   ></div>
 {/if}
-<Toaster />
+<Toaster {position} />
 <slot />

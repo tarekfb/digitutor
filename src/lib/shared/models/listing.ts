@@ -1,12 +1,25 @@
 import type { Tables } from "src/supabase";
-import type { TypeToZod } from "$lib/utils";
+import type { TypeToZod } from "src/lib/shared/utils/utils";
 import { z } from "zod";
+import type { DbProfile, Profile } from "./profile";
 
-export type Listing = Omit<Tables<"listings">, "profile"> & {
-    profile: Tables<"profiles">;
+export type DbListingBase = Tables<"listings">
+
+export type DbListingWithProfile = Omit<Tables<"listings">, "profile"> & {
+    profile: DbProfile;
 };
 
-export type InputListing = Pick<Tables<"listings">, 'description' | 'subjects' | 'title' | 'visible'> & {
+export type ListingBase = Omit<DbListingBase, "created_at" | "updated_at" | "hourly_price"> & {
+    hourlyPrice: number
+    createdAt: string,
+    updatedAt?: string
+}
+
+export type ListingWithProfile = Omit<ListingBase, "profile"> & {
+    profile: Profile;
+};
+
+export type InputListing = Pick<DbListingBase, 'description' | 'subjects' | 'title' | 'visible'> & {
     hourlyPrice: number
 };
 
@@ -14,19 +27,17 @@ const updateListingProps: TypeToZod<InputListing> = {
     description: z
         .string()
         .min(10, "Måste vara minst 10 karaktärer.")
-        .max(160, "Får inte vara mer än 160 karaktärer.")
-        .refine((s) => s.trim() !== "", "Får inte vara tom."),
+        .max(160, "Får inte vara mer än 160 karaktärer."),
     hourlyPrice: z
         .coerce
         .number()
-        .min(0, "Får inte vara negativt.")
+        .min(0, "Måste vara minst 0.")
         .max(100000, "Självinsikt och självsäkerhet är en hårfin balansgång."),
     subjects: z.number().array().min(1, "Du måste välja minst ett ämne."),
     title: z
         .string()
         .min(3, "Måste vara minst 3 bokstäver.")
-        .max(80, "Måste vara maximalt 100 bokstäver.")
-        .refine((s) => s.trim() !== "", "Får inte vara tom."),
+        .max(80, "Måste vara maximalt 100 bokstäver."),
     visible: z
         .boolean()
     // currency: z
@@ -38,4 +49,4 @@ const updateListingProps: TypeToZod<InputListing> = {
 
 export const updateListingSchema = z.object(updateListingProps)
 
-export const initCreateListingSchema = z.object({ title: updateListingProps.title })
+export const initCreateListingSchema = z.object({ title: updateListingProps.title, nbrOfListings: z.number() })

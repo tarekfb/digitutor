@@ -15,7 +15,7 @@
   import { goto } from "$app/navigation";
   import * as Carousel from "$lib/components/ui/carousel/index.js";
   import { languages } from "src/lib/shared/models/common";
-  import RootContainer from "src/lib/components/molecules/root-container.svelte";
+  import RootContainer from "src/lib/components/templates/root-container.svelte";
   import Wavy from "src/lib/components/atoms/wavy.svelte";
 
   export let data: PageData;
@@ -39,7 +39,6 @@
     >
       <div
         class="text-3xl md:text-5xl font-semibold px-2"
-        style="line-height: 1.2;"
       >
         Vill du bli
         <span
@@ -92,7 +91,7 @@
     </div>
 
     <div
-      class="flex flex-col justify-center items-center gap-y-4 w-full max-w-[650px]"
+      class="flex flex-col justify-center items-center gap-y-4 w-full max-w-screen-sm"
     >
       <form
         class="text-center flex flex-col gap-y-4 w-full"

@@ -1,12 +1,12 @@
 <script lang="ts">
   import Avatar from "$lib/components/atoms/avatar.svelte";
-  import type { Review } from "src/lib/shared/models/review";
+  import type { ReviewWithReferences } from "src/lib/shared/models/review";
   import Stars from "../atoms/stars.svelte";
-  import { cn } from "$lib/utils.js";
+  import { cn } from "src/lib/shared/utils/utils.js";
 
   let className: string | null | undefined = undefined;
   export { className as class };
-  export let review: Review;
+  export let review: ReviewWithReferences;
 </script>
 
 <div
@@ -19,10 +19,9 @@
     <div class="absolute select-none -top-3 -left-3">
       <span class="text-[120px] leading-none text-primary/40">
         <Avatar
-          onClick={undefined}
-          url={review.sender.avatar_url ?? ""}
-          firstName={review.sender.first_name}
-          lastName={review.sender.last_name}
+          url={review.sender.avatarUrl ?? ""}
+          firstName={review.sender.firstName}
+          lastName={review.sender.lastName}
           role={review.sender.role}
           class="text-sm w-8 h-8"
         />
@@ -30,7 +29,7 @@
     </div>
   {/if}
   {#if review.sender}
-    <h4 class="text-lg">{review.sender.first_name}</h4>
+    <h4 class="text-lg">{review.sender.firstName}</h4>
   {/if}
   {#if review.description}
     <div class="text-muted-foreground overflow-hidden">

@@ -2,16 +2,19 @@
   import type { PageData } from "./$types";
   import PrimaryTitle from "$lib/components/atoms/primary-title.svelte";
   import { mediaQuery } from "svelte-legos";
-  import RootContainer from "src/lib/components/molecules/root-container.svelte";
+  import RootContainer from "src/lib/components/templates/root-container.svelte";
   import ProfileHeaderMobile from "src/lib/components/organisms/profile-header-mobile.svelte";
   import ContactTeacherForm from "src/lib/components/molecules/contact-teacher-form.svelte";
   import SecondaryTitle from "src/lib/components/atoms/secondary-title.svelte";
   import { Terminal } from "lucide-svelte";
   import Stars from "src/lib/components/atoms/stars.svelte";
-  import { Subjects } from "src/lib/shared/models/common";
+  import { languages } from "src/lib/shared/models/common";
   import AlertMessage from "src/lib/components/atoms/alert-message.svelte";
   import ProfileBody from "src/lib/components/molecules/profile-body.svelte";
-  import NotPublished from "src/lib/components/atoms/not-published.svelte";
+  import OwnerSection from "src/lib/components/molecules/owner-section.svelte";
+  import { page } from "$app/stores";
+  import type { Session } from "@supabase/supabase-js";
+  import type { Profile } from "src/lib/shared/models/profile";
 
   export let data: PageData;
   $: ({
@@ -27,6 +30,20 @@
   } = data);
 
   const isDesktop = mediaQuery("(min-width: 768px)");
+
+  let isOwner = false;
+  let preview = false;
+  $: preview = $page.url.searchParams.get("preview") === "true";
+  $: isOwner = checkIsOwner(session, teacher, preview);
+
+  const checkIsOwner = (
+    session: Session | null,
+    teacher: Profile,
+    preview: boolean,
+  ) => {
+    if (preview) return false;
+    return session?.user.id === teacher.id;
+  };
 </script>
 
 {#if !$isDesktop}
@@ -37,7 +54,7 @@
       {requestContactForm}
       {startContactForm}
     />
-    {#if session?.user.id === teacher.id && listingMessage}
+    {#if isOwner && listingMessage}
       <div class="mx-8">
         <AlertMessage
           title={listingMessage.title}
@@ -50,7 +67,7 @@
         </AlertMessage>
       </div>
     {/if}
-    <div class="flex flex-col gap-y-4 p-8 w-full max-w-lg">
+    <div class="flex flex-col gap-y-4 p-8 pt-0 w-full max-w-lg">
       {#if listing}
         <PrimaryTitle class="text-wrap">{listing.title}</PrimaryTitle>
         <p class="text-muted-foreground">
@@ -64,26 +81,8 @@
 
       <ProfileBody {teacher} {allowCreateReview} {reviews} {addReviewForm} />
 
-      {#if session?.user.id === teacher.id}
-        <small
-          class="mt-6 flex flex-col gap-y-2 text-center text-muted-foreground px-8 text-lg"
-        >
-          <p>
-            Vill du göra ändringar på informationen om dig? <a
-              href="/account"
-              class="underline">Gå till din profil.</a
-            >
-          </p>
-          {#if listing}
-            <p>
-              Vill du göra ändringar på din annons? <a
-                href="/listing/{listing.id}"
-                class="underline">Gå till annonsen.</a
-              >
-            </p>
-          {/if}
-          <p class="italic">Bara du kan se detta.</p>
-        </small>
+      {#if isOwner}
+        <OwnerSection {listing} />
       {/if}
     </div>
   </RootContainer>
@@ -92,16 +91,16 @@
     <div class="grid grid-cols-3 w-full gap-x-8 p-8">
       <aside class="flex flex-col items-center gap-y-6 w-full max-w-md">
         <div class="p-8 rounded-md shadow-sm bg-accent w-full text-background">
-          {#if teacher.avatar_url}
+          {#if teacher.avatarUrl}
             <img
-              src={teacher.avatar_url}
+              src={teacher.avatarUrl}
               alt="profile avatar"
               class="object-cover w-full rounded-sm mb-8"
             />
           {/if}
-          <div class="flex flex-col gap-y-4 {!listing ? ' items-center' : ''}">
-            <SecondaryTitle class="font-normal md:text-4xl  "
-              >{teacher.first_name}</SecondaryTitle
+          <div class="flex flex-col gap-y-4">
+            <SecondaryTitle class="font-normal md:text-4xl whitespace-normal"
+              >{teacher.firstName}</SecondaryTitle
             >
             <Stars size={5} rating={4.7} />
             {#if listing}
@@ -110,7 +109,9 @@
                   {#if i < 6}
                     <li class="flex gap-x-2 items-center">
                       <Terminal class="w-5 h-5 text-primary" />
-                      <p class="font-mono text-2xl">{Subjects[subject]}</p>
+                      <p class="font-mono text-2xl">
+                        {languages[subject].label}
+                      </p>
                     </li>
                   {/if}
                 {/each}
@@ -120,7 +121,7 @@
         </div>
         {#if listing}
           <p class="text-4xl">
-            {listing.hourly_price} SEK
+            {listing.hourlyPrice} SEK
           </p>
         {/if}
         <ContactTeacherForm
@@ -128,10 +129,10 @@
           {startContactForm}
           requestContactAction="?/requestContact"
           startContactAction="?/startContact"
-          firstName={teacher.first_name}
+          firstName={teacher.firstName}
+          buttonStyling="self-center"
         />
-        <NotPublished visible={listing?.visible} class="self-center"/>
-        {#if session?.user.id === teacher.id && listingMessage}
+        {#if isOwner && listingMessage}
           <AlertMessage
             title={listingMessage.title}
             description={listingMessage.description}
@@ -143,10 +144,10 @@
           </AlertMessage>
         {/if}
       </aside>
-      <main class="col-start-2 col-span-2 flex flex-col gap-y-6">
+      <main class="col-start- col-span-2 flex flex-col gap-y-6 max-w-4xl">
         {#if listing}
           <PrimaryTitle class="text-wrap">{listing.title}</PrimaryTitle>
-          <p class="text-xl text-muted-foreground">
+          <p class="md:text-lg text-muted-foreground">
             {#if listing.description}
               {listing.description}
             {:else}
@@ -158,25 +159,7 @@
       </main>
     </div>
   </div>
-  {#if session?.user.id === teacher.id}
-    <small
-      class="mt-6 flex flex-col gap-y-2 text-center text-muted-foreground px-8 mb-8 text-lg"
-    >
-      <p>
-        Vill du göra ändringar på informationen om dig? <a
-          href="/account"
-          class="underline">Gå till din profil.</a
-        >
-      </p>
-      {#if listing}
-        <p>
-          Vill du göra ändringar på din annons? <a
-            href="/listing/{listing.id}"
-            class="underline">Gå till annonsen.</a
-          >
-        </p>
-      {/if}
-      <p class="italic">Bara du kan se detta.</p>
-    </small>
+  {#if isOwner}
+    <OwnerSection {listing} />
   {/if}
 {/if}

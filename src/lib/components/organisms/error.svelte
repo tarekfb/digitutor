@@ -4,35 +4,46 @@
   import ErrorNav from "$lib/components/atoms/error-nav.svelte";
   import { CircleHelp } from "lucide-svelte";
   import { UserRound } from "lucide-svelte";
-  import { unknownErrorTitle } from "src/lib/shared/constants/constants";
+  import {
+    defaultErrorDescription,
+    defaultErrorTitle,
+  } from "src/lib/shared/constants/constants";
 
-  export let title: string = unknownErrorTitle;
-  export let description =
-    "Ett oväntat fel uppstod. Du kan kontakta oss om detta fortsätter.";
-  export let code: number = 0;
+  export let error: App.Error;
+  export let code: number | undefined | null = undefined;
 
-  title = title || unknownErrorTitle;
-  description =
-    description ||
-    "Ett oväntat fel uppstod. Du kan kontakta oss om detta fortsätter.";
+  const getTitle = (): string => {
+    if (!error.message || error.message === "Internal Error")
+      return defaultErrorTitle;
+    return error.message;
+  };
+
+  const getDescription = (): string => {
+    if (error.message === "Internal Error")
+      return "Ett oväntat fel uppstod. Du kan kontakta oss om detta fortsätter.";
+    return error.description ?? defaultErrorDescription;
+  };
+
+  // const {id, data} = error; // not using atm, implement when needed
+
   const iconStyling = "w-4 h-4 md:w-5 md:h-5 text-accent";
 </script>
 
 <div
-  class="max-w-[42rem] md:max-w-[60rem] text-center flex flex-col items-center gap-y-4 md:gap-y-6 self-center m-8"
+  class=" min-w-[20rem] md:min-w-[48rem] lg:min-w-[60rem] text-center flex flex-col items-center gap-y-4 md:gap-y-6 self-center m-8"
 >
-  <div class=" flex flex-col items-center gap-y-4 md:gap-y-6">
+  <div class="flex flex-col items-center gap-y-4 md:gap-y-6">
     <PrimaryTitle class="text-4xl md:text-5xl font-normal whitespace-normal"
-      >{title}</PrimaryTitle
+      >{getTitle()}</PrimaryTitle
     >
-    {#if code !== 0}
+    {#if code}
       <p class="text-3xl md:text-4xl text-accent font-mono">{code}</p>
     {/if}
     <p class="text-xl md:text-2xl text-muted-foreground max-w-md">
-      {description}
+      {getDescription()}
     </p>
   </div>
-  <ul class="flex flex-col w-full h-62 gap-4 md:flex-row mt-4 md:mt-6">
+  <ul class="flex flex-col w-3/4 md:w-full h-62 gap-4 md:flex-row mt-4 md:mt-6">
     <ErrorNav text="Tillbaka till startsidan" href="/">
       <Home class={iconStyling} />
     </ErrorNav>

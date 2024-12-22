@@ -1,4 +1,3 @@
--- Insert additional users into auth.users table (2 teachers and 5 students)
 INSERT INTO
     auth.users (
         instance_id,
@@ -328,7 +327,6 @@ VALUES
         NOW()
     );
 
--- Insert additional listings for new teachers
 INSERT INTO
     public.listings (
         id,
@@ -343,8 +341,8 @@ INSERT INTO
 VALUES
     (
         '550e8400-e29b-41d4-a716-446655440080',
-        'Python Tutoring',
-        'Python for beginners',
+        'Programmering nybörjare',
+        'Hej, jag lär ut python. När jag inte kodar så gillar jag att springa, cykla, eller bara sitta i soffan och läsa en bra bok. Det är roligt att träffa nya människor och höra deras historier. Jag är bra på att förklara saker på ett enkelt sätt och jag har tålamod med de som behöver en extra förklaring. Secret ',
         '{1,2}',
         60,
         'SEK',
@@ -352,9 +350,20 @@ VALUES
         TRUE
     ),
     (
+
+        '550e8400-e29b-41d4-a716-446655440081',
+        'Webbutveckling när det är som roligast',
+        'Jag lär ut något. Text på svenska. Text på svenska. Text på svenska. Text på svenska. Text på svenska. Secret',
+        '{2,3}',
+        70,
+        'SEK',
+        '550e8400-e29b-41d4-a716-446655440000',
+        TRUE
+    ),
+    (
         '550e8400-e29b-41d4-a716-446655440090',
-        'Java Tutoring',
-        'Java for intermediate learners',
+        'Testa Java! 😍',
+        'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Praesent non nulla a magna aliquam mollis. Mauris vitae tortor nec erat lacinia dignissim. Morbi non nulla a magna aliquam mollis. Mauris vitae tortor nec erat lacinia dignissim. ',
         '{1,2,3}',
         70,
         'SEK',
@@ -362,7 +371,6 @@ VALUES
         TRUE
     );
 
--- Insert additional reviews to ensure each teacher has at least 5 reviews
 INSERT INTO
     public.reviews (id, sender, receiver, rating, description)
 VALUES
@@ -381,13 +389,13 @@ VALUES
         4,
         'Tarek is a good teacher. He is patient and helpful.'
     ),
-    (
-        uuid_generate_v4(),
-        '550e8400-e29b-41d4-a716-446655440050',
-        '550e8400-e29b-41d4-a716-446655440000',
-        5,
-        'Tarek is an excellent teacher. He is very knowledgeable and explains things clearly.'
-    ),
+    -- (
+    --     uuid_generate_v4(),
+    --     '550e8400-e29b-41d4-a716-446655440050',
+    --     '550e8400-e29b-41d4-a716-446655440000',
+    --     5,
+    --     'Tarek is an excellent teacher. He is very knowledgeable and explains things clearly.'
+    -- ),
     (
         uuid_generate_v4(),
         '550e8400-e29b-41d4-a716-446655440060',
@@ -439,6 +447,20 @@ VALUES
         'Bob made learning fun.'
     );
 
+INSERT INTO
+    public.conversations (id, teacher, student, has_replied, created_at)
+VALUES
+    ('550e8400-e29b-41d4-a716-100000000000', '550e8400-e29b-41d4-a716-446655440000', '550e8400-e29b-41d4-a716-446655440020', true, current_timestamp),
+    ('550e8400-e29b-41d4-a716-200000000000', '550e8400-e29b-41d4-a716-446655440000', '550e8400-e29b-41d4-a716-446655440050', false, current_timestamp);
+
+INSERT INTO
+    public.messages (id, sender, conversation, content, created_at)
+VALUES
+    ('550e8400-e29b-41d4-0000-100000000000', '550e8400-e29b-41d4-a716-446655440020', '550e8400-e29b-41d4-a716-100000000000', 'Hej där kan jag få hjälp?', current_timestamp - INTERVAL '1 hour'),
+    ('550e8400-e29b-41d4-0000-200000000000', '550e8400-e29b-41d4-a716-446655440000', '550e8400-e29b-41d4-a716-100000000000', 'ja det kan du', current_timestamp),
+
+    ('550e8400-e29b-41d4-1000-100000000000', '550e8400-e29b-41d4-a716-446655440050', '550e8400-e29b-41d4-a716-200000000000', 'Tjena tarek, kan du javascript? mvh frank', current_timestamp);
+
 insert into
     storage.buckets (id, name, public, file_size_limit)
 values
@@ -464,6 +486,7 @@ INSERT
         bucket_id = 'avatars'
         AND auth.role() = 'authenticated'
     );
+
 
 CREATE OR REPLACE FUNCTION compound_search(listing RECORD) RETURNS TEXT AS $$
 DECLARE
@@ -501,4 +524,5 @@ BEGIN
     RETURN NULL; -- or you can return '' for an empty string
   END IF;
 END;
+
 $$ LANGUAGE plpgsql IMMUTABLE;

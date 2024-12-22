@@ -1,6 +1,6 @@
 import type { Session, SupabaseClient } from "@supabase/supabase-js";
-import type { DbDisplayProfile, InputReview, Review } from "src/lib/shared/models/review";
-import { getNow } from "src/lib/utils";
+import type { DbDisplayProfile, InputReview, DbReviewWithReferences } from "src/lib/shared/models/review";
+import { getNow } from "src/lib/shared/utils/utils";
 import type { Database, Tables } from "src/supabase";
 
 
@@ -39,7 +39,7 @@ export const getReviewsByReceiver = async (
     supabase: SupabaseClient<Database>,
     receiver: string,
     max?: number,
-): Promise<Review[]> => {
+): Promise<DbReviewWithReferences[]> => {
     let query = supabase
         .from("reviews")
         .select(`
@@ -54,15 +54,41 @@ export const getReviewsByReceiver = async (
     const { data, error } = await query;
 
     if (error) {
-        console.error(`Failed to read reviews ${receiver ? "for userId" + receiver : ''}`, { error });
+        console.error(`Failed to read reviews"for userId" + receiver`, { error });
         throw error;
     }
 
-    return data as unknown as Review[];
+    return data as unknown as DbReviewWithReferences[];
+}
+
+export const getReviewsBySender = async (
+    supabase: SupabaseClient<Database>,
+    sender: string,
+    max?: number,
+): Promise<DbReviewWithReferences[]> => {
+    let query = supabase
+        .from("reviews")
+        .select(`
+            *,
+            sender ("*"),
+            receiver ("*")
+          `)
+        .eq("receiver", sender)
+
+    if (max) query = query.limit(max);
+
+    const { data, error } = await query;
+
+    if (error) {
+        console.error(`Failed to read reviews "for userId" sender`, { error });
+        throw error;
+    }
+
+    return data as unknown as DbReviewWithReferences[];
 }
 
 export const getHighQualityReviews = async (supabase: SupabaseClient<Database>, max?: number) => {
-    let query = supabase                                                                                                                                                                       
+    let query = supabase
         .from("reviews")
         .select(`
             *,
@@ -82,7 +108,7 @@ export const getHighQualityReviews = async (supabase: SupabaseClient<Database>, 
         throw error;
     }
 
-    return data as unknown as Review[];
+    return data as unknown as DbReviewWithReferences[];
 }
 
 

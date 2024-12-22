@@ -1,15 +1,15 @@
 import type { Session, SupabaseClient } from "@supabase/supabase-js";
-import type { InputListing, Listing } from "$lib/shared/models/listing";
+import type { InputListing, DbListingWithProfile } from "$lib/shared/models/listing";
 import type { Database, Tables } from "src/supabase"
-import { getNow } from '$lib/utils'
+import { getNow } from 'src/lib/shared/utils/utils'
 import { ResourceNotFoundError } from "src/lib/shared/errors/missing-error";
 
 export const getListings = async (
   supabase: SupabaseClient<Database>,
   max?: number,
-  userId?: string,
+  teacherId?: string,
   visible?: boolean,
-): Promise<Listing[]> => {
+): Promise<DbListingWithProfile[]> => {
   let query = supabase
     .from("listings")
     .select(
@@ -21,18 +21,18 @@ export const getListings = async (
           `,
     );
 
-  if (userId) query = query.eq("profile", userId)
+  if (teacherId) query = query.eq("profile", teacherId)
   if (visible) query = query.eq("visible", true)
   if (max) query = query.limit(max);
 
   const { data, error } = await query;
 
   if (error) {
-    console.error(`Failed to read listings ${userId ? "for userId" + userId : ''}`, { error });
+    console.error(`Failed to read listings ${teacherId ? "for teacher " + teacherId : ''}`, { error });
     throw error;
   }
 
-  return data as unknown as Listing[];
+  return data as unknown as DbListingWithProfile[];
 }
 
 
@@ -41,7 +41,7 @@ export const getListingsByTeacher = async (
   teacherId: string,
   max?: number,
   visible?: boolean,
-): Promise<Listing[]> => {
+): Promise<DbListingWithProfile[]> => {
   let query = supabase
     .from("listings")
     .select(
@@ -64,14 +64,14 @@ export const getListingsByTeacher = async (
     throw error;
   }
 
-  return data as unknown as Listing[];
+  return data as unknown as DbListingWithProfile[];
 }
 
 export const getListing = async (
   supabase: SupabaseClient<Database>,
   id: string,
   visible?: boolean,
-): Promise<Listing> => {
+): Promise<DbListingWithProfile> => {
   const { data, error } = await supabase
     .from("listings")
     .select(
@@ -93,14 +93,14 @@ export const getListing = async (
 
   if (visible && !data.visible) throw new ResourceNotFoundError(400, `Listing ${data.id} is not visible`)
 
-  return data as unknown as Listing;
+  return data as unknown as DbListingWithProfile;
 };
 
 export const createListing = async (
   supabase: SupabaseClient<Database>,
   title: string,
   session: Session,
-): Promise<Listing> => {
+): Promise<DbListingWithProfile> => {
   const dbListing: Tables<"listings"> = {
     id: crypto.randomUUID(),
     title: title,
@@ -133,7 +133,7 @@ export const createListing = async (
     throw error;
   }
 
-  return data as unknown as Listing;
+  return data as unknown as DbListingWithProfile;
 };
 
 
@@ -165,7 +165,7 @@ export const updateListing = async (
   input: InputListing,
   listingId: string,
   session: Session,
-): Promise<Listing> => {
+): Promise<DbListingWithProfile> => {
 
   const dbListing = {
     id: listingId,
@@ -198,5 +198,5 @@ export const updateListing = async (
     throw error;
   }
 
-  return data as unknown as Listing;
+  return data as unknown as DbListingWithProfile;
 };

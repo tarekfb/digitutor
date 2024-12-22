@@ -1,13 +1,13 @@
 <script lang="ts">
   import * as Card from "$lib/components/ui/card/index.js";
   import Avatar from "$lib/components/atoms/avatar.svelte";
-  import type { Review } from "src/lib/shared/models/review";
-
-  import { cn, formatDateReadable } from "$lib/utils.js";
+  import type { ReviewWithReferences } from "src/lib/shared/models/review";
   import Stars from "../atoms/stars.svelte";
+  import { cn, formatDateReadable } from "src/lib/shared/utils/utils.js";
+
   let className: string | null | undefined = undefined;
   export { className as class };
-  export let review: Review;
+  export let review: ReviewWithReferences;
 </script>
 
 <li class="list-none w-full">
@@ -21,16 +21,16 @@
         <div class="flex gap-x-2 items-center justify-center">
           <!-- if sender deleted account, sender will be null -->
           {#if review.sender}
+            {@const { sender } = review}
             <Avatar
-              url={review.sender.avatar_url ?? ""}
-              firstName={review.sender.first_name}
-              lastName={review.sender.last_name}
-              role={review.sender.role}
-              onClick={undefined}
+              url={sender.avatarUrl ?? ""}
+              firstName={sender.firstName}
+              lastName={sender.lastName}
+              role={sender.role}
               class="text-sm w-8 h-8"
             />
             <Card.Title>
-              <h4 class="font-semibold">{review.sender.first_name}</h4>
+              <h4 class="font-semibold">{sender.firstName}</h4>
             </Card.Title>
           {:else}
             <Card.Title>
@@ -39,12 +39,12 @@
           {/if}
         </div>
         {#if review.description}
-          <small>{formatDateReadable(review.created_at)}</small>
+          <small>{formatDateReadable(review.createdAt)}</small>
         {/if}
       </div>
       <Stars rating={review.rating} size={5} />
       {#if !review.description}
-        <small>{formatDateReadable(review.created_at)}</small>
+        <small>{formatDateReadable(review.createdAt)}</small>
       {/if}
     </Card.Header>
     {#if review.description}

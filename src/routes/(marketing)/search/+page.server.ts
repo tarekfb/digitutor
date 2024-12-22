@@ -6,8 +6,9 @@ import { fail, message, superValidate } from "sveltekit-superforms";
 import { zod } from "sveltekit-superforms/adapters";
 import { searchSchema, type SearchResult, } from "src/lib/shared/models/search";
 import type { Actions, PageServerLoad } from "./$types";
-import type { Message, PsqlError } from "src/lib/shared/models/common";
-import { formatProfile } from "src/lib/utils";
+import { type Message, ExternalErrorCodes } from "src/lib/shared/models/common";
+import { isErrorWithCode } from "src/lib/shared/utils/utils";
+import { formatProfile } from "src/lib/shared/utils/profile/utils";
 
 export const load = (async ({ url, locals: { supabase } }) => {
     const query = url.searchParams.get('q') || '';
@@ -19,8 +20,8 @@ export const load = (async ({ url, locals: { supabase } }) => {
     if (!query) return { form, initResults, initMessage }
 
     try {
-        const listings = await search(supabase, query);
-        initResults = listings.map(listing => ({
+        const dbLlistings = await search(supabase, query);
+        initResults = dbLlistings.map(listing => ({
             id: listing.id,
             title: listing.title,
             description: listing.description ?? undefined,
@@ -28,14 +29,17 @@ export const load = (async ({ url, locals: { supabase } }) => {
             firstName: listing.profile.first_name,
             lastName: listing.profile.last_name,
             avatar: listing.profile.avatar_url ?? undefined,
+            subjects: listing.subjects,
             profile: formatProfile(listing.profile),
         }));
 
     } catch (error) {
-        if (error && typeof error === "object") {
-            const psqlError = error as PsqlError;
-            if (psqlError.code && psqlError.code === "42601") // syntax error
+        if (isErrorWithCode(error)) {
+            if (error.code == ExternalErrorCodes.SyntaxError)
                 initMessage = getFailFormMessage("Ogiltiga karaktärer", "Testa söka på något annat.");
+            else
+                initMessage = getFailFormMessage("Något gick fel", "Testa söka på något annat, eller försök igen senare.");
+
         } else {
             console.error("Error searching for teachers with following search: " + query, error);
             initMessage = getFailFormMessage();
@@ -44,7 +48,6 @@ export const load = (async ({ url, locals: { supabase } }) => {
 
     return { form, initResults, initMessage }
 }) satisfies PageServerLoad;
-
 
 export const actions: Actions = {
     search: async (event) => {
@@ -55,6 +58,7 @@ export const actions: Actions = {
         const { query } = form.data;
 
         const cleanedQuery = query.trim();
+
         try {
             const listings = await search(supabase, cleanedQuery);
             const formatted: SearchResult[] = listings.map(listing => {
@@ -66,15 +70,15 @@ export const actions: Actions = {
                     firstName: listing.profile.first_name,
                     lastName: listing.profile.last_name,
                     avatar: listing.profile.avatar_url ?? undefined,
+                    subjects: listing.subjects,
                     profile: formatProfile(listing.profile),
                 }
             });
 
             return { form, formatted }
         } catch (error) {
-            if (error && typeof error === "object") {
-                const psqlError = error as PsqlError;
-                if (psqlError.code && psqlError.code === "42601") // syntax error
+            if (isErrorWithCode(error)) {
+                if (error.code === ExternalErrorCodes.SyntaxError)
                     return message(form, getFailFormMessage("Ogiltiga karaktärer", "Testa söka på något annat."), { status: 400 });
             }
             console.error("Error searching for teachers with following search: " + query, error);

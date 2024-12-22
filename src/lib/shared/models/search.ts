@@ -1,4 +1,3 @@
-import type { Tables } from "src/supabase";
 import { z } from "zod";
 import type { Profile } from "./profile";
 
@@ -17,5 +16,6 @@ export type SearchResult = {
     firstName: string;
     lastName: string;
     avatar?: string;
+    subjects: number[],
     profile: Profile
 }
