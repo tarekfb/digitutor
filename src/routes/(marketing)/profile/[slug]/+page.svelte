@@ -47,7 +47,7 @@
 </script>
 
 {#if !$isDesktop}
-  <RootContainer class="w-full m-0 ">
+  <RootContainer class="w-full m-0">
     <ProfileHeaderMobile
       {teacher}
       {listing}
@@ -90,7 +90,7 @@
   <div class="flex">
     <div class="grid grid-cols-3 w-full gap-x-8 p-8">
       <aside class="flex flex-col items-center gap-y-6 w-full max-w-md">
-        <div class="p-8 rounded-md shadow-sm bg-accent w-full text-background">
+        <div class="p-8 rounded-md shadow-sm bg-secondary w-full text-background">
           {#if teacher.avatarUrl}
             <img
               src={teacher.avatarUrl}
@@ -108,8 +108,8 @@
                 {#each listing?.subjects as subject, i}
                   {#if i < 6}
                     <li class="flex gap-x-2 items-center">
-                      <Terminal class="w-5 h-5 text-primary" />
-                      <p class="font-mono text-2xl">
+                      <Terminal class="w-5 h-5 text-third" />
+                      <p class="font-mono text-xl">
                         {languages[subject].label}
                       </p>
                     </li>

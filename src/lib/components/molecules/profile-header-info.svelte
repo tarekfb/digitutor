@@ -41,7 +41,7 @@
           <SubjectItem
             {subject}
             textStyling={light ? "text-background" : ""}
-            iconStyling={light ? "text-primary" : "text-accent"}
+            iconStyling={light ? "text-third" : "text-accent"}
           />
         {/if}
       {/each}

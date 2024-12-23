@@ -23,7 +23,7 @@
 
 {#if teacher.avatarUrl}
   <!-- this div creates some height to wavy background -->
-  <div class="{listing ? 'h-28' : 'h-28'} w-screen bg-accent"></div>
+  <div class="{listing ? 'h-28' : 'h-28'} w-screen bg-secondary"></div>
 
   <Wavy class="-mt-8 overflow-x-hidden" />
   <div class="flex flex-col gap-y-4 items-center w-full max-w-md">
@@ -42,7 +42,7 @@
     />
   </div>
 {:else}
-  <div class="w-screen bg-accent flex flex-col items-center text-foreground">
+  <div class="w-screen bg-secondary flex flex-col items-center text-foreground">
     <ProfileHeaderInfo
       {teacher}
       {listing}
@@ -53,6 +53,7 @@
     <ContactTeacherForm
       {requestContactForm}
       {startContactForm}
+      buttonVariant="third-secondary"
       requestContactAction="?/requestContact"
       startContactAction="?/startContact"
       firstName={teacher.firstName}
