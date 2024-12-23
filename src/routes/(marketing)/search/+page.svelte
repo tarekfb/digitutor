@@ -16,6 +16,8 @@
   import RootContainer from "src/lib/components/templates/root-container.svelte";
   import { mediaQuery } from "svelte-legos";
   import Wavy from "src/lib/components/atoms/wavy.svelte";
+  import { Button } from "src/lib/components/ui/button";
+  import { Search, ArrowRightIcon } from "lucide-svelte";
 
   const isDesktop = mediaQuery("(min-width: 768px)");
 
@@ -38,7 +40,7 @@
 </script>
 
 {#if !$isDesktop}
-  <div class="bg-accent min-h-44 w-full">
+  <div class="bg-secondary min-h-44 w-full">
     <form
       class="text-center flex flex-col gap-y-4 w-full p-8"
       action="?/search"
@@ -48,27 +50,38 @@
       <SecondaryTitle class="text-background"
         >Sök efter lärare och annonser</SecondaryTitle
       >
-      <div class="flex justify-between gap-x-2 md:gap-x-4 items-start">
-        <Form.Field form={searchForm} name="query" class="flex-1">
-          <Form.Control let:attrs>
-            <Input
-              {...attrs}
-              type="text"
-              bind:value={$formData.query}
-              placeholder="Namn, titel, beskrivning, pris, etc."
-              class="text-lg bg-card"
-            />
-          </Form.Control>
-          <Form.FieldErrors class="text-destructive-secondary" />
-        </Form.Field>
-        <FormSubmit
-          {delayed}
-          {allErrors}
-          text="Sök"
-          loadingText=""
-          class="w-12"
-        />
-      </div>
+        <div class="flex items-start">
+          <Form.Field form={searchForm} name="query" class="flex-1">
+            <Form.Control let:attrs>
+              <div class="relative bg-card rounded-sm rounded-r-none">
+                <Search
+                  class="text-muted-foreground absolute left-2 top-[50%] h-4 w-4 translate-y-[-50%]"
+                />
+                <Input
+                  {...attrs}
+                  type="text"
+                  bind:value={$formData.query}
+                  placeholder="Namn, titel, beskrivning, pris, etc."
+                  class="pl-8 text-lg bg-card rounded-r-none"
+                />
+              </div>
+            </Form.Control>
+            <Form.FieldErrors />
+          </Form.Field>
+          <Button
+            type="submit"
+            variant="ghost"
+            size="icon"
+            disabled={$allErrors.length > 0 || $delayed}
+            class="flex gap-x-2 items-center bg-card text-foreground rounded-l-none hover:bg-card hover:text-foreground"
+          >
+            {#if $delayed}
+              <LoadingSpinner class="size-4" />
+            {:else}
+              <ArrowRightIcon class="size-4" />
+            {/if}
+          </Button>
+        </div>
     </form>
   </div>
   <Wavy class="overflow-x-hidden -mt-4" />
@@ -97,9 +110,9 @@
     </div>
   {/if}
 {:else}
-  <div class="w-full bg-accent flex flex-col items-center">
+  <div class="w-full bg-secondary flex flex-col items-center">
     <form
-      class="text-center flex flex-col gap-y-4 w-full bg-accent max-w-screen-sm"
+      class="text-center flex flex-col gap-y-4 w-full bg-secondary max-w-screen-sm"
       action="?/search"
       method="POST"
       use:enhance
@@ -107,28 +120,39 @@
       <SecondaryTitle class="text-background"
         >Sök efter lärare och annonser</SecondaryTitle
       >
-      <div class="flex justify-between gap-x-2 md:gap-x-4 items-start">
-        <Form.Field form={searchForm} name="query" class="flex-1">
-          <Form.Control let:attrs>
-            <Input
-              {...attrs}
-              type="text"
-              bind:value={$formData.query}
-              placeholder="Namn, titel, beskrivning, pris, etc."
-              class="text-lg bg-card"
-            />
-          </Form.Control>
-          <Form.FieldErrors />
-        </Form.Field>
-        <FormSubmit
-          {delayed}
-          {allErrors}
-          text="Sök"
-          loadingText=""
-          class="w-12"
-        />
-      </div>
-    </form>
+      <div class="flex items-start">
+          <Form.Field form={searchForm} name="query" class="flex-1">
+            <Form.Control let:attrs>
+              <div class="relative bg-card rounded-sm rounded-r-none">
+                <Search
+                  class="text-muted-foreground absolute left-2 top-[50%] h-4 w-4 translate-y-[-50%]"
+                />
+                <Input
+                  {...attrs}
+                  type="text"
+                  bind:value={$formData.query}
+                  placeholder="Namn, titel, beskrivning, pris, etc."
+                  class="pl-8 text-lg bg-card rounded-r-none"
+                />
+              </div>
+            </Form.Control>
+            <Form.FieldErrors />
+          </Form.Field>
+          <Button
+            type="submit"
+            variant="ghost"
+            size="icon"
+            disabled={$allErrors.length > 0 || $delayed}
+            class="flex gap-x-2 items-center bg-card text-foreground rounded-l-none hover:bg-card hover:text-foreground"
+          >
+            {#if $delayed}
+              <LoadingSpinner class="size-4" />
+            {:else}
+              <ArrowRightIcon class="size-4" />
+            {/if}
+          </Button>
+        </div>
+      </form>
   </div>
   <Wavy />
   <RootContainer class="w-full md:max-w-sm lg:max-w-screen-md">
