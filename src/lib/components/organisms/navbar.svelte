@@ -22,11 +22,11 @@
 </script>
 
 <header
-  class="sticky top-0 z-40 w-full bg-accent text-background overflow-x-hidden h-16 md:h-20 flex items-center gap-x-3 sm:justify-between sm:space-x-0 px-2 md:px-4 lg:px-8"
+  class="sticky top-0 z-40 w-full bg-secondary text-background overflow-x-hidden h-16 md:h-20 flex items-center gap-x-3 sm:justify-between sm:space-x-0 px-2 md:px-4 lg:px-8"
 >
   <a
     href="/"
-    class="text-xl md:text-3xl hover:text-foreground md:hover:text-primary uppercase"
+    class="text-xl md:text-3xl hover:text-foreground md:hover:text-third uppercase"
   >
     {websiteName}
   </a>
@@ -37,11 +37,11 @@
       {#if profile !== false}
         {#if profile === undefined || profile === null}
           <Button
-            variant="ghost"
+            variant="secondary-alt"
             class="px-2 md:px-3"
             on:click={() => goto("/sign-in")}>Logga in</Button
           >
-          <Button on:click={() => goto("/sign-up")} class="px-2 md:px-3"
+          <Button variant="default-alt" on:click={() => goto("/sign-up")} class="px-2 md:px-3"
             >Skapa konto</Button
           >
         {:else if profile}

@@ -16,9 +16,11 @@ const buttonVariants = tv({
 			// ghost: "hover:bg-accent hover:text-accent-foreground",
 			// link: "text-primary underline-offset-4 hover:underline",
 			default: 'bg-accent text-background hover:bg-primary',
+			"default-alt": 'bg-third text-background hover:bg-primary',
 			destructive: 'bg-destructive text-destructive-foreground hover:bg-destructive/90',
 			outline: 'border-secondary bg-background hover:bg-primary hover:text-background border',
 			secondary: 'bg-secondary text-background hover:bg-accent',
+			"secondary-alt": 'bg-secondary text-background hover:bg-third',
 			ghost: 'hover:bg-primary hover:text-background',
 			link: 'text-primary underline-offset-4 hover:underline'
 		},
