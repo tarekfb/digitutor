@@ -99,10 +99,10 @@
         method="POST"
         use:enhance
       >
-        <div class="flex items-start">
+        <div class="flex items-start gap-x-2">
           <Form.Field form={searchForm} name="query" class="flex-1">
             <Form.Control let:attrs>
-              <div class="relative bg-card rounded-sm rounded-r-none">
+              <div class="relative">
                 <Search
                   class="text-muted-foreground absolute left-2 top-[50%] h-4 w-4 translate-y-[-50%]"
                 />
@@ -122,7 +122,7 @@
             variant="ghost"
             size="icon"
             disabled={$allErrors.length > 0 || $delayed}
-            class="flex gap-x-2 items-center bg-card text-foreground rounded-l-none hover:bg-card hover:text-foreground"
+            class="flex gap-x-2 items-center bg-card rounded-l-none hover:bg-third"
           >
             {#if $delayed}
               <LoadingSpinner class="size-4" />
