@@ -83,12 +83,12 @@
         <Tabs.List class="self-center">
           <Tabs.Trigger
             value="student"
-            class="data-[state=active]:bg-primary data-[state=inactive]:bg-secondary data-[state=inactive]:text-black data-[state=active]:text-red-300"
+            class="data-[state=active]:bg-primary data-[state=inactive]:bg-none data-[state=inactive]:text-black data-[state=active]:text-red-300"
             >Student</Tabs.Trigger
           >
           <Tabs.Trigger
             value="teacher"
-            class="data-[state=active]:bg-primary data-[state=inactive]:bg-secondary data-[state=inactive]:text-black data-[state=active]:text-red-300"
+            class="data-[state=active]:bg-primary data-[state=inactive]:bg-none data-[state=inactive]:text-black data-[state=active]:text-red-300"
             >Lärare</Tabs.Trigger
           >
         </Tabs.List>
@@ -104,6 +104,7 @@
         {delayed}
         {allErrors}
         text="Skapa konto"
+        variant="secondary"
         class="self-center min-w-wider"
       />
     </form>

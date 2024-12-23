@@ -8,7 +8,6 @@
   import FormMessage from "$lib/components/molecules/form-message.svelte";
   import * as Form from "$lib/components/ui/form/index.js";
   import { Input } from "$lib/components/ui/input/index.js";
-  import FormSubmit from "$lib/components/molecules/form-submit.svelte";
   import { searchSchema } from "src/lib/shared/models/search";
   import ProfileCarousel from "src/lib/components/organisms/profile-carousel.svelte";
   import ReviewCardExtra from "src/lib/components/molecules/review-card-extra.svelte";
@@ -155,7 +154,7 @@
   <p class="text-xl md:text-3xl font-bold text-center text-gradient mt-4">
     Vill du lära ut på {websiteName}?
   </p>
-  <Button on:click={() => goto("/sign-up?role=teacher")}
+  <Button on:click={() => goto("/sign-up?role=teacher")} variant="secondary"
     >Skapa konto som lärare</Button
   >
 </RootContainer>
