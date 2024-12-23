@@ -3,7 +3,7 @@ name: Test Prod
 on:
   push:
     branches:
-      - master
+      - disabled-this-will-never-match
 
 jobs:
   build_and_test:
