@@ -37,7 +37,7 @@
 <RootContainer>
   <div class="flex flex-col items-center -mt-8 p-8 w-screen bg-secondary">
     <div
-      class="flex flex-col items-center gap-y-8 mb-4 text-center md:gap-y-8 text-background"
+      class="flex flex-col items-center gap-y-2 mb-4 text-center text-background"
     >
       <div class="text-3xl md:text-5xl font-semibold px-2">
         Vill du bli
@@ -154,7 +154,7 @@
   <p class="text-xl md:text-3xl font-bold text-center text-gradient mt-4">
     Vill du lära ut på {websiteName}?
   </p>
-  <Button on:click={() => goto("/sign-up?role=teacher")} variant="secondary"
+  <Button on:click={() => goto("/sign-up?role=teacher")}
     >Skapa konto som lärare</Button
   >
 </RootContainer>

@@ -37,11 +37,11 @@
       {#if profile !== false}
         {#if profile === undefined || profile === null}
           <Button
-            variant="secondary-alt"
+            variant="secondary-third"
             class="px-2 md:px-3"
             on:click={() => goto("/sign-in")}>Logga in</Button
           >
-          <Button variant="default-alt" on:click={() => goto("/sign-up")} class="px-2 md:px-3"
+          <Button variant="third-secondary" on:click={() => goto("/sign-up")} class="px-2 md:px-3"
             >Skapa konto</Button
           >
         {:else if profile}

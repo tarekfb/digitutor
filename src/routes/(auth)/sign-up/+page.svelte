@@ -104,7 +104,6 @@
         {delayed}
         {allErrors}
         text="Skapa konto"
-        variant="secondary"
         class="self-center min-w-wider"
       />
     </form>

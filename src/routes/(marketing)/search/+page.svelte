@@ -18,6 +18,7 @@
   import Wavy from "src/lib/components/atoms/wavy.svelte";
   import { Button } from "src/lib/components/ui/button";
   import { Search, ArrowRightIcon } from "lucide-svelte";
+  import LoadingSpinner from "src/lib/components/atoms/loading-spinner.svelte";
 
   const isDesktop = mediaQuery("(min-width: 768px)");
 

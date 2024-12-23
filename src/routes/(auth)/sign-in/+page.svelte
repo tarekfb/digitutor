@@ -170,7 +170,6 @@
       <FormSubmit
         {delayed}
         {allErrors}
-        variant="secondary"
         text="Logga in"
         class="self-center min-w-wider"
       />

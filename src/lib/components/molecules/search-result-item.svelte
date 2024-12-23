@@ -64,7 +64,6 @@
       </div>
       <Button
         class="self-center"
-        variant="secondary"
         href="/profile/{result.profile.id}?id={result.id}"
         >Gå till profil</Button
       >
@@ -108,7 +107,7 @@
     </div>
     <Button
       class="self-center"
-      variant="secondary"
+      variant=""
       href="/profile/{result.profile.id}?id={result.id}">Gå till profil</Button
     >
   {/if}
