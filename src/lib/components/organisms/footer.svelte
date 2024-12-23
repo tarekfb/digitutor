@@ -11,7 +11,7 @@
 <Separator />
 <footer class="flex justify-between py-6 px-8 md:py-10 md:px-16">
   <Link href="/" class="self-center font-normal">
-    <h1 class="text-4xl md:text-5xl uppercase text-gradient">{websiteName}</h1>
+    <h1 class="text-2xl md:text-3xl uppercase text-gradient">{websiteName}</h1>
   </Link>
 
   <nav class="flex flex-col space-y-1">
