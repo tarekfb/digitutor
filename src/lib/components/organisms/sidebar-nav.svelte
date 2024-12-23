@@ -21,7 +21,7 @@
 >
   <div
     class:current={$page.url.pathname === href}
-    class="flex items-center gap-x-1 p-1 px-1.5 rounded-md normal-case text-foreground tracking-normal text-lg md:text-xl"
+    class="flex items-center gap-x-1 p-1 px-1.5 rounded-md normal-case text-foreground tracking-normal text-lg md:text-xl hover:text-accent"
   >
     <slot />
   </div>
