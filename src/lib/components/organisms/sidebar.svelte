@@ -32,7 +32,7 @@
 </script>
 
 <Sidebar.Root direction="right" bind:open>
-  <Sidebar.Trigger class="hover:text-primary" aria-label="Öppna meny">
+  <Sidebar.Trigger class="hover:text-third" aria-label="Öppna meny">
     <Menu class="h-7 w-7" />
   </Sidebar.Trigger>
   <Sidebar.Content class="rounded-none px-2 w-3/5 md:w-2/5 lg:w-1/5">

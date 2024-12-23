@@ -6,7 +6,7 @@
 
 <svg
   class={cn(
-    "fill-current text-accent",
+    "fill-current text-secondary",
     className,
   )}
   viewBox="0 0 900 80"

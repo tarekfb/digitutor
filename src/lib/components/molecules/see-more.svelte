@@ -14,7 +14,7 @@
 <Popover.Root portal={null}>
   <Popover.Trigger let:builder asChild>
     <Button
-      variant="secondary"
+      variant="ghost"
       builders={[builder]}
       class={cn("m-0 p-2 max-h-6 self-start", triggerStyling)}
       >...se {subjects.length - 1} till</Button

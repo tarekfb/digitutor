@@ -8,8 +8,8 @@
   export let variant: "default" | "accent" = "default";
 
   const styling = () => {
-    const primaryBorder = "border border-solid border-primary";
-    const accentborder = "border border-solid border-accent";
+    const primaryBorder = "border border-solid border-primary/25";
+    const accentborder = "border border-solid border-accent/25";
 
     if (variant === "default") {
       if (isPublished) {

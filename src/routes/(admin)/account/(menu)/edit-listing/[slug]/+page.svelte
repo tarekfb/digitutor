@@ -160,9 +160,9 @@
             <Form.FieldErrors />
           </Form.Field>
           <Button
-            variant="secondary"
+            variant="outline"
             href="/profile/{profile.id}?id={slug}"
-            class="flex gap-x-2 {secondaryAltButtonVariant()}"
+            class="flex gap-x-2 bg-card"
             ><ExternalLink class="h-4 w-4" />visa annons</Button
           >
         </div>
