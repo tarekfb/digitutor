@@ -34,14 +34,14 @@
         {#if listing.description}
           {truncate(listing.description, 50)}
         {:else}
-          Den här annonsen har ingen beskrivning just nu
+          Den här annonsen har ingen beskrivning just nu.
         {/if}
       </p>
       <div class="flex flex-col gap-y-4 md:flex-row md:justify-end md:gap-x-4">
         <Button
-          variant="secondary"
           href="/profile/{listing.profile.id}?id={listing.id}"
-          class="flex gap-x-2"
+          class="flex gap-x-2 text-foreground"
+          variant="outline"
           ><ExternalLink class="h-4 w-4" />visa annons</Button
         >
         <Button href="/account/edit-listing/{listing.id}" class="flex gap-x-2">

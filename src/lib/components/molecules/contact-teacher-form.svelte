@@ -10,10 +10,12 @@
   import { zodClient } from "sveltekit-superforms/adapters";
   import StartContact from "../atoms/start-contact.svelte";
   import { isStartingContact } from "src/stores/start-contact";
+  import type { Variant } from "src/lib/components/ui/button";
 
   let className: string | null | undefined = undefined;
   export { className as class };
   export let buttonStyling: string | null | undefined = undefined;
+  export let buttonVariant: Variant = "default";
   export let requestContactForm;
   export let requestContactAction: string;
   export let startContactForm;
@@ -69,6 +71,7 @@
   <FormSubmit
     {delayed}
     {allErrors}
+    variant={buttonVariant}
     text="Kontakta {firstName}"
     class={buttonStyling}
   />

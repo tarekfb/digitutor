@@ -1,4 +1,5 @@
 <script lang="ts">
+  import LoadingSpinner from "$lib/components/atoms/loading-spinner.svelte";
   import Autoplay from "embla-carousel-autoplay";
   import { websiteName } from "$lib/shared/constants/constants";
   import type { PageData } from "./$types";
@@ -7,7 +8,6 @@
   import FormMessage from "$lib/components/molecules/form-message.svelte";
   import * as Form from "$lib/components/ui/form/index.js";
   import { Input } from "$lib/components/ui/input/index.js";
-  import FormSubmit from "$lib/components/molecules/form-submit.svelte";
   import { searchSchema } from "src/lib/shared/models/search";
   import ProfileCarousel from "src/lib/components/organisms/profile-carousel.svelte";
   import ReviewCardExtra from "src/lib/components/molecules/review-card-extra.svelte";
@@ -17,6 +17,8 @@
   import { languages } from "src/lib/shared/models/common";
   import RootContainer from "src/lib/components/templates/root-container.svelte";
   import Wavy from "src/lib/components/atoms/wavy.svelte";
+  import { Search } from "lucide-svelte";
+  import { ArrowRightIcon } from "lucide-svelte";
 
   export let data: PageData;
   $: ({ displayProfiles, displayReviews } = data);
@@ -33,16 +35,14 @@
 </svelte:head>
 
 <RootContainer>
-  <div class="flex flex-col items-center -mt-8 p-8 w-screen bg-accent">
+  <div class="flex flex-col items-center -mt-8 p-8 w-screen bg-secondary">
     <div
-      class="flex flex-col items-center gap-y-8 mb-4 text-center md:gap-y-8 text-background"
+      class="flex flex-col items-center gap-y-2 mb-4 text-center text-background"
     >
-      <div
-        class="text-3xl md:text-5xl font-semibold px-2"
-      >
+      <div class="text-3xl md:text-5xl font-semibold px-2">
         Vill du bli
         <span
-          class="underline decoration-primary decoration-4 md:decoration-[6px]"
+          class="underline decoration-third decoration-4 md:decoration-[6px]"
           >utvecklare</span
         >,
         <div>
@@ -57,7 +57,7 @@
             <Carousel.Content class="flex items-center ">
               {#each languages as lang}
                 <Carousel.Item
-                  class="underline decoration-primary decoration-4 md:decoration-[6px]"
+                  class="underline decoration-third decoration-4 md:decoration-[6px]"
                 >
                   {lang.label}
                 </Carousel.Item>
@@ -67,7 +67,7 @@
         </div>
         eller bara
         <span
-          class="underline decoration-primary decoration-4 md:decoration-[6px]"
+          class="underline decoration-third decoration-4 md:decoration-[6px]"
           >klara tentan</span
         >?
       </div>
@@ -82,7 +82,7 @@
             Eller <Button
               variant="ghost"
               on:click={() => goto("/sign-up")}
-              class="text-2xl md:text-4xl lowercase  m-0 px-1 md:px-2 tracking-normal h-10 text-primary hover:text-background"
+              class="text-2xl md:text-4xl lowercase m-0 px-1 md:px-2 tracking-normal h-10 text-third hover:bg-secondary"
               >skapa ett konto</Button
             >direkt
           </span>
@@ -99,29 +99,39 @@
         method="POST"
         use:enhance
       >
-        <div class="flex justify-between gap-x-2 md:gap-x-4 items-start">
+        <div class="flex items-start gap-x-2">
           <Form.Field form={searchForm} name="query" class="flex-1">
             <Form.Control let:attrs>
-              <Input
-                {...attrs}
-                type="text"
-                bind:value={$formData.query}
-                placeholder="Namn, titel, beskrivning, pris, etc."
-                class="text-lg bg-card"
-              />
+              <div class="relative">
+                <Search
+                  class="text-muted-foreground absolute left-2 top-[50%] h-4 w-4 translate-y-[-50%]"
+                />
+                <Input
+                  {...attrs}
+                  type="text"
+                  bind:value={$formData.query}
+                  placeholder="Namn, titel, beskrivning, pris, etc."
+                  class="pl-8 text-lg bg-card rounded-r-none"
+                />
+              </div>
             </Form.Control>
             <Form.FieldErrors />
           </Form.Field>
-          <FormSubmit
-            {delayed}
-            {allErrors}
-            text="Sök"
-            loadingText=""
-            class="w-12"
-          />
+          <Button
+            type="submit"
+            variant="ghost"
+            size="icon"
+            disabled={$allErrors.length > 0 || $delayed}
+            class="flex gap-x-2 items-center bg-card rounded-l-none hover:bg-third"
+          >
+            {#if $delayed}
+              <LoadingSpinner class="size-4" />
+            {:else}
+              <ArrowRightIcon class="size-4" />
+            {/if}
+          </Button>
         </div>
       </form>
-
       <FormMessage {message} scroll scrollTo="end" />
     </div>
   </div>

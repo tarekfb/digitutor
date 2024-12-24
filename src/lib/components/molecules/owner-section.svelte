@@ -5,7 +5,6 @@
   import { page } from "$app/stores";
   import { goto } from "$app/navigation";
   import { ExternalLink } from "lucide-svelte";
-  import { secondaryAltButtonVariant } from "src/lib/shared/constants/constants";
 
   export let listing: ListingWithProfile | undefined = undefined;
 
@@ -16,8 +15,8 @@
 <div class="mt-6 flex flex-col gap-y-4 items-center">
   <Button
     on:click={() => goto(url)}
-    variant="secondary"
-    class="flex gap-x-2 self-center items-center {secondaryAltButtonVariant()}"
+    variant="outline"
+    class="flex gap-x-2 self-center bg-card items-center"
     ><ExternalLink class="h-4 w-4" />visa som student</Button
   >
   <IsPublished
