@@ -13,6 +13,7 @@
   import Link from "$lib/components/atoms/link.svelte";
   import RootContainer from "src/lib/components/templates/root-container.svelte";
   import type { PageData } from "./$types";
+  import { SendHorizontal } from "lucide-svelte";
 
   export let data: PageData;
 
@@ -28,38 +29,31 @@
 </script>
 
 <RootContainer>
-  <div class="flex flex-col justify-center items-center gap-y-0.5">
+  <div class="flex flex-col items-center justify-center gap-y-0.5">
     <PrimaryTitle class="mb-2">Kontakta oss</PrimaryTitle>
     <p class="text-lg md:text-xl">
-      Glöm inte att kika om din fråga finns i vår <Link
+      Glöm inte att kika om din fråga finns bland <Link
         class="text-lg"
-        href="/faq">FAQ</Link
+        href="/#faq">vanliga frågor och svar</Link
       >.
     </p>
   </div>
-  <div class="flex flex-col gap-y-1 text-muted-foreground">
-    <p>Kontakta oss om du har något på hjärtat, t.ex. om:</p>
-    <ul class="list-disc list-outside space-y-0.5 mx-6 mb-2">
-      <li>
-        Din fråga inte täcks av vår <Link class="text-lg" href="/faq">FAQ</Link
-        >.
-      </li>
-      <li>Du har synpunkter, klagomål eller önskningar.</li>
-    </ul>
+  <div class="flex flex-col gap-y-1 text-muted-foreground md:text-lg">
     <p>Vi svarar dig så fort vi kan.</p>
   </div>
 
   <FormMessage {message} scroll />
   <form
-    class="flex flex-col gap-y-4 generic-card w-full max-w-xl"
+    class="mt-4 flex w-full max-w-xl flex-col gap-y-4 text-lg md:text-xl"
     method="POST"
     action="?/submit"
     use:enhance
   >
     <Form.Field form={contactForm} name="email">
       <Form.Control let:attrs>
-        <Label>E-postadress</Label>
+        <Label hidden>E-postadress</Label>
         <Input
+          class="bg-card"
           {...attrs}
           type="email"
           bind:value={$formData.email}
@@ -70,8 +64,9 @@
     </Form.Field>
     <Form.Field form={contactForm} name="firstName">
       <Form.Control let:attrs>
-        <Label>Förnamn</Label>
+        <Label hidden>Förnamn</Label>
         <Input
+          class="bg-card"
           {...attrs}
           type="text"
           bind:value={$formData.firstName}
@@ -82,8 +77,9 @@
     </Form.Field>
     <Form.Field form={contactForm} name="lastName">
       <Form.Control let:attrs>
-        <Label>Efternamn</Label>
+        <Label hidden>Efternamn</Label>
         <Input
+          class="bg-card"
           {...attrs}
           type="text"
           bind:value={$formData.lastName}
@@ -99,7 +95,7 @@
         <Textarea
           {...attrs}
           placeholder="Skriv ett meddelande till oss..."
-          class="resize-y"
+          class="resize-y bg-card"
           bind:value={$formData.message}
         />
       </Form.Control>
@@ -111,6 +107,8 @@
       {allErrors}
       text="Skicka"
       class="self-center md:min-w-wider"
-    />
+    >
+      <SendHorizontal slot="icon" class="h-5 w-5" />
+    </FormSubmit>
   </form>
 </RootContainer>
