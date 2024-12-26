@@ -126,7 +126,7 @@
       use:enhance
     >
       <div class="flex flex-col gap-y-2 mb-4 text-center lg:text-start">
-        <PrimaryTitle class="text-2xl">Logga in</PrimaryTitle>
+        <PrimaryTitle>Logga in</PrimaryTitle>
         <p class="text-muted-foreground">
           Har du inget konto?
           <a href="/sign-up" class="underline">Skapa konto här.</a>
