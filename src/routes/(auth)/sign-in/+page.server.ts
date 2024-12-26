@@ -74,9 +74,9 @@ export const actions: Actions = {
                             }
                         })
                         if (resendError?.status === 429) {
-                            return message(form, { variant: "warning", title: "Verifiera e-postadress", description: "E-postadressen är inte verifierad. Kika i din inkorg för att verifiera e-posten.", id: MessageId.RateLimitExceeded }, { status: 403 });
+                            return message(form, { variant: "warning", title: "Verifiera e-postadress", description: "E-postadressen är inte verifierad. Kika i din inkorg (eller i skräpkorgen) för att verifiera e-posten.", id: MessageId.RateLimitExceeded }, { status: 403 });
                         }
-                        return message(form, { variant: "warning", title: "Verifiera e-postadress", description: "E-postadressen är inte verifierad. Ett bekräftelsemail har skickats. Kika i din inkorg för att verifiera e-posten." }, { status: 403 });
+                        return message(form, { variant: "warning", title: "Verifiera e-postadress", description: "E-postadressen är inte verifierad. Ett bekräftelsemail har skickats. Kika i din inkorg (eller i skräpkorgen) för att verifiera e-posten." }, { status: 403 });
 
                     default:
                         console.error("Supabase error on signin", { error });

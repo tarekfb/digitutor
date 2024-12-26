@@ -26,7 +26,7 @@
 >
   <a
     href="/"
-    class="text-xl md:text-3xl hover:text-foreground md:hover:text-third uppercase"
+    class="text-xl md:text-3xl md:hover:text-third uppercase"
   >
     {websiteName}
   </a>
