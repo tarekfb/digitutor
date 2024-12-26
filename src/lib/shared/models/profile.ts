@@ -41,9 +41,9 @@ export const nameSchema = z.object({
 //     lastName: signUpUserFields.lastName,
 // });
 
-// export const emailSchema = z.object({
-//     email: signUpUserFields.email,
-// })
+export const emailSchema = z.object({
+    email: signUpUserFields.email,
+})
 
 export type CreateProfile = {
     id: string;
