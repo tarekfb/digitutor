@@ -12,9 +12,8 @@ import { isErrorWithCode } from "src/lib/shared/utils/utils";
 import type { ReviewWithReferences } from "src/lib/shared/models/review";
 import { formatReviewWithReferences } from "src/lib/shared/utils/reviews/utils";
 
-
 export const load: PageServerLoad = async ({ locals: { supabase } }) => {
-    let review: ReviewWithReferences;
+    let review: ReviewWithReferences | undefined;
     try {
         const reviews = await getHighQualityReviews(supabase, 1);
         const longReviews = reviews.filter(r => r.description && r.description.length > 15);
@@ -22,7 +21,7 @@ export const load: PageServerLoad = async ({ locals: { supabase } }) => {
         review = formatReviewWithReferences(dbReview);
     } catch (e) {
         console.error("Error when reviews signup display, perhaps didnt find valid review", e);
-        error(500, { ...defaultErrorInfo });
+        review = undefined;
     };
     const form = await superValidate(zod(signUpSchema))
     return { form, review };
