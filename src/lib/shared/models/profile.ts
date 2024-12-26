@@ -36,14 +36,19 @@ export const nameSchema = z.object({
         .min(1, "Får inte vara tomt.")
         .max(50, "Får inte vara mer än 50 bokstäver."),
 });
+
+export const emailSchema = z.object({
+    email: z.string().email("Ogiltig e-postadress."),
+})
+
 // export const nameSchema = z.object({
 //     firstName: signUpUserFields.firstName,
 //     lastName: signUpUserFields.lastName,
 // });
 
-export const emailSchema = z.object({
-    email: signUpUserFields.email,
-})
+// export const emailSchema = z.object({
+//     email: signUpUserFields.email,
+// })
 
 export type CreateProfile = {
     id: string;
