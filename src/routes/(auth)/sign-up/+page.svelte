@@ -18,6 +18,12 @@
 
   const userForm = superForm(data.form, {
     validators: zodClient(signUpSchema),
+    onSubmit(input) {
+      console.log("input is", input);
+    },
+    onUpdate(data) {
+      console.log("on update", data)
+    }
   });
   const { form: formData, enhance, delayed, message, allErrors } = userForm;
 
@@ -73,6 +79,7 @@
   <svelte:fragment slot="form">
     <form
       class="text-start flex flex-col gap-y-4 w-full max-w-screen-sm p-4"
+      action="?/signUp"
       method="POST"
       use:enhance
     >

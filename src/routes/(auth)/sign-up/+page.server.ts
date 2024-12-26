@@ -29,7 +29,7 @@ export const load: PageServerLoad = async ({ locals: { supabase } }) => {
 }
 
 export const actions = {
-    default: async (event) => {
+    signUp: async (event) => {
         const { locals: { supabase, session } } = event;
         if (session)
             redirect(303, "/account");
@@ -37,7 +37,7 @@ export const actions = {
         const form = await superValidate(event, zod(signUpSchema));
         if (!form.valid) return fail(400, { form });
 
-        const { email, password, role, first_name, last_name } = form.data;
+        const { email, password, role, firstName, lastName } = form.data;
         let inputUser: CreateProfile;
         try {
             const { data, error } = await supabase.auth.signUp({
@@ -67,8 +67,8 @@ export const actions = {
             inputUser = {
                 id: data.user.id,
                 role,
-                firstName: first_name,
-                lastName: last_name,
+                firstName,
+                lastName,
             }
         } catch (error) {
             console.error("Error when creating supabase auth user", error);
@@ -77,11 +77,11 @@ export const actions = {
 
         try {
             await createProfile(supabase, inputUser)
-            return message(form, { variant: "success", title: "Verifiera e-postadress", description: "Kika i din inkorg för att verifiera e-post: " + email + ".", status: 201 });
+            return message(form, { variant: "success", title: "Verifiera e-postadress", description: "Kika i din inkorg (eller i skräpkorgen) för att verifiera e-post: " + email + ".", status: 201 });
         } catch (error) {
             if (isErrorWithCode(error)) {
                 if (error.code === ExternalErrorCodes.DuplicateKeyConstraintViolation) // somehow profile exists but not user. Allow.
-                    return message(form, { variant: "success", title: "Verifiera e-postadress", description: "Kika i din inkorg för att verifiera e-post: " + email + ".", status: 201 });
+                    return message(form, { variant: "success", title: "Verifiera e-postadress", description: "Kika i din inkorg (eller i skräpkorgen) för att verifiera e-post: " + email + ".", status: 201 });
             }
 
             console.error("Error when creating profile", error);

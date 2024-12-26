@@ -1,8 +1,8 @@
-import type { Tables } from "src/supabase";
 import type { TypeToZod } from "src/lib/shared/utils/utils";
 import { z } from "zod";
+import { type Profile } from "./profile";
 
-export type SignUpUser = Pick<Tables<"profiles">, "role" | "first_name" | "last_name"> & {
+export type SignUpUser = Pick<Profile, "role" | "firstName" | "lastName"> & {
     email: string;
     password: string;
     terms: boolean;
@@ -17,11 +17,11 @@ export const signUpUserFields: TypeToZod<SignUpUser> = {
         .min(5, "Måste vara minst 5 karaktärer."),
     role: z
         .enum(["student", "teacher", "admin"]),
-    first_name: z
+    firstName: z
         .string()
         .min(1, "Får inte vara tomt.")
         .max(50, "Får inte vara mer än 50 bokstäver."),
-    last_name: z
+    lastName: z
         .string()
         .min(1, "Får inte vara tomt.")
         .max(50, "Får inte vara mer än 50 bokstäver."),

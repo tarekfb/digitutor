@@ -1,6 +1,5 @@
 import type { Tables } from "src/supabase";
 import { z } from "zod";
-import { signUpUserFields } from "./user";
 import { acceptedAvatarFormats, getFormatsHumanReadable, maxAvatarSize } from "../constants/constants";
 import { formatBytes } from "src/lib/shared/utils/utils";
 
@@ -25,14 +24,26 @@ export type ProfileInput = {
     is_active?: boolean;
 }
 
+// props for name schema and email schema should be selected from object signUpUserFields, but getting issues with undefined
+// copy pasting instead [2024-12-26]
 export const nameSchema = z.object({
-    firstName: signUpUserFields.first_name,
-    lastName: signUpUserFields.last_name,
+    firstName: z
+        .string()
+        .min(1, "Får inte vara tomt.")
+        .max(50, "Får inte vara mer än 50 bokstäver."),
+    lastName: z
+        .string()
+        .min(1, "Får inte vara tomt.")
+        .max(50, "Får inte vara mer än 50 bokstäver."),
 });
+// export const nameSchema = z.object({
+//     firstName: signUpUserFields.firstName,
+//     lastName: signUpUserFields.lastName,
+// });
 
-export const emailSchema = z.object({
-    email: signUpUserFields.email,
-})
+// export const emailSchema = z.object({
+//     email: signUpUserFields.email,
+// })
 
 export type CreateProfile = {
     id: string;
