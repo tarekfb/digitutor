@@ -9,17 +9,16 @@
   export let type: "teacher" | "student" = "student";
   export let userForm;
   export let formData;
+
+  const getReadableType = (
+    type: "teacher" | "student",
+  ): "lärare" | "student" => (type === "teacher" ? "lärare" : "student");
 </script>
 
 <div class="space-y-1 mb-4 text-center lg:text-start">
-  <PrimaryTitle>Skapa konto</PrimaryTitle>
+  <PrimaryTitle>Skapa konto som {getReadableType(type)}</PrimaryTitle>
   <p class="text-muted-foreground">
-    Registrera dig som {#if type === "teacher"}
-      lärare.
-    {:else}
-      student.
-    {/if}
-    Har du redan ett konto?
+    Ett konto är gratis och inget betalkort behövs. Har du redan ett konto?
     <a href="/sign-in" class="underline"> Logga in här. </a>
   </p>
 </div>
