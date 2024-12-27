@@ -21,21 +21,22 @@ export const load: PageServerLoad = async ({ locals: { supabase } }) => {
     }
     catch (e) {
         console.error("Error when fetching signin display review, perhaps didnt find valid review", e);
-        error(500, getDefaultErrorInfo(""));
-        // todo: as in auth, dont fail the page. just skip displaying the review
+        longReviews = [];
     }
 
-    let subjects: number[] | undefined;
-    let listings: ListingWithProfile[] | undefined;
-    try {
-        if (longReviews[0]) {
+    let subjects: number[] = [];
+    let listings: ListingWithProfile[] = [];
+    if (longReviews[0]) {
+        try {
             const dbListings = await getListingsByTeacher(supabase, longReviews[0].receiver.id);
             listings = dbListings.map(listing => formatListingWithProfile(listing));
             subjects = listings.flatMap(listing => listing.subjects)
         }
-    }
-    catch (e) {
-        console.error("Error when fetching listings and subjects for signin", e);
+        catch (e) {
+            console.error("Error when fetching listings and subjects for signin", e);
+            subjects = [];
+            listings = [];
+        }
     }
 
     const form = await superValidate(zod(signInSchema))

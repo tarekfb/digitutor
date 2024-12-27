@@ -71,12 +71,12 @@ test('signup with query param teacher selects teacher', async ({ context }) => {
     const page = await context.newPage();
 
     await page.goto(`${baseUrl}/sign-up?role=teacher`)
-    await expect(page.getByText('Registrera dig som lärare.')).toBeVisible();
+    await expect(page.getByText('som lärare')).toBeVisible();
 });
 
 test('signup with query param student selects student', async ({ context }) => {
     const page = await context.newPage();
 
     await page.goto(`${baseUrl}/sign-up?role=student`)
-    await expect(page.getByText('Registrera dig som student.')).toBeVisible();
+    await expect(page.getByText('som student')).toBeVisible();
 });

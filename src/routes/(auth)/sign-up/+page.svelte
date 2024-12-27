@@ -22,8 +22,8 @@
       console.log("input is", input);
     },
     onUpdate(data) {
-      console.log("on update", data)
-    }
+      console.log("on update", data);
+    },
   });
   const { form: formData, enhance, delayed, message, allErrors } = userForm;
 
@@ -36,45 +36,49 @@
 
 <AuthSplit shouldShowAside={!!review}>
   <svelte:fragment slot="aside">
-    <div class="relative flex flex-col gap-3">
-      <div class="absolute select-none -top-32 -left-11 rotate-180">
-        <span class="text-[160px] font-[helvetica] leading-none text-primary/40"
-          >“</span
-        >
-      </div>
-      <blockquote class="z-10 max-w-lg text-3xl">
-        {review.description}
-      </blockquote>
-      <Stars rating={review.rating} />
-      {#if review.sender}
-        <div class="flex items-center gap-x-2 self-start mt-2.5">
-          <Avatar
-            url={review.sender.avatarUrl ?? ""}
-            firstName={review.sender.firstName}
-            lastName={review.sender.lastName}
-            role={review.sender.role}
-            class="text-sm w-7 h-7"
-          />
-          <cite class="not-italic text-lg">
-            {review.sender.firstName}
-          </cite>
-          <ArrowRightIcon class="w-4 h-4" />
-          <a
-            class="gap-x-2 flex items-center"
-            href="/profile/{review.receiver.id}"
+    <!-- this if block is only to please svelte compiler, the shouldShowAside condition already handles this logic -->
+    {#if review}
+      <div class="relative flex flex-col gap-3">
+        <div class="absolute select-none -top-32 -left-11 rotate-180">
+          <span
+            class="text-[160px] font-[helvetica] leading-none text-primary/40"
+            >“</span
           >
+        </div>
+        <blockquote class="z-10 max-w-lg text-3xl">
+          {review.description}
+        </blockquote>
+        <Stars rating={review.rating} />
+        {#if review.sender}
+          <div class="flex items-center gap-x-2 self-start mt-2.5">
             <Avatar
-              url={review.receiver.avatarUrl ?? ""}
-              firstName={review.receiver.firstName}
-              lastName={review.receiver.lastName}
-              role={review.receiver.role}
+              url={review.sender.avatarUrl ?? ""}
+              firstName={review.sender.firstName}
+              lastName={review.sender.lastName}
+              role={review.sender.role}
               class="text-sm w-7 h-7"
             />
-            <p class="text-lg">{review.receiver.firstName}</p>
-          </a>
-        </div>
-      {/if}
-    </div>
+            <cite class="not-italic text-lg">
+              {review.sender.firstName}
+            </cite>
+            <ArrowRightIcon class="w-4 h-4" />
+            <a
+              class="gap-x-2 flex items-center"
+              href="/profile/{review.receiver.id}"
+            >
+              <Avatar
+                url={review.receiver.avatarUrl ?? ""}
+                firstName={review.receiver.firstName}
+                lastName={review.receiver.lastName}
+                role={review.receiver.role}
+                class="text-sm w-7 h-7"
+              />
+              <p class="text-lg">{review.receiver.firstName}</p>
+            </a>
+          </div>
+        {/if}
+      </div>
+    {/if}
   </svelte:fragment>
   <svelte:fragment slot="form">
     <form
