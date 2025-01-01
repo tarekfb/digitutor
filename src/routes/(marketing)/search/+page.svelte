@@ -36,20 +36,27 @@
 </script>
 
 {#if !$isDesktop}
-  <div class="bg-secondary min-h-44 w-full">
+  <div class="bg-secondary min-h-44 w-full flex justify-center p-8">
     <div
-      class="flex flex-col justify-center md:mt-4 items-center gap-y-4 w-full max-w-screen-sm"
+      class="flex flex-col justify-center items-center gap-y-4 w-full max-w-screen-sm"
     >
-      <SearchForm form={data.form} {subjects} />
+      <PrimaryTitle class="heading text-background self-center md:mb-4"
+        >Sök bland lärare</PrimaryTitle
+      >
+      <SearchForm form={data.form} {subjects} formStyling="bg-secondary" />
     </div>
   </div>
+
   <Wavy class="overflow-x-hidden -mt-4" />
   {#if $message}
     <div class="p-4">
       <FormMessage {message} scroll scrollTo="end" />
     </div>
   {:else if isInit && initResults.length > 0}
-    <SearchResultList results={initResults} searchTerm={$formData.query} />
+    <SearchResultList
+      results={initResults}
+      searchTerm={$formData.subjects ?? $formData.query}
+    />
   {:else if initMessage}
     <div class="p-4">
       <AlertMessage
@@ -70,8 +77,10 @@
   {/if}
 {:else}
   <div class="w-full bg-secondary flex justify-center">
-    <div class="w-full flex flex-col  gap-y-4 max-w-screen-sm">
-      <PrimaryTitle class="heading text-background self-center md:mb-4">Sök bland lärare</PrimaryTitle>
+    <div class="w-full flex flex-col gap-y-4 max-w-screen-sm">
+      <PrimaryTitle class="heading text-background self-center md:mb-4"
+        >Sök bland lärare</PrimaryTitle
+      >
       <SearchForm form={data.form} {subjects} formStyling="bg-secondary" />
     </div>
   </div>

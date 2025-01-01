@@ -21,6 +21,9 @@
   export let form: SuperValidated<Infer<typeof searchSchema>>;
   const searchForm = superForm(form, {
     validators: zodClient(searchSchema),
+    onSubmit() {
+      $selected = [];
+    },
   });
   const { form: formData, enhance, delayed, message, allErrors } = searchForm;
 
@@ -125,7 +128,6 @@
   </div>
 </form>
 <FormMessage {message} scroll scrollTo="end" />
-
 {#if $selected && $selected.length > 0}
   <ul class="flex flex-wrap gap-2 w-full">
     <li>
