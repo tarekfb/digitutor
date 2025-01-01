@@ -5,7 +5,6 @@
   import type { WritableLoadable } from "@square/svelte-store";
   import PrimaryTitle from "../atoms/primary-title.svelte";
   import AlertMessage from "../atoms/alert-message.svelte";
-  import { secondaryAltButtonVariant } from "src/lib/shared/constants/constants";
   import { Button } from "../ui/button";
   import { goto } from "$app/navigation";
   import { Skeleton } from "$lib/components/ui/skeleton/index.js";
@@ -46,10 +45,8 @@
     />
     <PrimaryTitle>{other.firstName}</PrimaryTitle>
     {#if other.role === "teacher"}
-      <Button
-        on:click={() => goto(`/profile/${other.id}`)}
-        variant="secondary"
-        class={secondaryAltButtonVariant()}>Se profil</Button
+      <Button on:click={() => goto(`/profile/${other.id}`)} variant="outline"
+        >Se profil</Button
       >
     {/if}
   </div>

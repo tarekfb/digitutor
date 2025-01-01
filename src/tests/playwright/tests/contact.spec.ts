@@ -1,8 +1,5 @@
-
-
 // import { expect } from '@playwright/test';
 // import { test } from '../env-options';
-
 
 // let baseUrl: string;
 
@@ -23,9 +20,9 @@
 //     await page.getByPlaceholder('Lösenord').fill(password);
 //     await page.locator('form').getByRole('button', { name: 'Logga in' }).click();
 //     await page.waitForURL(/account$/);
-    
+
 //     await page.goto(`${process.env.BASE_URL ?? ""}/profile/${profileId}`, { waitUntil: 'networkidle' })
-//     await page.waitForTimeout(2000) 
+//     await page.waitForTimeout(2000)
 //     await page.getByRole('button', { name: 'Kontakta Tarek' }).click();
 //     await page.waitForLoadState('networkidle')
 //     await page.waitForURL(/conversation\/[a-zA-Z0-9\-]+$/);

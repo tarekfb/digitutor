@@ -16,7 +16,6 @@
   import { toast } from "svelte-sonner";
   import { page } from "$app/stores";
   import { ExternalLink } from "lucide-svelte";
-  import { secondaryAltButtonVariant } from "src/lib/shared/constants/constants";
   import Svelecte from "svelecte";
   import { arrayProxy } from "sveltekit-superforms/client";
   import Label from "src/lib/components/atoms/label.svelte";
@@ -29,7 +28,6 @@
   const { slug } = $page.params;
 
   const listingForm = superForm(data.updateListingForm, {
-    // clearOnSubmit: "none",
     validators: zodClient(updateListingSchema),
     onUpdated({ form }) {
       if (form.valid) {

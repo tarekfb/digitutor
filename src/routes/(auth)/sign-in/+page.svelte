@@ -64,7 +64,11 @@
   <title>Logga in</title>
 </svelte:head>
 
-<AuthSplit shouldShowAside={reviews.length > 0 && listings.length > 0 && subjects.length > 0}>
+<AuthSplit
+  shouldShowAside={reviews.length > 0 &&
+    listings.length > 0 &&
+    subjects.length > 0}
+>
   <svelte:fragment slot="aside">
     <div class="flex justify-around gap-x-8">
       <div class="max-w-36 flex flex-col">
@@ -89,11 +93,11 @@
           {#if subjects}
             <ul>
               {#each subjects as subject, i}
-                {#if i < 10 && languages[subject]?.label}
+                {#if i < 10 && languages[subject - 1]?.title}
                   <li class="flex gap-x-2 items-center">
                     <Terminal class="w-5 h-5 text-accent" />
                     <p class="font-mono text-base">
-                      {languages[subject].label}
+                      {languages[subject - 1].title}
                     </p>
                   </li>
                 {/if}

@@ -1,9 +1,11 @@
-import { expect } from '@playwright/test';
-import { test } from '../env-options';
+import { expect } from "@playwright/test";
+import { test } from "../env-options";
 
-test('fetch listing', async ({ page, listingId, profileId }) => {
-  await page.goto(`${process.env.BASE_URL || ""}/profile/${profileId}?id=${listingId}`);
-  await expect(page.getByText('SEK')).toBeVisible();
+test("fetch listing", async ({ page, listingId, profileId }) => {
+  await page.goto(
+    `${process.env.BASE_URL || ""}/profile/${profileId}?id=${listingId}`,
+  );
+  await expect(page.getByText("SEK")).toBeVisible();
 });
 
 // not working atm [2024-09-27]
@@ -46,4 +48,3 @@ test('fetch listing', async ({ page, listingId, profileId }) => {
 //   await page.waitForURL(/account$/);
 //   expect(page.url()).toMatch(/account$/);
 // });
-

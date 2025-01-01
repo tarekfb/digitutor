@@ -1,3 +1,3 @@
 export type ErrorWithCode = {
-    code: string;
-}
+  code: string;
+};

@@ -19,7 +19,6 @@
   import { Plus, Star } from "lucide-svelte";
   import { Button, buttonVariants } from "$lib/components/ui/button";
   import { Textarea } from "../ui/textarea";
-  import { secondaryAltButtonVariant } from "src/lib/shared/constants/constants";
   import type { Profile } from "src/lib/shared/models/profile";
 
   export let form: SuperValidated<Infer<AddReviewSchema>>;
@@ -41,8 +40,8 @@
   <Dialog.Trigger
     class={cn(
       buttonVariants({
-        variant: "white",
-        className: `flex gap-x-2 self-center ${secondaryAltButtonVariant()}`,
+        variant: "outline",
+        className: `flex gap-x-2 self-center`,
       }),
     )}
   >

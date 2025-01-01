@@ -1,8 +1,6 @@
 <script lang="ts">
   import { Clock, CircleAlert } from "lucide-svelte";
-  import type {
-    ConversationWithReferences,
-  } from "src/lib/shared/models/conversation";
+  import type { ConversationWithReferences } from "src/lib/shared/models/conversation";
   import { timeAgo } from "src/lib/shared/utils/utils";
   import type { Profile } from "src/lib/shared/models/profile";
 
