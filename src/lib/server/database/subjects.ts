@@ -1,5 +1,6 @@
 import type { SupabaseClient } from "@supabase/supabase-js";
 import type { Database } from "lucide-svelte";
+import { languages } from "src/lib/shared/models/common";
 import type { DbSubject, Subject } from "src/lib/shared/models/subject";
 import type { Tables } from "src/supabase";
 
@@ -15,7 +16,7 @@ export const getSubjects = async (
     console.error(`Error on getting subjects`, { error });
     throw error;
   }
-
+  
   return data as unknown as DbSubject[];
 };
 

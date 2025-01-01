@@ -17,11 +17,6 @@
 
   export let data: PageData;
   $: ({ displayProfiles, displayReviews, subjects } = data);
-
-  const searchForm = superForm(data.form, {
-    validators: zodClient(searchSchema),
-  });
-  const { form: formData, enhance, delayed, message, allErrors } = searchForm;
 </script>
 
 <svelte:head>

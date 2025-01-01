@@ -61,8 +61,6 @@ export const load = (async ({ url, locals: { supabase } }) => {
     console.error("Unknown error when reading subjects", e);
     subjects = languages;
   }
-
-
   return { subjects, form, initResults, initMessage };
 }) satisfies PageServerLoad;
 

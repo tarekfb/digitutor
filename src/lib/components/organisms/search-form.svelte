@@ -15,14 +15,32 @@
   import type { Subject } from "src/lib/shared/models/subject";
   import { createCombobox, melt } from "@melt-ui/svelte";
   import { fly } from "svelte/transition";
+  import type { ActionResult } from "@sveltejs/kit";
 
+  export let formStyling: string = "";
   export let subjects: Subject[];
-
   export let form: SuperValidated<Infer<typeof searchSchema>>;
+  export let onUpdatedCallback:
+    | ((
+        form: SuperValidated<Infer<typeof searchSchema>>,
+        result: Required<
+          Extract<
+            ActionResult,
+            {
+              type: "success" | "failure";
+            }
+          >
+        >,
+      ) => void)
+    | undefined = undefined;
+
   const searchForm = superForm(form, {
     validators: zodClient(searchSchema),
     onSubmit() {
       $selected = [];
+    },
+    onUpdate({ form, result }) {
+      if (onUpdatedCallback) onUpdatedCallback(form, result);
     },
   });
   const { form: formData, enhance, delayed, message, allErrors } = searchForm;
@@ -52,7 +70,6 @@
       })
     : subjects;
 
-  export let formStyling: string = "";
   const subjectChipStyling =
     "h-12 hover:scale-105 transition-all ease-in-out inline-flex gap-x-2 items-center px-2 py-1 text-sm bg-background rounded-full md:hover:bg-background";
 </script>
