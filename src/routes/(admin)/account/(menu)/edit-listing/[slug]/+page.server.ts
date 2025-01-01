@@ -1,22 +1,42 @@
 import { fail, error } from "@sveltejs/kit";
 import { zod } from "sveltekit-superforms/adapters";
-import { defaultErrorInfo, getFailFormMessage, MessageId, defaultErrorDescription, getDefaultErrorInfo } from "$lib/shared/constants/constants";
+import {
+  defaultErrorInfo,
+  getFailFormMessage,
+  MessageId,
+  defaultErrorDescription,
+  getDefaultErrorInfo,
+} from "$lib/shared/constants/constants";
 import { message, superValidate } from "sveltekit-superforms";
-import { deleteListing, getListing, updateListing } from "$lib/server/database/listings";
-import { updateListingSchema, type ListingWithProfile } from "$lib/shared/models/listing";
+import {
+  deleteListing,
+  getListing,
+  updateListing,
+} from "$lib/server/database/listings";
+import {
+  updateListingSchema,
+  type ListingWithProfile,
+} from "$lib/shared/models/listing";
 import { redirect } from "sveltekit-flash-message/server";
 import { isErrorWithCode } from "src/lib/shared/utils/utils";
-import { formatSubject, suggestSubjectSchema, type Subject } from "src/lib/shared/models/subject.js";
+import {
+  formatSubject,
+  suggestSubjectSchema,
+  type Subject,
+} from "src/lib/shared/models/subject.js";
 import { getSubjects, suggestSubject } from "src/lib/server/database/subjects";
 import type { Tables } from "src/supabase";
 import { findSimilarSubjects } from "src/lib/shared/utils/subjects/utils";
 import { ExternalErrorCodes } from "src/lib/shared/models/common.js";
 import { formatListingWithProfile } from "src/lib/shared/utils/listing/utils.js";
 
-export const load = async ({ locals: { supabase }, params: { slug }, parent }) => {
+export const load = async ({
+  locals: { supabase },
+  params: { slug },
+  parent,
+}) => {
   const { session } = await parent();
-  if (!session)
-    redirect(303, "/sign-in");
+  if (!session) redirect(303, "/sign-in");
 
   let listing: ListingWithProfile;
   try {
@@ -27,13 +47,14 @@ export const load = async ({ locals: { supabase }, params: { slug }, parent }) =
       if (e.code === ExternalErrorCodes.InvalidInputSyntax)
         error(404, {
           message: "Vi kunde inte hitta annonsen",
-          description: "Annonsen finns inte eller har tagits bort. Du kan kontakta oss om detta fortsätter."
+          description:
+            "Annonsen finns inte eller har tagits bort. Du kan kontakta oss om detta fortsätter.",
         });
 
       if (e.code === ExternalErrorCodes.ContainsZeroRows)
         error(404, {
           message: "Vi kunde inte hitta annonsen",
-          description: "Annonsen finns inte eller har tagits bort."
+          description: "Annonsen finns inte eller har tagits bort.",
         });
     }
     console.error("Unknown error when reading listing with id: " + slug, e);
@@ -41,29 +62,41 @@ export const load = async ({ locals: { supabase }, params: { slug }, parent }) =
   }
 
   if (session?.user.id !== listing.profile.id) {
-    console.error("Tried to read listing that is not theirs. listingid: " + listing.id + " userid: " + session?.user.id);
+    console.error(
+      "Tried to read listing that is not theirs. listingid: " +
+        listing.id +
+        " userid: " +
+        session?.user.id,
+    );
     error(500, { ...defaultErrorInfo });
   }
 
   let subjects: Subject[] = [];
   try {
     const rawSubjects = await getSubjects(supabase);
-    subjects = rawSubjects.map(s => formatSubject(s));
+    subjects = rawSubjects.map((s) => formatSubject(s));
   } catch (e) {
     console.error("Unknown error when reading subjects", e);
     error(500, { ...defaultErrorInfo });
-  };
+  }
 
-  const updateListingForm = await superValidate({ ...listing, hourlyPrice: listing.hourlyPrice }, zod(updateListingSchema), { errors: false })
-  const suggestSubjectForm = await superValidate(zod(suggestSubjectSchema))
+  const updateListingForm = await superValidate(
+    { ...listing, hourlyPrice: listing.hourlyPrice },
+    zod(updateListingSchema),
+    { errors: false },
+  );
+  const suggestSubjectForm = await superValidate(zod(suggestSubjectSchema));
   return { subjects, updateListingForm, suggestSubjectForm };
-}
+};
 
 export const actions = {
-  deleteListing: async ({ locals: { supabase, safeGetSession }, cookies, params: { slug } }) => {
+  deleteListing: async ({
+    locals: { supabase, safeGetSession },
+    cookies,
+    params: { slug },
+  }) => {
     const { session } = await safeGetSession();
-    if (!session)
-      throw redirect(303, "/sign-in");
+    if (!session) throw redirect(303, "/sign-in");
 
     try {
       await deleteListing(supabase, slug, session);
@@ -74,15 +107,22 @@ export const actions = {
       });
     }
 
-    throw redirect(303, `/account`, { message: 'Annonsen är borttagen.', type: 'success' }, cookies);
+    throw redirect(
+      303,
+      `/account`,
+      { message: "Annonsen är borttagen.", type: "success" },
+      cookies,
+    );
   },
   updateListing: async (event) => {
-    const { locals: { supabase, safeGetSession }, params: { slug } } = event;
+    const {
+      locals: { supabase, safeGetSession },
+      params: { slug },
+    } = event;
     const { session } = await safeGetSession();
-    if (!session)
-      throw redirect(303, "/sign-in");
+    if (!session) throw redirect(303, "/sign-in");
 
-    const form = await superValidate(event, zod(updateListingSchema))
+    const form = await superValidate(event, zod(updateListingSchema));
     if (!form.valid) return fail(400, { form });
 
     try {
@@ -94,12 +134,14 @@ export const actions = {
     }
   },
   suggestSubject: async (event) => {
-    const { locals: { supabase, safeGetSession }, params: { slug } } = event;
+    const {
+      locals: { supabase, safeGetSession },
+      params: { slug },
+    } = event;
     const { session } = await safeGetSession();
-    if (!session)
-      throw redirect(303, "/sign-in");
+    if (!session) throw redirect(303, "/sign-in");
 
-    const form = await superValidate(event, zod(suggestSubjectSchema))
+    const form = await superValidate(event, zod(suggestSubjectSchema));
     if (!form.valid) return fail(400, { form });
     const { subject, email, isRetry } = form.data;
 
@@ -108,23 +150,41 @@ export const actions = {
         const subjects = await getSubjects(supabase);
         const matches = findSimilarSubjects(subject, subjects);
         if (matches.length > 0)
-          return message(form, getFailFormMessage(`Detta verkar redan finnas: ${matches[0].title}`, "Om detta inte stämmer kan du skicka in förslaget ändå.", MessageId.ResourceAlreadyExists, undefined, "default"), { status: 400 }); // Todo: add some link or so in GUI to let user contact easily
+          return message(
+            form,
+            getFailFormMessage(
+              `Detta verkar redan finnas: ${matches[0].title}`,
+              "Om detta inte stämmer kan du skicka in förslaget ändå.",
+              MessageId.ResourceAlreadyExists,
+              undefined,
+              "default",
+            ),
+            { status: 400 },
+          ); // Todo: add some link or so in GUI to let user contact easily
       } catch (error) {
-        console.error("Error when looking for match. Allowing user to insert suggestion. slug: " + slug, error);
+        console.error(
+          "Error when looking for match. Allowing user to insert suggestion. slug: " +
+            slug,
+          error,
+        );
       }
     }
 
     let suggestion: Tables<"subjects_suggestions">;
     try {
-      suggestion = await suggestSubject(supabase, session.user.id, subject, email);
+      suggestion = await suggestSubject(
+        supabase,
+        session.user.id,
+        subject,
+        email,
+      );
     } catch (error) {
       console.error("Error when adding suggestion", error);
       return message(form, getFailFormMessage(), { status: 500 });
     }
 
     // send email to admin here
-    console.info("fake sending email", { suggestion })
+    console.info("fake sending email", { suggestion });
     return { form };
-
   },
-}
+};

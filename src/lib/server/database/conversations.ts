@@ -1,5 +1,5 @@
 import type { Session, SupabaseClient } from "@supabase/supabase-js";
-import type { Database, Tables } from "src/supabase"
+import type { Database, Tables } from "src/supabase";
 import type { DbConversationWithReferences } from "$lib/shared/models/conversation";
 import { getNow } from "src/lib/shared/utils/utils";
 import { sendMessage } from "./messages";
@@ -9,7 +9,7 @@ export const getConversation = async (
   supabase: SupabaseClient<Database>,
   id: string,
   role: "student" | "teacher" | "admin",
-  profileId: string
+  profileId: string,
 ): Promise<DbConversationWithReferences> => {
   let query = supabase
     .from("conversations")
@@ -24,10 +24,10 @@ export const getConversation = async (
                 )
               `,
     )
-    .eq("id", id)
+    .eq("id", id);
 
-  if (role === "student") query = query.eq("student", profileId)
-  else if (role === "teacher") query = query.eq("teacher", profileId)
+  if (role === "student") query = query.eq("student", profileId);
+  else if (role === "teacher") query = query.eq("teacher", profileId);
 
   const { data, error } = await query.limit(1).single();
 
@@ -37,12 +37,12 @@ export const getConversation = async (
   }
 
   return data as unknown as DbConversationWithReferences;
-}
+};
 
 export const getConversationForStudentAndTeacher = async (
   supabase: SupabaseClient<Database>,
   student: string,
-  teacher: string
+  teacher: string,
 ): Promise<DbConversationWithReferences | null> => {
   const { data, error } = await supabase
     .from("conversations")
@@ -62,8 +62,8 @@ export const getConversationForStudentAndTeacher = async (
     .limit(1)
     .single();
 
-  return error ? null : data as unknown as DbConversationWithReferences; // error means no existing convo, return null
-}
+  return error ? null : (data as unknown as DbConversationWithReferences); // error means no existing convo, return null
+};
 
 export const startConversation = async (
   supabase: SupabaseClient<Database>,
@@ -87,32 +87,49 @@ export const startConversation = async (
     )
     .eq("student", student)
     .eq("teacher", teacher)
-    .limit(1)
+    .limit(1);
 
   if (error) {
-    console.error(`Failed to get conversation for studentid ${student} and teacherid ${teacher}`, { error });
+    console.error(
+      `Failed to get conversation for studentid ${student} and teacherid ${teacher}`,
+      { error },
+    );
     throw error;
   }
 
   if (!data) {
-    console.error(`Failed to get conversation for studentid ${student} and teacherid ${teacher}`, { data, error });
+    console.error(
+      `Failed to get conversation for studentid ${student} and teacherid ${teacher}`,
+      { data, error },
+    );
     throw new Error("Unexpected null response");
   }
 
-  if (data.length === 0) { // no existing convo, create new
+  if (data.length === 0) {
+    // no existing convo, create new
     const newConversation = await createConversation(supabase, teacher);
-    await sendMessage(supabase, { content: firstMessage, conversation: newConversation.id }, session); // does this need to be awaited? todo: remove if not needed
+    await sendMessage(
+      supabase,
+      { content: firstMessage, conversation: newConversation.id },
+      session,
+    ); // does this need to be awaited? todo: remove if not needed
     return newConversation as unknown as DbConversationWithReferences;
   }
 
   if (data.length === 1) {
-    console.error("User tried to create new conversation through a bug, if this happens frequently consider implementing the update event on start convo form.", { teacher, student })
+    console.error(
+      "User tried to create new conversation through a bug, if this happens frequently consider implementing the update event on start convo form.",
+      { teacher, student },
+    );
     throw new ResourceAlreadyExistsError(409, data[0].id.toString());
   }
 
-  console.error("Unexpected error occured, invalid code path reached", { data, error });
+  console.error("Unexpected error occured, invalid code path reached", {
+    data,
+    error,
+  });
   throw new Error("Unexpected error occured");
-}
+};
 
 export const getConversations = async (
   supabase: SupabaseClient<Database>,
@@ -132,7 +149,7 @@ export const getConversations = async (
           )
         `,
     )
-    .or(`teacher.eq.${userId},student.eq.${userId}`)
+    .or(`teacher.eq.${userId},student.eq.${userId}`);
   // todo rewrite this function to take teacherid or studentid, and improve this search
 
   if (max) query = query.limit(max);
@@ -140,12 +157,14 @@ export const getConversations = async (
   const { data, error } = await query;
 
   if (error) {
-    console.error("Failed to get conversations for userid: " + userId, { error });
+    console.error("Failed to get conversations for userid: " + userId, {
+      error,
+    });
     throw error;
   }
 
   return data as unknown as DbConversationWithReferences[];
-}
+};
 
 export const createConversation = async (
   supabase: SupabaseClient<Database>,
@@ -171,7 +190,7 @@ export const createConversation = async (
   const { data, error } = await supabase
     .from("conversations")
     .insert(dbConversation)
-    .select('*')
+    .select("*")
     .limit(1)
     .single();
 
@@ -182,4 +201,3 @@ export const createConversation = async (
 
   return data;
 };
-

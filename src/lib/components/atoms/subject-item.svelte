@@ -20,7 +20,9 @@
     )}
   >
     <Terminal class={cn("w-5 h-5 text-accent", iconStyling)} />
-    <p class={cn("font-mono md:text-lg", textStyling)}>{languages[subject].label}</p>
+    <p class={cn("font-mono md:text-lg", textStyling)}>
+      {languages[subject - 1].title}
+    </p>
   </li>
 {:else}
   <div
@@ -30,6 +32,8 @@
     )}
   >
     <Terminal class={cn("w-5 h-5 text-accent", iconStyling)} />
-    <p class={cn("font-mono md:text-lg", textStyling)}>{languages[subject].label}</p>
+    <p class={cn("font-mono md:text-lg", textStyling)}>
+      {languages[subject - 1].title}
+    </p>
   </div>
 {/if}

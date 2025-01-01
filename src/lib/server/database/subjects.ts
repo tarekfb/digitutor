@@ -6,7 +6,10 @@ import type { Tables } from "src/supabase";
 export const getSubjects = async (
   supabase: SupabaseClient<Database>,
 ): Promise<DbSubject[]> => {
-  const { data, error } = await supabase.from('subjects').select('id, title, alt_title').order('title', { ascending: true });
+  const { data, error } = await supabase
+    .from("subjects")
+    .select("id, title, alt_title")
+    .order("title", { ascending: true });
 
   if (error) {
     console.error(`Error on getting subjects`, { error });
@@ -28,9 +31,9 @@ export const suggestSubject = async (
     email,
   };
   const { data, error } = await supabase
-    .from('subjects_suggestions')
+    .from("subjects_suggestions")
     .insert(suggestion)
-    .select('*')
+    .select("*")
     .limit(1)
     .single();
 

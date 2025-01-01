@@ -14,7 +14,7 @@
   <DrawerPrimitive.Content
     class={cn(
       "fixed inset-y-0 right-0 z-50 ml-24 flex h-full rounded-l-[10px] border bg-background",
-       className,
+      className,
     )}
     {...$$restProps}
   >

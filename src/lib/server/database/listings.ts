@@ -1,7 +1,10 @@
 import type { Session, SupabaseClient } from "@supabase/supabase-js";
-import type { InputListing, DbListingWithProfile } from "$lib/shared/models/listing";
-import type { Database, Tables } from "src/supabase"
-import { getNow } from 'src/lib/shared/utils/utils'
+import type {
+  InputListing,
+  DbListingWithProfile,
+} from "$lib/shared/models/listing";
+import type { Database, Tables } from "src/supabase";
+import { getNow } from "src/lib/shared/utils/utils";
 import { ResourceNotFoundError } from "src/lib/shared/errors/missing-error";
 
 export const getListings = async (
@@ -10,31 +13,31 @@ export const getListings = async (
   teacherId?: string,
   visible?: boolean,
 ): Promise<DbListingWithProfile[]> => {
-  let query = supabase
-    .from("listings")
-    .select(
-      `
+  let query = supabase.from("listings").select(
+    `
             *,
             profile (
               *
             )
           `,
-    );
+  );
 
-  if (teacherId) query = query.eq("profile", teacherId)
-  if (visible) query = query.eq("visible", true)
+  if (teacherId) query = query.eq("profile", teacherId);
+  if (visible) query = query.eq("visible", true);
   if (max) query = query.limit(max);
 
   const { data, error } = await query;
 
   if (error) {
-    console.error(`Failed to read listings ${teacherId ? "for teacher " + teacherId : ''}`, { error });
+    console.error(
+      `Failed to read listings ${teacherId ? "for teacher " + teacherId : ""}`,
+      { error },
+    );
     throw error;
   }
 
   return data as unknown as DbListingWithProfile[];
-}
-
+};
 
 export const getListingsByTeacher = async (
   supabase: SupabaseClient<Database>,
@@ -52,20 +55,23 @@ export const getListingsByTeacher = async (
         )
       `,
     )
-    .eq("profile", teacherId)
+    .eq("profile", teacherId);
 
-  if (visible) query = query.eq("visible", visible)
+  if (visible) query = query.eq("visible", visible);
   if (max) query = query.limit(max);
 
   const { data, error } = await query;
 
   if (error) {
-    console.error(`Failed to read listings ${teacherId ? "for userId" + teacherId : ''}`, { error });
+    console.error(
+      `Failed to read listings ${teacherId ? "for userId" + teacherId : ""}`,
+      { error },
+    );
     throw error;
   }
 
   return data as unknown as DbListingWithProfile[];
-}
+};
 
 export const getListing = async (
   supabase: SupabaseClient<Database>,
@@ -91,7 +97,8 @@ export const getListing = async (
     throw error;
   }
 
-  if (visible && !data.visible) throw new ResourceNotFoundError(400, `Listing ${data.id} is not visible`)
+  if (visible && !data.visible)
+    throw new ResourceNotFoundError(400, `Listing ${data.id} is not visible`);
 
   return data as unknown as DbListingWithProfile;
 };
@@ -111,7 +118,7 @@ export const createListing = async (
     description: "",
     subjects: [],
     profile: session.user.id,
-    visible: false
+    visible: false,
   };
 
   const { data, error } = await supabase
@@ -136,20 +143,19 @@ export const createListing = async (
   return data as unknown as DbListingWithProfile;
 };
 
-
 export const deleteListing = async (
   supabase: SupabaseClient<Database>,
   listingId: string,
   session: Session,
 ): Promise<Tables<"listings">> => {
   const { error, data } = await supabase
-    .from('listings')
+    .from("listings")
     .delete()
-    .eq('id', listingId)
-    .eq('profile', session.user.id)
-    .select('*')
+    .eq("id", listingId)
+    .eq("profile", session.user.id)
+    .select("*")
     .limit(1)
-    .order('id')
+    .order("id")
     .single();
 
   if (error) {
@@ -166,7 +172,6 @@ export const updateListing = async (
   listingId: string,
   session: Session,
 ): Promise<DbListingWithProfile> => {
-
   const dbListing = {
     id: listingId,
     title: input.title,
@@ -181,16 +186,17 @@ export const updateListing = async (
     .from("listings")
     .update({ ...dbListing })
     .eq("id", listingId)
-    .eq('profile', session.user.id)
+    .eq("profile", session.user.id)
     .select(
       `
     *,
     profile(
         *
       )
-      `)
+      `,
+    )
     .limit(1)
-    .order('id')
+    .order("id")
     .single();
 
   if (error) {

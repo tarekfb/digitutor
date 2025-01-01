@@ -3,27 +3,22 @@
   import { superForm } from "sveltekit-superforms";
   import { zodClient } from "sveltekit-superforms/adapters";
   import FormMessage from "$lib/components/molecules/form-message.svelte";
-  import * as Form from "$lib/components/ui/form/index.js";
-  import { Input } from "$lib/components/ui/input/index.js";
-  import FormSubmit from "$lib/components/molecules/form-submit.svelte";
   import {
     searchSchema,
     type SearchResult as SearchResultType,
   } from "src/lib/shared/models/search";
-  import SecondaryTitle from "src/lib/components/atoms/secondary-title.svelte";
   import AlertMessage from "$lib/components/atoms/alert-message.svelte";
   import SearchResultList from "src/lib/components/molecules/search-result-list.svelte";
   import RootContainer from "src/lib/components/templates/root-container.svelte";
   import { mediaQuery } from "svelte-legos";
   import Wavy from "src/lib/components/atoms/wavy.svelte";
-  import { Button } from "src/lib/components/ui/button";
-  import { Search, ArrowRightIcon } from "lucide-svelte";
-  import LoadingSpinner from "src/lib/components/atoms/loading-spinner.svelte";
+  import SearchForm from "src/lib/components/organisms/search-form.svelte";
+  import PrimaryTitle from "src/lib/components/atoms/primary-title.svelte";
 
   const isDesktop = mediaQuery("(min-width: 768px)");
 
   export let data: PageData;
-  $: ({ initResults, initMessage } = data);
+  $: ({ initResults, initMessage, subjects } = data);
 
   let isInit = true;
   let results: SearchResultType[] = [];
@@ -37,53 +32,16 @@
       }
     },
   });
-  const { form: formData, enhance, delayed, message, allErrors } = searchForm;
+  const { form: formData, message } = searchForm;
 </script>
 
 {#if !$isDesktop}
   <div class="bg-secondary min-h-44 w-full">
-    <form
-      class="text-center flex flex-col gap-y-4 w-full p-8"
-      action="?/search"
-      method="POST"
-      use:enhance
+    <div
+      class="flex flex-col justify-center md:mt-4 items-center gap-y-4 w-full max-w-screen-sm"
     >
-      <SecondaryTitle class="text-background"
-        >Sök efter lärare och annonser</SecondaryTitle
-      >
-        <div class="flex items-start">
-          <Form.Field form={searchForm} name="query" class="flex-1">
-            <Form.Control let:attrs>
-              <div class="relative bg-card rounded-sm rounded-r-none">
-                <Search
-                  class="text-muted-foreground absolute left-2 top-[50%] h-4 w-4 translate-y-[-50%]"
-                />
-                <Input
-                  {...attrs}
-                  type="text"
-                  bind:value={$formData.query}
-                  placeholder="Namn, titel, beskrivning, pris, etc."
-                  class="pl-8 text-lg bg-card rounded-r-none"
-                />
-              </div>
-            </Form.Control>
-            <Form.FieldErrors />
-          </Form.Field>
-          <Button
-            type="submit"
-            variant="ghost"
-            size="icon"
-            disabled={$allErrors.length > 0 || $delayed}
-            class="flex gap-x-2 items-center bg-card text-foreground rounded-l-none hover:bg-card hover:text-foreground"
-          >
-            {#if $delayed}
-              <LoadingSpinner class="size-4" />
-            {:else}
-              <ArrowRightIcon class="size-4" />
-            {/if}
-          </Button>
-        </div>
-    </form>
+      <SearchForm form={data.form} {subjects} />
+    </div>
   </div>
   <Wavy class="overflow-x-hidden -mt-4" />
   {#if $message}
@@ -111,49 +69,11 @@
     </div>
   {/if}
 {:else}
-  <div class="w-full bg-secondary flex flex-col items-center">
-    <form
-      class="text-center flex flex-col gap-y-4 w-full bg-secondary max-w-screen-sm"
-      action="?/search"
-      method="POST"
-      use:enhance
-    >
-      <SecondaryTitle class="text-background"
-        >Sök efter lärare och annonser</SecondaryTitle
-      >
-      <div class="flex items-start">
-          <Form.Field form={searchForm} name="query" class="flex-1">
-            <Form.Control let:attrs>
-              <div class="relative bg-card rounded-sm rounded-r-none">
-                <Search
-                  class="text-muted-foreground absolute left-2 top-[50%] h-4 w-4 translate-y-[-50%]"
-                />
-                <Input
-                  {...attrs}
-                  type="text"
-                  bind:value={$formData.query}
-                  placeholder="Namn, titel, beskrivning, pris, etc."
-                  class="pl-8 text-lg bg-card rounded-r-none"
-                />
-              </div>
-            </Form.Control>
-            <Form.FieldErrors />
-          </Form.Field>
-          <Button
-            type="submit"
-            variant="ghost"
-            size="icon"
-            disabled={$allErrors.length > 0 || $delayed}
-            class="flex gap-x-2 items-center bg-card text-foreground rounded-l-none hover:bg-card hover:text-foreground"
-          >
-            {#if $delayed}
-              <LoadingSpinner class="size-4" />
-            {:else}
-              <ArrowRightIcon class="size-4" />
-            {/if}
-          </Button>
-        </div>
-      </form>
+  <div class="w-full bg-secondary flex justify-center">
+    <div class="w-full flex flex-col  gap-y-4 max-w-screen-sm">
+      <PrimaryTitle class="heading text-background self-center md:mb-4">Sök bland lärare</PrimaryTitle>
+      <SearchForm form={data.form} {subjects} formStyling="bg-secondary" />
+    </div>
   </div>
   <Wavy />
   <RootContainer class="w-full md:max-w-sm lg:max-w-screen-md">

@@ -1,7 +1,7 @@
 import type { Session, SupabaseClient } from "@supabase/supabase-js";
-import type { Database, Tables } from "src/supabase"
-import type { InputMessage } from "$lib/shared/models/conversation"
-import { getNow } from 'src/lib/shared/utils/utils'
+import type { Database, Tables } from "src/supabase";
+import type { InputMessage } from "$lib/shared/models/conversation";
+import { getNow } from "src/lib/shared/utils/utils";
 
 export const getMessages = async (
   supabase: SupabaseClient<Database>,
@@ -10,30 +10,32 @@ export const getMessages = async (
 ): Promise<Tables<"messages">[] | null> => {
   let query = supabase
     .from("messages")
-    .select('*')
-    .eq("conversation", conversationId)
+    .select("*")
+    .eq("conversation", conversationId);
 
   if (max) {
-    query = query.limit(max)
+    query = query.limit(max);
     query = query.order("created_at", { ascending: false });
   }
 
   const { data, error } = await query;
 
   if (error) {
-    console.error(`Failed to fetch messages for conversationId: ${conversationId}`, { error });
+    console.error(
+      `Failed to fetch messages for conversationId: ${conversationId}`,
+      { error },
+    );
     throw error;
   }
 
   if (max) return data.reverse();
   return data;
-}
-
+};
 
 export const sendMessage = async (
   supabase: SupabaseClient<Database>,
   { conversation, content }: InputMessage,
-  session: Session
+  session: Session,
 ): Promise<Tables<"messages">> => {
   const dbMessage: Tables<"messages"> = {
     id: crypto.randomUUID(),
@@ -46,7 +48,7 @@ export const sendMessage = async (
   const { data, error } = await supabase
     .from("messages")
     .insert(dbMessage)
-    .select('*')
+    .select("*")
     .limit(1)
     .order("id")
     .single();

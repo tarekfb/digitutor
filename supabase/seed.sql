@@ -496,11 +496,13 @@ DECLARE
   listing_title TEXT;
   listing_description TEXT;
   listing_hourly_price INT;
+  subject_names TEXT;
 BEGIN
   -- Initialize listing fields to default values
   listing_title := '';
   listing_description := '';
   listing_hourly_price := 0;
+  subject_names := '';
 
   -- Retrieve the profile information
   SELECT p.first_name, p.last_name, p.role
@@ -514,15 +516,21 @@ BEGIN
   FROM listings l
   WHERE l.id = listing.id AND l.visible = TRUE;
 
+  -- Get subject names for the listing
+  SELECT string_agg(s.title, ' ')
+  INTO subject_names
+  FROM subjects s
+  WHERE s.id = ANY(listing.subjects);
+
   -- Check if the role is 'teacher' and if the listing is visible
   IF profile_role = 'teacher' AND listing_title IS NOT NULL THEN
     RETURN profile_first_name || ' ' || profile_last_name || ' ' ||
            COALESCE(listing_title, '') || ' ' || 
            COALESCE(listing_description, '') || ' ' ||
-           COALESCE(listing_hourly_price::TEXT, '');
+           COALESCE(listing_hourly_price::TEXT, '') || ' ' ||
+           COALESCE(subject_names, '');
   ELSE
     RETURN NULL; -- or you can return '' for an empty string
   END IF;
 END;
-
 $$ LANGUAGE plpgsql IMMUTABLE;

@@ -1,36 +1,44 @@
-import { createBrowserClient, createServerClient, isBrowser, parse } from '@supabase/ssr'
-import { PUBLIC_SUPABASE_ANON_KEY, PUBLIC_SUPABASE_URL } from '$env/static/public'
-import type { LayoutLoad } from './$types'
+import {
+  createBrowserClient,
+  createServerClient,
+  isBrowser,
+  parse,
+} from "@supabase/ssr";
+import {
+  PUBLIC_SUPABASE_ANON_KEY,
+  PUBLIC_SUPABASE_URL,
+} from "$env/static/public";
+import type { LayoutLoad } from "./$types";
 
 export const load: LayoutLoad = async ({ data, depends, fetch }) => {
   /**
    * Declare a dependency so the layout can be invalidated, for example, on
    * session refresh.
    */
-  depends('supabase:auth')
+  depends("supabase:auth");
 
   const supabase = isBrowser()
     ? createBrowserClient(PUBLIC_SUPABASE_URL, PUBLIC_SUPABASE_ANON_KEY, {
-      global: {
-        fetch,
-      },
-      cookies: {
-        get(key) {
-          const cookie = parse(document.cookie)
-          return cookie[key]
+        global: {
+          fetch,
         },
-      },
-    })
+        cookies: {
+          get(key) {
+            const cookie = parse(document.cookie);
+            return cookie[key];
+          },
+        },
+      })
     : createServerClient(PUBLIC_SUPABASE_URL, PUBLIC_SUPABASE_ANON_KEY, {
-      global: {
-        fetch,
-      },
-      cookies: {
-        get() {
-          return JSON.stringify(data.session)
+        global: {
+          fetch,
         },
-      },
-    })
+        cookies: {
+          get() {
+            return JSON.stringify(data.session);
+          },
+        },
+      });
 
   /**
    * It's fine to use `getSession` here, because on the client, `getSession` is
@@ -39,11 +47,11 @@ export const load: LayoutLoad = async ({ data, depends, fetch }) => {
    */
   const {
     data: { session },
-  } = await supabase.auth.getSession()
+  } = await supabase.auth.getSession();
 
   // checking session because if not, supabase throws 403 because of bad JWT
-  const userResponse = session ? await supabase.auth.getUser() : null
+  const userResponse = session ? await supabase.auth.getUser() : null;
   const user = userResponse?.data?.user ?? null;
 
-  return { session, supabase, user }
-}
+  return { session, supabase, user };
+};

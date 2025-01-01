@@ -15,7 +15,7 @@
   import * as Form from "$lib/components/ui/form";
   import { Label } from "$lib/components/ui/label/index.js";
   export let uploadAvatarForm;
-  export let avatarUrl: string
+  export let avatarUrl: string;
   export let deleteAvatarForm;
 
   const handleFilesSelect = (e: any) => {

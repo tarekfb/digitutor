@@ -17,8 +17,8 @@
   };
 
   const getLabels = (subjectIndex: number): string[] => {
-    const language = languages[subjectIndex];
-    const labels = [language.label, ...(language.altLabel ?? [])];
+    const language = languages[subjectIndex - 1];
+    const labels = [language.title, ...(language.altTitle ?? [])];
     return labels;
   };
 

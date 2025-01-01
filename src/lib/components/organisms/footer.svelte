@@ -2,7 +2,7 @@
   import { websiteName } from "$lib/shared/constants/constants";
   import Link from "../atoms/link.svelte";
   import Separator from "../ui/separator/separator.svelte";
-  
+
   const linkStyle = "self-start h-6";
 </script>
 

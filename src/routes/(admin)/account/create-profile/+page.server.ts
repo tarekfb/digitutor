@@ -1,4 +1,7 @@
-import { defaultErrorInfo, defaultErrorTitle } from "$lib/shared/constants/constants";
+import {
+  defaultErrorInfo,
+  defaultErrorTitle,
+} from "$lib/shared/constants/constants";
 import { error, fail, redirect } from "@sveltejs/kit";
 import { zod } from "sveltekit-superforms/adapters";
 import { message, superValidate } from "sveltekit-superforms/client";
@@ -11,8 +14,7 @@ export async function load({ parent }) {
   const profile = data.profile;
 
   // user completed their profile
-  if (hasFullProfile(profile))
-    redirect(303, "/account");
+  if (hasFullProfile(profile)) redirect(303, "/account");
 
   // redirect to select plan if student
   // if (profile.role === "student")
@@ -21,23 +23,24 @@ export async function load({ parent }) {
   const initFormData = {
     firstName: profile.firstName ?? "",
     lastName: profile.lastName ?? "",
-  }
+  };
 
   try {
-    const form = await superValidate(initFormData, zod(nameSchema))
+    const form = await superValidate(initFormData, zod(nameSchema));
     return { form, data };
   } catch (e) {
     console.error("Error when loading createprofile", e);
     error(500, { ...defaultErrorInfo });
-  };
+  }
 }
 
 export const actions = {
   default: async (event) => {
-    const { locals: { supabase, safeGetSession } } = event;
+    const {
+      locals: { supabase, safeGetSession },
+    } = event;
     const { user } = await safeGetSession();
-    if (!user)
-      redirect(303, "/sign-in");
+    if (!user) redirect(303, "/sign-in");
 
     const form = await superValidate(event, zod(nameSchema));
 
@@ -48,18 +51,19 @@ export const actions = {
     const profileInput: ProfileInput = {
       id: user.id,
       first_name: firstName,
-      last_name: lastName
-    }
+      last_name: lastName,
+    };
 
     try {
       await updateProfile(supabase, profileInput);
-      return message(form, 'Skapat profil.');
+      return message(form, "Skapat profil.");
     } catch (error) {
-      console.error("Error on complete profile for userid " + user.id, { error });
+      console.error("Error on complete profile for userid " + user.id, {
+        error,
+      });
       return fail(500, {
         errorMessage: defaultErrorTitle, // error or fail? todo fix
       });
     }
-
-  }
-}
+  },
+};

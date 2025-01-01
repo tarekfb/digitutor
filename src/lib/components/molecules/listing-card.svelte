@@ -41,8 +41,7 @@
         <Button
           href="/profile/{listing.profile.id}?id={listing.id}"
           class="flex gap-x-2 text-foreground"
-          variant="outline"
-          ><ExternalLink class="h-4 w-4" />visa annons</Button
+          variant="outline"><ExternalLink class="h-4 w-4" />visa annons</Button
         >
         <Button href="/account/edit-listing/{listing.id}" class="flex gap-x-2">
           <Pen class="h-4 w-4" />Redigera</Button

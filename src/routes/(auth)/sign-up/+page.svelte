@@ -18,12 +18,6 @@
 
   const userForm = superForm(data.form, {
     validators: zodClient(signUpSchema),
-    onSubmit(input) {
-      console.log("input is", input);
-    },
-    onUpdate(data) {
-      console.log("on update", data);
-    },
   });
   const { form: formData, enhance, delayed, message, allErrors } = userForm;
 

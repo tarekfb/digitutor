@@ -1,4 +1,3 @@
-
 import { redirect } from "@sveltejs/kit";
 import { hasFullProfile } from "src/lib/shared/utils/profile/utils";
 

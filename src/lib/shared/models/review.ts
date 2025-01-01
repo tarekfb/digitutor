@@ -1,56 +1,62 @@
 import type { Tables } from "src/supabase";
-import { z } from "zod"
+import { z } from "zod";
 import type { DbProfile, Profile } from "./profile";
 
 export type DbReviewBase = Tables<"reviews">;
 
-export type DbReviewWithReferences = Omit<DbReviewBase, "sender" | "receiver"> & {
-    sender: DbProfile | null;
-    receiver: DbProfile;
+export type DbReviewWithReferences = Omit<
+  DbReviewBase,
+  "sender" | "receiver"
+> & {
+  sender: DbProfile | null;
+  receiver: DbProfile;
 };
 
-export type ReviewBase = Omit<DbReviewBase, "created_at" | "description" | "sender"> & {
-    createdAt: string;
-    description: string;
-    sender: string;
-}
+export type ReviewBase = Omit<
+  DbReviewBase,
+  "created_at" | "description" | "sender"
+> & {
+  createdAt: string;
+  description: string;
+  sender: string;
+};
 
 export type ReviewWithReferences = Omit<ReviewBase, "receiver" | "sender"> & {
-    sender?: Profile;
-    receiver: Profile;
-}
+  sender?: Profile;
+  receiver: Profile;
+};
 
-export type InputReview = Pick<DbReviewBase, 'description' | 'rating'>;
+export type InputReview = Pick<DbReviewBase, "description" | "rating">;
 
 const addReviewProperties = {
-    rating: z
-        .coerce.number()
-        .min(1, "Måste vara minst 1.")
-        .max(5, "Får inte vara mer än 5."),
-    description: z
-        .string()
-        .min(1, "Får inte vara tom.")
-        .max(100, "Får inte vara mer än 100 karaktärer.")
-        .optional()
-}
+  rating: z.coerce
+    .number()
+    .min(1, "Måste vara minst 1.")
+    .max(5, "Får inte vara mer än 5."),
+  description: z
+    .string()
+    .min(1, "Får inte vara tom.")
+    .max(100, "Får inte vara mer än 100 karaktärer.")
+    .optional(),
+};
 
-export const addReviewSchema = z.object(addReviewProperties)
+export const addReviewSchema = z.object(addReviewProperties);
 export type AddReviewSchema = typeof addReviewSchema;
 
 export type DbDisplayProfile = {
-    id: string;
-    first_name: string;
-    last_name: string;
-    avatar_url: string | null;
-    avg_rating: number | null;
-    subjects: number[];
-}
+  id: string;
+  first_name: string;
+  last_name: string;
+  avatar_url: string | null;
+  avg_rating: number | null;
+  subjects: number[];
+};
 
 export type DisplayProfile = {
-    id: string;
-    firstName: string;
-    lastName: string;
-    avatarUrl: string | null;
-    avgRating: number;
-    subjects: number[];
-}
+  id: string;
+  firstName: string;
+  lastName: string;
+  avatarUrl: string | null;
+  avgRating: number;
+  subjects: number[];
+};

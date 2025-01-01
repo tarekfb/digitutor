@@ -1,3 +1,3 @@
 export type ErrorWithStatusCode = {
-    statusCode: string;
-  }
+  statusCode: string;
+};

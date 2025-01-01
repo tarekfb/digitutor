@@ -1,13 +1,13 @@
 <script lang="ts">
-	import type { HTMLAttributes } from "svelte/elements";
-	import { cn } from "src/lib/shared/utils/utils.js";
+  import type { HTMLAttributes } from "svelte/elements";
+  import { cn } from "src/lib/shared/utils/utils.js";
 
-	type $$Props = HTMLAttributes<HTMLParagraphElement>;
+  type $$Props = HTMLAttributes<HTMLParagraphElement>;
 
-	let className: $$Props["class"] = undefined;
-	export { className as class };
+  let className: $$Props["class"] = undefined;
+  export { className as class };
 </script>
 
 <p class={cn("text-sm text-muted-foreground", className)} {...$$restProps}>
-	<slot />
+  <slot />
 </p>

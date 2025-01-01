@@ -4,7 +4,7 @@
   import Avatar from "$lib/components/atoms/avatar.svelte";
   import type { ReviewWithReferences } from "src/lib/shared/models/review";
   import { cn } from "src/lib/shared/utils/utils.js";
-  
+
   let className: string | null | undefined = undefined;
   export { className as class };
   export let review: ReviewWithReferences;

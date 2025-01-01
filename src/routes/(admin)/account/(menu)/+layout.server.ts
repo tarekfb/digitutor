@@ -2,7 +2,9 @@ import type { LayoutServerLoad } from "./$types";
 import { redirect } from "@sveltejs/kit";
 
 export const load: LayoutServerLoad = async (event) => {
-  const { locals: { safeGetSession } } = event;
+  const {
+    locals: { safeGetSession },
+  } = event;
 
   const { session } = await safeGetSession();
   if (!session) {
