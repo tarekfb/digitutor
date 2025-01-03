@@ -10,15 +10,15 @@
   export let review: ReviewWithReferences;
 </script>
 
-<li class="list-none w-full">
-  <Card.Root class={cn(`shadow-md w-full`, className)}>
+<li class="w-full list-none">
+  <Card.Root class={cn(`w-full shadow-md`, className)}>
     <Card.Header
       class="gap-y-2 pb-4 {!review.description
         ? 'flex-row justify-between gap-x-6'
         : ''}"
     >
-      <div class="flex gap-x-2 justify-between items-center">
-        <div class="flex gap-x-2 items-center justify-center">
+      <div class="flex items-center justify-between gap-x-2">
+        <div class="flex items-center justify-center gap-x-2">
           <!-- if sender deleted account, sender will be null -->
           {#if review.sender}
             {@const { sender } = review}
@@ -27,14 +27,14 @@
               firstName={sender.firstName}
               lastName={sender.lastName}
               role={sender.role}
-              class="text-sm w-8 h-8"
+              class="h-8 w-8 text-sm"
             />
             <Card.Title>
               <h4 class="font-semibold">{sender.firstName}</h4>
             </Card.Title>
           {:else}
             <Card.Title>
-              <h4 class="font-normal font-mono">[konto raderat]</h4>
+              <h4 class="font-mono font-normal">[konto raderat]</h4>
             </Card.Title>
           {/if}
         </div>
@@ -48,7 +48,7 @@
       {/if}
     </Card.Header>
     {#if review.description}
-      <Card.Content class="text-muted-foreground pt-2 pb-4">
+      <Card.Content class="pb-4 pt-2 text-muted-foreground">
         {review.description}
       </Card.Content>
     {/if}

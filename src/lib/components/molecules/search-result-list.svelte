@@ -35,12 +35,12 @@
   };
 </script>
 
-<ul class="flex flex-col gap-y-4 w-full">
+<ul class="flex w-full flex-col gap-y-4">
   {#each results as result, i}
     {@const isLast = results.length - 1 === i}
     {@const hasBelow = results.length !== 1 && !isLast}
     {@const searchedSubject = getDisplaySubject(result)}
-    <li class="p-4 w-full">
+    <li class="w-full p-4">
       <SearchResultItem {result} {searchedSubject} />
     </li>
     {#if (hasMultiple && !isLast) || hasBelow}

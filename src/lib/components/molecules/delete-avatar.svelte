@@ -45,7 +45,7 @@
         disabled={$delayed}
         aria-label="Ta bort profilbild"
         size="icon"
-        class="absolute -top-2.5 -right-2.5 rounded-full"
+        class="absolute -right-2.5 -top-2.5 rounded-full"
       >
         {#if $delayed}
           <LoadingSpinner class="" /> <span>Laddar...</span>
@@ -54,7 +54,7 @@
         {/if}
       </Button>
     </Dialog.Trigger>
-    <Dialog.Content class="sm:max-w-[425px] bg-card">
+    <Dialog.Content class="bg-card sm:max-w-[425px]">
       <Dialog.Header>
         <Dialog.Title>{title}</Dialog.Title>
         <Dialog.Description>
@@ -91,7 +91,7 @@
         disabled={$delayed}
         aria-label="Ta bort profilbild"
         size="icon"
-        class="absolute -top-2.5 -right-2.5 rounded-full"
+        class="absolute -right-2.5 -top-2.5 rounded-full"
       >
         {#if $delayed}
           <LoadingSpinner class="" />

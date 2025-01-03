@@ -33,9 +33,9 @@
     <!-- this if block is only to please svelte compiler, the shouldShowAside condition already handles this logic -->
     {#if review}
       <div class="relative flex flex-col gap-3">
-        <div class="absolute select-none -top-32 -left-11 rotate-180">
+        <div class="absolute -left-11 -top-32 rotate-180 select-none">
           <span
-            class="text-[160px] font-[helvetica] leading-none text-primary/40"
+            class="font-[helvetica] text-[160px] leading-none text-primary/40"
             >“</span
           >
         </div>
@@ -44,20 +44,20 @@
         </blockquote>
         <Stars rating={review.rating} />
         {#if review.sender}
-          <div class="flex items-center gap-x-2 self-start mt-2.5">
+          <div class="mt-2.5 flex items-center gap-x-2 self-start">
             <Avatar
               url={review.sender.avatarUrl ?? ""}
               firstName={review.sender.firstName}
               lastName={review.sender.lastName}
               role={review.sender.role}
-              class="text-sm w-7 h-7"
+              class="h-7 w-7 text-sm"
             />
-            <cite class="not-italic text-lg">
+            <cite class="text-lg not-italic">
               {review.sender.firstName}
             </cite>
-            <ArrowRightIcon class="w-4 h-4" />
+            <ArrowRightIcon class="h-4 w-4" />
             <a
-              class="gap-x-2 flex items-center"
+              class="flex items-center gap-x-2"
               href="/profile/{review.receiver.id}"
             >
               <Avatar
@@ -65,7 +65,7 @@
                 firstName={review.receiver.firstName}
                 lastName={review.receiver.lastName}
                 role={review.receiver.role}
-                class="text-sm w-7 h-7"
+                class="h-7 w-7 text-sm"
               />
               <p class="text-lg">{review.receiver.firstName}</p>
             </a>
@@ -76,24 +76,24 @@
   </svelte:fragment>
   <svelte:fragment slot="form">
     <form
-      class="text-start flex flex-col gap-y-4 w-full max-w-screen-sm p-4"
+      class="flex w-full max-w-screen-sm flex-col gap-y-4 p-4 text-start"
       action="?/signUp"
       method="POST"
       use:enhance
     >
       <Tabs.Root
         value={role ?? "student"}
-        class="text-start flex flex-col gap-y-4"
+        class="flex flex-col gap-y-4 text-start"
       >
         <Tabs.List class="self-center">
           <Tabs.Trigger
             value="student"
-            class="data-[state=active]:bg-primary data-[state=inactive]:bg-none data-[state=inactive]:text-black data-[state=active]:text-red-300"
+            class="data-[state=active]:bg-primary data-[state=inactive]:bg-none data-[state=active]:text-red-300 data-[state=inactive]:text-black"
             >Student</Tabs.Trigger
           >
           <Tabs.Trigger
             value="teacher"
-            class="data-[state=active]:bg-primary data-[state=inactive]:bg-none data-[state=inactive]:text-black data-[state=active]:text-red-300"
+            class="data-[state=active]:bg-primary data-[state=inactive]:bg-none data-[state=active]:text-red-300 data-[state=inactive]:text-black"
             >Lärare</Tabs.Trigger
           >
         </Tabs.List>
@@ -109,7 +109,7 @@
         {delayed}
         {allErrors}
         text="Skapa konto"
-        class="self-center min-w-wider"
+        class="min-w-wider self-center"
       />
     </form>
   </svelte:fragment>

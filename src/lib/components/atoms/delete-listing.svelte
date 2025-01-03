@@ -17,7 +17,7 @@
       aria-label="Ta bort annons"
       class="self-end "
     >
-      <Trash2 class="h-5 w-5 mr-2" /> Ta bort annons
+      <Trash2 class="mr-2 h-5 w-5" /> Ta bort annons
     </Button>
   </AlertDialog.Trigger>
   <AlertDialog.Content>

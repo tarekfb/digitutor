@@ -11,10 +11,10 @@
   const profileChecked: null = profile;
 </script>
 
-<div class="flex flex-col min-h-screen">
+<div class="flex min-h-screen flex-col">
   <Navbar profile={profileChecked} logout={() => logout(supabase, session)} />
 
-  <main class="flex-1 flex flex-col items-center">
+  <main class="flex flex-1 flex-col items-center">
     <slot />
   </main>
 </div>

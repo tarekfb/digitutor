@@ -73,24 +73,24 @@
           altTitle?.toLowerCase().includes(normalizedInput)
         );
       })
-    : tempBugFixForUndefined ?? [];
+    : (tempBugFixForUndefined ?? []);
 </script>
 
 <!-- <div class="w-full bg-secondary flex justify-center">
     <div class="w-full flex flex-col gap-y-4 max-w-screen-sm">  -->
-<div class="w-full bg-secondary min-h-44 flex justify-center p-8">
-  <div class="w-full flex flex-col gap-y-4 max-w-screen-sm">
-    <PrimaryTitle class="heading text-background self-center md:mb-4"
+<div class="flex min-h-44 w-full justify-center bg-secondary p-8">
+  <div class="flex w-full max-w-screen-sm flex-col gap-y-4">
+    <PrimaryTitle class="heading self-center text-background md:mb-4"
       >Sök bland lärare</PrimaryTitle
     >
     <form
-      class="text-center flex flex-col gap-y-4 w-full bg-secondary"
+      class="flex w-full flex-col gap-y-4 bg-secondary text-center"
       action="?/search"
       method="POST"
       use:enhance
     >
-      <div class="flex items-start min-w-72">
-        <Form.Field form={searchForm} name="subjects" class="flex-auto w-20">
+      <div class="flex min-w-72 items-start">
+        <Form.Field form={searchForm} name="subjects" class="w-20 flex-auto">
           <Form.Control let:attrs>
             <div class="flex flex-col gap-1">
               <!-- svelte-ignore a11y-label-has-associated-control - $label contains the 'for' attribute -->
@@ -105,8 +105,8 @@
               <div class="relative">
                 <input
                   use:melt={$input}
-                  class="flex h-10 items-center w-full justify-between rounded-lg bg-card
-          px-3 pr-6 rounded-r-none text-md placeholder:text-muted-foreground"
+                  class="text-md flex h-10 w-full items-center justify-between rounded-lg
+          rounded-r-none bg-card px-3 pr-6 placeholder:text-muted-foreground"
                   placeholder="Välj teknologi"
                 />
                 <div
@@ -126,7 +126,7 @@
         <Form.Field
           form={searchForm}
           name="query"
-          class="flex-none w-28 md:w-64"
+          class="w-28 flex-none md:w-64"
         >
           <Form.Control let:attrs>
             <div class="relative">
@@ -136,7 +136,7 @@
                 autocomplete="false"
                 bind:value={$formData.query}
                 placeholder="Sök på lärare"
-                class="placeholder:text-muted-foreground text-md bg-card rounded-r-none rounded-l-none text-muted-foreground"
+                class="text-md rounded-l-none rounded-r-none bg-card text-muted-foreground placeholder:text-muted-foreground"
               />
             </div>
           </Form.Control>
@@ -147,7 +147,7 @@
           variant="accent-third"
           size="icon"
           disabled={$allErrors.length > 0 || $delayed}
-          class="flex-none flex gap-x-2 items-center justify-center rounded-l-none"
+          class="flex flex-none items-center justify-center gap-x-2 rounded-l-none"
         >
           {#if $delayed}
             <LoadingSpinner class="size-4" />
@@ -159,14 +159,14 @@
     </form>
     <FormMessage {message} scroll scrollTo="end" />
     {#if $selected && $selected.length > 0}
-      <ul class="flex flex-wrap gap-2 w-full">
+      <ul class="flex w-full flex-wrap gap-2">
         <li>
           <button
             aria-label="Rensa {$selected.length} teknologier"
             on:click={() => ($selected = [])}
             class="{subjectChipStyling} border-2 border-third"
           >
-            <span class="bg-third text-background px-3 py-1 rounded-full"
+            <span class="rounded-full bg-third px-3 py-1 text-background"
               >{$selected.length}</span
             >
             <X class="size-4" />
@@ -234,7 +234,7 @@
   </div>
 </div>
 {#if !$isDesktop}
-  <Wavy class="overflow-x-hidden -mt-4" />
+  <Wavy class="-mt-4 overflow-x-hidden" />
   {#if $message}
     <div class="p-4">
       <FormMessage {message} scroll scrollTo="end" />

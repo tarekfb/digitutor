@@ -17,7 +17,7 @@
 </script>
 
 <div
-  class="card-generic bg-card p-6 rounded-sm {isNewRequest(
+  class="card-generic rounded-sm bg-card p-6 {isNewRequest(
     profile,
     conversation,
   )
@@ -25,7 +25,7 @@
     : ''} flex justify-between"
 >
   <div class="flex flex-col gap-y-4 text-start">
-    <h3 class="font-semibold text-lg">{recipient.firstName}</h3>
+    <h3 class="text-lg font-semibold">{recipient.firstName}</h3>
     {#if isNewRequest(profile, conversation)}
       <p>Ny förfrågan!</p>
     {/if}
@@ -35,7 +35,7 @@
     </div>
   </div>
   {#if isNewRequest(profile, conversation)}
-    <div class="flex flex-col justify-center items-center">
+    <div class="flex flex-col items-center justify-center">
       <CircleAlert class="h-10 w-10 text-success" />
     </div>
   {/if}

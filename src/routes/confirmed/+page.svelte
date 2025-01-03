@@ -22,11 +22,11 @@
 </Navbar>
 
 <div
-  class="m-8 text-center flex flex-col gap-y-6 md:gap-y-8 items-center max-w-xl self-center"
+  class="m-8 flex max-w-xl flex-col items-center gap-y-6 self-center text-center md:gap-y-8"
 >
   <CheckCircle2 size="100" class="text-success" />
   <div class="space-y-2 md:space-y-4">
-    <PrimaryTitle class="text-3xl md:text-6xl font-semibold">
+    <PrimaryTitle class="text-3xl font-semibold md:text-6xl">
       E-post verifierad!
     </PrimaryTitle>
     <SecondaryTitle class="text-muted-foreground"

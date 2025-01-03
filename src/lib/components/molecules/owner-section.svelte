@@ -12,11 +12,11 @@
   const url = `/profile/${slug}?${listing && `id=${listing.id}`}${listing ? "&" : "?"}preview=true`;
 </script>
 
-<div class="mt-6 flex flex-col gap-y-4 items-center">
+<div class="mt-6 flex flex-col items-center gap-y-4">
   <Button
     on:click={() => goto(url)}
     variant="outline"
-    class="flex gap-x-2 self-center bg-card items-center"
+    class="flex items-center gap-x-2 self-center bg-card"
     ><ExternalLink class="h-4 w-4" />visa som student</Button
   >
   <IsPublished
@@ -24,18 +24,18 @@
     class="self-center"
     variant="accent"
   />
-  <small class="flex flex-col gap-y-4 text-center px-8 mb-8 text-lg">
+  <small class="mb-8 flex flex-col gap-y-4 px-8 text-center text-lg">
     <p class="text-muted-foreground">
       Vill du göra ändringar på informationen om dig själv? <a
         href="/account/settings"
-        class="underline whitespace-nowrap">Gå till din profil</a
+        class="whitespace-nowrap underline">Gå till din profil</a
       >
     </p>
     {#if listing}
       <p class="text-muted-foreground">
         Vill du göra ändringar på din annons? <a
           href="/account/edit-listing/{listing.id}"
-          class="underline whitespace-nowrap">Gå till redigera annons</a
+          class="whitespace-nowrap underline">Gå till redigera annons</a
         >
       </p>
     {/if}

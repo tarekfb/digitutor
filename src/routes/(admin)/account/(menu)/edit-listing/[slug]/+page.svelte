@@ -60,7 +60,7 @@
       method="POST"
       use:enhance
       action="?/updateListing"
-      class="flex flex-col gap-y-4 items-stretch w-full"
+      class="flex w-full flex-col items-stretch gap-y-4"
     >
       <Form.Field form={listingForm} name="title">
         <Form.Control let:attrs>
@@ -70,7 +70,7 @@
             type="text"
             bind:value={$form.title}
             placeholder="Rubrik"
-            class="text-lg bg-card"
+            class="bg-card text-lg"
           />
         </Form.Control>
         <Form.FieldErrors />
@@ -79,7 +79,7 @@
       <Form.Field form={listingForm} name="hourlyPrice">
         <Form.Control let:attrs>
           <Label class={labelStyling}>Timpris</Label>
-          <div class="flex gap-x-2 items-center text-xl">
+          <div class="flex items-center gap-x-2 text-xl">
             <Input
               {...attrs}
               type="number"
@@ -135,15 +135,15 @@
       </Form.Field>
       <SuggestSubject suggestSubjectForm={data.suggestSubjectForm} />
 
-      <div class="flex flex-col gap-y-4 mt-4 md:items-end">
-        <div class="flex justify-between gap-x-2 items-center md:gap-x-6">
+      <div class="mt-4 flex flex-col gap-y-4 md:items-end">
+        <div class="flex items-center justify-between gap-x-2 md:gap-x-6">
           <Form.Field form={listingForm} name="visible">
             <Form.Control let:attrs>
-              <div class="flex gap-x-2 items-center">
+              <div class="flex items-center gap-x-2">
                 <Checkbox
                   {...attrs}
                   bind:checked={$form.visible}
-                  class="w-5 h-5 flex items-center justify-center"
+                  class="flex h-5 w-5 items-center justify-center"
                 />
                 <Form.Label class="text-xl">Synlig</Form.Label>
               </div>

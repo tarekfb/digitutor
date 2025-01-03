@@ -4,7 +4,11 @@ import { fail, message, superValidate } from "sveltekit-superforms";
 import { zod } from "sveltekit-superforms/adapters";
 import { searchSchema, type SearchResult } from "src/lib/shared/models/search";
 import type { Actions, PageServerLoad } from "./$types";
-import { type Message, ExternalErrorCodes, languages } from "src/lib/shared/models/common";
+import {
+  type Message,
+  ExternalErrorCodes,
+  languages,
+} from "src/lib/shared/models/common";
 import { cleanQuery, isErrorWithCode } from "src/lib/shared/utils/utils";
 import { formatProfile } from "src/lib/shared/utils/profile/utils";
 import { getSubjects } from "src/lib/server/database/subjects";
@@ -74,7 +78,8 @@ export const actions: Actions = {
     if (!form.valid) return fail(400, { form });
     const { query, subjects } = form.data;
 
-    if (!query && (!subjects || subjects === "undefined")) return fail(400, { form });
+    if (!query && (!subjects || subjects === "undefined"))
+      return fail(400, { form });
 
     const cleanedQuery = cleanQuery(query ?? "", subjects);
     if (!cleanedQuery) return fail(400, { form });
