@@ -66,7 +66,8 @@ export const actions: Actions = {
     const form = await superValidate(event, zod(searchSchema));
     if (!form.valid) return fail(400, { form });
     const { query, subjects } = form.data;
-    if (!query && (!subjects || subjects === "undefined")) return fail(400, { form });
+    if (!query && (!subjects || subjects === "undefined"))
+      return fail(400, { form });
 
     const cleanedQuery = cleanQuery(query ?? "", subjects);
     if (!cleanedQuery) return fail(400, { form });

@@ -33,7 +33,7 @@
 </script>
 
 <div class="flex flex-col gap-y-4 overflow-y-auto">
-  <div class="flex flex-col items-center gap-y-2 mb-4">
+  <div class="mb-4 flex flex-col items-center gap-y-2">
     <Avatar
       url={other.avatarUrl ?? ""}
       href="/profile/{other.id}"
@@ -50,23 +50,23 @@
       >
     {/if}
   </div>
-  <ul class="flex flex-col gap-y-4 justify-end">
+  <ul class="flex flex-col justify-end gap-y-4">
     {#await chatStore.load()}
-      <li class="flex items-center gap-x-4 justify-start">
+      <li class="flex items-center justify-start gap-x-4">
         <Skeleton class="h-12 w-12 rounded-full bg-card" />
         <div class="flex flex-col gap-y-2">
-          <Skeleton class="h-4 w-64 text-primary bg-card" />
+          <Skeleton class="h-4 w-64 bg-card text-primary" />
           <Skeleton class="h-4 w-52 bg-card" />
         </div>
       </li>
-      <li class="flex flex-col items-end gap-y-2 justify-end">
-        <Skeleton class="h-4 w-64 text-primary bg-card " />
+      <li class="flex flex-col items-end justify-end gap-y-2">
+        <Skeleton class="h-4 w-64 bg-card text-primary " />
         <Skeleton class="h-4 w-44 bg-card" />
       </li>
     {:then}
       {#each $chatStore as message}
         {#if message.sender === self.id}
-          <li class="flex flex-col gap-y-2 bg-card p-2 rounded-md self-end">
+          <li class="flex flex-col gap-y-2 self-end rounded-md bg-card p-2">
             <p>{message.content}</p>
             <p class="text-xs text-muted-foreground">
               {timeAgo(message.createdAt)} sedan
@@ -86,7 +86,7 @@
               />
             </div>
             <div
-              class="flex flex-col gap-y-2 bg-card p-2 rounded-md self-start"
+              class="flex flex-col gap-y-2 self-start rounded-md bg-card p-2"
             >
               <p>{message.content}</p>
               <p class="text-xs text-muted-foreground">

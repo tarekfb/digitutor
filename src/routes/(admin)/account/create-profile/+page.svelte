@@ -33,10 +33,10 @@
   <title>Skapa profil</title>
 </svelte:head>
 <div
-  class="text-center max-w-lg py-12 flex flex-col items-center justify-center gap-y-4"
+  class="flex max-w-lg flex-col items-center justify-center gap-y-4 py-12 text-center"
 >
   <form
-    class="flex text-start mx-auto max-w-sm md:max-w-xl"
+    class="mx-auto flex max-w-sm text-start md:max-w-xl"
     method="POST"
     use:enhance
   >

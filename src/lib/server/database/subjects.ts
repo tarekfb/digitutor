@@ -16,7 +16,7 @@ export const getSubjects = async (
     console.error(`Error on getting subjects`, { error });
     throw error;
   }
-  
+
   return data as unknown as DbSubject[];
 };
 

@@ -8,7 +8,7 @@
 </svelte:head>
 
 <div
-  class="text-center flex flex-col items-center justify-center gap-y-2 md:max-w-xl m-8"
+  class="m-8 flex flex-col items-center justify-center gap-y-2 text-center md:max-w-xl"
 >
   <PrimaryTitle class="mb-2">Lösenordet stämde inte</PrimaryTitle>
   <p>

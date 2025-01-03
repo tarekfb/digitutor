@@ -47,7 +47,7 @@
 </script>
 
 {#if !$isDesktop}
-  <RootContainer class="w-full m-0">
+  <RootContainer class="m-0 w-full">
     <ProfileHeaderMobile
       {teacher}
       {listing}
@@ -63,11 +63,11 @@
           class="text-lg"
           descriptionClass="text-md"
         >
-          <p class="italic text-md mt-2">Bara du kan se detta</p>
+          <p class="text-md mt-2 italic">Bara du kan se detta</p>
         </AlertMessage>
       </div>
     {/if}
-    <div class="flex flex-col gap-y-4 p-8 pt-0 w-full max-w-lg">
+    <div class="flex w-full max-w-lg flex-col gap-y-4 p-8 pt-0">
       {#if listing}
         <PrimaryTitle class="text-wrap">{listing.title}</PrimaryTitle>
         <p class="text-muted-foreground">
@@ -88,20 +88,20 @@
   </RootContainer>
 {:else}
   <div class="flex">
-    <div class="grid grid-cols-3 w-full gap-x-8 p-8">
-      <aside class="flex flex-col items-center gap-y-6 w-full max-w-md">
+    <div class="grid w-full grid-cols-3 gap-x-8 p-8">
+      <aside class="flex w-full max-w-md flex-col items-center gap-y-6">
         <div
-          class="p-8 rounded-md shadow-sm bg-secondary w-full text-background"
+          class="w-full rounded-md bg-secondary p-8 text-background shadow-sm"
         >
           {#if teacher.avatarUrl}
             <img
               src={teacher.avatarUrl}
               alt="profile avatar"
-              class="object-cover w-full rounded-sm mb-8"
+              class="mb-8 w-full rounded-sm object-cover"
             />
           {/if}
           <div class="flex flex-col gap-y-4">
-            <SecondaryTitle class="font-normal md:text-4xl whitespace-normal"
+            <SecondaryTitle class="whitespace-normal font-normal md:text-4xl"
               >{teacher.firstName}</SecondaryTitle
             >
             <Stars size={5} rating={4.7} />
@@ -109,8 +109,8 @@
               <ul>
                 {#each listing?.subjects as subject, i}
                   {#if i < 6}
-                    <li class="flex gap-x-2 items-center">
-                      <Terminal class="w-5 h-5 text-third" />
+                    <li class="flex items-center gap-x-2">
+                      <Terminal class="h-5 w-5 text-third" />
                       <p class="font-mono text-xl">
                         {languages[subject - 1].title}
                       </p>
@@ -142,14 +142,14 @@
             class="text-2xl"
             descriptionClass="text-lg"
           >
-            <p class="italic text-lg mt-2">Bara du kan se detta</p>
+            <p class="mt-2 text-lg italic">Bara du kan se detta</p>
           </AlertMessage>
         {/if}
       </aside>
-      <main class="col-start- col-span-2 flex flex-col gap-y-6 max-w-4xl">
+      <main class="col-start- col-span-2 flex max-w-4xl flex-col gap-y-6">
         {#if listing}
           <PrimaryTitle class="text-wrap">{listing.title}</PrimaryTitle>
-          <p class="md:text-lg text-muted-foreground">
+          <p class="text-muted-foreground md:text-lg">
             {#if listing.description}
               {listing.description}
             {:else}

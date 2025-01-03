@@ -16,7 +16,9 @@
 </script>
 
 <div class="space-y-1 mb-4 text-center lg:text-start">
-  <PrimaryTitle class="whitespace-normal">Skapa konto som {getReadableType(type)}</PrimaryTitle>
+  <PrimaryTitle class="whitespace-normal"
+    >Skapa konto som {getReadableType(type)}</PrimaryTitle
+  >
   <p class="text-muted-foreground">
     Ett konto är gratis och inget betalkort behövs. Har du redan ett konto?
     <a href="/sign-in" class="underline"> Logga in här. </a>

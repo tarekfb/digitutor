@@ -30,20 +30,20 @@
 </script>
 
 <div
-  class=" min-w-[20rem] md:min-w-[48rem] lg:min-w-[60rem] text-center flex flex-col items-center gap-y-4 md:gap-y-6 self-center m-8"
+  class=" m-8 flex min-w-[20rem] flex-col items-center gap-y-4 self-center text-center md:min-w-[48rem] md:gap-y-6 lg:min-w-[60rem]"
 >
   <div class="flex flex-col items-center gap-y-4 md:gap-y-6">
-    <PrimaryTitle class="text-4xl md:text-5xl font-normal whitespace-normal"
+    <PrimaryTitle class="whitespace-normal text-4xl font-normal md:text-5xl"
       >{getTitle()}</PrimaryTitle
     >
     {#if code}
-      <p class="text-3xl md:text-4xl text-accent font-mono">{code}</p>
+      <p class="font-mono text-3xl text-accent md:text-4xl">{code}</p>
     {/if}
-    <p class="text-xl md:text-2xl text-muted-foreground max-w-md">
+    <p class="max-w-md text-xl text-muted-foreground md:text-2xl">
       {getDescription()}
     </p>
   </div>
-  <ul class="flex flex-col w-3/4 md:w-full h-62 gap-4 md:flex-row mt-4 md:mt-6">
+  <ul class="h-62 mt-4 flex w-3/4 flex-col gap-4 md:mt-6 md:w-full md:flex-row">
     <ErrorNav text="Tillbaka till startsidan" href="/">
       <Home class={iconStyling} />
     </ErrorNav>

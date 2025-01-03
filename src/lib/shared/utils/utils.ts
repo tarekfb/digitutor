@@ -78,16 +78,16 @@ export const flyAndScale = (
 
 export type TypeToZod<T> = {
   [K in keyof T]: T[K] extends
-  | string
-  | number
-  | boolean
-  | null
-  | undefined
-  | number[]
-  ? undefined extends T[K]
-  ? z.ZodOptional<z.ZodType<Exclude<T[K], undefined>>>
-  : z.ZodType<T[K]>
-  : z.ZodObject<TypeToZod<T[K]>>;
+    | string
+    | number
+    | boolean
+    | null
+    | undefined
+    | number[]
+    ? undefined extends T[K]
+      ? z.ZodOptional<z.ZodType<Exclude<T[K], undefined>>>
+      : z.ZodType<T[K]>
+    : z.ZodObject<TypeToZod<T[K]>>;
 };
 
 export const convertToInitials = (
@@ -228,11 +228,16 @@ export const loadContactTeacherForms = async (
   return { requestContactForm, startContactForm };
 };
 
-export const cleanQuery = (rawQuery: string, commaSeparatedSubjects: string) => {
+export const cleanQuery = (
+  rawQuery: string,
+  commaSeparatedSubjects: string,
+) => {
   let cleanedQuery: string = "";
-  if (rawQuery && rawQuery !== "undefined") // client side bug prevention
+  if (rawQuery && rawQuery !== "undefined")
+    // client side bug prevention
     cleanedQuery += rawQuery.trim();
-  if (commaSeparatedSubjects && commaSeparatedSubjects !== "undefined") // client side bug prevention
+  if (commaSeparatedSubjects && commaSeparatedSubjects !== "undefined")
+    // client side bug prevention
     cleanedQuery += `${rawQuery ? " " : ""}${commaSeparatedSubjects.trim()}`;
   return cleanedQuery;
-}
+};
