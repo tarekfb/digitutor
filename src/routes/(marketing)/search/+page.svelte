@@ -272,7 +272,7 @@
     </div>
   </div> -->
   <Wavy />
-  <RootContainer class="w-full md:max-w-sm lg:max-w-screen-md">
+  <RootContainer class="w-full" maxWidth>
     {#if isInit && initResults.length > 0}
       <SearchResultList results={initResults} searchTerm={$formData.query} />
     {:else if initMessage}

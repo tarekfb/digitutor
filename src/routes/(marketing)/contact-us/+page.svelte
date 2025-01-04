@@ -28,7 +28,7 @@
   const { form: formData, enhance, delayed, message, allErrors } = contactForm;
 </script>
 
-<RootContainer>
+<RootContainer responsiveGap>
   <div class="flex flex-col items-center justify-center gap-y-0.5">
     <PrimaryTitle class="mb-2">Kontakta oss</PrimaryTitle>
     <p class="text-lg md:text-xl">
@@ -38,13 +38,11 @@
       >.
     </p>
   </div>
-  <div class="flex flex-col gap-y-1 text-muted-foreground md:text-lg">
-    <p>Vi svarar dig så fort vi kan.</p>
-  </div>
+  <p class="text-muted-foreground md:text-lg self-start">Vi svarar dig så fort vi kan.</p>
 
   <FormMessage {message} scroll />
   <form
-    class="mt-4 flex w-full max-w-xl flex-col gap-y-4 text-lg md:text-xl"
+    class="mt-4 flex w-full max-w-xl flex-col gap-y-2 md:gap-y-4 text-lg md:text-xl"
     method="POST"
     action="?/submit"
     use:enhance

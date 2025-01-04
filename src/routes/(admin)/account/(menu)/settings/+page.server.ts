@@ -15,7 +15,7 @@ import {
 } from "$lib/shared/models/profile";
 import { updateProfile } from "$lib/server/database/profiles";
 import { updateUserEmail } from "$lib/server/database/user";
-import { deleteAccountSchema, passwordSchema } from "$lib/shared/models/user";
+import { deleteAccountSchema, changePasswordSchema } from "$lib/shared/models/user";
 import { isAuthApiError } from "@supabase/supabase-js";
 import { redirect } from "sveltekit-flash-message/server";
 import { deleteAvatar, uploadAvatar } from "src/lib/server/database/avatar";
@@ -49,7 +49,7 @@ export const load: PageServerLoad = async ({
     zod(emailSchema),
   );
   const deleteAccountForm = await superValidate(zod(deleteAccountSchema));
-  const updatePasswordForm = await superValidate(zod(passwordSchema));
+  const updatePasswordForm = await superValidate(zod(changePasswordSchema));
   const uploadAvatarForm = await superValidate(zod(avatarSchema));
   const deleteAvatarForm = await superValidate(
     { path: avatarUrl ?? "" },
@@ -319,7 +319,7 @@ export const actions = {
     const { session } = await safeGetSession();
     if (!session) throw redirect(303, "/sign-in");
 
-    const form = await superValidate(event, zod(passwordSchema));
+    const form = await superValidate(event, zod(changePasswordSchema));
     if (!form.valid) return fail(400, { form });
 
     const { new: newPassword, current } = form.data;

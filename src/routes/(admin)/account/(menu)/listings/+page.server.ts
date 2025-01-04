@@ -17,7 +17,6 @@ import { formatListingWithProfile } from "src/lib/shared/utils/listing/utils";
 export const load: PageServerLoad = async ({
   locals: { supabase, safeGetSession },
   parent,
-  depends,
 }) => {
   const { session } = await safeGetSession();
   if (!session) redirect(303, "/sign-in");

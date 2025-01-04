@@ -3,6 +3,7 @@
   import Navbar from "$lib/components/organisms/navbar.svelte";
   import "src/app.pcss";
   import { logout } from "src/lib/shared/utils/utils";
+  import Footer from "src/lib/components/organisms/footer.svelte";
   export let data: LayoutData;
 
   $: ({ supabase, session, profile } = data);
@@ -18,3 +19,4 @@
     <slot />
   </main>
 </div>
+<Footer />
