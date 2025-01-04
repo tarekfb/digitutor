@@ -3,7 +3,6 @@
   import PrimaryTitle from "$lib/components/atoms/primary-title.svelte";
   import CreateListing from "$lib/components/atoms/create-listing.svelte";
   import ListingCard from "$lib/components/molecules/listing-card.svelte";
-  import { initCreateListingSchema } from "$lib/shared/models/listing.js";
   import {
     superForm,
     type SuperValidated,
@@ -12,28 +11,16 @@
   import { zodClient } from "sveltekit-superforms/adapters";
   import RootContainer from "src/lib/components/templates/root-container.svelte";
   import AccountLayout from "src/lib/components/templates/account-layout.svelte";
+  import { passwordResetSchema } from "src/lib/shared/models/user";
 
   export let data: PageData;
 
-  const form = data.form as SuperValidated<
-    Infer<typeof initCreateListingSchema>
-  >;
-  // this is complaining about potential undefined. Maybe there's an issue with +page.server.ts?
-  // anyway, proceeding with this dirty hack...
-
-  const userForm = superForm(form, {
-    validators: zodClient(initCreateListingSchema),
+  const userForm = superForm(data.form, {
+    validators: zodClient(passwordResetSchema),
   });
 </script>
 
 <AccountLayout>
   <PrimaryTitle class="text-center">Dina annonser</PrimaryTitle>
-  <RootContainer class="my-6 w-full">
-    {#each listings as listing}
-      <ListingCard {listing} publicView={false} />
-    {:else}
-      <p class="text-center">Inga annonser. Testa skapa en!</p>
-    {/each}
-    <CreateListing form={userForm} />
-  </RootContainer>
+  <RootContainer class="my-6 w-full"></RootContainer>
 </AccountLayout>
