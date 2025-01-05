@@ -42,7 +42,8 @@ export const deleteAccountSchema = z.object({
   password: signInProperties.password,
 });
 
-export const passwordSchema = z
+// used for manually changing password in settings
+export const changePasswordSchema = z
   .object({
     new: signUpUserFields.password,
     confirm: signUpUserFields.password,
@@ -52,3 +53,13 @@ export const passwordSchema = z
     message: "Lösenorden stämmer inte överens.",
     path: ["confirm"],
   });
+
+// used for forgot password flow
+export const requestPasswordResetSchema = z.object({
+  email: signUpUserFields.email,
+});
+
+// used for forgot password flow
+export const passwordResetSchema = z.object({
+  newPassword: signUpUserFields.password,
+});

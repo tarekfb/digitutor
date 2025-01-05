@@ -6,6 +6,6 @@
   export let hidden: boolean = false;
 </script>
 
-<Label class={cn("font-semibold", className)} {hidden}>
+<Label class={cn("font-semibold", hidden && "sr-only",  className)}>
   <slot />
 </Label>

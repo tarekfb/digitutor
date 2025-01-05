@@ -9,7 +9,7 @@
   import { toast } from "svelte-sonner";
   import {
     deleteAccountSchema as deleteSchema,
-    passwordSchema,
+    changePasswordSchema,
   } from "$lib/shared/models/user.js";
   import { emailSchema, nameSchema } from "$lib/shared/models/profile";
   import DeleteAccount from "$lib/components/atoms/delete-account.svelte";
@@ -39,7 +39,7 @@
     validators: zodClient(deleteSchema),
   });
   const passwordForm = superForm(data.updatePasswordForm, {
-    validators: zodClient(passwordSchema),
+    validators: zodClient(changePasswordSchema),
   });
 
   const { form: nameData, reset: nameReset } = nameForm;

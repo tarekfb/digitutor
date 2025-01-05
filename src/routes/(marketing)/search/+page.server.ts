@@ -12,7 +12,7 @@ import {
 import { cleanQuery, isErrorWithCode } from "src/lib/shared/utils/utils";
 import { formatProfile } from "src/lib/shared/utils/profile/utils";
 import { getSubjects } from "src/lib/server/database/subjects";
-import { formatSubject, Subject } from "src/lib/shared/models/subject";
+import { formatSubject, type Subject } from "src/lib/shared/models/subject";
 
 export const load = (async ({ url, locals: { supabase } }) => {
   const query = url.searchParams.get("q") || "";
