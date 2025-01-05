@@ -153,6 +153,7 @@ export const removeUndefined = (fields: Record<string, any>) =>
 
 export const isErrorWithCode = (error: any): error is ErrorWithCode =>
   "code" in error && typeof error.code === "string";
+
 export const isErrorWithStatusCode = (
   error: any,
 ): error is ErrorWithStatusCode =>

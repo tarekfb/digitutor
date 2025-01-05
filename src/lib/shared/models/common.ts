@@ -71,7 +71,11 @@ export type Message = {
 export enum ExternalErrorCodes {
   InvalidInputSyntax = "22P02",
   ContainsZeroRows = "PGRST116",
-  FileTooLargeStorageError = "413",
+  FileTooLargeStorageError = "413", // cf worker
   DuplicateKeyConstraintViolation = "23505",
   SyntaxError = "42601",
+  NewPasswordNotDifferent = "422",
+}
+export enum SupabaseErrorMessages {
+  NewPasswordNotDifferent = "New password should be different from the old password.", // no useful information is returned from supabase besides this and error name
 }

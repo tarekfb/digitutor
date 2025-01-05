@@ -33,7 +33,7 @@
 <RootContainer responsiveGap maxWidth >
   <div class="flex flex-col items-center justify-center gap-y-0.5">
     <PrimaryTitle class="mb-2">Glömt lösenord</PrimaryTitle>
-    <p class="text-lg text-muted-foreground md:text-xl">
+    <p class="text-lg text-muted-foreground md:text-xl text-center">
       Ange e-postaddressen för ditt konto så skickar vi ett e-post med information om hur du återställer
       ditt lösenord.
     </p>

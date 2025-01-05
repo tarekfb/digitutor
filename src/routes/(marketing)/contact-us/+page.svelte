@@ -38,18 +38,20 @@
       >.
     </p>
   </div>
-  <p class="text-muted-foreground md:text-lg self-start">Vi svarar dig så fort vi kan.</p>
+  <p class="self-start text-muted-foreground md:text-lg">
+    Vi svarar dig så fort vi kan.
+  </p>
 
   <FormMessage {message} scroll />
   <form
-    class="mt-4 flex w-full max-w-xl flex-col gap-y-2 md:gap-y-4 text-lg md:text-xl"
+    class="mt-4 flex w-full max-w-xl flex-col gap-y-2 text-lg md:gap-y-4 md:text-xl"
     method="POST"
     action="?/submit"
     use:enhance
   >
     <Form.Field form={contactForm} name="email">
       <Form.Control let:attrs>
-        <Label hidden>E-postadress</Label>
+        <Label>E-postadress</Label>
         <Input
           class="bg-card"
           {...attrs}
@@ -62,7 +64,7 @@
     </Form.Field>
     <Form.Field form={contactForm} name="firstName">
       <Form.Control let:attrs>
-        <Label hidden>Förnamn</Label>
+        <Label>Förnamn</Label>
         <Input
           class="bg-card"
           {...attrs}
@@ -75,7 +77,7 @@
     </Form.Field>
     <Form.Field form={contactForm} name="lastName">
       <Form.Control let:attrs>
-        <Label hidden>Efternamn</Label>
+        <Label>Efternamn</Label>
         <Input
           class="bg-card"
           {...attrs}
