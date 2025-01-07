@@ -13,7 +13,7 @@ import {
 } from "src/lib/shared/models/review";
 import { formatDisplayProfile } from "src/lib/shared/utils/profile/utils";
 import { formatReviewWithReferences } from "src/lib/shared/utils/reviews/utils";
-import { formatSubject, Subject } from "src/lib/shared/models/subject";
+import { formatSubject, type Subject } from "src/lib/shared/models/subject";
 import { languages } from "src/lib/shared/models/common";
 import { getSubjects } from "src/lib/server/database/subjects";
 import { cleanQuery } from "src/lib/shared/utils/utils";
@@ -69,7 +69,7 @@ export const actions: Actions = {
     if (!query && (!subjects || subjects === "undefined"))
       return fail(400, { form });
 
-    const cleanedQuery = cleanQuery(query ?? "", subjects);
+    const cleanedQuery = cleanQuery(query ?? "", subjects, true);
     if (!cleanedQuery) return fail(400, { form });
     redirect(302, `/search/?q=${cleanedQuery}`);
   },

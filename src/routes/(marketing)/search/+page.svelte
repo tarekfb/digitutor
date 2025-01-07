@@ -20,8 +20,8 @@
   import LoadingSpinner from "src/lib/components/atoms/loading-spinner.svelte";
   import { Input } from "src/lib/components/ui/input";
   import Button from "src/lib/components/ui/button/button.svelte";
-  import type { Subject } from "src/lib/shared/models/subject";
   import { languages } from "src/lib/shared/models/common";
+  import { page } from "$app/stores";
 
   const isDesktop = mediaQuery("(min-width: 768px)");
 
@@ -76,8 +76,6 @@
     : (tempBugFixForUndefined ?? []);
 </script>
 
-<!-- <div class="w-full bg-secondary flex justify-center">
-    <div class="w-full flex flex-col gap-y-4 max-w-screen-sm">  -->
 <div class="flex min-h-44 w-full justify-center bg-secondary p-8">
   <div class="flex w-full max-w-screen-sm flex-col gap-y-4">
     <PrimaryTitle class="heading self-center text-background md:mb-4"
@@ -242,7 +240,7 @@
   {:else if isInit && initResults.length > 0}
     <SearchResultList
       results={initResults}
-      searchTerm={$formData.subjects ?? $formData.query}
+      searchTerm={$page.url.searchParams.get("q") ?? ""}
     />
   {:else if initMessage}
     <div class="p-4">
@@ -263,18 +261,10 @@
     </div>
   {/if}
 {:else}
-  <!-- <div class="w-full bg-secondary flex justify-center">
-    <div class="w-full flex flex-col gap-y-4 max-w-screen-sm">
-      <PrimaryTitle class="heading text-background self-center md:mb-4"
-        >Sök bland lärare</PrimaryTitle
-      >
-      <SearchForm form={data.form} subjects={assertedSubjectsTemp} />
-    </div>
-  </div> -->
   <Wavy />
   <RootContainer class="w-full" maxWidth>
     {#if isInit && initResults.length > 0}
-      <SearchResultList results={initResults} searchTerm={$formData.query} />
+    <SearchResultList results={initResults} searchTerm={$formData.query} />
     {:else if initMessage}
       <AlertMessage
         title={initMessage.title}

@@ -78,16 +78,16 @@ export const flyAndScale = (
 
 export type TypeToZod<T> = {
   [K in keyof T]: T[K] extends
-    | string
-    | number
-    | boolean
-    | null
-    | undefined
-    | number[]
-    ? undefined extends T[K]
-      ? z.ZodOptional<z.ZodType<Exclude<T[K], undefined>>>
-      : z.ZodType<T[K]>
-    : z.ZodObject<TypeToZod<T[K]>>;
+  | string
+  | number
+  | boolean
+  | null
+  | undefined
+  | number[]
+  ? undefined extends T[K]
+  ? z.ZodOptional<z.ZodType<Exclude<T[K], undefined>>>
+  : z.ZodType<T[K]>
+  : z.ZodObject<TypeToZod<T[K]>>;
 };
 
 export const convertToInitials = (
@@ -232,13 +232,13 @@ export const loadContactTeacherForms = async (
 export const cleanQuery = (
   rawQuery: string,
   commaSeparatedSubjects: string,
+  shouldEncode: boolean = false,
 ) => {
+  // trim and && "undefined" is for client side bug prevention
   let cleanedQuery: string = "";
   if (rawQuery && rawQuery !== "undefined")
-    // client side bug prevention
-    cleanedQuery += rawQuery.trim();
+    cleanedQuery = shouldEncode ? encodeURIComponent(rawQuery.trim()) : rawQuery.trim();
   if (commaSeparatedSubjects && commaSeparatedSubjects !== "undefined")
-    // client side bug prevention
-    cleanedQuery += `${rawQuery ? " " : ""}${commaSeparatedSubjects.trim()}`;
+    cleanedQuery += `${rawQuery ? " " : ""}${shouldEncode ? encodeURIComponent(commaSeparatedSubjects.trim()) : commaSeparatedSubjects.trim()}`;
   return cleanedQuery;
 };

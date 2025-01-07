@@ -2,8 +2,8 @@ import { requestPasswordResetSchema } from 'src/lib/shared/models/user';
 import { fail, message, superValidate } from 'sveltekit-superforms';
 import { zod } from 'sveltekit-superforms/adapters';
 import type { PageServerLoad } from './$types';
-import { redirect, setFlash } from 'sveltekit-flash-message/server';
-import { getFailFormMessage } from 'src/lib/shared/constants/constants';
+import { redirect } from 'sveltekit-flash-message/server';
+import { getFailFormMessage, getSuccessFormMessage } from 'src/lib/shared/constants/constants';
 import { FRONTEND_BASE_URL } from "$env/static/private";
 
 export const load = (async () => {
@@ -37,7 +37,6 @@ export const actions = {
             return message(form, getFailFormMessage("Kunde inte skicka e-post med information för att återställa lösenord"), { status: 500 });
         }
 
-        setFlash({ message: "Kika i din inkorg (eller i skräpkorgen) för information om hur du återställer ditt lösenord.", type: "success" }, event);
-        return { form };
+        return message(form, getSuccessFormMessage("E-post skickat", "Kika i din inkorg (eller i skräpkorgen) för information om hur du återställer ditt lösenord."));
     }
 }

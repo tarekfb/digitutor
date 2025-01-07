@@ -2,8 +2,7 @@ import { zod } from 'sveltekit-superforms/adapters';
 import type { PageServerLoad } from './$types';
 import { fail, message, superValidate } from 'sveltekit-superforms';
 import { passwordResetSchema } from 'src/lib/shared/models/user';
-import { getFailFormMessage } from 'src/lib/shared/constants/constants';
-import { setFlash } from 'sveltekit-flash-message/server';
+import { getFailFormMessage, getSuccessFormMessage } from 'src/lib/shared/constants/constants';
 import { SupabaseErrorMessages } from 'src/lib/shared/models/common';
 
 export const load = (async () => {
@@ -26,12 +25,11 @@ export const actions = {
         if (error) {
             if (error.message === SupabaseErrorMessages.NewPasswordNotDifferent)
                 return message(form, getFailFormMessage("Ange ett helt nytt lösenord", "Ange ett lösenord som aldrig har använts tidigare."), { status: 500 });
-            
+
             console.error("Unknown error updating user password", error);
             return message(form, getFailFormMessage("Kunde inte uppdatera lösenordet", "Något gick fel. Du kan kontakta oss om detta fortsätter."), { status: 500 });
         }
 
-        setFlash({ message: "Lösenordet har uppdaterats.", type: "success" }, event);
-        return { form };
+        return message(form, getSuccessFormMessage("Lösenordet har uppdaterats", "Använd detta lösenord i framtiden för att logga in."));
     }
-}
+};
