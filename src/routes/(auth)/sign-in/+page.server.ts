@@ -93,7 +93,7 @@ export const actions: Actions = {
               options: {
                 emailRedirectTo: "/account",
               },
-            });
+            }); // todo: test this flow
             if (resendError?.status === 429) {
               return message(
                 form,

@@ -11,7 +11,6 @@
   import { Input } from "$lib/components/ui/input";
   import Label from "$lib/components/atoms/label.svelte";
   import { SendHorizontal } from "lucide-svelte";
-  import * as Alert from "$lib/components/ui/alert/index.js";
 
   export let data: PageData;
   const requestResetForm = superForm(data.form, {
@@ -30,7 +29,7 @@
   <title>Glömt lösenord</title>
 </svelte:head>
 
-<RootContainer responsiveGap maxWidth>
+<RootContainer responsiveGap minWidth maxWidth>
   <div class="flex flex-col items-center justify-center gap-y-0.5">
     <PrimaryTitle class="mb-2">Glömt lösenord</PrimaryTitle>
     <p class="text-center text-lg text-muted-foreground md:text-xl">
