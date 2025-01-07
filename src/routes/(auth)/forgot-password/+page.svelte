@@ -28,7 +28,6 @@
 <svelte:head>
   <title>Glömt lösenord</title>
 </svelte:head>
-<!-- redirectTo={`${data.url}/callback?next=%2Faccount%2Fsettings%2Freset_password`} -->
 
 <RootContainer responsiveGap maxWidth >
   <div class="flex flex-col items-center justify-center gap-y-0.5">
