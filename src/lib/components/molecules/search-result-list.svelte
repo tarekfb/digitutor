@@ -9,7 +9,7 @@
 
   const hasMultiple = results.length > 1;
 
-  const hasMatchingLabel = (subjectIndex: number): boolean => {
+  const isSearchMatchingSubject = (subjectIndex: number): boolean => {
     const labels = getLabels(subjectIndex);
     return labels.some(
       (label) => label.toLowerCase() === searchTerm.toLowerCase(),
@@ -25,13 +25,10 @@
   const getDisplaySubject = (result: SearchResult): number => {
     const defaultSubject = result.subjects[0];
     if (!searchTerm) return defaultSubject;
-
-    const searchedSubject =
-      result.subjects.find((subjectIndex) => hasMatchingLabel(subjectIndex)) ??
-      result.subjects.at(0) ??
-      defaultSubject;
-
-    return searchedSubject;
+    return (
+      result.subjects.find((subjectIndex) => isSearchMatchingSubject(subjectIndex)) ??
+      defaultSubject
+    );
   };
 </script>
 
