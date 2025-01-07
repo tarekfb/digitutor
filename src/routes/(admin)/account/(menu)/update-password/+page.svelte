@@ -19,11 +19,11 @@
   const { form, enhance, delayed, message, allErrors } = passwordResetForm;
 </script>
 
-<RootContainer responsiveGap maxWidth class="self-center">
+<RootContainer responsiveGap maxWidth minWidth class="self-center">
   <div class="flex flex-col items-center justify-center gap-y-0.5">
     <PrimaryTitle class="mb-2">Uppdatera lösenord</PrimaryTitle>
     <p class="text-lg text-muted-foreground md:text-xl">
-      Ange ett lösenord. Använd sedan detta lösenord för att logga in i framtiden.
+      Ange ett nytt lösenord.
     </p>
   </div>
 
