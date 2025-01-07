@@ -27,7 +27,12 @@ export const load: LayoutServerLoad = async ({
       cookies,
     );
 
-  if (session) redirect(303, "/account");
+  if (session) redirect(303, "/account", {
+    message: `Du är redan inloggad.`,
+    type: "info",
+  },
+    cookies,
+  );
 
   const profile = session && (await getProfileByUser(supabase, user.id));
   return { profile };
