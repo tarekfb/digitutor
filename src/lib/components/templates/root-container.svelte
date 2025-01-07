@@ -3,8 +3,8 @@
 
   let className: string | null | undefined = undefined;
   export { className as class };
-  export let responsiveGap = true;
-  export let maxWidth = true;
+  export let responsiveGap = false;
+  export let maxWidth = false;
 </script>
 
 <div
