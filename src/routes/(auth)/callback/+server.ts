@@ -3,8 +3,10 @@ import { error, redirect, type RequestHandler } from "@sveltejs/kit";
 import { defaultErrorInfo } from "src/lib/shared/constants/constants";
 
 export const GET: RequestHandler = async ({ url, locals: { supabase } }) => {
+  console.log(" HIT SERVER TS")
   const code = url.searchParams.get("code");
   if (code) {
+    console.log(" HAS CODE")
     try {
       await supabase.auth.exchangeCodeForSession(code);
     } catch (e) {
@@ -24,6 +26,6 @@ export const GET: RequestHandler = async ({ url, locals: { supabase } }) => {
   if (next) {
     throw redirect(303, next);
   }
-  
+
   throw redirect(303, "/account");
 };

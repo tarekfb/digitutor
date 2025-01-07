@@ -3,7 +3,8 @@ import { fail, message, superValidate } from 'sveltekit-superforms';
 import { zod } from 'sveltekit-superforms/adapters';
 import type { PageServerLoad } from './$types';
 import { redirect, setFlash } from 'sveltekit-flash-message/server';
-import { getFailFormMessage, prodBaseUrl } from 'src/lib/shared/constants/constants';
+import { getFailFormMessage } from 'src/lib/shared/constants/constants';
+import { FRONTEND_BASE_URL } from "$env/static/private";
 
 export const load = (async () => {
     const form = await superValidate(zod(requestPasswordResetSchema));
@@ -25,7 +26,7 @@ export const actions = {
 
         try {
             const { error } = await supabase.auth.resetPasswordForEmail(email, {
-                redirectTo: `${prodBaseUrl}/callback?next=/account/update-password`,
+                redirectTo: `${FRONTEND_BASE_URL}/callback?next=/account/update-password`,
             });
             if (error) {
                 console.error("Error when requesting password reset", error);
