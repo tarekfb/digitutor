@@ -14,6 +14,7 @@
   import RootContainer from "src/lib/components/templates/root-container.svelte";
   import SearchForm from "src/lib/components/organisms/search-form.svelte";
   import Wavy from "src/lib/components/atoms/wavy.svelte";
+  import { Search } from "lucide-svelte";
 
   export let data: PageData;
   $: ({ displayProfiles, displayReviews, subjects } = data);
@@ -29,11 +30,11 @@
     <div
       class="mb-4 flex flex-col items-center gap-y-2 text-center text-background"
     >
-      <div class="px-2 text-3xl font-semibold md:text-5xl">
-        Vill du bli utvecklare, klara tentan eller bara
+      <div class="px-2 text-3xl font-semibold md:text-6xl heading">
+        Vill du öva på din
         <div>
-          slipa på din <Carousel.Root
-            class="content inline-flex h-10 w-60  items-center md:h-14"
+          <Carousel.Root
+            class="content inline-flex h-10 max-w-96  items-center md:h-14"
             plugins={[
               Autoplay({
                 delay: 3000,
@@ -55,22 +56,12 @@
           </Carousel.Root>
         </div>
       </div>
-      <div class="md:mt-6">
-        <h2 class="px-2 text-3xl font-semibold md:text-5xl">
-          Spana in våra lärare
+      <div class="md:mt-6 mt-4">
+        <h2
+          class="px-2 text-xl flex items-center gap-x-2 font-semibold md:text-3xl heading"
+        >
+          <Search class="size-4 md:size-6" /> Sök bland våra lärare
         </h2>
-        <h3>
-          <span
-            class="flex items-center justify-center gap-y-2 py-2 text-xl md:text-3xl"
-          >
-            Eller <Button
-              variant="ghost"
-              on:click={() => goto("/sign-up")}
-              class="m-0 h-10 px-1 text-2xl font-normal lowercase tracking-normal text-background underline decoration-third decoration-4 hover:bg-secondary hover:decoration-accent md:px-2 md:text-4xl md:decoration-[6px]"
-              >skapa ett konto</Button
-            >direkt
-          </span>
-        </h3>
       </div>
     </div>
 
@@ -79,6 +70,19 @@
     >
       <SearchForm form={data.form} {subjects} />
     </div>
+    <h3>
+      <span
+        class="text-background flex mt-2 md:mt-4 items-center justify-center gap-y-2 py-2 text-xl md:text-3xl"
+      >
+        Eller
+        <Button
+          variant="ghost"
+          on:click={() => goto("/sign-up")}
+          class="m-0 h-10 px-1 text-xl font-normal lowercase tracking-normal text-background underline decoration-third decoration-4 hover:bg-secondary hover:decoration-accent md:px-2 md:text-3xl md:decoration-[6px]"
+          >skapa ett gratis konto</Button
+        >direkt
+      </span>
+    </h3>
   </div>
   <Wavy class="-mx-8 -mt-8" />
 

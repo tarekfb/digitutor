@@ -79,7 +79,7 @@
 <div class="flex min-h-44 w-full justify-center bg-secondary p-8">
   <div class="flex w-full max-w-screen-sm flex-col gap-y-4">
     <PrimaryTitle class="heading self-center text-background md:mb-4"
-      >Sök bland lärare</PrimaryTitle
+      >Sök bland våra lärare</PrimaryTitle
     >
     <form
       class="flex w-full flex-col gap-y-4 bg-secondary text-center"
