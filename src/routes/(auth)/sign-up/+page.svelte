@@ -12,6 +12,8 @@
   import AuthSplit from "src/lib/components/molecules/auth-split.svelte";
   import type { PageData } from "./$types";
   import Stars from "src/lib/components/atoms/stars.svelte";
+  import { Input } from "$lib/components/ui/input";
+  import * as Form from "$lib/components/ui/form";
 
   export let data: PageData;
   $: ({ review } = data);
@@ -21,7 +23,8 @@
   });
   const { form: formData, enhance, delayed, message, allErrors } = userForm;
 
-  const role = $page.url.searchParams.get("role");
+  $formData.role =
+    $page.url.searchParams.get("role") === "teacher" ? "teacher" : "student";
 </script>
 
 <svelte:head>
@@ -82,8 +85,8 @@
       use:enhance
     >
       <Tabs.Root
-        value={role ?? "student"}
         class="flex flex-col gap-y-4 text-start"
+        bind:value={$formData.role}
       >
         <Tabs.List class="self-center">
           <Tabs.Trigger
@@ -97,7 +100,7 @@
             >Lärare</Tabs.Trigger
           >
         </Tabs.List>
-        <Tabs.Content value="student" class="">
+        <Tabs.Content value="student">
           <SignupContent type="student" {formData} {userForm} />
         </Tabs.Content>
         <Tabs.Content value="teacher">
@@ -111,6 +114,16 @@
         text="Skapa konto"
         class="min-w-wider self-center"
       />
+      <Form.Field form={userForm} name="role" class="hidden">
+        <Form.Control let:attrs>
+          <Input
+            type="hidden"
+            {...attrs}
+            class="hidden"
+            bind:value={$formData.role}
+          />
+        </Form.Control>
+      </Form.Field>
     </form>
   </svelte:fragment>
 </AuthSplit>

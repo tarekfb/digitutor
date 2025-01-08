@@ -32,7 +32,7 @@
   <div class="flex flex-col items-center justify-center gap-y-0.5">
     <PrimaryTitle class="mb-2">Kontakta oss</PrimaryTitle>
     <p class="text-lg md:text-xl">
-      Glöm inte att kika om din fråga finns bland <Link
+      Glöm inte att kolla om din fråga finns bland <Link
         class="text-lg"
         href="/#faq">vanliga frågor och svar</Link
       >.
