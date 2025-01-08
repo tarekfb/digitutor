@@ -5,17 +5,19 @@
   import PasswordInput from "$lib/components/molecules/password-input.svelte";
   import PrimaryTitle from "src/lib/components/atoms/primary-title.svelte";
   import { Checkbox } from "../ui/checkbox";
+  import type { signUpSchema } from "src/lib/shared/models/user";
+  import { type Infer, type SuperForm } from "sveltekit-superforms/client";
 
-  export let type: "teacher" | "student" = "student";
-  export let userForm;
-  export let formData;
+  export let type: "teacher" | "student";
+  export let userForm: SuperForm<Infer<typeof signUpSchema>>;
+  export let formData: SuperForm<Infer<typeof signUpSchema>>["form"];
 
   const getReadableType = (
     type: "teacher" | "student",
   ): "lärare" | "student" => (type === "teacher" ? "lärare" : "student");
 </script>
 
-<div class="space-y-1 mb-4 text-center lg:text-start">
+<div class="mb-4 space-y-1 text-center lg:text-start">
   <PrimaryTitle class="whitespace-normal"
     >Skapa konto som {getReadableType(type)}</PrimaryTitle
   >
@@ -68,12 +70,11 @@
     </Form.Control>
     <Form.FieldErrors />
   </Form.Field>
-  <input type="hidden" name="role" value={type} />
+
   <Form.Field
     form={userForm}
     name="terms"
     class="flex flex-row items-start space-x-3 space-y-0 rounded-md border p-4"
-    on:click={() => (formData.terms = !formData.terms)}
   >
     <Form.Control let:attrs>
       <Checkbox {...attrs} bind:checked={$formData.terms} />

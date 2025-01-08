@@ -1,8 +1,7 @@
-import { error, fail, redirect } from "@sveltejs/kit";
+import { fail, redirect } from "@sveltejs/kit";
 import type { PageServerLoad } from "./$types";
 import {
   getFailFormMessage,
-  defaultErrorInfo,
 } from "$lib/shared/constants/constants";
 import { message, setError, superValidate } from "sveltekit-superforms";
 import { zod } from "sveltekit-superforms/adapters";
@@ -47,6 +46,7 @@ export const actions = {
 
     const { email, password, role, firstName, lastName } = form.data;
     let inputUser: CreateProfile;
+
     try {
       const { data, error } = await supabase.auth.signUp({
         email,
@@ -98,9 +98,7 @@ export const actions = {
         variant: "success",
         title: "Verifiera e-postadress",
         description:
-          "Kika i din inkorg (eller i skräpkorgen) för att verifiera e-post: " +
-          email +
-          ".",
+          `Titta i din inkorg (eller i skräpkorgen) för att verifiera e-post: ${email}.`,
         status: 201,
       });
     } catch (error) {
@@ -111,7 +109,7 @@ export const actions = {
             variant: "success",
             title: "Verifiera e-postadress",
             description:
-              "Kika i din inkorg (eller i skräpkorgen) för att verifiera e-post: " +
+              "Titta i din inkorg (eller i skräpkorgen) för att verifiera e-post: " +
               email +
               ".",
             status: 201,
