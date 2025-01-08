@@ -101,7 +101,7 @@ export const actions: Actions = {
                   variant: "warning",
                   title: "Verifiera e-postadress",
                   description:
-                    "E-postadressen är inte verifierad. Kika i din inkorg (eller i skräpkorgen) för att verifiera e-posten.",
+                    "E-postadressen är inte verifierad. Titta i din inkorg (eller i skräpkorgen) för att verifiera e-posten.",
                   id: MessageId.RateLimitExceeded,
                 },
                 { status: 403 },
@@ -113,7 +113,7 @@ export const actions: Actions = {
                 variant: "warning",
                 title: "Verifiera e-postadress",
                 description:
-                  "E-postadressen är inte verifierad. Ett bekräftelsemail har skickats. Kika i din inkorg (eller i skräpkorgen) för att verifiera e-posten.",
+                  "E-postadressen är inte verifierad. Ett bekräftelsemail har skickats. Titta i din inkorg (eller i skräpkorgen) för att verifiera e-posten.",
               },
               { status: 403 },
             );
