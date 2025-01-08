@@ -1,5 +1,5 @@
 <script lang="ts">
-  import SuperDebug, { superForm } from "sveltekit-superforms";
+  import { superForm } from "sveltekit-superforms";
   import { zodClient } from "sveltekit-superforms/adapters";
   import { signUpSchema } from "$lib/shared/models/user.js";
   import * as Tabs from "$lib/components/ui/tabs";
@@ -107,7 +107,6 @@
           <SignupContent type="teacher" {formData} {userForm} />
         </Tabs.Content>
       </Tabs.Root>
-      <SuperDebug data={$formData} />
       <FormMessage {message} scroll scrollTo="start" />
       <FormSubmit
         {delayed}
@@ -117,10 +116,14 @@
       />
       <Form.Field form={userForm} name="role" class="hidden">
         <Form.Control let:attrs>
-          <Input type="hidden" {...attrs} class="hidden" bind:value={$formData.role} />
+          <Input
+            type="hidden"
+            {...attrs}
+            class="hidden"
+            bind:value={$formData.role}
+          />
         </Form.Control>
       </Form.Field>
-      
     </form>
   </svelte:fragment>
 </AuthSplit>
