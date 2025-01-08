@@ -9,7 +9,7 @@
 
   const hasMultiple = results.length > 1;
 
-  const hasMatchingLabel = (subjectIndex: number): boolean => {
+  const isSearchMatchingSubject = (subjectIndex: number): boolean => {
     const labels = getLabels(subjectIndex);
     return labels.some(
       (label) => label.toLowerCase() === searchTerm.toLowerCase(),
@@ -17,30 +17,27 @@
   };
 
   const getLabels = (subjectIndex: number): string[] => {
-    const language = languages[subjectIndex];
-    const labels = [language.label, ...(language.altLabel ?? [])];
+    const language = languages[subjectIndex - 1];
+    const labels = [language.title, ...(language.altTitle ?? [])];
     return labels;
   };
 
   const getDisplaySubject = (result: SearchResult): number => {
     const defaultSubject = result.subjects[0];
     if (!searchTerm) return defaultSubject;
-
-    const searchedSubject =
-      result.subjects.find((subjectIndex) => hasMatchingLabel(subjectIndex)) ??
-      result.subjects.at(0) ??
-      defaultSubject;
-
-    return searchedSubject;
+    return (
+      result.subjects.find((subjectIndex) => isSearchMatchingSubject(subjectIndex)) ??
+      defaultSubject
+    );
   };
 </script>
 
-<ul class="flex flex-col gap-y-4 w-full">
+<ul class="flex w-full flex-col gap-y-4">
   {#each results as result, i}
     {@const isLast = results.length - 1 === i}
     {@const hasBelow = results.length !== 1 && !isLast}
     {@const searchedSubject = getDisplaySubject(result)}
-    <li class="p-4 w-full">
+    <li class="w-full p-4">
       <SearchResultItem {result} {searchedSubject} />
     </li>
     {#if (hasMultiple && !isLast) || hasBelow}

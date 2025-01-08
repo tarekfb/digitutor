@@ -10,8 +10,7 @@ export const load: LayoutServerLoad = async ({
 }) => {
   const { user } = await safeGetSession();
 
-  if (!user)
-    redirect(303, "/sign-in");
+  if (!user) redirect(303, "/sign-in");
 
   let profile: Profile;
   try {

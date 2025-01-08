@@ -30,7 +30,15 @@
           class="object-cover h-36 w-36 rounded-md"
         />
       </a>
-      <div class="flex flex-col items-start gap-y-2 flex-grow">
+      <div class="flex flex-col gap-y-2 flex-grow">
+        <a
+          href="/profile/{result.profile.id}?id={result.id}"
+          aria-label="Gå till profil"
+        >
+          <PrimaryTitle class="whitespace-normal">
+            {result.title}
+          </PrimaryTitle>
+        </a>
         <a
           href="/profile/{result.profile.id}?id={result.id}"
           aria-label="Gå till profil"
@@ -107,7 +115,6 @@
     </div>
     <Button
       class="self-center"
-      variant=""
       href="/profile/{result.profile.id}?id={result.id}">Gå till profil</Button
     >
   {/if}

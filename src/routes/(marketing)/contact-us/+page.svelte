@@ -28,30 +28,30 @@
   const { form: formData, enhance, delayed, message, allErrors } = contactForm;
 </script>
 
-<RootContainer>
+<RootContainer responsiveGap>
   <div class="flex flex-col items-center justify-center gap-y-0.5">
     <PrimaryTitle class="mb-2">Kontakta oss</PrimaryTitle>
     <p class="text-lg md:text-xl">
-      Glöm inte att kika om din fråga finns bland <Link
+      Glöm inte att kolla om din fråga finns bland <Link
         class="text-lg"
         href="/#faq">vanliga frågor och svar</Link
       >.
     </p>
   </div>
-  <div class="flex flex-col gap-y-1 text-muted-foreground md:text-lg">
-    <p>Vi svarar dig så fort vi kan.</p>
-  </div>
+  <p class="self-start text-muted-foreground md:text-lg">
+    Vi svarar dig så fort vi kan.
+  </p>
 
   <FormMessage {message} scroll />
   <form
-    class="mt-4 flex w-full max-w-xl flex-col gap-y-4 text-lg md:text-xl"
+    class="mt-4 flex w-full max-w-xl flex-col gap-y-2 text-lg md:gap-y-4 md:text-xl"
     method="POST"
     action="?/submit"
     use:enhance
   >
     <Form.Field form={contactForm} name="email">
       <Form.Control let:attrs>
-        <Label hidden>E-postadress</Label>
+        <Label>E-postadress</Label>
         <Input
           class="bg-card"
           {...attrs}
@@ -64,7 +64,7 @@
     </Form.Field>
     <Form.Field form={contactForm} name="firstName">
       <Form.Control let:attrs>
-        <Label hidden>Förnamn</Label>
+        <Label>Förnamn</Label>
         <Input
           class="bg-card"
           {...attrs}
@@ -77,7 +77,7 @@
     </Form.Field>
     <Form.Field form={contactForm} name="lastName">
       <Form.Control let:attrs>
-        <Label hidden>Efternamn</Label>
+        <Label>Efternamn</Label>
         <Input
           class="bg-card"
           {...attrs}

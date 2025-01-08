@@ -12,22 +12,19 @@
   import AuthSplit from "src/lib/components/molecules/auth-split.svelte";
   import type { PageData } from "./$types";
   import Stars from "src/lib/components/atoms/stars.svelte";
+  import { Input } from "$lib/components/ui/input";
+  import * as Form from "$lib/components/ui/form";
 
   export let data: PageData;
   $: ({ review } = data);
 
   const userForm = superForm(data.form, {
     validators: zodClient(signUpSchema),
-    onSubmit(input) {
-      console.log("input is", input);
-    },
-    onUpdate(data) {
-      console.log("on update", data)
-    }
   });
   const { form: formData, enhance, delayed, message, allErrors } = userForm;
 
-  const role = $page.url.searchParams.get("role");
+  $formData.role =
+    $page.url.searchParams.get("role") === "teacher" ? "teacher" : "student";
 </script>
 
 <svelte:head>
@@ -36,70 +33,74 @@
 
 <AuthSplit shouldShowAside={!!review}>
   <svelte:fragment slot="aside">
-    <div class="relative flex flex-col gap-3">
-      <div class="absolute select-none -top-32 -left-11 rotate-180">
-        <span class="text-[160px] font-[helvetica] leading-none text-primary/40"
-          >“</span
-        >
-      </div>
-      <blockquote class="z-10 max-w-lg text-3xl">
-        {review.description}
-      </blockquote>
-      <Stars rating={review.rating} />
-      {#if review.sender}
-        <div class="flex items-center gap-x-2 self-start mt-2.5">
-          <Avatar
-            url={review.sender.avatarUrl ?? ""}
-            firstName={review.sender.firstName}
-            lastName={review.sender.lastName}
-            role={review.sender.role}
-            class="text-sm w-7 h-7"
-          />
-          <cite class="not-italic text-lg">
-            {review.sender.firstName}
-          </cite>
-          <ArrowRightIcon class="w-4 h-4" />
-          <a
-            class="gap-x-2 flex items-center"
-            href="/profile/{review.receiver.id}"
+    <!-- this if block is only to please svelte compiler, the shouldShowAside condition already handles this logic -->
+    {#if review}
+      <div class="relative flex flex-col gap-3">
+        <div class="absolute -left-11 -top-32 rotate-180 select-none">
+          <span
+            class="font-[helvetica] text-[160px] leading-none text-primary/40"
+            >“</span
           >
-            <Avatar
-              url={review.receiver.avatarUrl ?? ""}
-              firstName={review.receiver.firstName}
-              lastName={review.receiver.lastName}
-              role={review.receiver.role}
-              class="text-sm w-7 h-7"
-            />
-            <p class="text-lg">{review.receiver.firstName}</p>
-          </a>
         </div>
-      {/if}
-    </div>
+        <blockquote class="z-10 max-w-lg text-3xl">
+          {review.description}
+        </blockquote>
+        <Stars rating={review.rating} />
+        {#if review.sender}
+          <div class="mt-2.5 flex items-center gap-x-2 self-start">
+            <Avatar
+              url={review.sender.avatarUrl ?? ""}
+              firstName={review.sender.firstName}
+              lastName={review.sender.lastName}
+              role={review.sender.role}
+              class="h-7 w-7 text-sm"
+            />
+            <cite class="text-lg not-italic">
+              {review.sender.firstName}
+            </cite>
+            <ArrowRightIcon class="h-4 w-4" />
+            <a
+              class="flex items-center gap-x-2"
+              href="/profile/{review.receiver.id}"
+            >
+              <Avatar
+                url={review.receiver.avatarUrl ?? ""}
+                firstName={review.receiver.firstName}
+                lastName={review.receiver.lastName}
+                role={review.receiver.role}
+                class="h-7 w-7 text-sm"
+              />
+              <p class="text-lg">{review.receiver.firstName}</p>
+            </a>
+          </div>
+        {/if}
+      </div>
+    {/if}
   </svelte:fragment>
   <svelte:fragment slot="form">
     <form
-      class="text-start flex flex-col gap-y-4 w-full max-w-screen-sm p-4"
+      class="flex w-full max-w-screen-sm flex-col gap-y-4 p-4 text-start"
       action="?/signUp"
       method="POST"
       use:enhance
     >
       <Tabs.Root
-        value={role ?? "student"}
-        class="text-start flex flex-col gap-y-4"
+        class="flex flex-col gap-y-4 text-start"
+        bind:value={$formData.role}
       >
         <Tabs.List class="self-center">
           <Tabs.Trigger
             value="student"
-            class="data-[state=active]:bg-primary data-[state=inactive]:bg-none data-[state=inactive]:text-black data-[state=active]:text-red-300"
+            class="data-[state=active]:bg-primary data-[state=inactive]:bg-none data-[state=active]:text-red-300 data-[state=inactive]:text-black"
             >Student</Tabs.Trigger
           >
           <Tabs.Trigger
             value="teacher"
-            class="data-[state=active]:bg-primary data-[state=inactive]:bg-none data-[state=inactive]:text-black data-[state=active]:text-red-300"
+            class="data-[state=active]:bg-primary data-[state=inactive]:bg-none data-[state=active]:text-red-300 data-[state=inactive]:text-black"
             >Lärare</Tabs.Trigger
           >
         </Tabs.List>
-        <Tabs.Content value="student" class="">
+        <Tabs.Content value="student">
           <SignupContent type="student" {formData} {userForm} />
         </Tabs.Content>
         <Tabs.Content value="teacher">
@@ -111,8 +112,18 @@
         {delayed}
         {allErrors}
         text="Skapa konto"
-        class="self-center min-w-wider"
+        class="min-w-wider self-center"
       />
+      <Form.Field form={userForm} name="role" class="hidden">
+        <Form.Control let:attrs>
+          <Input
+            type="hidden"
+            {...attrs}
+            class="hidden"
+            bind:value={$formData.role}
+          />
+        </Form.Control>
+      </Form.Field>
     </form>
   </svelte:fragment>
 </AuthSplit>

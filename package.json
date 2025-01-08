@@ -20,6 +20,7 @@
     "format_check": "prettier --check --plugin prettier-plugin-svelte ./src"
   },
   "devDependencies": {
+    "@melt-ui/pp": "^0.3.2",
     "@playwright/test": "^1.46.1",
     "@sveltejs/adapter-auto": "^3.2.1",
     "@sveltejs/adapter-cloudflare": "^4.6.1",
@@ -43,9 +44,9 @@
     "jsdom": "^24.1.0",
     "msw": "^2.3.1",
     "postcss": "^8.4.31",
-    "prettier": "^3.2.5",
+    "prettier": "^3.4.2",
     "prettier-plugin-svelte": "^3.0.3",
-    "simple-svelte-autocomplete": "^2.5.2",
+    "prettier-plugin-tailwindcss": "^0.6.9",
     "svelte": "^4.0.5",
     "svelte-check": "^3.4.3",
     "sveltekit-flash-message": "^2.4.4",

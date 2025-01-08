@@ -2,7 +2,10 @@
   import AddReview from "src/lib/components/molecules/add-review.svelte";
   import PrimaryTitle from "$lib/components/atoms/primary-title.svelte";
   import ProfileReviewCard from "src/lib/components/molecules/profile-review-card.svelte";
-  import type { addReviewSchema, ReviewWithReferences } from "src/lib/shared/models/review";
+  import type {
+    addReviewSchema,
+    ReviewWithReferences,
+  } from "src/lib/shared/models/review";
   import type { SuperValidated, Infer } from "sveltekit-superforms/client";
   import { cn } from "src/lib/shared/utils/utils";
   import type { Profile } from "src/lib/shared/models/profile";

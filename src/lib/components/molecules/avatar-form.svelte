@@ -15,7 +15,7 @@
   import * as Form from "$lib/components/ui/form";
   import { Label } from "$lib/components/ui/label/index.js";
   export let uploadAvatarForm;
-  export let avatarUrl: string
+  export let avatarUrl: string;
   export let deleteAvatarForm;
 
   const handleFilesSelect = (e: any) => {
@@ -49,7 +49,7 @@
   };
 </script>
 
-<div class="flex flex-col gap-y-4 generic-card w-full">
+<div class="generic-card flex w-full flex-col gap-y-4">
   <SecondaryTitle>Profilbild</SecondaryTitle>
   <p class="text-muted-foreground">
     Maxstorlek är {formatBytes(maxAvatarSize)}.
@@ -68,7 +68,7 @@
           alt="profilbild"
           width="250"
           height="250"
-          class="object-cover self-center rounded-md shadow-md"
+          class="self-center rounded-md object-cover shadow-md"
         />
         <DeleteAvatar rootForm={deleteAvatarForm} />
       </div>
@@ -81,7 +81,7 @@
             name="avatar"
             bind:value={$form.avatar}
             accept={getMimeType()}
-            class="overflow-hidden flex h-10 w-full border border-input rounded-md bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
+            class="flex h-10 w-full overflow-hidden rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
             on:input={(e) => setAvatar(e.currentTarget?.files?.item(0))}
           />
         </Form.Control>
@@ -111,7 +111,7 @@
     <FormMessage {message} scroll />
     <Button
       type="submit"
-      class="md:self-center md:min-w-wider"
+      class="md:min-w-wider md:self-center"
       disabled={$allErrors.length > 0 || $delayed || !$form.avatar}
     >
       {#if $timeout}

@@ -19,7 +19,6 @@
   import { Plus, Star } from "lucide-svelte";
   import { Button, buttonVariants } from "$lib/components/ui/button";
   import { Textarea } from "../ui/textarea";
-  import { secondaryAltButtonVariant } from "src/lib/shared/constants/constants";
   import type { Profile } from "src/lib/shared/models/profile";
 
   export let form: SuperValidated<Infer<AddReviewSchema>>;
@@ -41,14 +40,14 @@
   <Dialog.Trigger
     class={cn(
       buttonVariants({
-        variant: "white",
-        className: `flex gap-x-2 self-center ${secondaryAltButtonVariant()}`,
+        variant: "outline",
+        className: `flex gap-x-2 self-center`,
       }),
     )}
   >
     <Plus />Lägg till recension</Dialog.Trigger
   >
-  <Dialog.Content class="sm:max-w-[425px] bg-card">
+  <Dialog.Content class="bg-card sm:max-w-[425px]">
     <Dialog.Header>
       <Dialog.Title>Lägg till recension</Dialog.Title>
       <Dialog.Description>
@@ -64,13 +63,13 @@
       <Form.Field form={formValues} name="rating">
         <Form.Control let:attrs>
           <Label>Betyg</Label>
-          <div class="flex gap-x-2 items-center text-xl">
+          <div class="flex items-center gap-x-2 text-xl">
             <Input
               {...attrs}
               type="number"
               bind:value={$formData.rating}
               placeholder="Välj timpris"
-              class="p-2 border bg-gray-100 rounded-sm w-14"
+              class="w-14 rounded-sm border bg-gray-100 p-2"
             />
             <Star class="text-yellow-500" />
           </div>

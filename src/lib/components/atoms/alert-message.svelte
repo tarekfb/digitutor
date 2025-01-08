@@ -5,8 +5,8 @@
   export let title: string;
   export let description: string;
   export let variant: "default" | "destructive" | "success" | "warning" =
-  "default";
-  
+    "default";
+
   let className: string | null | undefined = undefined;
   export { className as class };
   export let descriptionClass: string | null | undefined = undefined;

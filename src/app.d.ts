@@ -9,18 +9,24 @@ declare global {
     interface Locals {
       supabase: SupabaseClient<Database>;
       supabaseServiceRole: SupabaseClient<Database>;
-      safeGetSession: () => Promise<{ session: Session | null; user: User | null }>
-      session: Session | null
-      user: User | null
+      safeGetSession: () => Promise<{
+        session: Session | null;
+        user: User | null;
+      }>;
+      session: Session | null;
+      user: User | null;
     }
     interface PageData {
-      flash?: { type: 'success' | 'error' | 'info' | 'warning'; message: string };
+      flash?: {
+        type: "success" | "error" | "info" | "warning";
+        message: string;
+      };
     }
     interface Error {
-      message: string,
-      description: string,
-      id?: MessageId,
-      data?: any,
+      message: string;
+      description: string;
+      id?: MessageId;
+      data?: any;
     }
     // interface PageData {
     //   session: Session | null;
@@ -29,4 +35,4 @@ declare global {
   }
 }
 
-export { };
+export {};

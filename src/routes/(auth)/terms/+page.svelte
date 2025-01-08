@@ -3,7 +3,7 @@
   import SecondaryTitle from "src/lib/components/atoms/secondary-title.svelte";
 </script>
 
-<div class="text-center flex flex-col items-center m-8 gap-y-4 md:max-w-xl">
+<div class="m-8 flex flex-col items-center gap-y-4 text-center md:max-w-xl">
   <PrimaryTitle>Användarvillkor</PrimaryTitle>
   <SecondaryTitle>Not implemented</SecondaryTitle>
 </div>

@@ -9,11 +9,13 @@ import { getFailFormMessage } from "$lib/shared/constants/constants";
 export const load: PageServerLoad = async () => {
   const form = await superValidate(zod(contactUsSchema));
   return { form };
-}
+};
 
 export const actions: Actions = {
   submit: async (event) => {
-    const { locals: { supabaseServiceRole } } = event;
+    const {
+      locals: { supabaseServiceRole },
+    } = event;
 
     const form = await superValidate(event, zod(contactUsSchema));
     if (!form.valid) return fail(400, { form });
@@ -31,14 +33,28 @@ export const actions: Actions = {
         });
 
       if (insertError) {
-        console.error('Error when inserting contact request', insertError);
-        return message(form, getFailFormMessage(undefined, "Kunde ej skicka meddelandet. Försök igen lite senare."), { status: 500 });
+        console.error("Error when inserting contact request", insertError);
+        return message(
+          form,
+          getFailFormMessage(
+            undefined,
+            "Kunde ej skicka meddelandet. Försök igen lite senare.",
+          ),
+          { status: 500 },
+        );
       }
 
-      return { form }
+      return { form };
     } catch (error) {
-      console.error('Unknown error when inserting contact request', error);
-      return message(form, getFailFormMessage(undefined, "Kunde ej skicka meddelandet. Försök igen lite senare."), { status: 500 });
+      console.error("Unknown error when inserting contact request", error);
+      return message(
+        form,
+        getFailFormMessage(
+          undefined,
+          "Kunde ej skicka meddelandet. Försök igen lite senare.",
+        ),
+        { status: 500 },
+      );
     }
   },
 };

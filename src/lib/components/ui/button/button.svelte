@@ -17,7 +17,7 @@
   {builders}
   class={cn(
     "tracking-wider uppercase",
-    buttonVariants({ variant, size, className})
+    buttonVariants({ variant, size, className }),
   )}
   type="button"
   {...$$restProps}

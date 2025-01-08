@@ -11,7 +11,10 @@ import type { Tables } from "src/supabase";
 import type { DbProfile, Profile } from "../models/profile";
 import { superValidate } from "sveltekit-superforms";
 import { zod } from "sveltekit-superforms/adapters";
-import { requestContactSchema, startContactSchema } from "../models/conversation";
+import {
+  requestContactSchema,
+  startContactSchema,
+} from "../models/conversation";
 import type { ErrorWithCode } from "../errors/error-with-code";
 import type { ErrorWithStatusCode } from "../errors/error-with-statuscode";
 
@@ -74,15 +77,26 @@ export const flyAndScale = (
 };
 
 export type TypeToZod<T> = {
-  [K in keyof T]: T[K] extends (string | number | boolean | null | undefined | number[])
-  ? (undefined extends T[K] ? z.ZodOptional<z.ZodType<Exclude<T[K], undefined>>> : z.ZodType<T[K]>)
-  : z.ZodObject<TypeToZod<T[K]>>
+  [K in keyof T]: T[K] extends
+  | string
+  | number
+  | boolean
+  | null
+  | undefined
+  | number[]
+  ? undefined extends T[K]
+  ? z.ZodOptional<z.ZodType<Exclude<T[K], undefined>>>
+  : z.ZodType<T[K]>
+  : z.ZodObject<TypeToZod<T[K]>>;
 };
 
-export const convertToInitials = (firstName: string, lastName: string): string => {
+export const convertToInitials = (
+  firstName: string,
+  lastName: string,
+): string => {
   if (!lastName && firstName) return firstName[0].toUpperCase();
   if (!firstName && !lastName) return "?";
-  return (firstName[0] + lastName[0]).toUpperCase()
+  return (firstName[0] + lastName[0]).toUpperCase();
 };
 
 export const getNow = () => new Date().toISOString();
@@ -98,21 +112,21 @@ export const timeAgo = (dateIsoString: string): string => {
   const years = days * 365;
 
   if (diffInSeconds < minutes) {
-    return '>1 min';
+    return ">1 min";
   } else if (diffInSeconds < hours) {
     const mins = Math.floor(diffInSeconds / minutes);
-    return `${mins} minut${mins > 1 ? 'er' : ''}`;
+    return `${mins} minut${mins > 1 ? "er" : ""}`;
   } else if (diffInSeconds < days) {
     const hrs = Math.floor(diffInSeconds / hours);
-    return `${hrs} timm${hrs > 1 ? 'ar' : 'e'}`;
+    return `${hrs} timm${hrs > 1 ? "ar" : "e"}`;
   } else if (diffInSeconds < years) {
     const dys = Math.floor(diffInSeconds / days);
-    return `${dys} dag${dys > 1 ? 'ar' : ''}`;
+    return `${dys} dag${dys > 1 ? "ar" : ""}`;
   } else {
     const yrs = Math.floor(diffInSeconds / years);
     return `${yrs} år`;
   }
-}
+};
 
 export const getRecipient = (self: "teacher" | "student") => {
   switch (self) {
@@ -121,7 +135,7 @@ export const getRecipient = (self: "teacher" | "student") => {
     case "student":
       return "teacher";
   }
-}
+};
 
 export const logout = (
   supabase: SupabaseClient<Database>,
@@ -134,27 +148,32 @@ export const logout = (
 
 export const removeUndefined = (fields: Record<string, any>) =>
   Object.fromEntries(
-    Object.entries(fields).filter(([_, v]) => v !== undefined)
+    Object.entries(fields).filter(([_, v]) => v !== undefined),
   );
 
-export const isErrorWithCode = (error: any): error is ErrorWithCode => 'code' in error && typeof error.code === 'string';
-export const isErrorWithStatusCode = (error: any): error is ErrorWithStatusCode => 'statusCode' in error && typeof error.statusCode === 'string';
+export const isErrorWithCode = (error: any): error is ErrorWithCode =>
+  "code" in error && typeof error.code === "string";
+
+export const isErrorWithStatusCode = (
+  error: any,
+): error is ErrorWithStatusCode =>
+  "statusCode" in error && typeof error.statusCode === "string";
 
 export const formatBytes = (bytes: number, decimals = 2) => {
-  if (!+bytes) return '0 B'
+  if (!+bytes) return "0 B";
 
-  const k = 1024
-  const dm = decimals < 0 ? 0 : decimals
-  const sizes = ['B', 'KB', 'MB', 'GB', 'TB', 'PB', 'EB', 'ZB', 'YB']
+  const k = 1024;
+  const dm = decimals < 0 ? 0 : decimals;
+  const sizes = ["B", "KB", "MB", "GB", "TB", "PB", "EB", "ZB", "YB"];
 
-  const i = Math.floor(Math.log(bytes) / Math.log(k))
+  const i = Math.floor(Math.log(bytes) / Math.log(k));
 
-  return `${parseFloat((bytes / Math.pow(k, i)).toFixed(dm))} ${sizes[i]}`
-}
+  return `${parseFloat((bytes / Math.pow(k, i)).toFixed(dm))} ${sizes[i]}`;
+};
 
 export const truncate = (text: string, limit: number) => {
-  if (text.split(' ').length > limit) {
-    const truncatedText = text.split(' ').slice(0, limit).join(' ');
+  if (text.split(" ").length > limit) {
+    const truncatedText = text.split(" ").slice(0, limit).join(" ");
     return `${truncatedText}...`;
   }
   return text;
@@ -164,39 +183,62 @@ export const verifyAvatarOwnership = (avatarUrl: string, userId: string) => {
   const dirs = avatarUrl.split("/");
   const expectedUserId = dirs[dirs.length - 1].split("---")[0];
   return expectedUserId === userId;
-}
+};
 
 export const formatDateReadable = (date: string) => {
   const rawDate = new Date(date);
   const year = rawDate.getFullYear().toString();
   const month = getSwedishMonthName(rawDate.getMonth() + 1).substring(0, 3);
-  let day = rawDate.getDate().toString().padStart(2, '0');
-  if (day.substring(0, 1) === '0') day = day.substring(1);
+  let day = rawDate.getDate().toString().padStart(2, "0");
+  if (day.substring(0, 1) === "0") day = day.substring(1);
   const formattedDate = `${day} ${month} ${year}`;
   return formattedDate;
 };
 
 const getSwedishMonthName = (monthNumber: number) => {
   const monthNames = [
-    'Januari',
-    'Februari',
-    'Mars',
-    'April',
-    'Maj',
-    'Juni',
-    'Juli',
-    'Augusti',
-    'September',
-    'Oktober',
-    'November',
-    'December',
+    "Januari",
+    "Februari",
+    "Mars",
+    "April",
+    "Maj",
+    "Juni",
+    "Juli",
+    "Augusti",
+    "September",
+    "Oktober",
+    "November",
+    "December",
   ];
   return monthNames[monthNumber - 1];
 };
 
-export const loadContactTeacherForms = async (teacher?: Profile, student?: Profile) => {
-  const initValues = { teacher: teacher?.id, role: student?.role ?? "" }
-  const requestContactForm = await superValidate(initValues, zod(requestContactSchema))
-  const startContactForm = await superValidate(initValues, zod(startContactSchema))
-  return { requestContactForm, startContactForm }
-}
+export const loadContactTeacherForms = async (
+  teacher?: Profile,
+  student?: Profile,
+) => {
+  const initValues = { teacher: teacher?.id, role: student?.role ?? "" };
+  const requestContactForm = await superValidate(
+    initValues,
+    zod(requestContactSchema),
+  );
+  const startContactForm = await superValidate(
+    initValues,
+    zod(startContactSchema),
+  );
+  return { requestContactForm, startContactForm };
+};
+
+export const cleanQuery = (
+  rawQuery: string,
+  commaSeparatedSubjects: string,
+  shouldEncode: boolean = false,
+) => {
+  // trim and && "undefined" is for client side bug prevention
+  let cleanedQuery: string = "";
+  if (rawQuery && rawQuery !== "undefined")
+    cleanedQuery = shouldEncode ? encodeURIComponent(rawQuery.trim()) : rawQuery.trim();
+  if (commaSeparatedSubjects && commaSeparatedSubjects !== "undefined")
+    cleanedQuery += `${rawQuery ? " " : ""}${shouldEncode ? encodeURIComponent(commaSeparatedSubjects.trim()) : commaSeparatedSubjects.trim()}`;
+  return cleanedQuery;
+};

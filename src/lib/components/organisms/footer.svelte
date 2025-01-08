@@ -2,16 +2,16 @@
   import { websiteName } from "$lib/shared/constants/constants";
   import Link from "../atoms/link.svelte";
   import Separator from "../ui/separator/separator.svelte";
-  
+
   const linkStyle = "self-start h-6";
 </script>
 
 <!-- Spacer grows so the footer can be at bottom on short pages -->
 <div class="flex-grow"></div>
 <Separator />
-<footer class="flex justify-between py-6 px-8 md:py-10 md:px-16">
+<footer class="flex justify-between px-8 py-6 md:px-16 md:py-10">
   <Link href="/" class="self-center font-normal">
-    <h1 class="text-2xl md:text-3xl uppercase text-gradient">{websiteName}</h1>
+    <h1 class="text-gradient text-2xl uppercase md:text-3xl">{websiteName}</h1>
   </Link>
 
   <nav class="flex flex-col space-y-1">

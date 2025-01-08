@@ -6,7 +6,7 @@
 
 <h2
   class={cn(
-    "text-xl md:text-2xl font-semibold whitespace-nowrap overflow-x-hidden overflow-y-hidden",
+    "overflow-x-hidden overflow-y-hidden whitespace-nowrap text-xl font-semibold md:text-2xl",
     className,
   )}
 >

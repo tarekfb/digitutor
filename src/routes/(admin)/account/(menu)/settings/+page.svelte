@@ -9,7 +9,7 @@
   import { toast } from "svelte-sonner";
   import {
     deleteAccountSchema as deleteSchema,
-    passwordSchema,
+    changePasswordSchema,
   } from "$lib/shared/models/user.js";
   import { emailSchema, nameSchema } from "$lib/shared/models/profile";
   import DeleteAccount from "$lib/components/atoms/delete-account.svelte";
@@ -39,7 +39,7 @@
     validators: zodClient(deleteSchema),
   });
   const passwordForm = superForm(data.updatePasswordForm, {
-    validators: zodClient(passwordSchema),
+    validators: zodClient(changePasswordSchema),
   });
 
   const { form: nameData, reset: nameReset } = nameForm;
@@ -92,7 +92,8 @@
       submitText="Ändra"
     >
       <p class="text-muted-foreground">
-        Du kommer behöva bekräfta den nya <span class="italic">och</span> den gamla adressen.
+        Du kommer behöva bekräfta den nya <span class="italic">och</span> den gamla
+        adressen.
       </p>
       <Form.Field form={emailForm} name="email">
         <Form.Control let:attrs>

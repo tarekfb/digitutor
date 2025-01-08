@@ -12,14 +12,13 @@
   export let variant: Variant = "default";
   export let loadingText = text;
   export let disabled = false;
-  
 </script>
 
 <Button
   type="submit"
   {variant}
   disabled={$allErrors.length > 0 || $delayed || disabled}
-  class={cn("flex gap-x-2 items-center", className)}
+  class={cn("flex items-center gap-x-2", className)}
 >
   {#if $delayed}
     <LoadingSpinner />

@@ -24,13 +24,9 @@
 <header
   class="sticky top-0 z-40 w-full bg-secondary text-background overflow-x-hidden h-16 md:h-20 flex items-center gap-x-3 sm:justify-between sm:space-x-0 px-2 md:px-4 lg:px-8"
 >
-  <a
-    href="/"
-    class="text-xl md:text-3xl md:hover:text-third uppercase"
-  >
+  <a href="/" class="text-xl md:text-3xl md:hover:text-third uppercase">
     {websiteName}
   </a>
-  
 
   <div class="flex-1 flex items-center justify-end">
     <nav class="flex items-center gap-x-2 md:gap-x-4">
@@ -41,8 +37,10 @@
             class="px-2 md:px-3"
             on:click={() => goto("/sign-in")}>Logga in</Button
           >
-          <Button variant="third-secondary" on:click={() => goto("/sign-up")} class="px-2 md:px-3"
-            >Skapa konto</Button
+          <Button
+            variant="third-secondary"
+            on:click={() => goto("/sign-up")}
+            class="px-2 md:px-3">Skapa konto</Button
           >
         {:else if profile}
           <DropdownMenu.Root>
