@@ -9,19 +9,14 @@ on:
 jobs:
   deploy:
     runs-on: ubuntu-latest
-    if: |
+    if: >
       (github.event.workflow_run.conclusion == 'success') &&
       (
-        # Conditions for push to master
-        (github.event.workflow_run.head_branch == 'master' && 
+        (github.event.workflow_run.head_branch == 'master' &&
          github.event.workflow_run.event == 'push' &&
-         github.event.workflow_run.name in ['Build', 'CI'])
-        ||
-        # Conditions for pull request to master
-        (github.event.workflow_run.head_branch == 'master' && 
-         github.event.workflow_run.event == 'pull_request' &&
-         github.event.workflow_run.name in ['Test Prod', 'Build', 'CI'])
+         (github.event.workflow_run.name == 'Build' || github.event.workflow_run.name == 'CI'))
       )
+
 
     env:
       SUPABASE_ACCESS_TOKEN: ${{ secrets.SUPABASE_ACCESS_TOKEN }}
