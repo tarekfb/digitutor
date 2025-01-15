@@ -25,6 +25,7 @@ export const formatProfile = ({
   first_name,
   last_name,
   avatar_url,
+  bio
 }: DbProfile): Profile => {
   if (role === "admin") throw new Error("Unsupported role");
 
@@ -34,6 +35,7 @@ export const formatProfile = ({
     firstName: first_name,
     lastName: last_name,
     avatarUrl: avatar_url ?? undefined,
+    bio,
   };
 };
 

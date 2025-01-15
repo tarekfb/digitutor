@@ -11,13 +11,27 @@
     deleteAccountSchema as deleteSchema,
     changePasswordSchema,
   } from "$lib/shared/models/user.js";
-  import { emailSchema, nameSchema } from "$lib/shared/models/profile";
+  import {
+    emailSchema,
+    nameSchema,
+    updateBioSchema,
+  } from "$lib/shared/models/profile";
   import DeleteAccount from "$lib/components/atoms/delete-account.svelte";
   import PasswordInput from "$lib/components/molecules/password-input.svelte";
   import AvatarForm from "src/lib/components/molecules/avatar-form.svelte";
   import type { PageData } from "./$types";
   import RootContainer from "src/lib/components/templates/root-container.svelte";
-  import AccountLayout from "../../../../../lib/components/templates/account-layout.svelte";
+  import AccountLayout from "src/lib/components/templates/account-layout.svelte";
+  import { Textarea } from "src/lib/components/ui/textarea";
+  import * as Collapsible from "$lib/components/ui/collapsible";
+  import {
+    ChevronsUpDown,
+    Star,
+    MapPin,
+    GraduationCap,
+    Brain,
+  } from "lucide-svelte";
+  import { Button } from "src/lib/components/ui/button";
 
   export let data: PageData;
   $: ({ profile, uploadAvatarForm, deleteAvatarForm } = data);
@@ -28,6 +42,16 @@
       if (form.valid) {
         nameReset({ newState: data.updateNameForm.data });
         toast.success(`Ändrat namn.`);
+      }
+    },
+    resetForm: false,
+  });
+  const bioForm = superForm(data.updateBioForm, {
+    validators: zodClient(updateBioSchema),
+    onUpdated({ form }) {
+      if (form.valid) {
+        bioReset({ newState: data.updateBioForm.data });
+        toast.success(`Ändrat profilbeskrivning.`);
       }
     },
     resetForm: false,
@@ -43,6 +67,7 @@
   });
 
   const { form: nameData, reset: nameReset } = nameForm;
+  const { form: bioData, reset: bioReset } = bioForm;
   const { form: emailData } = emailForm;
   const { form: passwordData } = passwordForm;
 </script>
@@ -53,6 +78,62 @@
 <AccountLayout>
   <PrimaryTitle class="text-center">Inställningar</PrimaryTitle>
   <RootContainer class="my-6 w-full">
+    {#if profile.role === "teacher"}
+      <SettingsForm
+        form={bioForm}
+        action="?/bio"
+        title="Profilbeskrivning"
+        submitText="Ändra"
+        id="bio"
+      >
+        <p class="text-muted-foreground">
+          Detta är en beskrivning för din lärarprofil, som visas för alla dina
+          annonser. Beskrivningar för individuella <a
+            href="/account/listings"
+            class="underline">annonser</a
+          > ändras separat.
+        </p>
+        <p class="text-muted-foreground">
+          Exempel på saker du kan nämna i din profilbeskrivning är din
+          erfarenhet som lärare, om du helst lär ut online eller fysiskt, eller
+          ditt tillvägagångssätt som lärare.
+        </p>
+        <Collapsible.Root>
+          <Collapsible.Trigger
+            class="flex w-full items-center justify-between text-start text-muted-foreground "
+            >Några exempel på saker du kan nämna i din profilbeskrivning: <Button
+              variant="ghost"
+              size="sm"
+              class="w-9 p-0 text-foreground"
+            >
+              <ChevronsUpDown class="h-4 w-4" />
+              <span class="sr-only">Växla</span>
+            </Button>
+          </Collapsible.Trigger>
+          <Collapsible.Content class="text-muted-foreground mt-2 md:mt-1">
+            <ul class="list-disc space-y-1.5 md:space-y-2 *:flex *:items-center *:gap-x-2">
+              <li><Star size="20" />Din expertis.</li>
+              <li><GraduationCap size="20" />Dina erfarenheter som lärare.</li>
+              <li><MapPin size="20" />Om du helst lär ut online eller fysiskt.</li>
+              <li><Brain size="20" />Ditt tillvägagångssätt som lärare.</li>
+            </ul>
+          </Collapsible.Content>
+        </Collapsible.Root>
+        <Form.Field form={bioForm} name="bio">
+          <Form.Control let:attrs>
+            <Form.Label>Profilbeskrivning</Form.Label>
+            <Textarea
+              {...attrs}
+              placeholder="Skriv en text om dig själv som lärare..."
+              class="resize-y"
+              bind:value={$bioData.bio}
+            />
+          </Form.Control>
+          <Form.FieldErrors />
+        </Form.Field>
+      </SettingsForm>
+    {/if}
+
     <SettingsForm
       form={nameForm}
       action="?/name"
@@ -71,6 +152,7 @@
         </Form.Control>
         <Form.FieldErrors />
       </Form.Field>
+
       <Form.Field form={nameForm} name="lastName">
         <Form.Control let:attrs>
           <Form.Label>Efternamn</Form.Label>

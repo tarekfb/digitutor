@@ -15,6 +15,7 @@
   export let title: string;
   export let shouldHaveSubmit = true;
   export let enctype = "";
+  export let id: string | undefined = undefined;
 
   const { enhance, delayed, allErrors, message } = form;
 </script>
@@ -23,8 +24,9 @@
   method="POST"
   use:enhance
   {action}
-  class={cn("flex flex-col gap-y-4 generic-card w-full", className)}
+  class={cn("generic-card flex w-full flex-col gap-y-4", className)}
   enctype={enctype ?? "application/x-www-form-urlencoded"}
+  {id}
 >
   <SecondaryTitle>{title}</SecondaryTitle>
   <slot />
@@ -34,7 +36,7 @@
       {delayed}
       {allErrors}
       text={submitText}
-      class="md:self-center md:min-w-wider {submitStyling}"
+      class="md:min-w-wider md:self-center {submitStyling}"
     />
   {/if}
 </form>

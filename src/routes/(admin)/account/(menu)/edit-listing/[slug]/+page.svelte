@@ -98,6 +98,9 @@
       <Form.Field form={listingForm} name="description">
         <Form.Control let:attrs>
           <Label class={labelStyling}>Beskrivning</Label>
+          <p class="text-muted-foreground">
+            Detta är en beskrivning för denna annons. Profilbeskrivningen som visas för alla dina annonser kan ändras i <a href="/account/settings#bio" class="underline">profilinställningar</a>.
+          </p>
           <Textarea
             {...attrs}
             placeholder="Skriv några ord om din annons..."

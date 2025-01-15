@@ -34,6 +34,7 @@ export const createProfile = async (
     id: profileInput.id,
     role: profileInput.role,
     created_at: getNow(),
+    bio: null,
     updated_at: null,
     avatar_url: null,
     first_name: profileInput.firstName,

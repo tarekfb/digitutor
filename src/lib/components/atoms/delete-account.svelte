@@ -14,7 +14,7 @@
   const { form: formData, enhance, delayed, allErrors, message } = form;
 </script>
 
-<div class="flex flex-col gap-y-4 generic-card w-full">
+<div class="generic-card flex w-full flex-col gap-y-4">
   <SecondaryTitle>Ta bort konto</SecondaryTitle>
   <FormMessage {message} scroll />
   <Dialog.Root bind:open>
@@ -24,7 +24,7 @@
         variant="destructive"
         disabled={$delayed}
         aria-label="Delete account"
-        class="md:self-center md:min-w-wider"
+        class="md:min-w-wider md:self-center"
       >
         {#if $delayed}
           <LoadingSpinner class="mr-2" /> <span>Laddar...</span>
@@ -33,7 +33,7 @@
         {/if}
       </Button>
     </Dialog.Trigger>
-    <Dialog.Content class="sm:max-w-[425px] bg-card">
+    <Dialog.Content class="bg-card sm:max-w-[425px]">
       <Dialog.Header>
         <Dialog.Title>Är du säker?</Dialog.Title>
         <Dialog.Description>
@@ -44,7 +44,7 @@
       <FormMessage {message} scroll />
       <form
         method="POST"
-        action="?/delete"
+        action="?/deleteAccount"
         use:enhance
         class="flex flex-col gap-y-4"
       >
