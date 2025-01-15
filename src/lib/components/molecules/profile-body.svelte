@@ -19,12 +19,11 @@
 
 <PrimaryTitle class="text-wrap">Om {teacher.firstName}</PrimaryTitle>
 <p class={cn("text-muted-foreground md:text-lg", pStyle)}>
-  <!-- {#if profile.bio}
-          {profile.bio}
-        {:else}
-          Den här läraren har ingen beskrivning just nu.
-        {/if} -->
-  Den här läraren har ingen beskrivning just nu.
+  {#if teacher.bio}
+    {teacher.bio}
+  {:else}
+    Den här läraren har ingen beskrivning just nu.
+  {/if}
 </p>
 <PrimaryTitle class="text-wrap">Recensioner</PrimaryTitle>
 {#if allowCreateReview}
