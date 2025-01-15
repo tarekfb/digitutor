@@ -109,13 +109,13 @@
             <ul
               class="list-disc space-y-1.5 *:flex *:items-center *:gap-x-2 md:space-y-2"
             >
-              <li><Star size="20" />Din expertis.</li>
-              <li><GraduationCap size="20" />Dina erfarenheter som lärare.</li>
+              <li><Star class="size-8"/>Din expertis.</li>
+              <li><GraduationCap class="size-8"/>Dina erfarenheter som lärare.</li>
               <li>
-                <MapPin size="20" />Om du helst lär ut online eller fysiskt
+                <MapPin class="size-8" />Om du helst lär ut online eller fysiskt
                 (isåfall även plats).
               </li>
-              <li><Brain size="20" />Ditt tillvägagångssätt som lärare.</li>
+              <li><Brain class="size-8" />Ditt tillvägagångssätt som lärare.</li>
             </ul>
           </Collapsible.Content>
         </Collapsible.Root>
