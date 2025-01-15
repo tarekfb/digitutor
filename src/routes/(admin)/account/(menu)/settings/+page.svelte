@@ -93,11 +93,6 @@
             class="underline">annonser</a
           > ändras separat.
         </p>
-        <p class="text-muted-foreground">
-          Exempel på saker du kan nämna i din profilbeskrivning är din
-          erfarenhet som lärare, om du helst lär ut online eller fysiskt, eller
-          ditt tillvägagångssätt som lärare.
-        </p>
         <Collapsible.Root>
           <Collapsible.Trigger
             class="flex w-full items-center justify-between text-start text-muted-foreground "
@@ -110,11 +105,16 @@
               <span class="sr-only">Växla</span>
             </Button>
           </Collapsible.Trigger>
-          <Collapsible.Content class="text-muted-foreground mt-2 md:mt-1">
-            <ul class="list-disc space-y-1.5 md:space-y-2 *:flex *:items-center *:gap-x-2">
+          <Collapsible.Content class="mt-2 text-muted-foreground md:mt-1">
+            <ul
+              class="list-disc space-y-1.5 *:flex *:items-center *:gap-x-2 md:space-y-2"
+            >
               <li><Star size="20" />Din expertis.</li>
               <li><GraduationCap size="20" />Dina erfarenheter som lärare.</li>
-              <li><MapPin size="20" />Om du helst lär ut online eller fysiskt.</li>
+              <li>
+                <MapPin size="20" />Om du helst lär ut online eller fysiskt
+                (isåfall även plats).
+              </li>
               <li><Brain size="20" />Ditt tillvägagångssätt som lärare.</li>
             </ul>
           </Collapsible.Content>
