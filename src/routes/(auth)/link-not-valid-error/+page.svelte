@@ -21,7 +21,7 @@
     åtkomst.
   </p>
   <p class="text-muted-foreground">
-    Du kan försöka igen lite senare eller <Link href="/contact-us"
+    Du kan begära en ny länk genom att upprepa åtgärden eller <Link href="/contact-us"
       >kontakta oss</Link
     > om problemet kvarstår.
   </p>
