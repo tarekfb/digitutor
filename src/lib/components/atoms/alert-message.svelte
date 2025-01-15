@@ -10,9 +10,10 @@
   let className: string | null | undefined = undefined;
   export { className as class };
   export let descriptionClass: string | null | undefined = undefined;
+  export let closable = false;
 </script>
 
-<Alert.Root {variant} class={cn("bg-card text-center", className)}>
+<Alert.Root {variant} class={cn("bg-card text-center", className)} {closable}>
   <Alert.Title>{title}</Alert.Title>
   <Alert.Description class={descriptionClass}>{description}</Alert.Description>
   <slot />

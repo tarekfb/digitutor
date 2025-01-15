@@ -5,7 +5,7 @@
   import { toast } from "svelte-sonner";
   import { signInSchema } from "$lib/shared/models/user.js";
   import { Input } from "$lib/components/ui/input";
-  import { Terminal } from "lucide-svelte";
+  import { CheckCircle2, Terminal } from "lucide-svelte";
   import FormMessage from "$lib/components/molecules/form-message.svelte";
   import Label from "$lib/components/atoms/label.svelte";
   import { MessageId } from "$lib/shared/constants/constants";
@@ -19,6 +19,9 @@
   import type { ReviewWithReferences } from "src/lib/shared/models/review";
   import Stars from "src/lib/components/atoms/stars.svelte";
   import ReviewCardExtra from "src/lib/components/molecules/review-card-extra.svelte";
+  import { page } from "$app/stores";
+  import * as Dialog from "src/lib/components/ui/dialog";
+  import AlertMessage from "src/lib/components/atoms/alert-message.svelte";
 
   export let data: PageData;
 
@@ -71,18 +74,18 @@
 >
   <svelte:fragment slot="aside">
     <div class="flex justify-around gap-x-8">
-      <div class="max-w-36 flex flex-col">
+      <div class="flex max-w-36 flex-col">
         {#if reviews[0].receiver.avatarUrl}
           <img
             alt="profile avatar"
-            class="rounded-sm mb-2"
+            class="mb-2 rounded-sm"
             width="250"
             height="250"
             src={reviews[0].receiver.avatarUrl}
           />
         {/if}
         <div
-          class="flex flex-col gap-y-0.5 text-muted-foreground text-xl md:text-2xl"
+          class="flex flex-col gap-y-0.5 text-xl text-muted-foreground md:text-2xl"
         >
           <SecondaryTitle class="whitespace-normal font-semibold"
             >{reviews[0].receiver.firstName}</SecondaryTitle
@@ -94,8 +97,8 @@
             <ul>
               {#each subjects as subject, i}
                 {#if i < 10 && languages[subject - 1]?.title}
-                  <li class="flex gap-x-2 items-center">
-                    <Terminal class="w-5 h-5 text-accent" />
+                  <li class="flex items-center gap-x-2">
+                    <Terminal class="h-5 w-5 text-accent" />
                     <p class="font-mono text-base">
                       {languages[subject - 1].title}
                     </p>
@@ -108,7 +111,8 @@
       </div>
       <div class="flex flex-col items-center">
         {#if listings?.at(0)}
-          <PrimaryTitle class="font-normal max-w-[400px] overflow-hidden"
+          <PrimaryTitle
+            class="max-w-[400px] overflow-x-hidden overflow-y-hidden overflow-ellipsis font-normal"
             >{listings[0].title}</PrimaryTitle
           >
         {/if}
@@ -126,12 +130,20 @@
   </svelte:fragment>
   <svelte:fragment slot="form">
     <form
-      class="text-start flex flex-col gap-y-4 w-full max-w-screen-sm p-4"
+      class="flex w-full max-w-screen-sm flex-col gap-y-4 p-4 text-start"
       action="?/signIn"
       method="POST"
       use:enhance
     >
-      <div class="flex flex-col gap-y-2 mb-4 text-center lg:text-start">
+      {#if $page.url.searchParams.get("verified") == "true"}
+        <AlertMessage
+          variant="success"
+          closable
+          title="E-post verifierad"
+          description="Du kan nu logga in."
+        />
+      {/if}
+      <div class="mb-4 flex flex-col gap-y-2 text-center lg:text-start">
         <PrimaryTitle>Logga in</PrimaryTitle>
         <p class="text-muted-foreground">
           Har du inget konto?
@@ -160,7 +172,7 @@
         </Form.Field>
         <a
           href="/forgot-password"
-          class="underline text-muted-foreground text-sm justify-self-center text-center lg:text-start"
+          class="justify-self-center text-center text-sm text-muted-foreground underline lg:text-start"
           >Glömt lösen?</a
         >
       </div>
@@ -177,17 +189,8 @@
         {delayed}
         {allErrors}
         text="Logga in"
-        class="self-center min-w-wider"
+        class="min-w-wider self-center"
       />
     </form>
   </svelte:fragment>
 </AuthSplit>
-<!-- 
-<style lang="css">
-  .transp-background {
-    /* background-color: hsla(222.2, 84%, 4.9%, 0.5); */
-    background-color: hsla(0, 0%, 100%, 0.5);
-    --card: 0 0% 100%;
-    /* i broke the transparancy somehow... */
-  }
-</style> -->

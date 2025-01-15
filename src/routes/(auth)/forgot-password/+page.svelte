@@ -67,4 +67,10 @@
       <SendHorizontal slot="icon" class="h-5 w-5" />
     </FormSubmit>
   </form>
+  <div class="mb-4 flex flex-col gap-y-2 text-center lg:text-start mt-4 md:mt-2">
+    <p class="text-muted-foreground">
+      Kommer du ihåg ditt lösen?
+      <a href="/sign-in" class="underline">Logga in här.</a>
+    </p>
+  </div>
 </RootContainer>
