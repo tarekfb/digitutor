@@ -41,8 +41,6 @@ export const load: PageServerLoad = async ({
     profile: { avatarUrl, firstName, lastName, bio },
   } = await parent();
 
-
-  console.log("bio in load", bio);
   const updateNameForm = await superValidate({
     firstName,
     lastName
@@ -86,7 +84,6 @@ export const actions = {
       id: user.id,
       bio,
     };
-    console.log("bio in update profile", bio);
 
     try {
       await updateProfile(supabase, profileInput);
