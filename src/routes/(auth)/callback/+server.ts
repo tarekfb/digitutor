@@ -16,9 +16,12 @@ export const GET: RequestHandler = async ({ url, locals: { supabase } }) => {
     }
   }
 
+  if (!authToken?.data) redirect(303, "/link-not-valid-error")
+
   const next = url.searchParams.get("next");
   if (next) redirect(303, next);
 
-  if (authToken?.data.session) redirect(303, "/account");
-  else redirect(303, "/link-not-valid-error")
+  if (authToken?.data) redirect(303, "/account");
+
+  redirect(303, "/link-not-valid-error")
 };
