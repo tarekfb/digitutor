@@ -88,5 +88,5 @@ export const updateBioSchema = z.object({
   bio: z
     .string()
     .min(10, "Måste vara minst 10 karaktärer.")
-    .max(400, "Får inte vara mer än 400 karaktärer."),
+    .max(2000, "Får inte vara mer än 2000 karaktärer."),
 });
