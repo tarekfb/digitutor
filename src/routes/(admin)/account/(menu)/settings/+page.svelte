@@ -25,7 +25,8 @@
   import { Textarea } from "src/lib/components/ui/textarea";
   import * as Collapsible from "$lib/components/ui/collapsible";
   import {
-    ChevronsUpDown,
+    ChevronDown,
+    ChevronUp,
     Star,
     MapPin,
     GraduationCap,
@@ -95,27 +96,35 @@
         </p>
         <Collapsible.Root>
           <Collapsible.Trigger
-            class="flex w-full items-center justify-between text-start text-muted-foreground "
-            >Några exempel på saker du kan nämna i din profilbeskrivning: <Button
-              variant="ghost"
-              size="sm"
-              class="w-9 p-0 text-foreground"
-            >
-              <ChevronsUpDown class="h-4 w-4" />
-              <span class="sr-only">Växla</span>
-            </Button>
+            class="group flex w-full items-center justify-between text-start text-muted-foreground"
+            >Några exempel på saker du kan nämna i din profilbeskrivning:
+            <div class="p-0 text-foreground group-data-[state=open]:hidden">
+              <ChevronDown class="size-4" />
+              <span class="sr-only">Öppna</span>
+            </div>
+            <div class="p-0 text-foreground group-data-[state=closed]:hidden">
+              <ChevronUp class="size-4 " />
+              <span class="sr-only">Öppna</span>
+            </div>
           </Collapsible.Trigger>
           <Collapsible.Content class="mt-2 text-muted-foreground md:mt-1">
+            {@const styling = "size-5 flex-shrink-0 md:size-7"}
             <ul
-              class="list-disc space-y-1.5 *:flex *:items-center *:gap-x-2 md:space-y-2"
+              class="*:border-testing list-disc space-y-1.5 *:mx-1 *:flex *:gap-x-2 md:space-y-2"
             >
-              <li><Star class="size-8"/>Din expertis.</li>
-              <li><GraduationCap class="size-8"/>Dina erfarenheter som lärare.</li>
               <li>
-                <MapPin class="size-8" />Om du helst lär ut online eller fysiskt
-                (isåfall även plats).
+                <Star class={styling} />Din expertis.
               </li>
-              <li><Brain class="size-8" />Ditt tillvägagångssätt som lärare.</li>
+              <li>
+                <GraduationCap class={styling} />Dina erfarenheter som lärare.
+              </li>
+              <li>
+                <MapPin class={styling} />Om du helst lär ut online eller
+                fysiskt (isåfall även plats).
+              </li>
+              <li>
+                <Brain class={styling} />Ditt tillvägagångssätt som lärare.
+              </li>
             </ul>
           </Collapsible.Content>
         </Collapsible.Root>
@@ -125,7 +134,7 @@
             <Textarea
               {...attrs}
               placeholder="Skriv en text om dig själv som lärare..."
-              class="resize-y"
+              class="max-h-[700px] min-h-32 resize-y"
               bind:value={$bioData.bio}
             />
           </Form.Control>
