@@ -27,6 +27,7 @@ export type ProfileInput = {
   id: string;
   first_name?: string;
   last_name?: string;
+  bio?: string;
   avatar_url?: string;
   is_active?: boolean;
 };
@@ -81,4 +82,11 @@ export const avatarSchema = z.object({
 
 export const deleteAvatarSchema = z.object({
   path: z.string(),
+});
+
+export const updateBioSchema = z.object({
+  bio: z
+    .string()
+    .min(10, "Måste vara minst 10 karaktärer.")
+    .max(2000, "Får inte vara mer än 2000 karaktärer."),
 });

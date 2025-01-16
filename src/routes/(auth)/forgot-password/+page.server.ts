@@ -37,6 +37,6 @@ export const actions = {
             return message(form, getFailFormMessage("Kunde inte skicka e-post med information för att återställa lösenord"), { status: 500 });
         }
 
-        return message(form, getSuccessFormMessage("E-post skickat", "Titta i din inkorg (eller i skräpkorgen) för information om hur du återställer ditt lösenord."));
+        return message(form, getSuccessFormMessage("Titta i din inkorg", "Om du har ett konto hos oss har ett e-postmeddelande med instruktioner för att återställa lösenordet skickats. Kontrollera även skräpkorgen om du inte hittar det i inkorgen."));
     }
 }

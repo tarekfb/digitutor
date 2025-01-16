@@ -11,6 +11,7 @@ import {
   deleteAvatarSchema,
   emailSchema,
   nameSchema,
+  updateBioSchema,
   type ProfileInput,
 } from "$lib/shared/models/profile";
 import { updateProfile } from "$lib/server/database/profiles";
@@ -37,13 +38,14 @@ export const load: PageServerLoad = async ({
   if (!session) throw redirect(303, "/sign-in");
 
   const {
-    profile: { avatarUrl, firstName, lastName },
+    profile: { avatarUrl, firstName, lastName, bio },
   } = await parent();
-  const initName = {
+
+  const updateNameForm = await superValidate({
     firstName,
-    lastName,
-  };
-  const updateNameForm = await superValidate(initName, zod(nameSchema));
+    lastName
+  }, zod(nameSchema));
+  const updateBioForm = await superValidate({ bio: bio ?? "" }, zod(updateBioSchema), { errors: false });
   const updateEmailForm = await superValidate(
     { email: session.user.email },
     zod(emailSchema),
@@ -57,6 +59,7 @@ export const load: PageServerLoad = async ({
   );
   return {
     updateNameForm,
+    updateBioForm,
     updateEmailForm,
     deleteAccountForm,
     updatePasswordForm,
@@ -66,6 +69,34 @@ export const load: PageServerLoad = async ({
 };
 
 export const actions = {
+  bio: async (event) => {
+    const {
+      locals: { supabase, safeGetSession },
+    } = event;
+    const { user } = await safeGetSession();
+    if (!user) throw redirect(303, "/sign-in");
+
+    const form = await superValidate(event, zod(updateBioSchema));
+    if (!form.valid) return fail(400, { form });
+    const { bio } = form.data;
+
+    const profileInput: ProfileInput = {
+      id: user.id,
+      bio,
+    };
+
+    try {
+      await updateProfile(supabase, profileInput);
+    } catch (error) {
+      console.error(
+        `Error on update profile in update bio with userid ${user.id}`,
+        error,
+      );
+      return message(form, getFailFormMessage(), { status: 500 });
+    }
+
+    return { form };
+  },
   name: async (event) => {
     const {
       locals: { supabase, safeGetSession },
@@ -85,7 +116,6 @@ export const actions = {
 
     try {
       await updateProfile(supabase, profileInput);
-      return { form };
     } catch (error) {
       console.error(
         `Error on update profile in update name with userid ${user.id}`,
@@ -93,6 +123,8 @@ export const actions = {
       );
       return message(form, getFailFormMessage(), { status: 500 });
     }
+
+    return { form };
   },
   email: async (event) => {
     const {
@@ -107,13 +139,6 @@ export const actions = {
     const { email } = form.data;
     try {
       await updateUserEmail(supabase, email);
-      return message(
-        form,
-        getSuccessFormMessage(
-          "Bekräfta e-postadresserna",
-          "Bekräfta ändringen på både gamla och nya e-postadresserna. Tills dess loggar du in med din nuvarande e-postadress.",
-        ),
-      );
     } catch (error) {
       console.error(
         `Error on update profile in update name with userid ${session?.user.id}`,
@@ -121,6 +146,14 @@ export const actions = {
       );
       return message(form, getFailFormMessage(), { status: 500 });
     }
+
+    return message(
+      form,
+      getSuccessFormMessage(
+        "Bekräfta e-postadresserna",
+        "Bekräfta ändringen på både gamla och nya e-postadresserna. Tills dess loggar du in med din nuvarande e-postadress.",
+      ),
+    );
   },
   avatar: async (event) => {
     const {
@@ -255,7 +288,7 @@ export const actions = {
 
     return { form };
   },
-  delete: async (event) => {
+  deleteAccount: async (event) => {
     const {
       locals: { supabase, safeGetSession, supabaseServiceRole },
       cookies,
