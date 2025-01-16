@@ -20,7 +20,7 @@
 
 {#if visible}
   <div
-    class={cn(alertVariants({ variant }), className)}
+    class={cn(alertVariants({ variant }), className, "[&:has(svg)]:pl-4")}
     {...$$restProps}
     role="alert"
   >
