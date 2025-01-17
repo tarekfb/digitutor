@@ -58,10 +58,7 @@ export const load: PageServerLoad = async (event) => {
     }
 
     redirectTo.searchParams.delete("next");
-    return { email: user.email };
   }
 
   error(500, getDefaultErrorInfo("Det saknas lite info för att verifiera dig"));
-  // redirectTo.pathname = '/error'
-  // return redirect(303, redirectTo)
 };

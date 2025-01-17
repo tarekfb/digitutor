@@ -16,7 +16,7 @@
   >
   <p class="text-muted-foreground">
     Du tryckte på en länk som inte längre är giltig. Detta kan bero på att
-    länken har överskridit sin giltighetstid eller redan har använts. Vi tar
+    länken har överskridit sin giltighetstid, att länken redan har förbrukats, eller att ett oväntat fel uppstod. Vi tar
     dessa åtgärder för att skydda våra användares konton och förhindra obehörig
     åtkomst.
   </p>
