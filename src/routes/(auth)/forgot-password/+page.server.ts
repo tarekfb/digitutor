@@ -25,9 +25,7 @@ export const actions = {
         if (!form.valid) return fail(400, { form });
 
         try {
-            const { error } = await supabase.auth.resetPasswordForEmail(email, {
-                redirectTo: `${FRONTEND_BASE_URL}/callback?next=/account/update-password`,
-            });
+            const { error } = await supabase.auth.resetPasswordForEmail(email)
             if (error) {
                 console.error("Error when requesting password reset", error);
                 return message(form, getFailFormMessage("Kunde inte skicka e-post med information för att återställa lösenord"), { status: 500 });
