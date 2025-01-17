@@ -19,9 +19,6 @@
   import type { ReviewWithReferences } from "src/lib/shared/models/review";
   import Stars from "src/lib/components/atoms/stars.svelte";
   import ReviewCardExtra from "src/lib/components/molecules/review-card-extra.svelte";
-  import { page } from "$app/stores";
-  import * as Dialog from "src/lib/components/ui/dialog";
-  import AlertMessage from "src/lib/components/atoms/alert-message.svelte";
 
   export let data: PageData;
 
@@ -135,14 +132,6 @@
       method="POST"
       use:enhance
     >
-      {#if $page.url.searchParams.get("verified") == "true"}
-        <AlertMessage
-          variant="success"
-          closable
-          title="E-post verifierad"
-          description="Du kan nu logga in."
-        />
-      {/if}
       <div class="mb-4 flex flex-col gap-y-2 text-center lg:text-start">
         <PrimaryTitle>Logga in</PrimaryTitle>
         <p class="text-muted-foreground">
