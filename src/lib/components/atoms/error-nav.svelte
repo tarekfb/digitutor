@@ -3,7 +3,7 @@
   export let href: string;
 </script>
 
-<a {href} aria-label="Gå till din profil" class="h-42 w-full">
+<a {href} aria-label={text} class="h-42 w-full">
   <li
     class="flex justify-center items-center p-6 md:p-8 border border-solid border-accent rounded-md bg-card h-full w-full"
   >

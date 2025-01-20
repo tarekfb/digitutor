@@ -15,7 +15,7 @@ env:
   PRIVATE_STRIPE_API_KEY: "fake_strip_api_key"
   PUBLIC_SUPABASE_STORAGE_URL: "fake_storage_url"
   CF_IMAGE_RESIZE_URL: "fake_resize_url"
-  FRONTEND_BASE_URL: "fake_frontend_url"
+  ENVIRONMENT: "fake_frontend_url"
 
 jobs:
   build_and_test:

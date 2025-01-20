@@ -4,15 +4,14 @@
   import RootContainer from "src/lib/components/templates/root-container.svelte";
   import Button from "src/lib/components/ui/button/button.svelte";
   import {
-    subsriptionPlans,
+    pricingPlans,
     websiteName,
   } from "src/lib/shared/constants/constants";
   import * as Accordion from "src/lib/components/ui/accordion";
+  import PricingModule from "src/lib/components/molecules/pricing-module.svelte";
 
   export let highlightedPlanId: string = "premium";
-  export let callToAction: string = "Kom igång";
   export let currentPlanId: string = "";
-  export let center = true;
 
   type PlanFeatureRow = {
     name: string;
@@ -104,60 +103,22 @@
         <Accordion.Trigger>Hur går detta runt?</Accordion.Trigger>
         <Accordion.Content>
           Det gör det inte. Just nu är målet är att ge en så bra tjänst som
-          möjligt. Därför vill vi vi låta så många som möjligt använda
-          plattformen och sedan förbättra tjänsten.
+          möjligt. Därför vill vi låta så många som möjligt använda plattformen
+          och sedan förbättra innehåller och funktionerna.
         </Accordion.Content>
       </Accordion.Item>
     </Accordion.Root>
   </section>
 
   <section
-    class="flex flex-col gap-10 lg:flex-row {center
-      ? 'place-content-center'
-      : ''} flex-wrap"
+    class="flex flex-col-reverse flex-wrap place-content-center gap-6 md:gap-10 lg:flex-row"
   >
-    {#each subsriptionPlans as plan}
-      <div
-        class="flex-none rounded-xl border border-solid bg-card {plan.id ===
-        highlightedPlanId
-          ? 'border-primary'
-          : 'border-gray-200'} min-w-[260px] max-w-[310px] flex-1 flex-grow p-6 shadow-xl"
-      >
-        <div class="flex h-full flex-col">
-          <div class="text-xl font-bold">{plan.name}</div>
-          <p class="mt-2 text-sm leading-relaxed text-gray-500">
-            {plan.description}
-          </p>
-          <div class="mt-auto pt-4 text-sm text-gray-600">
-            Planen inkluderar:
-            <ul class="mt-2 list-inside list-disc space-y-1">
-              {#each plan.features as feature}
-                <li class="">{feature}</li>
-              {/each}
-              <ul></ul>
-            </ul>
-          </div>
-          <div class="pt-8">
-            <span class="text-4xl font-bold">{plan.price}</span>
-            <span class="text-gray-400">{plan.priceIntervalName}</span>
-            <div class="mt-6 flex flex-1 flex-row items-center pt-4">
-              {#if plan.id === currentPlanId}
-                <div
-                  class="btn btn-outline btn-success no-animation mx-auto w-[80%] cursor-default"
-                >
-                  Nuvarande plan
-                </div>
-              {:else}
-                <Button
-                  on:click={() =>
-                    goto(`/account/subscribe/${plan.stripePriceId}`)}
-                  >{callToAction}</Button
-                >
-              {/if}
-            </div>
-          </div>
-        </div>
-      </div>
+    {#each pricingPlans as pricingPlan}
+      <PricingModule
+        {currentPlanId}
+        highlighted={pricingPlan.id === highlightedPlanId}
+        {pricingPlan}
+      />
     {/each}
   </section>
 </RootContainer>

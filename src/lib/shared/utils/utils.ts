@@ -7,8 +7,7 @@ import { invalidate } from "$app/navigation";
 import type { SupabaseClient, Session } from "@supabase/supabase-js";
 import { redirect } from "@sveltejs/kit";
 import type { Database } from "lucide-svelte";
-import type { Tables } from "src/supabase";
-import type { DbProfile, Profile } from "../models/profile";
+import type { Profile } from "../models/profile";
 import { superValidate } from "sveltekit-superforms";
 import { zod } from "sveltekit-superforms/adapters";
 import {
@@ -17,6 +16,7 @@ import {
 } from "../models/conversation";
 import type { ErrorWithCode } from "../errors/error-with-code";
 import type { ErrorWithStatusCode } from "../errors/error-with-statuscode";
+import { PUBLIC_ENVIRONMENT } from "$env/static/public";
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
@@ -242,3 +242,5 @@ export const cleanQuery = (
     cleanedQuery += `${rawQuery ? " " : ""}${shouldEncode ? encodeURIComponent(commaSeparatedSubjects.trim()) : commaSeparatedSubjects.trim()}`;
   return cleanedQuery;
 };
+
+export const isProd = PUBLIC_ENVIRONMENT === "prod";

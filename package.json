@@ -70,6 +70,7 @@
     "formsnap": "^1.0.0",
     "pg": "^8.11.5",
     "postgres": "^3.4.4",
+    "stripe": "^17.5.0",
     "supabase": "^1.163.6",
     "svelecte": "^4.4.1",
     "svelte-file-dropzone": "^2.0.8",
