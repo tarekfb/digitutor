@@ -14,6 +14,7 @@
   import RootContainer from "src/lib/components/templates/root-container.svelte";
   import type { PageData } from "./$types";
   import { SendHorizontal } from "lucide-svelte";
+  import { websiteName } from "src/lib/shared/constants/constants";
 
   export let data: PageData;
 
@@ -27,6 +28,10 @@
 
   const { form: formData, enhance, delayed, message, allErrors } = contactForm;
 </script>
+
+<svelte:head>
+  <title>{websiteName} | Kontakta oss</title>
+</svelte:head> 
 
 <RootContainer responsiveGap>
   <div class="flex flex-col items-center justify-center gap-y-0.5">

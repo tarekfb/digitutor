@@ -10,6 +10,7 @@
   import * as Form from "$lib/components/ui/form";
   import Label from "$lib/components/atoms/label.svelte";
   import PasswordInput from "$lib/components/molecules/password-input.svelte";
+  import { websiteName } from "src/lib/shared/constants/constants";
 
   export let data: PageData;
 
@@ -18,6 +19,10 @@
   });
   const { form, enhance, delayed, message, allErrors } = passwordResetForm;
 </script>
+
+<svelte:head>
+  <title>{websiteName} | Uppdatera lösenord</title>
+</svelte:head> 
 
 <RootContainer responsiveGap maxWidth minWidth class="self-center">
   <div class="flex flex-col items-center justify-center gap-y-0.5">

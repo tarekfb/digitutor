@@ -10,6 +10,7 @@
   import { SendHorizontal } from "lucide-svelte";
   import { Input } from "src/lib/components/ui/input";
   import type { Profile } from "src/lib/shared/models/profile";
+  import { websiteName } from "src/lib/shared/constants/constants";
 
   export let data: PageData;
   $: ({ profile: self, conversation, supabase, session } = data);
@@ -61,6 +62,10 @@
     sendMessageForm.reset();
   };
 </script>
+
+<svelte:head>
+  <title>{websiteName} | Konversation</title>
+</svelte:head> 
 
 <div
   class="mx-8 my-8 flex flex-col justify-end flex-1 md:self-center md:w-full md:max-w-xl lg:max-w-2xl"

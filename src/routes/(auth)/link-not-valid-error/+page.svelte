@@ -3,10 +3,11 @@
   import Link from "$lib/components/atoms/link.svelte";
   import RootContainer from "src/lib/components/templates/root-container.svelte";
   import { TriangleAlert } from "lucide-svelte";
+  import { websiteName } from "src/lib/shared/constants/constants";
 </script>
 
 <svelte:head>
-  <title>Current Password Incorrect</title>
+  <title>{websiteName} | Ogiltig länk</title>
 </svelte:head>
 
 <RootContainer minWidth maxWidth class="items-start gap-y-4 md:gap-y-6">

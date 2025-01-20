@@ -10,7 +10,7 @@
 </script>
 
 <svelte:head>
-  <title>{websiteName} | E-post verifiering</title>
+  <title>{websiteName} | E-post verifierad</title>
   <meta name="description" content="{websiteName} email confirmation" />
 </svelte:head>
 

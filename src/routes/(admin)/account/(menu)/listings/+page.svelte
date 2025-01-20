@@ -12,6 +12,7 @@
   import { zodClient } from "sveltekit-superforms/adapters";
   import RootContainer from "src/lib/components/templates/root-container.svelte";
   import AccountLayout from "src/lib/components/templates/account-layout.svelte";
+  import { websiteName } from "src/lib/shared/constants/constants";
 
   export let data: PageData;
   $: ({ listings } = data);
@@ -26,6 +27,10 @@
     validators: zodClient(initCreateListingSchema),
   });
 </script>
+
+<svelte:head>
+  <title>{websiteName} | Annonser</title>
+</svelte:head> 
 
 <AccountLayout>
   <PrimaryTitle class="text-center">Dina annonser</PrimaryTitle>

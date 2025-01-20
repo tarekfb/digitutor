@@ -32,7 +32,7 @@
     GraduationCap,
     Brain,
   } from "lucide-svelte";
-  import { Button } from "src/lib/components/ui/button";
+  import { websiteName } from "src/lib/shared/constants/constants";
 
   export let data: PageData;
   $: ({ profile, uploadAvatarForm, deleteAvatarForm } = data);
@@ -74,8 +74,9 @@
 </script>
 
 <svelte:head>
-  <title>Settings</title>
+  <title>{websiteName} | Inställningar</title>
 </svelte:head>
+
 <AccountLayout>
   <PrimaryTitle class="text-center">Inställningar</PrimaryTitle>
   <RootContainer class="my-6 w-full">
