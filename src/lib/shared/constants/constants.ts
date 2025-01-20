@@ -1,4 +1,5 @@
 import type { Message } from "$lib/shared/models/common";
+import { SubscriptionPlanIds, type SubscriptionPlan } from "../models/subscription";
 
 export const websiteName = "Digitutor";
 export const localBaseUrl = "http://localhost:5173";
@@ -89,3 +90,31 @@ export const getFormatsHumanReadable = () => {
 
   return acceptedFormatsHumanReadable;
 };
+
+export const defaultPlanId = "free";
+
+export const subsriptionPlans: SubscriptionPlan[] = [
+  {
+    id: SubscriptionPlanIds.Free,
+    name: "Gratis",
+    description: "En gratisplan. Inget betalkort behövs!",
+    price: "0 SEK",
+    priceIntervalName: "per månad",
+    stripePriceId: "free_plan",
+    features: ["Oändligt med förfrågningar", "Tillgång till alla lärare", "Max en konversation"],
+  },
+  {
+    id: SubscriptionPlanIds.Premium,
+    name: "Premium",
+    description:
+      "En plan för dig som tar lärandet på allvar. Perfekt f ör att välja den bästa läraren. Testa planen gratis med betalkortet: 4242424242424242.",
+    price: "95 SEK",
+    priceIntervalName: "per månad",
+    stripePriceId: "price_1NkdZCHMjzZ8mGZnRSjUm4yA",
+    stripeProductId: "prod_OXj1CcemGMWOlU",
+    features: [
+      "Allt i gratisplanen",
+      "Oändligt med konversationer",
+    ],
+  },
+];
