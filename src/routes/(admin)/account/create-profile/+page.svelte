@@ -8,7 +8,6 @@
   import { nameSchema } from "$lib/shared/models/profile.js";
   import { Input } from "$lib/components/ui/input";
   import LoadingSpinner from "$lib/components/atoms/loading-spinner.svelte";
-  import { websiteName } from "$lib/shared/constants/constants";
   import { websiteName } from "src/lib/shared/constants/constants";
 
   export let data;
