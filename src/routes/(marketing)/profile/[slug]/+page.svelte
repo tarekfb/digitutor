@@ -48,10 +48,10 @@
 </script>
 
 <svelte:head>
-  <title>  import { websiteName } from "src/lib/shared/constants/constants";
-    {teacher.firstName} | Profil</title>
-</svelte:head> 
-
+  <title>
+    {websiteName} | {teacher.firstName}</title
+  >
+</svelte:head>
 
 {#if !$isDesktop}
   <RootContainer class="m-0 w-full">

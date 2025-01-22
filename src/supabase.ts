@@ -431,7 +431,14 @@ export type Database = {
       }
     }
     Views: {
-      [_ in never]: never
+      all_conversations: {
+        Row: {
+          id: string | null
+          student: string | null
+          teacher: string | null
+        }
+        Relationships: []
+      }
     }
     Functions: {
       compound_search: {

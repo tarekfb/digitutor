@@ -4,6 +4,7 @@ import type { DbConversationWithReferences } from "$lib/shared/models/conversati
 import { getNow } from "src/lib/shared/utils/utils";
 import { sendMessage } from "./messages";
 import { ResourceAlreadyExistsError } from "src/lib/shared/errors/resource-already-exists-error";
+import { getConversationRequestForStudentAndTeacher } from "./conversation-requests";
 
 export const getConversation = async (
   supabase: SupabaseClient<Database>,
@@ -72,63 +73,33 @@ export const startConversation = async (
   firstMessage: string,
   session: Session,
 ): Promise<DbConversationWithReferences> => {
-  const { data, error } = await supabase
-    .from("conversations")
-    .select(
-      `
-                  *,
-                  teacher (
-                    *
-                  ),
-                  student (
-                    *
-                  )
-                `,
-    )
-    .eq("student", student)
-    .eq("teacher", teacher)
-    .limit(1);
+  const hasRequest = await getConversationRequestForStudentAndTeacher(supabase, student, teacher);
+  if (!hasRequest) throw new Error("Unable to find existing conversation request");
+  const newConversation = await createConversation(supabase, teacher);
+  await sendMessage(
+    supabase,
+    { content: firstMessage, conversation: newConversation.id },
+    session,
+  ); // does this need to be awaited? todo: remove if not needed
+  return newConversation as unknown as DbConversationWithReferences;
 
-  if (error) {
-    console.error(
-      `Failed to get conversation for studentid ${student} and teacherid ${teacher}`,
-      { error },
-    );
-    throw error;
-  }
 
-  if (!data) {
-    console.error(
-      `Failed to get conversation for studentid ${student} and teacherid ${teacher}`,
-      { data, error },
-    );
-    throw new Error("Unexpected null response");
-  }
+  // if (data.length === 1) {
+  //   console.error(
+  //     "User tried to create new conversation through a bug, if this happens frequently consider implementing the update event on start convo form.",
+  //     { teacher, student },
+  //   );
+  //   throw new ResourceAlreadyExistsError(409, data[0].id.toString());
+  // }
 
-  if (data.length === 0) {
-    // no existing convo, create new
-    const newConversation = await createConversation(supabase, teacher);
-    await sendMessage(
-      supabase,
-      { content: firstMessage, conversation: newConversation.id },
-      session,
-    ); // does this need to be awaited? todo: remove if not needed
-    return newConversation as unknown as DbConversationWithReferences;
-  }
+  // console.error("Unexpected error occured, invalid code path reached", {
+  //   data,
+  //   error,
+  // });
+  // throw new Error("Unexpected error occured");
 
-  if (data.length === 1) {
-    console.error(
-      "User tried to create new conversation through a bug, if this happens frequently consider implementing the update event on start convo form.",
-      { teacher, student },
-    );
-    throw new ResourceAlreadyExistsError(409, data[0].id.toString());
-  }
 
-  console.error("Unexpected error occured, invalid code path reached", {
-    data,
-    error,
-  });
-  throw new Error("Unexpected error occured");
+  /// REWORK THIS. RETURN EXECPTED AND ACTUAL NOT CORRECT
 };
 
 export const getConversations = async (

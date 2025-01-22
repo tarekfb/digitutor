@@ -37,20 +37,6 @@ export type RequestMessage = {
   conversationRequest: string;
 };
 
-export const formatRequestMessage = ({
-  id,
-  sender,
-  content,
-  created_at,
-  conversation_request,
-}: Tables<"request_messages">): RequestMessage => ({
-  id,
-  sender,
-  content,
-  createdAt: created_at,
-  conversationRequest: conversation_request,
-});
-
 export const sendRequestMessageSchema = z.object({
   content: z
     .string()

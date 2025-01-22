@@ -14,7 +14,7 @@
   const { form: formData, enhance, delayed, allErrors, message } = form;
 
   const suggestions = [
-    "Online eller fysiskt?",
+    "Online eller fysiskt (isåfall även plats)?",
     "Vilket språk eller teknologi du vill ha hjälp med?",
     "Hur mycket erfarenhet har du redan?",
     "För vilket ändamål (tenta, hobby, inlämning, o.s.v.)",

@@ -10,7 +10,6 @@ import { fail, message, superValidate } from "sveltekit-superforms";
 import {
   requestContactSchema,
   startContactSchema,
-  type DbConversationWithReferences,
 } from "$lib/shared/models/conversation";
 import {
   addReviewSchema,
@@ -41,6 +40,8 @@ import type { Profile } from "src/lib/shared/models/profile.js";
 import { formatProfile } from "src/lib/shared/utils/profile/utils.js";
 import { formatListingWithProfile } from "src/lib/shared/utils/listing/utils.js";
 import { formatReviewWithReferences } from "src/lib/shared/utils/reviews/utils";
+import type { DbConversationRequestWithReferences } from "src/lib/shared/models/conversation-request";
+import { createConversationRequest, getConversationRequestForStudentAndTeacher, getStudentTeacherInteraction } from "src/lib/server/database/conversation-requests";
 
 export const load = async ({
   locals: { supabase, safeGetSession },
@@ -161,7 +162,7 @@ export const load = async ({
         } catch (error) {
           console.error(
             `Error when adding review for profile slug ${slug}, unable to read conversation for teacher & student` +
-              slug,
+            slug,
             error,
           );
           allowCreateReview = true;
@@ -205,7 +206,7 @@ export const actions = {
     } = event;
     const { session } = await safeGetSession();
     if (!session)
-      throw redirect(
+      redirect(
         303,
         "/sign-up",
         {
@@ -222,7 +223,7 @@ export const actions = {
       console.error(
         "Error when submitting request contact. Data that user does not submit manually is invalid: role",
       ); // user hasnt entered data theirselves, therefore send error message
-      throw redirect(
+      redirect(
         303,
         "/sign-up",
         {
@@ -264,24 +265,24 @@ export const actions = {
       return message(form, getFailFormMessage(), { status: 500 });
     }
 
-    let conversation: DbConversationWithReferences | null = null;
+    let interactionId: string | null = null;
     try {
-      conversation = await getConversationForStudentAndTeacher(
+      interactionId = await getStudentTeacherInteraction(
         supabase,
         session.user.id,
         slug,
       );
     } catch (error) {
       console.error(
-        `unable to read conversation for teacher: ${slug} & student: ${session.user.id}, allowing student to contact` +
-          slug,
+        `unable to get interaction for teacher: ${slug} & student: ${session.user.id}, allowing student to contact` +
+        slug,
         error,
       );
     }
-    if (conversation)
+    if (interactionId)
       redirect(
         303,
-        `/account/conversation/${conversation.id}`,
+        `/account/conversation/${interactionId}`,
         { message: "Du har redan kontaktat läraren.", type: "info" },
         event,
       );
@@ -296,7 +297,7 @@ export const actions = {
     } = event;
     const { session } = await safeGetSession();
     if (!session)
-      throw redirect(
+      redirect(
         303,
         "/sign-up",
         {
@@ -324,7 +325,7 @@ export const actions = {
       console.error(
         "Error when submitting request contact. Data that user does not submit manually is invalid: role",
       ); // user hasnt entered data theirselves, therefore send error message
-      throw redirect(
+      redirect(
         303,
         "/sign-up",
         {
@@ -368,17 +369,15 @@ export const actions = {
 
     let conversationId: string;
     try {
-      const { id } = await startConversation(
+      const { id } = await createConversationRequest(
         supabase,
         slug,
-        session.user.id,
         firstMessage,
-        session,
       );
       conversationId = id;
     } catch (error) {
       if (error instanceof ResourceAlreadyExistsError) {
-        throw redirect(
+        redirect(
           303,
           `/account/conversation/${error.message}`,
           { message: "Du har redan kontaktat läraren.", type: "info" },
@@ -392,7 +391,7 @@ export const actions = {
       );
       return message(form, getFailFormMessage(), { status: 500 });
     }
-    throw redirect(303, `/account/conversation/${conversationId}`);
+    redirect(303, `/account/request/${conversationId}`);
   },
   addReview: async (event) => {
     const {
@@ -402,7 +401,7 @@ export const actions = {
     } = event;
     const { session } = await safeGetSession();
     if (!session)
-      throw redirect(
+      redirect(
         303,
         "/sign-up",
         {
@@ -438,7 +437,7 @@ export const actions = {
     } catch (error) {
       console.error(
         `Error when adding review for profile slug ${slug}, unable to read conversation for teacher & student. Proceeding` +
-          slug,
+        slug,
         error,
       );
     }
@@ -454,7 +453,7 @@ export const actions = {
     } catch (error) {
       console.error(
         "Error when checking if user has already made a review for profile slug: " +
-          slug,
+        slug,
         error,
       );
     }

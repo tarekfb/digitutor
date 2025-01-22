@@ -10,12 +10,13 @@
   import { Skeleton } from "$lib/components/ui/skeleton/index.js";
   import { defaultErrorDescription } from "$lib/shared/constants/constants";
   import type { Profile } from "src/lib/shared/models/profile";
+  import type { RequestMessage } from "src/lib/shared/models/conversation-request";
 
-  export let chatStore: WritableLoadable<Message[]>;
+  export let chatStore: WritableLoadable<Message[] | RequestMessage[]>;
   export let self: Profile;
   export let other: Profile;
 
-  const scroll = (element: HTMLElement, messages: Message[]) => {
+  const scroll = (element: HTMLElement, messages: Message[] | RequestMessage[]) => {
     // messages is not needed, just to provide reactivity dependancy
     setTimeout(
       () => element.scrollIntoView({ behavior: "smooth", block: "end" }),

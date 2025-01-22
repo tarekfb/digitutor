@@ -14,8 +14,8 @@ supabase gen types typescript --local > src/supabase.ts
     * to test locally, run supabase db reset
     
 #### Manually create migration file
-* supabase migration new <insert-name-here>
-* paste SQL into new .sql file
+supabase migration new <insert-name-here>
+paste SQL into new .sql file
 
 #### Auto diff migration file
 supabase db diff -f insert_name_of_migration 

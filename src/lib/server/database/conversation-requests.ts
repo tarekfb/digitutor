@@ -1,7 +1,8 @@
-import type {  SupabaseClient } from "@supabase/supabase-js";
+import type { SupabaseClient } from "@supabase/supabase-js";
 import type { Database, Tables } from "src/supabase";
 import { getNow } from "src/lib/shared/utils/utils";
-import type { DbConversationRequestWithReferences } from "src/lib/shared/models/conversation-request";
+import type { DbConversationRequestBase, DbConversationRequestWithReferences } from "src/lib/shared/models/conversation-request";
+import { sendRequestMessage } from "./request-messages";
 
 export const getConversationRequest = async (
   supabase: SupabaseClient<Database>,
@@ -35,6 +36,24 @@ export const getConversationRequest = async (
   }
 
   return data as unknown as DbConversationRequestWithReferences;
+};
+
+export const getStudentTeacherInteraction = async (
+  supabase: SupabaseClient<Database>,
+  student: string,
+  teacher: string,
+): Promise<string | null> => {
+  const { data, error } = await supabase
+    .from("all_conversatons")
+    .select(
+      `id`,
+    )
+    .eq("student", student)
+    .eq("teacher", teacher)
+    .limit(1)
+    .single();
+
+  return error ? null : (data as unknown as string); // error means no existing convo, return null
 };
 
 export const getConversationRequestForStudentAndTeacher = async (
@@ -101,17 +120,18 @@ export const getConversationRequests = async (
 export const createConversationRequest = async (
   supabase: SupabaseClient<Database>,
   teacher: string,
-): Promise<Tables<"conversation_requests">> => {
-  const session = await supabase.auth.getSession();
+  firstMessage: string,
+): Promise<DbConversationRequestBase> => {
+  const { data: { session } } = await supabase.auth.getSession();
 
-  if (!session.data.session) {
+  if (!session) {
     console.error("Missing session when creating conversation");
     throw new Error("No session");
   }
 
-  const student = session.data.session.user.id;
+  const student = session.user.id;
 
-  const dbConversationRequest: Tables<"conversation_requests"> = {
+  const dbConversationRequest: DbConversationRequestBase = {
     id: crypto.randomUUID(),
     teacher,
     student: student,
@@ -128,9 +148,15 @@ export const createConversationRequest = async (
     .single();
 
   if (error) {
-    console.error("Failed to create conversation: ", { error });
+    console.error("Failed to create conversation request: ", { error });
     throw error;
   }
 
-  return data;
+  await sendRequestMessage(
+    supabase,
+    { content: firstMessage, conversation: data.id },
+    session,
+  ); // does this need to be awaited? todo: remove if not needed
+  
+  return data as unknown as DbConversationRequestBase;
 };
