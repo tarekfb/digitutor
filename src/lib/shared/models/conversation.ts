@@ -38,20 +38,6 @@ export type Message = {
   conversation: string;
 };
 
-export const formatMessage = ({
-  id,
-  sender,
-  content,
-  created_at,
-  conversation,
-}: Tables<"messages">): Message => ({
-  id,
-  sender,
-  content,
-  createdAt: created_at,
-  conversation,
-});
-
 export const sendMessageSchema = z.object({
   content: z
     .string()
