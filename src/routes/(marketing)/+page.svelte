@@ -2,9 +2,6 @@
   import Autoplay from "embla-carousel-autoplay";
   import { websiteName } from "$lib/shared/constants/constants";
   import type { PageData } from "./$types";
-  import { superForm } from "sveltekit-superforms";
-  import { zodClient } from "sveltekit-superforms/adapters";
-  import { searchSchema } from "src/lib/shared/models/search";
   import ProfileCarousel from "src/lib/components/organisms/profile-carousel.svelte";
   import ReviewCardExtra from "src/lib/components/molecules/review-card-extra.svelte";
   import { Button } from "src/lib/components/ui/button";
@@ -30,7 +27,7 @@
     <div
       class="mb-4 flex flex-col items-center gap-y-2 text-center text-background"
     >
-      <div class="px-2 text-3xl font-semibold md:text-6xl heading">
+      <div class="heading px-2 text-3xl font-semibold md:text-6xl">
         Vill du öva på din
         <div>
           <Carousel.Root
@@ -56,9 +53,9 @@
           </Carousel.Root>
         </div>
       </div>
-      <div class="md:mt-6 mt-4">
+      <div class="mt-4 md:mt-6">
         <h2
-          class="px-2 text-xl flex items-center gap-x-2 font-semibold md:text-3xl heading"
+          class="heading flex items-center gap-x-2 px-2 text-xl font-semibold md:text-3xl"
         >
           <Search class="size-4 md:size-6" /> Sök bland våra lärare
         </h2>
@@ -72,7 +69,7 @@
     </div>
     <h3>
       <span
-        class="text-background flex mt-2 md:mt-4 items-center justify-center gap-y-2 py-2 text-xl md:text-3xl"
+        class="mt-2 flex items-center justify-center gap-y-2 py-2 text-xl text-background md:mt-4 md:text-3xl"
       >
         Eller
         <Button
