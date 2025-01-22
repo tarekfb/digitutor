@@ -7,11 +7,10 @@ import type {
 import type { Database, Tables } from "src/supabase";
 import { initMessagesCount } from "$lib/shared/constants/constants";
 import {
-  formatMessage,
-  type InputMessage,
   type Message,
 } from "src/lib/shared/models/conversation";
 import { getNow } from "src/lib/shared/utils/utils";
+import { formatMessage } from "src/lib/shared/utils/message/utils";
 
 export const getMessages = async (
   supabase: SupabaseClient<Database>,
