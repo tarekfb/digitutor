@@ -4,14 +4,16 @@
   import Link from "$lib/components/atoms/link.svelte";
   import RootContainer from "src/lib/components/templates/root-container.svelte";
   import AccountLayout from "src/lib/components/templates/account-layout.svelte";
+  import { websiteName } from "src/lib/shared/constants/constants.js";
 
   export let data;
   $: ({ conversations, profile } = data);
 </script>
 
 <svelte:head>
-  <title>Konto</title>
+  <title>{websiteName} | Konto</title>
 </svelte:head>
+
 <AccountLayout>
   <PrimaryTitle class="text-center">Dina konversationer</PrimaryTitle>
   <RootContainer class="my-6 w-full text-center">

@@ -22,6 +22,7 @@
   import FormSubmit from "src/lib/components/molecules/form-submit.svelte";
   import SuggestSubject from "src/lib/components/molecules/suggest-subject.svelte";
   import AccountLayout from "src/lib/components/templates/account-layout.svelte";
+  import { websiteName } from "src/lib/shared/constants/constants";
 
   export let data: PageData;
   $: ({ subjects, profile } = data);
@@ -51,6 +52,10 @@
 
   const labelStyling = "text-xl md:text-2xl";
 </script>
+
+<svelte:head>
+  <title>{websiteName} | Redigera annons</title>
+</svelte:head> 
 
 <AccountLayout>
   <PrimaryTitle class="text-center">Redigera annons</PrimaryTitle>

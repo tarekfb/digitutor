@@ -47,7 +47,7 @@
     <ErrorNav text="Tillbaka till startsidan" href="/">
       <Home class={iconStyling} />
     </ErrorNav>
-    <ErrorNav text="Gå till din profil" href="/account">
+    <ErrorNav text="Gå till ditt konto" href="/account">
       <UserRound class={iconStyling} />
     </ErrorNav>
     <ErrorNav text="Kontakta oss" href="/contact-us">

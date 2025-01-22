@@ -1,9 +1,11 @@
 import type { Message } from "$lib/shared/models/common";
+import { StripePriceId, PricingPlanIds, type PricingPlan, StripeProductId } from "../models/subscription";
+import { isProd } from "$lib/shared/utils/utils";
 
 export const websiteName = "Digitutor";
 export const localBaseUrl = "http://localhost:5173";
-export const testBaseUrl = "https://dev.mindic.pages.dev";
-export const prodBaseUrl = "https://mindic.pro";
+export const testBaseUrl = `https://dev.mindic.pages.dev`;
+export const prodBaseUrl = `https://mindic.pro`;
 
 export const defaultErrorDescription =
   "Något gick fel. Du kan kontakta oss om detta fortsätter.";
@@ -89,3 +91,33 @@ export const getFormatsHumanReadable = () => {
 
   return acceptedFormatsHumanReadable;
 };
+
+export const defaultPlanId = PricingPlanIds.Free;
+
+export const pricingPlans: PricingPlan[] = [
+  {
+    id: PricingPlanIds.Free,
+    name: "Gratis",
+    description: "En gratisplan. Inget betalkort behövs!",
+    price: "0 SEK",
+    priceIntervalName: "per månad",
+    stripePriceId: StripePriceId.Free,
+    features: ["Oändligt med förfrågningar", "Tillgång till alla lärare", "Max en konversation"],
+  },
+  {
+    id: PricingPlanIds.Premium,
+    name: "Premium",
+    description:
+      "En plan för dig som tar lärandet på allvar. Perfekt för att hitta den bästa läraren. Testa planen gratis med betalkortet: 4242424242424242.",
+    price: "95 SEK",
+    priceIntervalName: "per månad",
+    stripePriceId: StripePriceId.PremiumTest,
+    // stripePriceId: isProd ? StripePriceId.PremiumProd : StripePriceId.PremiumTest,  // todo: reactive when live
+    stripeProductId: StripeProductId.PremiumTest,
+    // stripeProductId:  isProd ? StripeProductId.PremiumProd : StripeProductId.PremiumTest, // todo: reactive when live
+    features: [
+      "Allt i gratisplanen",
+      "Oändligt med konversationer",
+    ],
+  },
+];

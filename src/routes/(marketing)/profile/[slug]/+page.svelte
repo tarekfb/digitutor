@@ -15,6 +15,7 @@
   import { page } from "$app/stores";
   import type { Session } from "@supabase/supabase-js";
   import type { Profile } from "src/lib/shared/models/profile";
+  import { websiteName } from "src/lib/shared/constants/constants";
 
   export let data: PageData;
   $: ({
@@ -45,6 +46,12 @@
     return session?.user.id === teacher.id;
   };
 </script>
+
+<svelte:head>
+  <title>  import { websiteName } from "src/lib/shared/constants/constants";
+    {teacher.firstName} | Profil</title>
+</svelte:head> 
+
 
 {#if !$isDesktop}
   <RootContainer class="m-0 w-full">

@@ -22,6 +22,7 @@
   import Button from "src/lib/components/ui/button/button.svelte";
   import { languages } from "src/lib/shared/models/common";
   import { page } from "$app/stores";
+  import { websiteName } from "src/lib/shared/constants/constants";
 
   const isDesktop = mediaQuery("(min-width: 768px)");
 
@@ -75,6 +76,11 @@
       })
     : (tempBugFixForUndefined ?? []);
 </script>
+
+<svelte:head>
+  <title>  import { websiteName } from "src/lib/shared/constants/constants";
+    Sök bland lärare</title>
+</svelte:head> 
 
 <div class="flex min-h-44 w-full justify-center bg-secondary p-8">
   <div class="flex w-full max-w-screen-sm flex-col gap-y-4">

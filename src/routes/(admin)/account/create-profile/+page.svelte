@@ -8,7 +8,7 @@
   import { nameSchema } from "$lib/shared/models/profile.js";
   import { Input } from "$lib/components/ui/input";
   import LoadingSpinner from "$lib/components/atoms/loading-spinner.svelte";
-  import { websiteName } from "$lib/shared/constants/constants";
+  import { websiteName } from "src/lib/shared/constants/constants";
 
   export let data;
   $: ({ form } = data);
@@ -30,8 +30,9 @@
 </script>
 
 <svelte:head>
-  <title>Skapa profil</title>
+  <title>{websiteName} | Skapa profil</title>
 </svelte:head>
+
 <div
   class="flex max-w-lg flex-col items-center justify-center gap-y-4 py-12 text-center"
 >

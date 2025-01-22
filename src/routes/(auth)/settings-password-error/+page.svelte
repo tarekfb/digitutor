@@ -1,10 +1,11 @@
 <script lang="ts">
   import PrimaryTitle from "$lib/components/atoms/primary-title.svelte";
   import Link from "$lib/components/atoms/link.svelte";
+  import { websiteName } from "src/lib/shared/constants/constants";
 </script>
 
 <svelte:head>
-  <title>Current Password Incorrect</title>
+  <title>{websiteName} | Inkorrekt lösenord</title>
 </svelte:head>
 
 <div
