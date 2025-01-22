@@ -280,21 +280,21 @@ export type Database = {
           content: string
           conversation_request: string
           created_at: string
-          id: number
+          id: string
           sender: string
         }
         Insert: {
           content: string
           conversation_request: string
           created_at?: string
-          id?: number
+          id: string
           sender: string
         }
         Update: {
           content?: string
           conversation_request?: string
           created_at?: string
-          id?: number
+          id?: string
           sender?: string
         }
         Relationships: [
