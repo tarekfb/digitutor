@@ -64,6 +64,51 @@ export type Database = {
         }
         Relationships: []
       }
+      conversation_requests: {
+        Row: {
+          created_at: string
+          id: string
+          messages: string[]
+          status: "PENDING" | "SUCCESS" | "ERROR"
+          student: string
+          teacher: string
+          updated_at: string | null
+        }
+        Insert: {
+          created_at?: string
+          id: string
+          messages: string[]
+          status: "PENDING" | "SUCCESS" | "ERROR"
+          student: string
+          teacher: string
+          updated_at?: string | null
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          messages?: string[]
+          status?: "PENDING" | "SUCCESS" | "ERROR"
+          student?: string
+          teacher?: string
+          updated_at?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "public_conversation_requests_student_id_fkey"
+            columns: ["student"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "public_conversation_requests_teacher_id_fkey"
+            columns: ["teacher"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       conversations: {
         Row: {
           created_at: string
@@ -230,6 +275,38 @@ export type Database = {
           },
         ]
       }
+      request_messages: {
+        Row: {
+          content: string
+          conversation_request: string
+          created_at: string
+          id: number
+          sender: string
+        }
+        Insert: {
+          content: string
+          conversation_request: string
+          created_at?: string
+          id?: number
+          sender: string
+        }
+        Update: {
+          content?: string
+          conversation_request?: string
+          created_at?: string
+          id?: number
+          sender?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "public_request_messages_conversation_request_fkey"
+            columns: ["conversation_request"]
+            isOneToOne: false
+            referencedRelation: "conversation_requests"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       reviews: {
         Row: {
           created_at: string
@@ -379,6 +456,7 @@ export type Database = {
       }
     }
     Enums: {
+      request_status: "accepted" | "rejected" | "pending" | "invalid"
       role: "student" | "teacher" | "admin"
     }
     CompositeTypes: {
