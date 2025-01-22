@@ -1,6 +1,6 @@
-alter table "public"."request_messages" drop constraint "request_messages_pkey";
+alter table "public"."conversation_requests" drop column "messages";
 
-drop index if exists "public"."request_messages_pkey";
+alter table "public"."request_messages" alter column "id" set default gen_random_uuid();
 
 alter table "public"."request_messages" alter column "id" drop identity;
 

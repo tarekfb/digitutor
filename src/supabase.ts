@@ -68,7 +68,6 @@ export type Database = {
         Row: {
           created_at: string
           id: string
-          messages: string[]
           status: "PENDING" | "SUCCESS" | "ERROR"
           student: string
           teacher: string
@@ -77,7 +76,6 @@ export type Database = {
         Insert: {
           created_at?: string
           id: string
-          messages: string[]
           status: "PENDING" | "SUCCESS" | "ERROR"
           student: string
           teacher: string
@@ -86,7 +84,6 @@ export type Database = {
         Update: {
           created_at?: string
           id?: string
-          messages?: string[]
           status?: "PENDING" | "SUCCESS" | "ERROR"
           student?: string
           teacher?: string
