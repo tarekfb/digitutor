@@ -14,6 +14,7 @@ const onError = init(
     //   },
     //   enableInDevMode: boolean (default: false)
     }
+    }
 )
 
 export const handleError = onError((e, sentryEventId) => {
