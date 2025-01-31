@@ -58,6 +58,7 @@
   },
   "type": "module",
   "dependencies": {
+    "@jill64/sentry-sveltekit-cloudflare": "^2.0.6",
     "@square/svelte-store": "^0.2.1",
     "@supabase/auth-ui-svelte": "^0.2.2",
     "@supabase/ssr": "^0.3.0",
