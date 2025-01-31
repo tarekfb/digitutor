@@ -1,6 +1,5 @@
 <script lang="ts">
   import PrimaryTitle from "src/lib/components/atoms/primary-title.svelte";
-  import SecondaryTitle from "src/lib/components/atoms/secondary-title.svelte";
   import { websiteName, prodBaseUrl } from "src/lib/shared/constants/constants";
   import RootContainer from "src/lib/components/templates/root-container.svelte";
 </script>
@@ -10,7 +9,6 @@
 </svelte:head>
 <RootContainer maxWidth responsiveGap class="items-start">
   <PrimaryTitle class="self-center">Integritetspolicy</PrimaryTitle>
-  <!-- <SecondaryTitle>Not implemented</SecondaryTitle> -->
   <p>
     {websiteName} är personuppgiftsansvarig för behandlingen av personuppgifter som
     beskrivs i denna integritetspolicy. I denna integritetspolicy förklarar vi vilken
@@ -42,21 +40,32 @@
     Personuppgifterna samlas vanligtvis in direkt från dig eller genereras i
     samband med att du använder våra tjänster och produkter. När vi hämtar
     personuppgifter från andra källor, hämtar vi personuppgifter från följande
-    källor: Hur vi använder personuppgifter Leverans av tjänst/avtal Vi använder
-    dina personuppgifter för att uppfylla våra avtal med dig, det vill säga när
-    du har beställt en produkt eller tjänst från oss. Det rättsliga grunden för
-    att behandla personuppgifter för detta ändamål är att behandlingen är
-    nödvändig för att uppfylla ett avtal med dig. Hantering av kundrelationer Vi
-    använder dina personuppgifter för att hantera vår kundrelation med dig. Det
-    kan till exempel handla om kundtjänst, hantering av klagomål och felsökning
-    gällande ditt konto. Den rättsliga grunden för att behandla personuppgifter
-    för detta ändamål är att behandlingen är nödvändig för att uppfylla ett
-    avtal med dig. Analys, affärsutveckling och förbättring av tjänster Vi
-    arbetar kontinuerligt med att utveckla och förbättra våra tjänster och
+    källor:
+  </p>
+  <h2>Hur vi använder personuppgifter</h2>
+  <h3>Leverans av tjänst/avtal</h3>
+  <p>
+    Vi använder dina personuppgifter för att uppfylla våra avtal med dig, det
+    vill säga när du har beställt en produkt eller tjänst från oss. Det
+    rättsliga grunden för att behandla personuppgifter för detta ändamål är att
+    behandlingen är nödvändig för att uppfylla ett avtal med dig.
+  </p>
+
+  <h3>Hantering av kundrelationer</h3>
+  <p>
+    Vi använder dina personuppgifter för att hantera vår kundrelation med dig.
+    Det kan till exempel handla om kundtjänst, hantering av klagomål och
+    felsökning gällande ditt konto. Den rättsliga grunden för att behandla
+    personuppgifter för detta ändamål är att behandlingen är nödvändig för att
+    uppfylla ett avtal med dig.
+  </p>
+  <h3>Analys, affärsutveckling och förbättring av tjänster</h3>
+  <p>
+    Vi arbetar kontinuerligt med att utveckla och förbättra våra tjänster och
     produkter. En stor del av detta arbete innebär att analysera olika former av
     personuppgifter, till exempel kundaktivitet, kundhistorik och konto- och
     profilinformation. Den rättsliga grunden för att behandla personuppgifter
-    för detta ändamål är vårt berättigade intresse. Anpassad användarupplevelse
+    för detta ändamål är vårt berättigade intresse. </p><h3>Anpassad användarupplevelse</h3><p>
     Vi anpassar användarupplevelsen och kommunikationen till din kundrelation
     och vi använder personuppgifter för detta ändamål. Den rättsliga grunden för
     att behandla personuppgifter för detta ändamål är vårt berättigade intresse.
