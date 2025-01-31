@@ -8,7 +8,7 @@ import {
 import { createClient } from "@supabase/supabase-js";
 import { PRIVATE_SUPABASE_SERVICE_ROLE } from "$env/static/private";
 import { init } from '@jill64/sentry-sveltekit-cloudflare/server'
-import * as Sentry from "@sentry/node";
+import * as Sentry from "@sentry/sveltekit";
 
 const supabase: Handle = async ({ event, resolve }) => {
   /**
