@@ -1,6 +1,5 @@
 import type { Message } from "$lib/shared/models/common";
 import { StripePriceId, PricingPlanIds, type PricingPlan, StripeProductId } from "../models/subscription";
-import { isProd } from "$lib/shared/utils/utils";
 
 export const websiteName = "Digitutor";
 export const localBaseUrl = "http://localhost:5173";

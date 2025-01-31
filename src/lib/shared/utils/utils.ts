@@ -242,5 +242,3 @@ export const cleanQuery = (
     cleanedQuery += `${rawQuery ? " " : ""}${shouldEncode ? encodeURIComponent(commaSeparatedSubjects.trim()) : commaSeparatedSubjects.trim()}`;
   return cleanedQuery;
 };
-
-export const isProd = PUBLIC_ENVIRONMENT === "prod";
