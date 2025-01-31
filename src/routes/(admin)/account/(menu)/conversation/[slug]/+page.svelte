@@ -47,7 +47,7 @@
 
     if (!isAllowedToReply) {
       return toast.info(
-        `När du fått svar från ${recipient.firstName} kan du skicka fler meddelanden`,
+        `När du fått svar från ${recipient.firstName} kan du skicka fler meddelanden.`,
       );
     }
     const message = $form.content;

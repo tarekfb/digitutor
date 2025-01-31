@@ -161,7 +161,7 @@ export const load = async ({
         } catch (error) {
           console.error(
             `Error when adding review for profile slug ${slug}, unable to read conversation for teacher & student` +
-              slug,
+            slug,
             error,
           );
           allowCreateReview = true;
@@ -237,7 +237,7 @@ export const actions = {
       return message(
         form,
         getFailFormMessage(
-          undefined,
+          "Detta går inte att göra",
           "Du kan inte kontakta dig själv.",
           undefined,
           undefined,
@@ -274,7 +274,7 @@ export const actions = {
     } catch (error) {
       console.error(
         `unable to read conversation for teacher: ${slug} & student: ${session.user.id}, allowing student to contact` +
-          slug,
+        slug,
         error,
       );
     }
@@ -438,7 +438,7 @@ export const actions = {
     } catch (error) {
       console.error(
         `Error when adding review for profile slug ${slug}, unable to read conversation for teacher & student. Proceeding` +
-          slug,
+        slug,
         error,
       );
     }
@@ -454,7 +454,7 @@ export const actions = {
     } catch (error) {
       console.error(
         "Error when checking if user has already made a review for profile slug: " +
-          slug,
+        slug,
         error,
       );
     }
