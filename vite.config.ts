@@ -9,4 +9,7 @@ export default defineConfig({
     //   /* plugin options */
     // })
   ],
+  ssr: {
+    noExternal: ['@jill64/sentry-sveltekit-cloudflare']
+  }
 });
