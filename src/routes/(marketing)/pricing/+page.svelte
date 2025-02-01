@@ -12,50 +12,6 @@
 
   export let highlightedPlanId: string = "premium";
   export let currentPlanId: string = "";
-
-  type PlanFeatureRow = {
-    name: string;
-    freeIncluded?: boolean;
-    proIncluded?: boolean;
-    freeString?: string;
-    proString?: string;
-    header?: boolean;
-  };
-  const planFeatures: PlanFeatureRow[] = [
-    {
-      name: "Section 1",
-      header: true,
-    },
-    {
-      name: "Feature 1",
-      freeIncluded: true,
-      proIncluded: true,
-    },
-    {
-      name: "Feature 2",
-      freeIncluded: false,
-      proIncluded: true,
-    },
-    {
-      name: "Feature 3",
-      freeString: "3",
-      proString: "Unlimited",
-    },
-    {
-      name: "Section 2",
-      header: true,
-    },
-    {
-      name: "Feature 4",
-      freeIncluded: true,
-      proIncluded: true,
-    },
-    {
-      name: "Feature 5",
-      freeIncluded: false,
-      proIncluded: true,
-    },
-  ];
 </script>
 
 <svelte:head>
@@ -78,9 +34,9 @@
 
   <section class="flex w-full flex-col items-center">
     <PrimaryTitle responsiveMb>Vanliga frågor och svar</PrimaryTitle>
-    <Accordion.Root class="w-full sm:max-w-[70%]">
-      <Accordion.Item value="item-1">
-        <Accordion.Trigger
+    <Accordion.Root class="w-full sm:max-w-[70%] *:border-testing">
+      <Accordion.Item value="item-1" >
+        <Accordion.Trigger 
           >När kan jag avbryta prenumerationen?</Accordion.Trigger
         >
         <Accordion.Content
@@ -88,7 +44,7 @@
           prenumerationen.</Accordion.Content
         >
       </Accordion.Item>
-      <Accordion.Item value="item-2">
+      <Accordion.Item value="item-2" >
         <Accordion.Trigger
           >Vad innebär max en konversation, för gratisplanen?</Accordion.Trigger
         >
