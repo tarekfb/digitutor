@@ -57,7 +57,7 @@ export const sendMessageSchema = z.object({
     .string()
     .min(1, "Måste vara minst 1 karaktär.")
     .max(300, "Får inte vara mer än 300 karaktärer.")
-    .refine(m => !m.trim, "Får inte vara tomt.")
+    .refine(m => m.trim, "Får inte vara tomt.")
 
 });
 
