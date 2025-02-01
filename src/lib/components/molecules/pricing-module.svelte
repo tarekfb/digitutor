@@ -22,9 +22,8 @@
       Planen inkluderar:
       <ul class="mt-2 list-inside list-disc space-y-1">
         {#each pricingPlan.features as feature}
-          <li class="">{feature}</li>
+          <li>{feature}</li>
         {/each}
-        <ul></ul>
       </ul>
     </div>
     <div class="pt-8">
