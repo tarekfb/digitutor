@@ -51,13 +51,14 @@ export const load: PageServerLoad = async ({ locals: { supabase } }) => {
 
   const form = await superValidate(zod(signInSchema));
   const resendEmailForm = await superValidate(zod(resendSchema));
+
   return { listings, subjects, reviews: longReviews, form, resendEmailForm };
 };
 
 export const actions: Actions = {
   signIn: async (event) => {
     const {
-      locals: { supabase, session },
+      locals: { supabase, session }, url,
     } = event;
 
     if (session) redirect(303, "/account");
@@ -131,6 +132,7 @@ export const actions: Actions = {
       console.error("Error on signin supabase auth user", error);
       return message(form, getFailFormMessage(), { status: 500 });
     }
-    redirect(302, "/account");
+
+    redirect(302, url.searchParams.get("next") ?? "/account");
   },
 };

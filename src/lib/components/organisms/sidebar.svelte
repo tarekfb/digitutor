@@ -77,7 +77,7 @@
           {#if logoutLoading}
             <LoadingSpinner class="text-background" />
           {:else}
-            <LogOutIcon size="18" />
+            <LogOutIcon class={icon} />
             Logga ut
           {/if}
         </SidebarNav>

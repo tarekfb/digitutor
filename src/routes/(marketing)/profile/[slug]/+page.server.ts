@@ -161,7 +161,7 @@ export const load = async ({
         } catch (error) {
           console.error(
             `Error when adding review for profile slug ${slug}, unable to read conversation for teacher & student` +
-              slug,
+            slug,
             error,
           );
           allowCreateReview = true;
@@ -205,7 +205,7 @@ export const actions = {
     } = event;
     const { session } = await safeGetSession();
     if (!session)
-      throw redirect(
+      redirect(
         303,
         "/sign-up",
         {
@@ -222,7 +222,7 @@ export const actions = {
       console.error(
         "Error when submitting request contact. Data that user does not submit manually is invalid: role",
       ); // user hasnt entered data theirselves, therefore send error message
-      throw redirect(
+      redirect(
         303,
         "/sign-up",
         {
@@ -274,7 +274,7 @@ export const actions = {
     } catch (error) {
       console.error(
         `unable to read conversation for teacher: ${slug} & student: ${session.user.id}, allowing student to contact` +
-          slug,
+        slug,
         error,
       );
     }
@@ -438,7 +438,7 @@ export const actions = {
     } catch (error) {
       console.error(
         `Error when adding review for profile slug ${slug}, unable to read conversation for teacher & student. Proceeding` +
-          slug,
+        slug,
         error,
       );
     }
@@ -454,7 +454,7 @@ export const actions = {
     } catch (error) {
       console.error(
         "Error when checking if user has already made a review for profile slug: " +
-          slug,
+        slug,
         error,
       );
     }
