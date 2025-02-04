@@ -11,6 +11,7 @@
   import { Input } from "src/lib/components/ui/input";
   import type { Profile } from "src/lib/shared/models/profile";
   import { websiteName } from "src/lib/shared/constants/constants";
+  import { ZodError } from "zod";
 
   export let data: PageData;
   $: ({ profile: self, conversation, supabase, session } = data);
