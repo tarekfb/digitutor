@@ -1,5 +1,6 @@
 import { createServerClient } from "@supabase/ssr";
-import { redirect, type Handle } from "@sveltejs/kit";
+import { type Handle } from "@sveltejs/kit";
+import { redirect } from "sveltekit-flash-message/server";
 import { sequence } from "@sveltejs/kit/hooks";
 import {
   PUBLIC_SUPABASE_URL,
@@ -80,30 +81,30 @@ const supabase: Handle = async ({ event, resolve }) => {
 };
 
 const authGuard: Handle = async ({ event, resolve }) => {
-  const { session, user } = await event.locals.safeGetSession();
-  event.locals.session = session;
-  event.locals.user = user;
+  const { cookies, locals, url } = event;
+  const { session, user } = await locals.safeGetSession();
+  locals.session = session;
+  locals.user = user;
 
-  if (!event.locals.session && event.url.pathname.startsWith("/account"))
-    return redirect(303, "/sign-up");
+  if (!locals.session && url.pathname.startsWith("/account"))
+    redirect(303, `/sign-in?next=${url.pathname}`, { type: "info", message: `Du måste logga in först` }, cookies,);
 
   return resolve(event);
 };
 
-
 const { onHandle, onError } = init(
   'https://485a49edf664c4bad08c2ab0bf87a8eb@o4507622077169664.ingest.de.sentry.io/4507622079660112'
-   ,
+  ,
   {
     environment: PUBLIC_ENVIRONMENT
-  //   toucanOptions: {
-  //     // ... Other Sentry Config
-  //   },
-  //   handleOptions: {
-  //     handleUnknownRoutes: boolean (default: false)
-  //   },
-  //   enableInDevMode: boolean (default: false)
- }
+    //   toucanOptions: {
+    //     // ... Other Sentry Config
+    //   },
+    //   handleOptions: {
+    //     handleUnknownRoutes: boolean (default: false)
+    //   },
+    //   enableInDevMode: boolean (default: false)
+  }
 )
 
 export const handle: Handle = sequence(supabase, authGuard);
