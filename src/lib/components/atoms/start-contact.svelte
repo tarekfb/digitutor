@@ -7,6 +7,7 @@
   import { Label } from "$lib/components/ui/label/index.js";
   import { Textarea } from "../ui/textarea";
   import { isStartingContact } from "src/stores/start-contact";
+  import Link from "./link.svelte";
 
   export let form;
   export let action: string;
@@ -30,17 +31,22 @@
 
 <Dialog.Root bind:open={dialogOpen}>
   <Dialog.Trigger />
-  <Dialog.Content class="sm:max-w-[425px] bg-card">
+  <Dialog.Content class="bg-card sm:max-w-[425px]">
     <Dialog.Header>
       <Dialog.Title>Kontakta läraren</Dialog.Title>
       <Dialog.Description class="text-start">
-        För att få snabba och tydliga svar från läraren kan det vara bra att
-        nämna följande punkter:
-        <ul class="list-disc list-inside px-4 text-start">
+        <p>
+          För att få snabba och tydliga svar från läraren kan det vara bra att
+          nämna följande punkter:
+        </p>
+        <ul class="list-inside list-disc px-4 text-start">
           {#each suggestions as suggestion}
             <li class="mt-1">{suggestion}</li>
           {/each}
         </ul>
+        <p class="mt-4">
+          Detta kostar 9 krediter. För dig som har <a href="/pricing" class="text-accent">premium</a> kostar det ingenting.
+        </p>
       </Dialog.Description>
     </Dialog.Header>
     <form method="POST" {action} use:enhance class="flex flex-col gap-y-4">
