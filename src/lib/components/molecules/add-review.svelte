@@ -40,7 +40,7 @@
   <Dialog.Trigger
     class={cn(
       buttonVariants({
-        variant: "outline",
+        variant: "outline-card",
         className: `flex gap-x-2 self-center`,
       }),
     )}

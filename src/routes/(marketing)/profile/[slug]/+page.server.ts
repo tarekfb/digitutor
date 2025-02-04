@@ -207,13 +207,13 @@ export const actions = {
     if (!session)
       redirect(
         303,
-        "/sign-up",
+        `/sign-in?next=/profile/${slug}`,
         {
           type: "info",
           message: "Skapa ett konto eller logga in för att kontakta en lärare.",
         },
         cookies,
-      ); // todo: in the future should implement a redirect after login
+      );
 
     const form = await superValidate(event, zod(requestContactSchema));
     const { role } = form.data;
@@ -224,13 +224,13 @@ export const actions = {
       ); // user hasnt entered data theirselves, therefore send error message
       redirect(
         303,
-        "/sign-up",
+        `/sign-in?next=/profile/${slug}`,
         {
           type: "info",
           message: "Skapa ett konto eller logga in för att kontakta en lärare.",
         },
         cookies,
-      ); // todo: in the future should implement a redirect after login
+      );
     }
 
     if (slug === session.user.id)
@@ -296,15 +296,15 @@ export const actions = {
     } = event;
     const { session } = await safeGetSession();
     if (!session)
-      throw redirect(
+      redirect(
         303,
-        "/sign-up",
+        `/sign-in?next=/profile/${slug}`,
         {
           type: "info",
           message: "Skapa ett konto eller logga in för att kontakta en lärare.",
         },
         cookies,
-      ); // todo: in the future should implement a redirect after login
+      );
 
     const form = await superValidate(event, zod(startContactSchema));
     // this will not work nicely if teacher or role is invalid, but not expecting this to be an issue
@@ -324,15 +324,15 @@ export const actions = {
       console.error(
         "Error when submitting request contact. Data that user does not submit manually is invalid: role",
       ); // user hasnt entered data theirselves, therefore send error message
-      throw redirect(
+      redirect(
         303,
-        "/sign-up",
+        `/sign-in?next=/profile/${slug}`,
         {
           type: "info",
           message: "Skapa ett konto eller logga in för att kontakta en lärare.",
         },
         cookies,
-      ); // todo: in the future should implement a redirect after login
+      );
     }
 
     if (slug === session.user.id)
@@ -378,7 +378,7 @@ export const actions = {
       conversationId = id;
     } catch (error) {
       if (error instanceof ResourceAlreadyExistsError) {
-        throw redirect(
+        redirect(
           303,
           `/account/conversation/${error.message}`,
           { message: "Du har redan kontaktat läraren.", type: "info" },
@@ -392,7 +392,7 @@ export const actions = {
       );
       return message(form, getFailFormMessage(), { status: 500 });
     }
-    throw redirect(303, `/account/conversation/${conversationId}`);
+    redirect(303, `/account/conversation/${conversationId}`);
   },
   addReview: async (event) => {
     const {
@@ -402,15 +402,15 @@ export const actions = {
     } = event;
     const { session } = await safeGetSession();
     if (!session)
-      throw redirect(
+      redirect(
         303,
-        "/sign-up",
+        `/sign-in?next=/profile/${slug}`,
         {
           type: "info",
           message: "Skapa ett konto eller logga in för att göra en recension.",
         },
         cookies,
-      ); // todo: in the future should implement a redirect after login
+      );
 
     const form = await superValidate(event, zod(addReviewSchema));
     if (!form.valid) return fail(400, { form });

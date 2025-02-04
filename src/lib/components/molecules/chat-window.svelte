@@ -45,7 +45,7 @@
     />
     <PrimaryTitle>{other.firstName}</PrimaryTitle>
     {#if other.role === "teacher"}
-      <Button on:click={() => goto(`/profile/${other.id}`)} variant="outline"
+      <Button on:click={() => goto(`/profile/${other.id}`)} variant="outline-card"
         >Se profil</Button
       >
     {/if}
