@@ -38,6 +38,11 @@
   };
 
   const sendMessage = async () => {
+    if (!session)
+      return toast.error(
+        "Logga in först. Du kan kontakta oss om detta fortsätter.",
+      );
+
     let isAllowedToReply = true;
     try {
       isAllowedToReply = await getAllowedToReply(self);
@@ -45,18 +50,22 @@
       isAllowedToReply = true;
     }
 
-    if (!isAllowedToReply) {
+    if (!isAllowedToReply)
       return toast.info(
-        `När du fått svar från ${recipient.firstName} kan du skicka fler meddelanden`,
+        `När du fått svar från ${recipient.firstName} kan du skicka fler meddelanden.`,
       );
-    }
+
     const message = $form.content;
     if (!message) return toast.info("Skriv ett meddelande först");
 
-    if (!session)
-      return toast.error(
-        "Logga in först. Du kan kontakta oss om detta fortsätter.",
-      );
+    try {
+      sendMessageSchema.parse({ content: message });
+    } catch (error) {
+      if (error instanceof ZodError) {
+        if (error?.issues?.[0]?.message)
+          return toast.info(error.issues[0].message);
+      }
+    }
 
     sendMessageToStore(chatStore, message, conversation.id, session);
     sendMessageForm.reset();
@@ -65,17 +74,17 @@
 
 <svelte:head>
   <title>{websiteName} | Konversation</title>
-</svelte:head> 
+</svelte:head>
 
 <div
-  class="mx-8 my-8 flex flex-col justify-end flex-1 md:self-center md:w-full md:max-w-xl lg:max-w-2xl"
+  class="mx-8 my-8 flex flex-1 flex-col justify-end md:w-full md:max-w-xl md:self-center lg:max-w-2xl"
 >
   <ChatWindow {chatStore} {self} other={recipient} />
 
   <form
-    class="flex flex-col gap-y-2 px-4 justify-center -mx-8 fixed bottom-0 w-full md:self-center md:w-2/4 lg:w-1/3 h-20"
+    class="fixed bottom-0 -mx-8 flex h-20 w-full flex-col justify-center gap-y-2 px-4 md:w-2/4 md:self-center lg:w-1/3"
   >
-    <div class="flex justify-between gap-x-2 items-center">
+    <div class="flex items-center justify-between gap-x-2">
       <Input
         placeholder="Skriv ett meddelande..."
         class="bg-card"

@@ -237,7 +237,7 @@ export const actions = {
       return message(
         form,
         getFailFormMessage(
-          undefined,
+          "Detta går inte att göra",
           "Du kan inte kontakta dig själv.",
           undefined,
           undefined,
