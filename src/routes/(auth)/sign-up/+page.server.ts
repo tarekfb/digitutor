@@ -1,4 +1,5 @@
-import { fail, redirect } from "@sveltejs/kit";
+import { fail } from "@sveltejs/kit";
+import { redirect } from "sveltekit-flash-message/server";
 import type { PageServerLoad } from "./$types";
 import {
   getFailFormMessage,
@@ -22,7 +23,8 @@ export const load: PageServerLoad = async ({ locals: { supabase } }) => {
       (r) => r.description && r.description.length > 15,
     );
     const dbReview = longReviews[0] ?? reviews[0];
-    review = formatReviewWithReferences(dbReview);
+    if (dbReview)
+      review = formatReviewWithReferences(dbReview);
   } catch (e) {
     console.error(
       "Error when reviews signup display, perhaps didnt find valid review",
@@ -37,9 +39,12 @@ export const load: PageServerLoad = async ({ locals: { supabase } }) => {
 export const actions = {
   signUp: async (event) => {
     const {
-      locals: { supabase, session },
+      locals: { supabase, session }, cookies,
     } = event;
-    if (session) redirect(303, "/account");
+    if (session) redirect(303, "/account", {
+      type: "info",
+      message: "Du är redan inloggad.",
+    }, cookies);
 
     const form = await superValidate(event, zod(signUpSchema));
     if (!form.valid) return fail(400, { form });
@@ -94,13 +99,6 @@ export const actions = {
 
     try {
       await createProfile(supabase, inputUser);
-      return message(form, {
-        variant: "success",
-        title: "Verifiera e-postadress",
-        description:
-          `Titta i din inkorg (eller i skräpkorgen) för att verifiera e-post: ${email}.`,
-        status: 201,
-      });
     } catch (error) {
       if (isErrorWithCode(error)) {
         if (error.code === ExternalErrorCodes.DuplicateKeyConstraintViolation)
@@ -119,5 +117,12 @@ export const actions = {
       console.error("Error when creating profile", error);
       return message(form, getFailFormMessage(), { status: 500 });
     }
+    return message(form, {
+      variant: "success",
+      title: "Verifiera e-postadress",
+      description:
+        `Titta i din inkorg (eller i skräpkorgen) för att verifiera e-post: ${email}.`,
+      status: 201,
+    });
   },
 };

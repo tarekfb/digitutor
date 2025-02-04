@@ -19,6 +19,7 @@
   import type { ReviewWithReferences } from "src/lib/shared/models/review";
   import Stars from "src/lib/components/atoms/stars.svelte";
   import ReviewCardExtra from "src/lib/components/molecules/review-card-extra.svelte";
+  import { page } from "$app/stores";
 
   export let data: PageData;
 
@@ -126,9 +127,10 @@
     </div>
   </svelte:fragment>
   <svelte:fragment slot="form">
+    {@const next = $page.url.searchParams.get("next")}
     <form
       class="flex w-full max-w-screen-sm flex-col gap-y-4 p-4 text-start"
-      action="?/signIn"
+      action="?/signIn{next ? `&next=${next}` : ''}"
       method="POST"
       use:enhance
     >
