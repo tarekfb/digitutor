@@ -41,7 +41,7 @@
     class={cn(
       buttonVariants({
         variant: "outline-card",
-        className: `flex gap-x-2 self-center`,
+        className: `flex gap-x-2 md:self-start`,
       }),
     )}
   >
