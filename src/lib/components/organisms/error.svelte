@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { Home } from "lucide-svelte";
+    import { Home } from "lucide-svelte";
   import PrimaryTitle from "$lib/components/atoms/primary-title.svelte";
   import ErrorNav from "$lib/components/atoms/error-nav.svelte";
   import { CircleHelp } from "lucide-svelte";

@@ -5,6 +5,8 @@ import Stripe from "stripe"
 import { getOrCreateCustomerId, fetchSubscription } from "src/lib/shared/utils/subscription/subscription-helper"
 import { getDefaultErrorInfo } from "src/lib/shared/constants/constants"
 import type { PageServerLoad } from "./$types"
+import { creditProducts } from "src/lib/shared/constants/constants.js"
+import { updateCredits } from "src/lib/server/database/credits.js"
 
 const stripe = new Stripe(PRIVATE_STRIPE_API_KEY)
 // { apiVersion: "2023-08-16" }
@@ -12,19 +14,17 @@ const stripe = new Stripe(PRIVATE_STRIPE_API_KEY)
 export const load: PageServerLoad = async ({
     params: { slug },
     url,
-    locals: { safeGetSession, supabaseServiceRole },
+    locals: { safeGetSession, supabaseServiceRole, supabase },
 }) => {
     const { session, user } = await safeGetSession()
     if (!session) {
-        redirect(303, "/sign-in")
+        redirect(303, "/sign-in") // todo add flash
     }
 
     const successUrl = "/account/billing";
 
-    if (slug === "free") {
-        // free plan. simulate success by redirecting to success url
-        redirect(303, "successUrl")
-    }
+    // free plan. simulate success by redirecting to success url
+    if (slug === "free") redirect(303, successUrl)
 
     const { error: idError, customerId } = await getOrCreateCustomerId({
         supabaseServiceRole,
@@ -40,12 +40,15 @@ export const load: PageServerLoad = async ({
     })
     if (primarySubscription) {
         // User already has plan, we shouldn't let them buy another
-        redirect(303, "successUrl")
+        redirect(303, successUrl) // todo add flash
     }
 
-    let checkoutUrl
+    const mode = url.searchParams.get("mode") === "payment" ? "payment" : "subscription"; // if credits, then single purchase
+
+    let checkoutUrl;
+    let stripeSession: Stripe.Response<Stripe.Checkout.Session> | undefined;
     try {
-        const stripeSession = await stripe.checkout.sessions.create({
+        stripeSession = await stripe.checkout.sessions.create({
             line_items: [
                 {
                     price: slug,
@@ -53,7 +56,7 @@ export const load: PageServerLoad = async ({
                 },
             ],
             customer: customerId,
-            mode: "subscription",
+            mode,
             success_url: `${url.origin}${successUrl}`,
             cancel_url: `${url.origin}${successUrl}`,
         })
@@ -61,6 +64,18 @@ export const load: PageServerLoad = async ({
     } catch (e) {
         console.error("Error creating checkout session", e)
         error(500, getDefaultErrorInfo())
+    }
+
+    if (stripeSession.status === "complete" && mode === "payment") {
+        const product = creditProducts.find(slug);
+        if (product) {
+            try {
+                updateCredits(supabase, user.id, product.credits)
+            } catch (e) {
+                console.error("Critical error: after completing payment and adding credit value", e)
+                error(500, getDefaultErrorInfo(undefined, "Om du inte fick dina krediter kan du kontakta oss."))
+            }
+        }
     }
 
     redirect(303, checkoutUrl ?? "/pricing")
