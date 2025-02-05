@@ -2,6 +2,7 @@ export type PricingPlan = {
   id: PricingPlanIds;
   name: string;
   description: string;
+  bold?: string;
   price: string;
   priceIntervalName: string;
   stripePriceId: StripePriceId;

@@ -8,6 +8,7 @@
   import { Textarea } from "../ui/textarea";
   import { isStartingContact } from "src/stores/start-contact";
   import Link from "./link.svelte";
+  import { costPerRequest } from "src/lib/shared/constants/constants.js";
 
   export let form;
   export let action: string;
@@ -45,7 +46,7 @@
           {/each}
         </ul>
         <p class="mt-4">
-          Detta kostar 9 krediter. För dig som har <a href="/pricing" class="text-accent">premium</a> kostar det ingenting.
+          Detta kostar {costPerRequest} krediter. För dig som har <a href="/pricing" class="link">premium</a> kostar det ingenting.
         </p>
       </Dialog.Description>
     </Dialog.Header>

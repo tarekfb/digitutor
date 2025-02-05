@@ -1,6 +1,5 @@
 import type { Message } from "$lib/shared/models/common";
 import { StripePriceId, PricingPlanIds, type PricingPlan, StripeProductId } from "../models/subscription";
-import { isProd } from "$lib/shared/utils/utils";
 
 export const websiteName = "Digitutor";
 export const localBaseUrl = "http://localhost:5173";
@@ -92,17 +91,19 @@ export const getFormatsHumanReadable = () => {
   return acceptedFormatsHumanReadable;
 };
 
+export const costPerRequest = 9;
+export const freeCredits = 35;
 export const defaultPlanId = PricingPlanIds.Free;
-
 export const pricingPlans: PricingPlan[] = [
   {
     id: PricingPlanIds.Free,
     name: "Gratis",
-    description: "En gratisplan. Inget betalkort behövs!",
+    description: `En gratisplan. Inkluderar ${freeCredits} krediter vid start (att kontakta lärare kostar ${costPerRequest} krediter).`,
+    bold: `Inget betalkort behövs!`,
     price: "0 SEK",
     priceIntervalName: "per månad",
     stripePriceId: StripePriceId.Free,
-    features: ["Oändligt med förfrågningar", "Tillgång till alla lärare", "Max en konversation"],
+    features: [`${freeCredits} gratis krediter`, "Tillgång alla lärare", "Möjlighet att köpa fler krediter när som helst"],
   },
   {
     id: PricingPlanIds.Premium,
@@ -117,7 +118,7 @@ export const pricingPlans: PricingPlan[] = [
     // stripeProductId:  isProd ? StripeProductId.PremiumProd : StripeProductId.PremiumTest, // todo: reactive when live
     features: [
       "Allt i gratisplanen",
-      "Oändligt med konversationer",
+      "Oändligt med krediter",
     ],
   },
 ];
