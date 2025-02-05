@@ -18,6 +18,11 @@
     <p class="mt-2 text-sm leading-relaxed text-gray-500">
       {pricingPlan.description}
     </p>
+    {#if pricingPlan.bold}
+      <p class="mt-2 text-sm leading-relaxed text-gray-500 font-bold">
+        {pricingPlan.bold}
+      </p>
+    {/if}
     <div class="mt-auto pt-4 text-sm text-gray-600">
       Planen inkluderar:
       <ul class="mt-2 list-inside list-disc space-y-1">
