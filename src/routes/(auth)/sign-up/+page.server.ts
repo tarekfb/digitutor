@@ -1,18 +1,18 @@
 import { fail } from "@sveltejs/kit";
 import { redirect } from "sveltekit-flash-message/server";
-import type { PageServerLoad } from "./$types";
+import type { PageServerLoad } from "./$types.ts";
 import {
   getFailFormMessage,
-} from "$lib/shared/constants/constants";
+} from "$lib/shared/constants/constants.ts";
 import { message, setError, superValidate } from "sveltekit-superforms";
 import { zod } from "sveltekit-superforms/adapters";
-import { signUpSchema } from "$lib/shared/models/user";
-import { createProfile } from "$lib/server/database/profiles";
-import type { CreateProfile } from "$lib/shared/models/profile";
+import { signUpSchema } from "$lib/shared/models/user.ts";
+import { createProfile } from "$lib/server/database/profiles.ts";
+import type { CreateProfile } from "$lib/shared/models/profile.ts";
 import { getHighQualityReviews } from "src/lib/server/database/review";
-import { ExternalErrorCodes } from "src/lib/shared/models/common";
-import { isErrorWithCode } from "src/lib/shared/utils/utils";
-import type { ReviewWithReferences } from "src/lib/shared/models/review";
+import { ExternalErrorCodes } from "src/lib/shared/models/common.ts";
+import { isErrorWithCode } from "src/lib/shared/utils/utils.ts";
+import type { ReviewWithReferences } from "src/lib/shared/models/review.ts";
 import { formatReviewWithReferences } from "src/lib/shared/utils/reviews/utils";
 
 export const load: PageServerLoad = async ({ locals: { supabase } }) => {

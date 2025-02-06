@@ -1,16 +1,16 @@
 <script lang="ts">
   import PrimaryTitle from "src/lib/components/atoms/primary-title.svelte";
-  import type { PageData } from "./$types";
+  import type { PageData } from "./$types.ts";
   import { superForm } from "sveltekit-superforms";
   import FormSubmit from "src/lib/components/molecules/form-submit.svelte";
   import { zodClient } from "sveltekit-superforms/adapters";
-  import { passwordResetSchema } from "src/lib/shared/models/user";
+  import { passwordResetSchema } from "src/lib/shared/models/user.ts";
   import RootContainer from "src/lib/components/templates/root-container.svelte";
   import FormMessage from "$lib/components/molecules/form-message.svelte";
-  import * as Form from "$lib/components/ui/form";
+  import * as Form from "$lib/components/ui/form/index.js";
   import Label from "$lib/components/atoms/label.svelte";
   import PasswordInput from "$lib/components/molecules/password-input.svelte";
-  import { websiteName } from "src/lib/shared/constants/constants";
+  import { websiteName } from "src/lib/shared/constants/constants.ts";
 
   export let data: PageData;
 
@@ -22,7 +22,7 @@
 
 <svelte:head>
   <title>{websiteName} | Uppdatera lösenord</title>
-</svelte:head> 
+</svelte:head>
 
 <RootContainer responsiveGap maxWidth minWidth class="self-center">
   <div class="flex flex-col items-center justify-center gap-y-0.5">

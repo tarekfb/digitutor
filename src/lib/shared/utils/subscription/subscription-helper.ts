@@ -2,9 +2,9 @@ import type { SupabaseClient, User } from "@supabase/supabase-js"
 
 import { PRIVATE_STRIPE_API_KEY } from "$env/static/private"
 import Stripe from "stripe"
-import { pricingPlans } from "../../constants/constants"
-import type { Database } from "src/supabase"
-import { getNow } from "../utils"
+import { pricingPlans } from "../../constants/constants.ts"
+import type { Database } from "src/supabase.ts"
+import { getNow } from "../utils.ts"
 
 const stripe = new Stripe(PRIVATE_STRIPE_API_KEY)
 // { apiVersion: "2023-08-16" }

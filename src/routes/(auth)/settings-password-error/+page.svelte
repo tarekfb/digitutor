@@ -1,7 +1,7 @@
 <script lang="ts">
   import PrimaryTitle from "$lib/components/atoms/primary-title.svelte";
   import Link from "$lib/components/atoms/link.svelte";
-  import { websiteName } from "src/lib/shared/constants/constants";
+  import { websiteName } from "src/lib/shared/constants/constants.ts";
 </script>
 
 <svelte:head>

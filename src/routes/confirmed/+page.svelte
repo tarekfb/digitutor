@@ -1,10 +1,10 @@
 <script lang="ts">
-  import { websiteName } from "$lib/shared/constants/constants";
-  import { Button } from "$lib/components/ui/button";
-  import { CheckCircle2 } from "lucide-svelte";
+  import { websiteName } from "$lib/shared/constants/constants.ts";
+  import { Button } from "$lib/components/ui/button/index.js";
+  import CheckCircle2 from "lucide-svelte/icons/check-circle-2";
+  import UserRound from "lucide-svelte/icons/user-round";
   import { goto } from "$app/navigation";
   import Navbar from "src/lib/components/organisms/navbar.svelte";
-  import { UserRound } from "lucide-svelte";
   import PrimaryTitle from "src/lib/components/atoms/primary-title.svelte";
   import SecondaryTitle from "src/lib/components/atoms/secondary-title.svelte";
 </script>

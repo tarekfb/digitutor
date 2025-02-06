@@ -6,8 +6,8 @@
   import {
     pricingPlans,
     websiteName,
-  } from "src/lib/shared/constants/constants";
-  import * as Accordion from "src/lib/components/ui/accordion";
+  } from "src/lib/shared/constants/constants.ts";
+  import * as Accordion from "src/lib/components/ui/accordion/index.js";
   import PricingModule from "src/lib/components/molecules/pricing-module.svelte";
   import SecondaryTitle from "src/lib/components/atoms/secondary-title.svelte";
   import { costPerRequest } from "src/lib/shared/constants/constants.js";
@@ -29,7 +29,7 @@
     </p>
     <Button
       variant="third"
-      on:click={() => goto("/account/subscription")}
+      on:click={() => goto("/account/subscription.ts")}
       class="mt-2 md:mt-3">Skaffa Premium</Button
     >
   </div>

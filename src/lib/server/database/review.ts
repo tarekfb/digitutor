@@ -3,9 +3,9 @@ import type {
   DbDisplayProfile,
   InputReview,
   DbReviewWithReferences,
-} from "src/lib/shared/models/review";
-import { getNow } from "src/lib/shared/utils/utils";
-import type { Database, Tables } from "src/supabase";
+} from "src/lib/shared/models/review.ts";
+import { getNow } from "src/lib/shared/utils/utils.ts";
+import type { Database, Tables } from "src/supabase.ts";
 
 export const createReview = async (
   supabase: SupabaseClient<Database>,

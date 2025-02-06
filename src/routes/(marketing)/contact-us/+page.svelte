@@ -4,17 +4,17 @@
   import { superForm } from "sveltekit-superforms";
   import { zodClient } from "sveltekit-superforms/adapters";
   import FormSubmit from "$lib/components/molecules/form-submit.svelte";
-  import * as Form from "$lib/components/ui/form";
+  import * as Form from "$lib/components/ui/form/index.js";
   import Label from "$lib/components/atoms/label.svelte";
-  import { Input } from "$lib/components/ui/input";
-  import { Textarea } from "$lib/components/ui/textarea";
+  import { Input } from "$lib/components/ui/input/index.js";
+  import { Textarea } from "$lib/components/ui/textarea/index.js";
   import FormMessage from "$lib/components/molecules/form-message.svelte";
   import PrimaryTitle from "$lib/components/atoms/primary-title.svelte";
   import Link from "$lib/components/atoms/link.svelte";
   import RootContainer from "src/lib/components/templates/root-container.svelte";
-  import type { PageData } from "./$types";
-  import { SendHorizontal } from "lucide-svelte";
-  import { websiteName } from "src/lib/shared/constants/constants";
+  import type { PageData } from "./$types.ts";
+  import  SendHorizontal  from "lucide-svelte/icons/send-horizontal";
+  import { websiteName } from "src/lib/shared/constants/constants.ts";
 
   export let data: PageData;
 
@@ -31,7 +31,7 @@
 
 <svelte:head>
   <title>{websiteName} | Kontakta oss</title>
-</svelte:head> 
+</svelte:head>
 
 <RootContainer responsiveGap>
   <div class="flex flex-col items-center justify-center gap-y-0.5">

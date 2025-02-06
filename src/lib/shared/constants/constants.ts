@@ -1,5 +1,6 @@
-import type { Message } from "$lib/shared/models/common";
-import { StripePriceId, PricingPlanIds, type PricingPlan, StripeProductId } from "../models/subscription";
+import type { Message } from "$lib/shared/models/common.ts";
+import { StripePriceId, PricingPlanIds, type PricingPlan, StripeProductId } from "../models/subscription.ts";
+import type { CreditsProduct } from "../models/subscription.js";
 
 export const websiteName = "Digitutor";
 export const localBaseUrl = "http://localhost:5173";
@@ -94,11 +95,25 @@ export const getFormatsHumanReadable = () => {
 export const costPerRequest = 9;
 export const freeCredits = 35;
 export const defaultPlanId = PricingPlanIds.Free;
+export const creditProducts: CreditsProduct[] = [
+  {
+    price: "250 SEK",
+    credits: 50,
+    stripePriceId: StripePriceId.SmallCreditsTest,
+    stripeProductId: StripeProductId.SmallCreditsTest,
+  },
+  {
+    price: "400 SEK",
+    credits: 100,
+    stripePriceId: StripePriceId.LargeCreditsTest,
+    stripeProductId: StripeProductId.LargeCreditsTest,
+  }
+];
 export const pricingPlans: PricingPlan[] = [
   {
     id: PricingPlanIds.Free,
     name: "Gratis",
-    description: `En gratisplan. Inkluderar ${freeCredits} krediter vid start (att kontakta lärare kostar ${costPerRequest} krediter).`,
+    description: `Inkluderar ${freeCredits} krediter vid start (att kontakta lärare kostar ${costPerRequest} krediter).`,
     bold: `Inget betalkort behövs!`,
     price: "0 SEK",
     priceIntervalName: "per månad",

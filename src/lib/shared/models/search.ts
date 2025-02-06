@@ -1,5 +1,5 @@
 import { z } from "zod";
-import type { Profile } from "./profile";
+import type { Profile } from "./profile.ts";
 
 export const searchSchema = z
   .object({

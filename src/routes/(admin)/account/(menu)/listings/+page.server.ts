@@ -1,18 +1,18 @@
 import { error, fail } from "@sveltejs/kit";
-import { createListing, getListings } from "$lib/server/database/listings";
-import type { Actions, PageServerLoad } from "./$types";
+import { createListing, getListings } from "$lib/server/database/listings.ts";
+import type { Actions, PageServerLoad } from "./$types.ts";
 import {
   getFailFormMessage,
   getDefaultErrorInfo,
-} from "$lib/shared/constants/constants";
+} from "$lib/shared/constants/constants.ts";
 import { message, superValidate } from "sveltekit-superforms";
 import {
   initCreateListingSchema,
   type ListingWithProfile,
-} from "$lib/shared/models/listing";
+} from "$lib/shared/models/listing.ts";
 import { zod } from "sveltekit-superforms/adapters";
 import { redirect } from "sveltekit-flash-message/server";
-import { formatListingWithProfile } from "src/lib/shared/utils/listing/utils";
+import { formatListingWithProfile } from "src/lib/shared/utils/listing/utils.ts";
 
 export const load: PageServerLoad = async ({
   locals: { supabase, safeGetSession },

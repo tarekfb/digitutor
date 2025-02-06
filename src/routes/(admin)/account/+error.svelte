@@ -2,7 +2,7 @@
   import { page } from "$app/stores";
   import Error from "$lib/components/organisms/error.svelte";
   import Navbar from "src/lib/components/organisms/navbar.svelte";
-  import { defaultErrorInfo } from "src/lib/shared/constants/constants";
+  import { defaultErrorInfo } from "src/lib/shared/constants/constants.ts";
 </script>
 
 <Navbar profile={false} logout={false} />

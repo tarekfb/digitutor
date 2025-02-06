@@ -1,13 +1,12 @@
 <script lang="ts">
-  import { Button } from "$lib/components/ui/button";
+  import { Button } from "$lib/components/ui/button/index.js";
   import FormMessage from "../molecules/form-message.svelte";
   import FormSubmit from "../molecules/form-submit.svelte";
-  import * as Form from "$lib/components/ui/form";
+  import * as Form from "$lib/components/ui/form/index.js";
   import * as Dialog from "$lib/components/ui/dialog/index.js";
   import { Label } from "$lib/components/ui/label/index.js";
-  import { Textarea } from "../ui/textarea";
-  import { isStartingContact } from "src/stores/start-contact";
-  import Link from "./link.svelte";
+  import { Textarea } from "$lib/components/ui/textarea/index.js";
+  import { isStartingContact } from "src/stores/start-contact.ts";
   import { costPerRequest } from "src/lib/shared/constants/constants.js";
 
   export let form;
@@ -46,7 +45,8 @@
           {/each}
         </ul>
         <p class="mt-4">
-          Detta kostar {costPerRequest} krediter. För dig som har <a href="/pricing" class="link">premium</a> kostar det ingenting.
+          Detta kostar {costPerRequest} krediter. För dig som har
+          <a href="/pricing" class="link">premium</a> kostar det ingenting.
         </p>
       </Dialog.Description>
     </Dialog.Header>

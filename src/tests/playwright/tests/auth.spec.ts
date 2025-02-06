@@ -1,5 +1,5 @@
 import { expect } from "@playwright/test";
-import { test } from "../env-options";
+import { test } from "../env-options.ts";
 
 let baseUrl: string;
 

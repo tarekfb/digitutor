@@ -1,11 +1,11 @@
 <script lang="ts">
-  import { Input } from "$lib/components/ui/input";
-  import * as Form from "$lib/components/ui/form";
+  import { Input } from "$lib/components/ui/input/index.js";
+  import * as Form from "$lib/components/ui/form/index.js";
   import Label from "$lib/components/atoms/label.svelte";
   import PasswordInput from "$lib/components/molecules/password-input.svelte";
   import PrimaryTitle from "src/lib/components/atoms/primary-title.svelte";
-  import { Checkbox } from "../ui/checkbox";
-  import type { signUpSchema } from "src/lib/shared/models/user";
+  import { Checkbox } from "$lib/components/ui/checkbox/index.ts";
+  import type { signUpSchema } from "src/lib/shared/models/user.ts";
   import { type Infer, type SuperForm } from "sveltekit-superforms/client";
 
   export let type: "teacher" | "student";

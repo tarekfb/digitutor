@@ -1,4 +1,4 @@
-import type { Subject } from "../../models/subject";
+import type { Subject } from "../../models/subject.ts";
 
 // Helper function to calculate the Levenshtein distance
 function levenshteinDistance(a: string, b: string): number {
@@ -38,9 +38,9 @@ export const findSimilarSubjects = (
     );
     const altTitleDistance = subject.altTitle
       ? levenshteinDistance(
-          subjectTitle.toLowerCase(),
-          subject.altTitle.toLowerCase(),
-        )
+        subjectTitle.toLowerCase(),
+        subject.altTitle.toLowerCase(),
+      )
       : Infinity;
 
     if (titleDistance <= threshold || altTitleDistance <= threshold) {

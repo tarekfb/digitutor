@@ -38,7 +38,6 @@
     "@vitest/ui": "^1.6.0",
     "autoprefixer": "^10.4.15",
     "bits-ui": "^0.22.0",
-    "daisyui": "^4.12.10",
     "eslint": "^8.28.0",
     "eslint-config-prettier": "^9.1.0",
     "eslint-plugin-svelte": "^2.30.0",
@@ -60,7 +59,6 @@
   "dependencies": {
     "@jill64/sentry-sveltekit-cloudflare": "^2.0.6",
     "@square/svelte-store": "^0.2.1",
-    "@supabase/auth-ui-svelte": "^0.2.2",
     "@supabase/ssr": "^0.3.0",
     "@supabase/supabase-js": "^2.33.0",
     "clsx": "^2.1.1",

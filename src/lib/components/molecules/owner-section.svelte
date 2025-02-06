@@ -1,10 +1,10 @@
 <script lang="ts">
-  import type { ListingWithProfile } from "src/lib/shared/models/listing";
+  import type { ListingWithProfile } from "src/lib/shared/models/listing.ts";
   import IsPublished from "../atoms/is-published.svelte";
-  import { Button } from "../ui/button";
+  import { Button } from "$lib/components/ui/button/index.js";
   import { page } from "$app/stores";
   import { goto } from "$app/navigation";
-  import { ExternalLink } from "lucide-svelte";
+  import ExternalLink from "lucide-svelte/icons/external-link";
 
   export let listing: ListingWithProfile | undefined = undefined;
 

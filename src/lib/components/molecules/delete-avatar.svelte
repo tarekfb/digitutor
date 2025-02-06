@@ -1,11 +1,11 @@
 <script lang="ts">
-  import { Button } from "$lib/components/ui/button";
+  import { Button } from "$lib/components/ui/button/index.js";
   import FormSubmit from "../molecules/form-submit.svelte";
   import { mediaQuery } from "svelte-legos";
   import * as Dialog from "$lib/components/ui/dialog/index.js";
   import * as Drawer from "$lib/components/ui/drawer/index.js";
   import LoadingSpinner from "$lib/components/atoms/loading-spinner.svelte";
-  import { X } from "lucide-svelte";
+  import X from "lucide-svelte/icons/x";
   import { toast } from "svelte-sonner";
   import { superForm } from "sveltekit-superforms/client";
 

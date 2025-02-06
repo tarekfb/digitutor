@@ -1,9 +1,9 @@
 <script lang="ts">
-  import type { SearchResult } from "src/lib/shared/models/search";
+  import type { SearchResult } from "src/lib/shared/models/search.ts";
   import Button from "../ui/button/button.svelte";
   import SubjectItem from "../atoms/subject-item.svelte";
   import * as Popover from "$lib/components/ui/popover/index.js";
-  import { cn } from "src/lib/shared/utils/utils";
+  import { cn } from "src/lib/shared/utils/utils.ts";
 
   export let subjects: SearchResult["subjects"];
   export let searchedSubject: number | undefined = undefined;
@@ -16,11 +16,11 @@
     <Button
       variant="ghost"
       builders={[builder]}
-      class={cn("m-0 p-2 max-h-6 self-start", triggerStyling)}
+      class={cn("m-0 max-h-6 self-start p-2", triggerStyling)}
       >...se {subjects.length - 1} till</Button
     >
   </Popover.Trigger>
-  <Popover.Content class={cn("w-40 max-h-72 overflow-y-auto", contentStyling)}>
+  <Popover.Content class={cn("max-h-72 w-40 overflow-y-auto", contentStyling)}>
     <ul class="flex flex-col gap-y-2">
       {#each subjects as subject}
         {#if subject !== searchedSubject}

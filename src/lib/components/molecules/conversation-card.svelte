@@ -1,8 +1,9 @@
 <script lang="ts">
-  import { Clock, CircleAlert } from "lucide-svelte";
-  import type { ConversationWithReferences } from "src/lib/shared/models/conversation";
-  import { timeAgo } from "src/lib/shared/utils/utils";
-  import type { Profile } from "src/lib/shared/models/profile";
+  import Clock from "lucide-svelte/icons/clock";
+  import CircleAlert from "lucide-svelte/icons/circle-alert";
+  import type { ConversationWithReferences } from "src/lib/shared/models/conversation.ts";
+  import { timeAgo } from "src/lib/shared/utils/utils.ts";
+  import type { Profile } from "src/lib/shared/models/profile.ts";
 
   export let conversation: ConversationWithReferences;
   export let profile: Profile;

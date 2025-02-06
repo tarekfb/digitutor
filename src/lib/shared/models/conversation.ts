@@ -1,6 +1,6 @@
-import type { Tables } from "src/supabase";
+import type { Tables } from "src/supabase.ts";
 import { z } from "zod";
-import type { Profile } from "./profile";
+import type { Profile } from "./profile.ts";
 
 export type DbConversationBase = Tables<"conversations">;
 

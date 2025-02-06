@@ -1,7 +1,7 @@
 import { fail, superValidate } from "sveltekit-superforms";
 import { zod } from "sveltekit-superforms/adapters";
-import { searchSchema } from "src/lib/shared/models/search";
-import type { Actions, PageServerLoad } from "./$types";
+import { searchSchema } from "src/lib/shared/models/search.ts";
+import type { Actions, PageServerLoad } from "./$types.ts";
 import { redirect } from "@sveltejs/kit";
 import {
   getHighQualityReviews,
@@ -10,13 +10,13 @@ import {
 import {
   type DisplayProfile,
   type ReviewWithReferences,
-} from "src/lib/shared/models/review";
-import { formatDisplayProfile } from "src/lib/shared/utils/profile/utils";
+} from "src/lib/shared/models/review.ts";
+import { formatDisplayProfile } from "src/lib/shared/utils/profile/utils.ts";
 import { formatReviewWithReferences } from "src/lib/shared/utils/reviews/utils";
-import { formatSubject, type Subject } from "src/lib/shared/models/subject";
-import { languages } from "src/lib/shared/models/common";
-import { getSubjects } from "src/lib/server/database/subjects";
-import { cleanQuery } from "src/lib/shared/utils/utils";
+import { formatSubject, type Subject } from "src/lib/shared/models/subject.ts";
+import { languages } from "src/lib/shared/models/common.ts";
+import { getSubjects } from "src/lib/server/database/subjects.ts";
+import { cleanQuery } from "src/lib/shared/utils/utils.ts";
 
 export const load: PageServerLoad = async ({ locals: { supabase } }) => {
   const form = await superValidate(zod(searchSchema));

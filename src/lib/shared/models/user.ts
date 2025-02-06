@@ -1,6 +1,6 @@
-import type { TypeToZod } from "src/lib/shared/utils/utils";
+import type { TypeToZod } from "src/lib/shared/utils/utils.ts";
 import { z } from "zod";
-import { type Profile } from "./profile";
+import { type Profile } from "./profile.ts";
 
 export type SignUpUser = Pick<Profile, "role" | "firstName" | "lastName"> & {
   email: string;

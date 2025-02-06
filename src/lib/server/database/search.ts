@@ -1,6 +1,6 @@
 import type { SupabaseClient } from "@supabase/supabase-js";
-import type { Database } from "lucide-svelte";
-import type { DbListingWithProfile } from "src/lib/shared/models/listing";
+import type { DbListingWithProfile } from "src/lib/shared/models/listing.ts";
+import type { Database } from "src/supabase.ts";
 
 export const search = async (
   supabase: SupabaseClient<Database>,

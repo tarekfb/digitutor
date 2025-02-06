@@ -3,24 +3,24 @@ import {
   getFailFormMessage,
   defaultErrorInfo,
   getDefaultErrorInfo,
-} from "$lib/shared/constants/constants";
-import { getProfileByUser } from "$lib/server/database/profiles";
-import { getListing } from "$lib/server/database/listings";
+} from "$lib/shared/constants/constants.ts";
+import { getProfileByUser } from "$lib/server/database/profiles.ts";
+import { getListing } from "$lib/server/database/listings.ts";
 import { fail, message, superValidate } from "sveltekit-superforms";
 import {
   requestContactSchema,
   startContactSchema,
   type DbConversationWithReferences,
-} from "$lib/shared/models/conversation";
+} from "$lib/shared/models/conversation.ts";
 import {
   addReviewSchema,
   type ReviewWithReferences,
-} from "$lib/shared/models/review";
+} from "$lib/shared/models/review.ts";
 import { zod } from "sveltekit-superforms/adapters";
 import {
   getConversationForStudentAndTeacher,
   startConversation,
-} from "$lib/server/database/conversations";
+} from "$lib/server/database/conversations.ts";
 import { redirect, setFlash } from "sveltekit-flash-message/server";
 import { ResourceAlreadyExistsError } from "src/lib/shared/errors/resource-already-exists-error.js";
 import {
@@ -36,7 +36,7 @@ import {
 import {
   isErrorWithCode,
   loadContactTeacherForms,
-} from "src/lib/shared/utils/utils";
+} from "src/lib/shared/utils/utils.ts";
 import type { Profile } from "src/lib/shared/models/profile.js";
 import { formatProfile } from "src/lib/shared/utils/profile/utils.js";
 import { formatListingWithProfile } from "src/lib/shared/utils/listing/utils.js";

@@ -1,6 +1,6 @@
 <script lang="ts">
-  import * as Avatar from "$lib/components/ui/avatar";
-  import { convertToInitials } from "src/lib/shared/utils/utils";
+  import * as Avatar from "$lib/components/ui/avatar/index.js";
+  import { convertToInitials } from "src/lib/shared/utils/utils.ts";
   import { cn } from "src/lib/shared/utils/utils.js";
 
   let className: string | null | undefined = undefined;

@@ -1,19 +1,19 @@
 import { error, fail, redirect } from "@sveltejs/kit";
-import type { Actions, PageServerLoad } from "./$types";
+import type { Actions, PageServerLoad } from "./$types.ts";
 import {
   MessageId,
   getDefaultErrorInfo,
   getFailFormMessage,
-} from "$lib/shared/constants/constants";
+} from "$lib/shared/constants/constants.ts";
 import { message, superValidate } from "sveltekit-superforms";
 import { zod } from "sveltekit-superforms/adapters";
-import { resendSchema, signInSchema } from "$lib/shared/models/user";
+import { resendSchema, signInSchema } from "$lib/shared/models/user.ts";
 import { getHighQualityReviews } from "src/lib/server/database/review";
-import { getListingsByTeacher } from "src/lib/server/database/listings";
+import { getListingsByTeacher } from "src/lib/server/database/listings.ts";
 import { formatReviewWithReferences } from "src/lib/shared/utils/reviews/utils";
-import type { ReviewWithReferences } from "src/lib/shared/models/review";
-import type { ListingWithProfile } from "src/lib/shared/models/listing";
-import { formatListingWithProfile } from "src/lib/shared/utils/listing/utils";
+import type { ReviewWithReferences } from "src/lib/shared/models/review.ts";
+import type { ListingWithProfile } from "src/lib/shared/models/listing.ts";
+import { formatListingWithProfile } from "src/lib/shared/utils/listing/utils.ts";
 
 export const load: PageServerLoad = async ({ locals: { supabase } }) => {
   let longReviews: ReviewWithReferences[];

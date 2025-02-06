@@ -1,5 +1,5 @@
 import { expect } from "@playwright/test";
-import { test } from "../env-options";
+import { test } from "../env-options.ts";
 
 test("fetch profile", async ({ page, profileId }) => {
   await page.goto(`${process.env.BASE_URL || ""}/profile/${profileId}`);

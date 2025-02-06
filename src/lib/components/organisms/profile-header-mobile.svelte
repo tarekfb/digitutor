@@ -1,17 +1,14 @@
 <script lang="ts">
   import ContactTeacherForm from "$lib/components/molecules/contact-teacher-form.svelte";
-  import type {
-    DbListingWithProfile,
-    ListingWithProfile,
-  } from "src/lib/shared/models/listing";
+  import type { ListingWithProfile } from "src/lib/shared/models/listing.ts";
   import type { SuperValidated, Infer } from "sveltekit-superforms/client";
   import ProfileHeaderInfo from "$lib/components/molecules/profile-header-info.svelte";
   import Wavy from "$lib/components/atoms/wavy.svelte";
   import {
     requestContactSchema,
     startContactSchema,
-  } from "src/lib/shared/models/conversation";
-  import type { Profile } from "src/lib/shared/models/profile";
+  } from "src/lib/shared/models/conversation.ts";
+  import type { Profile } from "src/lib/shared/models/profile.ts";
 
   export let teacher: Profile;
   export let listing: ListingWithProfile | undefined;
@@ -26,11 +23,11 @@
   <div class="{listing ? 'h-28' : 'h-28'} w-screen bg-secondary"></div>
 
   <Wavy class="-mt-8 overflow-x-hidden" />
-  <div class="flex flex-col gap-y-4 items-center w-full max-w-md">
+  <div class="flex w-full max-w-md flex-col items-center gap-y-4">
     <img
       src={teacher.avatarUrl}
       alt="profile avatar"
-      class="object-cover w-max h-60 -mt-36 rounded-sm"
+      class="-mt-36 h-60 w-max rounded-sm object-cover"
     />
     <ProfileHeaderInfo {teacher} {listing} />
     <ContactTeacherForm
@@ -42,7 +39,7 @@
     />
   </div>
 {:else}
-  <div class="w-screen bg-secondary flex flex-col items-center text-foreground">
+  <div class="flex w-screen flex-col items-center bg-secondary text-foreground">
     <ProfileHeaderInfo
       {teacher}
       {listing}

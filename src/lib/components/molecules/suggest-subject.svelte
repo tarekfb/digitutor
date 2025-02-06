@@ -1,9 +1,9 @@
 <script lang="ts">
-  import { Button } from "$lib/components/ui/button";
+  import { Button } from "$lib/components/ui/button/index.js";
   import FormMessage from "./form-message.svelte";
   import FormSubmit from "./form-submit.svelte";
-  import { Input } from "$lib/components/ui/input";
-  import * as Form from "$lib/components/ui/form";
+  import { Input } from "$lib/components/ui/input/index.js";
+  import * as Form from "$lib/components/ui/form/index.js";
   import * as Dialog from "$lib/components/ui/dialog/index.js";
   import { Label } from "$lib/components/ui/label/index.js";
   import {
@@ -11,11 +11,11 @@
     type Infer,
     superForm,
   } from "sveltekit-superforms/client";
-  import { suggestSubjectSchema } from "src/lib/shared/models/subject";
+  import { suggestSubjectSchema } from "src/lib/shared/models/subject.ts";
   import { zodClient } from "sveltekit-superforms/adapters";
-  import { Checkbox } from "../ui/checkbox";
+  import { Checkbox } from "$lib/components/ui/checkbox/index.ts";
   import { toast } from "svelte-sonner";
-  import { MessageId } from "src/lib/shared/constants/constants";
+  import { MessageId } from "src/lib/shared/constants/constants.ts";
 
   export let suggestSubjectForm: SuperValidated<
     Infer<typeof suggestSubjectSchema>
@@ -65,7 +65,7 @@
 <Dialog.Root bind:open>
   <Dialog.Trigger asChild let:builder>
     <small
-      class="text-muted-foreground -mt-4 md:-mt-2 md:text-lg flex justify-center gap-x-2 items-center"
+      class="-mt-4 flex items-center justify-center gap-x-2 text-muted-foreground md:-mt-2 md:text-lg"
       >Saknar du något i listan? <Button
         variant="link"
         class="px-0"
@@ -73,7 +73,7 @@
       ></small
     >
   </Dialog.Trigger>
-  <Dialog.Content class="sm:max-w-[425px] bg-card">
+  <Dialog.Content class="bg-card sm:max-w-[425px]">
     <Dialog.Header>
       <Dialog.Title>Skicka in förslag</Dialog.Title>
       <Dialog.Description>
