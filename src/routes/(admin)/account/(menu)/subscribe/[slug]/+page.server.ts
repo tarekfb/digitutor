@@ -5,8 +5,6 @@ import Stripe from "stripe"
 import { getOrCreateCustomerId, fetchSubscription } from "src/lib/shared/utils/subscription/subscription-helper.ts"
 import { getDefaultErrorInfo } from "src/lib/shared/constants/constants.ts"
 import type { PageServerLoad } from "./$types.ts"
-import { creditProducts } from "src/lib/shared/constants/constants.js"
-import { updateCredits } from "src/lib/server/database/credits.js"
 
 const stripe = new Stripe(PRIVATE_STRIPE_API_KEY)
 // { apiVersion: "2023-08-16" }
@@ -49,6 +47,10 @@ export const load: PageServerLoad = async ({
     let stripeSession: Stripe.Response<Stripe.Checkout.Session> | undefined;
     try {
         stripeSession = await stripe.checkout.sessions.create({
+            metadata: {
+                user_id: session.user.id,
+                price_id: slug,
+            },
             line_items: [
                 {
                     price: slug,
@@ -66,22 +68,5 @@ export const load: PageServerLoad = async ({
         error(500, getDefaultErrorInfo())
     }
 
-    console.log("stripeSession before", stripeSession)
-    if (stripeSession.status === "complete" && mode === "payment") {
-        console.log("stripeSession inside if", stripeSession)
-        const product = creditProducts.find(slug);
-        if (product) {
-            console.log("product inside if product", product)
-            try {
-                await updateCredits(supabase, product.credits, session)
-                console.log("after awiat", stripeSession)
-
-            } catch (e) {
-                console.error(`Critical error: after completing payment and trying to add credit value of ${product.credits}. User ${user.id} most likely didnt receive their ${product.credits} credits`, e)
-                error(500, getDefaultErrorInfo(undefined, "Om du inte fick dina krediter kan du kontakta oss."))
-            }
-        }
-    }
-
-    redirect(303, checkoutUrl ?? "/pricing")
+    redirect(303, checkoutUrl ?? "/pricing") // stripe takes over checkout process
 }

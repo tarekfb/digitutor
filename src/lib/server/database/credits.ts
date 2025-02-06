@@ -28,12 +28,12 @@ export const getCreditsByStudent = async (
 export const updateCredits = async (
   supabase: SupabaseClient<Database>,
   amount: number,
-  session: Session,
+  studentId: string,
   comment: string = "",
 ): Promise<void> => {
   const input: InputCreditTransaction = {
     amount,
-    student: session.user.id,
+    student: studentId,
     comment,
   }
 
@@ -42,9 +42,10 @@ export const updateCredits = async (
     .insert({ ...input, updated_at: getNow() })
 
   if (error) {
-    console.error(`Failed to add credit transaction for: ${session.user.id}`, {
+    console.error(`Failed to add credit transaction for: ${studentId}`, {
       error,
     });
     throw error;
   }
 };
+

@@ -52,7 +52,7 @@ export const actions = {
         const amount = 5;
 
 
-        updateCredits(supabase, amount, session, `Testing credits feature.`);
+        updateCredits(supabase, amount, session.user.id, `Testing credits feature.`);
     },
     "remove-credits": async (event) => {
         const {
@@ -64,6 +64,6 @@ export const actions = {
         const amount = -5;
 
 
-        updateCredits(supabase, amount, session, `Testing credits feature.`);
+        updateCredits(supabase, amount, session.user.id, `Testing credits feature.`);
     },
 };
