@@ -3,8 +3,8 @@ import type {
   DbListingWithProfile,
   ListingBase,
   ListingWithProfile,
-} from "../../models/listing";
-import { formatProfile } from "../profile/utils";
+} from "../../models/listing.ts";
+import { formatProfile } from "../profile/utils.ts";
 
 export const formatListingBase = ({
   id,

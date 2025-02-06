@@ -5,12 +5,12 @@
   import {
     requestContactSchema,
     startContactSchema,
-  } from "src/lib/shared/models/conversation";
+  } from "src/lib/shared/models/conversation.ts";
   import { superForm } from "sveltekit-superforms";
   import { zodClient } from "sveltekit-superforms/adapters";
   import StartContact from "../atoms/start-contact.svelte";
-  import { isStartingContact } from "src/stores/start-contact";
-  import type { Variant } from "src/lib/components/ui/button";
+  import { isStartingContact } from "src/stores/start-contact.ts";
+  import type { Variant } from "src/lib/components/ui/button/index.js";
 
   let className: string | null | undefined = undefined;
   export { className as class };

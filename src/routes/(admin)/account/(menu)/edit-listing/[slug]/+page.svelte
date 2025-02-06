@@ -3,26 +3,26 @@
   import { superForm } from "sveltekit-superforms";
   import { updateListingSchema } from "$lib/shared/models/listing.js";
   import PrimaryTitle from "$lib/components/atoms/primary-title.svelte";
-  import type { PageData } from "./$types";
+  import type { PageData } from "./$types.ts";
   import RootContainer from "src/lib/components/templates/root-container.svelte";
   import DeleteListing from "$lib/components/atoms/delete-listing.svelte";
-  import { Button } from "$lib/components/ui/button";
+  import { Button } from "$lib/components/ui/button/index.js";
   import { Textarea } from "$lib/components/ui/textarea/index.js";
-  import { SaveIcon } from "lucide-svelte";
   import FormMessage from "$lib/components/molecules/form-message.svelte";
   import * as Form from "$lib/components/ui/form/index.js";
   import { Input } from "$lib/components/ui/input/index.js";
-  import { Checkbox } from "src/lib/components/ui/checkbox";
   import { toast } from "svelte-sonner";
   import { page } from "$app/stores";
-  import { ExternalLink } from "lucide-svelte";
+  import SaveIcon  from "lucide-svelte/icons/save";
+  import ExternalLink  from "lucide-svelte/icons/external-link";
+  import { Checkbox } from "src/lib/components/ui/checkbox/index.js";
   import Svelecte from "svelecte";
   import { arrayProxy } from "sveltekit-superforms/client";
   import Label from "src/lib/components/atoms/label.svelte";
   import FormSubmit from "src/lib/components/molecules/form-submit.svelte";
   import SuggestSubject from "src/lib/components/molecules/suggest-subject.svelte";
   import AccountLayout from "src/lib/components/templates/account-layout.svelte";
-  import { websiteName } from "src/lib/shared/constants/constants";
+  import { websiteName } from "src/lib/shared/constants/constants.ts";
 
   export let data: PageData;
   $: ({ subjects, profile } = data);
@@ -55,7 +55,7 @@
 
 <svelte:head>
   <title>{websiteName} | Redigera annons</title>
-</svelte:head> 
+</svelte:head>
 
 <AccountLayout>
   <PrimaryTitle class="text-center">Redigera annons</PrimaryTitle>
@@ -104,7 +104,11 @@
         <Form.Control let:attrs>
           <Label class={labelStyling}>Beskrivning</Label>
           <p class="text-muted-foreground">
-            Detta är en beskrivning för denna annons. Profilbeskrivningen som visas för alla dina annonser kan ändras i <a href="/account/settings#bio" class="underline">profilinställningar</a>.
+            Detta är en beskrivning för denna annons. Profilbeskrivningen som
+            visas för alla dina annonser kan ändras i <a
+              href="/account/settings#bio"
+              class="underline">profilinställningar</a
+            >.
           </p>
           <Textarea
             {...attrs}

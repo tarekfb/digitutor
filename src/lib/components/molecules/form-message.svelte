@@ -1,5 +1,5 @@
 <script lang="ts">
-  import type { Message } from "$lib/shared/models/common";
+  import type { Message } from "$lib/shared/models/common.ts";
   import type { Writable } from "svelte/store";
   import AlertMessage from "$lib/components/atoms/alert-message.svelte";
 
@@ -36,4 +36,4 @@
 
 <!-- <Button size="icon" variant="ghost" class="absolute right-1 top-1">x</Button> -->
 <!-- todo implement closeable -->
-<!-- import { Button } from "$lib/components/ui/button"; -->
+<!-- import { Button } from "$lib/components/ui/button/index.js"; -->

@@ -2,10 +2,10 @@ import type { Session, SupabaseClient } from "@supabase/supabase-js";
 import type {
   InputListing,
   DbListingWithProfile,
-} from "$lib/shared/models/listing";
-import type { Database, Tables } from "src/supabase";
-import { getNow } from "src/lib/shared/utils/utils";
-import { ResourceNotFoundError } from "src/lib/shared/errors/missing-error";
+} from "$lib/shared/models/listing.ts";
+import type { Database, Tables } from "src/supabase.ts";
+import { getNow } from "src/lib/shared/utils/utils.ts";
+import { ResourceNotFoundError } from "src/lib/shared/errors/missing-error.ts";
 
 export const getListings = async (
   supabase: SupabaseClient<Database>,

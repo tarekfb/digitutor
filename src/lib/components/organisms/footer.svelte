@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { websiteName } from "$lib/shared/constants/constants";
+  import { websiteName } from "$lib/shared/constants/constants.ts";
   import Link from "../atoms/link.svelte";
   import Separator from "../ui/separator/separator.svelte";
 

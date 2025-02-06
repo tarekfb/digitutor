@@ -2,9 +2,9 @@ import { PRIVATE_STRIPE_API_KEY } from "$env/static/private"
 import { error, redirect } from "@sveltejs/kit"
 import Stripe from "stripe"
 
-import { getOrCreateCustomerId, fetchSubscription } from "src/lib/shared/utils/subscription/subscription-helper"
-import { getDefaultErrorInfo } from "src/lib/shared/constants/constants"
-import type { PageServerLoad } from "./$types"
+import { getOrCreateCustomerId, fetchSubscription } from "src/lib/shared/utils/subscription/subscription-helper.ts"
+import { getDefaultErrorInfo } from "src/lib/shared/constants/constants.ts"
+import type { PageServerLoad } from "./$types.ts"
 import { creditProducts } from "src/lib/shared/constants/constants.js"
 import { updateCredits } from "src/lib/server/database/credits.js"
 

@@ -1,11 +1,11 @@
-import type { Tables } from "src/supabase";
+import type { Tables } from "src/supabase.ts";
 import { z } from "zod";
 import {
   acceptedAvatarFormats,
   getFormatsHumanReadable,
   maxAvatarSize,
-} from "../constants/constants";
-import { formatBytes } from "src/lib/shared/utils/utils";
+} from "../constants/constants.ts";
+import { formatBytes } from "src/lib/shared/utils/utils.ts";
 
 export type DbProfile = Tables<"profiles">;
 

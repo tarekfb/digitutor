@@ -1,13 +1,13 @@
 <script lang="ts">
-    import { Home } from "lucide-svelte";
+  import Home from "lucide-svelte/icons/home";
   import PrimaryTitle from "$lib/components/atoms/primary-title.svelte";
   import ErrorNav from "$lib/components/atoms/error-nav.svelte";
-  import { CircleHelp } from "lucide-svelte";
-  import { UserRound } from "lucide-svelte";
+  import CircleHelp from "lucide-svelte/icons/circle-help";
+  import UserRound from "lucide-svelte/icons/user-round";
   import {
     defaultErrorDescription,
     defaultErrorTitle,
-  } from "src/lib/shared/constants/constants";
+  } from "src/lib/shared/constants/constants.ts";
 
   export let error: App.Error;
   export let code: number | undefined | null = undefined;

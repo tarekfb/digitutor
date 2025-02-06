@@ -1,21 +1,19 @@
 <script lang="ts">
-  import {
-    Settings,
-    LogOutIcon,
-    NotepadText,
-    X,
-    Menu,
-    Mail,
-    DollarSign,
-  } from "lucide-svelte";
-  import type { Role } from "$lib/shared/models/profile";
-  import { websiteName } from "$lib/shared/constants/constants";
+  import Settings from "lucide-svelte/icons/settings";
+  import LogOutIcon from "lucide-svelte/icons/log-out";
+  import NotepadText from "lucide-svelte/icons/notepad-text";
+  import X from "lucide-svelte/icons/x";
+  import Mail from "lucide-svelte/icons/mail";
+  import Menu from "lucide-svelte/icons/menu";
+  import DollarSign from "lucide-svelte/icons/dollar-sign";
+  import type { Role } from "$lib/shared/models/profile.ts";
+  import { websiteName } from "$lib/shared/constants/constants.ts";
   import Link from "../atoms/link.svelte";
   import LoadingSpinner from "../atoms/loading-spinner.svelte";
   import * as Sidebar from "$lib/components/ui/sidebar/index.js";
   import SidebarNav from "./sidebar-nav.svelte";
   import { fade } from "svelte/transition";
-  import { Separator } from "../ui/separator";
+  import { Separator } from "../ui/separator/index.ts";
 
   export let role: Role | undefined;
   export let logout: () => void;

@@ -3,10 +3,10 @@ import type {
   CreateProfile,
   DbProfile,
   ProfileInput,
-} from "$lib/shared/models/profile";
-import { getNow, removeUndefined } from "src/lib/shared/utils/utils";
-import type { Database } from "src/supabase";
-import { InvalidInputError } from "src/lib/shared/errors/invalid-input-error";
+} from "$lib/shared/models/profile.ts";
+import { getNow, removeUndefined } from "src/lib/shared/utils/utils.ts";
+import type { Database } from "src/supabase.ts";
+import { InvalidInputError } from "src/lib/shared/errors/invalid-input-error.ts";
 
 export const getProfileByUser = async (
   supabase: SupabaseClient<Database>,

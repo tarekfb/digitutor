@@ -1,5 +1,5 @@
-import type { Message } from "$lib/shared/models/common";
-import { StripePriceId, PricingPlanIds, type PricingPlan, StripeProductId } from "../models/subscription";
+import type { Message } from "$lib/shared/models/common.ts";
+import { StripePriceId, PricingPlanIds, type PricingPlan, StripeProductId } from "../models/subscription.ts";
 import type { CreditsProduct } from "../models/subscription.js";
 
 export const websiteName = "Digitutor";

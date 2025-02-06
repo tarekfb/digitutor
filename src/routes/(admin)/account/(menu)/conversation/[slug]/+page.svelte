@@ -4,13 +4,13 @@
   import { superForm } from "sveltekit-superforms";
   import { sendMessageSchema } from "src/lib/shared/models/conversation.js";
   import ChatWindow from "$lib/components/molecules/chat-window.svelte";
-  import { initChat, sendMessageToStore } from "src/stores/chat";
-  import type { PageData } from "./$types";
-  import { Button } from "src/lib/components/ui/button";
-  import { SendHorizontal } from "lucide-svelte";
-  import { Input } from "src/lib/components/ui/input";
-  import type { Profile } from "src/lib/shared/models/profile";
-  import { websiteName } from "src/lib/shared/constants/constants";
+  import { initChat, sendMessageToStore } from "src/stores/chat.ts";
+  import type { PageData } from "./$types.ts";
+  import { Button } from "src/lib/components/ui/button/index.js";
+  import SendHorizontal from "lucide-svelte/icons/send-horizontal";
+  import { Input } from "src/lib/components/ui/input/index.js";
+  import type { Profile } from "src/lib/shared/models/profile.ts";
+  import { websiteName } from "src/lib/shared/constants/constants.ts";
   import { ZodError } from "zod";
 
   export let data: PageData;

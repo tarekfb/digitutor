@@ -1,7 +1,7 @@
-import type { Tables } from "src/supabase";
-import type { TypeToZod } from "src/lib/shared/utils/utils";
+import type { Tables } from "src/supabase.ts";
+import type { TypeToZod } from "src/lib/shared/utils/utils.ts";
 import { z } from "zod";
-import type { DbProfile, Profile } from "./profile";
+import type { DbProfile, Profile } from "./profile.ts";
 
 export type DbListingBase = Tables<"listings">;
 

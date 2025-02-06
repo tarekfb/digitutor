@@ -1,16 +1,16 @@
 <script lang="ts">
   import PrimaryTitle from "src/lib/components/atoms/primary-title.svelte";
-  import type { PageData } from "./$types";
+  import type { PageData } from "./$types.ts";
   import RootContainer from "src/lib/components/templates/root-container.svelte";
-  import { PricingPlanIds } from "src/lib/shared/models/subscription";
+  import { PricingPlanIds } from "src/lib/shared/models/subscription.ts";
   import {
     defaultPlanId,
     pricingPlans,
     websiteName,
-  } from "src/lib/shared/constants/constants";
+  } from "src/lib/shared/constants/constants.ts";
   import PricingModule from "src/lib/components/molecules/pricing-module.svelte";
   import Button from "src/lib/components/ui/button/button.svelte";
-  import { Pencil } from "lucide-svelte";
+  import Pencil from "lucide-svelte/icons/pencil";
   import SecondaryTitle from "src/lib/components/atoms/secondary-title.svelte";
   import CreditsNav from "src/lib/components/molecules/credits-nav.svelte";
   import {

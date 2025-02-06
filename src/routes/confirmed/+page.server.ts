@@ -1,10 +1,10 @@
 import type { EmailOtpType } from "@supabase/supabase-js";
 import { error } from "@sveltejs/kit";
-import type { PageServerLoad } from "./$types";
+import type { PageServerLoad } from "./$types.ts";
 import {
   defaultErrorInfo,
   getDefaultErrorInfo,
-} from "$lib/shared/constants/constants";
+} from "$lib/shared/constants/constants.ts";
 
 export const load: PageServerLoad = async (event) => {
   const {

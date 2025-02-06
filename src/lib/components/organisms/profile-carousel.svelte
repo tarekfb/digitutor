@@ -4,9 +4,9 @@
   import Stars from "src/lib/components/atoms/stars.svelte";
   import SecondaryTitle from "src/lib/components/atoms/secondary-title.svelte";
   import { goto } from "$app/navigation";
-  import { Button } from "src/lib/components/ui/button";
+  import { Button } from "src/lib/components/ui/button/index.js";
   import { mediaQuery } from "svelte-legos";
-  import type { DisplayProfile } from "src/lib/shared/models/review";
+  import type { DisplayProfile } from "src/lib/shared/models/review.ts";
   import SubjectItem from "../atoms/subject-item.svelte";
 
   const isDesktop = mediaQuery("(min-width: 768px)");
@@ -15,7 +15,7 @@
 
 {#if profiles.length > 1}
   <Carousel.Root
-    class="w-5/6 max-w-xs md:max-w-md lg:max-w-lg p-2"
+    class="w-5/6 max-w-xs p-2 md:max-w-md lg:max-w-lg"
     plugins={[
       Autoplay({
         delay: 3000,
@@ -25,18 +25,18 @@
     <Carousel.Content>
       {#each profiles as profile}
         {#if !$isDesktop}
-          <Carousel.Item class="flex flex-col start gap-y-4">
+          <Carousel.Item class="start flex flex-col gap-y-4">
             <a href="/profile/{profile.id}" class="self-center">
               <img
                 alt="profile avatar"
-                class="rounded-sm object-cover w-60 h-60"
+                class="h-60 w-60 rounded-sm object-cover"
                 src={profile.avatarUrl}
               />
             </a>
             <div class="flex flex-col justify-between gap-y-4">
               <div class="flex flex-col gap-y-0.5 text-xl md:text-2xl">
                 <div
-                  class="flex justify-between items-center gap-x-1 flex-l flex-wrap"
+                  class="flex-l flex flex-wrap items-center justify-between gap-x-1"
                 >
                   <SecondaryTitle>{profile.firstName}</SecondaryTitle>
                   <Stars size={5} rating={profile.avgRating} />
@@ -59,15 +59,15 @@
             <a href="/profile/{profile.id}" class="flex-shrink-0">
               <img
                 alt="profile avatar"
-                class="rounded-sm object-cover h-60 aspect-square"
+                class="aspect-square h-60 rounded-sm object-cover"
                 src={profile.avatarUrl}
               />
             </a>
             <div
-              class="flex flex-col justify-between gap-y-4 max-h-60 flex-grow-0"
+              class="flex max-h-60 flex-grow-0 flex-col justify-between gap-y-4"
             >
               <div
-                class="flex flex-col gap-y-2 text-xl md:text-2xl items-start"
+                class="flex flex-col items-start gap-y-2 text-xl md:text-2xl"
               >
                 <SecondaryTitle>{profile.firstName}</SecondaryTitle>
                 <Stars size={5} rating={profile.avgRating} />
@@ -75,7 +75,7 @@
                   on:click={() => goto(`/profile/${profile.id}`)}
                   class="md:min-w-wider">Profil</Button
                 >
-                <ul class="max-h-32 overflow-y-auto flex-grow-0 w-full">
+                <ul class="max-h-32 w-full flex-grow-0 overflow-y-auto">
                   {#each profile.subjects as subject}
                     <SubjectItem {subject} />
                   {/each}

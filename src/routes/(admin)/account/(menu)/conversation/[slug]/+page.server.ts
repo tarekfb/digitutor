@@ -1,15 +1,15 @@
 import { error } from "@sveltejs/kit";
-import { defaultErrorInfo } from "$lib/shared/constants/constants";
+import { defaultErrorInfo } from "$lib/shared/constants/constants.ts";
 import {
   sendMessageSchema,
   type ConversationWithReferences,
-} from "$lib/shared/models/conversation";
+} from "$lib/shared/models/conversation.ts";
 import { superValidate } from "sveltekit-superforms";
 import { zod } from "sveltekit-superforms/adapters";
-import { getConversation } from "src/lib/server/database/conversations";
-import { ExternalErrorCodes } from "src/lib/shared/models/common";
-import { formatConversationWithReferences } from "src/lib/shared/utils/conversation/utils";
-import { isErrorWithCode } from "src/lib/shared/utils/utils";
+import { getConversation } from "src/lib/server/database/conversations.ts";
+import { ExternalErrorCodes } from "src/lib/shared/models/common.ts";
+import { formatConversationWithReferences } from "src/lib/shared/utils/conversation/utils.ts";
+import { isErrorWithCode } from "src/lib/shared/utils/utils.ts";
 
 export const ssr = false;
 

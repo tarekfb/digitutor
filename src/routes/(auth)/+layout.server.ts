@@ -1,6 +1,6 @@
 import { redirect } from "sveltekit-flash-message/server";
 import type { LayoutServerLoad } from "../$types";
-import { getProfileByUser } from "src/lib/server/database/profiles";
+import { getProfileByUser } from "src/lib/server/database/profiles.ts";
 
 export const ssr = true;
 

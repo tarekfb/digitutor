@@ -1,9 +1,9 @@
 import { PRIVATE_STRIPE_API_KEY } from "$env/static/private"
 import { error } from "@sveltejs/kit"
 import Stripe from "stripe"
-import type { PageServerLoad } from "./$types"
-import { getDefaultErrorInfo } from 'src/lib/shared/constants/constants';
-import { getOrCreateCustomerId } from "src/lib/shared/utils/subscription/subscription-helper";
+import type { PageServerLoad } from "./$types.ts"
+import { getDefaultErrorInfo } from 'src/lib/shared/constants/constants.ts';
+import { getOrCreateCustomerId } from "src/lib/shared/utils/subscription/subscription-helper.ts";
 import { redirect } from "sveltekit-flash-message/server";
 
 // , { apiVersion: "2023-08-16" }

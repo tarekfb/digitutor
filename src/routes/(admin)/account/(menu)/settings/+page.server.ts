@@ -1,9 +1,9 @@
-import type { PageServerLoad } from "./$types";
+import type { PageServerLoad } from "./$types.ts";
 import {
   getFailFormMessage,
   getSuccessFormMessage,
   maxAvatarSize,
-} from "$lib/shared/constants/constants";
+} from "$lib/shared/constants/constants.ts";
 import { fail, message, superValidate, withFiles } from "sveltekit-superforms";
 import { zod } from "sveltekit-superforms/adapters";
 import {
@@ -13,22 +13,22 @@ import {
   nameSchema,
   updateBioSchema,
   type ProfileInput,
-} from "$lib/shared/models/profile";
-import { updateProfile } from "$lib/server/database/profiles";
-import { updateUserEmail } from "$lib/server/database/user";
-import { deleteAccountSchema, changePasswordSchema } from "$lib/shared/models/user";
+} from "$lib/shared/models/profile.ts";
+import { updateProfile } from "$lib/server/database/profiles.ts";
+import { updateUserEmail } from "$lib/server/database/user.ts";
+import { deleteAccountSchema, changePasswordSchema } from "$lib/shared/models/user.ts";
 import { isAuthApiError } from "@supabase/supabase-js";
 import { redirect } from "sveltekit-flash-message/server";
-import { deleteAvatar, uploadAvatar } from "src/lib/server/database/avatar";
+import { deleteAvatar, uploadAvatar } from "src/lib/server/database/avatar.ts";
 import {
   formatBytes,
   isErrorWithStatusCode,
   verifyAvatarOwnership,
-} from "src/lib/shared/utils/utils";
+} from "src/lib/shared/utils/utils.ts";
 import { Buffer } from "node:buffer";
 import { CF_IMAGE_RESIZE_URL } from "$env/static/private";
-import { ResourceNotFoundError } from "src/lib/shared/errors/missing-error";
-import { ExternalErrorCodes } from "src/lib/shared/models/common";
+import { ResourceNotFoundError } from "src/lib/shared/errors/missing-error.ts";
+import { ExternalErrorCodes } from "src/lib/shared/models/common.ts";
 
 export const load: PageServerLoad = async ({
   parent,

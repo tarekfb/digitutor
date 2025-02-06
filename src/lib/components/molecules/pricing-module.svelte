@@ -1,6 +1,6 @@
 <script lang="ts">
   import { goto } from "$app/navigation";
-  import type { PricingPlan } from "src/lib/shared/models/subscription";
+  import type { PricingPlan } from "src/lib/shared/models/subscription.ts";
   import Button from "src/lib/components/ui/button/button.svelte";
 
   export let pricingPlan: PricingPlan;
@@ -19,7 +19,7 @@
       {pricingPlan.description}
     </p>
     {#if pricingPlan.bold}
-      <p class="mt-2 text-sm leading-relaxed text-gray-500 font-bold">
+      <p class="mt-2 text-sm font-bold leading-relaxed text-gray-500">
         {pricingPlan.bold}
       </p>
     {/if}

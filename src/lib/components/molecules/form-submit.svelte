@@ -1,8 +1,8 @@
 <script lang="ts">
-  import { Button } from "$lib/components/ui/button";
+  import { Button } from "$lib/components/ui/button/index.js";
   import LoadingSpinner from "$lib/components/atoms/loading-spinner.svelte";
   import { cn } from "src/lib/shared/utils/utils.js";
-  import type { Variant } from "../ui/button";
+  import type { Variant } from "$lib/components/ui/button/index.js";
 
   let className: string | null | undefined = undefined;
   export { className as class };

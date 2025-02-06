@@ -1,11 +1,11 @@
 <script lang="ts">
   import * as Card from "$lib/components/ui/card/index.js";
-  import type { ListingWithProfile } from "$lib/shared/models/listing";
-  import { formatDateReadable, truncate } from "src/lib/shared/utils/utils";
+  import type { ListingWithProfile } from "$lib/shared/models/listing.ts";
+  import { formatDateReadable, truncate } from "src/lib/shared/utils/utils.ts";
   import IsPublished from "../atoms/is-published.svelte";
-  import { Button } from "../ui/button";
-  import { Pen } from "lucide-svelte";
-  import { ExternalLink } from "lucide-svelte";
+  import { Button } from "$lib/components/ui/button/index.js";
+  import Pen from "lucide-svelte/icons/pen";
+  import ExternalLink from "lucide-svelte/icons/external-link";
   import Separator from "../ui/separator/separator.svelte";
 
   export let listing: ListingWithProfile;

@@ -2,18 +2,18 @@
   import { superForm } from "sveltekit-superforms";
   import { zodClient } from "sveltekit-superforms/adapters";
   import { signUpSchema } from "$lib/shared/models/user.js";
-  import * as Tabs from "$lib/components/ui/tabs";
+  import * as Tabs from "$lib/components/ui/tabs/index.ts";
   import { page } from "$app/stores";
   import Avatar from "src/lib/components/atoms/avatar.svelte";
-  import { ArrowRightIcon } from "lucide-svelte";
+  import  ArrowRightIcon  from "lucide-svelte/icons/arrow-right";
   import SignupContent from "src/lib/components/molecules/signup-content.svelte";
   import FormMessage from "src/lib/components/molecules/form-message.svelte";
   import FormSubmit from "src/lib/components/molecules/form-submit.svelte";
   import AuthSplit from "src/lib/components/molecules/auth-split.svelte";
-  import type { PageData } from "./$types";
+  import type { PageData } from "./$types.ts";
   import Stars from "src/lib/components/atoms/stars.svelte";
-  import { Input } from "$lib/components/ui/input";
-  import * as Form from "$lib/components/ui/form";
+  import { Input } from "$lib/components/ui/input/index.js";
+  import * as Form from "$lib/components/ui/form/index.js";
 
   export let data: PageData;
   $: ({ review } = data);
