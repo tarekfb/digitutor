@@ -24,7 +24,7 @@ export const POST: RequestHandler = async ({ request, locals: { supabaseServiceR
         try {
             await updateCredits(supabaseServiceRole, matchedProduct.credits, userId)
         } catch (e) {
-            console.error(`Critical error: after completing payment and trying to add credit value of ${matchedProduct.credits}. User ${userId} most likely didnt receive their ${matchedProduct.credits} credits`, e)
+            console.error(`Critical error: after completing payment and trying to add credit value of ${matchedProduct.credits}. User ${userId} most likely didnt receive their ${matchedProduct.credits} credits`, {metadata}, {userId},e)
             return json({ success: false, status: 500 });
         }
 
