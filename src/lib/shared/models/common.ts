@@ -1,5 +1,5 @@
-import type { MessageId } from "../constants/constants";
-import { type Subject } from "./subject";
+import type { MessageId } from "../constants/constants.ts";
+import { type Subject } from "./subject.ts";
 
 export const languages: Subject[] = [
   { title: "JavaScript", id: 1, altTitle: "JS" },

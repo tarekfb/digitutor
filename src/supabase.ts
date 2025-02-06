@@ -103,6 +103,41 @@ export type Database = {
           },
         ]
       }
+      credit_transactions: {
+        Row: {
+          amount: number
+          comment: string | null
+          created_at: string
+          id: string
+          student: string
+          updated_at: string | null
+        }
+        Insert: {
+          amount: number
+          comment?: string | null
+          created_at?: string
+          id?: string
+          student: string
+          updated_at?: string | null
+        }
+        Update: {
+          amount?: number
+          comment?: string | null
+          created_at?: string
+          id?: string
+          student?: string
+          updated_at?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "public_credit_transactions_student_fkey"
+            columns: ["student"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       listings: {
         Row: {
           created_at: string
@@ -357,7 +392,21 @@ export type Database = {
       }
     }
     Views: {
-      [_ in never]: never
+      student_credit_balances: {
+        Row: {
+          balance: number | null
+          student: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "public_credit_transactions_student_fkey"
+            columns: ["student"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
     }
     Functions: {
       compound_search: {

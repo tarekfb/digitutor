@@ -7,6 +7,7 @@
     "forceConsistentCasingInFileNames": true,
     "resolveJsonModule": true,
     "moduleResolution": "node16",
+    "module": "Node16",
     "skipLibCheck": true,
     "sourceMap": true,
     "strict": true,
@@ -14,6 +15,7 @@
       "@testing-library/jest-dom"
     ],
     "allowSyntheticDefaultImports": true,
+    "allowImportingTsExtensions": true,
   }
   // Path aliases are handled by https://kit.svelte.dev/docs/configuration#alias and https://kit.svelte.dev/docs/configuration#files
   //

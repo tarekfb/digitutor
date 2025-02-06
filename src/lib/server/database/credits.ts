@@ -1,18 +1,24 @@
-import type { SupabaseClient } from "@supabase/supabase-js";
-import type { Database } from "src/supabase";
+import type { Session, SupabaseClient } from "@supabase/supabase-js";
+import type { InputCreditTransaction } from "src/lib/shared/models/credits.ts";
+import { getNow } from "src/lib/shared/utils/utils.ts";
+import type { Database } from "src/supabase.ts";
 
-export const getCreditsByUser = async (
+export const getCreditsByStudent = async (
   supabase: SupabaseClient<Database>,
-  userId: string,
-): Promise<number> => {
+  studentId: string,
+): Promise<{
+  balance: number | null;
+} | null> => {
   const { data, error } = await supabase
-    .from("credits")
-    .select(`credits`)
-    .eq("id", userId)
-    .single();
+    .from("student_credit_balances")
+    .select(`balance`)
+    .eq("student", studentId)
+    .limit(1)
+    .maybeSingle();
+
 
   if (error) {
-    console.error(`Failed to get credits for userId: ${userId}`, { error });
+    console.error(`Failed to get credits for studentId: ${studentId}`, { error });
     throw error;
   }
 
@@ -21,19 +27,24 @@ export const getCreditsByUser = async (
 
 export const updateCredits = async (
   supabase: SupabaseClient<Database>,
-  userId: string,
-  credits: number,
+  amount: number,
+  session: Session,
+  comment: string = "",
 ): Promise<void> => {
+  const input: InputCreditTransaction = {
+    amount,
+    student: session.user.id,
+    comment,
+  }
 
-  const { data, error } = await supabase
-    .rpc('update_credits', { userId, countvalue: credits })
+  const { error } = await supabase
+    .from('credit_transactions')
+    .insert({ ...input, updated_at: getNow() })
 
   if (error) {
-    console.error(`Failed to update credits for userId: ${userId}`, {
+    console.error(`Failed to add credit transaction for: ${session.user.id}`, {
       error,
     });
     throw error;
   }
-
-  return data;
 };

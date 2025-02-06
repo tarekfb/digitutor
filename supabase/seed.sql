@@ -535,8 +535,8 @@ BEGIN
 END;
 $$ LANGUAGE plpgsql IMMUTABLE;
 
-CREATE OR REPLACE FUNCTION update_credits(rowid int, countvalue int) RETURNS void AS $$
-  UPDATE "credits" 
-    SET credit = credit + countvalue 
-    WHERE id = rowid;
-$$ LANGUAGE sql;
+-- CREATE OR REPLACE FUNCTION update_credits(rowid int, countvalue int) RETURNS void AS $$
+--   UPDATE "credits" 
+--     SET credit = credit + countvalue 
+--     WHERE id = rowid;
+-- $$ LANGUAGE sql;

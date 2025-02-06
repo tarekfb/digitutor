@@ -13,10 +13,15 @@
   import { Pencil } from "lucide-svelte";
   import SecondaryTitle from "src/lib/components/atoms/secondary-title.svelte";
   import CreditsNav from "src/lib/components/molecules/credits-nav.svelte";
-  import { creditProducts } from "src/lib/shared/constants/constants.js";
+  import {
+    creditProducts,
+    defaultErrorDescription,
+  } from "src/lib/shared/constants/constants.js";
+  import { enhance } from "$app/forms";
+  import AlertMessage from "src/lib/components/atoms/alert-message.svelte";
 
   export let data: PageData;
-  $: ({ hasEverHadSubscription, currentCredits } = data);
+  $: ({ hasEverHadSubscription, balance } = data);
   let currentPlanId = data.currentPlanId ?? defaultPlanId;
   let currentPlanName = pricingPlans.find(
     (pricingPlan) => pricingPlan.id === currentPlanId,
@@ -30,6 +35,20 @@
 <RootContainer maxWidth minWidth class="gap-y-6 self-center md:gap-y-8">
   <section class="flex flex-col items-center justify-center gap-y-2 md:gap-y-4">
     <PrimaryTitle responsiveMb>Betalningar</PrimaryTitle>
+    <form action="?/add-credits" method="post" use:enhance>
+      <Button
+        type="submit"
+        class="flex w-full gap-x-2 self-center md:max-w-widest"
+        variant="outline-card">add credits</Button
+      >
+    </form>
+    <form action="?/remove-credits" method="post" use:enhance>
+      <Button
+        type="submit"
+        class="flex w-full gap-x-2 self-center md:max-w-widest"
+        variant="outline-card">remove credits</Button
+      >
+    </form>
     <div class="self-start text-muted-foreground">
       <p>
         Här finns din betalningsinformation och betalningshistorik. Se vår <a
@@ -60,9 +79,17 @@
           <div
             class="self-start whitespace-nowrap rounded-sm border border-accent bg-card p-1 font-mono text-sm font-normal uppercase tracking-wider md:p-2"
           >
-            {currentCredits}
+            {balance === undefined ? "?" : balance}
           </div>
         </div>
+        {#if balance === undefined}
+          <AlertMessage
+            class="w-3/4 self-center"
+            title="Kunde inte hämta dina krediter"
+            description={defaultErrorDescription}
+            variant="destructive"
+          />
+        {/if}
         <div class="flex items-center gap-x-2 self-center md:self-start">
           <SecondaryTitle>Köp fler krediter</SecondaryTitle>
         </div>
