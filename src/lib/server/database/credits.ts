@@ -26,7 +26,7 @@ export const getCreditsByStudent = async (
 };
 
 export const updateCredits = async (
-  supabase: SupabaseClient<Database>,
+  supabaseServiceRole: SupabaseClient<Database>,
   amount: number,
   studentId: string,
   comment: string = "",
@@ -37,7 +37,7 @@ export const updateCredits = async (
     comment,
   }
 
-  const { error } = await supabase
+  const { error } = await supabaseServiceRole
     .from('credit_transactions')
     .insert({ ...input, updated_at: getNow() })
 
