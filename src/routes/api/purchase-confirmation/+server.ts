@@ -13,7 +13,7 @@ export const POST: RequestHandler = async ({ request, locals: { supabaseServiceR
     if (status === "complete" && mode === "payment") {
         const metadata = requestBody.data.object.metadata;
         const priceId = metadata.price_id;
-        const userId = metadata.userId;
+        const userId = metadata.user_id;
 
         const matchedProduct = creditProducts.find((product) => product.stripePriceId === priceId);
         if (!matchedProduct) {
