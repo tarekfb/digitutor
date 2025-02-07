@@ -6,9 +6,7 @@
 </script>
 
 <svelte:head>
-  <title>
-    import {websiteName} from "src/lib/shared/constants/constants.ts"; Tips</title
-  >
+  <title>{websiteName} | Tips</title>
 </svelte:head>
 
 <RootContainer>

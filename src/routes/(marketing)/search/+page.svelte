@@ -83,8 +83,7 @@
 
 <svelte:head>
   <title>
-    import {websiteName} from "src/lib/shared/constants/constants.ts"; Sök bland
-    lärare</title
+    {websiteName} | Sök lärare</title
   >
 </svelte:head>
 

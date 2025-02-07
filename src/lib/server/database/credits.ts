@@ -6,9 +6,7 @@ import type { Database } from "src/supabase.ts";
 export const getCreditsByStudent = async (
   supabase: SupabaseClient<Database>,
   studentId: string,
-): Promise<{
-  balance: number | null;
-} | null> => {
+): Promise<number> => {
   const { data, error } = await supabase
     .from("student_credit_balances")
     .select(`balance`)
@@ -22,7 +20,7 @@ export const getCreditsByStudent = async (
     throw error;
   }
 
-  return data;
+  return data?.balance ?? 0;
 };
 
 export const updateCredits = async (
