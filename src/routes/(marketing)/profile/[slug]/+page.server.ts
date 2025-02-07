@@ -4,6 +4,7 @@ import {
   defaultErrorInfo,
   getDefaultErrorInfo,
   costPerRequest,
+  MessageId,
 } from "$lib/shared/constants/constants.ts";
 import { getProfileByUser } from "$lib/server/database/profiles.ts";
 import { getListing } from "$lib/server/database/listings.ts";
@@ -43,6 +44,7 @@ import { formatProfile } from "src/lib/shared/utils/profile/utils.js";
 import { formatListingWithProfile } from "src/lib/shared/utils/listing/utils.js";
 import { formatReviewWithReferences } from "src/lib/shared/utils/reviews/utils.ts";
 import { getCreditsByStudent, updateCredits } from "src/lib/server/database/credits.ts";
+import { fetchSubscription, getOrCreateCustomerId } from "src/lib/shared/utils/subscription/subscription-helper.ts";
 
 export const load = async ({
   locals: { supabase, safeGetSession },
@@ -290,18 +292,18 @@ export const actions = {
         event,
       );
 
-    let balance: number;
+    let balance: number | undefined;
     try {
       balance = await getCreditsByStudent(supabase, userId)
-      if (balance - costPerRequest < 0) {
-        const missing = (balance - costPerRequest) * -1;
-        redirect(303, `/account/billing`, { message: `Du har ${missing} krediter för lite.`, type: 'warning' }, event)
-      }
     } catch (error) {
+      balance = undefined;
       console.error("Unexpected error when checking if credit balance enough to contact teacher. Allowing contact.", error)
     }
 
-    return { form };
+    if (balance !== undefined && balance - costPerRequest < 0) {
+      const missing = (balance - costPerRequest) * -1;
+      return message(form, getFailFormMessage(`Du har ${missing} krediter för lite`, "", MessageId.InsufficientCredits, undefined, "warning"), { status: 403 })
+    }
   },
   startContact: async (event) => {
     const {
@@ -309,7 +311,7 @@ export const actions = {
       params: { slug: teacherId },
       cookies,
     } = event;
-    const { session } = await safeGetSession();
+    const { session, user } = await safeGetSession();
     if (!session)
       redirect(
         303,
@@ -411,9 +413,22 @@ export const actions = {
     }
 
     try {
-      await updateCredits(supabaseServiceRole, -costPerRequest, userId, `Started contact with teacher: ${teacherId}.`)
+      const { error: idError, customerId } = await getOrCreateCustomerId({
+        supabaseServiceRole,
+        user,
+      })
+      if (idError || !customerId)
+        console.error("Error getting or creating customer id. Allowing flow to proceed anyway.", idError)
+
+      const { primarySubscription: hasSubscription } = await fetchSubscription({
+        // @ts-expect-error - ts doesn't understand customerId has value because of if check above
+        customerId,
+      })
+
+      if (!hasSubscription)
+        await updateCredits(supabaseServiceRole, -costPerRequest, userId, `Started contact with teacher: ${teacherId}.`)
     } catch (error) {
-      console.error(`Unexpected issue when charging ${costPerRequest} credits for student: ${userId} contacting teacher: ${teacherId}. Allowing contact.`, error)
+      console.error(`Unexpected issue when checking subscription and charging ${costPerRequest} credits for student: ${userId} contacting teacher: ${teacherId}. Allowing contact.`, error)
     }
 
     redirect(303, `/account/conversation/${conversationId}`);

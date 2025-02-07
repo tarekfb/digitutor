@@ -29,6 +29,18 @@
       variant={$message.variant ?? "default"}
       class={className}
     >
+      {#if $message.id === 3}
+        <p class="inline text-sm">
+          Du kan köpa mer krediter på <a
+            href="/account/billing"
+            class=" font-medium text-accent hover:underline">betalningar</a
+          >, eller uppgradera till
+          <a
+            href="/account/pricing"
+            class="font-medium text-accent hover:underline">premium</a
+          > för att kontakta läraren.
+        </p>
+      {/if}
       <slot />
     </AlertMessage>
   </div>

@@ -26,7 +26,7 @@ export const load: PageServerLoad = (async ({ locals: { supabaseServiceRole, saf
 
     let balance: number | undefined;
     try {
-        balance = await getCreditsByStudent(supabase, user.id)
+        balance = await getCreditsByStudent(supabaseServiceRole, user.id)
     } catch (error) {
         console.error("Error fetching credits", error)
         balance = undefined;
@@ -43,7 +43,7 @@ export const load: PageServerLoad = (async ({ locals: { supabaseServiceRole, saf
 export const actions = {
     "add-credits": async (event) => {
         const {
-            locals: { supabase, safeGetSession },
+            locals: { supabaseServiceRole, safeGetSession },
         } = event;
 
         const { session } = await safeGetSession();
@@ -51,11 +51,11 @@ export const actions = {
         const amount = 5;
 
 
-        updateCredits(supabase, amount, session.user.id, `Testing credits feature.`);
+        updateCredits(supabaseServiceRole, amount, session.user.id, `Testing credits feature.`);
     },
     "remove-credits": async (event) => {
         const {
-            locals: { supabase, safeGetSession },
+            locals: { supabaseServiceRole, safeGetSession },
         } = event;
 
         const { session } = await safeGetSession();
@@ -63,6 +63,6 @@ export const actions = {
         const amount = -5;
 
 
-        updateCredits(supabase, amount, session.user.id, `Testing credits feature.`);
+        updateCredits(supabaseServiceRole, amount, session.user.id, `Testing credits feature.`);
     },
 };
