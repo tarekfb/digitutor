@@ -33,7 +33,11 @@
           bli kontaktad.
         </p>
       {:else}
-        <p>Inga konversationer. Testa söka efter en lärare!</p>
+        <p>
+          Inga konversationer. Testa <a href="/search" class="link"
+            >söka efter en lärare</a
+          >!
+        </p>
       {/if}
     {/each}
   </RootContainer>

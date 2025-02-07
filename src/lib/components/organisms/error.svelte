@@ -2,7 +2,7 @@
   import Home from "lucide-svelte/icons/home";
   import PrimaryTitle from "$lib/components/atoms/primary-title.svelte";
   import ErrorNav from "$lib/components/atoms/error-nav.svelte";
-  import CircleHelp from "lucide-svelte/icons/circle-help";
+  import MessageCircle from "lucide-svelte/icons/message-circle";
   import UserRound from "lucide-svelte/icons/user-round";
   import {
     defaultErrorDescription,
@@ -51,7 +51,7 @@
       <UserRound class={iconStyling} />
     </ErrorNav>
     <ErrorNav text="Kontakta oss" href="/contact-us">
-      <CircleHelp class={iconStyling} />
+      <MessageCircle class={iconStyling} />
     </ErrorNav>
   </ul>
 </div>

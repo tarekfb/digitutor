@@ -26,8 +26,7 @@ export const load: PageServerLoad = (async ({ locals: { supabaseServiceRole, saf
 
     let balance: number | undefined;
     try {
-        const credits = await getCreditsByStudent(supabase, user.id)
-        balance = credits?.balance ?? 0;
+        balance = await getCreditsByStudent(supabase, user.id)
     } catch (error) {
         console.error("Error fetching credits", error)
         balance = undefined;
