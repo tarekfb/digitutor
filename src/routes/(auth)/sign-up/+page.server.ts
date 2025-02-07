@@ -2,6 +2,7 @@ import { fail } from "@sveltejs/kit";
 import { redirect } from "sveltekit-flash-message/server";
 import type { PageServerLoad } from "./$types.ts";
 import {
+  freeCredits,
   getFailFormMessage,
 } from "$lib/shared/constants/constants.ts";
 import { message, setError, superValidate } from "sveltekit-superforms";
@@ -14,6 +15,7 @@ import { ExternalErrorCodes } from "src/lib/shared/models/common.ts";
 import { isErrorWithCode } from "src/lib/shared/utils/utils.ts";
 import type { ReviewWithReferences } from "src/lib/shared/models/review.ts";
 import { formatReviewWithReferences } from "src/lib/shared/utils/reviews/utils";
+import { updateCredits } from "src/lib/server/database/credits.ts";
 
 export const load: PageServerLoad = async ({ locals: { supabase } }) => {
   let review: ReviewWithReferences | undefined;
@@ -39,7 +41,7 @@ export const load: PageServerLoad = async ({ locals: { supabase } }) => {
 export const actions = {
   signUp: async (event) => {
     const {
-      locals: { supabase, session }, cookies,
+      locals: { supabase, session, supabaseServiceRole }, cookies,
     } = event;
     if (session) redirect(303, "/account", {
       type: "info",
@@ -117,6 +119,13 @@ export const actions = {
       console.error("Error when creating profile", error);
       return message(form, getFailFormMessage(), { status: 500 });
     }
+
+    try {
+      await updateCredits(supabaseServiceRole, freeCredits, inputUser.id)
+    } catch (error) {
+      console.error(`Unknown error when adding free credits to new profile with id ${inputUser.id}`, error)
+    }
+
     return message(form, {
       variant: "success",
       title: "Verifiera e-postadress",
