@@ -47,7 +47,7 @@
         <p class="mt-4">
           Detta kostar {costPerRequest} krediter. För dig som har
           <a href="/pricing" class="link">premium</a> kostar det ingenting. Läs
-          mer på <a href="/pricing" class="link text-foreground">betalningar</a>
+          mer på <a href="/pricing" class="link text-foreground">prissidan</a>
         </p>
       </Dialog.Description>
     </Dialog.Header>
