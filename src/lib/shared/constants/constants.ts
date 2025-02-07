@@ -59,6 +59,7 @@ export enum MessageId {
   Unknown = 0,
   RateLimitExceeded = 1,
   ResourceAlreadyExists = 2,
+  InsufficientCredits = 3,
 }
 
 export const initMessagesCount = 25;

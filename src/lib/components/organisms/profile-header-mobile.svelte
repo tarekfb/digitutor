@@ -23,7 +23,7 @@
   <div class="{listing ? 'h-28' : 'h-28'} w-screen bg-secondary"></div>
 
   <Wavy class="-mt-8 overflow-x-hidden" />
-  <div class="flex w-full max-w-md flex-col items-center gap-y-4">
+  <div class="flex w-full max-w-md flex-col items-center gap-y-4 px-8">
     <img
       src={teacher.avatarUrl}
       alt="profile avatar"
@@ -39,7 +39,9 @@
     />
   </div>
 {:else}
-  <div class="flex w-screen flex-col items-center bg-secondary text-foreground">
+  <div
+    class="flex w-screen flex-col items-center bg-secondary px-8 text-foreground"
+  >
     <ProfileHeaderInfo
       {teacher}
       {listing}
@@ -53,6 +55,7 @@
       buttonVariant="third-secondary"
       requestContactAction="?/requestContact"
       startContactAction="?/startContact"
+      class="max-w-md"
       firstName={teacher.firstName}
     />
   </div>

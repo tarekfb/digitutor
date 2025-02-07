@@ -64,7 +64,7 @@
   method="POST"
   use:enhance
   action={requestContactAction}
-  class={cn("flex flex-col gap-y-4", className)}
+  class={cn("flex flex-col gap-y-4 w-full", className)}
 >
   <input type="hidden" name="teacher" value={$formData.teacher} />
   <input type="hidden" name="role" value={$formData.role} />
@@ -73,7 +73,7 @@
     {allErrors}
     variant={buttonVariant}
     text="Kontakta {firstName}"
-    class={buttonStyling}
+    class="w-full md:min-w-widest md:max-w-widest {buttonStyling}"
   />
   <FormMessage {message} scroll />
 </form>

@@ -19,6 +19,7 @@
   } from "src/lib/shared/constants/constants.js";
   import { enhance } from "$app/forms";
   import AlertMessage from "src/lib/components/atoms/alert-message.svelte";
+  import { goto } from "$app/navigation";
 
   export let data: PageData;
   $: ({ hasEverHadSubscription, balance } = data);
@@ -26,6 +27,10 @@
   let currentPlanName = pricingPlans.find(
     (pricingPlan) => pricingPlan.id === currentPlanId,
   )?.name;
+
+  const pricingPlan = pricingPlans.find(
+    (plan) => plan.id === PricingPlanIds.Premium,
+  );
 </script>
 
 <svelte:head>
@@ -35,20 +40,6 @@
 <RootContainer maxWidth minWidth class="gap-y-6 self-center md:gap-y-8">
   <section class="flex flex-col items-center justify-center gap-y-2 md:gap-y-4">
     <PrimaryTitle responsiveMb>Betalningar</PrimaryTitle>
-    <form action="?/add-credits" method="post" use:enhance>
-      <Button
-        type="submit"
-        class="flex w-full gap-x-2 self-center md:max-w-widest"
-        variant="outline-card">add credits</Button
-      >
-    </form>
-    <form action="?/remove-credits" method="post" use:enhance>
-      <Button
-        type="submit"
-        class="flex w-full gap-x-2 self-center md:max-w-widest"
-        variant="outline-card">remove credits</Button
-      >
-    </form>
     <div class="self-start text-muted-foreground">
       <p>
         Här finns din betalningsinformation och betalningshistorik. Se vår <a
@@ -64,13 +55,17 @@
     class="flex w-full flex-col items-center justify-center gap-y-2 md:gap-y-4"
   >
     {#if currentPlanId !== PricingPlanIds.Premium}
-      <SecondaryTitle responsiveMb>Skaffa premium</SecondaryTitle>
-      <PricingModule
-        {currentPlanId}
-        pricingPlan={pricingPlans.find(
-          (plan) => plan.id === PricingPlanIds.Premium,
-        )}
-      />
+      {#if pricingPlan}
+        <SecondaryTitle responsiveMb>Skaffa premium</SecondaryTitle>
+        <PricingModule {currentPlanId} {pricingPlan} />
+      {:else}
+        <!-- this if case should never happen, just checking edge case -->
+        <Button
+          variant="third"
+          on:click={() => goto("/account/subscription.ts")}
+          >Skaffa Premium</Button
+        >
+      {/if}
       <div
         class="flex w-full flex-col gap-y-2 self-center md:gap-y-4 md:self-start"
       >
@@ -129,4 +124,18 @@
       </div>
     {/if}
   </section>
+  <form action="?/add-credits" method="post" use:enhance>
+    <Button
+      type="submit"
+      class="flex w-full gap-x-2 self-center md:max-w-widest"
+      variant="outline-card">add credits</Button
+    >
+  </form>
+  <form action="?/remove-credits" method="post" use:enhance>
+    <Button
+      type="submit"
+      class="flex w-full gap-x-2 self-center md:max-w-widest"
+      variant="outline-card">remove credits</Button
+    >
+  </form>
 </RootContainer>
