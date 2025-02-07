@@ -36,7 +36,7 @@
             class=" font-medium text-accent hover:underline">betalningar</a
           >, eller uppgradera till
           <a
-            href="/account/pricing"
+            href="/pricing"
             class="font-medium text-accent hover:underline">premium</a
           > för att kontakta läraren.
         </p>
