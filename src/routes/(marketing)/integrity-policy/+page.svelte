@@ -168,4 +168,22 @@
       class="text-blue-600 underline">Integritetsskyddsmyndigheten</a
     >.
   </p>
+  <h2>4. Hur vi hanterar kakor</h2>
+  <p>
+    På {websiteName} använder vi funktionella kakor för att säkerställa att du kan
+    få tillgång till säkra delar av vår webbplats. Dessa kakor lagras på din enhet
+    och gör det möjligt för oss att komma ihåg och autentisera din användning av
+    skyddade områden på webbplatsen.
+  </p>
+  <p>
+    Kakor är små textfiler som lagras på din webbläsare och används för att
+    förbättra din användarupplevelse genom att komma ihåg information om ditt
+    besök. Vi använder endast funktionella kakor som är nödvändiga för att
+    webbplatsen ska fungera korrekt.
+  </p>
+  <p>
+    Du kan hantera och kontrollera användningen av kakor via din webbläsare.
+    Genom att fortsätta använda vår webbplats samtycker du till användningen av
+    dessa kakor.
+  </p>
 </RootContainer>
