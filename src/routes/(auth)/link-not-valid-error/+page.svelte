@@ -2,7 +2,7 @@
   import PrimaryTitle from "$lib/components/atoms/primary-title.svelte";
   import Link from "$lib/components/atoms/link.svelte";
   import RootContainer from "src/lib/components/templates/root-container.svelte";
-  import TriangleAlert  from "lucide-svelte/icons/triangle-alert";
+  import TriangleAlert from "lucide-svelte/icons/triangle-alert";
   import { websiteName } from "src/lib/shared/constants/constants.ts";
 </script>
 
@@ -23,7 +23,8 @@
   </p>
   <p class="text-muted-foreground">
     Du kan begära en ny länk genom att upprepa åtgärden eller <Link
-      href="/contact-us">kontakta oss</Link
+      href="/contact-us"
+      class="text-foreground">kontakta oss</Link
     > om problemet kvarstår.
   </p>
 </RootContainer>

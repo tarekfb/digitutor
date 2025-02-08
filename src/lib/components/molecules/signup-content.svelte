@@ -79,9 +79,12 @@
     <Form.Control let:attrs>
       <Checkbox {...attrs} bind:checked={$formData.terms} />
       <Form.Label class="text-foreground"
-        >Jag accepterar <a href="/terms" class="underline">villkoren</a>
+        >Jag accepterar <a href="/terms-and-conditions" class="underline"
+          >villkoren</a
+        >
         och
-        <a href="/privacy" class="underline">integritetspolicyn</a>.</Form.Label
+        <a href="/integrity-policy" class="underline">integritetspolicyn</a
+        >.</Form.Label
       >
       <input name={attrs.name} value={$formData.terms} hidden />
     </Form.Control>

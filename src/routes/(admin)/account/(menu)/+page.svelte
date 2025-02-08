@@ -34,8 +34,8 @@
         </p>
       {:else}
         <p>
-          Inga konversationer. Testa <a href="/search" class="link"
-            >söka efter en lärare</a
+          Inga konversationer. Testa <Link href="/search"
+            >söka efter en lärare</Link
           >!
         </p>
       {/if}
