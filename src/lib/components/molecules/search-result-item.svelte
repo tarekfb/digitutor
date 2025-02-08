@@ -31,22 +31,24 @@
         />
       </a>
       <div class="flex flex-grow flex-col gap-y-2">
-        <a
+        <Link
           href="/profile/{result.profile.id}?id={result.id}"
+          class="text-foreground"
           aria-label="Gå till profil"
         >
           <PrimaryTitle class="whitespace-normal">
             {result.title}
           </PrimaryTitle>
-        </a>
-        <a
+        </Link>
+        <Link
           href="/profile/{result.profile.id}?id={result.id}"
           aria-label="Gå till profil"
+          class="text-foreground"
         >
           <PrimaryTitle class="whitespace-normal">
             {result.profile.firstName}
           </PrimaryTitle>
-        </a>
+        </Link>
         <div class="flex flex-col gap-y-1">
           <Stars {rating} size={4} class="m-0 p-0 " />
           <p class="text-muted-foreground">

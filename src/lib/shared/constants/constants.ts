@@ -3,6 +3,7 @@ import { StripePriceId, PricingPlanIds, type PricingPlan, StripeProductId } from
 import type { CreditsProduct } from "../models/subscription.js";
 
 export const websiteName = "Digitutor";
+export const contactEmail = "info@digitutor.se";
 export const localBaseUrl = "http://localhost:5173";
 export const testBaseUrl = `https://dev.mindic.pages.dev`;
 export const prodBaseUrl = `https://mindic.pro`;
