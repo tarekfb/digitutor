@@ -66,10 +66,12 @@
           <Settings class={icon} />
           Inställningar
         </SidebarNav>
-        <SidebarNav href="/account/billing" {closeSidebar}>
-          <DollarSign class={icon} />
-          Betalningar
-        </SidebarNav>
+        {#if role === "student"}
+          <SidebarNav href="/account/billing" {closeSidebar}>
+            <DollarSign class={icon} />
+            Betalningar
+          </SidebarNav>
+        {/if}
         <Separator />
         <SidebarNav disabled={logoutLoading} onClick={wrappedLogout}>
           {#if logoutLoading}
