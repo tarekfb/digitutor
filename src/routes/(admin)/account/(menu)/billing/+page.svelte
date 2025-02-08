@@ -80,7 +80,7 @@
             {:else if balance < 0}
               0
             {:else}
-              balance
+              {balance}
             {/if}
           </div>
         </div>
