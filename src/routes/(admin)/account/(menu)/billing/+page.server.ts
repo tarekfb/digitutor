@@ -1,10 +1,14 @@
 import { getOrCreateCustomerId, fetchSubscription } from 'src/lib/shared/utils/subscription/subscription-helper.ts';
 import type { PageServerLoad } from './$types.ts';
-import { error, redirect } from "@sveltejs/kit"
-import { getDefaultErrorInfo } from 'src/lib/shared/constants/constants.ts';
+import { error } from "@sveltejs/kit"
+import { getDefaultErrorInfo, websiteName } from 'src/lib/shared/constants/constants.ts';
 import { getCreditsByStudent, updateCredits } from 'src/lib/server/database/credits.ts';
+import { redirect } from 'sveltekit-flash-message/server';
 
-export const load: PageServerLoad = (async ({ locals: { supabaseServiceRole, safeGetSession, supabase } }) => {
+export const load: PageServerLoad = (async ({ locals: { supabaseServiceRole, safeGetSession }, parent, cookies }) => {
+    const { profile } = await parent();
+    if (profile.role === 'teacher') redirect(303, "/account", { type: "info", message: `Du är lärare och betalar därför ingenting för att använda ${websiteName}.` }, cookies);
+
     const { session, user } = await safeGetSession()
     if (!session || !user?.id) redirect(303, "/sign-in")
 

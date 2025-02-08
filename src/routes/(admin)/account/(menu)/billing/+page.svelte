@@ -11,6 +11,7 @@
   import PricingModule from "src/lib/components/molecules/pricing-module.svelte";
   import Button from "src/lib/components/ui/button/button.svelte";
   import Pencil from "lucide-svelte/icons/pencil";
+  import ExternalLink from "lucide-svelte/icons/external-link";
   import SecondaryTitle from "src/lib/components/atoms/secondary-title.svelte";
   import CreditsNav from "src/lib/components/molecules/credits-nav.svelte";
   import {
@@ -42,12 +43,12 @@
     <PrimaryTitle responsiveMb>Betalningar</PrimaryTitle>
     <div class="self-start text-muted-foreground">
       <p>
-        Här finns din betalningsinformation och betalningshistorik. Se vår <a
+        Här finns din betalningsinformation och betalningshistorik. Se <a
           href="/pricing"
           target="_blank"
-          class="underline">prissida</a
+          class="underline">prissidan</a
         >
-        för mer information om prenumerationer.
+        för mer information om premium och krediter.
       </p>
     </div>
   </section>
@@ -74,7 +75,13 @@
           <div
             class="self-start whitespace-nowrap rounded-sm border border-accent bg-card p-1 font-mono text-sm font-normal uppercase tracking-wider md:p-2"
           >
-            {balance === undefined ? "?" : balance}
+            {#if balance === undefined}
+              ?
+            {:else if balance < 0}
+              0
+            {:else}
+              balance
+            {/if}
           </div>
         </div>
         {#if balance === undefined}
@@ -118,8 +125,11 @@
     </div>
     {#if hasEverHadSubscription}
       <div>
-        <a href="/account/billing/manage" class="link"
-          >Se tidigare betalningar</a
+        <a
+          href="/account/billing/manage"
+          target="_blank"
+          class="link flex items-center gap-x-2"
+          ><ExternalLink class="size-5" />Se betalningshistorik</a
         >
       </div>
     {/if}

@@ -292,18 +292,6 @@ export const actions = {
         event,
       );
 
-    let balance: number | undefined;
-    try {
-      balance = await getCreditsByStudent(supabase, userId)
-    } catch (error) {
-      balance = undefined;
-      console.error("Unexpected error when checking if credit balance enough to contact teacher. Allowing contact.", error)
-    }
-
-    if (balance !== undefined && balance - costPerRequest < 0) {
-      const missing = (balance - costPerRequest) * -1;
-      return message(form, getFailFormMessage(`Du har ${missing} krediter för lite`, "", MessageId.InsufficientCredits, undefined, "warning"), { status: 403 })
-    }
     return { form };
   },
   startContact: async (event) => {
@@ -386,6 +374,43 @@ export const actions = {
       return message(form, getFailFormMessage(), { status: 500 });
     }
 
+    let hasSubscription: boolean = false;
+    try {
+      const { error: idError, customerId } = await getOrCreateCustomerId({
+        supabaseServiceRole,
+        user,
+      })
+      if (idError || !customerId)
+        console.error("Error getting or creating customer id. Allowing flow to proceed anyway.", idError)
+
+      const { primarySubscription } = await fetchSubscription({
+        // @ts-expect-error - ts doesn't understand customerId has value because of if check above
+        customerId,
+      })
+
+      hasSubscription = primarySubscription ? true : false;
+    } catch (error) {
+      console.error(`Unexpected issue when checking subscription and charging ${costPerRequest} credits for student: ${userId} contacting teacher: ${teacherId}. Allowing flow to procceed.`, error)
+    }
+
+    let shouldChargeCredits: boolean = false;
+    if (!hasSubscription) {
+      let balance: number | undefined;
+      try {
+        balance = await getCreditsByStudent(supabase, userId)
+      } catch (error) {
+        balance = undefined;
+        console.error("Unexpected error when checking if credit balance is enough to contact teacher. Allowing contact.", error)
+      }
+
+      if (balance !== undefined && balance - costPerRequest < 0) { // student doesnt have enough credits
+        const missing = (balance - costPerRequest) * -1;
+        return message(form, getFailFormMessage(`Du har ${missing} krediter för lite`, "", MessageId.InsufficientCredits, undefined, "warning"), { status: 403 })
+      }
+
+      shouldChargeCredits = true;
+    }
+
     let conversationId: string;
     try {
       const { id } = await startConversation(
@@ -410,26 +435,15 @@ export const actions = {
         "Error when starting conversation for profile slug: " + teacherId,
         error,
       );
-      return message(form, getFailFormMessage(), { status: 500 });
+      return message(form, getFailFormMessage(undefined, "Inga krediter har dragits. Du kan kontakta oss om detta fortsätter."), { status: 500 });
     }
 
-    try {
-      const { error: idError, customerId } = await getOrCreateCustomerId({
-        supabaseServiceRole,
-        user,
-      })
-      if (idError || !customerId)
-        console.error("Error getting or creating customer id. Allowing flow to proceed anyway.", idError)
-
-      const { primarySubscription: hasSubscription } = await fetchSubscription({
-        // @ts-expect-error - ts doesn't understand customerId has value because of if check above
-        customerId,
-      })
-
-      if (!hasSubscription)
+    if (shouldChargeCredits) {
+      try {
         await updateCredits(supabaseServiceRole, -costPerRequest, userId, `Started contact with teacher: ${teacherId}.`)
-    } catch (error) {
-      console.error(`Unexpected issue when checking subscription and charging ${costPerRequest} credits for student: ${userId} contacting teacher: ${teacherId}. Allowing contact.`, error)
+      } catch (error) {
+        console.error(`Unknown error when charging student ${userId} -${costPerRequest} credits, for contacting teacher ${teacherId}. Conversation ${conversationId} already created. Allowing contact.`, error)
+      }
     }
 
     redirect(303, `/account/conversation/${conversationId}`);
