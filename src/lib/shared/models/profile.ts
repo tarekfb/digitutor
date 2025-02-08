@@ -38,11 +38,11 @@ export const nameSchema = z.object({
   firstName: z
     .string()
     .min(1, "Får inte vara tomt.")
-    .max(50, "Får inte vara mer än 50 bokstäver."),
+    .max(50, "Får inte vara mer än 50 karaktärer."),
   lastName: z
     .string()
     .min(1, "Får inte vara tomt.")
-    .max(50, "Får inte vara mer än 50 bokstäver."),
+    .max(50, "Får inte vara mer än 50 karaktärer."),
 });
 
 export const emailSchema = z.object({
