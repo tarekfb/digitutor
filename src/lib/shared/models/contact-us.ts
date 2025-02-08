@@ -5,11 +5,11 @@ export const contactUsSchema = z.object({
   firstName: z
     .string()
     .min(1, "Får inte vara tomt.")
-    .max(50, "Får inte vara mer än 50 bokstäver."),
+    .max(50, "Får inte vara mer än 50 karaktärer."),
   lastName: z
     .string()
     .min(1, "Får inte vara tomt.")
-    .max(50, "Får inte vara mer än 50 bokstäver."),
+    .max(50, "Får inte vara mer än 50 karaktärer."),
   message: z
     .string()
     .min(5, "Måste vara minst 5 karaktärer.")
