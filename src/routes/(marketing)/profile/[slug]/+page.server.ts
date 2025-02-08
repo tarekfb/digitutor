@@ -304,6 +304,7 @@ export const actions = {
       const missing = (balance - costPerRequest) * -1;
       return message(form, getFailFormMessage(`Du har ${missing} krediter för lite`, "", MessageId.InsufficientCredits, undefined, "warning"), { status: 403 })
     }
+    return { form };
   },
   startContact: async (event) => {
     const {
