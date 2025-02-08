@@ -1,16 +1,16 @@
 <script lang="ts">
   import PrimaryTitle from "src/lib/components/atoms/primary-title.svelte";
-  import type { PageData } from "./$types";
+  import type { PageData } from "./$types.ts";
   import { superForm } from "sveltekit-superforms";
   import FormSubmit from "src/lib/components/molecules/form-submit.svelte";
   import { zodClient } from "sveltekit-superforms/adapters";
-  import { requestPasswordResetSchema } from "src/lib/shared/models/user";
+  import { requestPasswordResetSchema } from "src/lib/shared/models/user.ts";
   import RootContainer from "src/lib/components/templates/root-container.svelte";
   import FormMessage from "$lib/components/molecules/form-message.svelte";
-  import * as Form from "$lib/components/ui/form";
-  import { Input } from "$lib/components/ui/input";
+  import * as Form from "$lib/components/ui/form/index.js";
+  import { Input } from "$lib/components/ui/input/index.js";
   import Label from "$lib/components/atoms/label.svelte";
-  import { SendHorizontal } from "lucide-svelte";
+  import  SendHorizontal  from "lucide-svelte/icons/send-horizontal";
   import AlertMessage from "src/lib/components/atoms/alert-message.svelte";
   import { page } from "$app/stores";
 

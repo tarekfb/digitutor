@@ -6,56 +6,14 @@
   import {
     pricingPlans,
     websiteName,
-  } from "src/lib/shared/constants/constants";
-  import * as Accordion from "src/lib/components/ui/accordion";
+  } from "src/lib/shared/constants/constants.ts";
+  import * as Accordion from "src/lib/components/ui/accordion/index.js";
   import PricingModule from "src/lib/components/molecules/pricing-module.svelte";
+  import SecondaryTitle from "src/lib/components/atoms/secondary-title.svelte";
+  import { costPerRequest } from "src/lib/shared/constants/constants.js";
 
   export let highlightedPlanId: string = "premium";
   export let currentPlanId: string = "";
-
-  type PlanFeatureRow = {
-    name: string;
-    freeIncluded?: boolean;
-    proIncluded?: boolean;
-    freeString?: string;
-    proString?: string;
-    header?: boolean;
-  };
-  const planFeatures: PlanFeatureRow[] = [
-    {
-      name: "Section 1",
-      header: true,
-    },
-    {
-      name: "Feature 1",
-      freeIncluded: true,
-      proIncluded: true,
-    },
-    {
-      name: "Feature 2",
-      freeIncluded: false,
-      proIncluded: true,
-    },
-    {
-      name: "Feature 3",
-      freeString: "3",
-      proString: "Unlimited",
-    },
-    {
-      name: "Section 2",
-      header: true,
-    },
-    {
-      name: "Feature 4",
-      freeIncluded: true,
-      proIncluded: true,
-    },
-    {
-      name: "Feature 5",
-      freeIncluded: false,
-      proIncluded: true,
-    },
-  ];
 </script>
 
 <svelte:head>
@@ -71,44 +29,10 @@
     </p>
     <Button
       variant="third"
-      class="mt-2 md:mt-4"
-      on:click={() => goto("/account/subscription")}>Skaffa Premium</Button
+      on:click={() => goto("/account/subscription.ts")}
+      class="mt-2 md:mt-3">Skaffa Premium</Button
     >
   </div>
-
-  <section class="flex w-full flex-col items-center">
-    <PrimaryTitle responsiveMb>Vanliga frågor och svar</PrimaryTitle>
-    <Accordion.Root class="w-full sm:max-w-[70%]">
-      <Accordion.Item value="item-1">
-        <Accordion.Trigger
-          >När kan jag avbryta prenumerationen?</Accordion.Trigger
-        >
-        <Accordion.Content
-          >När du vill. Du betalar bara nästkommande betalning och sen avbryts
-          prenumerationen.</Accordion.Content
-        >
-      </Accordion.Item>
-      <Accordion.Item value="item-2">
-        <Accordion.Trigger
-          >Vad innebär max en konversation, för gratisplanen?</Accordion.Trigger
-        >
-        <Accordion.Content>
-          Du får kontakta hur många lärare du vill, men du får endast ha en
-          konversation med en lärare. Detta betyder att när en lärare accepterar
-          din förfrågan har du använt din gratiskonversation. För premium kan du
-          ha oändligt antal konversationer.
-        </Accordion.Content>
-      </Accordion.Item>
-      <Accordion.Item value="item-3">
-        <Accordion.Trigger>Hur går detta runt?</Accordion.Trigger>
-        <Accordion.Content>
-          Det gör det inte. Just nu är målet är att ge en så bra tjänst som
-          möjligt. Därför vill vi låta så många som möjligt använda plattformen
-          och sedan förbättra innehåller och funktionerna.
-        </Accordion.Content>
-      </Accordion.Item>
-    </Accordion.Root>
-  </section>
 
   <section
     class="flex flex-col-reverse flex-wrap place-content-center gap-6 md:gap-10 lg:flex-row"
@@ -120,5 +44,49 @@
         {pricingPlan}
       />
     {/each}
+  </section>
+
+  <section class="flex w-full flex-col items-center">
+    <SecondaryTitle responsiveMb>Vanliga frågor och svar</SecondaryTitle>
+    <Accordion.Root class="*:border-testing w-full sm:max-w-[70%]">
+      <Accordion.Item value="item-1">
+        <Accordion.Trigger
+          >När kan jag avbryta prenumerationen?</Accordion.Trigger
+        >
+        <Accordion.Content
+          >När du vill. Du betalar bara nästkommande betalning och sedan avbryts
+          prenumerationen.</Accordion.Content
+        >
+      </Accordion.Item>
+      <Accordion.Item value="item-2">
+        <Accordion.Trigger>Hur funkar krediter?</Accordion.Trigger>
+        <Accordion.Content>
+          Varje gång du skapar en kontakt med en lärare kostar det {costPerRequest}
+          krediter. Om du redan har en konversation och chatt med läraren kostar
+          meddelanden ingenting. Du kan se hur många krediter du har under
+          <a href="/account/billing" class="link">betalningar</a>.
+        </Accordion.Content>
+      </Accordion.Item>
+      <Accordion.Item value="item-3">
+        <Accordion.Trigger>Hur går detta runt?</Accordion.Trigger>
+        <Accordion.Content>
+          Det gör det inte. Just nu är målet är att ge en så bra tjänst som
+          möjligt, utan hänsyn till vinst. Vi vill låta så många som möjligt
+          använda {websiteName} för att kunna förbättra innehållet och funktionerna.
+        </Accordion.Content>
+      </Accordion.Item>
+    </Accordion.Root>
+  </section>
+  <section class="flex w-full flex-col items-center">
+    <SecondaryTitle responsiveMb>Köp fler krediter</SecondaryTitle>
+    <p>
+      Under <a href="/account/billing" class="link">betalningar</a> kan du köpa fler
+      krediter.
+    </p>
+    <Button
+      variant="third"
+      on:click={() => goto("/account/billing")}
+      class="mt-2 md:mt-3">Köp krediter</Button
+    >
   </section>
 </RootContainer>

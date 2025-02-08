@@ -1,6 +1,6 @@
 <script lang="ts">
   import { goto } from "$app/navigation";
-  import type { PricingPlan } from "src/lib/shared/models/subscription";
+  import type { PricingPlan } from "src/lib/shared/models/subscription.ts";
   import Button from "src/lib/components/ui/button/button.svelte";
 
   export let pricingPlan: PricingPlan;
@@ -18,13 +18,17 @@
     <p class="mt-2 text-sm leading-relaxed text-gray-500">
       {pricingPlan.description}
     </p>
+    {#if pricingPlan.bold}
+      <p class="mt-2 text-sm font-bold leading-relaxed text-gray-500">
+        {pricingPlan.bold}
+      </p>
+    {/if}
     <div class="mt-auto pt-4 text-sm text-gray-600">
       Planen inkluderar:
       <ul class="mt-2 list-inside list-disc space-y-1">
         {#each pricingPlan.features as feature}
-          <li class="">{feature}</li>
+          <li>{feature}</li>
         {/each}
-        <ul></ul>
       </ul>
     </div>
     <div class="pt-8">

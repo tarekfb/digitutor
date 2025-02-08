@@ -1,10 +1,10 @@
 import { error } from "@sveltejs/kit";
-import type { PageServerLoad } from "./$types";
-import { defaultErrorInfo } from "$lib/shared/constants/constants";
+import type { PageServerLoad } from "./$types.ts";
+import { defaultErrorInfo } from "$lib/shared/constants/constants.ts";
 import { redirect } from "sveltekit-flash-message/server";
-import { getConversations } from "src/lib/server/database/conversations";
-import type { ConversationWithReferences } from "src/lib/shared/models/conversation";
-import { formatConversationWithReferences } from "src/lib/shared/utils/conversation/utils";
+import { getConversations } from "src/lib/server/database/conversations.ts";
+import type { ConversationWithReferences } from "src/lib/shared/models/conversation.ts";
+import { formatConversationWithReferences } from "src/lib/shared/utils/conversation/utils.ts";
 
 export const load: PageServerLoad = async ({
   locals: { supabase, safeGetSession },

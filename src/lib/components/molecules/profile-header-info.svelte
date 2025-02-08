@@ -4,10 +4,10 @@
   import Stars from "src/lib/components/atoms/stars.svelte";
   import { Button } from "$lib/components/ui/button/index.js";
   import * as Popover from "$lib/components/ui/popover/index.js";
-  import type { ListingWithProfile } from "src/lib/shared/models/listing";
+  import type { ListingWithProfile } from "src/lib/shared/models/listing.ts";
   import { cn } from "src/lib/shared/utils/utils.js";
   import SubjectItem from "../atoms/subject-item.svelte";
-  import type { Profile } from "src/lib/shared/models/profile";
+  import type { Profile } from "src/lib/shared/models/profile.ts";
 
   let className: string | null | undefined = undefined;
   export { className as class };
@@ -20,7 +20,7 @@
 
 <div
   class={cn(
-    `mt-2 flex ${listing ? "justify-between" : "justify-center text-center"} gap-x-2 w-8/12 ${light ? "text-background" : ""}`,
+    `mt-2 flex ${listing ? "justify-between" : "justify-center text-center"} w-8/12 gap-x-2 ${light ? "text-background" : ""}`,
     className,
   )}
 >
@@ -35,7 +35,7 @@
   </div>
   {#if listing?.subjects}
     {@const subjects = listing.subjects}
-    <div class="flex flex-col gap-y-2 justify-start overflow-x-hidden">
+    <div class="flex flex-col justify-start gap-y-2 overflow-x-hidden">
       {#each subjects as subject, i}
         {#if i < maxSubjectsLength}
           <SubjectItem
@@ -52,7 +52,7 @@
               >...se {subjects.length - maxSubjectsLength} till</Button
             >
           </Popover.Trigger>
-          <Popover.Content class="w-40 max-h-72 overflow-y-scroll">
+          <Popover.Content class="max-h-72 w-40 overflow-y-scroll">
             <ul class="flex flex-col gap-y-2">
               {#each subjects as subject, i}
                 {#if i > maxSubjectsLength - 1}

@@ -1,15 +1,15 @@
 <script lang="ts">
-  import { timeAgo } from "src/lib/shared/utils/utils";
+  import { timeAgo } from "src/lib/shared/utils/utils.ts";
   import Avatar from "../atoms/avatar.svelte";
-  import type { Message } from "src/lib/shared/models/conversation";
+  import type { Message } from "src/lib/shared/models/conversation.ts";
   import type { WritableLoadable } from "@square/svelte-store";
   import PrimaryTitle from "../atoms/primary-title.svelte";
   import AlertMessage from "../atoms/alert-message.svelte";
-  import { Button } from "../ui/button";
+  import { Button } from "$lib/components/ui/button/index.js";
   import { goto } from "$app/navigation";
   import { Skeleton } from "$lib/components/ui/skeleton/index.js";
-  import { defaultErrorDescription } from "$lib/shared/constants/constants";
-  import type { Profile } from "src/lib/shared/models/profile";
+  import { defaultErrorDescription } from "$lib/shared/constants/constants.ts";
+  import type { Profile } from "src/lib/shared/models/profile.ts";
 
   export let chatStore: WritableLoadable<Message[]>;
   export let self: Profile;
@@ -45,8 +45,9 @@
     />
     <PrimaryTitle>{other.firstName}</PrimaryTitle>
     {#if other.role === "teacher"}
-      <Button on:click={() => goto(`/profile/${other.id}`)} variant="outline"
-        >Se profil</Button
+      <Button
+        on:click={() => goto(`/profile/${other.id}`)}
+        variant="outline-card">Se profil</Button
       >
     {/if}
   </div>

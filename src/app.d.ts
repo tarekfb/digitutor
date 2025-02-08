@@ -1,6 +1,6 @@
 import { SupabaseClient, Session } from "@supabase/supabase-js";
 import { Database } from "./supabase";
-import type { MessageId } from "./lib/shared/constants/constants";
+import type { MessageId } from "./lib/shared/constants/constants.ts";
 
 // See https://kit.svelte.dev/docs/types#app
 // for information about these interfaces
@@ -35,4 +35,4 @@ declare global {
   }
 }
 
-export {};
+export { };

@@ -1,17 +1,17 @@
 import type { EmailOtpType } from "@supabase/supabase-js";
 import { error } from "@sveltejs/kit";
-import type { PageServerLoad } from "./$types";
+import type { PageServerLoad } from "./$types.ts";
 import {
   defaultErrorInfo,
   getDefaultErrorInfo,
-} from "$lib/shared/constants/constants";
+} from "$lib/shared/constants/constants.ts";
 
 export const load: PageServerLoad = async (event) => {
   const {
     url,
     locals: { supabase },
   } = event;
-  const token_hash = url.searchParams.get("token_hash");
+  const tokenHash = url.searchParams.get("token_hash");
   const type = url.searchParams.get("type") as EmailOtpType | null;
   const next = url.searchParams.get("next") ?? "/";
 
@@ -25,11 +25,11 @@ export const load: PageServerLoad = async (event) => {
   redirectTo.searchParams.delete("token_hash");
   redirectTo.searchParams.delete("type");
 
-  if (token_hash && type) {
+  if (tokenHash && type) {
     const {
       error: e,
       data: { user },
-    } = await supabase.auth.verifyOtp({ type, token_hash });
+    } = await supabase.auth.verifyOtp({ type, token_hash: tokenHash });
 
     // if (e){
     //     redirect(
@@ -60,5 +60,6 @@ export const load: PageServerLoad = async (event) => {
     redirectTo.searchParams.delete("next");
   }
 
+  console.error("Issue at confirm signup, something was falsy", tokenHash, type)
   error(500, getDefaultErrorInfo("Det saknas lite info för att verifiera dig"));
 };

@@ -1,9 +1,9 @@
 import { error, redirect } from "@sveltejs/kit";
-import type { LayoutServerLoad } from "./$types";
-import { getProfileByUser } from "$lib/server/database/profiles";
-import type { Profile } from "src/lib/shared/models/profile";
-import { defaultErrorInfo } from "src/lib/shared/constants/constants";
-import { formatProfile } from "src/lib/shared/utils/profile/utils";
+import type { LayoutServerLoad } from "./$types.ts";
+import { getProfileByUser } from "$lib/server/database/profiles.ts";
+import type { Profile } from "src/lib/shared/models/profile.ts";
+import { defaultErrorInfo } from "src/lib/shared/constants/constants.ts";
+import { formatProfile } from "src/lib/shared/utils/profile/utils.ts";
 
 export const load: LayoutServerLoad = async ({
   locals: { supabase, safeGetSession },

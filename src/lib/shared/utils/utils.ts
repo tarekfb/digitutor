@@ -6,17 +6,17 @@ import type { z } from "zod";
 import { invalidate } from "$app/navigation";
 import type { SupabaseClient, Session } from "@supabase/supabase-js";
 import { redirect } from "@sveltejs/kit";
-import type { Database } from "lucide-svelte";
-import type { Profile } from "../models/profile";
+import type { Profile } from "../models/profile.ts";
 import { superValidate } from "sveltekit-superforms";
 import { zod } from "sveltekit-superforms/adapters";
 import {
   requestContactSchema,
   startContactSchema,
-} from "../models/conversation";
-import type { ErrorWithCode } from "../errors/error-with-code";
-import type { ErrorWithStatusCode } from "../errors/error-with-statuscode";
+} from "../models/conversation.ts";
+import type { ErrorWithCode } from "../errors/error-with-code.ts";
+import type { ErrorWithStatusCode } from "../errors/error-with-statuscode.ts";
 import { PUBLIC_ENVIRONMENT } from "$env/static/public";
+import type { Database } from "src/supabase.ts";
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));

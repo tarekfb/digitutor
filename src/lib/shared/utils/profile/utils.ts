@@ -1,5 +1,5 @@
-import type { DbProfile, Profile } from "../../models/profile";
-import type { DbDisplayProfile, DisplayProfile } from "../../models/review";
+import type { DbProfile, Profile } from "../../models/profile.ts";
+import type { DbDisplayProfile, DisplayProfile } from "../../models/review.ts";
 
 export const formatDisplayProfile = ({
   id,

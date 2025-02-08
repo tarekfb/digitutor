@@ -1,7 +1,7 @@
 <script lang="ts">
   import { goto } from "$app/navigation";
   import { page } from "$app/stores";
-  import { Button } from "$lib/components/ui/button";
+  import { Button } from "$lib/components/ui/button/index.js";
 
   export let href: string = "";
   export let closeSidebar: undefined | (() => void) = undefined;
@@ -12,7 +12,7 @@
 <Button
   variant="link"
   {disabled}
-  class="hover:no-underline hover:text-accent active:text-accent p-0"
+  class="p-0 hover:text-accent hover:no-underline active:text-accent"
   on:click={() => {
     if (onClick) onClick();
     if (closeSidebar) closeSidebar();
@@ -21,7 +21,7 @@
 >
   <div
     class:current={$page.url.pathname === href}
-    class="flex items-center gap-x-1 p-1 px-1.5 rounded-md normal-case text-foreground tracking-normal text-lg md:text-xl hover:text-accent"
+    class="flex items-center gap-x-1 rounded-md p-1 px-1.5 text-lg normal-case tracking-normal text-foreground hover:text-accent md:text-xl"
   >
     <slot />
   </div>

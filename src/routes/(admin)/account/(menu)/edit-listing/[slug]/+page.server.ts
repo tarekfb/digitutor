@@ -6,27 +6,27 @@ import {
   MessageId,
   defaultErrorDescription,
   getDefaultErrorInfo,
-} from "$lib/shared/constants/constants";
+} from "$lib/shared/constants/constants.ts";
 import { message, superValidate } from "sveltekit-superforms";
 import {
   deleteListing,
   getListing,
   updateListing,
-} from "$lib/server/database/listings";
+} from "$lib/server/database/listings.ts";
 import {
   updateListingSchema,
   type ListingWithProfile,
-} from "$lib/shared/models/listing";
+} from "$lib/shared/models/listing.ts";
 import { redirect } from "sveltekit-flash-message/server";
-import { isErrorWithCode } from "src/lib/shared/utils/utils";
+import { isErrorWithCode } from "src/lib/shared/utils/utils.ts";
 import {
   formatSubject,
   suggestSubjectSchema,
   type Subject,
 } from "src/lib/shared/models/subject.js";
-import { getSubjects, suggestSubject } from "src/lib/server/database/subjects";
-import type { Tables } from "src/supabase";
-import { findSimilarSubjects } from "src/lib/shared/utils/subjects/utils";
+import { getSubjects, suggestSubject } from "src/lib/server/database/subjects.ts";
+import type { Tables } from "src/supabase.ts";
+import { findSimilarSubjects } from "src/lib/shared/utils/subjects/utils.ts";
 import { ExternalErrorCodes } from "src/lib/shared/models/common.js";
 import { formatListingWithProfile } from "src/lib/shared/utils/listing/utils.js";
 
@@ -64,9 +64,9 @@ export const load = async ({
   if (session?.user.id !== listing.profile.id) {
     console.error(
       "Tried to read listing that is not theirs. listingid: " +
-        listing.id +
-        " userid: " +
-        session?.user.id,
+      listing.id +
+      " userid: " +
+      session?.user.id,
     );
     error(500, { ...defaultErrorInfo });
   }
@@ -164,7 +164,7 @@ export const actions = {
       } catch (error) {
         console.error(
           "Error when looking for match. Allowing user to insert suggestion. slug: " +
-            slug,
+          slug,
           error,
         );
       }

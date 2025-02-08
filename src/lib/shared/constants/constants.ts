@@ -1,5 +1,6 @@
-import type { Message } from "$lib/shared/models/common";
-import { StripePriceId, PricingPlanIds, type PricingPlan, StripeProductId } from "../models/subscription";
+import type { Message } from "$lib/shared/models/common.ts";
+import { StripePriceId, PricingPlanIds, type PricingPlan, StripeProductId } from "../models/subscription.ts";
+import type { CreditsProduct } from "../models/subscription.js";
 
 export const websiteName = "Digitutor";
 export const localBaseUrl = "http://localhost:5173";
@@ -58,6 +59,7 @@ export enum MessageId {
   Unknown = 0,
   RateLimitExceeded = 1,
   ResourceAlreadyExists = 2,
+  InsufficientCredits = 3,
 }
 
 export const initMessagesCount = 25;
@@ -91,17 +93,33 @@ export const getFormatsHumanReadable = () => {
   return acceptedFormatsHumanReadable;
 };
 
+export const costPerRequest = 9;
+export const freeCredits = 35;
 export const defaultPlanId = PricingPlanIds.Free;
-
+export const creditProducts: CreditsProduct[] = [
+  {
+    price: "250 SEK",
+    credits: 50,
+    stripePriceId: StripePriceId.SmallCreditsTest,
+    stripeProductId: StripeProductId.SmallCreditsTest,
+  },
+  {
+    price: "400 SEK",
+    credits: 100,
+    stripePriceId: StripePriceId.LargeCreditsTest,
+    stripeProductId: StripeProductId.LargeCreditsTest,
+  }
+];
 export const pricingPlans: PricingPlan[] = [
   {
     id: PricingPlanIds.Free,
     name: "Gratis",
-    description: "En gratisplan. Inget betalkort behövs!",
+    description: `Inkluderar ${freeCredits} krediter vid start (att kontakta lärare kostar ${costPerRequest} krediter).`,
+    bold: `Inget betalkort behövs!`,
     price: "0 SEK",
     priceIntervalName: "per månad",
     stripePriceId: StripePriceId.Free,
-    features: ["Oändligt med förfrågningar", "Tillgång till alla lärare", "Max en konversation"],
+    features: [`${freeCredits} gratis krediter`, "Tillgång alla lärare", "Möjlighet att köpa fler krediter när som helst"],
   },
   {
     id: PricingPlanIds.Premium,
@@ -116,7 +134,7 @@ export const pricingPlans: PricingPlan[] = [
     // stripeProductId:  isProd ? StripeProductId.PremiumProd : StripeProductId.PremiumTest, // todo: reactive when live
     features: [
       "Allt i gratisplanen",
-      "Oändligt med konversationer",
+      "Oändligt med krediter",
     ],
   },
 ];

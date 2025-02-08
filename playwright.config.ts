@@ -1,5 +1,5 @@
 import { defineConfig, devices } from '@playwright/test';
-import { localBaseUrl as baseUrl } from './src/lib/shared/constants/constants'
+import { localBaseUrl as baseUrl } from './src/lib/shared/constants/constants.ts'
 import { EnvOptions } from './src/tests/playwright/env-options';
 import { localEmailStudent, localEmailTeacher, localListingId, localProfileId } from './src/tests/playwright/data';
 import path from 'node:path';

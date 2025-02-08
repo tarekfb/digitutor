@@ -2,9 +2,9 @@ import type { SupabaseClient, User } from "@supabase/supabase-js"
 
 import { PRIVATE_STRIPE_API_KEY } from "$env/static/private"
 import Stripe from "stripe"
-import { pricingPlans } from "../../constants/constants"
-import type { Database } from "src/supabase"
-import { getNow } from "../utils"
+import { pricingPlans } from "../../constants/constants.ts"
+import type { Database } from "src/supabase.ts"
+import { getNow } from "../utils.ts"
 
 const stripe = new Stripe(PRIVATE_STRIPE_API_KEY)
 // { apiVersion: "2023-08-16" }
@@ -22,14 +22,13 @@ export const getOrCreateCustomerId = async ({
         .eq("user_id", user.id)
         .single()
 
+    // PGRST116 == no rows
     if (error && error.code != "PGRST116") {
-        // PGRST116 == no rows
+        console.error("error PGRST116 when getting customer id: no rows", error)
         return { error: error }
     }
 
-    if (dbCustomer?.stripe_customer_id) {
-        return { customerId: dbCustomer.stripe_customer_id }
-    }
+    if (dbCustomer?.stripe_customer_id) return { customerId: dbCustomer.stripe_customer_id }
 
     // Fetch data needed to create customer
     const { data: profile, error: profileError } = await supabaseServiceRole
@@ -50,10 +49,12 @@ export const getOrCreateCustomerId = async ({
             },
         })
     } catch (e) {
+        console.error("Unknown error when creating stripe customer", e)
         return { error: e }
     }
 
     if (!customer.id) {
+        console.error("Unknown error on stripe user creation")
         return { error: "Unknown stripe user creation error" }
     }
 
@@ -66,7 +67,10 @@ export const getOrCreateCustomerId = async ({
             updated_at: getNow(),
         })
 
-    if (insertError) return { error: insertError }
+    if (insertError) {
+        console.error("Unknown error on inserting row to stripe_customers", insertError)
+        return { error: insertError }
+    }
 
     return { customerId: customer.id }
 }
@@ -85,6 +89,7 @@ export const fetchSubscription = async ({
             status: "all",
         })
     } catch (e) {
+        console.error(`unknown error when fetching list of subscriptions from stripe for customerid: ${customerId}`, e)
         return { error: e }
     }
 

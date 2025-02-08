@@ -1,8 +1,8 @@
 <script lang="ts">
   import { cn } from "src/lib/shared/utils/utils.js";
-  import * as Form from "$lib/components/ui/form";
+  import * as Form from "$lib/components/ui/form/index.js";
   import type { SuperForm } from "sveltekit-superforms/client";
-  import { Input } from "../ui/input";
+  import { Input } from "$lib/components/ui/input/index.ts";
 
   export let name: string;
   export let form: SuperForm<any>;

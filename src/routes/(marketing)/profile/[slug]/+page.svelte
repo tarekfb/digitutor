@@ -1,21 +1,21 @@
 <script lang="ts">
-  import type { PageData } from "./$types";
+  import type { PageData } from "./$types.ts";
   import PrimaryTitle from "$lib/components/atoms/primary-title.svelte";
   import { mediaQuery } from "svelte-legos";
   import RootContainer from "src/lib/components/templates/root-container.svelte";
   import ProfileHeaderMobile from "src/lib/components/organisms/profile-header-mobile.svelte";
   import ContactTeacherForm from "src/lib/components/molecules/contact-teacher-form.svelte";
   import SecondaryTitle from "src/lib/components/atoms/secondary-title.svelte";
-  import { Terminal } from "lucide-svelte";
+  import  Terminal  from "lucide-svelte/icons/terminal";
   import Stars from "src/lib/components/atoms/stars.svelte";
-  import { languages } from "src/lib/shared/models/common";
+  import { languages } from "src/lib/shared/models/common.ts";
   import AlertMessage from "src/lib/components/atoms/alert-message.svelte";
   import ProfileBody from "src/lib/components/molecules/profile-body.svelte";
   import OwnerSection from "src/lib/components/molecules/owner-section.svelte";
   import { page } from "$app/stores";
   import type { Session } from "@supabase/supabase-js";
-  import type { Profile } from "src/lib/shared/models/profile";
-  import { websiteName } from "src/lib/shared/constants/constants";
+  import type { Profile } from "src/lib/shared/models/profile.ts";
+  import { websiteName } from "src/lib/shared/constants/constants.ts";
 
   export let data: PageData;
   $: ({
@@ -48,10 +48,8 @@
 </script>
 
 <svelte:head>
-  <title>  import { websiteName } from "src/lib/shared/constants/constants";
-    {teacher.firstName} | Profil</title>
-</svelte:head> 
-
+  <title>{websiteName} | {teacher.firstName}</title>
+</svelte:head>
 
 {#if !$isDesktop}
   <RootContainer class="m-0 w-full">

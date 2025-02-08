@@ -1,8 +1,8 @@
 import type {
   DbReviewWithReferences,
   ReviewWithReferences,
-} from "../../models/review";
-import { formatProfile } from "../profile/utils";
+} from "../../models/review.ts";
+import { formatProfile } from "../profile/utils.ts";
 
 export const formatReviewWithReferences = ({
   id,

@@ -1,6 +1,6 @@
 <script lang="ts">
   import { goto } from "$app/navigation";
-  import { Button } from "$lib/components/ui/button";
+  import { Button } from "$lib/components/ui/button/index.js";
   import { cn } from "src/lib/shared/utils/utils.js";
   let className: string | null | undefined = undefined;
   export { className as class };
@@ -8,7 +8,7 @@
 </script>
 
 <Button
-  class={cn("m-0 p-0 text-accent text-base normal-case", className)}
+  class={cn("m-0 p-0 text-base normal-case text-accent", className)}
   variant="link"
   on:click={() => goto(href)}
 >

@@ -2,9 +2,9 @@ import { PRIVATE_STRIPE_API_KEY } from "$env/static/private"
 import { error, redirect } from "@sveltejs/kit"
 import Stripe from "stripe"
 
-import { getOrCreateCustomerId, fetchSubscription } from "src/lib/shared/utils/subscription/subscription-helper"
-import { getDefaultErrorInfo } from "src/lib/shared/constants/constants"
-import type { PageServerLoad } from "./$types"
+import { getOrCreateCustomerId, fetchSubscription } from "src/lib/shared/utils/subscription/subscription-helper.ts"
+import { getDefaultErrorInfo } from "src/lib/shared/constants/constants.ts"
+import type { PageServerLoad } from "./$types.ts"
 
 const stripe = new Stripe(PRIVATE_STRIPE_API_KEY)
 // { apiVersion: "2023-08-16" }
@@ -12,19 +12,17 @@ const stripe = new Stripe(PRIVATE_STRIPE_API_KEY)
 export const load: PageServerLoad = async ({
     params: { slug },
     url,
-    locals: { safeGetSession, supabaseServiceRole },
+    locals: { safeGetSession, supabaseServiceRole, supabase },
 }) => {
     const { session, user } = await safeGetSession()
     if (!session) {
-        redirect(303, "/sign-in")
+        redirect(303, "/sign-in") // todo add flash
     }
 
     const successUrl = "/account/billing";
 
-    if (slug === "free") {
-        // free plan. simulate success by redirecting to success url
-        redirect(303, "successUrl")
-    }
+    // free plan. simulate success by redirecting to success url
+    if (slug === "free") redirect(303, successUrl)
 
     const { error: idError, customerId } = await getOrCreateCustomerId({
         supabaseServiceRole,
@@ -40,12 +38,19 @@ export const load: PageServerLoad = async ({
     })
     if (primarySubscription) {
         // User already has plan, we shouldn't let them buy another
-        redirect(303, "successUrl")
+        redirect(303, successUrl) // todo add flash
     }
 
-    let checkoutUrl
+    const mode = url.searchParams.get("mode") === "payment" ? "payment" : "subscription"; // if credits, then single purchase
+
+    let checkoutUrl;
+    let stripeSession: Stripe.Response<Stripe.Checkout.Session> | undefined;
     try {
-        const stripeSession = await stripe.checkout.sessions.create({
+        stripeSession = await stripe.checkout.sessions.create({
+            metadata: {
+                user_id: session.user.id,
+                price_id: slug,
+            },
             line_items: [
                 {
                     price: slug,
@@ -53,7 +58,7 @@ export const load: PageServerLoad = async ({
                 },
             ],
             customer: customerId,
-            mode: "subscription",
+            mode,
             success_url: `${url.origin}${successUrl}`,
             cancel_url: `${url.origin}${successUrl}`,
         })
@@ -63,5 +68,5 @@ export const load: PageServerLoad = async ({
         error(500, getDefaultErrorInfo())
     }
 
-    redirect(303, checkoutUrl ?? "/pricing")
+    redirect(303, checkoutUrl ?? "/pricing") // stripe takes over checkout process
 }

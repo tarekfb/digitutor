@@ -1,5 +1,5 @@
 <script lang="ts">
-  import type { Message } from "$lib/shared/models/common";
+  import type { Message } from "$lib/shared/models/common.ts";
   import type { Writable } from "svelte/store";
   import AlertMessage from "$lib/components/atoms/alert-message.svelte";
 
@@ -29,6 +29,18 @@
       variant={$message.variant ?? "default"}
       class={className}
     >
+      {#if $message.id === 3}
+        <p class="inline text-sm">
+          Du kan köpa mer krediter på <a
+            href="/account/billing"
+            class=" font-medium text-accent hover:underline">betalningar</a
+          >, eller uppgradera till
+          <a
+            href="/pricing"
+            class="font-medium text-accent hover:underline">premium</a
+          > för att kontakta läraren.
+        </p>
+      {/if}
       <slot />
     </AlertMessage>
   </div>
@@ -36,4 +48,4 @@
 
 <!-- <Button size="icon" variant="ghost" class="absolute right-1 top-1">x</Button> -->
 <!-- todo implement closeable -->
-<!-- import { Button } from "$lib/components/ui/button"; -->
+<!-- import { Button } from "$lib/components/ui/button/index.js"; -->

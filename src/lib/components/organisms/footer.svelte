@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { websiteName } from "$lib/shared/constants/constants";
+  import { websiteName } from "$lib/shared/constants/constants.ts";
   import Link from "../atoms/link.svelte";
   import Separator from "../ui/separator/separator.svelte";
 
@@ -18,6 +18,7 @@
     <span class="font-semibold uppercase">Utforska</span>
     <Link href="/" class={linkStyle}>Hem</Link>
     <Link href="/sign-up" class={linkStyle}>Skapa konto</Link>
+    <Link href="/pricing" class={linkStyle}>Premium</Link>
     <Link href="/faq" class={linkStyle}>Vanliga frågor</Link>
     <Link href="/contact-us" class={linkStyle}>Kontakta oss</Link>
   </nav>

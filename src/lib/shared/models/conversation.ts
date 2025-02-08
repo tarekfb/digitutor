@@ -1,6 +1,6 @@
-import type { Tables } from "src/supabase";
+import type { Tables } from "src/supabase.ts";
 import { z } from "zod";
-import type { Profile } from "./profile";
+import type { Profile } from "./profile.ts";
 
 export type DbConversationBase = Tables<"conversations">;
 
@@ -55,8 +55,9 @@ export const formatMessage = ({
 export const sendMessageSchema = z.object({
   content: z
     .string()
-    .min(1, "Måste vara minst 1 karaktär.")
-    .max(300, "Får inte vara mer än 300 karaktärer."),
+    .trim()
+    .min(1, "Meddelandet måste vara minst 1 karaktär.")
+    .max(300, "Meddelandet får inte vara mer än 300 karaktärer.")
 });
 
 const requestContactProperties = {

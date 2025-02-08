@@ -1,9 +1,9 @@
 import { zod } from 'sveltekit-superforms/adapters';
-import type { PageServerLoad } from './$types';
+import type { PageServerLoad } from './$types.ts';
 import { fail, message, superValidate } from 'sveltekit-superforms';
-import { passwordResetSchema } from 'src/lib/shared/models/user';
-import { getFailFormMessage, getSuccessFormMessage } from 'src/lib/shared/constants/constants';
-import { SupabaseErrorMessages } from 'src/lib/shared/models/common';
+import { passwordResetSchema } from 'src/lib/shared/models/user.ts';
+import { getFailFormMessage, getSuccessFormMessage } from 'src/lib/shared/constants/constants.ts';
+import { SupabaseErrorMessages } from 'src/lib/shared/models/common.ts';
 
 export const load = (async () => {
     const form = await superValidate(zod(passwordResetSchema));

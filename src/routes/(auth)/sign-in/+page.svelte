@@ -1,24 +1,26 @@
 <script lang="ts">
-  import * as Form from "$lib/components/ui/form";
+  import * as Form from "$lib/components/ui/form/index.js";
   import { superForm } from "sveltekit-superforms";
   import { zodClient } from "sveltekit-superforms/adapters";
   import { toast } from "svelte-sonner";
   import { signInSchema } from "$lib/shared/models/user.js";
-  import { Input } from "$lib/components/ui/input";
-  import { CheckCircle2, Terminal } from "lucide-svelte";
+  import { Input } from "$lib/components/ui/input/index.js";
+  import CheckCircle2 from "lucide-svelte/icons/check-circle-2";
+  import Terminal from "lucide-svelte/icons/terminal";
   import FormMessage from "$lib/components/molecules/form-message.svelte";
   import Label from "$lib/components/atoms/label.svelte";
-  import { MessageId } from "$lib/shared/constants/constants";
+  import { MessageId } from "$lib/shared/constants/constants.ts";
   import PasswordInput from "$lib/components/molecules/password-input.svelte";
   import FormSubmit from "src/lib/components/molecules/form-submit.svelte";
   import AuthSplit from "src/lib/components/molecules/auth-split.svelte";
   import PrimaryTitle from "src/lib/components/atoms/primary-title.svelte";
   import SecondaryTitle from "src/lib/components/atoms/secondary-title.svelte";
-  import type { PageData } from "./$types";
-  import { languages } from "src/lib/shared/models/common";
-  import type { ReviewWithReferences } from "src/lib/shared/models/review";
+  import type { PageData } from "./$types.ts";
+  import { languages } from "src/lib/shared/models/common.ts";
+  import type { ReviewWithReferences } from "src/lib/shared/models/review.ts";
   import Stars from "src/lib/components/atoms/stars.svelte";
   import ReviewCardExtra from "src/lib/components/molecules/review-card-extra.svelte";
+  import { page } from "$app/stores";
 
   export let data: PageData;
 
@@ -126,9 +128,10 @@
     </div>
   </svelte:fragment>
   <svelte:fragment slot="form">
+    {@const next = $page.url.searchParams.get("next")}
     <form
       class="flex w-full max-w-screen-sm flex-col gap-y-4 p-4 text-start"
-      action="?/signIn"
+      action="?/signIn{next ? `&next=${next}` : ''}"
       method="POST"
       use:enhance
     >

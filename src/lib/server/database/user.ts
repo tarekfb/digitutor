@@ -1,5 +1,5 @@
 import type { SupabaseClient } from "@supabase/supabase-js";
-import type { Database } from "lucide-svelte";
+import type { Database } from "src/supabase.ts";
 
 export const updateUserEmail = async (
   supabase: SupabaseClient<Database>,

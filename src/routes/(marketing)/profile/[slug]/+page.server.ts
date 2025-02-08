@@ -3,24 +3,26 @@ import {
   getFailFormMessage,
   defaultErrorInfo,
   getDefaultErrorInfo,
-} from "$lib/shared/constants/constants";
-import { getProfileByUser } from "$lib/server/database/profiles";
-import { getListing } from "$lib/server/database/listings";
+  costPerRequest,
+  MessageId,
+} from "$lib/shared/constants/constants.ts";
+import { getProfileByUser } from "$lib/server/database/profiles.ts";
+import { getListing } from "$lib/server/database/listings.ts";
 import { fail, message, superValidate } from "sveltekit-superforms";
 import {
   requestContactSchema,
   startContactSchema,
   type DbConversationWithReferences,
-} from "$lib/shared/models/conversation";
+} from "$lib/shared/models/conversation.ts";
 import {
   addReviewSchema,
   type ReviewWithReferences,
-} from "$lib/shared/models/review";
+} from "$lib/shared/models/review.ts";
 import { zod } from "sveltekit-superforms/adapters";
 import {
   getConversationForStudentAndTeacher,
   startConversation,
-} from "$lib/server/database/conversations";
+} from "$lib/server/database/conversations.ts";
 import { redirect, setFlash } from "sveltekit-flash-message/server";
 import { ResourceAlreadyExistsError } from "src/lib/shared/errors/resource-already-exists-error.js";
 import {
@@ -36,21 +38,23 @@ import {
 import {
   isErrorWithCode,
   loadContactTeacherForms,
-} from "src/lib/shared/utils/utils";
+} from "src/lib/shared/utils/utils.ts";
 import type { Profile } from "src/lib/shared/models/profile.js";
 import { formatProfile } from "src/lib/shared/utils/profile/utils.js";
 import { formatListingWithProfile } from "src/lib/shared/utils/listing/utils.js";
-import { formatReviewWithReferences } from "src/lib/shared/utils/reviews/utils";
+import { formatReviewWithReferences } from "src/lib/shared/utils/reviews/utils.ts";
+import { getCreditsByStudent, updateCredits } from "src/lib/server/database/credits.ts";
+import { fetchSubscription, getOrCreateCustomerId } from "src/lib/shared/utils/subscription/subscription-helper.ts";
 
 export const load = async ({
   locals: { supabase, safeGetSession },
-  params: { slug },
+  params: { slug: teacherId },
   parent,
   url: { searchParams },
 }) => {
   let teacher: Profile;
   try {
-    const dbTeacher = await getProfileByUser(supabase, slug);
+    const dbTeacher = await getProfileByUser(supabase, teacherId);
     teacher = formatProfile(dbTeacher);
   } catch (e) {
     if (isErrorWithCode(e)) {
@@ -67,12 +71,12 @@ export const load = async ({
           description: "Profilen finns inte eller har tagits bort.",
         });
     }
-    console.error("Error when reading profile with id: " + slug, e);
+    console.error("Error when reading profile with id: " + teacherId, e);
     error(500, { ...defaultErrorInfo });
   }
 
   if (teacher.role !== "teacher") {
-    console.error("Attempted to read a non-teacher profile: " + slug);
+    console.error("Attempted to read a non-teacher profile: " + teacherId);
     error(
       400,
       getDefaultErrorInfo(
@@ -122,7 +126,7 @@ export const load = async ({
 
       listing = undefined;
       console.error(
-        "Error when reading listings for profile with id: " + slug,
+        "Error when reading listings for profile with id: " + teacherId,
         error,
       );
     }
@@ -131,19 +135,19 @@ export const load = async ({
   let reviews: ReviewWithReferences[] = [];
   let reviewsMessage: Message | undefined = undefined;
   try {
-    const dbReviews = await getReviewsByReceiver(supabase, slug);
+    const dbReviews = await getReviewsByReceiver(supabase, teacherId);
     reviews = dbReviews.map((review) => formatReviewWithReferences(review));
   } catch (e) {
-    console.error("Error when reading reviews for profile with id: " + slug, e);
+    console.error("Error when reading reviews for profile with id: " + teacherId, e);
     const {
       user: { id },
     } = await safeGetSession();
-    const isOwner = id === slug;
+    const isOwner = id === teacherId;
     if (isOwner)
       // only show error info to owner
       reviewsMessage = getFailFormMessage(
         "Vi kunde inte hämta recensioner",
-        "Något gick fel. Kontakta oss om detta fortsätter.",
+        "Något gick fel. Kontakta oss om de tta fortsätter.",
       );
   }
 
@@ -154,14 +158,14 @@ export const load = async ({
       if (userId) {
         try {
           const hasExistingConversation =
-            await getConversationForStudentAndTeacher(supabase, userId, slug);
+            await getConversationForStudentAndTeacher(supabase, userId, teacherId);
           allowCreateReview = hasExistingConversation?.has_replied
             ? true
             : false;
         } catch (error) {
           console.error(
-            `Error when adding review for profile slug ${slug}, unable to read conversation for teacher & student` +
-              slug,
+            `Error when adding review for profile slug ${teacherId}, unable to read conversation for teacher & student` +
+            teacherId,
             error,
           );
           allowCreateReview = true;
@@ -200,21 +204,22 @@ export const actions = {
   requestContact: async (event) => {
     const {
       locals: { supabase, safeGetSession },
-      params: { slug },
+      params: { slug: teacherId },
       cookies,
     } = event;
     const { session } = await safeGetSession();
     if (!session)
-      throw redirect(
+      redirect(
         303,
-        "/sign-up",
+        `/sign-in?next=/profile/${teacherId}`,
         {
           type: "info",
           message: "Skapa ett konto eller logga in för att kontakta en lärare.",
         },
         cookies,
-      ); // todo: in the future should implement a redirect after login
+      );
 
+    const userId = session.user.id;
     const form = await superValidate(event, zod(requestContactSchema));
     const { role } = form.data;
 
@@ -222,22 +227,22 @@ export const actions = {
       console.error(
         "Error when submitting request contact. Data that user does not submit manually is invalid: role",
       ); // user hasnt entered data theirselves, therefore send error message
-      throw redirect(
+      redirect(
         303,
-        "/sign-up",
+        `/sign-in?next=/profile/${teacherId}`,
         {
           type: "info",
           message: "Skapa ett konto eller logga in för att kontakta en lärare.",
         },
         cookies,
-      ); // todo: in the future should implement a redirect after login
+      );
     }
 
-    if (slug === session.user.id)
+    if (teacherId === userId)
       return message(
         form,
         getFailFormMessage(
-          undefined,
+          "Detta går inte att göra",
           "Du kan inte kontakta dig själv.",
           undefined,
           undefined,
@@ -269,15 +274,16 @@ export const actions = {
       conversation = await getConversationForStudentAndTeacher(
         supabase,
         session.user.id,
-        slug,
+        teacherId,
       );
     } catch (error) {
       console.error(
-        `unable to read conversation for teacher: ${slug} & student: ${session.user.id}, allowing student to contact` +
-          slug,
+        `unable to read conversation for teacher: ${teacherId} & student: ${session.user.id}, allowing student to contact` +
+        teacherId,
         error,
       );
     }
+
     if (conversation)
       redirect(
         303,
@@ -290,21 +296,23 @@ export const actions = {
   },
   startContact: async (event) => {
     const {
-      locals: { supabase, safeGetSession },
-      params: { slug },
+      locals: { supabase, safeGetSession, supabaseServiceRole },
+      params: { slug: teacherId },
       cookies,
     } = event;
-    const { session } = await safeGetSession();
+    const { session, user } = await safeGetSession();
     if (!session)
-      throw redirect(
+      redirect(
         303,
-        "/sign-up",
+        `/sign-in?next=/profile/${teacherId}`,
         {
           type: "info",
           message: "Skapa ett konto eller logga in för att kontakta en lärare.",
         },
         cookies,
-      ); // todo: in the future should implement a redirect after login
+      );
+
+    const userId = session.user.id;
 
     const form = await superValidate(event, zod(startContactSchema));
     // this will not work nicely if teacher or role is invalid, but not expecting this to be an issue
@@ -324,18 +332,18 @@ export const actions = {
       console.error(
         "Error when submitting request contact. Data that user does not submit manually is invalid: role",
       ); // user hasnt entered data theirselves, therefore send error message
-      throw redirect(
+      redirect(
         303,
-        "/sign-up",
+        `/sign-in?next=/profile/${teacherId}`,
         {
           type: "info",
           message: "Skapa ett konto eller logga in för att kontakta en lärare.",
         },
         cookies,
-      ); // todo: in the future should implement a redirect after login
+      );
     }
 
-    if (slug === session.user.id)
+    if (teacherId === userId)
       return message(
         form,
         getFailFormMessage(
@@ -366,19 +374,56 @@ export const actions = {
       return message(form, getFailFormMessage(), { status: 500 });
     }
 
+    let hasSubscription: boolean = false;
+    try {
+      const { error: idError, customerId } = await getOrCreateCustomerId({
+        supabaseServiceRole,
+        user,
+      })
+      if (idError || !customerId)
+        console.error("Error getting or creating customer id. Allowing flow to proceed anyway.", idError)
+
+      const { primarySubscription } = await fetchSubscription({
+        // @ts-expect-error - ts doesn't understand customerId has value because of if check above
+        customerId,
+      })
+
+      hasSubscription = primarySubscription ? true : false;
+    } catch (error) {
+      console.error(`Unexpected issue when checking subscription and charging ${costPerRequest} credits for student: ${userId} contacting teacher: ${teacherId}. Allowing flow to procceed.`, error)
+    }
+
+    let shouldChargeCredits: boolean = false;
+    if (!hasSubscription) {
+      let balance: number | undefined;
+      try {
+        balance = await getCreditsByStudent(supabase, userId)
+      } catch (error) {
+        balance = undefined;
+        console.error("Unexpected error when checking if credit balance is enough to contact teacher. Allowing contact.", error)
+      }
+
+      if (balance !== undefined && balance - costPerRequest < 0) { // student doesnt have enough credits
+        const missing = (balance - costPerRequest) * -1;
+        return message(form, getFailFormMessage(`Du har ${missing} krediter för lite`, "", MessageId.InsufficientCredits, undefined, "warning"), { status: 403 })
+      }
+
+      shouldChargeCredits = true;
+    }
+
     let conversationId: string;
     try {
       const { id } = await startConversation(
         supabase,
-        slug,
-        session.user.id,
+        teacherId,
+        userId,
         firstMessage,
         session,
       );
       conversationId = id;
     } catch (error) {
       if (error instanceof ResourceAlreadyExistsError) {
-        throw redirect(
+        redirect(
           303,
           `/account/conversation/${error.message}`,
           { message: "Du har redan kontaktat läraren.", type: "info" },
@@ -387,30 +432,39 @@ export const actions = {
         // message is conversation id
       }
       console.error(
-        "Error when starting conversation for profile slug: " + slug,
+        "Error when starting conversation for profile slug: " + teacherId,
         error,
       );
-      return message(form, getFailFormMessage(), { status: 500 });
+      return message(form, getFailFormMessage(undefined, "Inga krediter har dragits. Du kan kontakta oss om detta fortsätter."), { status: 500 });
     }
-    throw redirect(303, `/account/conversation/${conversationId}`);
+
+    if (shouldChargeCredits) {
+      try {
+        await updateCredits(supabaseServiceRole, -costPerRequest, userId, `Started contact with teacher: ${teacherId}.`)
+      } catch (error) {
+        console.error(`Unknown error when charging student ${userId} -${costPerRequest} credits, for contacting teacher ${teacherId}. Conversation ${conversationId} already created. Allowing contact.`, error)
+      }
+    }
+
+    redirect(303, `/account/conversation/${conversationId}`);
   },
   addReview: async (event) => {
     const {
       locals: { supabase, safeGetSession },
-      params: { slug },
+      params: { slug: teacherId },
       cookies,
     } = event;
     const { session } = await safeGetSession();
     if (!session)
-      throw redirect(
+      redirect(
         303,
-        "/sign-up",
+        `/sign-in?next=/profile/${teacherId}`,
         {
           type: "info",
           message: "Skapa ett konto eller logga in för att göra en recension.",
         },
         cookies,
-      ); // todo: in the future should implement a redirect after login
+      );
 
     const form = await superValidate(event, zod(addReviewSchema));
     if (!form.valid) return fail(400, { form });
@@ -420,11 +474,11 @@ export const actions = {
       const conversation = await getConversationForStudentAndTeacher(
         supabase,
         session.user.id,
-        slug,
+        teacherId,
       );
       if (!conversation) {
         console.error(
-          `Error when adding review for profile slug ${slug}, teacher & student has no conversation.`,
+          `Error when adding review for profile slug ${teacherId}, teacher & student has no conversation.`,
         );
         return message(
           form,
@@ -437,8 +491,8 @@ export const actions = {
       }
     } catch (error) {
       console.error(
-        `Error when adding review for profile slug ${slug}, unable to read conversation for teacher & student. Proceeding` +
-          slug,
+        `Error when adding review for profile slug ${teacherId}, unable to read conversation for teacher & student. Proceeding` +
+        teacherId,
         error,
       );
     }
@@ -454,7 +508,7 @@ export const actions = {
     } catch (error) {
       console.error(
         "Error when checking if user has already made a review for profile slug: " +
-          slug,
+        teacherId,
         error,
       );
     }
@@ -463,12 +517,12 @@ export const actions = {
       await createReview(
         supabase,
         { rating, description: description ?? "" },
-        slug,
+        teacherId,
         session,
       );
     } catch (error) {
       console.error(
-        "Error when adding review for profile slug: " + slug,
+        "Error when adding review for profile slug: " + teacherId,
         error,
       );
       return message(form, getFailFormMessage(), { status: 500 });

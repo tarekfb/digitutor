@@ -1,11 +1,11 @@
-import type { Tables } from "src/supabase";
+import type { Tables } from "src/supabase.ts";
 import { z } from "zod";
 import {
   acceptedAvatarFormats,
   getFormatsHumanReadable,
   maxAvatarSize,
-} from "../constants/constants";
-import { formatBytes } from "src/lib/shared/utils/utils";
+} from "../constants/constants.ts";
+import { formatBytes } from "src/lib/shared/utils/utils.ts";
 
 export type DbProfile = Tables<"profiles">;
 
@@ -38,11 +38,11 @@ export const nameSchema = z.object({
   firstName: z
     .string()
     .min(1, "Får inte vara tomt.")
-    .max(50, "Får inte vara mer än 50 bokstäver."),
+    .max(50, "Får inte vara mer än 50 karaktärer."),
   lastName: z
     .string()
     .min(1, "Får inte vara tomt.")
-    .max(50, "Får inte vara mer än 50 bokstäver."),
+    .max(50, "Får inte vara mer än 50 karaktärer."),
 });
 
 export const emailSchema = z.object({

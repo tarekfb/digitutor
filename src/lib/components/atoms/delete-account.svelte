@@ -1,10 +1,10 @@
 <script lang="ts">
-  import { Button } from "$lib/components/ui/button";
+  import { Button } from "$lib/components/ui/button/index.js";
   import FormMessage from "../molecules/form-message.svelte";
   import FormSubmit from "../molecules/form-submit.svelte";
   import SecondaryTitle from "./secondary-title.svelte";
   import LoadingSpinner from "./loading-spinner.svelte";
-  import * as Form from "$lib/components/ui/form";
+  import * as Form from "$lib/components/ui/form/index.js";
   import * as Dialog from "$lib/components/ui/dialog/index.js";
   import { Label } from "$lib/components/ui/label/index.js";
   import PasswordInput from "../molecules/password-input.svelte";

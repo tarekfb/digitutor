@@ -1,7 +1,7 @@
 import { PUBLIC_SUPABASE_STORAGE_URL } from "$env/static/public";
 import type { SupabaseClient } from "@supabase/supabase-js";
-import type { Database } from "lucide-svelte";
-import { ResourceNotFoundError } from "src/lib/shared/errors/missing-error";
+import { ResourceNotFoundError } from "src/lib/shared/errors/missing-error.ts";
+import type { Database } from "src/supabase.ts";
 
 export type FileBody =
   | ArrayBuffer

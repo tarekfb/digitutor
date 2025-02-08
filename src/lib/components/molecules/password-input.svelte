@@ -1,7 +1,8 @@
 <script lang="ts">
-  import { EyeIcon, EyeOffIcon } from "lucide-svelte";
-  import { Input } from "$lib/components/ui/input";
-  import { Button } from "$lib/components/ui/button";
+  import Eye from "lucide-svelte/icons/eye";
+  import EyeOff from "lucide-svelte/icons/eye-off";
+  import { Input } from "$lib/components/ui/input/index.js";
+  import { Button } from "$lib/components/ui/button/index.js";
   import { cn } from "src/lib/shared/utils/utils.js";
 
   export let formData;
@@ -26,10 +27,10 @@
     <Button
       slot="icon"
       variant="ghost"
-      class="{bgStyling}"
+      class={bgStyling}
       on:click={() => (show = false)}
     >
-      <EyeOffIcon class="md:hover:text-background" />
+      <EyeOff class="md:hover:text-background" />
     </Button>
   </Input>
 {:else}
@@ -47,7 +48,7 @@
       variant="ghost"
       on:click={() => (show = true)}
     >
-      <EyeIcon class="md:hover:text-background" />
+      <Eye class="md:hover:text-background" />
     </Button>
   </Input>
 {/if}

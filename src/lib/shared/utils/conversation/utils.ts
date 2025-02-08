@@ -3,8 +3,8 @@ import type {
   ConversationWithReferences,
   DbConversationBase,
   DbConversationWithReferences,
-} from "../../models/conversation";
-import { formatProfile } from "../profile/utils";
+} from "../../models/conversation.ts";
+import { formatProfile } from "../profile/utils.ts";
 
 export const formatConversationBase = ({
   id,

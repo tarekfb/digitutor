@@ -1,11 +1,12 @@
 <script lang="ts">
-  import { Button } from "$lib/components/ui/button";
-  import * as DropdownMenu from "$lib/components/ui/dropdown-menu";
-  import { UserRound, LogOutIcon } from "lucide-svelte";
+  import { Button } from "$lib/components/ui/button/index.js";
+  import * as DropdownMenu from "$lib/components/ui/dropdown-menu/index.ts";
+  import UserRound from "lucide-svelte/icons/user-round";
+  import LogOutIcon from "lucide-svelte/icons/log-out";
   // import Logo from "$lib/components/atoms/logo.svelte";
   import { goto } from "$app/navigation";
-  import type { Profile } from "src/lib/shared/models/profile";
-  import { websiteName } from "../../shared/constants/constants";
+  import type { Profile } from "src/lib/shared/models/profile.ts";
+  import { websiteName } from "../../shared/constants/constants.ts";
   import Avatar from "../atoms/avatar.svelte";
   import LoadingSpinner from "../atoms/loading-spinner.svelte";
 
@@ -22,13 +23,13 @@
 </script>
 
 <header
-  class="sticky top-0 z-40 w-full bg-secondary text-background overflow-x-hidden h-16 md:h-20 flex items-center gap-x-3 sm:justify-between sm:space-x-0 px-2 md:px-4 lg:px-8"
+  class="sticky top-0 z-40 flex h-16 w-full items-center gap-x-3 overflow-x-hidden bg-secondary px-2 text-background sm:justify-between sm:space-x-0 md:h-20 md:px-4 lg:px-8"
 >
-  <a href="/" class="text-xl md:text-3xl md:hover:text-third uppercase">
+  <a href="/" class="text-xl uppercase md:text-3xl md:hover:text-third">
     {websiteName}
   </a>
 
-  <div class="flex-1 flex items-center justify-end">
+  <div class="flex flex-1 items-center justify-end">
     <nav class="flex items-center gap-x-2 md:gap-x-4">
       {#if profile !== false}
         {#if profile === undefined || profile === null}
@@ -48,7 +49,7 @@
               <Button
                 variant="ghost"
                 builders={[builder]}
-                class="relative h-8 w-8 rounded-full mx-1"
+                class="relative mx-1 h-8 w-8 rounded-full"
               >
                 <Avatar
                   url={profile.avatarUrl ?? ""}
@@ -68,7 +69,7 @@
               <DropdownMenu.Separator />
               <DropdownMenu.Item class="data-[highlighted]:bg-white">
                 <button
-                  class="flex gap-x-2 w-full items-center"
+                  class="flex w-full items-center gap-x-2"
                   disabled={logoutLoading}
                   on:click={() => goto("/account")}
                 >
@@ -79,12 +80,12 @@
               <DropdownMenu.Separator />
               <DropdownMenu.Item class="data-[highlighted]:bg-white">
                 <button
-                  class="flex gap-x-2 w-full items-center"
+                  class="flex w-full items-center gap-x-2"
                   disabled={logoutLoading}
                   on:click={wrappedLogout}
                 >
                   {#if logoutLoading}
-                    <LoadingSpinner class="text-background mr-2" />
+                    <LoadingSpinner class="mr-2 text-background" />
                   {:else}
                     <LogOutIcon size="18" class="mr-2" />
                   {/if}

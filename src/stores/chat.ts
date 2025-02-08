@@ -4,14 +4,14 @@ import type {
   Session,
   SupabaseClient,
 } from "@supabase/supabase-js";
-import type { Database, Tables } from "src/supabase";
-import { initMessagesCount } from "$lib/shared/constants/constants";
+import type { Database, Tables } from "src/supabase.ts";
+import { initMessagesCount } from "$lib/shared/constants/constants.ts";
 import {
   formatMessage,
   type InputMessage,
   type Message,
-} from "src/lib/shared/models/conversation";
-import { getNow } from "src/lib/shared/utils/utils";
+} from "src/lib/shared/models/conversation.ts";
+import { getNow } from "src/lib/shared/utils/utils.ts";
 
 export const getMessages = async (
   supabase: SupabaseClient<Database>,

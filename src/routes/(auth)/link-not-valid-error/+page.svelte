@@ -2,8 +2,8 @@
   import PrimaryTitle from "$lib/components/atoms/primary-title.svelte";
   import Link from "$lib/components/atoms/link.svelte";
   import RootContainer from "src/lib/components/templates/root-container.svelte";
-  import { TriangleAlert } from "lucide-svelte";
-  import { websiteName } from "src/lib/shared/constants/constants";
+  import TriangleAlert  from "lucide-svelte/icons/triangle-alert";
+  import { websiteName } from "src/lib/shared/constants/constants.ts";
 </script>
 
 <svelte:head>
@@ -17,13 +17,13 @@
   >
   <p class="text-muted-foreground">
     Du tryckte på en länk som inte längre är giltig. Detta kan bero på att
-    länken har överskridit sin giltighetstid, att länken redan har förbrukats, eller att ett oväntat fel uppstod. Vi tar
-    dessa åtgärder för att skydda våra användares konton och förhindra obehörig
-    åtkomst.
+    länken har överskridit sin giltighetstid, att länken redan har förbrukats,
+    eller att ett oväntat fel uppstod. Vi tar dessa åtgärder för att skydda våra
+    användares konton och förhindra obehörig åtkomst.
   </p>
   <p class="text-muted-foreground">
-    Du kan begära en ny länk genom att upprepa åtgärden eller <Link href="/contact-us"
-      >kontakta oss</Link
+    Du kan begära en ny länk genom att upprepa åtgärden eller <Link
+      href="/contact-us">kontakta oss</Link
     > om problemet kvarstår.
   </p>
 </RootContainer>

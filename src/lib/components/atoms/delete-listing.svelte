@@ -1,9 +1,9 @@
 <script lang="ts">
-  import { Trash2 } from "lucide-svelte";
+  import Trash2 from "lucide-svelte/icons/trash-2";
   import * as AlertDialog from "$lib/components/ui/alert-dialog/index.js";
   import { enhance } from "$app/forms";
   import LoadingSpinner from "$lib/components/atoms/loading-spinner.svelte";
-  import { Button } from "$lib/components/ui/button";
+  import { Button } from "$lib/components/ui/button/index.js";
 
   let formLoading = false;
   let isOpen = false;
