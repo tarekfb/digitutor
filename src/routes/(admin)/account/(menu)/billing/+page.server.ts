@@ -43,30 +43,3 @@ export const load: PageServerLoad = (async ({ locals: { supabaseServiceRole, saf
         balance,
     }
 }) satisfies PageServerLoad;
-
-export const actions = {
-    "add-credits": async (event) => {
-        const {
-            locals: { supabaseServiceRole, safeGetSession },
-        } = event;
-
-        const { session } = await safeGetSession();
-        if (!session) throw redirect(303, "/sign-in");
-        const amount = 5;
-
-
-        updateCredits(supabaseServiceRole, amount, session.user.id, `Testing credits feature.`);
-    },
-    "remove-credits": async (event) => {
-        const {
-            locals: { supabaseServiceRole, safeGetSession },
-        } = event;
-
-        const { session } = await safeGetSession();
-        if (!session) throw redirect(303, "/sign-in");
-        const amount = -5;
-
-
-        updateCredits(supabaseServiceRole, amount, session.user.id, `Testing credits feature.`);
-    },
-};

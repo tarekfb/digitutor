@@ -29,7 +29,7 @@
     </p>
     <Button
       variant="third"
-      on:click={() => goto("/account/subscription.ts")}
+      on:click={() => goto("/account/subscription")}
       class="mt-2 md:mt-3">Skaffa Premium</Button
     >
   </div>
