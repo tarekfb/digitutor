@@ -4,23 +4,24 @@
   import RootContainer from "src/lib/components/templates/root-container.svelte";
   import { PricingPlanIds } from "src/lib/shared/models/subscription.ts";
   import {
+    costPerRequest,
     defaultPlanId,
     pricingPlans,
     websiteName,
   } from "src/lib/shared/constants/constants.ts";
-  import PricingModule from "src/lib/components/molecules/pricing-module.svelte";
   import Button from "src/lib/components/ui/button/button.svelte";
   import Pencil from "lucide-svelte/icons/pencil";
   import ExternalLink from "lucide-svelte/icons/external-link";
-  import SecondaryTitle from "src/lib/components/atoms/secondary-title.svelte";
   import CreditsNav from "src/lib/components/molecules/credits-nav.svelte";
   import {
     creditProducts,
     defaultErrorDescription,
   } from "src/lib/shared/constants/constants.js";
-  import { enhance } from "$app/forms";
   import AlertMessage from "src/lib/components/atoms/alert-message.svelte";
   import { goto } from "$app/navigation";
+  import * as Card from "$lib/components/ui/card/index.js";
+  import { Separator } from "src/lib/components/ui/separator/index.ts";
+  import Link from "src/lib/components/atoms/link.svelte";
 
   export let data: PageData;
   $: ({ hasEverHadSubscription, balance } = data);
@@ -43,98 +44,113 @@
     <PrimaryTitle responsiveMb>Betalningar</PrimaryTitle>
     <div class="self-start text-muted-foreground">
       <p>
-        Här finns din betalningsinformation och betalningshistorik. Se <a
+        Här finns din betalningsinformation och betalningshistorik. Se <Link
           href="/pricing"
           target="_blank"
-          class="underline">prissidan</a
+          class="text-muted-foreground">prissidan</Link
         >
         för mer information om premium och krediter.
       </p>
     </div>
+    <Link
+      href="/account/billing/manage"
+      target="_blank"
+      class="flex items-center gap-x-2"
+      ><ExternalLink class="size-5" />Se betalningshistorik</Link
+    >
   </section>
-  <section
-    class="flex w-full flex-col items-center justify-center gap-y-2 md:gap-y-4"
-  >
-    {#if currentPlanId !== PricingPlanIds.Premium}
-      {#if pricingPlan}
-        <SecondaryTitle responsiveMb>Skaffa premium</SecondaryTitle>
-        <PricingModule {currentPlanId} {pricingPlan} />
-      {:else}
-        <!-- this if case should never happen, just checking edge case -->
-        <Button
-          variant="third"
-          on:click={() => goto("/account/subscription.ts")}
-          >Skaffa Premium</Button
-        >
-      {/if}
-      <div
-        class="flex w-full flex-col gap-y-2 self-center md:gap-y-4 md:self-start"
+  <section class="flex w-full flex-col items-center justify-center gap-y-4">
+    <Card.Root class="w-full">
+      <Card.Header
+        class="flex flex-row items-center justify-between gap-x-2 gap-y-0"
       >
-        <div class="flex items-center gap-x-2 self-center md:self-start">
-          <SecondaryTitle>Dina krediter:</SecondaryTitle>
+        <Card.Title class="text-xl md:text-2xl">Din nuvarande plan</Card.Title>
+        <div
+          class="self-start whitespace-nowrap rounded-sm border border-accent bg-card p-1 font-mono font-normal uppercase tracking-wider md:p-2 md:text-lg"
+        >
+          {currentPlanName}
+        </div>
+      </Card.Header>
+      <Separator />
+      <Card.Content class="flex flex-col gap-y-4 pt-5 text-muted-foreground ">
+        <p>
+          {#if currentPlanId === PricingPlanIds.Free}
+            Denna plan är gratis och inget betalkort behövs. Du betalar {costPerRequest}
+            krediter varje gång du kontaktar en lärare. Se hur många krediter du
+            har kvar <Link
+              class="text-muted-foreground"
+              href="/account/billing#credits">nedan</Link
+            >.
+          {:else if currentPlanId === PricingPlanIds.Premium}
+            Du har premium och kan kontakta obegränsat antal lärare.
+          {/if}
+        </p>
+        <div
+          class="flex flex-col gap-y-4 md:flex-row md:justify-end md:gap-x-4"
+        >
+          <Button
+            href="/account/billing/manage"
+            class="flex gap-x-2 text-foreground"
+            variant="outline"><Pencil class="size-4" />Hantera</Button
+          >
+          {#if currentPlanId === PricingPlanIds.Free}
+            <Button
+              on:click={() => goto("/account/subscription")}
+              class="flex gap-x-2"
+              variant="third"
+            >
+              <ExternalLink class="size-4" />Skaffa premium</Button
+            >
+          {/if}
+        </div>
+      </Card.Content>
+    </Card.Root>
+
+    {#if currentPlanId !== PricingPlanIds.Premium}
+      <Card.Root class="w-full">
+        <Card.Header
+          class="flex flex-row items-center justify-between gap-x-2 gap-y-0"
+        >
+          <Card.Title id="credits" class="text-xl md:text-2xl"
+            >Dina krediter</Card.Title
+          >
           <div
-            class="self-start whitespace-nowrap rounded-sm border border-accent bg-card p-1 font-mono text-sm font-normal uppercase tracking-wider md:p-2"
+            class="self-start whitespace-nowrap rounded-sm border border-accent bg-card p-1 font-mono font-normal uppercase tracking-wider md:p-2 md:text-lg"
           >
             {#if balance === undefined}
               ?
             {:else if balance < 0}
-              0
+              0 <span class="hidden md:inline">KREDITER</span>
             {:else}
-              {balance}
+              {balance} <span class="hidden md:inline">KREDITER</span>
             {/if}
           </div>
-        </div>
-        {#if balance === undefined}
-          <AlertMessage
-            class="w-3/4 self-center"
-            title="Kunde inte hämta dina krediter"
-            description={defaultErrorDescription}
-            variant="destructive"
-          />
-        {/if}
-        <div class="flex items-center gap-x-2 self-center md:self-start">
-          <SecondaryTitle>Köp fler krediter</SecondaryTitle>
-        </div>
-        <ul
-          class="h-38 mt-4 flex flex-wrap justify-center gap-4 self-center md:mt-6 md:h-44 md:w-full md:flex-row md:self-start"
+        </Card.Header>
+        <Separator />
+        <Card.Content
+          class="flex flex-col gap-y-2 pt-5 text-muted-foreground md:gap-y-4"
         >
-          {#each creditProducts as creditsProduct}
-            <CreditsNav {creditsProduct} />
-          {/each}
-        </ul>
-      </div>
-    {/if}
-    <div
-      class="flex w-full flex-col gap-y-2 self-center md:gap-y-4 md:self-start"
-    >
-      <div class="flex items-center gap-x-2 self-center md:self-start">
-        <SecondaryTitle>Din nuvarande plan:</SecondaryTitle>
-        <div
-          class="self-start whitespace-nowrap rounded-sm border border-accent bg-card p-1 font-mono text-sm font-normal uppercase tracking-wider md:p-2"
-        >
-          {currentPlanName}
-        </div>
-      </div>
-      <div class="flex items-center gap-x-2">
-        <Button
-          href="/account/billing/manage"
-          class="flex w-full gap-x-2 self-center md:max-w-widest"
-          variant="outline-card"><Pencil class="size-4" />Hantera</Button
-        >
-      </div>
-    </div>
-    {#if hasEverHadSubscription}
-      <div>
-        <a
-          href="/account/billing/manage"
-          target="_blank"
-          class="link flex items-center gap-x-2"
-          ><ExternalLink class="size-5" />Se betalningshistorik</a
-        >
-      </div>
+          <p>Vill du köpa fler krediter? Välj ett alternativ nedan.</p>
+          <ul
+            class="flex flex-wrap justify-evenly gap-4 self-center md:w-full md:flex-row md:self-start"
+          >
+            {#each creditProducts as creditsProduct}
+              <CreditsNav {creditsProduct} />
+            {/each}
+          </ul>
+        </Card.Content>
+      </Card.Root>
+      {#if balance === undefined}
+        <AlertMessage
+          class="w-full self-center lg:w-3/4"
+          title="Kunde inte hämta dina krediter"
+          description={defaultErrorDescription}
+          variant="destructive"
+        />
+      {/if}
     {/if}
   </section>
-  <form action="?/add-credits" method="post" use:enhance>
+  <!-- <form action="?/add-credits" method="post" use:enhance>
     <Button
       type="submit"
       class="flex w-full gap-x-2 self-center md:max-w-widest"
@@ -146,6 +162,6 @@
       type="submit"
       class="flex w-full gap-x-2 self-center md:max-w-widest"
       variant="outline-card">remove credits</Button
-    >
-  </form>
+    > -->
+  <!-- </form> -->
 </RootContainer>
