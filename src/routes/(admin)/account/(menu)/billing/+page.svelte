@@ -6,6 +6,7 @@
   import {
     costPerRequest,
     defaultPlanId,
+    premiumPlan,
     pricingPlans,
     websiteName,
   } from "src/lib/shared/constants/constants.ts";
@@ -95,7 +96,7 @@
           >
           {#if currentPlanId === PricingPlanIds.Free}
             <Button
-              on:click={() => goto("/account/subscription")}
+              on:click={() => goto(`/account/subscribe/${premiumPlan.stripePriceId}`)}
               class="flex gap-x-2"
               variant="third"
             >

@@ -5,7 +5,7 @@
   import ExternalLink from "lucide-svelte/icons/external-link";
 
   export let creditsProduct: CreditsProduct;
-  const href = "/account/subscribe/{creditsProduct.stripePriceId}?mode=payment";
+  const href = `/account/subscribe/${creditsProduct.stripePriceId}?mode=payment`;
 </script>
 
 <a

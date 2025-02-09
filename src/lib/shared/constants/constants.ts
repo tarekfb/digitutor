@@ -111,31 +111,34 @@ export const creditProducts: CreditsProduct[] = [
     stripeProductId: StripeProductId.LargeCreditsTest,
   }
 ];
+export const freePlan: PricingPlan = {
+  id: PricingPlanIds.Free,
+  name: "Gratis",
+  description: `Inkluderar ${freeCredits} krediter vid start (att kontakta lärare kostar ${costPerRequest} krediter).`,
+  bold: `Inget betalkort behövs!`,
+  price: "0 SEK",
+  priceIntervalName: "per månad",
+  stripePriceId: StripePriceId.Free,
+  features: [`${freeCredits} gratis krediter`, "Tillgång alla lärare", "Möjlighet att köpa fler krediter när som helst"],
+}
+export const premiumPlan: PricingPlan = {
+  id: PricingPlanIds.Premium,
+  name: "Premium",
+  description:
+    "En plan för dig som tar lärandet på allvar. Perfekt för att hitta den bästa läraren. Testa planen gratis med betalkortet: 4242424242424242.",
+  price: "95 SEK",
+  priceIntervalName: "per månad",
+  stripePriceId: StripePriceId.PremiumTest,
+  // stripePriceId: isProd ? StripePriceId.PremiumProd : StripePriceId.PremiumTest,  // todo: reactive when live
+  stripeProductId: StripeProductId.PremiumTest,
+  // stripeProductId:  isProd ? StripeProductId.PremiumProd : StripeProductId.PremiumTest, // todo: reactive when live
+  features: [
+    "Allt i gratisplanen",
+    "Oändligt med krediter",
+  ],
+}
+
 export const pricingPlans: PricingPlan[] = [
-  {
-    id: PricingPlanIds.Free,
-    name: "Gratis",
-    description: `Inkluderar ${freeCredits} krediter vid start (att kontakta lärare kostar ${costPerRequest} krediter).`,
-    bold: `Inget betalkort behövs!`,
-    price: "0 SEK",
-    priceIntervalName: "per månad",
-    stripePriceId: StripePriceId.Free,
-    features: [`${freeCredits} gratis krediter`, "Tillgång alla lärare", "Möjlighet att köpa fler krediter när som helst"],
-  },
-  {
-    id: PricingPlanIds.Premium,
-    name: "Premium",
-    description:
-      "En plan för dig som tar lärandet på allvar. Perfekt för att hitta den bästa läraren. Testa planen gratis med betalkortet: 4242424242424242.",
-    price: "95 SEK",
-    priceIntervalName: "per månad",
-    stripePriceId: StripePriceId.PremiumTest,
-    // stripePriceId: isProd ? StripePriceId.PremiumProd : StripePriceId.PremiumTest,  // todo: reactive when live
-    stripeProductId: StripeProductId.PremiumTest,
-    // stripeProductId:  isProd ? StripeProductId.PremiumProd : StripeProductId.PremiumTest, // todo: reactive when live
-    features: [
-      "Allt i gratisplanen",
-      "Oändligt med krediter",
-    ],
-  },
+  freePlan,
+  premiumPlan,
 ];
