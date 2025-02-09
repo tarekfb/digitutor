@@ -45,6 +45,8 @@ import { formatListingWithProfile } from "src/lib/shared/utils/listing/utils.js"
 import { formatReviewWithReferences } from "src/lib/shared/utils/reviews/utils.ts";
 import { getCreditsByStudent, updateCredits } from "src/lib/server/database/credits.ts";
 import { fetchSubscription, getOrCreateCustomerId } from "src/lib/shared/utils/subscription/subscription-helper.ts";
+import { Resend } from 'resend';
+import ReceivedRequest from "src/emails/received-request.svelte";
 
 export const load = async ({
   locals: { supabase, safeGetSession },
@@ -445,6 +447,21 @@ export const actions = {
         console.error(`Unknown error when charging student ${userId} -${costPerRequest} credits, for contacting teacher ${teacherId}. Conversation ${conversationId} already created. Allowing contact.`, error)
       }
     }
+
+    // try {
+      // have to get user email here with rpc
+      // const resend = new Resend('re_123456789');
+
+      // const data = await resend.emails.send({
+      //   from: 'Digitutor <noreply@digitutor.se>',
+      //   to: ['delivered@resend.dev'],
+      //   subject: 'hello world',
+      //   react: <EmailTemplate firstName="John" />,
+      // });
+
+    // } catch (error) {
+
+    // }
 
     redirect(303, `/account/conversation/${conversationId}`);
   },

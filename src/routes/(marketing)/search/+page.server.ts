@@ -1,4 +1,4 @@
-import { search } from "src/lib/server/database/search";
+import { search } from "src/lib/server/database/search.ts";
 import { getFailFormMessage } from "src/lib/shared/constants/constants.ts";
 import { fail, message, superValidate } from "sveltekit-superforms";
 import { zod } from "sveltekit-superforms/adapters";
