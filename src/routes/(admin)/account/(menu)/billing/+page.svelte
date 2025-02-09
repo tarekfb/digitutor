@@ -150,18 +150,4 @@
       {/if}
     {/if}
   </section>
-  <!-- <form action="?/add-credits" method="post" use:enhance>
-    <Button
-      type="submit"
-      class="flex w-full gap-x-2 self-center md:max-w-widest"
-      variant="outline-card">add credits</Button
-    >
-  </form>
-  <form action="?/remove-credits" method="post" use:enhance>
-    <Button
-      type="submit"
-      class="flex w-full gap-x-2 self-center md:max-w-widest"
-      variant="outline-card">remove credits</Button
-    > -->
-  <!-- </form> -->
 </RootContainer>
