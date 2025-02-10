@@ -186,7 +186,7 @@ export const actions = {
       return message(form, getFailFormMessage(), { status: 500 });
     }
 
-    // send email to admin here
+    // todo send email to admin here
     console.info("fake sending email", { suggestion });
     return { form };
   },
