@@ -3,5 +3,7 @@
   "useTabs": false,
   "tabWidth": 2,
   "semi": true,
-  "overrides": [{ "files": "*.svelte", "options": { "parser": "svelte" } }]
+  "overrides": [{ "files": "*.svelte", "options": { "parser": "svelte" } }],
+  "prettier.trailingComma": "none"
+
 }

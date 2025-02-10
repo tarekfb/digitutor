@@ -87,12 +87,10 @@
   },
   "lint-staged": {
     "*.js": [
-      "eslint --cache --fix",
-      "eslint"
+      "eslint --cache --fix"
     ],
     "*.ts": [
-      "eslint --cache --fix",
-      "eslint"
+      "eslint --cache --fix"
     ],
     "*.svelte": [
       "eslint --cache --fix"
