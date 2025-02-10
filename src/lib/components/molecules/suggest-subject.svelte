@@ -53,7 +53,7 @@
       ? "Skicka in igen"
       : "Skicka in";
 
-  const { form, enhance, delayed, allErrors, message, errors } = suggestSubject;
+  const { form, enhance, delayed, allErrors, message } = suggestSubject;
 
   const cleanEmail = () => {
     // the on click is executed before the checked value is updated causing checked value to be inverted

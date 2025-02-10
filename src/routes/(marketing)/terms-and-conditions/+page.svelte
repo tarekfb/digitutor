@@ -1,7 +1,6 @@
 <script lang="ts">
   import PrimaryTitle from "$lib/components/atoms/primary-title.svelte";
   import RootContainer from "$lib/components/templates/root-container.svelte";
-  import Link from "$lib/components/atoms/link.svelte";
   import { websiteName } from "$lib/shared/constants/constants.ts";
 </script>
 

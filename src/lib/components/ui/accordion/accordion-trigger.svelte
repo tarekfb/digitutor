@@ -1,15 +1,16 @@
 <script lang="ts">
   import { Accordion as AccordionPrimitive } from "bits-ui";
-  import ChevronDown  from "lucide-svelte/icons/chevron-down";
+  import ChevronDown from "lucide-svelte/icons/chevron-down";
   import { cn } from "src/lib/shared/utils/utils.js";
 
   type $$Props = AccordionPrimitive.TriggerProps;
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   type $$Events = AccordionPrimitive.TriggerEvents;
 
   let className: $$Props["class"] = undefined;
   export let level: AccordionPrimitive.HeaderProps["level"] = 3;
   export { className as class };
-  
+
   export let centerText: boolean = true;
 </script>
 

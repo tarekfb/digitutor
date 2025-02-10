@@ -43,8 +43,14 @@ import type { Profile } from "src/lib/shared/models/profile.js";
 import { formatProfile } from "src/lib/shared/utils/profile/utils.js";
 import { formatListingWithProfile } from "src/lib/shared/utils/listing/utils.js";
 import { formatReviewWithReferences } from "src/lib/shared/utils/reviews/utils.ts";
-import { getCreditsByStudent, updateCredits } from "src/lib/server/database/credits.ts";
-import { fetchSubscription, getOrCreateCustomerId } from "src/lib/shared/utils/subscription/subscription-helper.ts";
+import {
+  getCreditsByStudent,
+  updateCredits,
+} from "src/lib/server/database/credits.ts";
+import {
+  fetchSubscription,
+  getOrCreateCustomerId,
+} from "src/lib/shared/utils/subscription/subscription-helper.ts";
 
 export const load = async ({
   locals: { supabase, safeGetSession },
@@ -138,7 +144,10 @@ export const load = async ({
     const dbReviews = await getReviewsByReceiver(supabase, teacherId);
     reviews = dbReviews.map((review) => formatReviewWithReferences(review));
   } catch (e) {
-    console.error("Error when reading reviews for profile with id: " + teacherId, e);
+    console.error(
+      "Error when reading reviews for profile with id: " + teacherId,
+      e,
+    );
     const {
       user: { id },
     } = await safeGetSession();
@@ -158,14 +167,18 @@ export const load = async ({
       if (userId) {
         try {
           const hasExistingConversation =
-            await getConversationForStudentAndTeacher(supabase, userId, teacherId);
+            await getConversationForStudentAndTeacher(
+              supabase,
+              userId,
+              teacherId,
+            );
           allowCreateReview = hasExistingConversation?.has_replied
             ? true
             : false;
         } catch (error) {
           console.error(
             `Error when adding review for profile slug ${teacherId}, unable to read conversation for teacher & student` +
-            teacherId,
+              teacherId,
             error,
           );
           allowCreateReview = true;
@@ -279,7 +292,7 @@ export const actions = {
     } catch (error) {
       console.error(
         `unable to read conversation for teacher: ${teacherId} & student: ${session.user.id}, allowing student to contact` +
-        teacherId,
+          teacherId,
         error,
       );
     }
@@ -379,33 +392,53 @@ export const actions = {
       const { error: idError, customerId } = await getOrCreateCustomerId({
         supabaseServiceRole,
         user,
-      })
+      });
       if (idError || !customerId)
-        console.error("Error getting or creating customer id. Allowing flow to proceed anyway.", idError)
+        console.error(
+          "Error getting or creating customer id. Allowing flow to proceed anyway.",
+          idError,
+        );
 
       const { primarySubscription } = await fetchSubscription({
         // @ts-expect-error - ts doesn't understand customerId has value because of if check above
         customerId,
-      })
+      });
 
       hasSubscription = primarySubscription ? true : false;
     } catch (error) {
-      console.error(`Unexpected issue when checking subscription and charging ${costPerRequest} credits for student: ${userId} contacting teacher: ${teacherId}. Allowing flow to procceed.`, error)
+      console.error(
+        `Unexpected issue when checking subscription and charging ${costPerRequest} credits for student: ${userId} contacting teacher: ${teacherId}. Allowing flow to procceed.`,
+        error,
+      );
     }
 
     let shouldChargeCredits: boolean = false;
     if (!hasSubscription) {
       let balance: number | undefined;
       try {
-        balance = await getCreditsByStudent(supabase, userId)
+        balance = await getCreditsByStudent(supabase, userId);
       } catch (error) {
         balance = undefined;
-        console.error("Unexpected error when checking if credit balance is enough to contact teacher. Allowing contact.", error)
+        console.error(
+          "Unexpected error when checking if credit balance is enough to contact teacher. Allowing contact.",
+          error,
+        );
       }
 
-      if (balance !== undefined && balance - costPerRequest < 0) { // student doesnt have enough credits
+      if (balance !== undefined && balance - costPerRequest < 0) {
+        // student doesnt have enough credits
         const missing = (balance - costPerRequest) * -1;
-        return message(form, getFailFormMessage(`Du har ${missing} krediter för lite`, "", MessageId.InsufficientCredits, undefined, "warning"), { status: 403 })
+        return message(
+          form,
+          getFailFormMessage(
+            `Du har ${missing} krediter för lite`,
+            "",
+            MessageId.InsufficientCredits,
+            undefined,
+            "warning",
+          ),
+          { status: 403 },
+        );
       }
 
       shouldChargeCredits = true;
@@ -435,14 +468,29 @@ export const actions = {
         "Error when starting conversation for profile slug: " + teacherId,
         error,
       );
-      return message(form, getFailFormMessage(undefined, "Inga krediter har dragits. Du kan kontakta oss om detta fortsätter."), { status: 500 });
+      return message(
+        form,
+        getFailFormMessage(
+          undefined,
+          "Inga krediter har dragits. Du kan kontakta oss om detta fortsätter.",
+        ),
+        { status: 500 },
+      );
     }
 
     if (shouldChargeCredits) {
       try {
-        await updateCredits(supabaseServiceRole, -costPerRequest, userId, `Started contact with teacher: ${teacherId}.`)
+        await updateCredits(
+          supabaseServiceRole,
+          -costPerRequest,
+          userId,
+          `Started contact with teacher: ${teacherId}.`,
+        );
       } catch (error) {
-        console.error(`Unknown error when charging student ${userId} -${costPerRequest} credits, for contacting teacher ${teacherId}. Conversation ${conversationId} already created. Allowing contact.`, error)
+        console.error(
+          `Unknown error when charging student ${userId} -${costPerRequest} credits, for contacting teacher ${teacherId}. Conversation ${conversationId} already created. Allowing contact.`,
+          error,
+        );
       }
     }
 
@@ -492,7 +540,7 @@ export const actions = {
     } catch (error) {
       console.error(
         `Error when adding review for profile slug ${teacherId}, unable to read conversation for teacher & student. Proceeding` +
-        teacherId,
+          teacherId,
         error,
       );
     }
@@ -508,7 +556,7 @@ export const actions = {
     } catch (error) {
       console.error(
         "Error when checking if user has already made a review for profile slug: " +
-        teacherId,
+          teacherId,
         error,
       );
     }

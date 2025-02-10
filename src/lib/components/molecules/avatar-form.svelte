@@ -18,6 +18,7 @@
   export let avatarUrl: string;
   export let deleteAvatarForm;
 
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const handleFilesSelect = (e: any) => {
     const { acceptedFiles } = e.detail;
     if (acceptedFiles && acceptedFiles.length > 0) {

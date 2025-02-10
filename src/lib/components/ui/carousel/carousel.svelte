@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { writable } from "svelte/store";
+  import { writable } from '@square/svelte-store';
   import { onDestroy } from "svelte";
   import {
     type CarouselAPI,

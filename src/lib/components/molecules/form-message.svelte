@@ -1,6 +1,6 @@
 <script lang="ts">
   import type { Message } from "$lib/shared/models/common.ts";
-  import type { Writable } from "svelte/store";
+  import type { Writable } from '@square/svelte-store';
   import AlertMessage from "$lib/components/atoms/alert-message.svelte";
 
   let className: string | null | undefined = undefined;
@@ -35,9 +35,8 @@
             href="/account/billing"
             class=" font-medium text-accent hover:underline">betalningar</a
           >, eller uppgradera till
-          <a
-            href="/pricing"
-            class="font-medium text-accent hover:underline">premium</a
+          <a href="/pricing" class="font-medium text-accent hover:underline"
+            >premium</a
           > för att kontakta läraren.
         </p>
       {/if}

@@ -34,7 +34,7 @@
         <Link
           href="/profile/{result.profile.id}?id={result.id}"
           class="text-foreground"
-          aria-label="Gå till profil"
+          ariaLabel="Gå till profil"
         >
           <PrimaryTitle class="whitespace-normal">
             {result.title}
@@ -42,7 +42,7 @@
         </Link>
         <Link
           href="/profile/{result.profile.id}?id={result.id}"
-          aria-label="Gå till profil"
+          ariaLabel="Gå till profil"
           class="text-foreground"
         >
           <PrimaryTitle class="whitespace-normal">

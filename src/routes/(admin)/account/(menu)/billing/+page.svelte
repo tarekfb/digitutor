@@ -25,15 +25,11 @@
   import Link from "src/lib/components/atoms/link.svelte";
 
   export let data: PageData;
-  $: ({ hasEverHadSubscription, balance } = data);
+  $: ({ balance } = data);
   let currentPlanId = data.currentPlanId ?? defaultPlanId;
   let currentPlanName = pricingPlans.find(
     (pricingPlan) => pricingPlan.id === currentPlanId,
   )?.name;
-
-  const pricingPlan = pricingPlans.find(
-    (plan) => plan.id === PricingPlanIds.Premium,
-  );
 </script>
 
 <svelte:head>
@@ -96,7 +92,8 @@
           >
           {#if currentPlanId === PricingPlanIds.Free}
             <Button
-              on:click={() => goto(`/account/subscribe/${premiumPlan.stripePriceId}`)}
+              on:click={() =>
+                goto(`/account/subscribe/${premiumPlan.stripePriceId}`)}
               class="flex gap-x-2"
               variant="third"
             >

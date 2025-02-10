@@ -26,6 +26,7 @@ declare global {
       message: string;
       description: string;
       id?: MessageId;
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       data?: any;
     }
     // interface PageData {

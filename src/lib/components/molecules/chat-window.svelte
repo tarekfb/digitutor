@@ -15,7 +15,8 @@
   export let self: Profile;
   export let other: Profile;
 
-  const scroll = (element: HTMLElement, messages: Message[]) => {
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const scroll = (element: HTMLElement, _messages: Message[]) => {
     // messages is not needed, just to provide reactivity dependancy
     setTimeout(
       () => element.scrollIntoView({ behavior: "smooth", block: "end" }),
@@ -100,6 +101,7 @@
         <p class="self-center">Inga meddelanden ännu.</p>
       {/each}
     {:catch error}
+      {console.error("Unexpected error when fetching messages", error)}
       <AlertMessage
         title="Vi kunde inte hämta några meddelanden"
         description={defaultErrorDescription}

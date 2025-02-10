@@ -38,9 +38,9 @@ export const findSimilarSubjects = (
     );
     const altTitleDistance = subject.altTitle
       ? levenshteinDistance(
-        subjectTitle.toLowerCase(),
-        subject.altTitle.toLowerCase(),
-      )
+          subjectTitle.toLowerCase(),
+          subject.altTitle.toLowerCase(),
+        )
       : Infinity;
 
     if (titleDistance <= threshold || altTitleDistance <= threshold) {

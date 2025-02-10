@@ -1,6 +1,6 @@
 <script lang="ts">
   import { cn } from "src/lib/shared/utils/utils.js";
-  import  Star  from "lucide-svelte/icons/star";
+  import Star from "lucide-svelte/icons/star";
   let className: string | null | undefined = undefined;
   export { className as class };
 </script>
