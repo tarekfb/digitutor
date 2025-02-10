@@ -25,8 +25,7 @@ export const load: PageServerLoad = async ({ locals: { supabase } }) => {
       (r) => r.description && r.description.length > 15,
     );
     const dbReview = longReviews[0] ?? reviews[0];
-    if (dbReview)
-      review = formatReviewWithReferences(dbReview);
+    if (dbReview) review = formatReviewWithReferences(dbReview);
   } catch (e) {
     console.error(
       "Error when reviews signup display, perhaps didnt find valid review",
@@ -41,12 +40,19 @@ export const load: PageServerLoad = async ({ locals: { supabase } }) => {
 export const actions = {
   signUp: async (event) => {
     const {
-      locals: { supabase, session, supabaseServiceRole }, cookies,
+      locals: { supabase, session, supabaseServiceRole },
+      cookies,
     } = event;
-    if (session) redirect(303, "/account", {
-      type: "info",
-      message: "Du är redan inloggad.",
-    }, cookies);
+    if (session)
+      redirect(
+        303,
+        "/account",
+        {
+          type: "info",
+          message: "Du är redan inloggad.",
+        },
+        cookies,
+      );
 
     const form = await superValidate(event, zod(signUpSchema));
     if (!form.valid) return fail(400, { form });
@@ -121,16 +127,18 @@ export const actions = {
     }
 
     try {
-      await updateCredits(supabaseServiceRole, freeCredits, inputUser.id)
+      await updateCredits(supabaseServiceRole, freeCredits, inputUser.id);
     } catch (error) {
-      console.error(`Unknown error when adding free credits to new profile with id ${inputUser.id}`, error)
+      console.error(
+        `Unknown error when adding free credits to new profile with id ${inputUser.id}`,
+        error,
+      );
     }
 
     return message(form, {
       variant: "success",
       title: "Verifiera e-postadress",
-      description:
-        `Titta i din inkorg (eller i skräpkorgen) för att verifiera e-post: ${email}.`,
+      description: `Titta i din inkorg (eller i skräpkorgen) för att verifiera e-post: ${email}.`,
       status: 201,
     });
   },

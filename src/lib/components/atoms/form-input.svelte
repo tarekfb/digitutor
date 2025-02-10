@@ -5,6 +5,7 @@
   import { Input } from "$lib/components/ui/input/index.ts";
 
   export let name: string;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   export let form: SuperForm<any>;
   export let type: "text" | "email";
   export let placeholder: string = "";

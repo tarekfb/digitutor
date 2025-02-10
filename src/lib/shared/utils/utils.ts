@@ -15,7 +15,6 @@ import {
 } from "../models/conversation.ts";
 import type { ErrorWithCode } from "../errors/error-with-code.ts";
 import type { ErrorWithStatusCode } from "../errors/error-with-statuscode.ts";
-import { PUBLIC_ENVIRONMENT } from "$env/static/public";
 import type { Database } from "src/supabase.ts";
 
 export function cn(...inputs: ClassValue[]) {
@@ -146,18 +145,18 @@ export const logout = (
   invalidate("supabase:auth");
 };
 
-export const removeUndefined = (fields: Record<string, any>) =>
+export const removeUndefined = (fields: Record<string, unknown>) =>
   Object.fromEntries(
-    Object.entries(fields).filter(([_, v]) => v !== undefined),
+    Object.entries(fields).filter(([, v]) => v !== undefined),
   );
 
-export const isErrorWithCode = (error: any): error is ErrorWithCode =>
-  "code" in error && typeof error.code === "string";
+export const isErrorWithCode = (error: unknown): error is ErrorWithCode =>
+  typeof error === "object" && error !== null && "code" in error && typeof error.code === "string";
 
 export const isErrorWithStatusCode = (
-  error: any,
+  error: unknown,
 ): error is ErrorWithStatusCode =>
-  "statusCode" in error && typeof error.statusCode === "string";
+  typeof error === "object" && error !== null && "statusCode" in error && typeof error.statusCode === "string";
 
 export const formatBytes = (bytes: number, decimals = 2) => {
   if (!+bytes) return "0 B";
@@ -237,7 +236,9 @@ export const cleanQuery = (
   // trim and && "undefined" is for client side bug prevention
   let cleanedQuery: string = "";
   if (rawQuery && rawQuery !== "undefined")
-    cleanedQuery = shouldEncode ? encodeURIComponent(rawQuery.trim()) : rawQuery.trim();
+    cleanedQuery = shouldEncode
+      ? encodeURIComponent(rawQuery.trim())
+      : rawQuery.trim();
   if (commaSeparatedSubjects && commaSeparatedSubjects !== "undefined")
     cleanedQuery += `${rawQuery ? " " : ""}${shouldEncode ? encodeURIComponent(commaSeparatedSubjects.trim()) : commaSeparatedSubjects.trim()}`;
   return cleanedQuery;

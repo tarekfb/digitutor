@@ -88,6 +88,7 @@
     <Form.Field form={searchForm} name="subjects" class="w-20 flex-auto">
       <Form.Control let:attrs>
         <div class="flex flex-col gap-1">
+          <!-- eslint-disable-next-line svelte/no-unused-svelte-ignore -->
           <!-- svelte-ignore a11y-label-has-associated-control - $label contains the 'for' attribute -->
           <label use:melt={$label} hidden>Välj teknologi</label>
           <input

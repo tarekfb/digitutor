@@ -10,10 +10,13 @@ export type DbCreditTransactionsWithReferences = Omit<
   student: DbProfile;
 };
 
-export type CreditTransactionsBase = Omit<DbCreditTransactionsBase, "created_at" | "updated_at"> & {
+export type CreditTransactionsBase = Omit<
+  DbCreditTransactionsBase,
+  "created_at" | "updated_at"
+> & {
   createdAt: string;
   updatedAt: string;
-}
+};
 
 export type CreditTransactionsWithReferences = Omit<
   CreditTransactionsBase,
@@ -26,4 +29,4 @@ export type InputCreditTransaction = {
   amount: number;
   comment?: string;
   student: string;
-}
+};

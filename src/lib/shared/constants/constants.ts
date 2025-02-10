@@ -1,5 +1,10 @@
 import type { Message } from "$lib/shared/models/common.ts";
-import { StripePriceId, PricingPlanIds, type PricingPlan, StripeProductId } from "../models/subscription.ts";
+import {
+  StripePriceId,
+  PricingPlanIds,
+  type PricingPlan,
+  StripeProductId,
+} from "../models/subscription.ts";
 import type { CreditsProduct } from "../models/subscription.js";
 
 export const websiteName = "Digitutor";
@@ -21,6 +26,7 @@ export const getDefaultErrorInfo = (
   message?: string,
   description?: string,
   id?: MessageId,
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   data?: any,
 ): App.Error => ({
   message: message ?? defaultErrorTitle,
@@ -33,6 +39,7 @@ export const getFailFormMessage = (
   title?: string,
   description?: string,
   messageId?: MessageId,
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   data?: any,
   variant: "destructive" | "default" | "warning" = "destructive",
 ): Message => ({
@@ -47,6 +54,7 @@ export const getSuccessFormMessage = (
   title: string,
   description?: string,
   messageId?: MessageId,
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   data?: any,
 ): Message => ({
   variant: "success",
@@ -109,33 +117,34 @@ export const creditProducts: CreditsProduct[] = [
     credits: 100,
     stripePriceId: StripePriceId.LargeCreditsTest,
     stripeProductId: StripeProductId.LargeCreditsTest,
-  }
-];
-export const pricingPlans: PricingPlan[] = [
-  {
-    id: PricingPlanIds.Free,
-    name: "Gratis",
-    description: `Inkluderar ${freeCredits} krediter vid start (att kontakta lärare kostar ${costPerRequest} krediter).`,
-    bold: `Inget betalkort behövs!`,
-    price: "0 SEK",
-    priceIntervalName: "per månad",
-    stripePriceId: StripePriceId.Free,
-    features: [`${freeCredits} gratis krediter`, "Tillgång alla lärare", "Möjlighet att köpa fler krediter när som helst"],
-  },
-  {
-    id: PricingPlanIds.Premium,
-    name: "Premium",
-    description:
-      "En plan för dig som tar lärandet på allvar. Perfekt för att hitta den bästa läraren. Testa planen gratis med betalkortet: 4242424242424242.",
-    price: "95 SEK",
-    priceIntervalName: "per månad",
-    stripePriceId: StripePriceId.PremiumTest,
-    // stripePriceId: isProd ? StripePriceId.PremiumProd : StripePriceId.PremiumTest,  // todo: reactive when live
-    stripeProductId: StripeProductId.PremiumTest,
-    // stripeProductId:  isProd ? StripeProductId.PremiumProd : StripeProductId.PremiumTest, // todo: reactive when live
-    features: [
-      "Allt i gratisplanen",
-      "Oändligt med krediter",
-    ],
   },
 ];
+export const freePlan: PricingPlan = {
+  id: PricingPlanIds.Free,
+  name: "Gratis",
+  description: `Inkluderar ${freeCredits} krediter vid start (att kontakta lärare kostar ${costPerRequest} krediter).`,
+  bold: `Inget betalkort behövs!`,
+  price: "0 SEK",
+  priceIntervalName: "per månad",
+  stripePriceId: StripePriceId.Free,
+  features: [
+    `${freeCredits} gratis krediter`,
+    "Tillgång alla lärare",
+    "Möjlighet att köpa fler krediter när som helst",
+  ],
+};
+export const premiumPlan: PricingPlan = {
+  id: PricingPlanIds.Premium,
+  name: "Premium",
+  description:
+    "En plan för dig som tar lärandet på allvar. Perfekt för att hitta den bästa läraren. Testa planen gratis med betalkortet: 4242424242424242.",
+  price: "95 SEK",
+  priceIntervalName: "per månad",
+  stripePriceId: StripePriceId.PremiumTest,
+  // stripePriceId: isProd ? StripePriceId.PremiumProd : StripePriceId.PremiumTest,  // todo: reactive when live
+  stripeProductId: StripeProductId.PremiumTest,
+  // stripeProductId:  isProd ? StripeProductId.PremiumProd : StripeProductId.PremiumTest, // todo: reactive when live
+  features: ["Allt i gratisplanen", "Oändligt med krediter"],
+};
+
+export const pricingPlans: PricingPlan[] = [freePlan, premiumPlan];

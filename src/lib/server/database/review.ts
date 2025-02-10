@@ -127,7 +127,6 @@ export const getTopTeacherByReviews = async (
   supabase: SupabaseClient<Database>,
   max?: number,
 ): Promise<DbDisplayProfile[]> => {
-  // @ts-ignore
   let query = supabase.rpc("get_top_teacher_by_reviews");
 
   if (max) query = query.limit(max);

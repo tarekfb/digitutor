@@ -6,7 +6,7 @@
   import ProfileHeaderMobile from "src/lib/components/organisms/profile-header-mobile.svelte";
   import ContactTeacherForm from "src/lib/components/molecules/contact-teacher-form.svelte";
   import SecondaryTitle from "src/lib/components/atoms/secondary-title.svelte";
-  import  Terminal  from "lucide-svelte/icons/terminal";
+  import Terminal from "lucide-svelte/icons/terminal";
   import Stars from "src/lib/components/atoms/stars.svelte";
   import { languages } from "src/lib/shared/models/common.ts";
   import AlertMessage from "src/lib/components/atoms/alert-message.svelte";

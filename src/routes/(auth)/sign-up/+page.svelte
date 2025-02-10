@@ -5,7 +5,7 @@
   import * as Tabs from "$lib/components/ui/tabs/index.ts";
   import { page } from "$app/stores";
   import Avatar from "src/lib/components/atoms/avatar.svelte";
-  import  ArrowRightIcon  from "lucide-svelte/icons/arrow-right";
+  import ArrowRightIcon from "lucide-svelte/icons/arrow-right";
   import SignupContent from "src/lib/components/molecules/signup-content.svelte";
   import FormMessage from "src/lib/components/molecules/form-message.svelte";
   import FormSubmit from "src/lib/components/molecules/form-submit.svelte";

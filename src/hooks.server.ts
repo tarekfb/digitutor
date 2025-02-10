@@ -5,11 +5,11 @@ import { sequence } from "@sveltejs/kit/hooks";
 import {
   PUBLIC_SUPABASE_URL,
   PUBLIC_SUPABASE_ANON_KEY,
-  PUBLIC_ENVIRONMENT
+  PUBLIC_ENVIRONMENT,
 } from "$env/static/public";
 import { createClient } from "@supabase/supabase-js";
 import { PRIVATE_SUPABASE_SERVICE_ROLE } from "$env/static/private";
-import { init } from '@jill64/sentry-sveltekit-cloudflare/server'
+import { init } from "@jill64/sentry-sveltekit-cloudflare/server";
 // import * as Sentry from "@sentry/sveltekit";
 
 const supabase: Handle = async ({ event, resolve }) => {
@@ -87,29 +87,34 @@ const authGuard: Handle = async ({ event, resolve }) => {
   locals.user = user;
 
   if (!locals.session && url.pathname.startsWith("/account"))
-    redirect(303, `/sign-in?next=${url.pathname}`, { type: "info", message: `Du måste logga in först` }, cookies,);
+    redirect(
+      303,
+      `/sign-in?next=${url.pathname}`,
+      { type: "info", message: `Du måste logga in först` },
+      cookies,
+    );
 
   return resolve(event);
 };
 
-const { onHandle, onError } = init(
-  'https://485a49edf664c4bad08c2ab0bf87a8eb@o4507622077169664.ingest.de.sentry.io/4507622079660112',
+const { onError } = init(
+  "https://485a49edf664c4bad08c2ab0bf87a8eb@o4507622077169664.ingest.de.sentry.io/4507622079660112",
   {
     toucanOptions: {
-      environment: PUBLIC_ENVIRONMENT
+      environment: PUBLIC_ENVIRONMENT,
     },
     //   handleOptions: {
     //     handleUnknownRoutes: boolean (default: false)
     //   },
     //   enableInDevMode: boolean (default: false)
-  }
-)
+  },
+);
 
 export const handle: Handle = sequence(supabase, authGuard);
 
 export const handleError = onError((e, sentryEventId) => {
-  console.error(e, sentryEventId)
-})
+  console.error(e, sentryEventId);
+});
 
 // This func is not used but comes from https://github.com/jill64/sentry-sveltekit-cloudflare
 // export const handle = onHandle(({ event, resolve }) => {
