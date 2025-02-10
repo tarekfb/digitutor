@@ -29,6 +29,14 @@
 
 <style>
   .current {
-    @apply bg-primary text-background hover:bg-accent hover:text-background active:text-background;
+    @apply bg-primary text-background;
+  }
+
+  .current:hover {
+    @apply bg-accent text-background;
+  }
+
+  .current:active {
+    @apply text-background;
   }
 </style>
