@@ -43,6 +43,7 @@ import type { Profile } from "src/lib/shared/models/profile.js";
 import { formatProfile } from "src/lib/shared/utils/profile/utils.js";
 import { formatListingWithProfile } from "src/lib/shared/utils/listing/utils.js";
 import { formatReviewWithReferences } from "src/lib/shared/utils/reviews/utils.ts";
+
 import {
   getCreditsByStudent,
   updateCredits,
@@ -51,6 +52,8 @@ import {
   fetchSubscription,
   getOrCreateCustomerId,
 } from "src/lib/shared/utils/subscription/subscription-helper.ts";
+import ReceivedRequest from "src/emails/received-request.svelte";
+import { getEmailById, sendEmail } from "src/lib/shared/utils/emails/utils.ts";
 
 export const load = async ({
   locals: { supabase, safeGetSession },
@@ -178,7 +181,7 @@ export const load = async ({
         } catch (error) {
           console.error(
             `Error when adding review for profile slug ${teacherId}, unable to read conversation for teacher & student` +
-              teacherId,
+            teacherId,
             error,
           );
           allowCreateReview = true;
@@ -229,8 +232,7 @@ export const actions = {
           type: "info",
           message: "Skapa ett konto eller logga in för att kontakta en lärare.",
         },
-        cookies,
-      );
+        cookies);
 
     const userId = session.user.id;
     const form = await superValidate(event, zod(requestContactSchema));
@@ -292,7 +294,7 @@ export const actions = {
     } catch (error) {
       console.error(
         `unable to read conversation for teacher: ${teacherId} & student: ${session.user.id}, allowing student to contact` +
-          teacherId,
+        teacherId,
         error,
       );
     }
@@ -494,6 +496,23 @@ export const actions = {
       }
     }
 
+    let teacherEmail: string | undefined;
+    try {
+      teacherEmail = await getEmailById(supabaseServiceRole, teacherId)
+    } catch (error) {
+      console.error("Error getting teacher email. Unable to contact teacher", error);
+    }
+
+    if (teacherEmail) {
+      try {
+        const { error: sendError } = await sendEmail(ReceivedRequest, [teacherEmail], "En elev vill kontakta dig!");
+        if (sendError)
+          console.error("Error sending email for when teacher received contact request", sendError);
+      } catch (e) {
+        console.error("Error sending email for when teacher received contact request", e);
+      }
+    }
+
     redirect(303, `/account/conversation/${conversationId}`);
   },
   addReview: async (event) => {
@@ -506,7 +525,7 @@ export const actions = {
     if (!session)
       redirect(
         303,
-        `/sign-in?next=/profile/${teacherId}`,
+        `/ sign -in? next = /profile/${teacherId}`,
         {
           type: "info",
           message: "Skapa ett konto eller logga in för att göra en recension.",
@@ -539,8 +558,8 @@ export const actions = {
       }
     } catch (error) {
       console.error(
-        `Error when adding review for profile slug ${teacherId}, unable to read conversation for teacher & student. Proceeding` +
-          teacherId,
+        `Error when adding review for profile slug ${teacherId}, unable to read conversation for teacher & student.Proceeding` +
+        teacherId,
         error,
       );
     }
@@ -556,7 +575,7 @@ export const actions = {
     } catch (error) {
       console.error(
         "Error when checking if user has already made a review for profile slug: " +
-          teacherId,
+        teacherId,
         error,
       );
     }
