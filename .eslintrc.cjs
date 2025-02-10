@@ -35,7 +35,7 @@ module.exports = {
   rules: {
     "no-undef": "off",
     'square-svelte-store/use-square-svelte-stores': 'error',
-    "@typescript-eslint/explicit-function-return-type": "warn",
+    "@typescript-eslint/explicit-function-return-type": "off",
     "comma-dangle": "off",
     // no-undef has been turned off because of this:
     // basically, it causes issues and TS does those checks so it's redundant
