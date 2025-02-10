@@ -12,7 +12,7 @@ const stripe = new Stripe(PRIVATE_STRIPE_API_KEY)
 export const load: PageServerLoad = async ({
     params: { slug },
     url,
-    locals: { safeGetSession, supabaseServiceRole, supabase },
+    locals: { safeGetSession, supabaseServiceRole },
 }) => {
     const { session, user } = await safeGetSession()
     if (!session) {

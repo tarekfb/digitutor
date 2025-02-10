@@ -86,9 +86,17 @@
     "zod": "^3.23.6"
   },
   "lint-staged": {
-    "*.js": "eslint --cache --fix",
-    "*.ts": "eslint --cache --fix",
-    "*.svelte": "eslint --cache --fix",
+    "*.js": [
+      "eslint --cache --fix",
+      "eslint"
+    ],
+    "*.ts": [
+      "eslint --cache --fix",
+      "eslint"
+    ],
+    "*.svelte": [
+      "eslint --cache --fix"
+    ],
     "*./src": "prettier --write"
   }
 }

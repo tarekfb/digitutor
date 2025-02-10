@@ -2,7 +2,7 @@ import { getOrCreateCustomerId, fetchSubscription } from 'src/lib/shared/utils/s
 import type { PageServerLoad } from './$types.ts';
 import { error } from "@sveltejs/kit"
 import { getDefaultErrorInfo, websiteName } from 'src/lib/shared/constants/constants.ts';
-import { getCreditsByStudent, updateCredits } from 'src/lib/server/database/credits.ts';
+import { getCreditsByStudent } from 'src/lib/server/database/credits.ts';
 import { redirect } from 'sveltekit-flash-message/server';
 
 export const load: PageServerLoad = (async ({ locals: { supabaseServiceRole, safeGetSession }, parent, cookies }) => {
