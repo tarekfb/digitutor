@@ -5,6 +5,7 @@ import {
   getDefaultErrorInfo,
   costPerRequest,
   MessageId,
+  getBaseUrl,
 } from "$lib/shared/constants/constants.ts";
 import { getProfileByUser } from "$lib/server/database/profiles.ts";
 import { getListing } from "$lib/server/database/listings.ts";
@@ -54,6 +55,7 @@ import {
 } from "src/lib/shared/utils/subscription/subscription-helper.ts";
 import ReceivedRequest from "src/emails/received-request.svelte";
 import { getEmailById, sendEmail } from "src/lib/shared/utils/emails/utils.ts";
+import { PUBLIC_ENVIRONMENT } from "$env/static/public";
 
 export const load = async ({
   locals: { supabase, safeGetSession },
@@ -503,9 +505,38 @@ export const actions = {
       console.error("Error getting teacher email. Unable to contact teacher", error);
     }
 
+    let teacherName: string = "";
+    try {
+      const profile = await getProfileByUser(supabase, teacherId)
+      teacherName = profile.first_name;
+    } catch (error) {
+      console.error(`Error getting teacher first name for id ${teacherId}. Omitting teacher name`, error);
+    }
+
+
+    let studentName: string = "";
+    try {
+      const profile = await getProfileByUser(supabase, userId)
+      studentName = profile.first_name;
+    } catch (error) {
+      console.error(`Error getting student first name for id ${userId}. Omitting student name`, error);
+    }
+
+    let contactRequestUrl = "";
+    try {
+      contactRequestUrl = `${getBaseUrl(PUBLIC_ENVIRONMENT)}/account/conversation/${conversationId}`
+    } catch (error) {
+      console.error(`Error getting contact request url for id ${conversationId}. Omitting contact request url`, error);
+    }
+
     if (teacherEmail) {
       try {
-        const { error: sendError } = await sendEmail(ReceivedRequest, [teacherEmail], "En elev vill kontakta dig!");
+        const props = {
+          studentName,
+          teacherName,
+          contactRequestUrl
+        };
+        const { error: sendError } = await sendEmail(ReceivedRequest, [teacherEmail], "En elev vill kontakta dig!", props)
         if (sendError)
           console.error("Error sending email for when teacher received contact request", sendError);
       } catch (e) {

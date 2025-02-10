@@ -19,14 +19,11 @@ export const getEmailById = async (supabaseServiceRole: SupabaseClient<Database>
 }
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any -- svelty-email uses any for render function
-export const sendEmail = async (svelteComponentToRender: any, to: string[], subject: string) => {
+export const sendEmail = async (svelteComponentToRender: any, to: string[], subject: string, props: Record<string, any>) => {
     const resend = new Resend(RESEND_API_KEY);
     const html = render({
         template: svelteComponentToRender,
-        props: {
-            studentName: 'Jane',
-            reviewText: "Tack för lektionen!",
-        }
+        props
     });
     const { data, error } = await resend.emails.send({
         from: `${websiteName} <${noReplyEmail}>`,
