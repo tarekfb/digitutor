@@ -14,6 +14,13 @@ export const localBaseUrl = "http://localhost:5173";
 export const testBaseUrl = `https://dev.mindic.pages.dev`;
 export const prodBaseUrl = `https://mindic.pro`;
 
+export const getBaseUrl = (env: string): string => {
+  if (env === "local") return localBaseUrl;
+  if (env === "staging") return testBaseUrl;
+  if (env === "prod") return prodBaseUrl;
+  throw new Error("Unsupported environment")
+}
+
 export const defaultErrorDescription =
   "Något gick fel. Du kan kontakta oss om detta fortsätter.";
 export const defaultErrorTitle = "Något gick fel...";
