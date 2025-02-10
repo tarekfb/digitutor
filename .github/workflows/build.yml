@@ -9,13 +9,14 @@ on:
       - master
 
 env:
-  PUBLIC_SUPABASE_URL: "https://fake_test_url.supabase.co"
-  PUBLIC_SUPABASE_ANON_KEY: "fake_anon_key"
-  PRIVATE_SUPABASE_SERVICE_ROLE: "fake_service_role"
-  PRIVATE_STRIPE_API_KEY: "fake_strip_api_key"
-  PUBLIC_SUPABASE_STORAGE_URL: "fake_storage_url"
-  CF_IMAGE_RESIZE_URL: "fake_resize_url"
-  PUBLIC_ENVIRONMENT: "fake_frontend_url"
+  PUBLIC_SUPABASE_URL: "dummy_value"
+  PUBLIC_SUPABASE_ANON_KEY: "dummy_value"
+  PRIVATE_SUPABASE_SERVICE_ROLE: "dummy_value"
+  PRIVATE_STRIPE_API_KEY: "dummy_value"
+  PUBLIC_SUPABASE_STORAGE_URL: "dummy_value"
+  CF_IMAGE_RESIZE_URL: "dummy_value"
+  PUBLIC_ENVIRONMENT: "dummy_value"
+  RESEND_API_KEY: "dummy_value"
 
 jobs:
   build_and_test:

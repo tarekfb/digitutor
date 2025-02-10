@@ -52,8 +52,8 @@ import {
   fetchSubscription,
   getOrCreateCustomerId,
 } from "src/lib/shared/utils/subscription/subscription-helper.ts";
-// import { Resend } from 'resend';
-// import ReceivedRequest from "src/emails/received-request.svelte";
+import ReceivedRequest from "src/emails/received-request.svelte";
+import { getEmailById, sendEmail } from "src/lib/shared/utils/emails/utils.ts";
 
 export const load = async ({
   locals: { supabase, safeGetSession },
@@ -232,8 +232,7 @@ export const actions = {
           type: "info",
           message: "Skapa ett konto eller logga in för att kontakta en lärare.",
         },
-        cookies,
-      );
+        cookies);
 
     const userId = session.user.id;
     const form = await superValidate(event, zod(requestContactSchema));
@@ -497,20 +496,22 @@ export const actions = {
       }
     }
 
-    // try {
-    // have to get user email here with rpc
-    // const resend = new Resend('re_123456789');
+    let teacherEmail: string | undefined;
+    try {
+      teacherEmail = await getEmailById(supabaseServiceRole, teacherId)
+    } catch (error) {
+      console.error("Error getting teacher email. Unable to contact teacher", error);
+    }
 
-    // const data = await resend.emails.send({
-    //   from: 'Digitutor <noreply@digitutor.se>',
-    //   to: ['delivered@resend.dev'],
-    //   subject: 'hello world',
-    //   react: <EmailTemplate firstName="John" />,
-    // });
-
-    // } catch (error) {
-
-    // }
+    if (teacherEmail) {
+      try {
+        const { error: sendError } = await sendEmail(ReceivedRequest, [teacherEmail], "En elev vill kontakta dig!");
+        if (sendError)
+          console.error("Error sending email for when teacher received contact request", sendError);
+      } catch (e) {
+        console.error("Error sending email for when teacher received contact request", e);
+      }
+    }
 
     redirect(303, `/account/conversation/${conversationId}`);
   },
@@ -524,7 +525,7 @@ export const actions = {
     if (!session)
       redirect(
         303,
-        `/sign-in?next=/profile/${teacherId}`,
+        `/ sign -in? next = /profile/${teacherId}`,
         {
           type: "info",
           message: "Skapa ett konto eller logga in för att göra en recension.",
@@ -557,7 +558,7 @@ export const actions = {
       }
     } catch (error) {
       console.error(
-        `Error when adding review for profile slug ${teacherId}, unable to read conversation for teacher & student. Proceeding` +
+        `Error when adding review for profile slug ${teacherId}, unable to read conversation for teacher & student.Proceeding` +
         teacherId,
         error,
       );
