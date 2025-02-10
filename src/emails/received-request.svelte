@@ -85,7 +85,7 @@
       >
       <Text style={paragraph}
         >Hej{teacherName ? ` ${teacherName}` : ""}! {studentName || "En elev"} har
-        skickat en kontaktförfrågan. Tryck på knappen nedan för att svara .
+        skickat en kontaktförfrågan. Tryck på knappen nedan för att svara.
       </Text>
       <Text style={sign}>—Digitutor-teamet</Text>
       <Section style={{ textAlign: "center", marginTop: "20px" }}>
