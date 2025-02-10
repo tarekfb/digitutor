@@ -16,7 +16,10 @@ import {
 } from "$lib/shared/models/profile.ts";
 import { updateProfile } from "$lib/server/database/profiles.ts";
 import { updateUserEmail } from "$lib/server/database/user.ts";
-import { deleteAccountSchema, changePasswordSchema } from "$lib/shared/models/user.ts";
+import {
+  deleteAccountSchema,
+  changePasswordSchema,
+} from "$lib/shared/models/user.ts";
 import { isAuthApiError } from "@supabase/supabase-js";
 import { redirect } from "sveltekit-flash-message/server";
 import { deleteAvatar, uploadAvatar } from "src/lib/server/database/avatar.ts";
@@ -41,11 +44,18 @@ export const load: PageServerLoad = async ({
     profile: { avatarUrl, firstName, lastName, bio },
   } = await parent();
 
-  const updateNameForm = await superValidate({
-    firstName,
-    lastName
-  }, zod(nameSchema));
-  const updateBioForm = await superValidate({ bio: bio ?? "" }, zod(updateBioSchema), { errors: false });
+  const updateNameForm = await superValidate(
+    {
+      firstName,
+      lastName,
+    },
+    zod(nameSchema),
+  );
+  const updateBioForm = await superValidate(
+    { bio: bio ?? "" },
+    zod(updateBioSchema),
+    { errors: false },
+  );
   const updateEmailForm = await superValidate(
     { email: session.user.email },
     zod(emailSchema),

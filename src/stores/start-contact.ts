@@ -1,2 +1,2 @@
-import { writable } from "svelte/store";
+import { writable } from '@square/svelte-store';
 export const isStartingContact = writable(false);

@@ -1,6 +1,6 @@
 <script lang="ts">
   import { cn } from "src/lib/shared/utils/utils.js";
-  import  Terminal  from "lucide-svelte/icons/terminal";
+  import Terminal from "lucide-svelte/icons/terminal";
   import { languages } from "src/lib/shared/models/common.ts";
 
   let className: string | null | undefined = undefined;

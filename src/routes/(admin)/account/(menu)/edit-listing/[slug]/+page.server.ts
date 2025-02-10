@@ -24,7 +24,10 @@ import {
   suggestSubjectSchema,
   type Subject,
 } from "src/lib/shared/models/subject.js";
-import { getSubjects, suggestSubject } from "src/lib/server/database/subjects.ts";
+import {
+  getSubjects,
+  suggestSubject,
+} from "src/lib/server/database/subjects.ts";
 import type { Tables } from "src/supabase.ts";
 import { findSimilarSubjects } from "src/lib/shared/utils/subjects/utils.ts";
 import { ExternalErrorCodes } from "src/lib/shared/models/common.js";
@@ -64,9 +67,9 @@ export const load = async ({
   if (session?.user.id !== listing.profile.id) {
     console.error(
       "Tried to read listing that is not theirs. listingid: " +
-      listing.id +
-      " userid: " +
-      session?.user.id,
+        listing.id +
+        " userid: " +
+        session?.user.id,
     );
     error(500, { ...defaultErrorInfo });
   }
@@ -164,7 +167,7 @@ export const actions = {
       } catch (error) {
         console.error(
           "Error when looking for match. Allowing user to insert suggestion. slug: " +
-          slug,
+            slug,
           error,
         );
       }

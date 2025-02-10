@@ -5,7 +5,6 @@
   import { toast } from "svelte-sonner";
   import { signInSchema } from "$lib/shared/models/user.js";
   import { Input } from "$lib/components/ui/input/index.js";
-  import CheckCircle2 from "lucide-svelte/icons/check-circle-2";
   import Terminal from "lucide-svelte/icons/terminal";
   import FormMessage from "$lib/components/molecules/form-message.svelte";
   import Label from "$lib/components/atoms/label.svelte";

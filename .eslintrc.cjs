@@ -26,6 +26,16 @@ module.exports = {
         },
       },
     },
+    {
+      "files": [
+        "src/lib/components/ui/**/*.js",
+        "src/lib/components/ui/**/*.ts",
+        "src/lib/components/ui/**/*.svelte",
+        "src/lib/components/ui/**/*.tsx"
+      ], "rules": {
+        "no-unused-vars": "off"
+      }
+    },
   ],
   env: {
     browser: true,

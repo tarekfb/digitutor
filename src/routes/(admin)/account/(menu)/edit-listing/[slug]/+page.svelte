@@ -13,8 +13,8 @@
   import { Input } from "$lib/components/ui/input/index.js";
   import { toast } from "svelte-sonner";
   import { page } from "$app/stores";
-  import SaveIcon  from "lucide-svelte/icons/save";
-  import ExternalLink  from "lucide-svelte/icons/external-link";
+  import SaveIcon from "lucide-svelte/icons/save";
+  import ExternalLink from "lucide-svelte/icons/external-link";
   import { Checkbox } from "src/lib/components/ui/checkbox/index.js";
   import Svelecte from "svelecte";
   import { arrayProxy } from "sveltekit-superforms/client";

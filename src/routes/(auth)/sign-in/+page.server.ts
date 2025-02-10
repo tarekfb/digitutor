@@ -1,16 +1,15 @@
-import { error, fail, redirect } from "@sveltejs/kit";
+import { fail, redirect } from "@sveltejs/kit";
 import type { Actions, PageServerLoad } from "./$types.ts";
 import {
   MessageId,
-  getDefaultErrorInfo,
   getFailFormMessage,
 } from "$lib/shared/constants/constants.ts";
 import { message, superValidate } from "sveltekit-superforms";
 import { zod } from "sveltekit-superforms/adapters";
 import { resendSchema, signInSchema } from "$lib/shared/models/user.ts";
-import { getHighQualityReviews } from "src/lib/server/database/review";
+import { getHighQualityReviews } from "src/lib/server/database/review.ts";
 import { getListingsByTeacher } from "src/lib/server/database/listings.ts";
-import { formatReviewWithReferences } from "src/lib/shared/utils/reviews/utils";
+import { formatReviewWithReferences } from "src/lib/shared/utils/reviews/utils.ts";
 import type { ReviewWithReferences } from "src/lib/shared/models/review.ts";
 import type { ListingWithProfile } from "src/lib/shared/models/listing.ts";
 import { formatListingWithProfile } from "src/lib/shared/utils/listing/utils.ts";
@@ -58,7 +57,8 @@ export const load: PageServerLoad = async ({ locals: { supabase } }) => {
 export const actions: Actions = {
   signIn: async (event) => {
     const {
-      locals: { supabase, session }, url,
+      locals: { supabase, session },
+      url,
     } = event;
 
     if (session) redirect(303, "/account");
@@ -85,7 +85,8 @@ export const actions: Actions = {
               },
               { status: 401 },
             );
-          case "Email not confirmed":
+          case "Email not confirmed": {
+
             // try to resend confirmation email
             // can return error but not relevant, just act as if no resend was attempted
             const { error: resendError } = await supabase.auth.resend({
@@ -118,7 +119,7 @@ export const actions: Actions = {
               },
               { status: 403 },
             );
-
+          }
           default:
             console.error("Supabase error on signin", { error });
             return message(form, getFailFormMessage(), { status: 500 });

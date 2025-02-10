@@ -2,7 +2,10 @@ import { search } from "src/lib/server/database/search";
 import { getFailFormMessage } from "src/lib/shared/constants/constants.ts";
 import { fail, message, superValidate } from "sveltekit-superforms";
 import { zod } from "sveltekit-superforms/adapters";
-import { searchSchema, type SearchResult } from "src/lib/shared/models/search.ts";
+import {
+  searchSchema,
+  type SearchResult,
+} from "src/lib/shared/models/search.ts";
 import type { Actions, PageServerLoad } from "./$types.ts";
 import {
   type Message,

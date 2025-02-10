@@ -10,7 +10,7 @@
   import * as Form from "$lib/components/ui/form/index.js";
   import { Input } from "$lib/components/ui/input/index.js";
   import Label from "$lib/components/atoms/label.svelte";
-  import  SendHorizontal  from "lucide-svelte/icons/send-horizontal";
+  import SendHorizontal from "lucide-svelte/icons/send-horizontal";
   import AlertMessage from "src/lib/components/atoms/alert-message.svelte";
   import { page } from "$app/stores";
 

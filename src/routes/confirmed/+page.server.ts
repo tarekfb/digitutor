@@ -60,6 +60,10 @@ export const load: PageServerLoad = async (event) => {
     redirectTo.searchParams.delete("next");
   }
 
-  console.error("Issue at confirm signup, something was falsy", tokenHash, type)
+  console.error(
+    "Issue at confirm signup, something was falsy",
+    tokenHash,
+    type,
+  );
   error(500, getDefaultErrorInfo("Det saknas lite info för att verifiera dig"));
 };

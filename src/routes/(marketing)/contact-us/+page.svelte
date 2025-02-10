@@ -13,7 +13,7 @@
   import Link from "$lib/components/atoms/link.svelte";
   import RootContainer from "src/lib/components/templates/root-container.svelte";
   import type { PageData } from "./$types.ts";
-  import  SendHorizontal  from "lucide-svelte/icons/send-horizontal";
+  import SendHorizontal from "lucide-svelte/icons/send-horizontal";
   import { websiteName } from "src/lib/shared/constants/constants.ts";
 
   export let data: PageData;

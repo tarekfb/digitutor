@@ -8,7 +8,6 @@ import type { Database, Tables } from "src/supabase.ts";
 import { initMessagesCount } from "$lib/shared/constants/constants.ts";
 import {
   formatMessage,
-  type InputMessage,
   type Message,
 } from "src/lib/shared/models/conversation.ts";
 import { getNow } from "src/lib/shared/utils/utils.ts";
@@ -88,6 +87,7 @@ export const sendMessageToStore = async (
 const newMessageListener = async (
   store: WritableLoadable<Message[]>,
   payload: RealtimePostgresInsertPayload<{
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     [key: string]: any;
   }>,
 ) => {

@@ -2,9 +2,6 @@
   import Autoplay from "embla-carousel-autoplay";
   import { websiteName } from "$lib/shared/constants/constants.ts";
   import type { PageData } from "./$types.ts";
-  import { superForm } from "sveltekit-superforms";
-  import { zodClient } from "sveltekit-superforms/adapters";
-  import { searchSchema } from "src/lib/shared/models/search.ts";
   import ProfileCarousel from "src/lib/components/organisms/profile-carousel.svelte";
   import ReviewCardExtra from "src/lib/components/molecules/review-card-extra.svelte";
   import { Button } from "src/lib/components/ui/button/index.js";
@@ -14,7 +11,7 @@
   import RootContainer from "src/lib/components/templates/root-container.svelte";
   import SearchForm from "src/lib/components/organisms/search-form.svelte";
   import Wavy from "src/lib/components/atoms/wavy.svelte";
-  import Search  from "lucide-svelte/icons/search";
+  import Search from "lucide-svelte/icons/search";
 
   export let data: PageData;
   $: ({ displayProfiles, displayReviews, subjects } = data);

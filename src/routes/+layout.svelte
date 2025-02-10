@@ -60,7 +60,7 @@
 
   const setPosition = (pathname: string): "top-center" | "bottom-center" => {
     const conversationPage = new RegExp(
-      /\/account\/conversation\/([0-9a-f\-]{36})$/,
+      /\/account\/conversation\/([0-9a-f-]{36})$/,
     );
     return new RegExp(conversationPage).test(pathname)
       ? "top-center"

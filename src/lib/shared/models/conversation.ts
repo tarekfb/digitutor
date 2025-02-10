@@ -57,7 +57,7 @@ export const sendMessageSchema = z.object({
     .string()
     .trim()
     .min(1, "Meddelandet måste vara minst 1 karaktär.")
-    .max(300, "Meddelandet får inte vara mer än 300 karaktärer.")
+    .max(300, "Meddelandet får inte vara mer än 300 karaktärer."),
 });
 
 const requestContactProperties = {
