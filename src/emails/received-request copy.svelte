@@ -11,7 +11,6 @@
     Text,
   } from "svelty-email";
   import Sign from "./sign.svelte";
-  import Footer from "./footer.svelte";
 
   export let studentName: string = "";
   export let teacherName: string = "";
@@ -62,6 +61,14 @@
     padding: "12px 24px",
     fontWeight: "bold",
   };
+
+  const footer = {
+    fontFamily,
+    fontSize: "12px",
+    color: "hsl(215.4, 16.3%, 35%)", // --muted-foreground
+    textAlign: "center" as const,
+    marginTop: "20px",
+  };
 </script>
 
 <Html>
@@ -84,7 +91,7 @@
           >Visa förfrågan</Button
         >
       </Section>
-      <Footer />
+      <Text style={footer}>{prodBaseUrl}</Text>
     </Container>
   </Section>
 </Html>

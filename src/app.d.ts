@@ -1,4 +1,4 @@
-import { SupabaseClient, Session } from "@supabase/supabase-js";
+import { SupabaseClient, Session, User } from "@supabase/supabase-js";
 import { Database } from "./supabase";
 import type { MessageId } from "./lib/shared/constants/constants.ts";
 
