@@ -1,7 +1,6 @@
 <script lang="ts">
-  import { prodBaseUrl } from "src/lib/shared/constants/constants.ts";
+  import { prodBaseUrl, websiteName } from "src/lib/shared/constants/constants.ts";
   import {
-    Button,
     Container,
     Head,
     Heading,
@@ -9,15 +8,14 @@
     Preview,
     Section,
     Text,
+    Link,
   } from "svelty-email";
   import Sign from "./sign.svelte";
   import Footer from "./footer.svelte";
 
   export let studentName: string = "";
-  export let teacherName: string = "";
-  export let contactRequestUrl: string = "";
 
-  const previewText = `${studentName || "En elev"} har skickat en kontaktförfrågan till dig!`;
+  const previewText = `Ditt konto hos ${websiteName} har avslutats.`;
 
   const fontFamily =
     '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen-Sans, Ubuntu, Cantarell, "Helvetica Neue", sans-serif';
@@ -49,19 +47,6 @@
     color: "hsl(215.4, 16.3%, 35%)", // --muted-foreground
     lineHeight: "1.5",
   };
-
-  const button = {
-    fontFamily,
-    backgroundColor: "hsl(197, 100%, 29%)", // --third
-    borderRadius: "6px",
-    color: "hsl(210, 40%, 98%)", // --primary-foreground
-    fontSize: "16px",
-    textDecoration: "none",
-    textAlign: "center" as const,
-    display: "inline-block",
-    padding: "12px 24px",
-    fontWeight: "bold",
-  };
 </script>
 
 <Html>
@@ -69,21 +54,21 @@
   <Preview preview={previewText} />
   <Section style={main}>
     <Container style={container}>
-      <Heading style={heading}
-        >{studentName || "En elev"} vill komma i kontakt med dig</Heading
-      >
-      <Text style={paragraph}
-        >Hej{teacherName ? ` ${teacherName}` : ""}! {studentName || "En elev"} har
-        skickat en kontaktförfrågan. Tryck på knappen nedan för att svara.
+      <Heading style={heading}>Tack för din tid hos oss!</Heading>
+      <Text style={paragraph}>
+        Hej{studentName ? ` ${studentName}` : ""}!
+      </Text>
+      <Text style={paragraph}>
+        Ditt konto hos oss har nu tagits bort. Vi hoppas att vi har varit till
+        nytta på din resa och att vi kanske ses igen i framtiden.
+      </Text>
+      <Text style={paragraph}>
+        Om du inte begärde denna handling eller har några frågor eller
+        synpunkter kan du alltid <Link href="{prodBaseUrl}/contact-us"
+          >kontakta oss</Link
+        >.
       </Text>
       <Sign />
-      <Section style={{ textAlign: "center", marginTop: "20px" }}>
-        <Button
-          style={button}
-          href={contactRequestUrl || `${prodBaseUrl}/account`}
-          >Visa förfrågan</Button
-        >
-      </Section>
       <Footer />
     </Container>
   </Section>
