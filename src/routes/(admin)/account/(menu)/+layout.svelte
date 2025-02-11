@@ -6,6 +6,7 @@
   import { page } from "$app/stores";
   import { toast } from "svelte-sonner";
   import { getFlash } from "sveltekit-flash-message/client";
+  import { goto } from "$app/navigation";
 
   export let data: PageData;
   $: ({ supabase, session, profile } = data);
@@ -36,7 +37,12 @@
 </script>
 
 <Navbar profile={false} logout={false}>
-  <Sidebar role={profile?.role} logout={() => logout(supabase, session)} />
+  <Sidebar
+    role={profile?.role}
+    logout={() => {
+      logout(supabase, session);
+      goto("/sign-in");
+    }}
+  />
 </Navbar>
-<!-- <AccountLayout><slot /></AccountLayout> -->
 <slot />

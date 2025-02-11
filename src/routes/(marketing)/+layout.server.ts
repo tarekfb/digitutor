@@ -14,12 +14,13 @@ export const load: LayoutServerLoad = async ({
   const { session, user } = await safeGetSession();
 
   let profile: Profile | undefined;
-  try {
-    const dbProfile = session && (await getProfileByUser(supabase, user.id));
-    profile = dbProfile ? formatProfile(dbProfile) : undefined;
-  } catch (error) {
-    console.error("Unable to get profile in (marketing) layout", error);
-  }
+  if (session && user)
+    try {
+      const dbProfile = session && (await getProfileByUser(supabase, user.id));
+      profile = dbProfile ? formatProfile(dbProfile) : undefined;
+    } catch (error) {
+      console.error("Unable to get profile in (marketing) layout", error);
+    }
 
   let listings: ListingWithProfile[] = [];
   try {
