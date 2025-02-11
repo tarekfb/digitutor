@@ -363,10 +363,7 @@ export const actions = {
     }
 
     try {
-      const props = {
-        studentName,
-      };
-      const { error: sendError } = await sendEmail(DeletedAccount, ["tarekfb69@gmail.com"], "Ditt konto har avslutats", props)
+      const { error: sendError } = await sendEmail(DeletedAccount, [email], "Ditt konto har avslutats", { studentName })
       if (sendError)
         console.error(`Error sending email for deleted acc ${userId}`, sendError);
     } catch (e) {
