@@ -10,11 +10,11 @@ import { zod } from "sveltekit-superforms/adapters";
 import { signUpSchema } from "$lib/shared/models/user.ts";
 import { createProfile } from "$lib/server/database/profiles.ts";
 import type { CreateProfile } from "$lib/shared/models/profile.ts";
-import { getHighQualityReviews } from "src/lib/server/database/review";
+import { getHighQualityReviews } from "src/lib/server/database/review.ts";
 import { ExternalErrorCodes } from "src/lib/shared/models/common.ts";
 import { isErrorWithCode } from "src/lib/shared/utils/utils.ts";
 import type { ReviewWithReferences } from "src/lib/shared/models/review.ts";
-import { formatReviewWithReferences } from "src/lib/shared/utils/reviews/utils";
+import { formatReviewWithReferences } from "src/lib/shared/utils/reviews/utils.ts";
 import { updateCredits } from "src/lib/server/database/credits.ts";
 
 export const load: PageServerLoad = async ({ locals: { supabase } }) => {

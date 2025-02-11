@@ -153,15 +153,12 @@ export const load = async ({
       "Error when reading reviews for profile with id: " + teacherId,
       e,
     );
-    const {
-      user: { id },
-    } = await safeGetSession();
-    const isOwner = id === teacherId;
+    const isOwner = userId === teacherId;
     if (isOwner)
       // only show error info to owner
       reviewsMessage = getFailFormMessage(
         "Vi kunde inte hämta recensioner",
-        "Något gick fel. Kontakta oss om de tta fortsätter.",
+        "Något gick fel. Kontakta oss om detta fortsätter.",
       );
   }
 
@@ -318,7 +315,7 @@ export const actions = {
       cookies,
     } = event;
     const { session, user } = await safeGetSession();
-    if (!session)
+    if (!session || !user)
       redirect(
         303,
         `/sign-in?next=/profile/${teacherId}`,
