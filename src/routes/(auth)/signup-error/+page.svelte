@@ -7,19 +7,20 @@
 </script>
 
 <svelte:head>
-  <title>{websiteName} | Ogiltig länk</title>
+  <title>{websiteName} | Fel vid verifiering</title>
 </svelte:head>
 
 <RootContainer minWidth maxWidth class="items-start gap-y-4 md:gap-y-6">
   <TriangleAlert size="100" class="self-center text-warning" />
   <PrimaryTitle class="self-center text-wrap text-center"
-    >Länken är inte längre tillgänglig</PrimaryTitle
+    >Något gick fel vid bekräftelse av din e-post</PrimaryTitle
   >
   <p class="text-muted-foreground">
-    Du tryckte på en länk som inte längre är giltig. Detta kan bero på att
-    länken har överskridit sin giltighetstid, att den redan har förbrukats,
-    eller att ett oväntat fel uppstod. Vi tar dessa åtgärder för att skydda våra
-    användares konton och förhindra obehörig åtkomst.
+    Det uppstod ett fel när vi försökte bekräfta din e-post. Det kan bero på att
+    länken i bekräftelse-mailet har överskridit sin giltighetstid, att den
+    redan har förbrukats, eller att ett oväntat fel uppstod. Vi tar dessa
+    åtgärder för att skydda våra användares konton och förhindra obehörig
+    åtkomst.
   </p>
   <p class="text-muted-foreground">
     Du kan begära en ny länk genom att upprepa åtgärden eller <Link
