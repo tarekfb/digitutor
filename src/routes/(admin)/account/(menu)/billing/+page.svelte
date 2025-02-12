@@ -9,6 +9,7 @@
     premiumPlan,
     pricingPlans,
     websiteName,
+    freeCredits,
   } from "src/lib/shared/constants/constants.ts";
   import Button from "src/lib/components/ui/button/button.svelte";
   import Pencil from "lucide-svelte/icons/pencil";
@@ -72,7 +73,8 @@
       <Card.Content class="flex flex-col gap-y-4 pt-5 text-muted-foreground ">
         <p>
           {#if currentPlanId === PricingPlanIds.Free}
-            Denna plan är gratis och inget betalkort behövs. Du betalar {costPerRequest}
+            Denna plan är gratis och inget betalkort behövs. Du har automatiskt
+            fått {freeCredits} krediter vid registrering. Du betalar {costPerRequest}
             krediter varje gång du kontaktar en lärare. Se hur många krediter du
             har kvar <Link
               class="text-muted-foreground"
