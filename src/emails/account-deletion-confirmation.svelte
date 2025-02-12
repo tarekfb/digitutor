@@ -1,5 +1,8 @@
 <script lang="ts">
-  import { prodBaseUrl, websiteName } from "src/lib/shared/constants/constants.ts";
+  import {
+    prodBaseUrl,
+    websiteName,
+  } from "src/lib/shared/constants/constants.ts";
   import {
     Container,
     Head,

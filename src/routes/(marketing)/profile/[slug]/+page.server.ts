@@ -53,7 +53,7 @@ import {
   fetchSubscription,
   getOrCreateCustomerId,
 } from "src/lib/shared/utils/subscription/subscription-helper.ts";
-import ReceivedRequest from "src/emails/received-request.svelte";
+import RequestNotification from "src/emails/request-notification.svelte";
 import { getEmailById, sendEmail } from "src/lib/shared/utils/emails/utils.ts";
 import { PUBLIC_ENVIRONMENT } from "$env/static/public";
 
@@ -533,7 +533,7 @@ export const actions = {
           teacherName,
           contactRequestUrl
         };
-        const { error: sendError } = await sendEmail(ReceivedRequest, [teacherEmail], "En elev vill kontakta dig!", props)
+        const { error: sendError } = await sendEmail(RequestNotification, [teacherEmail], "En elev vill kontakta dig!", props)
         if (sendError)
           console.error("Error sending email for when teacher received contact request", sendError);
       } catch (e) {

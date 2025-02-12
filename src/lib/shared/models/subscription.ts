@@ -9,11 +9,12 @@ export type PricingPlan = {
   stripeProductId?: string;
   features: string[];
 };
+
 export type CreditsProduct = {
   price: string;
   credits: number;
   stripePriceId: StripePriceId;
-  stripeProductId?: StripeProductId;
+  stripeProductId: StripeProductId;
 };
 
 export enum PricingPlanIds {
