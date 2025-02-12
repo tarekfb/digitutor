@@ -1,5 +1,8 @@
 <script lang="ts">
-  import { prodBaseUrl, websiteName } from "src/lib/shared/constants/constants.ts";
+  import {
+    prodBaseUrl,
+    websiteName,
+  } from "src/lib/shared/constants/constants.ts";
   import {
     Container,
     Head,
@@ -10,8 +13,8 @@
     Text,
     Link,
   } from "svelty-email";
-  import Sign from "./sign.svelte.ts";
-  import Footer from "./footer.svelte.ts";
+  import Sign from "./sign.svelte";
+  import Footer from "./footer.svelte";
 
   export let studentName: string = "";
 

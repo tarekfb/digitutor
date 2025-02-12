@@ -13,8 +13,8 @@
     Text,
     Button,
   } from "svelty-email";
-  import Sign from "./sign.svelte.ts";
-  import Footer from "./footer.svelte.ts";
+  import Sign from "./sign.svelte";
+  import Footer from "./footer.svelte";
 
   export let studentName: string = "";
   export let conversationId: string = "";
