@@ -1,7 +1,7 @@
 import { json } from "@sveltejs/kit";
 import type { RequestHandler } from "./$types.ts";
 import { getEmailById, sendEmail } from "src/lib/shared/utils/emails/utils.ts";
-import RequestResponseReceived from "src/emails/request-response-received.svelte";
+import ResponseNotification from "src/emails/response-notification.svelte";
 import { getProfileByUser } from "src/lib/server/database/profiles.ts";
 
 export const POST: RequestHandler = async ({
@@ -38,7 +38,7 @@ export const POST: RequestHandler = async ({
   }
 
   try {
-    const { error: sendError } = await sendEmail(RequestResponseReceived, [email], "Din kontaktförfrågan har besvarats", { studentName, conversationId })
+    const { error: sendError } = await sendEmail(ResponseNotification, [email], "Din kontaktförfrågan har besvarats", { studentName, conversationId })
     if (sendError)
       console.error(`Error sending email for request response for student ${studentId} and conversationId: ${conversationId}`, sendError);
   } catch (e) {

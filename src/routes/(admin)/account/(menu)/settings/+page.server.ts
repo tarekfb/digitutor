@@ -33,7 +33,7 @@ import { CF_IMAGE_RESIZE_URL } from "$env/static/private";
 import { ResourceNotFoundError } from "src/lib/shared/errors/missing-error.ts";
 import { ExternalErrorCodes } from "src/lib/shared/models/common.ts";
 import { sendEmail } from "src/lib/shared/utils/emails/utils.ts";
-import DeletedAccount from "src/emails/deleted-account.svelte";
+import AccountDeletionConfirmation from "src/emails/account-deletion-confirmation.svelte";
 
 export const load: PageServerLoad = async ({
   parent,
@@ -363,7 +363,7 @@ export const actions = {
     }
 
     try {
-      const { error: sendError } = await sendEmail(DeletedAccount, [email], "Ditt konto har avslutats", { studentName })
+      const { error: sendError } = await sendEmail(AccountDeletionConfirmation, [email], "Ditt konto har avslutats", { studentName })
       if (sendError)
         console.error(`Error sending email for deleted acc ${userId}`, sendError);
     } catch (e) {

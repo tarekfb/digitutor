@@ -3,7 +3,7 @@ import { updateCredits } from "src/lib/server/database/credits.ts";
 import { creditProducts } from "src/lib/shared/constants/constants.ts";
 import type { RequestHandler } from "./$types.ts";
 import { sendEmail } from "src/lib/shared/utils/emails/utils.ts";
-import PurchasedProductConfirmation from "src/emails/purchased-product-confirmation.svelte";
+import PurchaseConfirmation from "src/emails/purchase-confirmation.svelte";
 
 export const POST: RequestHandler = async ({
   request,
@@ -51,7 +51,7 @@ export const POST: RequestHandler = async ({
 
     if (customerEmail) {
       try {
-        const { error: sendError } = await sendEmail(PurchasedProductConfirmation, [customerEmail], "Tack för ditt köp", { userName: customerName, priceId })
+        const { error: sendError } = await sendEmail(PurchaseConfirmation, [customerEmail], "Tack för ditt köp", { userName: customerName, priceId })
         if (sendError)
           console.error(`Error sending email for deleted acc ${userId}`, sendError);
       } catch (e) {

@@ -10,8 +10,8 @@
     Text,
     Link,
   } from "svelty-email";
-  import Sign from "./sign.svelte";
-  import Footer from "./footer.svelte";
+  import Sign from "./sign.svelte.ts";
+  import Footer from "./footer.svelte.ts";
 
   export let studentName: string = "";
 

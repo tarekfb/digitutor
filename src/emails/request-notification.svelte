@@ -1,9 +1,7 @@
 <script lang="ts">
+  import { prodBaseUrl } from "src/lib/shared/constants/constants.ts";
   import {
-    prodBaseUrl,
-    websiteName,
-  } from "src/lib/shared/constants/constants.ts";
-  import {
+    Button,
     Container,
     Head,
     Heading,
@@ -11,19 +9,15 @@
     Preview,
     Section,
     Text,
-    Button,
   } from "svelty-email";
-  import Sign from "./sign.svelte";
-  import Footer from "./footer.svelte";
+  import Sign from "./sign.svelte.ts";
+  import Footer from "./footer.svelte.ts";
 
   export let studentName: string = "";
-  export let conversationId: string = "";
+  export let teacherName: string = "";
+  export let contactRequestUrl: string = "";
 
-  const conversationUrl = conversationId
-    ? `${prodBaseUrl}/conversations/${conversationId}`
-    : `${prodBaseUrl}/account`;
-
-  const previewText = `Din kontaktförfrågan på ${websiteName} har besvarats!`;
+  const previewText = `${studentName || "En elev"} har skickat en kontaktförfrågan till dig!`;
 
   const fontFamily =
     '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen-Sans, Ubuntu, Cantarell, "Helvetica Neue", sans-serif';
@@ -75,17 +69,20 @@
   <Preview preview={previewText} />
   <Section style={main}>
     <Container style={container}>
-      <Heading style={heading}>Din kontaktförfrågan har besvarats!</Heading>
-      <Text style={paragraph}>
-        Hej{studentName ? ` ${studentName}` : ""}!
-      </Text>
-      <Text style={paragraph}>
-        En lärare har svarat din kontaktförfrågan. Tryck på knappen nedan för
-        att gå till konversationen.
+      <Heading style={heading}
+        >{studentName || "En elev"} vill komma i kontakt med dig</Heading
+      >
+      <Text style={paragraph}
+        >Hej{teacherName ? ` ${teacherName}` : ""}! {studentName || "En elev"} har
+        skickat en kontaktförfrågan. Tryck på knappen nedan för att svara.
       </Text>
       <Sign />
       <Section style={{ textAlign: "center", marginTop: "20px" }}>
-        <Button style={button} href={conversationUrl}>Visa konversation</Button>
+        <Button
+          style={button}
+          href={contactRequestUrl || `${prodBaseUrl}/account`}
+          >Visa förfrågan</Button
+        >
       </Section>
       <Footer />
     </Container>
