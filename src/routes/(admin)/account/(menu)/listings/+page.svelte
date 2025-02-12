@@ -1,5 +1,5 @@
 <script lang="ts">
-  import type { PageData } from "./$types";
+  import type { PageData } from "./$types.ts";
   import PrimaryTitle from "$lib/components/atoms/primary-title.svelte";
   import CreateListing from "$lib/components/atoms/create-listing.svelte";
   import ListingCard from "$lib/components/molecules/listing-card.svelte";
@@ -12,6 +12,7 @@
   import { zodClient } from "sveltekit-superforms/adapters";
   import RootContainer from "src/lib/components/templates/root-container.svelte";
   import AccountLayout from "src/lib/components/templates/account-layout.svelte";
+  import { websiteName } from "src/lib/shared/constants/constants.ts";
 
   export let data: PageData;
   $: ({ listings } = data);
@@ -26,6 +27,10 @@
     validators: zodClient(initCreateListingSchema),
   });
 </script>
+
+<svelte:head>
+  <title>{websiteName} | Annonser</title>
+</svelte:head>
 
 <AccountLayout>
   <PrimaryTitle class="text-center">Dina annonser</PrimaryTitle>

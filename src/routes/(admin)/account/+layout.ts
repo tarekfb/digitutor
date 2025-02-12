@@ -1,5 +1,5 @@
 import { redirect } from "@sveltejs/kit";
-import { hasFullProfile } from "src/lib/shared/utils/profile/utils";
+import { hasFullProfile } from "src/lib/shared/utils/profile/utils.ts";
 
 export const load = async ({ data, url }) => {
   const { profile } = data;

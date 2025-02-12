@@ -1,9 +1,25 @@
-import type { Message } from "$lib/shared/models/common";
+import type { Message } from "$lib/shared/models/common.ts";
+import {
+  StripePriceId,
+  PricingPlanIds,
+  type PricingPlan,
+  StripeProductId,
+} from "../models/subscription.ts";
+import type { CreditsProduct } from "../models/subscription.js";
 
 export const websiteName = "Digitutor";
+export const contactEmail = "info@digitutor.se";
+export const noReplyEmail = "noreply@digitutor.se";
 export const localBaseUrl = "http://localhost:5173";
-export const testBaseUrl = "https://dev.mindic.pages.dev";
-export const prodBaseUrl = "https://mindic.pro";
+export const testBaseUrl = `https://dev.mindic.pages.dev`;
+export const prodBaseUrl = `https://mindic.pro`;
+
+export const getBaseUrl = (env: string): string => {
+  if (env === "local") return localBaseUrl;
+  if (env === "staging") return testBaseUrl;
+  if (env === "prod") return prodBaseUrl;
+  throw new Error("Unsupported environment")
+}
 
 export const defaultErrorDescription =
   "Något gick fel. Du kan kontakta oss om detta fortsätter.";
@@ -18,6 +34,7 @@ export const getDefaultErrorInfo = (
   message?: string,
   description?: string,
   id?: MessageId,
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   data?: any,
 ): App.Error => ({
   message: message ?? defaultErrorTitle,
@@ -30,6 +47,7 @@ export const getFailFormMessage = (
   title?: string,
   description?: string,
   messageId?: MessageId,
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   data?: any,
   variant: "destructive" | "default" | "warning" = "destructive",
 ): Message => ({
@@ -44,6 +62,7 @@ export const getSuccessFormMessage = (
   title: string,
   description?: string,
   messageId?: MessageId,
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   data?: any,
 ): Message => ({
   variant: "success",
@@ -57,6 +76,7 @@ export enum MessageId {
   Unknown = 0,
   RateLimitExceeded = 1,
   ResourceAlreadyExists = 2,
+  InsufficientCredits = 3,
 }
 
 export const initMessagesCount = 25;
@@ -89,3 +109,50 @@ export const getFormatsHumanReadable = () => {
 
   return acceptedFormatsHumanReadable;
 };
+
+export const costPerRequest = 9;
+export const freeCredits = 35;
+export const defaultPlanId = PricingPlanIds.Free;
+export const creditProducts: CreditsProduct[] = [
+  {
+    price: "250 SEK",
+    credits: 50,
+    stripePriceId: StripePriceId.SmallCreditsTest,
+    stripeProductId: StripeProductId.SmallCreditsTest,
+  },
+  {
+    price: "400 SEK",
+    credits: 100,
+    stripePriceId: StripePriceId.LargeCreditsTest,
+    stripeProductId: StripeProductId.LargeCreditsTest,
+  },
+];
+export const freePlan: PricingPlan = {
+  id: PricingPlanIds.Free,
+  name: "Gratis",
+  description: `Inkluderar ${freeCredits} krediter vid start (att kontakta lärare kostar ${costPerRequest} krediter).`,
+  bold: `Inget betalkort behövs!`,
+  price: "0 SEK",
+  priceIntervalName: "per månad",
+  stripePriceId: StripePriceId.Free,
+  features: [
+    `${freeCredits} gratis krediter`,
+    "Tillgång alla lärare",
+    "Möjlighet att köpa fler krediter när som helst",
+  ],
+};
+export const premiumPlan: PricingPlan = {
+  id: PricingPlanIds.Premium,
+  name: "Premium",
+  description:
+    "En plan för dig som tar lärandet på allvar. Perfekt för att hitta den bästa läraren. Testa planen gratis med betalkortet: 4242424242424242.",
+  price: "95 SEK",
+  priceIntervalName: "per månad",
+  stripePriceId: StripePriceId.PremiumTest,
+  // stripePriceId: isProd ? StripePriceId.PremiumProd : StripePriceId.PremiumTest,  // todo: reactive when live
+  stripeProductId: StripeProductId.PremiumTest,
+  // stripeProductId:  isProd ? StripeProductId.PremiumProd : StripeProductId.PremiumTest, // todo: reactive when live
+  features: ["Allt i gratisplanen", "Oändligt med krediter"],
+};
+
+export const pricingPlans: PricingPlan[] = [freePlan, premiumPlan];

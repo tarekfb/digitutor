@@ -18,9 +18,11 @@
 </script>
 
 <div class={cn("flex gap-x-0.5", className)}>
+  <!-- eslint-disable-next-line @typescript-eslint/no-unused-vars -->
   {#each [...Array(rounded)] as _}
     <Star class="w-{size} h-{size}" />
   {/each}
+  <!-- eslint-disable-next-line @typescript-eslint/no-unused-vars -->
   {#each [...Array(rest)] as _}
     <Star class="fill-none w-{size} h-{size}" />
   {/each}

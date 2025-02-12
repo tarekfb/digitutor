@@ -1,14 +1,14 @@
 <script lang="ts">
-  import * as Form from "$lib/components/ui/form";
-  import * as Card from "$lib/components/ui/card";
+  import * as Form from "$lib/components/ui/form/index.js";
+  import * as Card from "$lib/components/ui/card/index.js";
   import { superForm } from "sveltekit-superforms";
-  import { Button } from "$lib/components/ui/button";
+  import { Button } from "$lib/components/ui/button/index.js";
   import { zodClient } from "sveltekit-superforms/adapters";
   import { toast } from "svelte-sonner";
   import { nameSchema } from "$lib/shared/models/profile.js";
-  import { Input } from "$lib/components/ui/input";
+  import { Input } from "$lib/components/ui/input/index.js";
   import LoadingSpinner from "$lib/components/atoms/loading-spinner.svelte";
-  import { websiteName } from "$lib/shared/constants/constants";
+  import { websiteName } from "src/lib/shared/constants/constants.ts";
 
   export let data;
   $: ({ form } = data);
@@ -30,8 +30,9 @@
 </script>
 
 <svelte:head>
-  <title>Skapa profil</title>
+  <title>{websiteName} | Skapa profil</title>
 </svelte:head>
+
 <div
   class="flex max-w-lg flex-col items-center justify-center gap-y-4 py-12 text-center"
 >

@@ -1,16 +1,20 @@
 <script lang="ts">
-  import { Search, ChevronDown, Check, ChevronUp, X } from "lucide-svelte";
+  import Search from "lucide-svelte/icons/search";
+  import ChevronDown from "lucide-svelte/icons/chevron-down";
+  import Check from "lucide-svelte/icons/check";
+  import ChevronUp from "lucide-svelte/icons/chevron-up";
+  import X from "lucide-svelte/icons/x";
   import { createCombobox, melt } from "@melt-ui/svelte";
   import { fly } from "svelte/transition";
-  import type { PageData } from "./$types";
+  import type { PageData } from "./$types.ts";
   import { superForm } from "sveltekit-superforms";
   import { zodClient } from "sveltekit-superforms/adapters";
   import FormMessage from "$lib/components/molecules/form-message.svelte";
-  import * as Form from "$lib/components/ui/form";
+  import * as Form from "$lib/components/ui/form/index.js";
   import {
     searchSchema,
     type SearchResult as SearchResultType,
-  } from "src/lib/shared/models/search";
+  } from "src/lib/shared/models/search.ts";
   import AlertMessage from "$lib/components/atoms/alert-message.svelte";
   import SearchResultList from "src/lib/components/molecules/search-result-list.svelte";
   import RootContainer from "src/lib/components/templates/root-container.svelte";
@@ -18,10 +22,11 @@
   import Wavy from "src/lib/components/atoms/wavy.svelte";
   import PrimaryTitle from "src/lib/components/atoms/primary-title.svelte";
   import LoadingSpinner from "src/lib/components/atoms/loading-spinner.svelte";
-  import { Input } from "src/lib/components/ui/input";
+  import { Input } from "src/lib/components/ui/input/index.js";
   import Button from "src/lib/components/ui/button/button.svelte";
-  import { languages } from "src/lib/shared/models/common";
+  import { languages } from "src/lib/shared/models/common.ts";
   import { page } from "$app/stores";
+  import { websiteName } from "src/lib/shared/constants/constants.ts";
 
   const isDesktop = mediaQuery("(min-width: 768px)");
 
@@ -76,6 +81,12 @@
     : (tempBugFixForUndefined ?? []);
 </script>
 
+<svelte:head>
+  <title>
+    {websiteName} | Sök lärare</title
+  >
+</svelte:head>
+
 <div class="flex min-h-44 w-full justify-center bg-secondary p-8">
   <div class="flex w-full max-w-screen-sm flex-col gap-y-4">
     <PrimaryTitle class="heading self-center text-background md:mb-4"
@@ -91,6 +102,7 @@
         <Form.Field form={searchForm} name="subjects" class="w-20 flex-auto">
           <Form.Control let:attrs>
             <div class="flex flex-col gap-1">
+               <!-- eslint-disable-next-line svelte/no-unused-svelte-ignore -->
               <!-- svelte-ignore a11y-label-has-associated-control - $label contains the 'for' attribute -->
               <label use:melt={$label} hidden>Välj teknologi</label>
               <input
@@ -264,7 +276,7 @@
   <Wavy />
   <RootContainer class="w-full" maxWidth>
     {#if isInit && initResults.length > 0}
-    <SearchResultList results={initResults} searchTerm={$formData.query} />
+      <SearchResultList results={initResults} searchTerm={$formData.query} />
     {:else if initMessage}
       <AlertMessage
         title={initMessage.title}

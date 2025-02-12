@@ -4,14 +4,13 @@ import type {
   Session,
   SupabaseClient,
 } from "@supabase/supabase-js";
-import type { Database, Tables } from "src/supabase";
-import { initMessagesCount } from "$lib/shared/constants/constants";
+import type { Database, Tables } from "src/supabase.ts";
+import { initMessagesCount } from "$lib/shared/constants/constants.ts";
 import {
   formatMessage,
-  type InputMessage,
   type Message,
-} from "src/lib/shared/models/conversation";
-import { getNow } from "src/lib/shared/utils/utils";
+} from "src/lib/shared/models/conversation.ts";
+import { getNow } from "src/lib/shared/utils/utils.ts";
 
 export const getMessages = async (
   supabase: SupabaseClient<Database>,
@@ -39,11 +38,11 @@ export const getMessages = async (
   return data.map((message) => formatMessage(message));
 };
 
-export const sendMessage = async (
+export const sendMessageToDb = async (
   supabase: SupabaseClient<Database>,
   { createdAt, content, id, conversation }: Message,
   session: Session,
-): Promise<Tables<"messages">> => {
+): Promise<void> => {
   const dbMessage: Tables<"messages"> = {
     id,
     sender: session.user.id,
@@ -52,20 +51,14 @@ export const sendMessage = async (
     created_at: createdAt,
   };
 
-  const { data, error } = await supabase
+  const { error } = await supabase
     .from("messages")
     .insert(dbMessage)
-    .select("*")
-    .limit(1)
-    .order("id")
-    .single();
 
   if (error) {
     console.error("Failed to send message: ", { dbMessage, error });
     throw error;
   }
-
-  return data;
 };
 
 export const sendMessageToStore = async (
@@ -81,13 +74,23 @@ export const sendMessageToStore = async (
     conversation,
     sender: session.user.id,
   };
-  store.update((messages) => [...messages, newMessage]);
+  store.update((messages) => {
+    if (messages.length === 1 && messages[0].sender !== newMessage.sender) {
+      fetch('/api/request-response-notification', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ studentId: messages[0].sender, conversationId: conversation }),
+      });
+    }
+    return [...messages, newMessage];
+  });
   return true;
 };
 
 const newMessageListener = async (
   store: WritableLoadable<Message[]>,
   payload: RealtimePostgresInsertPayload<{
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     [key: string]: any;
   }>,
 ) => {
@@ -138,6 +141,7 @@ const persistMessage = async (
   if (!newMessage) return;
 
   // only persist your own messages
-  if (newMessage.sender === session.user.id)
-    await sendMessage(supabase, newMessage, session);
+  if (newMessage.sender === session.user.id) {
+    await sendMessageToDb(supabase, newMessage, session);
+  }
 };

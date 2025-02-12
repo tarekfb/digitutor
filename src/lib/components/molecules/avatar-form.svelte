@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { Button } from "$lib/components/ui/button";
+  import { Button } from "$lib/components/ui/button/index.js";
   import FormMessage from "../molecules/form-message.svelte";
   import SecondaryTitle from "$lib/components/atoms/secondary-title.svelte";
   import LoadingSpinner from "$lib/components/atoms/loading-spinner.svelte";
@@ -12,12 +12,13 @@
   import { superForm } from "sveltekit-superforms/client";
   import DeleteAvatar from "$lib/components/molecules/delete-avatar.svelte";
   import Dropzone from "svelte-file-dropzone";
-  import * as Form from "$lib/components/ui/form";
+  import * as Form from "$lib/components/ui/form/index.js";
   import { Label } from "$lib/components/ui/label/index.js";
   export let uploadAvatarForm;
   export let avatarUrl: string;
   export let deleteAvatarForm;
 
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const handleFilesSelect = (e: any) => {
     const { acceptedFiles } = e.detail;
     if (acceptedFiles && acceptedFiles.length > 0) {

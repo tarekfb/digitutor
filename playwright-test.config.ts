@@ -1,6 +1,6 @@
 import { defineConfig, devices } from '@playwright/test';
 import { type EnvOptions } from './src/tests/playwright/env-options'
-import { testBaseUrl } from './src/lib/shared/constants/constants'
+import { testBaseUrl } from './src/lib/shared/constants/constants.ts'
 import { testProfileId, testListingId } from './src/tests/playwright/data';
 import path from 'node:path';
 import { fileURLToPath } from 'url';

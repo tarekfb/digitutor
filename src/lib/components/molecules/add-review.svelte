@@ -8,18 +8,19 @@
     type SuperValidated,
   } from "sveltekit-superforms";
   import { zodClient } from "sveltekit-superforms/adapters";
-  import { Input } from "$lib/components/ui/input";
+  import { Input } from "$lib/components/ui/input/index.js";
   import {
     addReviewSchema,
     type AddReviewSchema,
-  } from "src/lib/shared/models/review";
+  } from "src/lib/shared/models/review.ts";
   import Label from "$lib/components/atoms/label.svelte";
-  import * as Form from "$lib/components/ui/form";
-  import * as Dialog from "$lib/components/ui/dialog";
-  import { Plus, Star } from "lucide-svelte";
-  import { Button, buttonVariants } from "$lib/components/ui/button";
-  import { Textarea } from "../ui/textarea";
-  import type { Profile } from "src/lib/shared/models/profile";
+  import * as Form from "$lib/components/ui/form/index.js";
+  import * as Dialog from "$lib/components/ui/dialog/index.js";
+  import Plus from "lucide-svelte/icons/plus";
+  import Star from "lucide-svelte/icons/star";
+  import { Button, buttonVariants } from "$lib/components/ui/button/index.js";
+  import { Textarea } from "$lib/components/ui/textarea/index.js";
+  import type { Profile } from "src/lib/shared/models/profile.ts";
 
   export let form: SuperValidated<Infer<AddReviewSchema>>;
   export let teacher: Profile;
@@ -40,8 +41,8 @@
   <Dialog.Trigger
     class={cn(
       buttonVariants({
-        variant: "outline",
-        className: `flex gap-x-2 self-center`,
+        variant: "outline-card",
+        className: `flex gap-x-2 md:self-start`,
       }),
     )}
   >

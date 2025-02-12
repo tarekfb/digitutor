@@ -1,5 +1,5 @@
 <script lang="ts">
-  import type { SearchResult } from "src/lib/shared/models/search";
+  import type { SearchResult } from "src/lib/shared/models/search.ts";
   import PrimaryTitle from "../atoms/primary-title.svelte";
   import Stars from "../atoms/stars.svelte";
   import Button from "../ui/button/button.svelte";
@@ -16,7 +16,7 @@
   export let searchedSubject: number;
 </script>
 
-<div class="flex flex-col gap-y-4 gap-x-4">
+<div class="flex flex-col gap-x-4 gap-y-4">
   {#if result.avatar}
     <div class="flex gap-x-4">
       <a
@@ -27,28 +27,30 @@
         <img
           src={result.avatar}
           alt="profile avatar"
-          class="object-cover h-36 w-36 rounded-md"
+          class="h-36 w-36 rounded-md object-cover"
         />
       </a>
-      <div class="flex flex-col gap-y-2 flex-grow">
-        <a
+      <div class="flex flex-grow flex-col gap-y-2">
+        <Link
           href="/profile/{result.profile.id}?id={result.id}"
-          aria-label="Gå till profil"
+          class="text-foreground"
+          ariaLabel="Gå till profil"
         >
           <PrimaryTitle class="whitespace-normal">
             {result.title}
           </PrimaryTitle>
-        </a>
-        <a
+        </Link>
+        <Link
           href="/profile/{result.profile.id}?id={result.id}"
-          aria-label="Gå till profil"
+          ariaLabel="Gå till profil"
+          class="text-foreground"
         >
           <PrimaryTitle class="whitespace-normal">
             {result.profile.firstName}
           </PrimaryTitle>
-        </a>
+        </Link>
         <div class="flex flex-col gap-y-1">
-          <Stars {rating} size={4} class="p-0 m-0 " />
+          <Stars {rating} size={4} class="m-0 p-0 " />
           <p class="text-muted-foreground">
             {nbrOfReviews} recension{nbrOfReviews > 1 ? "er" : ""}
           </p>
@@ -66,7 +68,7 @@
       </div>
     </div>
     <div class="flex justify-evenly">
-      <div class="flex flex-col gap-y-1 items-center">
+      <div class="flex flex-col items-center gap-y-1">
         <h3 class="text-2xl {boxStyling}">{result.hourlyPrice} SEK</h3>
         <p class="text-muted-foreground">60 minuter</p>
       </div>
@@ -79,14 +81,14 @@
   {:else}
     <div class="flex flex-col">
       <Link
-        class="text-foreground self-start"
+        class="self-start text-foreground"
         href="/profile/{result.profile.id}?id={result.id}"
       >
         <PrimaryTitle class="whitespace-normal">
           {result.profile.firstName}
         </PrimaryTitle>
       </Link>
-      <div class="flex justify-between items-center gap-x-2">
+      <div class="flex items-center justify-between gap-x-2">
         <div class={rowItemStyling}>
           <Stars
             {rating}
@@ -105,7 +107,7 @@
           <SubjectItem
             subject={searchedSubject}
             muted={false}
-            class="{boxStyling} gap-x-1 overflow-x-hidden self-start"
+            class="{boxStyling} gap-x-1 self-start overflow-x-hidden"
           />
           {#if result.subjects.length > 1}
             <SeeMore subjects={result.subjects} {searchedSubject} />

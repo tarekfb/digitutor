@@ -1,13 +1,13 @@
 <script lang="ts">
-  import { Home } from "lucide-svelte";
+  import Home from "lucide-svelte/icons/home";
   import PrimaryTitle from "$lib/components/atoms/primary-title.svelte";
   import ErrorNav from "$lib/components/atoms/error-nav.svelte";
-  import { CircleHelp } from "lucide-svelte";
-  import { UserRound } from "lucide-svelte";
+  import MessageCircle from "lucide-svelte/icons/message-circle";
+  import UserRound from "lucide-svelte/icons/user-round";
   import {
     defaultErrorDescription,
     defaultErrorTitle,
-  } from "src/lib/shared/constants/constants";
+  } from "src/lib/shared/constants/constants.ts";
 
   export let error: App.Error;
   export let code: number | undefined | null = undefined;
@@ -47,11 +47,11 @@
     <ErrorNav text="Tillbaka till startsidan" href="/">
       <Home class={iconStyling} />
     </ErrorNav>
-    <ErrorNav text="Gå till din profil" href="/account">
+    <ErrorNav text="Gå till ditt konto" href="/account">
       <UserRound class={iconStyling} />
     </ErrorNav>
     <ErrorNav text="Kontakta oss" href="/contact-us">
-      <CircleHelp class={iconStyling} />
+      <MessageCircle class={iconStyling} />
     </ErrorNav>
   </ul>
 </div>

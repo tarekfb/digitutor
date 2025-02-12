@@ -1,7 +1,7 @@
 <script lang="ts">
   import * as Card from "$lib/components/ui/card/index.js";
   import Avatar from "$lib/components/atoms/avatar.svelte";
-  import type { ReviewWithReferences } from "src/lib/shared/models/review";
+  import type { ReviewWithReferences } from "src/lib/shared/models/review.ts";
   import Stars from "../atoms/stars.svelte";
   import { cn, formatDateReadable } from "src/lib/shared/utils/utils.js";
 

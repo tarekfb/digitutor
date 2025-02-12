@@ -1,11 +1,11 @@
 <script lang="ts">
-  import { Input } from "$lib/components/ui/input";
-  import * as Form from "$lib/components/ui/form";
+  import { Input } from "$lib/components/ui/input/index.js";
+  import * as Form from "$lib/components/ui/form/index.js";
   import Label from "$lib/components/atoms/label.svelte";
   import PasswordInput from "$lib/components/molecules/password-input.svelte";
   import PrimaryTitle from "src/lib/components/atoms/primary-title.svelte";
-  import { Checkbox } from "../ui/checkbox";
-  import type { signUpSchema } from "src/lib/shared/models/user";
+  import { Checkbox } from "$lib/components/ui/checkbox/index.ts";
+  import type { signUpSchema } from "src/lib/shared/models/user.ts";
   import { type Infer, type SuperForm } from "sveltekit-superforms/client";
 
   export let type: "teacher" | "student";
@@ -79,9 +79,12 @@
     <Form.Control let:attrs>
       <Checkbox {...attrs} bind:checked={$formData.terms} />
       <Form.Label class="text-foreground"
-        >Jag accepterar <a href="/terms" class="underline">villkoren</a>
+        >Jag accepterar <a href="/terms-and-conditions" class="underline"
+          >villkoren</a
+        >
         och
-        <a href="/privacy" class="underline">integritetspolicyn</a>.</Form.Label
+        <a href="/integrity-policy" class="underline">integritetspolicyn</a
+        >.</Form.Label
       >
       <input name={attrs.name} value={$formData.terms} hidden />
     </Form.Control>

@@ -1,7 +1,7 @@
 import type { Session, SupabaseClient } from "@supabase/supabase-js";
-import type { Database, Tables } from "src/supabase";
-import type { InputMessage } from "$lib/shared/models/conversation";
-import { getNow } from "src/lib/shared/utils/utils";
+import type { Database, Tables } from "src/supabase.ts";
+import type { InputMessage } from "$lib/shared/models/conversation.ts";
+import { getNow } from "src/lib/shared/utils/utils.ts";
 
 export const getMessages = async (
   supabase: SupabaseClient<Database>,

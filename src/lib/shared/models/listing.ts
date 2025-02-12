@@ -1,7 +1,7 @@
-import type { Tables } from "src/supabase";
-import type { TypeToZod } from "src/lib/shared/utils/utils";
+import type { Tables } from "src/supabase.ts";
+import type { TypeToZod } from "src/lib/shared/utils/utils.ts";
 import { z } from "zod";
-import type { DbProfile, Profile } from "./profile";
+import type { DbProfile, Profile } from "./profile.ts";
 
 export type DbListingBase = Tables<"listings">;
 
@@ -41,8 +41,8 @@ const updateListingProps: TypeToZod<InputListing> = {
   subjects: z.number().array().min(1, "Du måste välja minst ett ämne."),
   title: z
     .string()
-    .min(3, "Måste vara minst 3 bokstäver.")
-    .max(80, "Måste vara maximalt 100 bokstäver."),
+    .min(3, "Måste vara minst 3 karaktärer.")
+    .max(80, "Får inte vara mer än 80 karaktärer."),
   visible: z.boolean(),
   // currency: z
   // .string()

@@ -1,21 +1,22 @@
 <script lang="ts">
-  import { timeAgo } from "src/lib/shared/utils/utils";
+  import { timeAgo } from "src/lib/shared/utils/utils.ts";
   import Avatar from "../atoms/avatar.svelte";
-  import type { Message } from "src/lib/shared/models/conversation";
+  import type { Message } from "src/lib/shared/models/conversation.ts";
   import type { WritableLoadable } from "@square/svelte-store";
   import PrimaryTitle from "../atoms/primary-title.svelte";
   import AlertMessage from "../atoms/alert-message.svelte";
-  import { Button } from "../ui/button";
+  import { Button } from "$lib/components/ui/button/index.js";
   import { goto } from "$app/navigation";
   import { Skeleton } from "$lib/components/ui/skeleton/index.js";
-  import { defaultErrorDescription } from "$lib/shared/constants/constants";
-  import type { Profile } from "src/lib/shared/models/profile";
+  import { defaultErrorDescription } from "$lib/shared/constants/constants.ts";
+  import type { Profile } from "src/lib/shared/models/profile.ts";
 
   export let chatStore: WritableLoadable<Message[]>;
   export let self: Profile;
   export let other: Profile;
 
-  const scroll = (element: HTMLElement, messages: Message[]) => {
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const scroll = (element: HTMLElement, _messages: Message[]) => {
     // messages is not needed, just to provide reactivity dependancy
     setTimeout(
       () => element.scrollIntoView({ behavior: "smooth", block: "end" }),
@@ -45,8 +46,9 @@
     />
     <PrimaryTitle>{other.firstName}</PrimaryTitle>
     {#if other.role === "teacher"}
-      <Button on:click={() => goto(`/profile/${other.id}`)} variant="outline"
-        >Se profil</Button
+      <Button
+        on:click={() => goto(`/profile/${other.id}`)}
+        variant="outline-card">Se profil</Button
       >
     {/if}
   </div>
@@ -99,6 +101,7 @@
         <p class="self-center">Inga meddelanden ännu.</p>
       {/each}
     {:catch error}
+      {console.error("Unexpected error when fetching messages", error)}
       <AlertMessage
         title="Vi kunde inte hämta några meddelanden"
         description={defaultErrorDescription}

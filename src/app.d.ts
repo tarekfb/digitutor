@@ -1,6 +1,6 @@
-import { SupabaseClient, Session } from "@supabase/supabase-js";
+import { SupabaseClient, Session, User } from "@supabase/supabase-js";
 import { Database } from "./supabase";
-import type { MessageId } from "./lib/shared/constants/constants";
+import type { MessageId } from "./lib/shared/constants/constants.ts";
 
 // See https://kit.svelte.dev/docs/types#app
 // for information about these interfaces
@@ -26,6 +26,7 @@ declare global {
       message: string;
       description: string;
       id?: MessageId;
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       data?: any;
     }
     // interface PageData {
@@ -35,4 +36,4 @@ declare global {
   }
 }
 
-export {};
+export { };

@@ -3,19 +3,23 @@
   export let href: string;
 </script>
 
-<a {href} aria-label="Gå till din profil" class="h-42 w-full">
+<a
+  {href}
+  aria-label={text}
+  class="h-42 w-full hover:scale-105 transition-all ease-in-out"
+>
   <li
-    class="flex justify-center items-center p-6 md:p-8 border border-solid border-accent rounded-md bg-card h-full w-full"
+    class="flex h-full w-full items-center justify-center rounded-md border border-solid border-accent bg-card p-6 md:p-8"
   >
     <div
-      class="flex flex-col flex-1 gap-y-2 md:gap-y-4 justify-center items-center"
+      class="flex flex-1 flex-col items-center justify-center gap-y-2 md:gap-y-4"
     >
       <div
-        class="p-2 md:p-3 rounded-sm bg-accent/10 flex justify-center items-center"
+        class="flex items-center justify-center rounded-sm bg-accent/10 p-2 md:p-3"
       >
         <slot />
       </div>
-      <p class="text-muted-foreground text-bold md:text-lg">
+      <p class="text-bold text-muted-foreground md:text-lg">
         {text}
       </p>
     </div>

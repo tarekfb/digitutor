@@ -1,9 +1,9 @@
 import type { Session, SupabaseClient } from "@supabase/supabase-js";
-import type { Database, Tables } from "src/supabase";
-import type { DbConversationWithReferences } from "$lib/shared/models/conversation";
-import { getNow } from "src/lib/shared/utils/utils";
-import { sendMessage } from "./messages";
-import { ResourceAlreadyExistsError } from "src/lib/shared/errors/resource-already-exists-error";
+import type { Database, Tables } from "src/supabase.ts";
+import type { DbConversationWithReferences } from "$lib/shared/models/conversation.ts";
+import { getNow } from "src/lib/shared/utils/utils.ts";
+import { sendMessage } from "./messages.ts";
+import { ResourceAlreadyExistsError } from "src/lib/shared/errors/resource-already-exists-error.ts";
 
 export const getConversation = async (
   supabase: SupabaseClient<Database>,

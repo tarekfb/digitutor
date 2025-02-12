@@ -17,7 +17,10 @@
     "lint": "eslint .",
     "lint:fix": "eslint . --fix",
     "format": "prettier --write --plugin prettier-plugin-svelte ./src",
-    "format_check": "prettier --check --plugin prettier-plugin-svelte ./src"
+    "format:check": "prettier --check --plugin prettier-plugin-svelte ./src",
+    "prepare": "husky && husky install",
+    "db:types": "supabase gen types typescript --local > src/supabase.ts",
+    "db:reset": "supabase db reset"
   },
   "devDependencies": {
     "@melt-ui/pp": "^0.3.2",
@@ -38,11 +41,13 @@
     "@vitest/ui": "^1.6.0",
     "autoprefixer": "^10.4.15",
     "bits-ui": "^0.22.0",
-    "daisyui": "^4.12.10",
     "eslint": "^8.28.0",
     "eslint-config-prettier": "^9.1.0",
+    "eslint-plugin-square-svelte-store": "^1.0.0",
     "eslint-plugin-svelte": "^2.30.0",
+    "husky": "^9.1.7",
     "jsdom": "^24.1.0",
+    "lucide-svelte": "^0.473.0",
     "msw": "^2.3.1",
     "postcss": "^8.4.31",
     "prettier": "^3.4.2",
@@ -57,8 +62,8 @@
   },
   "type": "module",
   "dependencies": {
+    "@jill64/sentry-sveltekit-cloudflare": "^2.0.6",
     "@square/svelte-store": "^0.2.1",
-    "@supabase/auth-ui-svelte": "^0.2.2",
     "@supabase/ssr": "^0.3.0",
     "@supabase/supabase-js": "^2.33.0",
     "clsx": "^2.1.1",
@@ -67,19 +72,33 @@
     "embla-carousel-autoplay": "^8.3.0",
     "embla-carousel-svelte": "^8.3.0",
     "formsnap": "^1.0.0",
-    "lucide-svelte": "^0.376.1",
     "pg": "^8.11.5",
     "postgres": "^3.4.4",
+    "resend": "^4.1.2",
+    "stripe": "^17.5.0",
     "supabase": "^1.163.6",
     "svelecte": "^4.4.1",
     "svelte-file-dropzone": "^2.0.8",
     "svelte-legos": "^0.2.2",
     "svelte-sonner": "^0.3.22",
     "sveltekit-superforms": "^2.3.0",
+    "svelty-email": "^0.0.11",
     "tailwind-merge": "^2.3.0",
     "tailwind-variants": "^0.2.1",
     "ts-custom-error": "^3.3.1",
     "vaul-svelte": "^0.3.1",
     "zod": "^3.23.6"
+  },
+  "lint-staged": {
+    "*.js": [
+      "eslint --cache --fix"
+    ],
+    "*.ts": [
+      "eslint --cache --fix"
+    ],
+    "*.svelte": [
+      "eslint --cache --fix"
+    ],
+    "*./src": "prettier --write"
   }
 }

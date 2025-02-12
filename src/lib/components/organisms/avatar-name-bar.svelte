@@ -1,5 +1,5 @@
 <script lang="ts">
-  import type { Profile } from "src/lib/shared/models/profile";
+  import type { Profile } from "src/lib/shared/models/profile.ts";
   import Avatar from "../atoms/avatar.svelte";
   import { cn } from "src/lib/shared/utils/utils.js";
 
@@ -14,7 +14,7 @@
   <a
     href="/profile/{profile.id}"
     aria-label="Gå till lärarens profil"
-    class={cn("flex gap-x-2 items-center self-start", className)}
+    class={cn("flex items-center gap-x-2 self-start", className)}
   >
     <Avatar
       url={profile.avatarUrl ?? ""}
@@ -25,7 +25,7 @@
     <slot />
   </a>
 {:else}
-  <div class={cn("flex gap-x-2 items-center self-start", className)}>
+  <div class={cn("flex items-center gap-x-2 self-start", className)}>
     <Avatar
       url={profile.avatarUrl ?? ""}
       firstName={profile.firstName}

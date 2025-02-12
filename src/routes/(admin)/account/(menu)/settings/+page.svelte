@@ -4,8 +4,8 @@
   import SettingsForm from "$lib/components/molecules/settings-form.svelte";
   import { superForm } from "sveltekit-superforms/client";
   import { zodClient } from "sveltekit-superforms/adapters";
-  import { Input } from "$lib/components/ui/input";
-  import * as Form from "$lib/components/ui/form";
+  import { Input } from "$lib/components/ui/input/index.js";
+  import * as Form from "$lib/components/ui/form/index.js";
   import { toast } from "svelte-sonner";
   import {
     deleteAccountSchema as deleteSchema,
@@ -15,24 +15,22 @@
     emailSchema,
     nameSchema,
     updateBioSchema,
-  } from "$lib/shared/models/profile";
+  } from "$lib/shared/models/profile.ts";
   import DeleteAccount from "$lib/components/atoms/delete-account.svelte";
   import PasswordInput from "$lib/components/molecules/password-input.svelte";
   import AvatarForm from "src/lib/components/molecules/avatar-form.svelte";
-  import type { PageData } from "./$types";
+  import type { PageData } from "./$types.ts";
   import RootContainer from "src/lib/components/templates/root-container.svelte";
   import AccountLayout from "src/lib/components/templates/account-layout.svelte";
-  import { Textarea } from "src/lib/components/ui/textarea";
-  import * as Collapsible from "$lib/components/ui/collapsible";
-  import {
-    ChevronDown,
-    ChevronUp,
-    Star,
-    MapPin,
-    GraduationCap,
-    Brain,
-  } from "lucide-svelte";
-  import { Button } from "src/lib/components/ui/button";
+  import { Textarea } from "src/lib/components/ui/textarea/index.ts";
+  import * as Collapsible from "$lib/components/ui/collapsible/index.ts";
+  import Star from "lucide-svelte/icons/star";
+  import MapPin from "lucide-svelte/icons/map-pin";
+  import GraduationCap from "lucide-svelte/icons/graduation-cap";
+  import Brain from "lucide-svelte/icons/brain";
+  import ChevronDown from "lucide-svelte/icons/chevron-down";
+  import ChevronUp from "lucide-svelte/icons/chevron-up";
+  import { websiteName } from "src/lib/shared/constants/constants.ts";
 
   export let data: PageData;
   $: ({ profile, uploadAvatarForm, deleteAvatarForm } = data);
@@ -74,8 +72,9 @@
 </script>
 
 <svelte:head>
-  <title>Settings</title>
+  <title>{websiteName} | Inställningar</title>
 </svelte:head>
+
 <AccountLayout>
   <PrimaryTitle class="text-center">Inställningar</PrimaryTitle>
   <RootContainer class="my-6 w-full">

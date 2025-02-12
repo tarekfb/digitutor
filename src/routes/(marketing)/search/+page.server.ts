@@ -1,18 +1,21 @@
-import { search } from "src/lib/server/database/search";
-import { getFailFormMessage } from "src/lib/shared/constants/constants";
+import { search } from "src/lib/server/database/search.ts";
+import { getFailFormMessage } from "src/lib/shared/constants/constants.ts";
 import { fail, message, superValidate } from "sveltekit-superforms";
 import { zod } from "sveltekit-superforms/adapters";
-import { searchSchema, type SearchResult } from "src/lib/shared/models/search";
-import type { Actions, PageServerLoad } from "./$types";
+import {
+  searchSchema,
+  type SearchResult,
+} from "src/lib/shared/models/search.ts";
+import type { Actions, PageServerLoad } from "./$types.ts";
 import {
   type Message,
   ExternalErrorCodes,
   languages,
-} from "src/lib/shared/models/common";
-import { cleanQuery, isErrorWithCode } from "src/lib/shared/utils/utils";
-import { formatProfile } from "src/lib/shared/utils/profile/utils";
-import { getSubjects } from "src/lib/server/database/subjects";
-import { formatSubject, type Subject } from "src/lib/shared/models/subject";
+} from "src/lib/shared/models/common.ts";
+import { cleanQuery, isErrorWithCode } from "src/lib/shared/utils/utils.ts";
+import { formatProfile } from "src/lib/shared/utils/profile/utils.ts";
+import { getSubjects } from "src/lib/server/database/subjects.ts";
+import { formatSubject, type Subject } from "src/lib/shared/models/subject.ts";
 
 export const load = (async ({ url, locals: { supabase } }) => {
   const query = url.searchParams.get("q") || "";

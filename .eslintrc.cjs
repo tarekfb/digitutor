@@ -26,6 +26,16 @@ module.exports = {
         },
       },
     },
+    {
+      "files": [
+        "src/lib/components/ui/**/*.js",
+        "src/lib/components/ui/**/*.ts",
+        "src/lib/components/ui/**/*.svelte",
+        "src/lib/components/ui/**/*.tsx"
+      ], "rules": {
+        "no-unused-vars": "off"
+      }
+    },
   ],
   env: {
     browser: true,
@@ -35,7 +45,8 @@ module.exports = {
   rules: {
     "no-undef": "off",
     'square-svelte-store/use-square-svelte-stores': 'error',
-    "@typescript-eslint/explicit-function-return-type": "error"
+    "@typescript-eslint/explicit-function-return-type": "off",
+    "comma-dangle": "off",
     // no-undef has been turned off because of this:
     // basically, it causes issues and TS does those checks so it's redundant
     // https://typescript-eslint.io/linting/troubleshooting#i-get-errors-from-the-no-undef-rule-about-global-variables-not-being-defined-even-though-there-are-no-typescript-errors

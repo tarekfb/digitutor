@@ -1,5 +1,5 @@
 import { test as base } from "@playwright/test";
-import { localListingId, localProfileId } from "./data";
+import { localListingId, localProfileId } from "./data.ts";
 
 export type EnvOptions = {
   profileId: string;

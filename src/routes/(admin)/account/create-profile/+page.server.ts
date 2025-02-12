@@ -1,13 +1,13 @@
 import {
   defaultErrorInfo,
   defaultErrorTitle,
-} from "$lib/shared/constants/constants";
+} from "$lib/shared/constants/constants.ts";
 import { error, fail, redirect } from "@sveltejs/kit";
 import { zod } from "sveltekit-superforms/adapters";
 import { message, superValidate } from "sveltekit-superforms/client";
-import { nameSchema, type ProfileInput } from "$lib/shared/models/profile";
+import { nameSchema, type ProfileInput } from "$lib/shared/models/profile.ts";
 import { updateProfile } from "$lib/server/database/profiles.js";
-import { hasFullProfile } from "src/lib/shared/utils/profile/utils";
+import { hasFullProfile } from "src/lib/shared/utils/profile/utils.ts";
 
 export async function load({ parent }) {
   const data = await parent();

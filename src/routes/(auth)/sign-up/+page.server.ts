@@ -1,18 +1,21 @@
-import { fail, redirect } from "@sveltejs/kit";
-import type { PageServerLoad } from "./$types";
+import { fail } from "@sveltejs/kit";
+import { redirect } from "sveltekit-flash-message/server";
+import type { PageServerLoad } from "./$types.ts";
 import {
+  freeCredits,
   getFailFormMessage,
-} from "$lib/shared/constants/constants";
+} from "$lib/shared/constants/constants.ts";
 import { message, setError, superValidate } from "sveltekit-superforms";
 import { zod } from "sveltekit-superforms/adapters";
-import { signUpSchema } from "$lib/shared/models/user";
-import { createProfile } from "$lib/server/database/profiles";
-import type { CreateProfile } from "$lib/shared/models/profile";
-import { getHighQualityReviews } from "src/lib/server/database/review";
-import { ExternalErrorCodes } from "src/lib/shared/models/common";
-import { isErrorWithCode } from "src/lib/shared/utils/utils";
-import type { ReviewWithReferences } from "src/lib/shared/models/review";
-import { formatReviewWithReferences } from "src/lib/shared/utils/reviews/utils";
+import { signUpSchema } from "$lib/shared/models/user.ts";
+import { createProfile } from "$lib/server/database/profiles.ts";
+import type { CreateProfile } from "$lib/shared/models/profile.ts";
+import { getHighQualityReviews } from "src/lib/server/database/review.ts";
+import { ExternalErrorCodes } from "src/lib/shared/models/common.ts";
+import { isErrorWithCode } from "src/lib/shared/utils/utils.ts";
+import type { ReviewWithReferences } from "src/lib/shared/models/review.ts";
+import { formatReviewWithReferences } from "src/lib/shared/utils/reviews/utils.ts";
+import { updateCredits } from "src/lib/server/database/credits.ts";
 
 export const load: PageServerLoad = async ({ locals: { supabase } }) => {
   let review: ReviewWithReferences | undefined;
@@ -22,7 +25,7 @@ export const load: PageServerLoad = async ({ locals: { supabase } }) => {
       (r) => r.description && r.description.length > 15,
     );
     const dbReview = longReviews[0] ?? reviews[0];
-    review = formatReviewWithReferences(dbReview);
+    if (dbReview) review = formatReviewWithReferences(dbReview);
   } catch (e) {
     console.error(
       "Error when reviews signup display, perhaps didnt find valid review",
@@ -37,9 +40,19 @@ export const load: PageServerLoad = async ({ locals: { supabase } }) => {
 export const actions = {
   signUp: async (event) => {
     const {
-      locals: { supabase, session },
+      locals: { supabase, session, supabaseServiceRole },
+      cookies,
     } = event;
-    if (session) redirect(303, "/account");
+    if (session)
+      redirect(
+        303,
+        "/account",
+        {
+          type: "info",
+          message: "Du är redan inloggad.",
+        },
+        cookies,
+      );
 
     const form = await superValidate(event, zod(signUpSchema));
     if (!form.valid) return fail(400, { form });
@@ -94,13 +107,6 @@ export const actions = {
 
     try {
       await createProfile(supabase, inputUser);
-      return message(form, {
-        variant: "success",
-        title: "Verifiera e-postadress",
-        description:
-          `Titta i din inkorg (eller i skräpkorgen) för att verifiera e-post: ${email}.`,
-        status: 201,
-      });
     } catch (error) {
       if (isErrorWithCode(error)) {
         if (error.code === ExternalErrorCodes.DuplicateKeyConstraintViolation)
@@ -119,5 +125,21 @@ export const actions = {
       console.error("Error when creating profile", error);
       return message(form, getFailFormMessage(), { status: 500 });
     }
+
+    try {
+      await updateCredits(supabaseServiceRole, freeCredits, inputUser.id);
+    } catch (error) {
+      console.error(
+        `Unknown error when adding free credits to new profile with id ${inputUser.id}`,
+        error,
+      );
+    }
+
+    return message(form, {
+      variant: "success",
+      title: "Verifiera e-postadress",
+      description: `Titta i din inkorg (eller i skräpkorgen) för att verifiera e-post: ${email}.`,
+      status: 201,
+    });
   },
 };

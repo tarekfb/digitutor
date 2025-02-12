@@ -5,10 +5,10 @@
   import type {
     addReviewSchema,
     ReviewWithReferences,
-  } from "src/lib/shared/models/review";
+  } from "src/lib/shared/models/review.ts";
   import type { SuperValidated, Infer } from "sveltekit-superforms/client";
-  import { cn } from "src/lib/shared/utils/utils";
-  import type { Profile } from "src/lib/shared/models/profile";
+  import { cn } from "src/lib/shared/utils/utils.ts";
+  import type { Profile } from "src/lib/shared/models/profile.ts";
 
   export let pStyle: string | null | undefined = undefined;
   export let reviews: ReviewWithReferences[];

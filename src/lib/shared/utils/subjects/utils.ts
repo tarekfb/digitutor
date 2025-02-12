@@ -1,4 +1,4 @@
-import type { Subject } from "../../models/subject";
+import type { Subject } from "../../models/subject.ts";
 
 // Helper function to calculate the Levenshtein distance
 function levenshteinDistance(a: string, b: string): number {

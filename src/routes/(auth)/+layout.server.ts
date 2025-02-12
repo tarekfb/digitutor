@@ -1,16 +1,15 @@
 import { redirect } from "sveltekit-flash-message/server";
-import type { LayoutServerLoad } from "../$types";
-import { getProfileByUser } from "src/lib/server/database/profiles";
+import type { LayoutServerLoad } from "./$types.ts";
 
 export const ssr = true;
 
 export const load: LayoutServerLoad = async ({
-  locals: { safeGetSession, supabase },
+  locals: { safeGetSession },
   cookies,
   url,
 }) => {
   // depends("supabase:auth");
-  const { session, user } = await safeGetSession();
+  const { session } = await safeGetSession();
 
   if (
     session &&
@@ -27,13 +26,14 @@ export const load: LayoutServerLoad = async ({
       cookies,
     );
 
-  if (session) redirect(303, "/account", {
-    message: `Du är redan inloggad.`,
-    type: "info",
-  },
-    cookies,
-  );
-
-  const profile = session && (await getProfileByUser(supabase, user.id));
-  return { profile };
+  if (session)
+    redirect(
+      303,
+      "/account",
+      {
+        message: `Du är redan inloggad.`,
+        type: "info",
+      },
+      cookies,
+    );
 };

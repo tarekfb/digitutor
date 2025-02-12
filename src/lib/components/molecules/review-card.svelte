@@ -2,7 +2,7 @@
   import Star from "src/lib/components/atoms/star.svelte";
   import * as Card from "$lib/components/ui/card/index.js";
   import Avatar from "$lib/components/atoms/avatar.svelte";
-  import type { ReviewWithReferences } from "src/lib/shared/models/review";
+  import type { ReviewWithReferences } from "src/lib/shared/models/review.ts";
   import { cn } from "src/lib/shared/utils/utils.js";
 
   let className: string | null | undefined = undefined;
@@ -12,23 +12,23 @@
 
 <Card.Root>
   <Card.Header
-    class={cn(`${review.description ? "pb-2" : "pb-4"} pt-4 px-4`, className)}
+    class={cn(`${review.description ? "pb-2" : "pb-4"} px-4 pt-4`, className)}
   >
-    <div class="flex gap-x-2 justify-between items-center">
+    <div class="flex items-center justify-between gap-x-2">
       <Card.Title>
-        <div class="flex gap-x-2 items-center">
+        <div class="flex items-center gap-x-2">
           {review.rating}<Star class="text-yellow-500" />
         </div>
       </Card.Title>
       {#if review.sender}
         <!-- if sender deleted account, sender will be null -->
-        <div class="flex gap-x-2 items-center">
+        <div class="flex items-center gap-x-2">
           <Avatar
             url={review.sender.avatarUrl ?? ""}
             firstName={review.sender.firstName}
             lastName={review.sender.lastName}
             role={review.sender.role}
-            class="text-sm w-8 h-8"
+            class="h-8 w-8 text-sm"
           />
           <h4 class="font-semibold">{review.sender.firstName}</h4>
         </div>
@@ -36,7 +36,7 @@
     </div>
   </Card.Header>
   {#if review.description}
-    <Card.Content class="text-muted-foreground pt-2 pb-4 px-4">
+    <Card.Content class="px-4 pb-4 pt-2 text-muted-foreground">
       {review.description}
     </Card.Content>
   {/if}

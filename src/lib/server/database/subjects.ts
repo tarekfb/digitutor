@@ -1,8 +1,6 @@
 import type { SupabaseClient } from "@supabase/supabase-js";
-import type { Database } from "lucide-svelte";
-import { languages } from "src/lib/shared/models/common";
-import type { DbSubject, Subject } from "src/lib/shared/models/subject";
-import type { Tables } from "src/supabase";
+import type { DbSubject } from "src/lib/shared/models/subject.ts";
+import type { Database, Tables } from "src/supabase.ts";
 
 export const getSubjects = async (
   supabase: SupabaseClient<Database>,

@@ -1,9 +1,9 @@
-import type { PageServerLoad } from "./$types";
+import type { PageServerLoad } from "./$types.ts";
 import {
   getFailFormMessage,
   getSuccessFormMessage,
   maxAvatarSize,
-} from "$lib/shared/constants/constants";
+} from "$lib/shared/constants/constants.ts";
 import { fail, message, superValidate, withFiles } from "sveltekit-superforms";
 import { zod } from "sveltekit-superforms/adapters";
 import {
@@ -13,22 +13,27 @@ import {
   nameSchema,
   updateBioSchema,
   type ProfileInput,
-} from "$lib/shared/models/profile";
-import { updateProfile } from "$lib/server/database/profiles";
-import { updateUserEmail } from "$lib/server/database/user";
-import { deleteAccountSchema, changePasswordSchema } from "$lib/shared/models/user";
+} from "$lib/shared/models/profile.ts";
+import { getProfileByUser, updateProfile } from "$lib/server/database/profiles.ts";
+import { updateUserEmail } from "$lib/server/database/user.ts";
+import {
+  deleteAccountSchema,
+  changePasswordSchema,
+} from "$lib/shared/models/user.ts";
 import { isAuthApiError } from "@supabase/supabase-js";
 import { redirect } from "sveltekit-flash-message/server";
-import { deleteAvatar, uploadAvatar } from "src/lib/server/database/avatar";
+import { deleteAvatar, uploadAvatar } from "src/lib/server/database/avatar.ts";
 import {
   formatBytes,
   isErrorWithStatusCode,
   verifyAvatarOwnership,
-} from "src/lib/shared/utils/utils";
+} from "src/lib/shared/utils/utils.ts";
 import { Buffer } from "node:buffer";
 import { CF_IMAGE_RESIZE_URL } from "$env/static/private";
-import { ResourceNotFoundError } from "src/lib/shared/errors/missing-error";
-import { ExternalErrorCodes } from "src/lib/shared/models/common";
+import { ResourceNotFoundError } from "src/lib/shared/errors/missing-error.ts";
+import { ExternalErrorCodes } from "src/lib/shared/models/common.ts";
+import { sendEmail } from "src/lib/shared/utils/emails/utils.ts";
+import AccountDeletionConfirmation from "src/emails/account-deletion-confirmation.svelte";
 
 export const load: PageServerLoad = async ({
   parent,
@@ -41,11 +46,18 @@ export const load: PageServerLoad = async ({
     profile: { avatarUrl, firstName, lastName, bio },
   } = await parent();
 
-  const updateNameForm = await superValidate({
-    firstName,
-    lastName
-  }, zod(nameSchema));
-  const updateBioForm = await superValidate({ bio: bio ?? "" }, zod(updateBioSchema), { errors: false });
+  const updateNameForm = await superValidate(
+    {
+      firstName,
+      lastName,
+    },
+    zod(nameSchema),
+  );
+  const updateBioForm = await superValidate(
+    { bio: bio ?? "" },
+    zod(updateBioSchema),
+    { errors: false },
+  );
   const updateEmailForm = await superValidate(
     { email: session.user.email },
     zod(emailSchema),
@@ -159,8 +171,9 @@ export const actions = {
     const {
       locals: { supabase, safeGetSession },
     } = event;
-    const { session, user } = await safeGetSession();
-    if (!session) throw redirect(303, "/sign-in");
+    const { session } = await safeGetSession();
+    if (!session) redirect(303, "/sign-in");
+    const userId = session.user.id;
 
     const form = await superValidate(event, zod(avatarSchema));
     if (!form.data || !form.data.avatar) return fail(400, { form });
@@ -206,7 +219,7 @@ export const actions = {
     let avatarPath;
     try {
       const format = avatar.type.split("/")[1]; // example type property: image/png
-      const fileName = `${user.id}---${crypto.randomUUID()}.${format}`;
+      const fileName = `${userId}---${crypto.randomUUID()}.${format}`;
       avatarPath = await uploadAvatar(supabase, fileName, input);
     } catch (error) {
       if (isErrorWithStatusCode(error)) {
@@ -226,12 +239,12 @@ export const actions = {
 
     try {
       await updateProfile(supabase, {
-        id: user.id,
+        id: userId,
         avatar_url: avatarPath,
       });
     } catch (error) {
       console.error(
-        `Error on update profile with new avatar on path ${avatarPath} with userid ${user.id}`,
+        `Error on update profile with new avatar on path ${avatarPath} with userid ${userId}`,
         error,
       );
       return message(form, getFailFormMessage(), { status: 500 });
@@ -243,17 +256,18 @@ export const actions = {
     const {
       locals: { supabase, safeGetSession },
     } = event;
-    const { session, user } = await safeGetSession();
+    const { session } = await safeGetSession();
     if (!session) throw redirect(303, "/sign-in");
+    const userId = session.user.id;
 
     const form = await superValidate(event, zod(deleteAvatarSchema));
     if (!form.valid) return fail(400, { form });
 
     const { path } = form.data;
 
-    if (!verifyAvatarOwnership(path, user.id)) {
+    if (!verifyAvatarOwnership(path, userId)) {
       console.error(
-        `User ${user.id} sent incorrect filename and might have tampered with form data. Filename is ${path}`,
+        `User ${userId} sent incorrect filename and might have tampered with form data. Filename is ${path}`,
       );
       return message(form, getFailFormMessage(), { status: 401 });
     }
@@ -275,12 +289,12 @@ export const actions = {
 
     try {
       await updateProfile(supabase, {
-        id: user.id,
+        id: userId,
         avatar_url: "",
       });
     } catch (error) {
       console.error(
-        `Error on update profile with delete avatar for userid ${user.id}`,
+        `Error on update profile with delete avatar for userid ${userId}`,
         error,
       );
       return message(form, getFailFormMessage(), { status: 500 });
@@ -294,15 +308,16 @@ export const actions = {
       cookies,
     } = event;
     const { user } = await safeGetSession();
-    if (!user) throw redirect(303, "/sign-in");
+    if (!user) redirect(303, "/sign-in");
 
     const form = await superValidate(event, zod(deleteAccountSchema));
     if (!form.valid) return fail(400, { form });
+
     const { password } = form.data;
-    const { id, email } = user;
+    const { id: userId, email } = user;
     if (!email) {
       console.error(
-        `User with id ${id} has no email and therefore password could not be verified`,
+        `User with id ${userId} has no email and therefore password could not be verified`,
       );
       return message(form, getFailFormMessage(), { status: 500 });
     }
@@ -313,17 +328,26 @@ export const actions = {
       password,
     });
 
-    if (error) throw redirect(303, "/settings_password_error");
+    if (error) redirect(303, "/settings_password_error");
     // user was logged out because of bad password. Redirect to error page with explaination.
+
+
+    let studentName: string = "";
+    try {
+      const profile = await getProfileByUser(supabase, userId)
+      studentName = profile.first_name;
+    } catch (error) {
+      console.error(`Error getting  first name for id ${userId}. Omitting name`, error);
+    }
 
     try {
       const { error } = await supabaseServiceRole.auth.admin.deleteUser(
-        id,
+        userId,
         false,
       );
       if (error) {
         console.error(
-          `Error on attempt to delete user with userid ${id}`,
+          `Error on attempt to delete user with userid ${userId}`,
           error,
         );
         return message(form, getFailFormMessage(), { status: 500 });
@@ -332,16 +356,25 @@ export const actions = {
       await supabase.auth.signOut();
     } catch (e) {
       console.error(
-        `Error on attempt to delete & signout user with userid ${id}`,
+        `Error on attempt to delete & signout user with userid ${userId}`,
         e,
       );
       return message(form, getFailFormMessage(), { status: 500 });
     }
 
-    throw redirect(
+    try {
+      const { error: sendError } = await sendEmail(AccountDeletionConfirmation, [email], "Ditt konto har avslutats", { studentName })
+      if (sendError)
+        console.error(`Error sending email for deleted acc ${userId}`, sendError);
+    } catch (e) {
+      console.error(`Error sending email for deleted acc ${userId}`, e);
+    }
+
+
+    redirect(
       303,
       `/`,
-      { message: "Ditt konto har raderats.", type: "success" },
+      { message: "Ditt konto har tagits bort.", type: "success" },
       cookies,
     );
   },

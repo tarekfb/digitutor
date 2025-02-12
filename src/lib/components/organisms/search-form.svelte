@@ -6,13 +6,17 @@
     type SuperValidated,
   } from "sveltekit-superforms";
   import { zodClient } from "sveltekit-superforms/adapters";
-  import { Input } from "$lib/components/ui/input";
-  import * as Form from "$lib/components/ui/form";
-  import { Button } from "$lib/components/ui/button";
-  import { Search, ChevronDown, Check, ChevronUp, X } from "lucide-svelte";
-  import { searchSchema } from "src/lib/shared/models/search";
+  import { Input } from "$lib/components/ui/input/index.js";
+  import * as Form from "$lib/components/ui/form/index.js";
+  import { Button } from "$lib/components/ui/button/index.js";
+  import Search from "lucide-svelte/icons/search";
+  import Check from "lucide-svelte/icons/check";
+  import ChevronDown from "lucide-svelte/icons/chevron-down";
+  import ChevronUp from "lucide-svelte/icons/chevron-up";
+  import X from "lucide-svelte/icons/x";
+  import { searchSchema } from "src/lib/shared/models/search.ts";
   import LoadingSpinner from "$lib/components/atoms/loading-spinner.svelte";
-  import type { Subject } from "src/lib/shared/models/subject";
+  import type { Subject } from "src/lib/shared/models/subject.ts";
   import { createCombobox, melt } from "@melt-ui/svelte";
   import { fly } from "svelte/transition";
   import type { ActionResult } from "@sveltejs/kit";
@@ -75,15 +79,16 @@
 </script>
 
 <form
-  class="text-center flex flex-col gap-y-4 w-full {formStyling}"
+  class="flex w-full flex-col gap-y-4 text-center {formStyling}"
   action="?/search"
   method="POST"
   use:enhance
 >
-  <div class="flex items-start min-w-72">
-    <Form.Field form={searchForm} name="subjects" class="flex-auto w-20">
+  <div class="flex min-w-72 items-start">
+    <Form.Field form={searchForm} name="subjects" class="w-20 flex-auto">
       <Form.Control let:attrs>
         <div class="flex flex-col gap-1">
+          <!-- eslint-disable-next-line svelte/no-unused-svelte-ignore -->
           <!-- svelte-ignore a11y-label-has-associated-control - $label contains the 'for' attribute -->
           <label use:melt={$label} hidden>Välj teknologi</label>
           <input
@@ -96,8 +101,8 @@
           <div class="relative">
             <input
               use:melt={$input}
-              class="flex h-10 items-center w-full justify-between rounded-lg bg-card
-          px-3 pr-6 rounded-r-none text-md placeholder:text-muted-foreground"
+              class="text-md flex h-10 w-full items-center justify-between rounded-lg
+          rounded-r-none bg-card px-3 pr-6 placeholder:text-muted-foreground"
               placeholder="Välj teknologi"
             />
             <div
@@ -114,7 +119,7 @@
         <Form.FieldErrors class="" />
       </Form.Control>
     </Form.Field>
-    <Form.Field form={searchForm} name="query" class="flex-none w-28 md:w-64">
+    <Form.Field form={searchForm} name="query" class="w-28 flex-none md:w-64">
       <Form.Control let:attrs>
         <div class="relative">
           <Input
@@ -123,7 +128,7 @@
             autocomplete="false"
             bind:value={$formData.query}
             placeholder="Sök på lärare"
-            class="placeholder:text-muted-foreground text-md bg-card rounded-r-none rounded-l-none text-muted-foreground"
+            class="text-md rounded-l-none rounded-r-none bg-card text-muted-foreground placeholder:text-muted-foreground"
           />
         </div>
       </Form.Control>
@@ -134,7 +139,7 @@
       variant="accent-third"
       size="icon"
       disabled={$allErrors.length > 0 || $delayed}
-      class="flex-none flex gap-x-2 items-center justify-center rounded-l-none"
+      class="flex flex-none items-center justify-center gap-x-2 rounded-l-none"
     >
       {#if $delayed}
         <LoadingSpinner class="size-4" />
@@ -146,14 +151,14 @@
 </form>
 <FormMessage {message} scroll scrollTo="end" />
 {#if $selected && $selected.length > 0}
-  <ul class="flex flex-wrap gap-2 w-full">
+  <ul class="flex w-full flex-wrap gap-2">
     <li>
       <button
         aria-label="Rensa {$selected.length} teknologier"
         on:click={() => ($selected = [])}
         class="{subjectChipStyling} border-2 border-third"
       >
-        <span class="bg-third text-background px-3 py-1 rounded-full"
+        <span class="rounded-full bg-third px-3 py-1 text-background"
           >{$selected.length}</span
         >
         <X class="size-4" />

@@ -1,6 +1,6 @@
 <script lang="ts">
   import { Dialog as DialogPrimitive } from "bits-ui";
-  import { X } from "lucide-svelte";
+  import X from "lucide-svelte/icons/x";
   import * as Dialog from "./index.js";
   import { cn, flyAndScale } from "src/lib/shared/utils/utils.js";
 
@@ -20,7 +20,7 @@
     {transition}
     {transitionConfig}
     class={cn(
-      "fixed left-[50%] top-[50%] z-50 grid w-11/12 md:w-full max-w-lg translate-x-[-50%] translate-y-[-50%] gap-4 border bg-background p-6 shadow-lg sm:rounded-sm ",
+      "fixed left-[50%] top-[50%] z-50 grid w-11/12 max-w-lg translate-x-[-50%] translate-y-[-50%] gap-4 border bg-background p-6 shadow-lg sm:rounded-sm md:w-full ",
       className,
     )}
     {...$$restProps}

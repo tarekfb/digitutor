@@ -3,7 +3,7 @@
   import { type Variant, alertVariants } from "./index.js";
   import { cn } from "src/lib/shared/utils/utils.js";
   import Button from "../button/button.svelte";
-  import { X } from "lucide-svelte";
+  import X from "lucide-svelte/icons/x";
 
   type $$Props = HTMLAttributes<HTMLDivElement> & {
     variant?: Variant;
