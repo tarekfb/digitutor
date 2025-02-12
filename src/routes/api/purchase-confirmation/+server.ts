@@ -2,6 +2,8 @@ import { json } from "@sveltejs/kit";
 import { updateCredits } from "src/lib/server/database/credits.ts";
 import { creditProducts } from "src/lib/shared/constants/constants.ts";
 import type { RequestHandler } from "./$types.ts";
+import { sendEmail } from "src/lib/shared/utils/emails/utils.ts";
+import PurchasedProductConfirmation from "src/emails/purchased-product-confirmation.svelte";
 
 export const POST: RequestHandler = async ({
   request,
@@ -17,16 +19,20 @@ export const POST: RequestHandler = async ({
           price_id: string;
           user_id: string;
         };
+        customer_details: {
+          name: string;
+          email: string;
+        }
       };
     };
   };
 
-  // const customerEmail = requestBody.data.object.customer_details.email;
-  // const customerName = requestBody.data.object.customer_details.name;
+  const customerEmail = requestBodyTyped.data.object.customer_details.email;
+  const customerName = requestBodyTyped.data.object.customer_details.name ?? ""; // should always be present, but null check for precaution
   const status = requestBodyTyped.data.object.status;
   const mode = requestBodyTyped.data.object.mode;
 
-  if (status === "complete" && mode === "payment") {
+  if (status === "complete") {
     const metadata = requestBodyTyped.data.object.metadata;
     const priceId = metadata.price_id;
     const userId = metadata.user_id;
@@ -37,23 +43,35 @@ export const POST: RequestHandler = async ({
     if (!matchedProduct) {
       console.error(
         "Unexpected error: product not found.",
-        userId,
-        priceId,
-        matchedProduct,
+        { userId },
+        { priceId },
+        { matchedProduct },
       );
-      return json({ success: false, status: 404 });
     }
 
-    try {
-      await updateCredits(supabaseServiceRole, matchedProduct.credits, userId);
-    } catch (e) {
-      console.error(
-        `Critical error: after completing payment and trying to add credit value of ${matchedProduct.credits}. User ${userId} most likely didnt receive their ${matchedProduct.credits} credits`,
-        { metadata },
-        { userId },
-        e,
-      );
-      return json({ success: false, status: 500 });
+    if (customerEmail) {
+      try {
+        const { error: sendError } = await sendEmail(PurchasedProductConfirmation, [customerEmail], "Tack för ditt köp", { userName: customerName, priceId })
+        if (sendError)
+          console.error(`Error sending email for deleted acc ${userId}`, sendError);
+      } catch (e) {
+        console.error(`Error sending email for deleted acc ${userId}`, e);
+      }
+    } else console.error(`Missing email, unable to send confirmation email for userid ${userId}`);
+    // shouldnt happen but we dont own the API, safeguarding against future changes 
+
+    if (mode === "payment" && matchedProduct) {
+      try {
+        await updateCredits(supabaseServiceRole, matchedProduct.credits, userId);
+      } catch (e) {
+        console.error(
+          `Critical error: after completing payment and trying to add credit value of ${matchedProduct.credits}. User ${userId} most likely didnt receive their ${matchedProduct.credits} credits`,
+          { metadata },
+          { userId },
+          e,
+        );
+        return json({ success: false, status: 500 });
+      }
     }
   }
 
