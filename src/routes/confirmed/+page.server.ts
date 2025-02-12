@@ -15,6 +15,16 @@ export const load: PageServerLoad = async (event) => {
   const type = url.searchParams.get("type") as EmailOtpType | null;
   const next = url.searchParams.get("next") ?? "/";
 
+
+  if (!tokenHash || !type) {
+    console.error(
+      "Issue at confirm signup, mimssing information",
+      { tokenHash },
+      { type },
+    );
+    error(500, getDefaultErrorInfo("Det saknas lite info för att verifiera dig"));
+  }
+
   /**
    * Clean up the redirect URL by deleting the Auth flow parameters.
    *
@@ -25,45 +35,28 @@ export const load: PageServerLoad = async (event) => {
   redirectTo.searchParams.delete("token_hash");
   redirectTo.searchParams.delete("type");
 
-  if (tokenHash && type) {
-    const {
-      error: e,
-      data: { user },
-    } = await supabase.auth.verifyOtp({ type, token_hash: tokenHash });
+  const {
+    error: e,
+    data: { user },
+  } = await supabase.auth.verifyOtp({ type, token_hash: tokenHash });
 
-    // if (e){
-    //     redirect(
-    //     303,
-    //     '/',
-    //     { message: 'Test', type: 'error' },
-    //     event
-    // )        // user was logged out because of bad password. Redirect to error page with explaination.
-
-    if (e) {
-      console.error("Unknown error on verify otp on email confirmation", e);
-      // redirect(303, '/sign-in', { message: 'Test', type: 'error' }, event)
-      error(500, {
-        message: "Oväntat fel uppstod",
-        description:
-          "Vi försökte verifiera dig men någonting gick fel. Försök igen senare.",
-      });
-    }
-
-    if (!user) {
-      console.error(
-        "User data was null on verify otp on email confirmation",
-        e,
-      );
-      error(500, { ...defaultErrorInfo });
-    }
-
-    redirectTo.searchParams.delete("next");
+  if (e) {
+    console.error("Unknown error on verify otp on email confirmation", e);
+    error(500, {
+      message: "Oväntat fel uppstod",
+      description:
+        "Vi försökte verifiera dig men någonting gick fel. Försök igen senare.",
+    });
   }
 
-  console.error(
-    "Issue at confirm signup, something was falsy",
-    tokenHash,
-    type,
-  );
-  error(500, getDefaultErrorInfo("Det saknas lite info för att verifiera dig"));
-};
+  if (!user) {
+    console.error(
+      "User data was null on verify otp on email confirmation",
+      e,
+    );
+    error(500, { ...defaultErrorInfo });
+  }
+
+  redirectTo.searchParams.delete("next");
+  return { email: user.email };
+}
