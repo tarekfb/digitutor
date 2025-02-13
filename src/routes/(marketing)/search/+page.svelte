@@ -18,7 +18,7 @@
   import AlertMessage from "$lib/components/atoms/alert-message.svelte";
   import SearchResultList from "src/lib/components/molecules/search-result-list.svelte";
   import RootContainer from "src/lib/components/templates/root-container.svelte";
-  import { mediaQuery } from "svelte-legos";
+  // import { mediaQuery } from "svelte-legos";
   import Wavy from "src/lib/components/atoms/wavy.svelte";
   import PrimaryTitle from "src/lib/components/atoms/primary-title.svelte";
   import LoadingSpinner from "src/lib/components/atoms/loading-spinner.svelte";
@@ -28,7 +28,7 @@
   import { page } from "$app/stores";
   import { websiteName } from "src/lib/shared/constants/constants.ts";
 
-  const isDesktop = mediaQuery("(min-width: 768px)");
+  // const isDesktop = mediaQuery("(min-width: 768px)");
 
   export let data: PageData;
   $: ({ initResults, initMessage, subjects } = data);
@@ -102,7 +102,7 @@
         <Form.Field form={searchForm} name="subjects" class="w-20 flex-auto">
           <Form.Control let:attrs>
             <div class="flex flex-col gap-1">
-               <!-- eslint-disable-next-line svelte/no-unused-svelte-ignore -->
+              <!-- eslint-disable-next-line svelte/no-unused-svelte-ignore -->
               <!-- svelte-ignore a11y-label-has-associated-control - $label contains the 'for' attribute -->
               <label use:melt={$label} hidden>Välj teknologi</label>
               <input
@@ -243,7 +243,38 @@
     {/if}
   </div>
 </div>
-{#if !$isDesktop}
+<Wavy class="-mt-4 overflow-x-hidden" />
+<RootContainer class="m-0 px-8" maxWidth>
+  {#if $message}
+    <div class="p-4">
+      <FormMessage {message} scroll scrollTo="end" />
+    </div>
+  {:else if isInit && initResults.length > 0}
+    <SearchResultList
+      results={initResults}
+      searchTerm={$page.url.searchParams.get("q") ?? ""}
+    />
+  {:else if initMessage}
+    <div class="p-4">
+      <AlertMessage
+        title={initMessage.title}
+        description={initMessage.description}
+        variant={initMessage.variant}
+      />
+    </div>
+  {:else if results.length > 0}
+    <SearchResultList {results} searchTerm={$formData.query} />
+  {:else}
+    <div class="p-4">
+      <AlertMessage
+        title="Inga träffar på din sökning"
+        description="Testa söka på en lärares namn, eller en annons titel, beskrivning eller pris."
+      />
+    </div>
+  {/if}
+</RootContainer>
+
+<!-- {#if !$isDesktop}
   <Wavy class="-mt-4 overflow-x-hidden" />
   {#if $message}
     <div class="p-4">
@@ -294,7 +325,7 @@
       />
     {/if}
   </RootContainer>
-{/if}
+{/if} -->
 
 <style lang="postcss">
   .check {

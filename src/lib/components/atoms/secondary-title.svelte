@@ -7,9 +7,10 @@
   export let responsiveMt: boolean = false;
 </script>
 
+<!-- heading styling from app.pcss but putting it here helps cn function work properly -->
 <h2
   class={cn(
-    "heading whitespace-nowrap text-xl font-semibold md:text-2xl",
+    "whitespace-nowrap text-xl font-semibold leading-none tracking-tight md:text-2xl",
     responsiveMb ? "mb-2 md:mb-4" : "",
     responsiveMt ? "mt-2 md:mt-4" : "",
     className,
