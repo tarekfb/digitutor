@@ -110,8 +110,9 @@
     <p class="text-gradient mt-4 text-center text-xl font-bold md:text-3xl">
       Vill du lära ut på {websiteName}?
     </p>
-    <Button on:click={() => goto("/sign-up?role=teacher")}
-      >Skapa konto som lärare</Button
+    <Button
+      on:click={() => goto("/sign-up?role=teacher")}
+      class="w-full md:w-auto">Skapa konto som lärare</Button
     >
   </RootContainer>
 </RootContainer>
