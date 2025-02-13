@@ -3,11 +3,13 @@
   let className: string | null | undefined = undefined;
   export { className as class };
 
+  export let id: string | undefined = undefined;
   export let responsiveMb: boolean = false;
   export let responsiveMt: boolean = false;
 </script>
 
 <h1
+  {id}
   class={cn(
     "heading whitespace-nowrap text-3xl md:text-4xl ",
     responsiveMb ? "mb-2 md:mb-4" : "",

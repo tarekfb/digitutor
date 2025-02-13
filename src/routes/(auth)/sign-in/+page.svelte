@@ -118,7 +118,7 @@
           {#each reviews as review, index}
             <ReviewCardExtra
               {review}
-              class="z-{(reviews.length - index) * 10 + 20} {getBlur(index)}"
+              class="z-{(reviews.length - index) * 10 + 20} {getBlur(index)} w-96"
             />
             <!-- + 20 because didnt work without it, will always work on 3 items but might act up on >3 -->
           {/each}

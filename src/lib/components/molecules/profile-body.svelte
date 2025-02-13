@@ -25,7 +25,7 @@
     Den här läraren har ingen beskrivning just nu.
   {/if}
 </p>
-<PrimaryTitle class="text-wrap">Recensioner</PrimaryTitle>
+<PrimaryTitle class="text-wrap" id="reviews">Recensioner</PrimaryTitle>
 {#if allowCreateReview}
   <AddReview form={addReviewForm} {teacher} />
 {/if}

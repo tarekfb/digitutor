@@ -170,12 +170,12 @@ export const formatBytes = (bytes: number, decimals = 2) => {
   return `${parseFloat((bytes / Math.pow(k, i)).toFixed(dm))} ${sizes[i]}`;
 };
 
-export const truncate = (text: string, limit: number) => {
+export const truncate = (text: string, limit: number): { text: string, truncated: boolean } => {
   if (text.split(" ").length > limit) {
     const truncatedText = text.split(" ").slice(0, limit).join(" ");
-    return `${truncatedText}...`;
+    return {text:`${truncatedText}...`, truncated: true};
   }
-  return text;
+  return { text, truncated: false };
 };
 
 export const verifyAvatarOwnership = (avatarUrl: string, userId: string) => {
