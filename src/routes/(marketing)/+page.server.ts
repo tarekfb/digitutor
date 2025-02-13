@@ -5,14 +5,11 @@ import type { Actions, PageServerLoad } from "./$types.ts";
 import { redirect } from "@sveltejs/kit";
 import {
   getHighQualityReviews,
-  getTopTeacherByReviews,
-} from "src/lib/server/database/review";
+} from "src/lib/server/database/review.ts";
 import {
-  type DisplayProfile,
   type ReviewWithReferences,
 } from "src/lib/shared/models/review.ts";
-import { formatDisplayProfile } from "src/lib/shared/utils/profile/utils.ts";
-import { formatReviewWithReferences } from "src/lib/shared/utils/reviews/utils";
+import { formatReviewWithReferences } from "src/lib/shared/utils/reviews/utils.ts";
 import { formatSubject, type Subject } from "src/lib/shared/models/subject.ts";
 import { languages } from "src/lib/shared/models/common.ts";
 import { getSubjects } from "src/lib/server/database/subjects.ts";
@@ -21,23 +18,25 @@ import { cleanQuery } from "src/lib/shared/utils/utils.ts";
 export const load: PageServerLoad = async ({ locals: { supabase } }) => {
   const form = await superValidate(zod(searchSchema));
 
-  let displayProfiles: DisplayProfile[] = [];
-  try {
-    const unformatted = await getTopTeacherByReviews(supabase, 5);
-    displayProfiles = unformatted.map((r) => formatDisplayProfile(r));
-    displayProfiles = displayProfiles.filter(
-      (r) => r.avgRating > 0 && r.avatarUrl,
-    );
-    if (displayProfiles.length > 4)
-      displayProfiles = displayProfiles.slice(0, 4);
-  } catch (e) {
-    console.error("Error when fetching top teacher by reviews", e);
-    displayProfiles = [];
-  }
+  // todo: not used or tested atm, but must bring back.
+
+  // let displayProfiles: DisplayProfile[] = [];
+  // try {
+  //   const unformatted = await getTopTeacherByReviews(supabase, 5);
+  //   displayProfiles = unformatted.map((r) => formatDisplayProfile(r));
+  //   displayProfiles = displayProfiles.filter(
+  //     (r) => r.avgRating > 0 && r.avatarUrl,
+  //   );
+  //   if (displayProfiles.length > 4)
+  //     displayProfiles = displayProfiles.slice(0, 4);
+  // } catch (e) {
+  //   console.error("Error when fetching top teacher by reviews", e);
+  //   displayProfiles = [];
+  // }
 
   let displayReviews: ReviewWithReferences[] = [];
   try {
-    const dbReviews = await getHighQualityReviews(supabase, 4);
+    const dbReviews = await getHighQualityReviews(supabase, 8);
     const dbDisplayReviews = dbReviews.filter(
       (r) => r.description && r.description.length > 15,
     );
@@ -58,7 +57,7 @@ export const load: PageServerLoad = async ({ locals: { supabase } }) => {
     subjects = languages;
   }
 
-  return { form, displayProfiles, displayReviews, subjects };
+  return { form, displayReviews, subjects };
 };
 
 export const actions: Actions = {

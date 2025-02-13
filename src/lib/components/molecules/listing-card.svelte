@@ -32,7 +32,7 @@
     >
       <p>
         {#if listing.description}
-          {truncate(listing.description, 50)}
+          {truncate(listing.description, 50).text}
         {:else}
           Den här annonsen har ingen beskrivning just nu.
         {/if}

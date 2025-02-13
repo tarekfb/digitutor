@@ -2,7 +2,6 @@
   import Autoplay from "embla-carousel-autoplay";
   import { websiteName } from "$lib/shared/constants/constants.ts";
   import type { PageData } from "./$types.ts";
-  import ProfileCarousel from "src/lib/components/organisms/profile-carousel.svelte";
   import ReviewCardExtra from "src/lib/components/molecules/review-card-extra.svelte";
   import { Button } from "src/lib/components/ui/button/index.js";
   import { goto } from "$app/navigation";
@@ -12,9 +11,10 @@
   import SearchForm from "src/lib/components/organisms/search-form.svelte";
   import Wavy from "src/lib/components/atoms/wavy.svelte";
   import Search from "lucide-svelte/icons/search";
+  import PrimaryTitle from "src/lib/components/atoms/primary-title.svelte";
 
   export let data: PageData;
-  $: ({ displayProfiles, displayReviews, subjects } = data);
+  $: ({ displayReviews, subjects } = data);
 </script>
 
 <svelte:head>
@@ -82,40 +82,36 @@
     </h3>
   </div>
   <Wavy class="-mx-8 -mt-8" />
+  <RootContainer maxWidth class="m-0 px-8" responsiveGap>
+    <!-- <ProfileCarousel profiles={displayProfiles} /> -->
+    <!-- atm unused but will bring back -->
 
-  <ProfileCarousel profiles={displayProfiles} />
+    <div class="flex flex-col items-center gap-y-2">
+      {#if displayReviews.length > 0}
+        <PrimaryTitle class="text-gradient my-4 whitespace-normal text-center ">
+          Vad våra användare säger
+        </PrimaryTitle>
+        <div class="grid grid-cols-2 gap-4 md:grid-cols-2">
+          {#each Array(2) as _, colIndex}
+            <div class="flex flex-col gap-4">
+              {#each displayReviews.filter((_, index) => index % 4 === colIndex) as review}
+                <ReviewCardExtra
+                  truncate={40}
+                  {review}
+                  class="h-auto min-w-32 max-w-full rounded-lg"
+                />
+              {/each}
+            </div>
+          {/each}
+        </div>
+      {/if}
+    </div>
 
-  {#if displayReviews.length > 0}
-    <p class="text-gradient my-4 text-center text-3xl font-bold md:text-5xl">
-      Vad våra användare säger
+    <p class="text-gradient mt-4 text-center text-xl font-bold md:text-3xl">
+      Vill du lära ut på {websiteName}?
     </p>
-    <div
-      class="flex flex-col gap-x-8 gap-y-4 md:mb-6 md:grid md:grid-cols-2 md:flex-row md:gap-y-6"
+    <Button on:click={() => goto("/sign-up?role=teacher")}
+      >Skapa konto som lärare</Button
     >
-      {#each displayReviews as review}
-        <ReviewCardExtra {review} class="h-fit w-64" />
-      {/each}
-    </div>
-  {/if}
-  <p class="text-gradient mt-4 text-center text-xl font-bold md:text-3xl">
-    Vill du lära ut på {websiteName}?
-  </p>
-  <Button on:click={() => goto("/sign-up?role=teacher")}
-    >Skapa konto som lärare</Button
-  >
+  </RootContainer>
 </RootContainer>
-
-<!-- <div
-      class="flex flex-col justify-center items-center gap-y-4 w-full max-w-screen-sm"
-    >
-      <form
-        class="text-center flex flex-col gap-y-4 w-full"
-        action="?/search"
-        method="POST"
-        use:enhance
-      >
-      </form>
-      <FormMessage {message} scroll scrollTo="end" />
-    </div>
-  </div> 
--->

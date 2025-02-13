@@ -22,7 +22,7 @@
 <Avatar.Root
   data-testid="avatar"
   class={cn(
-    `flex justify-center text-lg items-center font-normal h-${size} w-${size}`,
+    `flex items-center justify-center text-lg font-normal h-${size} w-${size} ${href ? "md:transition-all md:ease-in-out md:hover:scale-110" : ""}`,
     className,
   )}
 >

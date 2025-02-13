@@ -33,7 +33,7 @@
   export let data: PageData;
   $: ({ initResults, initMessage, subjects } = data);
 
-  const tempBugFixForUndefined =
+  const handleUndefinedBug =
     subjects && subjects.length > 0 ? subjects : languages;
   let isInit = true;
   let results: SearchResultType[] = [];
@@ -68,17 +68,17 @@
   });
 
   const subjectChipStyling =
-    "h-12 hover:scale-105 transition-all ease-in-out inline-flex gap-x-2 items-center px-2 py-1 text-sm bg-background rounded-full md:hover:bg-background";
+    "h-12 md:hover:scale-105 md:transition-all md:ease-in-out inline-flex gap-x-2 items-center px-2 py-1 text-sm bg-background rounded-full md:hover:bg-background";
 
   $: filteredSubjects = $touchedInput
-    ? tempBugFixForUndefined?.filter(({ title, altTitle }) => {
+    ? handleUndefinedBug?.filter(({ title, altTitle }) => {
         const normalizedInput = $inputValue.toLowerCase();
         return (
           title.toLowerCase().includes(normalizedInput) ||
           altTitle?.toLowerCase().includes(normalizedInput)
         );
       })
-    : (tempBugFixForUndefined ?? []);
+    : (handleUndefinedBug ?? []);
 </script>
 
 <svelte:head>
