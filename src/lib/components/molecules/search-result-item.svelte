@@ -17,7 +17,7 @@
   export let searchedSubject: number;
 </script>
 
-<div class="flex flex-col gap-x-4 gap-y-4 overflow-x-hidden">
+<div class="flex w-full flex-col gap-x-4 gap-y-4 overflow-x-hidden">
   {#if result.avatar}
     <div class="flex gap-x-4">
       <div class="flex flex-shrink-0 flex-col gap-y-2 md:gap-y-4">
