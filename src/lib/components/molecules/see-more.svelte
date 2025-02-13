@@ -14,10 +14,10 @@
 <Popover.Root portal={null}>
   <Popover.Trigger let:builder asChild>
     <Button
-      variant="ghost"
+      variant="outline-card"
       builders={[builder]}
-      class={cn("m-0 max-h-6 self-start p-2", triggerStyling)}
-      >...se {subjects.length - 1} till</Button
+      class={cn("self-start", triggerStyling)}
+      >se {subjects.length - 1} till</Button
     >
   </Popover.Trigger>
   <Popover.Content class={cn("max-h-72 w-40 overflow-y-auto", contentStyling)}>
