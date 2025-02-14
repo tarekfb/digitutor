@@ -32,7 +32,7 @@
   export let data: PageData;
   $: ({ initResults, initMessage, subjects } = data);
 
-  const tempBugFixForUndefined =
+  const handleUndefinedBug =
     subjects && subjects.length > 0 ? subjects : languages;
   let isInit = true;
   let results: SearchResultType[] = [];
@@ -74,15 +74,15 @@
   });
 
   $: filteredSubjects = $touchedInput
-    ? tempBugFixForUndefined?.filter(({ title, altTitle }) => {
+    ? handleUndefinedBug?.filter(({ title, altTitle }) => {
         const normalizedInput = $inputValue.toLowerCase();
         return (
           title.toLowerCase().includes(normalizedInput) ||
           altTitle?.toLowerCase().includes(normalizedInput)
         );
       })
-    : (tempBugFixForUndefined ?? []);
-
+    : (handleUndefinedBug ?? []);
+    
   const messageStyling = "w-full md:w-auto md:min-w-[30vw]";
 </script>
 

@@ -1,8 +1,10 @@
 <script lang="ts">
   import Star from "./star.svelte";
   import { cn } from "src/lib/shared/utils/utils.js";
+
   let className: string | null | undefined = undefined;
   export { className as class };
+  export let starsStylign: string | null | undefined = undefined;
 
   const handleRounding = (rating: number) => {
     let rounded = Math.round(rating);
@@ -18,12 +20,10 @@
 </script>
 
 <div class={cn("flex gap-x-0.5", className)}>
-  <!-- eslint-disable-next-line @typescript-eslint/no-unused-vars -->
   {#each [...Array(rounded)] as _}
-    <Star class="w-{size} h-{size}" />
+    <Star class={cn(`size-${size}`, starsStylign)} />
   {/each}
-  <!-- eslint-disable-next-line @typescript-eslint/no-unused-vars -->
   {#each [...Array(rest)] as _}
-    <Star class="fill-none w-{size} h-{size}" />
+    <Star class={cn(`fill-none size-${size}`, starsStylign)} />
   {/each}
 </div>

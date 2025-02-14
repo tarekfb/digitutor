@@ -6,7 +6,7 @@
 <a
   {href}
   aria-label={text}
-  class="h-42 w-full hover:scale-105 transition-all ease-in-out"
+  class="h-42 w-full md:hover:scale-105 md:transition-all md:ease-in-out"
 >
   <li
     class="flex h-full w-full items-center justify-center rounded-md border border-solid border-accent bg-card p-6 md:p-8"

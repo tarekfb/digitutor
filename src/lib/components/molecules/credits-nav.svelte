@@ -11,7 +11,7 @@
 <a
   {href}
   aria-label="Köp {creditsProduct.credits} krediter"
-  class="h-full w-full transition-all ease-in-out hover:scale-105 md:h-36 md:w-52"
+  class="h-full w-full md:transition-all md:ease-in-out md:hover:scale-105 md:h-36 md:w-52"
 >
   <li
     class="flex h-full flex-col items-center justify-center gap-y-2 rounded-md border border-solid border-accent bg-card p-4 md:gap-y-4 md:p-8"
