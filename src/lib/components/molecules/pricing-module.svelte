@@ -49,7 +49,7 @@
             on:click={() =>
               goto(
                 pricingPlan.id === PricingPlanIds.Free
-                  ? "/account/billing?free"
+                  ? "/account/billing?plan=free"
                   : `/account/subscribe/${pricingPlan.stripePriceId}`,
               )}>Kom igång</Button
           >

@@ -64,7 +64,7 @@ export const load: PageServerLoad = (async (event) => {
   }
 
   const currentPlanId = primarySubscription?.appSubscription?.id || defaultPlanId;
-  if (currentPlanId === PricingPlanIds.Free && url.searchParams.get("free") !== undefined)
+  if (currentPlanId === PricingPlanIds.Free && url.searchParams.get("plan") === "free")
     setFlash({ message: "Din nuvarande plan är redan: Gratis ", type: "info" }, event);
 
   return {
