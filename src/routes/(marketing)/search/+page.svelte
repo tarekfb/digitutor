@@ -244,7 +244,7 @@
   </div>
 </div>
 <Wavy class="-mt-4 overflow-x-hidden" />
-<RootContainer class="m-0 px-8" maxWidth>
+<RootContainer class="m-0 w-full px-8" minWidth maxWidth>
   {#if $message}
     <div class="p-4">
       <FormMessage {message} scroll scrollTo="end" />
