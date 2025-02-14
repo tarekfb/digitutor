@@ -18,7 +18,6 @@
   import AlertMessage from "$lib/components/atoms/alert-message.svelte";
   import SearchResultList from "src/lib/components/molecules/search-result-list.svelte";
   import RootContainer from "src/lib/components/templates/root-container.svelte";
-  // import { mediaQuery } from "svelte-legos";
   import Wavy from "src/lib/components/atoms/wavy.svelte";
   import PrimaryTitle from "src/lib/components/atoms/primary-title.svelte";
   import LoadingSpinner from "src/lib/components/atoms/loading-spinner.svelte";
@@ -27,8 +26,8 @@
   import { languages } from "src/lib/shared/models/common.ts";
   import { page } from "$app/stores";
   import { websiteName } from "src/lib/shared/constants/constants.ts";
-
-  // const isDesktop = mediaQuery("(min-width: 768px)");
+  import SearchSuggestion from "src/lib/components/molecules/search-suggestion.svelte";
+  import SearchSubjectButton from "src/lib/components/atoms/search-subject-button.svelte";
 
   export let data: PageData;
   $: ({ initResults, initMessage, subjects } = data);
@@ -50,7 +49,14 @@
       }
     },
   });
-  const { form: formData, enhance, delayed, message, allErrors } = searchForm;
+  const {
+    form: formData,
+    enhance,
+    delayed,
+    message,
+    allErrors,
+    submitting,
+  } = searchForm;
 
   const {
     elements: { menu, input, option, label, hiddenInput },
@@ -67,9 +73,6 @@
     },
   });
 
-  const subjectChipStyling =
-    "h-12 hover:scale-105 transition-all ease-in-out inline-flex gap-x-2 items-center px-2 py-1 text-sm bg-background rounded-full md:hover:bg-background";
-
   $: filteredSubjects = $touchedInput
     ? tempBugFixForUndefined?.filter(({ title, altTitle }) => {
         const normalizedInput = $inputValue.toLowerCase();
@@ -79,6 +82,8 @@
         );
       })
     : (tempBugFixForUndefined ?? []);
+
+  const messageStyling = "w-full md:w-auto md:min-w-[30vw]";
 </script>
 
 <svelte:head>
@@ -167,34 +172,32 @@
         </Button>
       </div>
     </form>
-    <FormMessage {message} scroll scrollTo="end" />
+    <!-- <FormMessage {message} scroll scrollTo="end" /> -->
     {#if $selected && $selected.length > 0}
       <ul class="flex w-full flex-wrap gap-2">
         <li>
-          <button
-            aria-label="Rensa {$selected.length} teknologier"
-            on:click={() => ($selected = [])}
-            class="{subjectChipStyling} border-2 border-third"
+          <SearchSubjectButton
+            ariaLabel="Rensa {$selected.length} teknologier"
+            onClickCallback={() => ($selected = [])}
+            text={$selected.length.toString()}
+            class="border-2 border-third"
+            textStyling="rounded-full bg-third px-3 py-1 text-background"
           >
-            <span class="rounded-full bg-third px-3 py-1 text-background"
-              >{$selected.length}</span
-            >
             <X class="size-4" />
-          </button>
+          </SearchSubjectButton>
         </li>
         {#each $selected as subject, i}
           <li>
-            <button
-              on:click={() => {
+            <SearchSubjectButton
+              ariaLabel="Rensa {subject.label}"
+              onClickCallback={() => {
                 if ($selected)
                   $selected = $selected.filter((_, index) => index !== i);
               }}
-              aria-label="Rensa {subject.label}"
-              class={subjectChipStyling}
+              text={subject.value}
             >
-              {subject.label}
               <X class="size-4" />
-            </button>
+            </SearchSubjectButton>
           </li>
         {/each}
       </ul>
@@ -244,9 +247,9 @@
   </div>
 </div>
 <Wavy class="-mt-4 overflow-x-hidden" />
-<RootContainer class="m-0 w-full px-8" minWidth maxWidth>
+<RootContainer class="my-4 w-full px-8 md:my-6" minWidth maxWidth>
   {#if $message}
-    <div class="p-4">
+    <div class={messageStyling}>
       <FormMessage {message} scroll scrollTo="end" />
     </div>
   {:else if isInit && initResults.length > 0}
@@ -254,8 +257,17 @@
       results={initResults}
       searchTerm={$page.url.searchParams.get("q") ?? ""}
     />
+  {:else if isInit && initResults.length === 0 && !$page.url.searchParams.get("q")}
+    <!-- intentionally excluded !$formdata.subjects here because it can never be true with $!formdata.subjects (and subjects is reactive) -->
+    {#if !$formData.subjects && !$submitting}
+      <SearchSuggestion
+        setSelected={(subjectName) => {
+          $selected = [{ label: subjectName, value: subjectName }];
+        }}
+      />
+    {/if}
   {:else if initMessage}
-    <div class="p-4">
+    <div class={messageStyling}>
       <AlertMessage
         title={initMessage.title}
         description={initMessage.description}
@@ -265,67 +277,23 @@
   {:else if results.length > 0}
     <SearchResultList {results} searchTerm={$formData.query} />
   {:else}
-    <div class="p-4">
-      <AlertMessage
-        title="Inga träffar på din sökning"
-        description="Testa söka på en lärares namn, eller en annons titel, beskrivning eller pris."
-      />
+    <div class="flex flex-col items-center gap-y-4 md:gap-y-6">
+      <div class={messageStyling}>
+        <AlertMessage
+          title="Inga träffar på din sökning"
+          description="Testa söka på en lärares namn, eller en annons titel, beskrivning eller pris."
+        />
+      </div>
+      {#if !$formData.subjects && !$submitting}
+        <SearchSuggestion
+          setSelected={(subjectName) => {
+            $selected = [{ label: subjectName, value: subjectName }];
+          }}
+        />
+      {/if}
     </div>
   {/if}
 </RootContainer>
-
-<!-- {#if !$isDesktop}
-  <Wavy class="-mt-4 overflow-x-hidden" />
-  {#if $message}
-    <div class="p-4">
-      <FormMessage {message} scroll scrollTo="end" />
-    </div>
-  {:else if isInit && initResults.length > 0}
-    <SearchResultList
-      results={initResults}
-      searchTerm={$page.url.searchParams.get("q") ?? ""}
-    />
-  {:else if initMessage}
-    <div class="p-4">
-      <AlertMessage
-        title={initMessage.title}
-        description={initMessage.description}
-        variant={initMessage.variant}
-      />
-    </div>
-  {:else if results.length > 0}
-    <SearchResultList {results} searchTerm={$formData.query} />
-  {:else}
-    <div class="p-4">
-      <AlertMessage
-        title="Inga träffar på din sökning"
-        description="Testa söka på en lärares namn, eller en annons titel, beskrivning eller pris."
-      />
-    </div>
-  {/if}
-{:else}
-  <Wavy />
-  <RootContainer class="w-full" maxWidth>
-    {#if isInit && initResults.length > 0}
-      <SearchResultList results={initResults} searchTerm={$formData.query} />
-    {:else if initMessage}
-      <AlertMessage
-        title={initMessage.title}
-        description={initMessage.description}
-        variant={initMessage.variant}
-      />
-    {:else if $message}
-      <FormMessage {message} />
-    {:else if results.length > 0}
-      <SearchResultList {results} searchTerm={$formData.query} />
-    {:else}
-      <AlertMessage
-        title="Inga träffar på din sökning"
-        description="Testa söka på en lärares namn, eller en annons titel, beskrivning eller pris."
-      />
-    {/if}
-  </RootContainer>
-{/if} -->
 
 <style lang="postcss">
   .check {
