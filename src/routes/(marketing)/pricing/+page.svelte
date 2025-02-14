@@ -4,6 +4,7 @@
   import RootContainer from "src/lib/components/templates/root-container.svelte";
   import Button from "src/lib/components/ui/button/button.svelte";
   import {
+    premiumPlan,
     pricingPlans,
     websiteName,
   } from "src/lib/shared/constants/constants.ts";
@@ -29,7 +30,7 @@
     </p>
     <Button
       variant="third"
-      on:click={() => goto("/account/subscription")}
+      on:click={() => goto(`/account/subscribe/${premiumPlan.stripePriceId}`)}
       class="mt-2 md:mt-3">Skaffa Premium</Button
     >
   </div>

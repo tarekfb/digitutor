@@ -451,7 +451,7 @@ export const actions = {
         supabase,
         teacherId,
         userId,
-        firstMessage,
+        firstMessage.trim(),
         session,
       );
       conversationId = id;
@@ -611,7 +611,7 @@ export const actions = {
     try {
       await createReview(
         supabase,
-        { rating, description: description ?? "" },
+        { rating, description: description?.trim() ?? "" },
         teacherId,
         session,
       );

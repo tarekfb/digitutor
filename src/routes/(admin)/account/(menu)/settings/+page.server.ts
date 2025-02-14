@@ -94,7 +94,7 @@ export const actions = {
 
     const profileInput: ProfileInput = {
       id: user.id,
-      bio,
+      bio: bio.trim(),
     };
 
     try {
@@ -122,8 +122,8 @@ export const actions = {
 
     const profileInput: ProfileInput = {
       id: user.id,
-      first_name: firstName,
-      last_name: lastName,
+      first_name: firstName.trim(),
+      last_name: lastName.trim(),
     };
 
     try {
@@ -150,7 +150,7 @@ export const actions = {
 
     const { email } = form.data;
     try {
-      await updateUserEmail(supabase, email);
+      await updateUserEmail(supabase, email.trim());
     } catch (error) {
       console.error(
         `Error on update profile in update name with userid ${session?.user.id}`,

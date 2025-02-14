@@ -77,7 +77,7 @@ export const actions: Actions = {
 
     let listingId = "";
     try {
-      const { id } = await createListing(supabase, title, session);
+      const { id } = await createListing(supabase, title.trim(), session);
       listingId = id;
     } catch (error) {
       console.error("Failed to create listing", error);
