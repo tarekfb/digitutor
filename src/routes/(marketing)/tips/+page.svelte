@@ -9,9 +9,9 @@
   <title>{websiteName} | Tips</title>
 </svelte:head>
 
-<RootContainer minWidth maxWidth responsiveGap>
+<RootContainer maxWidth responsiveGap>
   <PrimaryTitle>Tips för lärare</PrimaryTitle>
-  <ol class="flex flex-col gap-y-4 text-muted-foreground list-decimal list-inside">
+  <ol class="flex flex-col gap-y-4 list-decimal list-inside">
     <li class="flex flex-col gap-y-2">
       <SecondaryTitle>Använd en bra profilbild</SecondaryTitle>
       <p>
