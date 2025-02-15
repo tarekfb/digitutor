@@ -9,7 +9,42 @@
   <title>{websiteName} | Tips</title>
 </svelte:head>
 
-<RootContainer>
-  <PrimaryTitle>Tips</PrimaryTitle>
-  <SecondaryTitle>Not implemented</SecondaryTitle>
+<RootContainer minWidth maxWidth responsiveGap>
+  <PrimaryTitle>Tips för lärare</PrimaryTitle>
+  <ol class="flex flex-col gap-y-4 text-muted-foreground list-decimal list-inside">
+    <li class="flex flex-col gap-y-2">
+      <SecondaryTitle>Använd en bra profilbild</SecondaryTitle>
+      <p>
+        En tydlig och professionell profilbild ökar chansen att bli kontaktad. Välj en bild där du ser vänlig och tillgänglig ut.
+      </p>
+    </li>
+
+    <li class="flex flex-col gap-y-2">
+      <SecondaryTitle>Skapa en tydlig och informativ profil</SecondaryTitle>
+      <p>
+        Beskriv tydligt vad du lär ut, din erfarenhet och din undervisningsstil. En välskriven profil hjälper elever att förstå om du passar deras behov.
+      </p>
+    </li>
+
+    <li class="flex flex-col gap-y-2">
+      <SecondaryTitle>Fokusera på att få recensioner</SecondaryTitle>
+      <p>
+        Lärare med fler recensioner får betydligt fler kontakter. För att få dina första recensioner kan du sänka ditt pris temporärt. När du fått några bra recensioner kan du återgå till din normala prissättning.
+      </p>
+    </li>
+
+    <li class="flex flex-col gap-y-2">
+      <SecondaryTitle>Håll ditt pris konkurrenskraftigt</SecondaryTitle>
+      <p>
+        Ett pris som är i linje med marknaden lockar fler elever. Tänk på att du alltid kan justera ditt pris baserat på efterfrågan och dina recensioner.
+      </p>
+    </li>
+
+    <li class="flex flex-col gap-y-2">
+      <SecondaryTitle>Var snabb med att svara på meddelanden</SecondaryTitle>
+      <p>
+        Snabba svar visar engagemang och kan göra att fler elever väljer just dig som lärare.
+      </p>
+    </li>
+  </ol>
 </RootContainer>
