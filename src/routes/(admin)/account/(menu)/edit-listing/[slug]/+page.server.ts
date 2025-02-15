@@ -67,9 +67,9 @@ export const load = async ({
   if (session?.user.id !== listing.profile.id) {
     console.error(
       "Tried to read listing that is not theirs. listingid: " +
-        listing.id +
-        " userid: " +
-        session?.user.id,
+      listing.id +
+      " userid: " +
+      session?.user.id,
     );
     error(500, { ...defaultErrorInfo });
   }
@@ -146,7 +146,9 @@ export const actions = {
 
     const form = await superValidate(event, zod(suggestSubjectSchema));
     if (!form.valid) return fail(400, { form });
-    const { subject, email, isRetry } = form.data;
+    const { isRetry } = form.data;
+    const email = form.data.email ? form.data.email.trim() : undefined;
+    const subject = form.data.subject.trim();
 
     if (!isRetry) {
       try {
@@ -167,7 +169,7 @@ export const actions = {
       } catch (error) {
         console.error(
           "Error when looking for match. Allowing user to insert suggestion. slug: " +
-            slug,
+          slug,
           error,
         );
       }

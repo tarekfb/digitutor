@@ -5,17 +5,21 @@ import {
 import type { PageServerLoad } from "./$types.ts";
 import { error } from "@sveltejs/kit";
 import {
+  defaultPlanId,
   getDefaultErrorInfo,
   websiteName,
 } from "src/lib/shared/constants/constants.ts";
 import { getCreditsByStudent } from "src/lib/server/database/credits.ts";
-import { redirect } from "sveltekit-flash-message/server";
+import { redirect, setFlash } from "sveltekit-flash-message/server";
+import { PricingPlanIds } from "src/lib/shared/models/subscription.ts";
 
-export const load: PageServerLoad = (async ({
-  locals: { supabaseServiceRole, safeGetSession },
-  parent,
-  cookies,
-}) => {
+export const load: PageServerLoad = (async (event) => {
+  const {
+    locals: { supabaseServiceRole, safeGetSession },
+    parent,
+    cookies,
+    url
+  } = event;
   const { profile } = await parent();
   if (profile.role === "teacher")
     redirect(
@@ -59,10 +63,14 @@ export const load: PageServerLoad = (async ({
     balance = undefined;
   }
 
+  const currentPlanId = primarySubscription?.appSubscription?.id || defaultPlanId;
+  if (currentPlanId === PricingPlanIds.Free && url.searchParams.get("plan") === "free")
+    setFlash({ message: "Din nuvarande plan är redan: Gratis ", type: "info" }, event);
+
   return {
     isActiveCustomer: !!primarySubscription,
     hasEverHadSubscription,
-    currentPlanId: primarySubscription?.appSubscription?.id,
+    currentPlanId,
     balance,
   };
 }) satisfies PageServerLoad;

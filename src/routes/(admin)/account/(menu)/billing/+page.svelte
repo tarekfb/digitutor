@@ -5,7 +5,6 @@
   import { PricingPlanIds } from "src/lib/shared/models/subscription.ts";
   import {
     costPerRequest,
-    defaultPlanId,
     premiumPlan,
     pricingPlans,
     websiteName,
@@ -26,11 +25,10 @@
   import Link from "src/lib/components/atoms/link.svelte";
 
   export let data: PageData;
-  $: ({ balance } = data);
-  let currentPlanId = data.currentPlanId ?? defaultPlanId;
-  let currentPlanName = pricingPlans.find(
-    (pricingPlan) => pricingPlan.id === currentPlanId,
-  )?.name;
+  $: ({ balance, currentPlanId } = data);
+  $: currentPlanName =
+    pricingPlans.find((pricingPlan) => pricingPlan.id === currentPlanId)
+      ?.name ?? "Okänd";
 </script>
 
 <svelte:head>

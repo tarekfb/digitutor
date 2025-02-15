@@ -89,7 +89,7 @@ const authGuard: Handle = async ({ event, resolve }) => {
     redirect(
       303,
       `/sign-in?next=${url.pathname}`,
-      { type: "info", message: `Du måste logga in först` },
+      { type: "info", message: `Du måste logga in först.` },
       cookies,
     );
 

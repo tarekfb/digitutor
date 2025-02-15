@@ -1,13 +1,14 @@
 import { PRIVATE_STRIPE_API_KEY } from "$env/static/private";
-import { error, redirect } from "@sveltejs/kit";
+import { error } from "@sveltejs/kit";
 import Stripe from "stripe";
 
 import {
   getOrCreateCustomerId,
   fetchSubscription,
 } from "src/lib/shared/utils/subscription/subscription-helper.ts";
-import { getDefaultErrorInfo } from "src/lib/shared/constants/constants.ts";
+import { getDefaultErrorInfo, websiteName } from "src/lib/shared/constants/constants.ts";
 import type { PageServerLoad } from "./$types.ts";
+import { redirect } from "sveltekit-flash-message/server";
 
 const stripe = new Stripe(PRIVATE_STRIPE_API_KEY);
 // { apiVersion: "2023-08-16" }
@@ -15,17 +16,29 @@ const stripe = new Stripe(PRIVATE_STRIPE_API_KEY);
 export const load: PageServerLoad = async ({
   params: { slug },
   url,
-  locals: { safeGetSession, supabaseServiceRole },
+  locals: { safeGetSession, supabaseServiceRole }, parent, cookies
 }) => {
   const { session, user } = await safeGetSession();
-  if (!session) {
-    redirect(303, "/sign-in"); // todo add flash
+  if (!session || !user) {
+    redirect(303, "/sign-in");
   }
 
   const successUrl = "/account/billing";
 
   // free plan. simulate success by redirecting to success url
   if (slug === "free") redirect(303, successUrl);
+
+  const { profile } = await parent();
+  if (profile.role === "teacher")
+    redirect(
+      303,
+      "/account",
+      {
+        type: "info",
+        message: `Du är lärare och betalar därför ingenting för att använda ${websiteName}.`,
+      },
+      cookies,
+    );
 
   const { error: idError, customerId } = await getOrCreateCustomerId({
     supabaseServiceRole,
@@ -41,11 +54,19 @@ export const load: PageServerLoad = async ({
   });
   if (primarySubscription) {
     // User already has plan, we shouldn't let them buy another
-    redirect(303, successUrl); // todo add flash
+    redirect(
+      303,
+      successUrl,
+      {
+        type: "info",
+        message: `Du har redan en prenumeration.`,
+      },
+      cookies,
+    );
   }
 
   const mode =
-    url.searchParams.get("mode") === "payment" ? "payment" : "subscription"; // if credits, then single purchase
+    url.searchParams.get("mode") === "payment" ? "payment" : "subscription"; // if credits, then single purchase (payment)
 
   let checkoutUrl;
   let stripeSession: Stripe.Response<Stripe.Checkout.Session> | undefined;

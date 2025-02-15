@@ -12,7 +12,9 @@
 <Button
   variant="link"
   {disabled}
-  class="p-0 hover:text-accent hover:no-underline active:text-accent"
+  class="p-0 hover:text-accent active:text-accent  {$page.url.pathname === href
+    ? 'md:hover:no-underline'
+    : ''}"
   on:click={() => {
     if (onClick) onClick();
     if (closeSidebar) closeSidebar();
@@ -29,14 +31,14 @@
 
 <style>
   .current {
-    @apply bg-primary text-background;
+    @apply bg-primary text-background no-underline;
   }
 
   .current:hover {
-    @apply bg-accent text-background;
+    @apply bg-accent text-background no-underline;
   }
 
   .current:active {
-    @apply text-background;
+    @apply text-background no-underline;
   }
 </style>

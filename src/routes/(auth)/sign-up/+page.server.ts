@@ -57,7 +57,11 @@ export const actions = {
     const form = await superValidate(event, zod(signUpSchema));
     if (!form.valid) return fail(400, { form });
 
-    const { email, password, role, firstName, lastName } = form.data;
+    const { password, role, } = form.data;
+    const firstName = form.data.firstName.trim();
+    const lastName = form.data.lastName.trim();
+    const email = form.data.email.trim();
+
     let inputUser: CreateProfile;
 
     try {

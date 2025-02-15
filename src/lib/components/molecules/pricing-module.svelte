@@ -1,6 +1,9 @@
 <script lang="ts">
   import { goto } from "$app/navigation";
-  import type { PricingPlan } from "src/lib/shared/models/subscription.ts";
+  import {
+    PricingPlanIds,
+    type PricingPlan,
+  } from "src/lib/shared/models/subscription.ts";
   import Button from "src/lib/components/ui/button/button.svelte";
 
   export let pricingPlan: PricingPlan;
@@ -44,8 +47,11 @@
         {:else}
           <Button
             on:click={() =>
-              goto(`/account/subscribe/${pricingPlan.stripePriceId}`)}
-            >Kom igång</Button
+              goto(
+                pricingPlan.id === PricingPlanIds.Free
+                  ? "/account/billing?plan=free"
+                  : `/account/subscribe/${pricingPlan.stripePriceId}`,
+              )}>Kom igång</Button
           >
         {/if}
       </div>
