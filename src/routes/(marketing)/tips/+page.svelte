@@ -15,7 +15,7 @@
     <li class="flex flex-col gap-y-2">
       <SecondaryTitle>Använd en bra profilbild</SecondaryTitle>
       <p>
-        En tydlig och professionell profilbild ökar chansen att bli kontaktad. Välj en bild där du ser vänlig och tillgänglig ut.
+        En trevlig och professionell profilbild ökar chansen att bli kontaktad. Välj en bild där du ser vänlig och tillgänglig ut.
       </p>
     </li>
 
@@ -43,8 +43,8 @@
     <li class="flex flex-col gap-y-2">
       <SecondaryTitle>Var snabb med att svara på meddelanden</SecondaryTitle>
       <p>
-        Snabba svar visar engagemang och kan göra att fler elever väljer just dig som lärare.
-      </p>
+En elev kan ha kontaktat flera lärare. Om du svarar först ökar dina chanser att bli vald av eleven.
+        </p>
     </li>
   </ol>
 </RootContainer>
