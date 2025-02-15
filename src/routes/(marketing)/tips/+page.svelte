@@ -9,7 +9,7 @@
   <title>{websiteName} | Tips</title>
 </svelte:head>
 
-<RootContainer maxWidth responsiveGap class="p-8">
+<RootContainer maxWidth responsiveGap class="px-8">
   <PrimaryTitle>Tips för lärare</PrimaryTitle>
   <ol class="flex flex-col gap-y-4 list-decimal list-inside mt-4 md:mt-6">
     <li class="flex flex-col gap-y-2">
