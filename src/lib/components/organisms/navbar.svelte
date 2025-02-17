@@ -25,7 +25,7 @@
 <header
   class="sticky top-0 z-40 flex h-16 w-full items-center gap-x-3 overflow-x-hidden bg-secondary px-2 text-background sm:justify-between sm:space-x-0 md:h-20 md:px-4 lg:px-8"
 >
-  <a href="/" class="text-xl uppercase md:text-3xl md:hover:text-third">
+  <a href="/" class="text-xl uppercase md:text-3xl font-medium md:hover:text-third">
     {websiteName}
   </a>
 

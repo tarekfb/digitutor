@@ -39,7 +39,7 @@
     <p class="text-lg md:text-xl">
       Glöm inte att kolla om din fråga finns bland <Link
         class="text-lg"
-        href="/#faq">vanliga frågor och svar</Link
+        href="/pricing#faq">vanliga frågor och svar</Link
       >.
     </p>
   </div>

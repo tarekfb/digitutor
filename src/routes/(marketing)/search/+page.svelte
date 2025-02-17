@@ -39,15 +39,13 @@
 
   const searchForm = superForm(data.form, {
     validators: zodClient(searchSchema),
-    onSubmit() {
-      $selected = [];
-    },
     onUpdate({ form, result }) {
       if (form.valid && result.data) {
         results = result.data.formatted as SearchResultType[];
         isInit = false;
       }
     },
+    resetForm: false,
   });
   const {
     form: formData,
@@ -56,6 +54,7 @@
     message,
     allErrors,
     submitting,
+    submit
   } = searchForm;
 
   const {
@@ -82,8 +81,14 @@
         );
       })
     : (handleUndefinedBug ?? []);
-    
+
   const messageStyling = "w-full md:w-auto md:min-w-[30vw]";
+
+  $: getSearchTerm = () => {
+    if ($formData.subjects) return $formData.subjects.split(" ")[0];
+    if ($formData.query) return $formData.query;
+    return $page.url.searchParams.get("q") ?? "";
+  }
 </script>
 
 <svelte:head>
@@ -255,7 +260,7 @@
   {:else if isInit && initResults.length > 0}
     <SearchResultList
       results={initResults}
-      searchTerm={$page.url.searchParams.get("q") ?? ""}
+      searchTerm={getSearchTerm()}
     />
   {:else if isInit && initResults.length === 0 && !$page.url.searchParams.get("q")}
     <!-- intentionally excluded !$formdata.subjects here because it can never be true with $!formdata.subjects (and subjects is reactive) -->
@@ -263,6 +268,7 @@
       <SearchSuggestion
         setSelected={(subjectName) => {
           $selected = [{ label: subjectName, value: subjectName }];
+          submit();
         }}
       />
     {/if}
@@ -275,7 +281,7 @@
       />
     </div>
   {:else if results.length > 0}
-    <SearchResultList {results} searchTerm={$formData.query} />
+    <SearchResultList {results} searchTerm={getSearchTerm()} />
   {:else}
     <div class="flex flex-col items-center gap-y-4 md:gap-y-6">
       <div class={messageStyling}>
@@ -288,6 +294,7 @@
         <SearchSuggestion
           setSelected={(subjectName) => {
             $selected = [{ label: subjectName, value: subjectName }];
+            $formData
           }}
         />
       {/if}

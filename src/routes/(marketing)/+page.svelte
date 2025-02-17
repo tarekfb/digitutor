@@ -12,6 +12,7 @@
   import Wavy from "src/lib/components/atoms/wavy.svelte";
   import Search from "lucide-svelte/icons/search";
   import PrimaryTitle from "src/lib/components/atoms/primary-title.svelte";
+  import Link from "src/lib/components/atoms/link.svelte";
 
   export let data: PageData;
   $: ({ displayReviews, subjects } = data);
@@ -53,15 +54,15 @@
           </Carousel.Root>
         </div>
       </div>
-      <div class="mt-4 md:mt-6">
-        <h2
-          class="heading flex items-center gap-x-2 px-2 text-xl font-semibold md:text-3xl"
-        >
-          <Search class="size-4 md:size-6" /> Sök bland våra lärare
-        </h2>
-      </div>
     </div>
 
+    <Link href="/search" class="mb-2 md:mb-0 md:mt-6 ">
+      <h2
+        class="heading flex items-center gap-x-2 px-2 text-xl font-semibold text-background md:text-3xl"
+      >
+        <Search class="size-4 md:size-6" /> Sök bland våra lärare
+      </h2>
+    </Link>
     <div
       class="flex w-full max-w-screen-sm flex-col items-center justify-center gap-y-4 md:mt-4"
     >
@@ -69,14 +70,13 @@
     </div>
     <h3>
       <span
-        class="mt-2 flex items-center justify-center gap-y-2 py-2 text-xl text-background md:mt-4 md:text-3xl"
+        class=" flex items-center justify-center gap-y-2 text-xl text-background md:text-3xl"
       >
         Eller
-        <Button
-          variant="ghost"
-          on:click={() => goto("/sign-up")}
-          class="m-0 h-10 px-1 text-xl font-normal lowercase tracking-normal text-background underline decoration-third decoration-4 hover:bg-secondary hover:decoration-accent md:px-2 md:text-3xl md:decoration-[6px]"
-          >skapa ett gratis konto</Button
+        <Link
+          href="/sign-up"
+          class="px-1 text-xl normal-case tracking-normal text-background underline decoration-third decoration-4 md:px-2 md:text-3xl md:decoration-[6px] md:hover:decoration-accent"
+          >skapa ett gratis konto</Link
         >direkt
       </span>
     </h3>
