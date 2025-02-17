@@ -106,7 +106,7 @@
             />
           {/if}
           <div class="flex flex-col gap-y-4">
-            <SecondaryTitle class="whitespace-normal font-normal md:text-4xl"
+            <SecondaryTitle class="font-normal md:text-4xl"
               >{teacher.firstName}</SecondaryTitle
             >
             <Stars size={5} rating={4.7} />

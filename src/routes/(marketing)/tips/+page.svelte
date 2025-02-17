@@ -9,42 +9,56 @@
   <title>{websiteName} | Tips</title>
 </svelte:head>
 
-<RootContainer maxWidth responsiveGap class="px-8">
+<RootContainer maxWidth responsiveGap minWidth class=" max-w-full">
   <PrimaryTitle>Tips för lärare</PrimaryTitle>
-  <ol class="flex flex-col gap-y-4 list-decimal list-inside mt-4 md:mt-6">
-    <li class="flex flex-col gap-y-2">
-      <SecondaryTitle>Använd en bra profilbild</SecondaryTitle>
-      <p>
-        En trevlig och professionell profilbild ökar chansen att bli kontaktad. Välj en bild där du ser vänlig och tillgänglig ut.
-      </p>
-    </li>
-
-    <li class="flex flex-col gap-y-2">
-      <SecondaryTitle>Skapa en tydlig och informativ profil</SecondaryTitle>
-      <p>
-        Beskriv tydligt vad du lär ut, din erfarenhet och din undervisningsstil. En välskriven profil hjälper elever att förstå om du passar deras behov.
-      </p>
-    </li>
-
-    <li class="flex flex-col gap-y-2">
+  <main
+    class="mt-4 flex list-inside flex-col gap-y-4 *:flex *:flex-col *:gap-y-2 md:mt-6"
+  >
+    <section>
       <SecondaryTitle>Fokusera på att få recensioner</SecondaryTitle>
       <p>
-        Lärare med fler recensioner får betydligt fler kontakter. För att få dina första recensioner kan du sänka ditt pris temporärt. När du fått några bra recensioner kan du återgå till din normala prissättning.
+        Lärare med fler recensioner får betydligt fler kontaktförfrågningar. Det
+        kan vara väldigt svårt att komma igång om du tar ett högt timpris men
+        inte har (eller har väldigt få) recensioner. För att få dina första
+        recensioner kan du sänka ditt pris temporärt. När du fått några bra
+        recensioner kan du återgå till din normala prissättning.
       </p>
-    </li>
+      <p>
+        <strong>Detta är utan tvekan viktigaste rekomendationen här</strong> - om
+        du ska ändra något är detta en bra plats att börja på.
+      </p>
+    </section>
+    <section>
+      <SecondaryTitle>Använd en bra profilbild</SecondaryTitle>
+      <p>
+        En trevlig och professionell profilbild ökar chansen att bli kontaktad.
+        Välj en bild där du ser vänlig och tillgänglig ut.
+      </p>
+    </section>
 
-    <li class="flex flex-col gap-y-2">
+    <section>
+      <SecondaryTitle>Skapa en tydlig och informativ profil</SecondaryTitle>
+      <p>
+        Beskriv tydligt vad du lär ut, din erfarenhet och din undervisningsstil.
+        En välskriven profil hjälper elever att förstå om du passar deras behov.
+      </p>
+    </section>
+
+    <section>
       <SecondaryTitle>Håll ditt pris konkurrenskraftigt</SecondaryTitle>
       <p>
-        Ett pris som är i linje med marknaden lockar fler elever. Tänk på att du alltid kan justera ditt pris baserat på efterfrågan och dina recensioner.
+        Ett pris som är i linje med marknaden lockar fler elever. Tänk på att du
+        alltid kan justera ditt pris baserat på efterfrågan och dina
+        recensioner.
       </p>
-    </li>
+    </section>
 
-    <li class="flex flex-col gap-y-2">
+    <section>
       <SecondaryTitle>Var snabb med att svara på meddelanden</SecondaryTitle>
       <p>
-En elev kan ha kontaktat flera lärare. Om du svarar först ökar dina chanser att bli vald av eleven.
-        </p>
-    </li>
-  </ol>
+        En elev kan ha kontaktat flera lärare. Om du svarar först ökar dina
+        chanser att bli vald av eleven.
+      </p>
+    </section>
+  </main>
 </RootContainer>

@@ -88,7 +88,7 @@
 
     <div class="flex flex-col items-center gap-y-2">
       {#if displayReviews.length > 0}
-        <PrimaryTitle class="text-gradient my-4 whitespace-normal text-center ">
+        <PrimaryTitle class="text-gradient my-4 text-center ">
           Vad våra användare säger
         </PrimaryTitle>
         <div class="grid grid-cols-2 gap-4 md:grid-cols-2">

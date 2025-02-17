@@ -12,7 +12,7 @@
   class={cn(
     "m-8 flex flex-col items-center",
     responsiveGap ? "gap-y-2 md:gap-y-4" : "gap-y-4",
-    maxWidth ? "md:max-w-screen-sm lg:max-w-screen-md" : "",
+    maxWidth ? "max-w-full md:max-w-screen-sm lg:max-w-screen-md" : "",
     minWidth ? "min-w-full px-8 md:min-w-[400px] md:px-0 lg:min-w-[500px]" : "",
     className,
   )}

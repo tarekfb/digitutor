@@ -12,7 +12,7 @@
 <h1
   {id}
   class={cn(
-    "whitespace-nowrap text-3xl font-extrabold leading-none tracking-tight md:text-4xl ",
+    "text-3xl font-extrabold leading-none tracking-tight md:text-4xl ",
     responsiveMb ? "mb-2 md:mb-4" : "",
     responsiveMt ? "mt-2 md:mt-4" : "",
     className,
