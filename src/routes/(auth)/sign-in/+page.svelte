@@ -85,7 +85,7 @@
         <div
           class="flex flex-col gap-y-0.5 text-xl text-muted-foreground md:text-2xl"
         >
-          <SecondaryTitle class="whitespace-normal font-semibold"
+          <SecondaryTitle class="font-semibold"
             >{reviews[0].receiver.firstName}</SecondaryTitle
           >
           {#if avgRating !== undefined}
@@ -118,7 +118,9 @@
           {#each reviews as review, index}
             <ReviewCardExtra
               {review}
-              class="z-{(reviews.length - index) * 10 + 20} {getBlur(index)} w-96"
+              class="z-{(reviews.length - index) * 10 + 20} {getBlur(
+                index,
+              )} w-96"
             />
             <!-- + 20 because didnt work without it, will always work on 3 items but might act up on >3 -->
           {/each}

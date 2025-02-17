@@ -43,7 +43,7 @@
           class="text-foreground"
           ariaLabel="Gå till profil"
         >
-          <PrimaryTitle class="whitespace-normal text-2xl md:text-3xl">
+          <PrimaryTitle class=" text-2xl md:text-3xl">
             {result.title}
           </PrimaryTitle>
         </Link>
@@ -52,7 +52,7 @@
           ariaLabel="Gå till profil"
           class="text-foreground"
         >
-          <SecondaryTitle class="whitespace-normal">
+          <SecondaryTitle class="">
             {result.profile.firstName}
           </SecondaryTitle>
         </Link>
@@ -88,7 +88,7 @@
         class="text-foreground"
         ariaLabel="Gå till profil"
       >
-        <PrimaryTitle class="whitespace-normal text-2xl md:text-3xl">
+        <PrimaryTitle class="text-2xl md:text-3xl">
           {result.title}
         </PrimaryTitle>
       </Link>
@@ -97,12 +97,12 @@
         ariaLabel="Gå till profil"
         class="text-foreground"
       >
-        <SecondaryTitle class="whitespace-normal">
+        <SecondaryTitle>
           {result.profile.firstName}
         </SecondaryTitle>
       </Link>
       <div class="mt-2 flex flex-col items-start gap-y-1 md:hidden">
-        <Stars {rating} size={4} class="" />
+        <Stars {rating} size={4} />
         <p class="text-muted-foreground">
           {nbrOfReviews} recension{nbrOfReviews > 1 ? "er" : ""}
         </p>

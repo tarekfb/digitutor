@@ -34,7 +34,7 @@
   class=" m-8 flex min-w-[20rem] flex-col items-center gap-y-4 self-center text-center md:min-w-[48rem] md:gap-y-6 lg:min-w-[60rem]"
 >
   <div class="flex flex-col items-center gap-y-4 md:gap-y-6">
-    <PrimaryTitle class="whitespace-normal text-4xl font-normal md:text-5xl"
+    <PrimaryTitle class="text-4xl font-normal md:text-5xl"
       >{getTitle()}</PrimaryTitle
     >
     {#if code}
