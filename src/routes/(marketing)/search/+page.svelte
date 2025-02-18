@@ -42,7 +42,7 @@
     onUpdate({ form, result }) {
       if (form.valid && result.data) {
         results = result.data.formatted as SearchResultType[];
-        isInit = false;
+        if (isInit) isInit = false;
       }
     },
     resetForm: false,
@@ -54,7 +54,8 @@
     message,
     allErrors,
     submitting,
-    submit
+    submit,
+    // reset,
   } = searchForm;
 
   const {
@@ -88,7 +89,18 @@
     if ($formData.subjects) return $formData.subjects.split(" ")[0];
     if ($formData.query) return $formData.query;
     return $page.url.searchParams.get("q") ?? "";
-  }
+  };
+
+  // const getAll = () => {
+  //   if (isInit) isInit = false;
+  //   // reset();
+  //   $selected = undefined;
+  //   $formData.subjects = "";
+  //   $formData.query = "";
+  //   submit();
+  // };
+
+  $: console.log("query is", $formData.query);
 </script>
 
 <svelte:head>
@@ -102,6 +114,7 @@
     <PrimaryTitle class="heading self-center text-background md:mb-4"
       >Sök bland våra lärare</PrimaryTitle
     >
+    <!-- <SuperDebug data={$formData} /> -->
     <form
       class="flex w-full flex-col gap-y-4 bg-secondary text-center"
       action="?/search"
@@ -149,16 +162,14 @@
           class="w-28 flex-none md:w-64"
         >
           <Form.Control let:attrs>
-            <div class="relative">
-              <Input
-                {...attrs}
-                type="text"
-                autocomplete="false"
-                bind:value={$formData.query}
-                placeholder="Sök på lärare"
-                class="text-md rounded-l-none rounded-r-none bg-card text-muted-foreground placeholder:text-muted-foreground"
-              />
-            </div>
+            <Input
+              {...attrs}
+              type="text"
+              autocomplete="false"
+              bind:value={$formData.query}
+              placeholder="Sök på lärare"
+              class="text-md rounded-l-none rounded-r-none bg-card text-muted-foreground placeholder:text-muted-foreground"
+            />
           </Form.Control>
           <Form.FieldErrors />
         </Form.Field>
@@ -176,8 +187,14 @@
           {/if}
         </Button>
       </div>
+      <!-- <Button
+        variant="link"
+        class="normal-case text-background text-lg md:text-xl"
+        on:click={getAll}
+      >
+        Visa alla lärare</Button
+      > -->
     </form>
-    <!-- <FormMessage {message} scroll scrollTo="end" /> -->
     {#if $selected && $selected.length > 0}
       <ul class="flex w-full flex-wrap gap-2">
         <li>
@@ -258,10 +275,7 @@
       <FormMessage {message} scroll scrollTo="end" />
     </div>
   {:else if isInit && initResults.length > 0}
-    <SearchResultList
-      results={initResults}
-      searchTerm={getSearchTerm()}
-    />
+    <SearchResultList results={initResults} searchTerm={getSearchTerm()} />
   {:else if isInit && initResults.length === 0 && !$page.url.searchParams.get("q")}
     <!-- intentionally excluded !$formdata.subjects here because it can never be true with $!formdata.subjects (and subjects is reactive) -->
     {#if !$formData.subjects && !$submitting}
@@ -294,7 +308,7 @@
         <SearchSuggestion
           setSelected={(subjectName) => {
             $selected = [{ label: subjectName, value: subjectName }];
-            $formData
+            $formData;
           }}
         />
       {/if}

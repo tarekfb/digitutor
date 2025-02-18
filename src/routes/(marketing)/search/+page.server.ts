@@ -1,4 +1,4 @@
-import { getAll, search } from "src/lib/server/database/search.ts";
+import { search } from "src/lib/server/database/search.ts";
 import { getFailFormMessage } from "src/lib/shared/constants/constants.ts";
 import { fail, message, superValidate } from "sveltekit-superforms";
 import { zod } from "sveltekit-superforms/adapters";
@@ -62,39 +62,6 @@ export const load = (async ({ url, locals: { supabase } }) => {
 }) satisfies PageServerLoad;
 
 export const actions: Actions = {
-  getAll: async (event) => {
-    const {
-      locals: { supabase },
-    } = event;
-
-
-    try {
-      const listings = await getAll(supabase);
-      const formatted: SearchResult[] = listings.map((listing) => formatSearchResult(listing));
-      console.log(formatted);
-
-
-      return { formatted };
-    } catch (error) {
-      // if (isErrorWithCode(error)) {
-      //   if (error.code === ExternalErrorCodes.SyntaxError)
-      //     return message(
-      //       form,
-      //       getFailFormMessage(
-      //         "Ogiltiga karaktärer",
-      //         "Testa söka på något annat.",
-      //       ),
-      //       { status: 400 },
-      //     );
-      // }
-      console.error(
-        "Error",
-        error,
-      );
-      // return message(form, getFailFormMessage(), { status: 500 });
-      return { formatted: [] }
-    }
-  },
   search: async (event) => {
     const {
       locals: { supabase },
@@ -102,18 +69,22 @@ export const actions: Actions = {
 
     const form = await superValidate(event, zod(searchSchema));
     if (!form.valid) return fail(400, { form });
-    const { query, subjects } = form.data;
 
-    if (!query && (!subjects || subjects === "undefined"))
-      return fail(400, { form });
 
-    const cleanedQuery = cleanQuery(query ?? "", subjects);
-    if (!cleanedQuery) return fail(400, { form });
+    // "undefined" check to prevent corner case issue in frontend
+    let subjects = form.data.subjects.trim();
+    let query = form.data.query;
+    if (subjects === "undefined") subjects = "";
+    if (query === undefined || query === "undefined") query = "";
+
+    console.log("Before db call query was ", form.data.query, form.data.subjects);
+    console.log("and after cleanup ", subjects, query);
+
+    const cleanedQuery = (query || subjects) ? cleanQuery(query, subjects) : "";
 
     try {
       const listings = await search(supabase, cleanedQuery);
       const formatted: SearchResult[] = listings.map((listing) => formatSearchResult(listing));
-      console.log(formatted);
       return { form, formatted };
     } catch (error) {
       if (isErrorWithCode(error)) {

@@ -1,38 +1,30 @@
 import type { SupabaseClient } from "@supabase/supabase-js";
-import type {  DbSearchResult } from "src/lib/shared/models/listing.ts";
+import type { DbSearchResult } from "src/lib/shared/models/listing.ts";
 import type { Database } from "src/supabase.ts";
 
 export const search = async (
   supabase: SupabaseClient<Database>,
-  query: string,
+  inputQuery: string,
 ): Promise<DbSearchResult[]> => {
-  query = query
-    .trim()
-    .split(" ")
-    .map((word) => `'${word}'`)
-    .join(" | ");
-  // https://supabase.com/docs/guides/database/full-text-search?queryGroups=language&language=js#match-all-search-words
-
-  const { data, error } = await supabase
-    .from("searchable_listings")
-    .select("*")
-    .textSearch("compound_search", query);
+  const dbQuery = supabase.from("searchable_listings").select("*");
+  if (inputQuery) {
+    inputQuery = inputQuery
+      .trim()
+      .split(" ")
+      .map((word) => `'${word}'`)
+      .join(" | ");
+    // https://supabase.com/docs/guides/database/full-text-search?queryGroups=language&language=js#match-all-search-words
+    dbQuery.textSearch("compound_search", inputQuery);
+  }
+  const { data, error } = await dbQuery;
 
   if (error) {
-    console.error(`Error on search. Query: ${query}`, { error });
+    console.error(`Error on search. Query: ${inputQuery}`, { error });
     throw error;
   }
+
+  console.log("data was", { data });
+  console.log({ inputQuery });
 
   return data as unknown as DbSearchResult[];
 };
-
-export const getAll = async (supabase: SupabaseClient<Database>): Promise<DbSearchResult[]> => {
-  const { data, error } = await supabase.from("searchable_listings").select("*");
-
-  console.log(data);
-  if (error) {
-    console.error(`Error on search get all`, { error });
-    throw error;
-  }
-  return data as unknown as DbSearchResult[];
-}
