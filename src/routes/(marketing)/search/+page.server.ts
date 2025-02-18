@@ -1,4 +1,4 @@
-import { search } from "src/lib/server/database/search.ts";
+import { getAll, search } from "src/lib/server/database/search.ts";
 import { getFailFormMessage } from "src/lib/shared/constants/constants.ts";
 import { fail, message, superValidate } from "sveltekit-superforms";
 import { zod } from "sveltekit-superforms/adapters";
@@ -13,9 +13,9 @@ import {
   languages,
 } from "src/lib/shared/models/common.ts";
 import { cleanQuery, isErrorWithCode } from "src/lib/shared/utils/utils.ts";
-import { formatProfile } from "src/lib/shared/utils/profile/utils.ts";
 import { getSubjects } from "src/lib/server/database/subjects.ts";
 import { formatSubject, type Subject } from "src/lib/shared/models/subject.ts";
+import { formatSearchResult } from "src/lib/shared/utils/listing/utils.ts";
 
 export const load = (async ({ url, locals: { supabase } }) => {
   const query = url.searchParams.get("q") || "";
@@ -28,17 +28,7 @@ export const load = (async ({ url, locals: { supabase } }) => {
 
   try {
     const dbLlistings = await search(supabase, query);
-    initResults = dbLlistings.map((listing) => ({
-      id: listing.id,
-      title: listing.title,
-      description: listing.description ?? undefined,
-      hourlyPrice: listing.hourly_price,
-      firstName: listing.profile.first_name,
-      lastName: listing.profile.last_name,
-      avatar: listing.profile.avatar_url ?? undefined,
-      subjects: listing.subjects,
-      profile: formatProfile(listing.profile),
-    }));
+    initResults = dbLlistings.map((listing) => formatSearchResult(listing));
   } catch (error) {
     if (isErrorWithCode(error)) {
       if (error.code == ExternalErrorCodes.SyntaxError)
@@ -72,6 +62,39 @@ export const load = (async ({ url, locals: { supabase } }) => {
 }) satisfies PageServerLoad;
 
 export const actions: Actions = {
+  getAll: async (event) => {
+    const {
+      locals: { supabase },
+    } = event;
+
+
+    try {
+      const listings = await getAll(supabase);
+      const formatted: SearchResult[] = listings.map((listing) => formatSearchResult(listing));
+      console.log(formatted);
+
+
+      return { formatted };
+    } catch (error) {
+      // if (isErrorWithCode(error)) {
+      //   if (error.code === ExternalErrorCodes.SyntaxError)
+      //     return message(
+      //       form,
+      //       getFailFormMessage(
+      //         "Ogiltiga karaktärer",
+      //         "Testa söka på något annat.",
+      //       ),
+      //       { status: 400 },
+      //     );
+      // }
+      console.error(
+        "Error",
+        error,
+      );
+      // return message(form, getFailFormMessage(), { status: 500 });
+      return { formatted: [] }
+    }
+  },
   search: async (event) => {
     const {
       locals: { supabase },
@@ -89,20 +112,8 @@ export const actions: Actions = {
 
     try {
       const listings = await search(supabase, cleanedQuery);
-      const formatted: SearchResult[] = listings.map((listing) => {
-        return {
-          id: listing.id,
-          title: listing.title,
-          description: listing.description ?? undefined,
-          hourlyPrice: listing.hourly_price,
-          firstName: listing.profile.first_name,
-          lastName: listing.profile.last_name,
-          avatar: listing.profile.avatar_url ?? undefined,
-          subjects: listing.subjects,
-          profile: formatProfile(listing.profile),
-        };
-      });
-
+      const formatted: SearchResult[] = listings.map((listing) => formatSearchResult(listing));
+      console.log(formatted);
       return { form, formatted };
     } catch (error) {
       if (isErrorWithCode(error)) {

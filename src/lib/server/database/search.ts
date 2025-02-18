@@ -1,11 +1,11 @@
 import type { SupabaseClient } from "@supabase/supabase-js";
-import type { DbListingWithProfile } from "src/lib/shared/models/listing.ts";
+import type {  DbSearchResult } from "src/lib/shared/models/listing.ts";
 import type { Database } from "src/supabase.ts";
 
 export const search = async (
   supabase: SupabaseClient<Database>,
   query: string,
-): Promise<DbListingWithProfile[]> => {
+): Promise<DbSearchResult[]> => {
   query = query
     .trim()
     .split(" ")
@@ -14,16 +14,8 @@ export const search = async (
   // https://supabase.com/docs/guides/database/full-text-search?queryGroups=language&language=js#match-all-search-words
 
   const { data, error } = await supabase
-    .from("listings")
-    .select(
-      `
-      *,
-      profile (
-        *
-      )
-    `,
-    )
-    .eq("visible", true)
+    .from("searchable_listings")
+    .select("*")
     .textSearch("compound_search", query);
 
   if (error) {
@@ -31,5 +23,16 @@ export const search = async (
     throw error;
   }
 
-  return data as unknown as DbListingWithProfile[];
+  return data as unknown as DbSearchResult[];
 };
+
+export const getAll = async (supabase: SupabaseClient<Database>): Promise<DbSearchResult[]> => {
+  const { data, error } = await supabase.from("searchable_listings").select("*");
+
+  console.log(data);
+  if (error) {
+    console.error(`Error on search get all`, { error });
+    throw error;
+  }
+  return data as unknown as DbSearchResult[];
+}
