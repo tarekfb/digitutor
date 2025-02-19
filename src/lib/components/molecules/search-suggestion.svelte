@@ -21,17 +21,19 @@
 </script>
 
 {#if suggestions.length > 0}
-  <SecondaryTitle>Behöver du ett sökförslag?</SecondaryTitle>
-  <ul class="flex w-full justify-center gap-x-2 py-1">
-    {#each suggestions as subject}
-      <li>
-        <SearchSubjectButton
-          text={subject.title}
-          onClickCallback={setSuggestion}
-          class="border-2 border-third"
-          textStyling="text-third"
-        />
-      </li>
-    {/each}
-  </ul>
+  <div>
+    <SecondaryTitle class="mb-2">Behöver du ett sökförslag?</SecondaryTitle>
+    <ul class="flex w-full justify-center gap-x-2 py-1">
+      {#each suggestions as subject}
+        <li>
+          <SearchSubjectButton
+            text={subject.title}
+            onClickCallback={setSuggestion}
+            class="border-2 border-third"
+            textStyling="text-third"
+          />
+        </li>
+      {/each}
+    </ul>
+  </div>
 {/if}

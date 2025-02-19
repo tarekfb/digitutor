@@ -141,7 +141,7 @@
       method="POST"
       use:enhance
     >
-      <div class="flex min-w-72 items-start">
+      <div class="flex min-w-72 items-start border-testing">
         <Form.Field form={searchForm} name="subjects" class="w-20 flex-auto">
           <Form.Control let:attrs>
             <div class="flex flex-col gap-1">

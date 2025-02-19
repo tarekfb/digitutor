@@ -1,4 +1,4 @@
-export const handleUndefinedInFormData = (data: {
+const handleUndefinedInFormData = (data: {
     subjects: string;
     query?: string | undefined;
 }): { subjects: string, query: string } => {
@@ -11,7 +11,7 @@ export const handleUndefinedInFormData = (data: {
     return { subjects, query };
 };
 
-export const cleanQuery = (
+const cleanQuery = (
     rawQuery: string,
     commaSeparatedSubjects: string,
     shouldEncode: boolean = false,
@@ -24,6 +24,7 @@ export const cleanQuery = (
             : rawQuery.trim();
     if (commaSeparatedSubjects && commaSeparatedSubjects !== "undefined")
         cleanedQuery += `${rawQuery ? " " : ""}${shouldEncode ? encodeURIComponent(commaSeparatedSubjects.trim()) : commaSeparatedSubjects.trim()}`;
+
     return cleanedQuery;
 };
 

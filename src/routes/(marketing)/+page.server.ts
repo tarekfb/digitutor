@@ -13,7 +13,7 @@ import { formatReviewWithReferences } from "src/lib/shared/utils/reviews/utils.t
 import { formatSubject, type Subject } from "src/lib/shared/models/subject.ts";
 import { languages } from "src/lib/shared/models/common.ts";
 import { getSubjects } from "src/lib/server/database/subjects.ts";
-import { cleanQuery, getQueryFromFormData } from "src/lib/shared/utils/search/utils.ts";
+import { getQueryFromFormData } from "src/lib/shared/utils/search/utils.ts";
 
 export const load: PageServerLoad = async ({ locals: { supabase } }) => {
   const form = await superValidate(zod(searchSchema));
@@ -64,7 +64,7 @@ export const actions: Actions = {
     const form = await superValidate(event, zod(searchSchema));
     if (!form.valid) return fail(400, { form });
 
-    const query = getQueryFromFormData(form.data);
+    const query = getQueryFromFormData(form.data, true);
     redirect(302, query ? `/search/?q=${query}` : `/search?getAll=true`);
   },
 };

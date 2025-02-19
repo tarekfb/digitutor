@@ -56,7 +56,7 @@
       </div>
     </div>
 
-    <div class="mt-0 flex flex-col items-center text-center md:mt-4">
+    <div class="mt-0 flex w-full max-w-screen-sm flex-col items-center text-center md:mt-4">
       <Link href="/search" class="md:mb-2">
         <h2
           class="heading flex items-center gap-x-2 px-2 text-xl font-semibold text-background md:text-3xl"
@@ -64,17 +64,15 @@
           <Search class="size-4 md:size-6" /> Sök bland våra lärare
         </h2>
       </Link>
-      <div
-        class="flex w-full max-w-screen-sm flex-col items-center justify-center gap-y-4"
-      >
-        <SearchForm form={data.form} {subjects} />
-      </div>
       <Link
-        class="text-md normal-case text-background md:text-lg"
+        class="text-md mb-2 normal-case text-background md:text-lg"
         href="/search?getAll=true"
       >
         Visa alla</Link
       >
+      <div class="flex w-full flex-col items-center justify-center">
+        <SearchForm form={data.form} {subjects} />
+      </div>
     </div>
     <h3 class="mt-4 md:mt-6">
       <span
