@@ -95,7 +95,10 @@
   const getAll = async () => {
     if (isInit) isInit = false;
     $selected = undefined;
-    reset({ newState: { subjects: "", query: "" } });
+    reset({
+      newState: { subjects: "", query: "" },
+      data: { subjects: "", query: "" },
+    });
     const queryInput = document.getElementById(
       "query-input",
     ) as HTMLInputElement | null;
@@ -120,7 +123,7 @@
       class="text-md -my-4 normal-case text-background md:text-lg"
       on:click={getAll}
     >
-      Eller visa alla</Button
+      Visa alla</Button
     >
     <form
       class="flex w-full flex-col gap-y-4 bg-secondary text-center"

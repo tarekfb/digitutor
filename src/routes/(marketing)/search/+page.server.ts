@@ -18,13 +18,14 @@ import { formatSubject, type Subject } from "src/lib/shared/models/subject.ts";
 import { formatSearchResult } from "src/lib/shared/utils/listing/utils.ts";
 
 export const load = (async ({ url, locals: { supabase } }) => {
-  const query = url.searchParams.get("q") || "";
+  const query = url.searchParams.get("q") || ""; // falsy query will get all
+  const getAll = url.searchParams.get("getAll");
   const form = await superValidate(zod(searchSchema));
 
   let initMessage: Message | undefined;
   let initResults: SearchResult[] = [];
 
-  if (!query) return { form, initResults, initMessage };
+  if (!query && !getAll) return { form, initResults, initMessage };
 
   try {
     const dbLlistings = await search(supabase, query);
@@ -72,17 +73,14 @@ export const actions: Actions = {
 
     // "undefined" check to prevent corner case issue in frontend
     let subjects = form.data.subjects.trim();
-    let query = form.data.query;
+    let freeText = form.data.query;
     if (subjects === "undefined") subjects = "";
-    if (query === undefined || query === "undefined") query = "";
+    if (freeText === undefined || freeText === "undefined") freeText = "";
 
-    console.log("Before db call query was ", form.data.query, form.data.subjects);
-    console.log("and after cleanup ", subjects, query);
-
-    const cleanedQuery = (query || subjects) ? cleanQuery(query, subjects) : "";
+    const query = (freeText || subjects) ? cleanQuery(freeText, subjects) : "";
 
     try {
-      const listings = await search(supabase, cleanedQuery);
+      const listings = await search(supabase, query);
       const formatted: SearchResult[] = listings.map((listing) => formatSearchResult(listing));
       return { form, formatted };
     } catch (error) {
@@ -98,7 +96,7 @@ export const actions: Actions = {
           );
       }
       console.error(
-        "Error searching for teachers with following search: " + query,
+        "Error searching for teachers with following search: " + freeText,
         error,
       );
       return message(form, getFailFormMessage(), { status: 500 });

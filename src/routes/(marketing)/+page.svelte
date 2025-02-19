@@ -56,19 +56,27 @@
       </div>
     </div>
 
-    <Link href="/search" class="mb-2 md:mb-0 md:mt-6 ">
-      <h2
-        class="heading flex items-center gap-x-2 px-2 text-xl font-semibold text-background md:text-3xl"
+    <div class="mt-0 flex flex-col items-center text-center md:mt-4">
+      <Link href="/search" class="md:mb-2">
+        <h2
+          class="heading flex items-center gap-x-2 px-2 text-xl font-semibold text-background md:text-3xl"
+        >
+          <Search class="size-4 md:size-6" /> Sök bland våra lärare
+        </h2>
+      </Link>
+      <div
+        class="flex w-full max-w-screen-sm flex-col items-center justify-center gap-y-4"
       >
-        <Search class="size-4 md:size-6" /> Sök bland våra lärare
-      </h2>
-    </Link>
-    <div
-      class="flex w-full max-w-screen-sm flex-col items-center justify-center gap-y-4 md:mt-4"
-    >
-      <SearchForm form={data.form} {subjects} />
+        <SearchForm form={data.form} {subjects} />
+      </div>
+      <Link
+        class="text-md normal-case text-background md:text-lg"
+        href="/search?getAll=true"
+      >
+        Visa alla</Link
+      >
     </div>
-    <h3>
+    <h3 class="mt-4 md:mt-6">
       <span
         class=" flex items-center justify-center gap-y-2 text-xl text-background md:text-3xl"
       >
