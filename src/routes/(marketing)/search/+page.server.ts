@@ -70,7 +70,6 @@ export const actions: Actions = {
     const form = await superValidate(event, zod(searchSchema));
     if (!form.valid) return fail(400, { form });
 
-
     // "undefined" check to prevent corner case issue in frontend
     let subjects = form.data.subjects.trim();
     let query = form.data.query;

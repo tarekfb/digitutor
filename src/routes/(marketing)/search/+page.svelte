@@ -47,6 +47,7 @@
     },
     resetForm: false,
   });
+
   const {
     form: formData,
     enhance,
@@ -55,7 +56,7 @@
     allErrors,
     submitting,
     submit,
-    // reset,
+    reset,
   } = searchForm;
 
   const {
@@ -91,16 +92,16 @@
     return $page.url.searchParams.get("q") ?? "";
   };
 
-  // const getAll = () => {
-  //   if (isInit) isInit = false;
-  //   // reset();
-  //   $selected = undefined;
-  //   $formData.subjects = "";
-  //   $formData.query = "";
-  //   submit();
-  // };
-
-  $: console.log("query is", $formData.query);
+  const getAll = async () => {
+    if (isInit) isInit = false;
+    $selected = undefined;
+    reset({ newState: { subjects: "", query: "" } });
+    const queryInput = document.getElementById(
+      "query-input",
+    ) as HTMLInputElement | null;
+    if (queryInput) queryInput.value = "";
+    submit();
+  };
 </script>
 
 <svelte:head>
@@ -114,7 +115,13 @@
     <PrimaryTitle class="heading self-center text-background md:mb-4"
       >Sök bland våra lärare</PrimaryTitle
     >
-    <!-- <SuperDebug data={$formData} /> -->
+    <Button
+      variant="link"
+      class="text-md -my-4 normal-case text-background md:text-lg"
+      on:click={getAll}
+    >
+      Eller visa alla</Button
+    >
     <form
       class="flex w-full flex-col gap-y-4 bg-secondary text-center"
       action="?/search"
@@ -164,6 +171,7 @@
           <Form.Control let:attrs>
             <Input
               {...attrs}
+              id="query-input"
               type="text"
               autocomplete="false"
               bind:value={$formData.query}
@@ -187,13 +195,6 @@
           {/if}
         </Button>
       </div>
-      <!-- <Button
-        variant="link"
-        class="normal-case text-background text-lg md:text-xl"
-        on:click={getAll}
-      >
-        Visa alla lärare</Button
-      > -->
     </form>
     {#if $selected && $selected.length > 0}
       <ul class="flex w-full flex-wrap gap-2">
