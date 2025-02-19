@@ -18,7 +18,7 @@
 </script>
 
 <div class="flex w-full flex-col gap-x-4 gap-y-4 overflow-x-hidden">
-  {#if result.avatar}
+  {#if result.profile.avatarUrl}
     <div class="flex gap-x-4">
       <div class="flex flex-shrink-0 flex-col gap-y-2 md:gap-y-4">
         <a
@@ -27,7 +27,7 @@
           class="flex-shrink-0"
         >
           <img
-            src={result.avatar}
+            src={result.profile.avatarUrl}
             alt="profile avatar"
             class="size-24 rounded-md object-cover md:size-36"
           />

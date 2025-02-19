@@ -12,33 +12,25 @@ import {
   ExternalErrorCodes,
   languages,
 } from "src/lib/shared/models/common.ts";
-import { cleanQuery, isErrorWithCode } from "src/lib/shared/utils/utils.ts";
-import { formatProfile } from "src/lib/shared/utils/profile/utils.ts";
+import { isErrorWithCode } from "src/lib/shared/utils/utils.ts";
 import { getSubjects } from "src/lib/server/database/subjects.ts";
 import { formatSubject, type Subject } from "src/lib/shared/models/subject.ts";
+import { formatSearchResult } from "src/lib/shared/utils/listing/utils.ts";
+import { cleanQuery, getQueryFromFormData, handleUndefinedInFormData } from "src/lib/shared/utils/search/utils.ts";
 
 export const load = (async ({ url, locals: { supabase } }) => {
-  const query = url.searchParams.get("q") || "";
+  const query = url.searchParams.get("q") || ""; // falsy query will get all
+  const getAll = url.searchParams.get("getAll");
   const form = await superValidate(zod(searchSchema));
 
   let initMessage: Message | undefined;
   let initResults: SearchResult[] = [];
 
-  if (!query) return { form, initResults, initMessage };
+  if (!query && !getAll) return { form, initResults, initMessage };
 
   try {
     const dbLlistings = await search(supabase, query);
-    initResults = dbLlistings.map((listing) => ({
-      id: listing.id,
-      title: listing.title,
-      description: listing.description ?? undefined,
-      hourlyPrice: listing.hourly_price,
-      firstName: listing.profile.first_name,
-      lastName: listing.profile.last_name,
-      avatar: listing.profile.avatar_url ?? undefined,
-      subjects: listing.subjects,
-      profile: formatProfile(listing.profile),
-    }));
+    initResults = dbLlistings.map((listing) => formatSearchResult(listing));
   } catch (error) {
     if (isErrorWithCode(error)) {
       if (error.code == ExternalErrorCodes.SyntaxError)
@@ -79,30 +71,11 @@ export const actions: Actions = {
 
     const form = await superValidate(event, zod(searchSchema));
     if (!form.valid) return fail(400, { form });
-    const { query, subjects } = form.data;
-
-    if (!query && (!subjects || subjects === "undefined"))
-      return fail(400, { form });
-
-    const cleanedQuery = cleanQuery(query ?? "", subjects);
-    if (!cleanedQuery) return fail(400, { form });
+    const query = getQueryFromFormData(form.data);
 
     try {
-      const listings = await search(supabase, cleanedQuery);
-      const formatted: SearchResult[] = listings.map((listing) => {
-        return {
-          id: listing.id,
-          title: listing.title,
-          description: listing.description ?? undefined,
-          hourlyPrice: listing.hourly_price,
-          firstName: listing.profile.first_name,
-          lastName: listing.profile.last_name,
-          avatar: listing.profile.avatar_url ?? undefined,
-          subjects: listing.subjects,
-          profile: formatProfile(listing.profile),
-        };
-      });
-
+      const listings = await search(supabase, query);
+      const formatted: SearchResult[] = listings.map((listing) => formatSearchResult(listing));
       return { form, formatted };
     } catch (error) {
       if (isErrorWithCode(error)) {

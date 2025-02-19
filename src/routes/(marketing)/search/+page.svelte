@@ -42,11 +42,12 @@
     onUpdate({ form, result }) {
       if (form.valid && result.data) {
         results = result.data.formatted as SearchResultType[];
-        isInit = false;
+        if (isInit) isInit = false;
       }
     },
     resetForm: false,
   });
+
   const {
     form: formData,
     enhance,
@@ -54,7 +55,8 @@
     message,
     allErrors,
     submitting,
-    submit
+    submit,
+    reset,
   } = searchForm;
 
   const {
@@ -88,7 +90,31 @@
     if ($formData.subjects) return $formData.subjects.split(" ")[0];
     if ($formData.query) return $formData.query;
     return $page.url.searchParams.get("q") ?? "";
-  }
+  };
+
+  const resetForm = () => {
+    if (isInit) isInit = false;
+    if ($selected) $selected = undefined;
+    reset({
+      newState: { subjects: "", query: "" },
+      data: { subjects: "", query: "" },
+    });
+    const queryInput = document.getElementById(
+      "query-input",
+    ) as HTMLInputElement | null;
+    if (queryInput) queryInput.value = "";
+  };
+
+  const getAll = async () => {
+    resetForm();
+    submit();
+  };
+
+  const setSuggestion = (subjectName: string): void => {
+    resetForm();
+    $selected = [{ label: subjectName, value: subjectName }];
+    submit();
+  };
 </script>
 
 <svelte:head>
@@ -101,6 +127,13 @@
   <div class="flex w-full max-w-screen-sm flex-col gap-y-4">
     <PrimaryTitle class="heading self-center text-background md:mb-4"
       >Sök bland våra lärare</PrimaryTitle
+    >
+    <Button
+      variant="link"
+      class="text-md -my-4 normal-case text-background md:text-lg"
+      on:click={getAll}
+    >
+      Visa alla</Button
     >
     <form
       class="flex w-full flex-col gap-y-4 bg-secondary text-center"
@@ -149,16 +182,15 @@
           class="w-28 flex-none md:w-64"
         >
           <Form.Control let:attrs>
-            <div class="relative">
-              <Input
-                {...attrs}
-                type="text"
-                autocomplete="false"
-                bind:value={$formData.query}
-                placeholder="Sök på lärare"
-                class="text-md rounded-l-none rounded-r-none bg-card text-muted-foreground placeholder:text-muted-foreground"
-              />
-            </div>
+            <Input
+              {...attrs}
+              id="query-input"
+              type="text"
+              autocomplete="false"
+              bind:value={$formData.query}
+              placeholder="Sök på lärare"
+              class="text-md rounded-l-none rounded-r-none bg-card text-muted-foreground placeholder:text-muted-foreground"
+            />
           </Form.Control>
           <Form.FieldErrors />
         </Form.Field>
@@ -177,7 +209,6 @@
         </Button>
       </div>
     </form>
-    <!-- <FormMessage {message} scroll scrollTo="end" /> -->
     {#if $selected && $selected.length > 0}
       <ul class="flex w-full flex-wrap gap-2">
         <li>
@@ -257,22 +288,12 @@
     <div class={messageStyling}>
       <FormMessage {message} scroll scrollTo="end" />
     </div>
-  {:else if isInit && initResults.length > 0}
-    <SearchResultList
-      results={initResults}
-      searchTerm={getSearchTerm()}
-    />
+  {:else if isInit && initResults.length > 0 && !$submitting}
+    <SearchResultList results={initResults} searchTerm={getSearchTerm()} />
   {:else if isInit && initResults.length === 0 && !$page.url.searchParams.get("q")}
     <!-- intentionally excluded !$formdata.subjects here because it can never be true with $!formdata.subjects (and subjects is reactive) -->
-    {#if !$formData.subjects && !$submitting}
-      <SearchSuggestion
-        setSelected={(subjectName) => {
-          $selected = [{ label: subjectName, value: subjectName }];
-          submit();
-        }}
-      />
-    {/if}
-  {:else if initMessage}
+    <SearchSuggestion {setSuggestion} />
+  {:else if initMessage && !$submitting}
     <div class={messageStyling}>
       <AlertMessage
         title={initMessage.title}
@@ -290,14 +311,7 @@
           description="Testa söka på en lärares namn, eller en annons titel, beskrivning eller pris."
         />
       </div>
-      {#if !$formData.subjects && !$submitting}
-        <SearchSuggestion
-          setSelected={(subjectName) => {
-            $selected = [{ label: subjectName, value: subjectName }];
-            $formData
-          }}
-        />
-      {/if}
+      <SearchSuggestion {setSuggestion} />
     </div>
   {/if}
 </RootContainer>

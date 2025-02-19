@@ -180,8 +180,9 @@
             </p>
             <Textarea
               {...attrs}
+              class="max-h-[500px] min-h-32 resize-y bg-card md:max-h-[700px]"
+              style={"field-sizing: content"}
               placeholder="Skriv några ord om din annons..."
-              class="resize-y bg-card"
               bind:value={$form.description}
             />
           </Form.Control>
