@@ -13,13 +13,12 @@ import { formatReviewWithReferences } from "src/lib/shared/utils/reviews/utils.t
 import { formatSubject, type Subject } from "src/lib/shared/models/subject.ts";
 import { languages } from "src/lib/shared/models/common.ts";
 import { getSubjects } from "src/lib/server/database/subjects.ts";
-import { cleanQuery } from "src/lib/shared/utils/utils.ts";
+import { cleanQuery, getQueryFromFormData } from "src/lib/shared/utils/search/utils.ts";
 
 export const load: PageServerLoad = async ({ locals: { supabase } }) => {
   const form = await superValidate(zod(searchSchema));
 
   // todo: not used or tested atm, but must bring back.
-
   // let displayProfiles: DisplayProfile[] = [];
   // try {
   //   const unformatted = await getTopTeacherByReviews(supabase, 5);
@@ -64,12 +63,8 @@ export const actions: Actions = {
   search: async (event) => {
     const form = await superValidate(event, zod(searchSchema));
     if (!form.valid) return fail(400, { form });
-    const { query, subjects } = form.data;
-    if (!query && (!subjects || subjects === "undefined"))
-      return fail(400, { form });
 
-    const cleanedQuery = cleanQuery(query ?? "", subjects, true);
-    if (!cleanedQuery) return fail(400, { form });
-    redirect(302, `/search/?q=${cleanedQuery}`);
+    const query = getQueryFromFormData(form.data);
+    redirect(302, query ? `/search/?q=${query}` : `/search?getAll=true`);
   },
 };

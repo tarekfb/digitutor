@@ -19,12 +19,9 @@ export const search = async (
   const { data, error } = await dbQuery;
 
   if (error) {
-    console.error(`Error on search. Query: ${inputQuery}`, { error });
+    console.error(`Error on search. Query: '${inputQuery}'. If query empty, tried to return all`, { error });
     throw error;
   }
-
-  console.log("data was", { data });
-  console.log({ inputQuery });
 
   return data as unknown as DbSearchResult[];
 };

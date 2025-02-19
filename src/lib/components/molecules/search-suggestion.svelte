@@ -4,7 +4,7 @@
   import SecondaryTitle from "../atoms/secondary-title.svelte";
   import type { Subject } from "src/lib/shared/models/subject.ts";
 
-  export let setSelected: (subjectName: string) => void;
+  export let setSuggestion: (subjectName: string) => void;
 
   const getSuggestions = (): Subject[] => {
     const js = languages.find((subject) => subject.title === "JavaScript");
@@ -27,7 +27,7 @@
       <li>
         <SearchSubjectButton
           text={subject.title}
-          onClickCallback={setSelected}
+          onClickCallback={setSuggestion}
           class="border-2 border-third"
           textStyling="text-third"
         />

@@ -12,10 +12,11 @@ import {
   ExternalErrorCodes,
   languages,
 } from "src/lib/shared/models/common.ts";
-import { cleanQuery, isErrorWithCode } from "src/lib/shared/utils/utils.ts";
+import { isErrorWithCode } from "src/lib/shared/utils/utils.ts";
 import { getSubjects } from "src/lib/server/database/subjects.ts";
 import { formatSubject, type Subject } from "src/lib/shared/models/subject.ts";
 import { formatSearchResult } from "src/lib/shared/utils/listing/utils.ts";
+import { cleanQuery, getQueryFromFormData, handleUndefinedInFormData } from "src/lib/shared/utils/search/utils.ts";
 
 export const load = (async ({ url, locals: { supabase } }) => {
   const query = url.searchParams.get("q") || ""; // falsy query will get all
@@ -70,14 +71,7 @@ export const actions: Actions = {
 
     const form = await superValidate(event, zod(searchSchema));
     if (!form.valid) return fail(400, { form });
-
-    // "undefined" check to prevent corner case issue in frontend
-    let subjects = form.data.subjects.trim();
-    let freeText = form.data.query;
-    if (subjects === "undefined") subjects = "";
-    if (freeText === undefined || freeText === "undefined") freeText = "";
-
-    const query = (freeText || subjects) ? cleanQuery(freeText, subjects) : "";
+    const query = getQueryFromFormData(form.data);
 
     try {
       const listings = await search(supabase, query);
@@ -96,7 +90,7 @@ export const actions: Actions = {
           );
       }
       console.error(
-        "Error searching for teachers with following search: " + freeText,
+        "Error searching for teachers with following search: " + query,
         error,
       );
       return message(form, getFailFormMessage(), { status: 500 });

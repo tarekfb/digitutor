@@ -92,9 +92,9 @@
     return $page.url.searchParams.get("q") ?? "";
   };
 
-  const getAll = async () => {
+  const resetForm = () => {
     if (isInit) isInit = false;
-    $selected = undefined;
+    if ($selected) $selected = undefined;
     reset({
       newState: { subjects: "", query: "" },
       data: { subjects: "", query: "" },
@@ -103,6 +103,16 @@
       "query-input",
     ) as HTMLInputElement | null;
     if (queryInput) queryInput.value = "";
+  };
+
+  const getAll = async () => {
+    resetForm();
+    submit();
+  };
+
+  const setSuggestion = (subjectName: string): void => {
+    resetForm();
+    $selected = [{ label: subjectName, value: subjectName }];
     submit();
   };
 </script>
@@ -278,19 +288,12 @@
     <div class={messageStyling}>
       <FormMessage {message} scroll scrollTo="end" />
     </div>
-  {:else if isInit && initResults.length > 0}
+  {:else if isInit && initResults.length > 0 && !$submitting}
     <SearchResultList results={initResults} searchTerm={getSearchTerm()} />
   {:else if isInit && initResults.length === 0 && !$page.url.searchParams.get("q")}
     <!-- intentionally excluded !$formdata.subjects here because it can never be true with $!formdata.subjects (and subjects is reactive) -->
-    {#if !$formData.subjects && !$submitting}
-      <SearchSuggestion
-        setSelected={(subjectName) => {
-          $selected = [{ label: subjectName, value: subjectName }];
-          submit();
-        }}
-      />
-    {/if}
-  {:else if initMessage}
+    <SearchSuggestion {setSuggestion} />
+  {:else if initMessage && !$submitting}
     <div class={messageStyling}>
       <AlertMessage
         title={initMessage.title}
@@ -308,14 +311,7 @@
           description="Testa söka på en lärares namn, eller en annons titel, beskrivning eller pris."
         />
       </div>
-      {#if !$formData.subjects && !$submitting}
-        <SearchSuggestion
-          setSelected={(subjectName) => {
-            $selected = [{ label: subjectName, value: subjectName }];
-            $formData;
-          }}
-        />
-      {/if}
+      <SearchSuggestion {setSuggestion} />
     </div>
   {/if}
 </RootContainer>

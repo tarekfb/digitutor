@@ -227,19 +227,3 @@ export const loadContactTeacherForms = async (
   );
   return { requestContactForm, startContactForm };
 };
-
-export const cleanQuery = (
-  rawQuery: string,
-  commaSeparatedSubjects: string,
-  shouldEncode: boolean = false,
-) => {
-  // trim and && "undefined" is for client side bug prevention
-  let cleanedQuery: string = "";
-  if (rawQuery && rawQuery !== "undefined")
-    cleanedQuery = shouldEncode
-      ? encodeURIComponent(rawQuery.trim())
-      : rawQuery.trim();
-  if (commaSeparatedSubjects && commaSeparatedSubjects !== "undefined")
-    cleanedQuery += `${rawQuery ? " " : ""}${shouldEncode ? encodeURIComponent(commaSeparatedSubjects.trim()) : commaSeparatedSubjects.trim()}`;
-  return cleanedQuery;
-};
