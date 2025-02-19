@@ -133,7 +133,8 @@
             <Textarea
               {...attrs}
               placeholder="Skriv en text om dig själv som lärare..."
-              class="max-h-[700px] min-h-32 resize-y"
+              class="max-h-[500px] md:max-h-[700px] min-h-32 resize-y"
+              style={"field-sizing: content"}
               bind:value={$bioData.bio}
             />
           </Form.Control>
