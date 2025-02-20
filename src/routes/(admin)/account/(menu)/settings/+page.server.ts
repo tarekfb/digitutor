@@ -46,13 +46,7 @@ export const load: PageServerLoad = async ({
     profile: { avatarUrl, firstName, bio },
   } = await parent();
 
-  const updateNameForm = await superValidate(
-    {
-      firstName,
-      lastName,
-    },
-    zod(nameSchema),
-  );
+  const updateNameForm = await superValidate({ firstName, }, zod(nameSchema),);
   const updateBioForm = await superValidate(
     { bio: bio ?? "" },
     zod(updateBioSchema),
@@ -118,12 +112,11 @@ export const actions = {
 
     const form = await superValidate(event, zod(nameSchema));
     if (!form.valid) return fail(400, { form });
-    const { firstName, lastName } = form.data;
+    const { firstName } = form.data;
 
     const profileInput: ProfileInput = {
       id: user.id,
       first_name: firstName.trim(),
-      last_name: lastName.trim(),
     };
 
     try {

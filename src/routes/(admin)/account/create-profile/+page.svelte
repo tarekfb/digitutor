@@ -60,17 +60,6 @@
           </Form.Control>
           <Form.FieldErrors />
         </Form.Field>
-        <Form.Field form={completeProfileForm} name="lastName">
-          <Form.Control let:attrs>
-            <Input
-              {...attrs}
-              type="text"
-              bind:value={$formData.lastName}
-              placeholder="Efternamn"
-            />
-          </Form.Control>
-          <Form.FieldErrors />
-        </Form.Field>
       </Card.Content>
       <Card.Footer class="justify-center">
         <Button type="submit" disabled={$allErrors.length > 0 || $delayed}>

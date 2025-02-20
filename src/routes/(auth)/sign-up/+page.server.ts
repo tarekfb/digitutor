@@ -59,7 +59,6 @@ export const actions = {
 
     const { password, role, } = form.data;
     const firstName = form.data.firstName.trim();
-    const lastName = form.data.lastName.trim();
     const email = form.data.email.trim();
 
     let inputUser: CreateProfile;
@@ -102,7 +101,6 @@ export const actions = {
         id: data.user.id,
         role,
         firstName,
-        lastName,
       };
     } catch (error) {
       console.error("Error when creating supabase auth user", error);

@@ -46,7 +46,6 @@ export type AddReviewSchema = typeof addReviewSchema;
 export type DbDisplayProfile = {
   id: string;
   first_name: string;
-  last_name: string;
   avatar_url: string | null;
   avg_rating: number | null;
   subjects: number[];

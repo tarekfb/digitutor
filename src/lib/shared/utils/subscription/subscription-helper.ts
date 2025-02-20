@@ -34,7 +34,7 @@ export const getOrCreateCustomerId = async ({
   // Fetch data needed to create customer
   const { data: profile, error: profileError } = await supabaseServiceRole
     .from("profiles")
-    .select(`first_name, last_name`)
+    .select(`first_name`)
     .eq("id", user.id)
     .single();
   if (profileError) return { error: profileError };
@@ -44,7 +44,7 @@ export const getOrCreateCustomerId = async ({
   try {
     customer = await stripe.customers.create({
       email: user.email,
-      name: `${profile.first_name} ${profile.last_name}`.trim() ?? "",
+      name: `${profile.first_name}`.trim() ?? "",
       metadata: {
         user_id: user.id,
       },

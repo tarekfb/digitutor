@@ -162,18 +162,6 @@
         <Form.FieldErrors />
       </Form.Field>
 
-      <Form.Field form={nameForm} name="lastName">
-        <Form.Control let:attrs>
-          <Form.Label>Efternamn</Form.Label>
-          <Input
-            {...attrs}
-            type="text"
-            bind:value={$nameData.lastName}
-            placeholder="Efternamn"
-          />
-        </Form.Control>
-        <Form.FieldErrors />
-      </Form.Field>
     </SettingsForm>
 
     <SettingsForm

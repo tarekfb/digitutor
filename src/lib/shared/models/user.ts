@@ -2,7 +2,7 @@ import type { TypeToZod } from "src/lib/shared/utils/utils.ts";
 import { z } from "zod";
 import { type Profile } from "./profile.ts";
 
-export type SignUpUser = Pick<Profile, "role" | "firstName" | "lastName"> & {
+export type SignUpUser = Pick<Profile, "role" | "firstName"> & {
   email: string;
   password: string;
   terms: boolean;
@@ -13,10 +13,6 @@ export const signUpUserFields: TypeToZod<SignUpUser> = {
   password: z.string().min(5, "Måste vara minst 5 karaktärer."),
   role: z.enum(["student", "teacher", "admin"]),
   firstName: z
-    .string()
-    .min(1, "Får inte vara tomt.")
-    .max(50, "Får inte vara mer än 50 karaktärer."),
-  lastName: z
     .string()
     .min(1, "Får inte vara tomt.")
     .max(50, "Får inte vara mer än 50 karaktärer."),
