@@ -451,7 +451,6 @@ export type Database = {
         Returns: {
           id: string
           first_name: string
-          last_name: string
           avatar_url: string
           avg_rating: number
           subjects: number[]
