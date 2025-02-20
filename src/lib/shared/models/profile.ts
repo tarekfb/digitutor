@@ -14,7 +14,6 @@ export type Profile = Omit<
   "created_at" | "updated_at" | "first_name" | "last_name" | "avatar_url"
 > & {
   firstName: string;
-  lastName: string;
   avatarUrl?: string;
 };
 

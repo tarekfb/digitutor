@@ -28,7 +28,5 @@ export type SearchResult = {
   description?: string;
   hourlyPrice: number;
   subjects: number[];
-  profile: Omit<Profile, "lastName" | "bio"> & {
-    lastInitial: string
-  };
+  profile: Omit<Profile, "bio">
 };

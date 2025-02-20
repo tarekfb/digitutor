@@ -43,7 +43,7 @@ export const load: PageServerLoad = async ({
   if (!session) throw redirect(303, "/sign-in");
 
   const {
-    profile: { avatarUrl, firstName, lastName, bio },
+    profile: { avatarUrl, firstName, bio },
   } = await parent();
 
   const updateNameForm = await superValidate(

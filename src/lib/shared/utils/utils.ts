@@ -91,11 +91,9 @@ export type TypeToZod<T> = {
 
 export const convertToInitials = (
   firstName: string,
-  lastName: string,
 ): string => {
-  if (!lastName && firstName) return firstName[0].toUpperCase();
-  if (!firstName && !lastName) return "?";
-  return (firstName[0] + lastName[0]).toUpperCase();
+  if (!firstName) return "?";
+  return firstName[0].toUpperCase();
 };
 
 export const getNow = () => new Date().toISOString();
@@ -173,7 +171,7 @@ export const formatBytes = (bytes: number, decimals = 2) => {
 export const truncate = (text: string, limit: number): { text: string, truncated: boolean } => {
   if (text.split(" ").length > limit) {
     const truncatedText = text.split(" ").slice(0, limit).join(" ");
-    return {text:`${truncatedText}...`, truncated: true};
+    return { text: `${truncatedText}...`, truncated: true };
   }
   return { text, truncated: false };
 };

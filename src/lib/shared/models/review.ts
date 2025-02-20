@@ -55,7 +55,6 @@ export type DbDisplayProfile = {
 export type DisplayProfile = {
   id: string;
   firstName: string;
-  lastName: string;
   avatarUrl: string | null;
   avgRating: number;
   subjects: number[];

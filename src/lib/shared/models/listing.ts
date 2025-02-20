@@ -18,7 +18,6 @@ export type DbSearchResult =  {
   updated_at: DbListingBase["updated_at"];
   profile_id: DbProfile["id"];
   first_name: DbProfile["first_name"];
-  last_initial: string;
   avatar_url: DbProfile["avatar_url"];
   profile_created_at: DbProfile["created_at"];
   profile_updated_at: DbProfile["updated_at"];

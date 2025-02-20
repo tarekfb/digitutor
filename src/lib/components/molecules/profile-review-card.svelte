@@ -25,7 +25,6 @@
             <Avatar
               url={sender.avatarUrl ?? ""}
               firstName={sender.firstName}
-              lastName={sender.lastName}
               role={sender.role}
               class="h-8 w-8 text-sm"
             />

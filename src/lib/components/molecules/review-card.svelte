@@ -26,7 +26,6 @@
           <Avatar
             url={review.sender.avatarUrl ?? ""}
             firstName={review.sender.firstName}
-            lastName={review.sender.lastName}
             role={review.sender.role}
             class="h-8 w-8 text-sm"
           />

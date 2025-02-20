@@ -11,10 +11,9 @@
   export let url: string = "";
   export let role: "teacher" | "student" | "admin" | "" = "";
   export let firstName: string;
-  export let lastName: string;
   export let size = "10";
 
-  let initials = convertToInitials(firstName, lastName);
+  let initials = convertToInitials(firstName);
 
   const fallback = `text-background bg-accent w-${size} h-${size}`;
 </script>

@@ -16,7 +16,7 @@ import { isErrorWithCode } from "src/lib/shared/utils/utils.ts";
 import { getSubjects } from "src/lib/server/database/subjects.ts";
 import { formatSubject, type Subject } from "src/lib/shared/models/subject.ts";
 import { formatSearchResult } from "src/lib/shared/utils/listing/utils.ts";
-import { cleanQuery, getQueryFromFormData, handleUndefinedInFormData } from "src/lib/shared/utils/search/utils.ts";
+import { getQueryFromFormData } from "src/lib/shared/utils/search/utils.ts";
 
 export const load = (async ({ url, locals: { supabase } }) => {
   const query = url.searchParams.get("q") || ""; // falsy query will get all
