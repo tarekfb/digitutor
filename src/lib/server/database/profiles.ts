@@ -38,7 +38,6 @@ export const createProfile = async (
     updated_at: null,
     avatar_url: null,
     first_name: profileInput.firstName,
-    last_name: profileInput.lastName,
   };
 
   const { data, error } = await supabase

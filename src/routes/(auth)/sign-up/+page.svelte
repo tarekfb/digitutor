@@ -51,7 +51,6 @@
             <Avatar
               url={review.sender.avatarUrl ?? ""}
               firstName={review.sender.firstName}
-              lastName={review.sender.lastName}
               role={review.sender.role}
               class="h-7 w-7 text-sm"
             />
@@ -66,7 +65,6 @@
               <Avatar
                 url={review.receiver.avatarUrl ?? ""}
                 firstName={review.receiver.firstName}
-                lastName={review.receiver.lastName}
                 role={review.receiver.role}
                 class="h-7 w-7 text-sm"
               />

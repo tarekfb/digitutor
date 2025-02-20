@@ -68,7 +68,6 @@ export const formatSearchResult = ({
   hourly_price,
   profile_id,
   first_name,
-  last_initial,
   avatar_url,
   role,
 }: DbSearchResult): SearchResult => {
@@ -82,7 +81,6 @@ export const formatSearchResult = ({
       role: role,
       avatarUrl: avatar_url ?? undefined,
       firstName: first_name,
-      lastInitial: last_initial,
       id: profile_id,
     }
   };

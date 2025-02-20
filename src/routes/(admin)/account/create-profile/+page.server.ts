@@ -22,7 +22,6 @@ export async function load({ parent }) {
 
   const initFormData = {
     firstName: profile.firstName ?? "",
-    lastName: profile.lastName ?? "",
   };
 
   try {
@@ -46,12 +45,11 @@ export const actions = {
 
     if (!form.valid) return fail(400, { form });
 
-    const { firstName, lastName } = form.data;
+    const { firstName } = form.data;
 
     const profileInput: ProfileInput = {
       id: user.id,
       first_name: firstName,
-      last_name: lastName,
     };
 
     try {

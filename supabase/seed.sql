@@ -267,61 +267,53 @@ VALUES
     );
 
 INSERT INTO
-    public.profiles (id, first_name, last_name, role, created_at)
+    public.profiles (id, first_name, role, created_at)
 VALUES
     (
         '550e8400-e29b-41d4-a716-446655440000',
         'Tarek',
-        'Anderson',
         'teacher',
         NOW()
     ),
     (
         '550e8400-e29b-41d4-a716-446655440010',
         'Thomas',
-        'Brown',
         'teacher',
         NOW()
     ),
     (
         '550e8400-e29b-41d4-a716-446655440020',
         'Johnny',
-        'Clark',
         'student',
         NOW()
     ),
     (
         '550e8400-e29b-41d4-a716-446655440030',
         'Thor',
-        'Developer',
         'teacher',
         NOW()
     ),
     (
         '550e8400-e29b-41d4-a716-446655440040',
         'Eve',
-        'Evans',
         'student',
         NOW()
     ),
     (
         '550e8400-e29b-41d4-a716-446655440050',
         'Frank',
-        'Foster',
         'student',
         NOW()
     ),
     (
         '550e8400-e29b-41d4-a716-446655440060',
         'Grace',
-        'Green',
         'student',
         NOW()
     ),
     (
         '550e8400-e29b-41d4-a716-446655440070',
         'Heidi',
-        'Hoover',
         'student',
         NOW()
     );
@@ -722,27 +714,24 @@ VALUES
 
 -- Add profiles for new users
 INSERT INTO
-    public.profiles (id, first_name, last_name, role, created_at)
+    public.profiles (id, first_name, role, created_at)
 VALUES
     -- Teachers
     (
         '550e8400-e29b-41d4-a716-446655440100',
         'Tova',
-        'Ingram',
         'teacher',
         NOW()
     ),
     (
         '550e8400-e29b-41d4-a716-446655440110',
         'Tamara',
-        'Jones',
         'teacher',
         NOW()
     ),
     (
         '550e8400-e29b-41d4-a716-446655440120',
         'Trevor',
-        'King',
         'teacher',
         NOW()
     ),
@@ -750,21 +739,18 @@ VALUES
     (
         '550e8400-e29b-41d4-a716-446655440130',
         'Lisa',
-        'Lewis',
         'student',
         NOW()
     ),
     (
         '550e8400-e29b-41d4-a716-446655440140',
         'Mike',
-        'Miller',
         'student',
         NOW()
     ),
     (
         '550e8400-e29b-41d4-a716-446655440150',
         'Nina',
-        'Nelson',
         'student',
         NOW()
     );
@@ -1095,27 +1081,24 @@ VALUES
 
 -- Add profiles for new teachers
 INSERT INTO
-    public.profiles (id, first_name, last_name, role, created_at)
+    public.profiles (id, first_name, role, created_at)
 VALUES
     -- Teachers
     (
         '550e8400-e29b-41d4-a716-446655440200',
         'Tiana',
-        'Taylor',
         'teacher',
         NOW()
     ),
     (
         '550e8400-e29b-41d4-a716-446655440210',
         'Tobias',
-        'Turner',
         'teacher',
         NOW()
     ),
     (
         '550e8400-e29b-41d4-a716-446655440220',
         'Tara',
-        'Thompson',
         'teacher',
         NOW()
     );

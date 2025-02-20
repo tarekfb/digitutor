@@ -21,7 +21,6 @@
         url={review.receiver.avatarUrl ?? ""}
         href={`/profile/${review.receiver.id}`}
         firstName={review.receiver.firstName}
-        lastName={review.receiver.lastName}
         role={review.receiver.role}
         class="size-8 text-sm"
       />
@@ -47,7 +46,6 @@
         <Avatar
           url={review.sender.avatarUrl ?? ""}
           firstName={review.sender.firstName}
-          lastName={review.sender.lastName}
           role={review.sender.role}
           class="size-6 text-xs"
           size="8"

@@ -37,18 +37,6 @@
     </Form.Control>
     <Form.FieldErrors />
   </Form.Field>
-  <Form.Field form={userForm} name="lastName">
-    <Form.Control let:attrs>
-      <Label>Efternamn</Label>
-      <Input
-        {...attrs}
-        type="text"
-        bind:value={$formData.lastName}
-        placeholder="Efternamn"
-      />
-    </Form.Control>
-    <Form.FieldErrors />
-  </Form.Field>
   <Form.Field form={userForm} name="email">
     <Form.Control let:attrs>
       <Label>E-postadress</Label>
