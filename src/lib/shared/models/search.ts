@@ -28,5 +28,7 @@ export type SearchResult = {
   description?: string;
   hourlyPrice: number;
   subjects: number[];
-  profile: Omit<Profile, "bio">
+  profile: Omit<Profile, "bio">;
+  avgRating: number;
+  reviewCount: number;
 };

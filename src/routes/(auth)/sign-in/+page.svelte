@@ -24,7 +24,6 @@
   export let data: PageData;
 
   $: ({ reviews, listings, subjects } = data);
-  $: console.log(subjects);
 
   $: avgRating = getAvgRating(reviews);
 
