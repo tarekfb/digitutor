@@ -16,7 +16,8 @@ import { isErrorWithCode } from "src/lib/shared/utils/utils.ts";
 import { getSubjects } from "src/lib/server/database/subjects.ts";
 import { formatSubject, type Subject } from "src/lib/shared/models/subject.ts";
 import { formatSearchResult } from "src/lib/shared/utils/listing/utils.ts";
-import { cleanQuery, getQueryFromFormData, handleUndefinedInFormData } from "src/lib/shared/utils/search/utils.ts";
+import { getQueryFromFormData } from "src/lib/shared/utils/search/utils.ts";
+import { PUBLIC_ENVIRONMENT } from "$env/static/public";
 
 export const load = (async ({ url, locals: { supabase } }) => {
   const query = url.searchParams.get("q") || ""; // falsy query will get all
@@ -66,7 +67,7 @@ export const load = (async ({ url, locals: { supabase } }) => {
 export const actions: Actions = {
   search: async (event) => {
     const {
-      locals: { supabase },
+      locals: { supabase, captureException },
     } = event;
 
     const form = await superValidate(event, zod(searchSchema));
@@ -76,6 +77,7 @@ export const actions: Actions = {
     try {
       const listings = await search(supabase, query);
       const formatted: SearchResult[] = listings.map((listing) => formatSearchResult(listing));
+      throw new Error("PANIK - something wrong");
       return { form, formatted };
     } catch (error) {
       if (isErrorWithCode(error)) {
@@ -89,11 +91,33 @@ export const actions: Actions = {
             { status: 400 },
           );
       }
-      console.error(
-        "Error searching for teachers with following search: " + query,
-        error,
-      );
-      return message(form, getFailFormMessage(), { status: 500 });
+
+      const eventId = crypto.randomUUID();
+      captureException({ error, event, message: "Error searching for teachers with following search: " + query, status: 500 });
+      // const client = new PostHog(
+      //   POSTHOG_API_KEY,
+      //   { host: 'https://eu.i.posthog.com' }
+      // )
+
+      // client.capture({
+      //   distinctId: "",
+      //   event: "search error",
+      //   properties: {
+      //     environment: PUBLIC_ENVIRONMENT,
+      //     ...(trackingId && { trackingId }),
+      //   },
+      // })
+
+
+      console.log(captureException)
+      // await client.shutdown()
+      console.log("tried local capture")
+      // await captureEvent("Error searching for teachers with following search: " + query, error, trackingId);
+      // console.error(
+      //   "Error searching for teachers with following search: " + query,
+      //   error,
+      // );
+      return message(form, getFailFormMessage("trackingId: " + eventId), { status: 500 });
     }
   },
 };

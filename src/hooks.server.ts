@@ -1,5 +1,5 @@
 import { createServerClient } from "@supabase/ssr";
-import { type Handle } from "@sveltejs/kit";
+import { type Handle, type HandleServerError } from "@sveltejs/kit";
 import { redirect } from "sveltekit-flash-message/server";
 import { sequence } from "@sveltejs/kit/hooks";
 import {
@@ -9,7 +9,22 @@ import {
 } from "$env/static/public";
 import { createClient } from "@supabase/supabase-js";
 import { PRIVATE_SUPABASE_SERVICE_ROLE } from "$env/static/private";
-import { init } from "@jill64/sentry-sveltekit-cloudflare/server";
+import { init } from '@jill64/sentry-sveltekit-cloudflare/server'
+
+const { onError } = init(
+  "https://485a49edf664c4bad08c2ab0bf87a8eb@o4507622077169664.ingest.de.sentry.io/4507622079660112",
+  {
+    toucanOptions: {
+      environment: PUBLIC_ENVIRONMENT,
+    },
+  },
+);
+
+const logging: Handle = async ({ event, resolve }) => {
+  const captureException = onError();
+  event.locals.captureException = captureException;
+  return resolve(event);
+}
 
 const supabase: Handle = async ({ event, resolve }) => {
   /**
@@ -96,26 +111,5 @@ const authGuard: Handle = async ({ event, resolve }) => {
   return resolve(event);
 };
 
-const { onError } = init(
-  "https://485a49edf664c4bad08c2ab0bf87a8eb@o4507622077169664.ingest.de.sentry.io/4507622079660112",
-  {
-    toucanOptions: {
-      environment: PUBLIC_ENVIRONMENT,
-    },
-    //   handleOptions: {
-    //     handleUnknownRoutes: boolean (default: false)
-    //   },
-    //   enableInDevMode: boolean (default: false)
-  },
-);
+export const handle: Handle = sequence(logging, supabase, authGuard);
 
-export const handle: Handle = sequence(supabase, authGuard);
-
-export const handleError = onError((e, sentryEventId) => {
-  console.error(e, sentryEventId);
-});
-
-// This func is not used but comes from https://github.com/jill64/sentry-sveltekit-cloudflare
-// export const handle = onHandle(({ event, resolve }) => {
-//   // Your Handle Code
-// })

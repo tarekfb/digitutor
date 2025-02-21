@@ -1,6 +1,7 @@
 import { SupabaseClient, Session, User } from "@supabase/supabase-js";
 import { Database } from "./supabase";
 import type { MessageId } from "./lib/shared/constants/constants.ts";
+import { init } from "sentry-sveltekit-cloudflare-capture/server";
 
 // See https://kit.svelte.dev/docs/types#app
 // for information about these interfaces
@@ -15,6 +16,8 @@ declare global {
       }>;
       session: Session | null;
       user: User | null;
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      captureException: ReturnType<ReturnType<typeof init>["onError"]>;
     }
     interface PageData {
       flash?: {
