@@ -7,7 +7,7 @@ import {
 import { message, superValidate } from "sveltekit-superforms";
 import { zod } from "sveltekit-superforms/adapters";
 import { resendSchema, signInSchema } from "$lib/shared/models/user.ts";
-import { getHighQualityReviews } from "src/lib/server/database/review.ts";
+import { getHighQualityReviews, getTopTeacher } from "src/lib/server/database/review.ts";
 import { getListingsByTeacher } from "src/lib/server/database/listings.ts";
 import { formatReviewWithReferences } from "src/lib/shared/utils/reviews/utils.ts";
 import type { ReviewWithReferences } from "src/lib/shared/models/review.ts";
@@ -15,6 +15,17 @@ import type { ListingWithProfile } from "src/lib/shared/models/listing.ts";
 import { formatListingWithProfile } from "src/lib/shared/utils/listing/utils.ts";
 
 export const load: PageServerLoad = async ({ locals: { supabase } }) => {
+
+  try {
+    const top = await getTopTeacher(supabase, 3)
+    console.log({ top });
+  } catch (e) {
+    console.error("Error when fetching signin display review, perhaps didnt find valid review", e);
+  } 
+
+  // change this to also get a list of all reviews. i want review description ,id, sender and receiver, rating and created at
+  // also when that works, get one listing that has visible = true
+
   let longReviews: ReviewWithReferences[];
   try {
     const dbReviews = await getHighQualityReviews(supabase);

@@ -1,6 +1,7 @@
 import type { Tables } from "src/supabase.ts";
 import { z } from "zod";
 import type { DbProfile, Profile } from "./profile.ts";
+import type { DbSubject, Subject } from "./subject.ts";
 
 export type DbReviewBase = Tables<"reviews">;
 
@@ -57,4 +58,24 @@ export type DisplayProfile = {
   avatarUrl: string | null;
   avgRating: number;
   subjects: number[];
+};
+
+export type DbTopTeacher = {
+  id: string;
+  first_name: DbProfile["first_name"];
+  avatar_url: DbProfile["avatar_url"];
+  avg_rating: number;
+  review_count: number;
+  five_star_reviews_with_description: number;
+  subjects: DbSubject[];
+};
+
+export type TopTeacher = {
+  id: string;
+  firstName: Profile["firstName"];
+  avatarUrl: Profile["avatarUrl"];
+  avgRating: number;
+  reviewCount: number;
+  fiveStarReviewsWithDescription: number;
+  subjects: Subject[];
 };
