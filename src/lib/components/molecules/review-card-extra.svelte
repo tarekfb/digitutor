@@ -10,6 +10,7 @@
   export { className as class };
   export let review: ReviewWithReferences;
   export let truncate: number = 0;
+  export let index: number = -1;
 </script>
 
 <div
@@ -31,8 +32,11 @@
       {#if truncate}
         {@const { text, truncated } = truncateFn(review.description, truncate)}
         {text}
-        {#if truncated}
-          <Link href="/profile/{review.receiver.id}#{review.id}" class="whitespace-nowrap">Läs hela</Link>
+        {#if truncated && index === 0}
+          <Link
+            href="/profile/{review.receiver.id}#{review.id}"
+            class="whitespace-nowrap">Läs hela</Link
+          >
         {/if}
       {:else}
         {review.description}

@@ -24,6 +24,7 @@
   export let data: PageData;
 
   $: ({ reviews, listings, subjects } = data);
+  $: console.log(subjects);
 
   $: avgRating = getAvgRating(reviews);
 
@@ -71,59 +72,62 @@
     subjects.length > 0}
 >
   <svelte:fragment slot="aside">
-    <div class="flex justify-around gap-x-8">
-      <div class="flex max-w-36 flex-col">
-        {#if reviews[0].receiver.avatarUrl}
-          <img
-            alt="profile avatar"
-            class="mb-2 rounded-sm"
-            width="250"
-            height="250"
-            src={reviews[0].receiver.avatarUrl}
-          />
-        {/if}
-        <div
-          class="flex flex-col gap-y-0.5 text-xl text-muted-foreground md:text-2xl"
-        >
-          <SecondaryTitle class="font-semibold"
-            >{reviews[0].receiver.firstName}</SecondaryTitle
-          >
-          {#if avgRating !== undefined}
-            <Stars size={5} rating={avgRating} />
-          {/if}
-          {#if subjects}
-            <ul>
-              {#each subjects as subject, i}
-                {#if i < 10 && languages[subject - 1]?.title}
-                  <li class="flex items-center gap-x-2">
-                    <Terminal class="h-5 w-5 text-accent" />
-                    <p class="font-mono text-base">
-                      {languages[subject - 1].title}
-                    </p>
-                  </li>
-                {/if}
-              {/each}
-            </ul>
-          {/if}
-        </div>
-      </div>
-      <div class="flex flex-col items-center">
-        {#if listings?.at(0)}
-          <PrimaryTitle
-            class="max-w-[400px] overflow-x-hidden overflow-y-hidden overflow-ellipsis font-normal"
-            >{listings[0].title}</PrimaryTitle
-          >
-        {/if}
-        <div class="mt-6 flex flex-col gap-y-2">
-          {#each reviews as review, index}
-            <ReviewCardExtra
-              {review}
-              class="z-{(reviews.length - index) * 10 + 20} {getBlur(
-                index,
-              )} w-96"
+    <div class="flex max-h-[75vh] flex-col gap-y-4">
+      <PrimaryTitle class=" text-muted-foreground"
+        >Spana in en av våra lärare</PrimaryTitle
+      >
+      <div class="flex justify-around gap-x-8">
+        <div class="flex max-w-36 flex-col">
+          {#if reviews[0].receiver.avatarUrl}
+            <img
+              alt="profile avatar"
+              class="mb-2 rounded-sm"
+              width="250"
+              height="250"
+              src={reviews[0].receiver.avatarUrl}
             />
-            <!-- + 20 because didnt work without it, will always work on 3 items but might act up on >3 -->
-          {/each}
+          {/if}
+          <div class="flex flex-col gap-y-0.5 text-muted-foreground">
+            <SecondaryTitle class="font-semibold"
+              >{reviews[0].receiver.firstName}</SecondaryTitle
+            >
+            {#if avgRating !== undefined}
+              <Stars size={5} rating={avgRating} />
+            {/if}
+            {#if subjects}
+              <ul>
+                {#each subjects as subject, i}
+                  {#if i < 10 && languages[subject - 1]?.title}
+                    <li class="flex items-center gap-x-2">
+                      <Terminal class="h-5 w-5 text-accent" />
+                      <p class="font-mono text-base">
+                        {languages[subject - 1].title}
+                      </p>
+                    </li>
+                  {/if}
+                {/each}
+              </ul>
+            {/if}
+          </div>
+        </div>
+        <div class="flex flex-col items-center">
+          {#if listings?.at(0)}
+            <SecondaryTitle
+              class="max-w-[400px] self-start overflow-x-hidden overflow-y-hidden overflow-ellipsis text-muted-foreground md:text-3xl"
+              >{listings[0].title}</SecondaryTitle
+            >
+          {/if}
+          <div class="mt-6 flex flex-col gap-y-2">
+            {#each reviews as review, index}
+              <ReviewCardExtra
+                truncate={40}
+                {index}
+                {review}
+                class="z-{(reviews.length - index) * 10} {getBlur(index)} w-96"
+              />
+              <!-- + 20 because didnt work without it, will always work on 3 items but might act up on >3 -->
+            {/each}
+          </div>
         </div>
       </div>
     </div>
