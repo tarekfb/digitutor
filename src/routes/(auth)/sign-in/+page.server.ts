@@ -41,6 +41,8 @@ export const load: PageServerLoad = async ({ locals: { supabase } }) => {
       );
       listings = dbListings.map((listing) => formatListingWithProfile(listing));
       subjects = listings.flatMap((listing) => listing.subjects);
+      subjects = [...new Set(subjects)]; // remove duplicates
+
     } catch (e) {
       console.error("Error when fetching listings and subjects for signin", e);
       subjects = [];
