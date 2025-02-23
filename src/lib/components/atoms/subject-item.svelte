@@ -8,32 +8,21 @@
   export let iconStyling = "";
   export let textStyling = "";
   export let subject: number;
-  export let li = true;
-  export let muted = true;
+  export let li: boolean = false;
+  export let muted: boolean = true;
+
+  const tag = li ? "li" : "div";
 </script>
 
-{#if li}
-  <li
-    class={cn(
-      `flex gap-x-2 items-center ${muted ? "text-muted-foreground" : ""}  overflow-x-hidden`,
-      className,
-    )}
-  >
-    <Terminal class={cn("w-5 h-5 text-accent", iconStyling)} />
-    <p class={cn("font-mono md:text-lg", textStyling)}>
-      {languages[subject - 1].title}
-    </p>
-  </li>
-{:else}
-  <div
-    class={cn(
-      `flex gap-x-2 items-center ${muted ? "text-muted-foreground" : ""}  overflow-x-hidden`,
-      className,
-    )}
-  >
-    <Terminal class={cn("w-5 h-5 text-accent", iconStyling)} />
-    <p class={cn("font-mono md:text-lg", textStyling)}>
-      {languages[subject - 1].title}
-    </p>
-  </div>
-{/if}
+<svelte:element
+  this={tag}
+  class={cn(
+    `flex items-center gap-x-2 ${muted ? "text-muted-foreground" : ""} overflow-x-hidden`,
+    className,
+  )}
+>
+  <Terminal class={cn("size-5 text-accent", iconStyling)} />
+  <p class={cn("font-mono md:text-lg", textStyling)}>
+    {languages[subject - 1].title}
+  </p>
+</svelte:element>

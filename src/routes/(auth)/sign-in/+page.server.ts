@@ -7,64 +7,25 @@ import {
 import { message, superValidate } from "sveltekit-superforms";
 import { zod } from "sveltekit-superforms/adapters";
 import { resendSchema, signInSchema } from "$lib/shared/models/user.ts";
-import { getHighQualityReviews, getTopTeacher } from "src/lib/server/database/review.ts";
-import { getListingsByTeacher } from "src/lib/server/database/listings.ts";
-import { formatReviewWithReferences } from "src/lib/shared/utils/reviews/utils.ts";
-import type { ReviewWithReferences } from "src/lib/shared/models/review.ts";
-import type { ListingWithProfile } from "src/lib/shared/models/listing.ts";
-import { formatListingWithProfile } from "src/lib/shared/utils/listing/utils.ts";
+import { getTopTeacher } from "src/lib/server/database/review.ts";
+import { formatTopTeacher } from "src/lib/shared/utils/reviews/utils.ts";
+import type { TopTeacher } from "src/lib/shared/models/review.ts";
 
 export const load: PageServerLoad = async ({ locals: { supabase } }) => {
 
+  let displayTeacher: TopTeacher | undefined;
   try {
-    const top = await getTopTeacher(supabase, 3)
-    console.log({ top });
+    const dbTeacher = await getTopTeacher(supabase, 1);
+    displayTeacher = dbTeacher.length > 0 ? formatTopTeacher(dbTeacher[0]) : undefined;
   } catch (e) {
-    console.error("Error when fetching signin display review, perhaps didnt find valid review", e);
-  } 
-
-  // change this to also get a list of all reviews. i want review description ,id, sender and receiver, rating and created at
-  // also when that works, get one listing that has visible = true
-
-  let longReviews: ReviewWithReferences[];
-  try {
-    const dbReviews = await getHighQualityReviews(supabase);
-    let sorted = dbReviews.sort(
-      (a, b) => (b.description?.length ?? 0) - (a.description?.length ?? 0),
-    );
-    sorted = sorted.slice(0, 3);
-    longReviews = sorted.map((s) => formatReviewWithReferences(s));
-  } catch (e) {
-    console.error(
-      "Error when fetching signin display review, perhaps didnt find valid review",
-      e,
-    );
-    longReviews = [];
-  }
-
-  let subjects: number[] = [];
-  let listings: ListingWithProfile[] = [];
-  if (longReviews[0]) {
-    try {
-      const dbListings = await getListingsByTeacher(
-        supabase,
-        longReviews[0].receiver.id,
-      );
-      listings = dbListings.map((listing) => formatListingWithProfile(listing));
-      subjects = listings.flatMap((listing) => listing.subjects);
-      subjects = [...new Set(subjects)]; // remove duplicates
-
-    } catch (e) {
-      console.error("Error when fetching listings and subjects for signin", e);
-      subjects = [];
-      listings = [];
-    }
+    console.error("Error when fetching signin topteacher", e);
+    displayTeacher = undefined;
   }
 
   const form = await superValidate(zod(signInSchema));
   const resendEmailForm = await superValidate(zod(resendSchema));
 
-  return { listings, subjects, reviews: longReviews, form, resendEmailForm };
+  return { displayTeacher, form, resendEmailForm };
 };
 
 export const actions: Actions = {

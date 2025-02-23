@@ -4,6 +4,7 @@ import type {
   ReviewWithReferences,
   TopTeacher,
 } from "../../models/review.ts";
+import { formatSubject } from "../../models/subject.ts";
 import { formatProfile } from "../profile/utils.ts";
 
 export const formatReviewWithReferences = ({
@@ -32,6 +33,7 @@ export const formatTopTeacher = ({
   review_count,
   five_star_reviews_with_description,
   subjects,
+  reviews,
 }: DbTopTeacher): TopTeacher => {
   return {
     id,
@@ -40,6 +42,7 @@ export const formatTopTeacher = ({
     avgRating: avg_rating,
     reviewCount: review_count,
     fiveStarReviewsWithDescription: five_star_reviews_with_description,
-    subjects: subjects.map(({ title, alt_title, id }) => ({ title, altTitle: alt_title ?? undefined, id })),
+    subjects: subjects.map(s => formatSubject(s)),
+    reviews: reviews.map(r => formatReviewWithReferences(r)),
   };
 };

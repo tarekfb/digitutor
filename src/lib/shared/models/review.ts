@@ -19,7 +19,7 @@ export type ReviewBase = Omit<
 > & {
   createdAt: string;
   description: string;
-  sender: string;
+  sender?: string;
 };
 
 export type ReviewWithReferences = Omit<ReviewBase, "receiver" | "sender"> & {
@@ -44,30 +44,43 @@ const addReviewProperties = {
 export const addReviewSchema = z.object(addReviewProperties);
 export type AddReviewSchema = typeof addReviewSchema;
 
-export type DbDisplayProfile = {
-  id: string;
-  first_name: string;
-  avatar_url: string | null;
-  avg_rating: number | null;
-  subjects: number[];
-};
+// export type DbDisplayProfile = {
+//   id: Profile["id"];
+//   first_name: DbProfile["first_name"];
+//   avatar_url: DbProfile["avatar_url"];
+//   avg_rating: number;
+//   review_count: number;
+//   five_star_reviews_with_description: number;
+//   subjects: DbSubject[];
+//   reviews: {
+//     rating: DbReviewBase["rating"];
+//     review_id: DbReviewBase["id"];
+//     sender_id: DbReviewBase["sender"];
+//     receiver_id: DbReviewBase["receiver"];
+//     created_at: DbReviewBase["created_at"];
+//     description: DbReviewBase["description"];
+//     sender_name?: DbProfile["first_name"];
+//     receiver_name: DbReviewWithReferences["receiver"]["first_name"];
+//   }[];
+// };
 
-export type DisplayProfile = {
-  id: string;
-  firstName: string;
-  avatarUrl: string | null;
-  avgRating: number;
-  subjects: number[];
-};
+// export type DisplayProfile = {
+//   id: string;
+//   firstName: Profile["firstName"];
+//   avatarUrl: Profile["avatarUrl"];
+//   avgRating: number;
+//   subjects: Subject[];
+// };
 
 export type DbTopTeacher = {
-  id: string;
+  id: Profile["id"];
   first_name: DbProfile["first_name"];
   avatar_url: DbProfile["avatar_url"];
-  avg_rating: number;
   review_count: number;
+  avg_rating: number;
   five_star_reviews_with_description: number;
   subjects: DbSubject[];
+  reviews: DbReviewWithReferences[];
 };
 
 export type TopTeacher = {
@@ -78,4 +91,5 @@ export type TopTeacher = {
   reviewCount: number;
   fiveStarReviewsWithDescription: number;
   subjects: Subject[];
+  reviews: ReviewWithReferences[];
 };
