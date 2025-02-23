@@ -5,7 +5,6 @@
   import { toast } from "svelte-sonner";
   import { signInSchema } from "$lib/shared/models/user.js";
   import { Input } from "$lib/components/ui/input/index.js";
-  import Terminal from "lucide-svelte/icons/terminal";
   import FormMessage from "$lib/components/molecules/form-message.svelte";
   import Label from "$lib/components/atoms/label.svelte";
   import { MessageId } from "$lib/shared/constants/constants.ts";
@@ -15,29 +14,15 @@
   import PrimaryTitle from "src/lib/components/atoms/primary-title.svelte";
   import SecondaryTitle from "src/lib/components/atoms/secondary-title.svelte";
   import type { PageData } from "./$types.ts";
-  import { languages } from "src/lib/shared/models/common.ts";
-  import type { ReviewWithReferences } from "src/lib/shared/models/review.ts";
   import Stars from "src/lib/components/atoms/stars.svelte";
   import ReviewCardExtra from "src/lib/components/molecules/review-card-extra.svelte";
   import { page } from "$app/stores";
+  import SubjectItem from "src/lib/components/atoms/subject-item.svelte";
+  import Avatar from "src/lib/components/atoms/avatar.svelte";
 
   export let data: PageData;
 
-  $: ({ reviews, listings, subjects } = data);
-  $: console.log(subjects);
-
-  $: avgRating = getAvgRating(reviews);
-
-  const getAvgRating = (
-    reviews: ReviewWithReferences[],
-  ): number | undefined => {
-    if (reviews.length === 0) return undefined;
-    let sum = 0;
-    reviews?.forEach((review) => {
-      sum += review.rating;
-    });
-    return sum / reviews.length;
-  };
+  $: ({ displayTeacher } = data);
 
   const getBlur = (i: number): "blur-sm" | "blur-md" | "" => {
     switch (i) {
@@ -60,6 +45,8 @@
     resetForm: false,
   });
   const { form: formData, enhance, delayed, message, allErrors } = userForm;
+
+  $: console.log("non db", displayTeacher);
 </script>
 
 <svelte:head>
@@ -67,70 +54,73 @@
 </svelte:head>
 
 <AuthSplit
-  shouldShowAside={reviews.length > 0 &&
-    listings.length > 0 &&
-    subjects.length > 0}
+  shouldShowAside={!!displayTeacher && displayTeacher.reviews.length > 0}
 >
   <svelte:fragment slot="aside">
-    <div class="flex max-h-[75vh] flex-col gap-y-4">
-      <PrimaryTitle class=" text-muted-foreground"
-        >Spana in en av våra lärare</PrimaryTitle
-      >
-      <div class="flex justify-around gap-x-8">
-        <div class="flex max-w-36 flex-col">
-          {#if reviews[0].receiver.avatarUrl}
-            <img
-              alt="profile avatar"
-              class="mb-2 rounded-sm"
-              width="250"
-              height="250"
-              src={reviews[0].receiver.avatarUrl}
-            />
-          {/if}
-          <div class="flex flex-col gap-y-0.5 text-muted-foreground">
-            <SecondaryTitle class="font-semibold"
-              >{reviews[0].receiver.firstName}</SecondaryTitle
-            >
-            {#if avgRating !== undefined}
-              <Stars size={5} rating={avgRating} />
+    {#if displayTeacher}
+      {@const reviews = displayTeacher.reviews.splice(0, 3)}
+      <!-- this is here only to please explain to ts displayteacher is not undefined -->
+      <div class="flex max-h-[75vh] flex-col gap-y-4">
+        <PrimaryTitle class="text-muted-foreground"
+          >Spana in en av våra lärare</PrimaryTitle
+        >
+        <div class="flex justify-around gap-x-8">
+          <div class="flex max-w-36 flex-col">
+            {#if displayTeacher.avatarUrl}
+              <a href="/profile/{displayTeacher.id}" class="grow">
+                <img
+                  alt="profile avatar"
+                  class="mb-2 rounded-sm"
+                  width="250"
+                  height="250"
+                  src={displayTeacher.avatarUrl}
+                />
+              </a>
             {/if}
-            {#if subjects}
+            <div class="flex flex-col gap-y-2 text-muted-foreground">
+              {#if displayTeacher.avatarUrl}
+                <SecondaryTitle class="font-semibold"
+                  >{displayTeacher.firstName}</SecondaryTitle
+                >
+              {:else}
+                <div class="flex items-center gap-x-2">
+                  <Avatar
+                    firstName={displayTeacher.firstName}
+                    role="teacher"
+                    class="size-8 text-sm"
+                    href="/profile/{displayTeacher.id}"
+                    url={displayTeacher.avatarUrl ?? ""}
+                  />
+                  <SecondaryTitle class="font-semibold"
+                    >{displayTeacher.firstName}</SecondaryTitle
+                  >
+                </div>
+              {/if}
+              <Stars size={5} rating={displayTeacher.avgRating} />
               <ul>
-                {#each subjects as subject, i}
-                  {#if i < 10 && languages[subject - 1]?.title}
-                    <li class="flex items-center gap-x-2">
-                      <Terminal class="h-5 w-5 text-accent" />
-                      <p class="font-mono text-base">
-                        {languages[subject - 1].title}
-                      </p>
-                    </li>
+                {#each displayTeacher.subjects as subject, i}
+                  {#if i < 10}
+                    <SubjectItem subject={subject.id} muted={false} li />
                   {/if}
                 {/each}
               </ul>
-            {/if}
+            </div>
           </div>
-        </div>
-        <div class="flex flex-col items-center">
-          {#if listings?.at(0)}
-            <SecondaryTitle
-              class="max-w-[400px] self-start overflow-x-hidden overflow-y-hidden overflow-ellipsis text-muted-foreground md:text-3xl"
-              >{listings[0].title}</SecondaryTitle
-            >
-          {/if}
-          <div class="mt-6 flex flex-col gap-y-2">
+          <ul class="flex list-outside flex-col gap-y-2">
             {#each reviews as review, index}
               <ReviewCardExtra
+                showAvatar={false}
                 truncate={40}
                 {index}
                 {review}
+                li
                 class="z-{(reviews.length - index) * 10} {getBlur(index)} w-96"
               />
-              <!-- + 20 because didnt work without it, will always work on 3 items but might act up on >3 -->
             {/each}
-          </div>
+          </ul>
         </div>
       </div>
-    </div>
+    {/if}
   </svelte:fragment>
   <svelte:fragment slot="form">
     {@const next = $page.url.searchParams.get("next")}

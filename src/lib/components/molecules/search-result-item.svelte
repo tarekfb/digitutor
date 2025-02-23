@@ -7,9 +7,8 @@
   import Link from "../atoms/link.svelte";
   import SeeMore from "./see-more.svelte";
   import SecondaryTitle from "../atoms/secondary-title.svelte";
+  import NbrOfReviews from "../atoms/nbr-of-reviews.svelte";
 
-  const rating = 4.3;
-  const nbrOfReviews = 11;
   const rowItemStyling = "flex flex-col gap-y-2 items-center";
   const boxStyling = "p-0 m-0 h-8";
 
@@ -57,10 +56,8 @@
           </SecondaryTitle>
         </Link>
         <div class="flex flex-col gap-y-1">
-          <Stars {rating} size={4} class="m-0 p-0 " />
-          <p class="text-muted-foreground">
-            {nbrOfReviews} recension{nbrOfReviews > 1 ? "er" : ""}
-          </p>
+          <Stars rating={result.avgRating} size={4} class="m-0 p-0 " />
+          <NbrOfReviews nbrOfReviews={result.reviewCount} />
         </div>
         <div class="flex flex-col">
           <SubjectItem
@@ -102,20 +99,20 @@
         </SecondaryTitle>
       </Link>
       <div class="mt-2 flex flex-col items-start gap-y-1 md:hidden">
-        <Stars {rating} size={4} />
+        <Stars rating={result.avgRating} size={4} />
         <p class="text-muted-foreground">
-          {nbrOfReviews} recension{nbrOfReviews > 1 ? "er" : ""}
+          <NbrOfReviews nbrOfReviews={result.reviewCount} />
         </p>
       </div>
       <div class="flex items-center justify-between gap-x-2">
         <div class="{rowItemStyling} hidden md:block">
           <Stars
-            {rating}
+            rating={result.avgRating}
             size={4}
             class="{boxStyling} items-center self-start "
           />
           <p class="text-muted-foreground">
-            {nbrOfReviews} recension{nbrOfReviews > 1 ? "er" : ""}
+            <NbrOfReviews nbrOfReviews={result.reviewCount} />
           </p>
         </div>
         <div class={rowItemStyling}>

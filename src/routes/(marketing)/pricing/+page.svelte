@@ -49,7 +49,7 @@
 
   <section class="flex w-full flex-col items-center">
     <SecondaryTitle responsiveMb>Vanliga frågor och svar</SecondaryTitle>
-    <Accordion.Root class="*:border-testing w-full sm:max-w-[70%]">
+    <Accordion.Root class="w-full sm:max-w-[70%]">
       <Accordion.Item value="item-1">
         <Accordion.Trigger
           >När kan jag avbryta prenumerationen?</Accordion.Trigger

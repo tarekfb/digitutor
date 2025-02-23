@@ -8,25 +8,30 @@
 
   let className: string | null | undefined = undefined;
   export { className as class };
-  export let review: ReviewWithReferences;
+  export let review: Omit<ReviewWithReferences, "createdAt">;
   export let truncate: number = 0;
   export let index: number = -1;
+  export let li: boolean = false;
+  export let showAvatar: boolean = true;
 </script>
 
-<div
+<svelte:element
+  this={li ? "li" : "div"}
   class={cn("relative flex flex-col gap-y-2 rounded-md bg-card p-6", className)}
 >
-  <div class="absolute -left-3 -top-3 select-none">
-    <span class="text-[120px] leading-none text-primary/40">
-      <Avatar
-        url={review.receiver.avatarUrl ?? ""}
-        href={`/profile/${review.receiver.id}`}
-        firstName={review.receiver.firstName}
-        role={review.receiver.role}
-        class="size-8 text-sm"
-      />
-    </span>
-  </div>
+  {#if showAvatar}
+    <div class="absolute -left-3 -top-3 select-none">
+      <span class="text-[120px] leading-none text-primary/40">
+        <Avatar
+          url={review.receiver.avatarUrl ?? ""}
+          href={`/profile/${review.receiver.id}`}
+          firstName={review.receiver.firstName}
+          role={review.receiver.role}
+          class="size-8 text-sm"
+        />
+      </span>
+    </div>
+  {/if}
   {#if review.description}
     <p class="overflow-hidden">
       {#if truncate}
@@ -62,4 +67,4 @@
       starsStylign=" size-4 lg:size-6"
     />
   </div>
-</div>
+</svelte:element>

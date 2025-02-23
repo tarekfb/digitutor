@@ -109,7 +109,7 @@
           <Collapsible.Content class="mt-2 text-muted-foreground md:mt-1">
             {@const styling = "size-5 flex-shrink-0 md:size-7"}
             <ul
-              class="*:border-testing list-disc space-y-1.5 *:mx-1 *:flex *:gap-x-2 md:space-y-2"
+              class="list-disc space-y-1.5 *:mx-1 *:flex *:gap-x-2 md:space-y-2"
             >
               <li>
                 <Star class={styling} />Din expertis.
@@ -133,7 +133,7 @@
             <Textarea
               {...attrs}
               placeholder="Skriv en text om dig själv som lärare..."
-              class="max-h-[500px] md:max-h-[700px] min-h-32 resize-y"
+              class="max-h-[500px] min-h-32 resize-y md:max-h-[700px]"
               style={"field-sizing: content"}
               bind:value={$bioData.bio}
             />
@@ -161,7 +161,6 @@
         </Form.Control>
         <Form.FieldErrors />
       </Form.Field>
-
     </SettingsForm>
 
     <SettingsForm

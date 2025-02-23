@@ -75,7 +75,7 @@
     : subjects;
 
   const subjectChipStyling =
-    "h-12 hover:scale-105 transition-all ease-in-out inline-flex gap-x-2 items-center px-2 py-1 text-sm bg-background rounded-full md:hover:bg-background";
+    "h-12 grow inline-flex gap-x-2 items-center px-2 py-1 text-sm bg-background rounded-full md:hover:bg-background";
 </script>
 
 <form

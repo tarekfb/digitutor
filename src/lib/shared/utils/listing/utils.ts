@@ -70,6 +70,8 @@ export const formatSearchResult = ({
   first_name,
   avatar_url,
   role,
+  avg_rating,
+  review_count
 }: DbSearchResult): SearchResult => {
   return {
     id,
@@ -77,6 +79,8 @@ export const formatSearchResult = ({
     description,
     hourlyPrice: hourly_price,
     subjects,
+    avgRating: avg_rating,
+    reviewCount: review_count,
     profile: {
       role: role,
       avatarUrl: avatar_url ?? undefined,

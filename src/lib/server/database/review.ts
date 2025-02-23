@@ -1,8 +1,8 @@
 import type { Session, SupabaseClient } from "@supabase/supabase-js";
 import type {
-  DbDisplayProfile,
   InputReview,
   DbReviewWithReferences,
+  DbTopTeacher,
 } from "src/lib/shared/models/review.ts";
 import { getNow } from "src/lib/shared/utils/utils.ts";
 import type { Database, Tables } from "src/supabase.ts";
@@ -123,19 +123,36 @@ export const getHighQualityReviews = async (
   return data as unknown as DbReviewWithReferences[];
 };
 
-export const getTopTeacherByReviews = async (
+// export const getTopTeacherByReviews = async (
+//   supabase: SupabaseClient<Database>,
+//   max?: number,
+// ): Promise<DbDisplayProfile[]> => {
+//   let query = supabase.rpc("get_top_teacher_by_reviews");
+
+//   if (max) query = query.limit(max);
+//   const { data, error } = await query;
+
+//   if (error) {
+//     console.error(`Failed to find reviews`, { error });
+//     throw error;
+//   }
+
+//   return data as unknown as DbDisplayProfile[];
+// };
+
+export const getTopTeacher = async (
   supabase: SupabaseClient<Database>,
   max?: number,
-): Promise<DbDisplayProfile[]> => {
-  let query = supabase.rpc("get_top_teacher_by_reviews");
+): Promise<DbTopTeacher[]> => {
+  let query = supabase.from("top_rated_teachers").select("*").eq("avg_rating", 5).gt("five_star_reviews_with_description", 0);
 
   if (max) query = query.limit(max);
   const { data, error } = await query;
 
   if (error) {
-    console.error(`Failed to find reviews`, { error });
+    console.error(`Failed to find top teachers`, { error });
     throw error;
   }
 
-  return data as unknown as DbDisplayProfile[];
+  return data as unknown as DbTopTeacher[];
 };

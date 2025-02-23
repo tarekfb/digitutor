@@ -9,7 +9,7 @@ export type DbListingWithProfile = Omit<Tables<"listings">, "profile"> & {
   profile: DbProfile;
 };
 
-export type DbSearchResult =  {
+export type DbSearchResult = {
   id: DbListingBase["id"];
   title: DbListingBase["title"];
   description: DbListingBase["description"];
@@ -24,6 +24,8 @@ export type DbSearchResult =  {
   bio: DbProfile["bio"];
   role: DbProfile["role"];
   subjects: DbListingBase["subjects"];
+  avg_rating: number;
+  review_count: number;
 };
 
 export type ListingBase = Omit<

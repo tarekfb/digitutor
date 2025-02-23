@@ -24,7 +24,7 @@
     <ul class="flex flex-col gap-y-2">
       {#each subjects as subject}
         {#if subject !== searchedSubject}
-          <SubjectItem {subject} muted={false} />
+          <SubjectItem {subject} muted={false} li />
         {/if}
       {/each}
     </ul>
