@@ -15,7 +15,7 @@ import {
 import { isErrorWithCode } from "src/lib/shared/utils/utils.ts";
 import { getSubjects } from "src/lib/server/database/subjects.ts";
 import { formatSubject, type Subject } from "src/lib/shared/models/subject.ts";
-import { formatSearchResult } from "src/lib/shared/utils/listing/utils.ts";
+import { filterUniqueAndFormatSearchResults, formatSearchResult } from "src/lib/shared/utils/search/utils.ts";
 import { getQueryFromFormData } from "src/lib/shared/utils/search/utils.ts";
 
 export const load = (async ({ url, locals: { supabase } }) => {
@@ -29,8 +29,8 @@ export const load = (async ({ url, locals: { supabase } }) => {
   if (!query && !getAll) return { form, initResults, initMessage };
 
   try {
-    const dbLlistings = await search(supabase, query);
-    initResults = dbLlistings.map((listing) => formatSearchResult(listing));
+    const dbListings = await search(supabase, query);
+    initResults = filterUniqueAndFormatSearchResults(dbListings);
   } catch (error) {
     if (isErrorWithCode(error)) {
       if (error.code == ExternalErrorCodes.SyntaxError)
@@ -76,7 +76,7 @@ export const actions: Actions = {
 
     try {
       const listings = await search(supabase, query);
-      const formatted: SearchResult[] = listings.map((listing) => formatSearchResult(listing));
+      const formatted = filterUniqueAndFormatSearchResults(listings);
       return { form, formatted };
     } catch (error) {
       if (isErrorWithCode(error)) {

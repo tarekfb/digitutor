@@ -56,7 +56,9 @@
       </div>
     </div>
 
-    <div class="mt-0 flex w-full max-w-screen-sm flex-col items-center text-center md:mt-4">
+    <div
+      class="mt-0 flex w-full max-w-screen-sm flex-col items-center text-center md:mt-4"
+    >
       <Link href="/search" class="md:mb-2">
         <h2
           class="heading flex items-center gap-x-2 px-2 text-xl font-semibold text-background md:text-3xl"
@@ -92,26 +94,28 @@
     <!-- <ProfileCarousel profiles={displayProfiles} /> -->
     <!-- atm unused but will bring back -->
 
+    {#if displayReviews.length > 0}
     <div class="flex flex-col items-center gap-y-2">
-      {#if displayReviews.length > 0}
         <PrimaryTitle class="text-gradient my-4 text-center ">
           Vad våra användare säger
         </PrimaryTitle>
-        <div class="grid grid-cols-2 gap-4 md:grid-cols-2">
+        <div class="grid grid-cols-1 gap-4 {displayReviews.length > 1 ? 'md:grid-cols-2' : ''}">
           {#each Array(2) as _, colIndex}
             <div class="flex flex-col gap-4">
               {#each displayReviews.filter((_, index) => index % 4 === colIndex) as review}
                 <ReviewCardExtra
                   truncate={40}
                   {review}
-                  class="h-auto min-w-32 max-w-full rounded-lg"
+                  class="h-auto min-w-32 max-w-full rounded-lg {colIndex > 0
+                    ? 'hidden md:flex'
+                    : ''}"
                 />
               {/each}
             </div>
           {/each}
         </div>
+      </div>
       {/if}
-    </div>
 
     <p class="text-gradient mt-4 text-center text-xl font-bold md:text-3xl">
       Vill du lära ut på {websiteName}?
