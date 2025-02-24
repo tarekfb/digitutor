@@ -94,8 +94,8 @@
     <!-- <ProfileCarousel profiles={displayProfiles} /> -->
     <!-- atm unused but will bring back -->
 
+    {#if displayReviews.length > 0}
     <div class="flex flex-col items-center gap-y-2">
-      {#if displayReviews.length > 0}
         <PrimaryTitle class="text-gradient my-4 text-center ">
           Vad våra användare säger
         </PrimaryTitle>
@@ -106,7 +106,7 @@
                 <ReviewCardExtra
                   truncate={40}
                   {review}
-                  class="h-auto min-w-32 max-w-full rounded-lg {colIndex === 0
+                  class="h-auto min-w-32 max-w-full rounded-lg {colIndex > 0
                     ? 'hidden md:flex'
                     : ''}"
                 />
@@ -114,8 +114,8 @@
             </div>
           {/each}
         </div>
+      </div>
       {/if}
-    </div>
 
     <p class="text-gradient mt-4 text-center text-xl font-bold md:text-3xl">
       Vill du lära ut på {websiteName}?
