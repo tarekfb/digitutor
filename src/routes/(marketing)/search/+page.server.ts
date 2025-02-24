@@ -1,5 +1,5 @@
 import { search } from "src/lib/server/database/search.ts";
-import { getFailFormMessage } from "src/lib/shared/constants/constants.ts";
+import { getFailFormMessage, getFailFormMessageObjectified } from "src/lib/shared/constants/constants.ts";
 import { fail, message, superValidate } from "sveltekit-superforms";
 import { zod } from "sveltekit-superforms/adapters";
 import {
@@ -15,9 +15,9 @@ import {
 import { isErrorWithCode } from "src/lib/shared/utils/utils.ts";
 import { getSubjects } from "src/lib/server/database/subjects.ts";
 import { formatSubject, type Subject } from "src/lib/shared/models/subject.ts";
-import { filterUniqueAndFormatSearchResults, formatSearchResult } from "src/lib/shared/utils/search/utils.ts";
+import { filterUniqueAndFormatSearchResults } from "src/lib/shared/utils/search/utils.ts";
 import { getQueryFromFormData } from "src/lib/shared/utils/search/utils.ts";
-import * as Sentry from "@sentry/sveltekit";
+import { logError } from "src/lib/shared/utils/logging/utils.ts";
 
 export const load = (async ({ url, locals: { supabase } }) => {
   const query = url.searchParams.get("q") || ""; // falsy query will get all
@@ -76,7 +76,6 @@ export const actions: Actions = {
     const query = getQueryFromFormData(form.data);
 
     try {
-      throw new Error("Test error for sentry")
       const listings = await search(supabase, query);
       const formatted = filterUniqueAndFormatSearchResults(listings);
       return { form, formatted };
@@ -92,13 +91,10 @@ export const actions: Actions = {
             { status: 400 },
           );
       }
-      const uuid = crypto.randomUUID();
-      Sentry.captureException(error, {});
-      console.error(
-        "Error searching for teachers with following search: " + query,
-        error,
-      );
-      return message(form, getFailFormMessage(uuid), { status: 500 });
+      const trackingId = logError(error, {
+        message: "Error searching for teachers with following search: " + query,
+      });
+      return message(form, getFailFormMessageObjectified({ trackingId }), { status: 500 });
     }
   },
 };

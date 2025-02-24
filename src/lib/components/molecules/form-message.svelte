@@ -1,7 +1,9 @@
 <script lang="ts">
   import type { Message } from "$lib/shared/models/common.ts";
-  import type { Writable } from '@square/svelte-store';
+  import type { Writable } from "@square/svelte-store";
   import AlertMessage from "$lib/components/atoms/alert-message.svelte";
+  import SquareArrowOutUpRight from "lucide-svelte/icons/square-arrow-out-up-right";
+  import Link from "../atoms/link.svelte";
 
   let className: string | null | undefined = undefined;
   export { className as class };
@@ -40,7 +42,18 @@
           > för att kontakta läraren.
         </p>
       {/if}
+
       <slot />
+      {#if $message.trackingId}
+        <p class="inline text-xs md:text-sm">
+          <Link
+            href="/report-bug?id={$message.trackingId}"
+            class="flex-inline items-center gap-x-2 font-normal text-inherit"
+            target="_blank"
+            >Rapportera detta fel <SquareArrowOutUpRight class="inline size-4" /></Link
+          >
+        </p>
+      {/if}
     </AlertMessage>
   </div>
 {/if}

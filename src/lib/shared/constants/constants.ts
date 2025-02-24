@@ -58,6 +58,25 @@ export const getFailFormMessage = (
   data: data ?? undefined,
 });
 
+export const getFailFormMessageObjectified = (
+  options: {
+    title?: string,
+    description?: string,
+    messageId?: MessageId,
+    trackingId?: string,
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    data?: any,
+    variant?: "destructive" | "default" | "warning",
+  }
+): Message => ({
+  variant: options.variant ?? "destructive",
+  title: options.title ?? "Något gick fel",
+  description: options.description ?? "Du kan kontakta oss om detta fortsätter.",
+  trackingId: options.trackingId ?? undefined,
+  id: options.messageId ?? MessageId.Unknown,
+  data: options.data ?? undefined,
+});
+
 export const getSuccessFormMessage = (
   title: string,
   description?: string,

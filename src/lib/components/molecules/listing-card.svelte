@@ -5,7 +5,7 @@
   import IsPublished from "../atoms/is-published.svelte";
   import { Button } from "$lib/components/ui/button/index.js";
   import Pen from "lucide-svelte/icons/pen";
-  import ExternalLink from "lucide-svelte/icons/external-link";
+  import ExternalLink from "lucide-svelte/icons/square-arrow-out-up-right";
   import Separator from "../ui/separator/separator.svelte";
 
   export let listing: ListingWithProfile;

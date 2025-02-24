@@ -4,7 +4,7 @@
   import { Button } from "$lib/components/ui/button/index.js";
   import { page } from "$app/stores";
   import { goto } from "$app/navigation";
-  import ExternalLink from "lucide-svelte/icons/external-link";
+  import ExternalLink from "lucide-svelte/icons/square-arrow-out-up-right";
   import Link from "../atoms/link.svelte";
 
   export let listing: ListingWithProfile | undefined = undefined;

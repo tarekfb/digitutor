@@ -2,7 +2,7 @@
   import type { CreditsProduct } from "src/lib/shared/models/subscription.js";
   import { Button } from "../ui/button/index.ts";
   import { goto } from "$app/navigation";
-  import ExternalLink from "lucide-svelte/icons/external-link";
+  import ExternalLink from "lucide-svelte/icons/square-arrow-out-up-right";
 
   export let creditsProduct: CreditsProduct;
   const href = `/account/subscribe/${creditsProduct.stripePriceId}?mode=payment`;
