@@ -63,8 +63,8 @@
     {/if}
     <Stars
       rating={review.rating}
-      class="self-center md:self-end"
-      starsStylign=" size-4 lg:size-6"
+      class="self-end"
+      starsStylign="size-4 lg:size-6"
     />
   </div>
 </svelte:element>

@@ -99,21 +99,26 @@
         </SecondaryTitle>
       </Link>
       <div class="mt-2 flex flex-col items-start gap-y-1 md:hidden">
-        <Stars rating={result.avgRating} size={4} />
-        <p class="text-muted-foreground">
+        {#if result.reviewCount > 0}
+          <Stars rating={result.avgRating} size={4} />
           <NbrOfReviews nbrOfReviews={result.reviewCount} />
-        </p>
+        {:else}
+          <p>Ny lärare</p>
+        {/if}
       </div>
+
       <div class="flex items-center justify-between gap-x-2">
         <div class="{rowItemStyling} hidden md:block">
-          <Stars
-            rating={result.avgRating}
-            size={4}
-            class="{boxStyling} items-center self-start "
-          />
-          <p class="text-muted-foreground">
+          {#if result.reviewCount > 0}
+            <Stars
+              rating={result.avgRating}
+              size={4}
+              class="{boxStyling} items-center self-start "
+            />
             <NbrOfReviews nbrOfReviews={result.reviewCount} />
-          </p>
+          {:else}
+            <p>Ny lärare</p>
+          {/if}
         </div>
         <div class={rowItemStyling}>
           <h3 class="self-start text-2xl md:self-center {boxStyling}">
