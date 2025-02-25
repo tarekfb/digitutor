@@ -5,6 +5,7 @@ import Stripe from "stripe";
 import { pricingPlans } from "../../constants/constants.ts";
 import type { Database } from "src/supabase.ts";
 import { getNow } from "../utils.ts";
+import { logError } from "../logging/utils.ts";
 
 const stripe = new Stripe(PRIVATE_STRIPE_API_KEY);
 // { apiVersion: "2023-08-16" }
@@ -24,8 +25,10 @@ export const getOrCreateCustomerId = async ({
 
   // PGRST116 == no rows
   if (error && error.code != "PGRST116") {
-    console.error("error PGRST116 when getting customer id: no rows", error);
-    return { error: error };
+    logError(error, {
+      message: "Error searching for teachers with following search: no rows",
+    });
+    return { error };
   }
 
   if (dbCustomer?.stripe_customer_id)
@@ -50,12 +53,14 @@ export const getOrCreateCustomerId = async ({
       },
     });
   } catch (e) {
-    console.error("Unknown error when creating stripe customer", e);
+    logError(e, {
+      message: "Unknown error when creating stripe customer",
+    });
     return { error: e };
   }
 
   if (!customer.id) {
-    console.error("Unknown error on stripe user creation");
+    logError(new Error("Custom error, missing customer id"), { message: "Unknown error on stripe user creation" });
     return { error: "Unknown stripe user creation error" };
   }
 
@@ -69,10 +74,9 @@ export const getOrCreateCustomerId = async ({
     });
 
   if (insertError) {
-    console.error(
-      "Unknown error on inserting row to stripe_customers",
-      insertError,
-    );
+    logError(insertError, {
+      message: "Unknown error on inserting row to stripe_customers",
+    });
     return { error: insertError };
   }
 
@@ -93,10 +97,9 @@ export const fetchSubscription = async ({
       status: "all",
     });
   } catch (e) {
-    console.error(
-      `unknown error when fetching list of subscriptions from stripe for customerid: ${customerId}`,
-      e,
-    );
+    logError(e, {
+      message: `unknown error when fetching list of subscriptions from stripe for customerid: ${customerId}`,
+    });
     return { error: e };
   }
 
@@ -116,10 +119,16 @@ export const fetchSubscription = async ({
       return pricingPlan.stripeProductId === productId;
     });
     if (!appSubscription)
-      return {
-        error:
-          "Stripe subscription does not have matching app subscription in pricing_plans.ts (via product id match)",
-      };
+      logError(
+        new Error("Custom error - missing app subscription"),
+        {
+          message: "Stripe subscription does not have matching app subscription in pricing_plans.ts (via product id match)",
+        }
+      )
+    return {
+      error:
+        "Stripe subscription does not have matching app subscription in pricing_plans.ts (via product id match)",
+    };
   }
   let primarySubscription = null;
   if (primaryStripeSubscription && appSubscription) {

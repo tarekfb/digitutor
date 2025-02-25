@@ -43,6 +43,23 @@ export const getDefaultErrorInfo = (
   data: data ?? undefined,
 });
 
+export const getDefaultErrorInfoObjectified = (
+  options: {
+    message?: string,
+    description?: string,
+    trackingId?: string,
+    id?: MessageId,
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    data?: any,
+  }
+): App.Error => ({
+  message: options.message ?? defaultErrorTitle,
+  description: options.description ?? defaultErrorDescription,
+  id: options.id ?? MessageId.Unknown,
+  data: options.data ?? undefined,
+  trackingId: options.trackingId ?? undefined,
+});
+
 export const getFailFormMessage = (
   title?: string,
   description?: string,
