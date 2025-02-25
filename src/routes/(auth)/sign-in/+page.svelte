@@ -45,8 +45,6 @@
     resetForm: false,
   });
   const { form: formData, enhance, delayed, message, allErrors } = userForm;
-
-  $: console.log("non db", displayTeacher);
 </script>
 
 <svelte:head>

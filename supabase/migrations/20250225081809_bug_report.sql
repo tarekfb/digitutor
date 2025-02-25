@@ -2,7 +2,7 @@ create table "public"."bug_report" (
     "id" uuid not null default gen_random_uuid(),
     "created_at" timestamp with time zone not null default now(),
     "description" text,
-    "tracking_id" uuid
+    "tracking_id" text
 );
 
 

@@ -76,6 +76,7 @@ export const actions: Actions = {
     const query = getQueryFromFormData(form.data);
 
     try {
+      throw new Error("Testing error functionality")
       const listings = await search(supabase, query);
       const formatted = filterUniqueAndFormatSearchResults(listings);
       return { form, formatted };

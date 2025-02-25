@@ -16,10 +16,6 @@
   import { websiteName } from "src/lib/shared/constants/constants.ts";
   import { reportBugSchema } from "src/lib/shared/models/report-bug.ts";
   import * as Collapsible from "$lib/components/ui/collapsible/index.ts";
-  import Star from "lucide-svelte/icons/star";
-  import MapPin from "lucide-svelte/icons/map-pin";
-  import GraduationCap from "lucide-svelte/icons/graduation-cap";
-  import Brain from "lucide-svelte/icons/pin";
   import ChevronDown from "lucide-svelte/icons/chevron-down";
   import ChevronUp from "lucide-svelte/icons/chevron-up";
 
@@ -94,7 +90,7 @@
         </Collapsible.Root>
         <Textarea
           {...attrs}
-          placeholder="En beskrivning på felet..."
+          placeholder="Hur uppstod felet? Vilken webbläsare? Löstes problemet, hur?"
           class="max-h-[500px] min-h-32 resize-y bg-card md:max-h-[700px]"
           style={"field-sizing: content"}
           bind:value={$formData.description}
@@ -105,13 +101,14 @@
     <Form.Field form={contactForm} name="trackingId">
       <Form.Control let:attrs>
         <Label>Autogenererat ID</Label>
+        <p class="text-sm text-muted-foreground">Fältet fylls i automatiskt.</p>
         <Input
           {...attrs}
           placeholder="Detta fylls i automatiskt..."
-          class="bg-card"
+          class="cursor-not-allowed bg-card text-muted-foreground"
           bind:value={$formData.trackingId}
           type="text"
-          disabled
+          readonly
         />
       </Form.Control>
       <Form.FieldErrors />

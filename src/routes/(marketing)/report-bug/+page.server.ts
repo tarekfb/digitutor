@@ -21,8 +21,7 @@ export const actions: Actions = {
     if (!form.valid) return fail(400, { form });
 
     const { trackingId, description } = form.data;
-    console.log(trackingId, description)
-    console.log(form.data);
+
     try {
       const { error: insertError } = await supabase
         .from("bug_report")
