@@ -1,5 +1,5 @@
 import { error } from "@sveltejs/kit";
-import { defaultErrorInfo } from "$lib/shared/constants/constants.ts";
+import { getDefaultErrorInfoObjectified } from "$lib/shared/constants/constants.ts";
 import {
   sendMessageSchema,
   type ConversationWithReferences,
@@ -10,6 +10,7 @@ import { getConversation } from "src/lib/server/database/conversations.ts";
 import { ExternalErrorCodes } from "src/lib/shared/models/common.ts";
 import { formatConversationWithReferences } from "src/lib/shared/utils/conversation/utils.ts";
 import { isErrorWithCode } from "src/lib/shared/utils/utils.ts";
+import { logError } from "src/lib/shared/utils/logging/utils.ts";
 
 export const ssr = false;
 
@@ -40,8 +41,10 @@ export const load = async ({
           description: "Konversationen finns inte eller har tagits bort.",
         });
     }
-    console.error("Unable to find conversation for slug " + slug, e);
-    error(500, { ...defaultErrorInfo });
+    const trackingId = logError(e, {
+      message: "Error when retrieving conversation with slug " + slug,
+    });
+    error(500, { ...getDefaultErrorInfoObjectified({ trackingId }) });
   }
 
   const form = await superValidate(zod(sendMessageSchema));

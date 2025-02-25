@@ -2,8 +2,8 @@ import { error, fail } from "@sveltejs/kit";
 import { createListing, getListings } from "$lib/server/database/listings.ts";
 import type { Actions, PageServerLoad } from "./$types.ts";
 import {
-  getFailFormMessage,
-  getDefaultErrorInfo,
+  getFailFormMessageObjectified,
+  getDefaultErrorInfoObjectified,
 } from "$lib/shared/constants/constants.ts";
 import { message, superValidate } from "sveltekit-superforms";
 import {
@@ -13,6 +13,7 @@ import {
 import { zod } from "sveltekit-superforms/adapters";
 import { redirect } from "sveltekit-flash-message/server";
 import { formatListingWithProfile } from "src/lib/shared/utils/listing/utils.ts";
+import { logError } from "src/lib/shared/utils/logging/utils.ts";
 
 export const load: PageServerLoad = async ({
   locals: { supabase, safeGetSession },
@@ -29,8 +30,11 @@ export const load: PageServerLoad = async ({
     const dbListings = await getListings(supabase, 4, session.user.id);
     listings = dbListings.map((listing) => formatListingWithProfile(listing));
   } catch (e) {
-    console.error("Unable to get listings for id " + session.user.id, e);
-    error(500, getDefaultErrorInfo("Kunde inte hämta konversationer"));
+    const trackingId = logError(e, {
+      message: "Error while fetching listings in profile page",
+      userId: session.user.id,
+    });
+    error(500, { ...getDefaultErrorInfoObjectified({ trackingId, message: "Kunde inte hämta konversationer" }) });
   }
 
   const form = await superValidate(
@@ -56,8 +60,11 @@ export const actions: Actions = {
     let { nbrOfListings } = form.data;
 
     if (nbrOfListings === undefined) {
-      console.error(
-        "User had undefined nbr of listings and tried to create listing, allow creation.",
+      logError(
+        new Error("Custom error - nbrOfListings was undefined"),
+        {
+          message: "User had undefined nbr of listings and tried to create listing, allow creation.",
+        },
       );
       nbrOfListings = 0;
     }
@@ -65,13 +72,12 @@ export const actions: Actions = {
     if (nbrOfListings > 4)
       return message(
         form,
-        getFailFormMessage(
-          "Du har för många annonser",
-          "Ta bort en annons innan du skapar en ny.",
-          undefined,
-          undefined,
-          "warning",
-        ),
+        getFailFormMessageObjectified(
+          {
+            title: "Du har för många annonser",
+            description: "Ta bort en annons innan du skapar en ny.",
+            variant: "warning",
+          }),
         { status: 400 },
       );
 
@@ -80,8 +86,14 @@ export const actions: Actions = {
       const { id } = await createListing(supabase, title.trim(), session);
       listingId = id;
     } catch (error) {
-      console.error("Failed to create listing", error);
-      return message(form, getFailFormMessage(), { status: 500 });
+      const trackingId = logError(error, {
+        message: "Error when creating listing",
+      });
+      return message(
+        form,
+        getFailFormMessageObjectified({ trackingId }),
+        { status: 500 },
+      );
     }
     redirect(303, `/account/edit-listing/${listingId}`);
   },

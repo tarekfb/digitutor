@@ -6,14 +6,11 @@
   import Footer from "src/lib/components/organisms/footer.svelte";
   export let data: LayoutData;
 
-  $: ({ supabase, session, profile } = data);
-  // profile should always be null
-  // ts will complain if not true
-  const profileChecked: null = profile;
+  $: ({ supabase, session } = data);
 </script>
 
 <div class="flex min-h-screen flex-col">
-  <Navbar profile={profileChecked} logout={() => logout(supabase, session)} />
+  <Navbar profile={null} logout={() => logout(supabase, session)} />
 
   <main class="flex flex-1 flex-col items-center">
     <slot />

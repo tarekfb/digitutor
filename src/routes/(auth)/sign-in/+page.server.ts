@@ -18,7 +18,9 @@ export const load: PageServerLoad = async ({ locals: { supabase } }) => {
     const dbTeacher = await getTopTeacher(supabase, 1);
     displayTeacher = dbTeacher.length > 0 ? formatTopTeacher(dbTeacher[0]) : undefined;
   } catch (e) {
-    console.error("Error when fetching signin topteacher", e);
+    const trackingId = logError(e, {
+      message: "Error when fetching signin topteacher",
+    });
     displayTeacher = undefined;
   }
 

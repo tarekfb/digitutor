@@ -21,11 +21,7 @@ export const load: LayoutServerLoad = async ({
     const trackingId = logError(e, {
       message: "Error while fetching profile in layout for account",
     });
-    // return message({}, getFailFormMessageObjectified({ trackingId }), {
-    //   status: 500,
-    // });
     error(500, { ...getDefaultErrorInfoObjectified({ trackingId }) });
-
   }
   return { profile };
 };

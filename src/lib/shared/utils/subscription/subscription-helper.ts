@@ -118,17 +118,18 @@ export const fetchSubscription = async ({
     appSubscription = pricingPlans.find((pricingPlan) => {
       return pricingPlan.stripeProductId === productId;
     });
-    if (!appSubscription)
+    if (!appSubscription) {
       logError(
         new Error("Custom error - missing app subscription"),
         {
           message: "Stripe subscription does not have matching app subscription in pricing_plans.ts (via product id match)",
         }
       )
-    return {
-      error:
-        "Stripe subscription does not have matching app subscription in pricing_plans.ts (via product id match)",
-    };
+      return {
+        error:
+          "Stripe subscription does not have matching app subscription in pricing_plans.ts (via product id match)",
+      };
+    }
   }
   let primarySubscription = null;
   if (primaryStripeSubscription && appSubscription) {

@@ -7,11 +7,13 @@ import { error } from "@sveltejs/kit";
 import {
   defaultPlanId,
   getDefaultErrorInfo,
+  getDefaultErrorInfoObjectified,
   websiteName,
 } from "src/lib/shared/constants/constants.ts";
 import { getCreditsByStudent } from "src/lib/server/database/credits.ts";
 import { redirect, setFlash } from "sveltekit-flash-message/server";
 import { PricingPlanIds } from "src/lib/shared/models/subscription.ts";
+import { logError } from "src/lib/shared/utils/logging/utils.ts";
 
 export const load: PageServerLoad = (async (event) => {
   const {
@@ -40,8 +42,10 @@ export const load: PageServerLoad = (async (event) => {
     user,
   });
   if (idError || !customerId) {
-    console.error("Error creating customer id", idError);
-    error(500, getDefaultErrorInfo());
+    const trackingId = logError(idError, {
+      message: "Error creating customer id",
+    });
+    error(500, { ...getDefaultErrorInfoObjectified({ trackingId }) });
   }
 
   const {
@@ -51,16 +55,19 @@ export const load: PageServerLoad = (async (event) => {
   } = await fetchSubscription({ customerId });
 
   if (fetchErr) {
-    console.error("Error fetching subscription", fetchErr);
-    error(500, getDefaultErrorInfo());
+    const trackingId = logError(fetchErr, {
+      message: "Error while fetching subscription for account billing page",
+    });
+    error(500, { ...getDefaultErrorInfoObjectified({ trackingId }) });
   }
 
   let balance: number | undefined;
   try {
     balance = await getCreditsByStudent(supabaseServiceRole, user.id);
   } catch (error) {
-    console.error("Error fetching credits", error);
-    balance = undefined;
+    logError(error, {
+      message: "Error while fetching credits for account billing page",
+    });
   }
 
   const currentPlanId = primarySubscription?.appSubscription?.id || defaultPlanId;

@@ -6,6 +6,8 @@ import {
   MessageId,
   defaultErrorDescription,
   getDefaultErrorInfo,
+  getDefaultErrorInfoObjectified,
+  getFailFormMessageObjectified,
 } from "$lib/shared/constants/constants.ts";
 import { message, superValidate } from "sveltekit-superforms";
 import {
@@ -32,6 +34,8 @@ import type { Tables } from "src/supabase.ts";
 import { findSimilarSubjects } from "src/lib/shared/utils/subjects/utils.ts";
 import { ExternalErrorCodes } from "src/lib/shared/models/common.js";
 import { formatListingWithProfile } from "src/lib/shared/utils/listing/utils.js";
+import { logError } from "src/lib/shared/utils/logging/utils.ts";
+import type { Actions } from "./$types.js";
 
 export const load = async ({
   locals: { supabase },
@@ -60,18 +64,19 @@ export const load = async ({
           description: "Annonsen finns inte eller har tagits bort.",
         });
     }
-    console.error("Unknown error when reading listing with id: " + slug, e);
-    error(500, getDefaultErrorInfo("Vi kunde inte hämta annonsen"));
+    const trackingId = logError(e, {
+      message: "Error when reading listing with id " + slug,
+    });
+    error(500, { ...getDefaultErrorInfoObjectified({ trackingId }) });
   }
 
   if (session?.user.id !== listing.profile.id) {
-    console.error(
-      "Tried to read listing that is not theirs. listingid: " +
-      listing.id +
-      " userid: " +
-      session?.user.id,
-    );
-    error(500, { ...defaultErrorInfo });
+    const trackingId = logError(new Error("Unauthorized access to listing"), {
+      message: "Attempted to access a listing not owned by the user",
+      listingId: listing.id,
+      userId: session?.user.id,
+    });
+    error(500, { ...getDefaultErrorInfoObjectified({ trackingId }) });
   }
 
   let subjects: Subject[] = [];
@@ -79,8 +84,10 @@ export const load = async ({
     const rawSubjects = await getSubjects(supabase);
     subjects = rawSubjects.map((s) => formatSubject(s));
   } catch (e) {
-    console.error("Unknown error when reading subjects", e);
-    error(500, { ...defaultErrorInfo });
+    const trackingId = logError(e, {
+      message: "Error while fetching subjects",
+    });
+    error(500, { ...getDefaultErrorInfoObjectified({ trackingId }) });
   }
 
   const updateListingForm = await superValidate(
@@ -92,7 +99,7 @@ export const load = async ({
   return { subjects, updateListingForm, suggestSubjectForm };
 };
 
-export const actions = {
+export const actions: Actions = {
   deleteListing: async ({
     locals: { supabase, safeGetSession },
     cookies,
@@ -132,8 +139,10 @@ export const actions = {
       await updateListing(supabase, form.data, slug, session);
       return { form };
     } catch (error) {
-      console.error("Error when updating listing slug id: " + slug, error);
-      return message(form, getFailFormMessage(), { status: 500 });
+      const trackingId = logError(error, {
+        message: "Error when updating listing slug id: " + slug,
+      });
+      return message(form, getFailFormMessageObjectified({ trackingId }), { status: 500 });
     }
   },
   suggestSubject: async (event) => {
@@ -167,11 +176,10 @@ export const actions = {
             { status: 400 },
           ); // Todo: add some link or so in GUI to let user contact easily
       } catch (error) {
-        console.error(
-          "Error when looking for match. Allowing user to insert suggestion. slug: " +
+        logError(error, {
+          message: "Error when looking for match. Allowing user to insert suggestion.",
           slug,
-          error,
-        );
+        });
       }
     }
 
@@ -184,8 +192,11 @@ export const actions = {
         email,
       );
     } catch (error) {
-      console.error("Error when adding suggestion", error);
-      return message(form, getFailFormMessage(), { status: 500 });
+      const trackingId = logError(error, {
+        message: "Error when adding suggestion",
+        slug,
+      });
+      return message(form, getFailFormMessageObjectified({ trackingId }), { status: 500 });
     }
 
     // todo send email to admin here
