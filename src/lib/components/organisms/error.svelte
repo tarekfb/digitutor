@@ -4,6 +4,7 @@
   import ErrorNav from "$lib/components/atoms/error-nav.svelte";
   import MessageCircle from "lucide-svelte/icons/message-circle";
   import UserRound from "lucide-svelte/icons/user-round";
+  import Bug from "lucide-svelte/icons/bug";
   import {
     defaultErrorDescription,
     defaultErrorTitle,
@@ -31,7 +32,7 @@
 </script>
 
 <div
-  class=" m-8 flex min-w-[20rem] flex-col items-center gap-y-4 self-center text-center md:min-w-[48rem] md:gap-y-6 lg:min-w-[60rem]"
+  class="m-8 flex min-w-[20rem] flex-col items-center gap-y-4 self-center text-center md:min-w-[48rem] md:gap-y-6 lg:min-w-[60rem]"
 >
   <div class="flex flex-col items-center gap-y-4 md:gap-y-6">
     <PrimaryTitle class="text-4xl font-normal md:text-5xl"
@@ -45,6 +46,11 @@
     </p>
   </div>
   <ul class="h-62 mt-4 flex w-3/4 flex-col gap-4 md:mt-6 md:w-full md:flex-row">
+    {#if error.trackingId}
+      <ErrorNav text="Rapportera fel" href="/report-bug?id={error.trackingId}">
+        <Bug class={iconStyling} />
+      </ErrorNav>
+    {/if}
     <ErrorNav text="Tillbaka till startsidan" href="/">
       <Home class={iconStyling} />
     </ErrorNav>
