@@ -1,5 +1,5 @@
 // import * as Sentry from '@sentry/sveltekit';
-// import { initCloudflareSentryHandle, sentryHandle } from '@sentry/sveltekit';
+// import { initSentryHasnd, sentryHandle } from '@sentry/sveltekit';
 // import { sequence } from '@sveltejs/kit/hooks';
 
 // export const handle = sequence(
