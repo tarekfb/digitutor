@@ -1,10 +1,8 @@
-import { getListings } from "$lib/server/database/listings.ts";
 import type { LayoutServerLoad } from "./$types.ts";
 import { getProfileByUser } from "$lib/server/database/profiles.ts";
 import { formatProfile } from "src/lib/shared/utils/profile/utils.ts";
-import type { ListingWithProfile } from "src/lib/shared/models/listing.ts";
-import { formatListingWithProfile } from "src/lib/shared/utils/listing/utils.ts";
 import type { Profile } from "src/lib/shared/models/profile.ts";
+import { logError } from "src/lib/shared/utils/logging/utils.ts";
 
 export const load: LayoutServerLoad = async ({
   locals: { supabase, safeGetSession },
@@ -14,21 +12,17 @@ export const load: LayoutServerLoad = async ({
   const { session, user } = await safeGetSession();
 
   let profile: Profile | undefined;
-  if (session && user)
+  if (session && user) {
     try {
       const dbProfile = session && (await getProfileByUser(supabase, user.id));
       profile = dbProfile ? formatProfile(dbProfile) : undefined;
     } catch (error) {
-      console.error("Unable to get profile in (marketing) layout", error);
+      logError({
+        error,
+        message: "Unable to get profile in (marketing) layout",
+      });
     }
-
-  let listings: ListingWithProfile[] = [];
-  try {
-    const dbListings = await getListings(supabase, 5, undefined, true);
-    listings = dbListings.map((listing) => formatListingWithProfile(listing));
-  } catch (error) {
-    console.error("Unable to get listings in (marketing) layout", error);
   }
 
-  return { session, profile, listings }; // TODO: stream these
+  return { session, profile };
 };

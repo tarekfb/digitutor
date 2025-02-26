@@ -4,9 +4,10 @@ import { zod } from "sveltekit-superforms/adapters";
 import type { PageServerLoad } from "./$types.ts";
 import { redirect } from "sveltekit-flash-message/server";
 import {
-  getFailFormMessage,
+  getFailFormMessageObjectified,
   getSuccessFormMessage,
 } from "src/lib/shared/constants/constants.ts";
+import { logError } from "src/lib/shared/utils/logging/utils.ts";
 
 export const load = (async () => {
   const form = await superValidate(zod(requestPasswordResetSchema));
@@ -26,16 +27,22 @@ export const actions = {
     const { email } = form.data;
     if (!form.valid) return fail(400, { form });
 
-    try {
-      const { error } = await supabase.auth.resetPasswordForEmail(email);
-      if (error) {
-        console.error("Error when requesting password reset", error);
-        return message(form, getFailFormMessage(), { status: 500 });
-      }
-    } catch (error) {
-      console.error("Error when requesting password reset", error);
-      return message(form, getFailFormMessage(), { status: 500 });
+
+    const { error } = await supabase.auth.resetPasswordForEmail(email);
+    if (error) {
+      const trackingId = logError({
+        error,
+        message: "Error when requesting password reset",
+      });
+      return message(
+        form,
+        getFailFormMessageObjectified({
+          trackingId,
+        }),
+        { status: 500 },
+      );
     }
+
 
     return message(
       form,

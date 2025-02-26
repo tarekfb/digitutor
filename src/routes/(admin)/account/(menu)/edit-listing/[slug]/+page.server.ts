@@ -1,11 +1,9 @@
 import { fail, error } from "@sveltejs/kit";
 import { zod } from "sveltekit-superforms/adapters";
 import {
-  defaultErrorInfo,
   getFailFormMessage,
   MessageId,
   defaultErrorDescription,
-  getDefaultErrorInfo,
   getDefaultErrorInfoObjectified,
   getFailFormMessageObjectified,
 } from "$lib/shared/constants/constants.ts";
@@ -64,17 +62,20 @@ export const load = async ({
           description: "Annonsen finns inte eller har tagits bort.",
         });
     }
-    const trackingId = logError(e, {
+    const trackingId = logError({
+      error: e,
       message: "Error when reading listing with id " + slug,
     });
     error(500, { ...getDefaultErrorInfoObjectified({ trackingId }) });
   }
 
   if (session?.user.id !== listing.profile.id) {
-    const trackingId = logError(new Error("Unauthorized access to listing"), {
+    const trackingId = logError({
       message: "Attempted to access a listing not owned by the user",
-      listingId: listing.id,
-      userId: session?.user.id,
+      additionalData: {
+        listingId: listing.id,
+        userId: session?.user.id,
+      }
     });
     error(500, { ...getDefaultErrorInfoObjectified({ trackingId }) });
   }
@@ -84,7 +85,8 @@ export const load = async ({
     const rawSubjects = await getSubjects(supabase);
     subjects = rawSubjects.map((s) => formatSubject(s));
   } catch (e) {
-    const trackingId = logError(e, {
+    const trackingId = logError({
+      error: e,
       message: "Error while fetching subjects",
     });
     error(500, { ...getDefaultErrorInfoObjectified({ trackingId }) });
@@ -139,7 +141,8 @@ export const actions: Actions = {
       await updateListing(supabase, form.data, slug, session);
       return { form };
     } catch (error) {
-      const trackingId = logError(error, {
+      const trackingId = logError({
+        error,
         message: "Error when updating listing slug id: " + slug,
       });
       return message(form, getFailFormMessageObjectified({ trackingId }), { status: 500 });
@@ -176,9 +179,10 @@ export const actions: Actions = {
             { status: 400 },
           ); // Todo: add some link or so in GUI to let user contact easily
       } catch (error) {
-        logError(error, {
+        logError({
+          error,
           message: "Error when looking for match. Allowing user to insert suggestion.",
-          slug,
+          additionalData: { slug },
         });
       }
     }
@@ -192,9 +196,10 @@ export const actions: Actions = {
         email,
       );
     } catch (error) {
-      const trackingId = logError(error, {
+      const trackingId = logError({
+        error,
         message: "Error when adding suggestion",
-        slug,
+        additionalData: { slug },
       });
       return message(form, getFailFormMessageObjectified({ trackingId }), { status: 500 });
     }

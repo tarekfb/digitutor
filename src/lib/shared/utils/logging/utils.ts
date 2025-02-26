@@ -1,9 +1,15 @@
 import { PUBLIC_ENVIRONMENT } from "$env/static/public";
 import * as Sentry from "@sentry/sveltekit";
 
-export const logError = (error: unknown, additionalData?: Record<string, unknown>): string => {
-    if (handleLocalLog({ error, additionalData })) return crypto.randomUUID();
-    return Sentry.captureException(error, { extra: { ...(additionalData && additionalData) } });
+export const logError = (options: { error?: unknown, message: string, additionalData?: Record<string, unknown>, critical?: boolean }): string => {
+    let { additionalData } = options;
+    if (options.critical) {
+        if (additionalData) additionalData.critical = true;
+        else additionalData = { critical: true };
+    }
+
+    if (handleLocalLog({ error: options.error, additionalData })) return crypto.randomUUID();
+    return Sentry.captureException(options.error, { extra: { ...(additionalData && additionalData) } });
 };
 
 export const logMessage = (message: string, additionalData?: Record<string, unknown>): string => {

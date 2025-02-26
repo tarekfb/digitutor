@@ -1,5 +1,6 @@
 import type { PageServerLoad } from "./$types.ts";
 import {
+  getDefaultErrorInfoObjectified,
   getFailFormMessageObjectified,
   getSuccessFormMessage,
   maxAvatarSize,
@@ -34,6 +35,7 @@ import { ResourceNotFoundError } from "src/lib/shared/errors/missing-error.ts";
 import { ExternalErrorCodes } from "src/lib/shared/models/common.ts";
 import { sendEmail } from "src/lib/shared/utils/emails/utils.ts";
 import AccountDeletionConfirmation from "src/emails/account-deletion-confirmation.svelte";
+import { logError } from "src/lib/shared/utils/logging/utils.ts";
 
 export const load: PageServerLoad = async ({
   parent,
@@ -94,7 +96,8 @@ export const actions = {
     try {
       await updateProfile(supabase, profileInput);
     } catch (error) {
-      const trackingId = logError(error, {
+      const trackingId = logError({
+        error,
         message: "Error on update profile in update bio with userid " + user.id,
       });
       return message(
@@ -125,7 +128,8 @@ export const actions = {
     try {
       await updateProfile(supabase, profileInput);
     } catch (error) {
-      const trackingId = logError(error, {
+      const trackingId = logError({
+        error,
         message: "Error on update profile in update name with userid " + user.id,
       });
       return message(
@@ -151,7 +155,8 @@ export const actions = {
     try {
       await updateUserEmail(supabase, email.trim());
     } catch (error) {
-      const trackingId = logError(error, {
+      const trackingId = logError({
+        error,
         message: "Error on update profile in update email with userid " + session?.user.id,
       });
       return message(
@@ -191,7 +196,8 @@ export const actions = {
     if (!form.valid) return fail(400, { form });
     const { avatar } = form.data;
 
-    let failedCompression = false;
+    let failedCompression: boolean = false;
+    let trackingId: string = "";
     let input = await avatar.arrayBuffer();
     try {
       const res = await fetch(CF_IMAGE_RESIZE_URL, {
@@ -205,7 +211,8 @@ export const actions = {
       input = await res.arrayBuffer();
     } catch (error) {
       failedCompression = true;
-      const trackingId = logError(error, {
+      trackingId = logError({
+        error,
         message: "Error on compression in upload avatar for userid " + userId,
       });
     }
@@ -213,10 +220,12 @@ export const actions = {
     if (failedCompression)
       return message(
         form,
-        getFailFormMessage(
-          "Bilden är för stor",
-          `Komprimeringen misslyckades. Din bild är ${formatBytes(Buffer.byteLength(input))}. Testa med en mindre bild.`,
-        ),
+        getFailFormMessageObjectified(
+          {
+            title: "Bilden är för stor",
+            description: `Komprimeringen misslyckades. Din bild är ${formatBytes(Buffer.byteLength(input))}. Testa med en mindre bild.`,
+            trackingId,
+          }),
         { status: 500 },
       );
 
@@ -227,17 +236,20 @@ export const actions = {
       avatarPath = await uploadAvatar(supabase, fileName, input);
     } catch (error) {
       if (isErrorWithStatusCode(error)) {
-        if (error.statusCode === ExternalErrorCodes.FileTooLargeStorageError)
+        if (error.statusCode === ExternalErrorCodes.FileTooLargeStorageError) {
           return message(
             form,
-            getFailFormMessage(
-              "Filen är för stor",
-              `Din fil är ${formatBytes(Buffer.byteLength(input))}, maxgränsen är ${formatBytes(maxAvatarSize)}.`,
-            ),
-            { status: 413 },
-          );
+            {
+              title: "Filen är för stor",
+              description: `Din fil är ${formatBytes(
+                Buffer.byteLength(input),
+              )}, maxgränsen är ${formatBytes(maxAvatarSize)}.`,
+            }),
+            { status: 413 }
+        }
       }
-      const trackingId = logError(error, {
+      const trackingId = logError({
+        error,
         message: "Unknown error on upload avatar for userid " + userId,
       });
       return message(
@@ -253,7 +265,8 @@ export const actions = {
         avatar_url: avatarPath,
       });
     } catch (error) {
-      const trackingId = logError(error, {
+      const trackingId = logError({
+        error,
         message: `Error on update profile with new avatar on path ${avatarPath} with userid ${userId}`,
       });
       return message(form, getFailFormMessageObjectified({ trackingId }), { status: 500 });
@@ -275,13 +288,7 @@ export const actions = {
     const { path } = form.data;
 
     if (!verifyAvatarOwnership(path, userId)) {
-      const trackingId = logError(
-        new Error(
-          "Custom error - unexpected filename",
-        ),
-        {
-          message: `User ${userId} sent incorrect filename and might have tampered with form data. Filename is ${path}`,
-        },
+      const trackingId = logError({ message: `User ${userId} sent incorrect filename and might have tampered with form data. Filename is ${path}`, },
       );
       return message(
         form,
@@ -295,16 +302,11 @@ export const actions = {
     try {
       await deleteAvatar(supabase, fileName);
     } catch (error) {
-      if (error instanceof ResourceNotFoundError)
-        logError(
-          error,
-          {
-            message: "No object deleted. Possible permission or path issue",
-          },
-        );
-      else logError(error, { message: "Unknown error on delete avatar from storage" });
-
-      return message(form, getFailFormMessage(), { status: 500 });
+      const trackingId = logError({
+        error,
+        message: error instanceof ResourceNotFoundError ? "No object deleted. Possible permission or path issue" : "Unknown error on delete avatar from storage",
+      })
+      return message(form, getFailFormMessageObjectified({ trackingId }), { status: 500 });
     }
 
     try {
@@ -313,7 +315,8 @@ export const actions = {
         avatar_url: "",
       });
     } catch (error) {
-      const trackingId = logError(error, {
+      const trackingId = logError({
+        error,
         message: `Error on update profile with delete avatar for userid ${userId}`,
       });
       return message(
@@ -339,13 +342,7 @@ export const actions = {
     const { password } = form.data;
     const { id: userId, email } = user;
     if (!email) {
-      const trackingId = logError(
-        new Error("Custom error - user has no email"),
-        {
-          message: `User with id ${userId} has no email and therefore password could not be verified`,
-          ...getDefaultErrorInfoObjectified({ trackingId }),
-        },
-      );
+      const trackingId = logError({ ...getDefaultErrorInfoObjectified({ message: `User with id ${userId} has no email and therefore password could not be verified` }), },);
       return message(form, getFailFormMessageObjectified({ trackingId }), { status: 500 });
     }
 
@@ -363,7 +360,8 @@ export const actions = {
       const profile = await getProfileByUser(supabase, userId)
       studentName = profile.first_name;
     } catch (error) {
-      logError(error, {
+      logError({
+        error,
         message: `Error getting  first name for id ${userId}. Omitting name`,
       });
     }
@@ -374,21 +372,13 @@ export const actions = {
         false,
       );
       if (error) {
-        const trackingId = logError(error,
-          {
-            message: `User with id ${userId} has no email and therefore password could not be verified`,
-            ...getDefaultErrorInfoObjectified({ trackingId }),
-          },
-        );
+        const trackingId = logError({ error, message: `User with id ${userId} has no email and therefore password could not be verified` })
         return message(form, getFailFormMessageObjectified({ trackingId }), { status: 500 });
       }
 
       await supabase.auth.signOut();
     } catch (e) {
-      const trackingId = logError(e, {
-        message: `Error on attempt to delete & signout user with userid ${userId}`,
-        ...getDefaultErrorInfoObjectified({ trackingId }),
-      });
+      const trackingId = logError({ error: e, message: `Error on attempt to delete & signout user with userid ${userId}` })
       return message(
         form,
         getFailFormMessageObjectified({ trackingId }),
@@ -399,21 +389,19 @@ export const actions = {
     try {
       const { error: sendError } = await sendEmail(AccountDeletionConfirmation, [email], "Ditt konto har avslutats", { studentName })
       if (sendError)
-        logError(sendError, {
+        logError({
+          error,
           message: `Error sending email for deleted acc ${userId}`,
         });
     } catch (e) {
-      logError(e, {
+      logError({
+        error: e,
         message: `Error sending email for deleted acc ${userId}`,
       });
     }
 
-
     redirect(
-      303,
-      `/`,
-      { message: "Ditt konto har tagits bort.", type: "success" },
-      cookies,
+      303, `/ `, { message: "Ditt konto har tagits bort.", type: "success" }, cookies,
     );
   },
   password: async (event) => {
@@ -430,7 +418,7 @@ export const actions = {
 
     const { id, email } = session.user;
     if (!email) {
-      const trackingId = logError(new Error("Custom error - user has no email"),
+      const trackingId = logError(
         { message: `User with id ${id} has no email and therefore password could not be verified` },
       );
       return message(
@@ -466,12 +454,10 @@ export const actions = {
           { status: 500 },
         );
 
-      const trackingId = logError(
-        updateError,
-        {
-          message: `Error on attempt to update password with userid ${id}`,
-        },
-      );
+      const trackingId = logError({
+        error: updateError,
+        message: `Error on attempt to update password with userid ${id}`,
+      });
       return message(form, getFailFormMessageObjectified({ trackingId }), { status: 500 });
     }
     return message(

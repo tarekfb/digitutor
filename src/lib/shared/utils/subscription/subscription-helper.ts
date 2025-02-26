@@ -25,7 +25,8 @@ export const getOrCreateCustomerId = async ({
 
   // PGRST116 == no rows
   if (error && error.code != "PGRST116") {
-    logError(error, {
+    logError({
+      error,
       message: "Error searching for teachers with following search: no rows",
     });
     return { error };
@@ -53,14 +54,15 @@ export const getOrCreateCustomerId = async ({
       },
     });
   } catch (e) {
-    logError(e, {
+    logError({
+      error: e,
       message: "Unknown error when creating stripe customer",
     });
     return { error: e };
   }
 
   if (!customer.id) {
-    logError(new Error("Custom error, missing customer id"), { message: "Unknown error on stripe user creation" });
+    logError({ message: "Unknown error on stripe user creation" });
     return { error: "Unknown stripe user creation error" };
   }
 
@@ -74,7 +76,8 @@ export const getOrCreateCustomerId = async ({
     });
 
   if (insertError) {
-    logError(insertError, {
+    logError({
+      error: insertError,
       message: "Unknown error on inserting row to stripe_customers",
     });
     return { error: insertError };
@@ -97,7 +100,8 @@ export const fetchSubscription = async ({
       status: "all",
     });
   } catch (e) {
-    logError(e, {
+    logError({
+      error: e,
       message: `unknown error when fetching list of subscriptions from stripe for customerid: ${customerId}`,
     });
     return { error: e };
@@ -120,10 +124,7 @@ export const fetchSubscription = async ({
     });
     if (!appSubscription) {
       logError(
-        new Error("Custom error - missing app subscription"),
-        {
-          message: "Stripe subscription does not have matching app subscription in pricing_plans.ts (via product id match)",
-        }
+        { message: "Stripe subscription does not have matching app subscription in pricing_plans.ts (via product id match)", }
       )
       return {
         error:

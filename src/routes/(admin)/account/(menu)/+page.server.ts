@@ -21,7 +21,8 @@ export const load: PageServerLoad = async ({
       formatConversationWithReferences(c),
     );
   } catch (e) {
-    const trackingId = logError(e, {
+    const trackingId = logError({
+      error: e,
       message: `Error while getting conversations ${session.user.id}`,
     });
     error(500, { ...getDefaultErrorInfoObjectified({ trackingId }) });

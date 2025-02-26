@@ -45,10 +45,10 @@ export const load = (async ({ url, locals: { supabase } }) => {
           "Testa söka på något annat, eller försök igen senare.",
         );
     } else {
-      console.error(
-        "Error searching for teachers with following search: " + query,
+      logError({
         error,
-      );
+        message: `Error searching for teachers with following search: ${query}`,
+      });
       initMessage = getFailFormMessage();
     }
   }
@@ -58,7 +58,7 @@ export const load = (async ({ url, locals: { supabase } }) => {
     const rawSubjects = await getSubjects(supabase);
     subjects = rawSubjects.map((s) => formatSubject(s));
   } catch (e) {
-    console.error("Unknown error when reading subjects", e);
+    logError({ error: e, message: "Unknown error when reading subjects" });
     subjects = languages;
   }
 
@@ -91,7 +91,8 @@ export const actions: Actions = {
             { status: 400 },
           );
       }
-      const trackingId = logError(error, {
+      const trackingId = logError({
+        error,
         message: "Error searching for teachers with following search: " + query,
       });
       return message(form, getFailFormMessageObjectified({ trackingId }), { status: 500 });

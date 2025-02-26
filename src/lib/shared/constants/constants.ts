@@ -38,13 +38,13 @@ export const getDefaultErrorInfo = (
   data?: any,
 ): App.Error => ({
   message: message ?? defaultErrorTitle,
-  description: description ?? defaultErrorDescription,
+  description: description ?? defaultErrorInfo.description,
   id: id ?? MessageId.Unknown,
   data: data ?? undefined,
 });
 
 export const getDefaultErrorInfoObjectified = (
-  options: {
+  options?: {
     message?: string,
     description?: string,
     trackingId?: string,
@@ -53,11 +53,11 @@ export const getDefaultErrorInfoObjectified = (
     data?: any,
   }
 ): App.Error => ({
-  message: options.message ?? defaultErrorTitle,
-  description: options.description ?? defaultErrorDescription,
-  id: options.id ?? MessageId.Unknown,
-  data: options.data ?? undefined,
-  trackingId: options.trackingId ?? undefined,
+  message: options?.message ?? defaultErrorTitle,
+  description: options?.description ?? defaultErrorInfo.description,
+  id: options?.id ?? MessageId.Unknown,
+  data: options?.data ?? undefined,
+  trackingId: options?.trackingId ?? undefined,
 });
 
 export const getFailFormMessage = (
@@ -76,7 +76,7 @@ export const getFailFormMessage = (
 });
 
 export const getFailFormMessageObjectified = (
-  options: {
+  options?: {
     title?: string,
     description?: string,
     messageId?: MessageId,
@@ -86,12 +86,12 @@ export const getFailFormMessageObjectified = (
     variant?: "destructive" | "default" | "warning",
   }
 ): Message => ({
-  variant: options.variant ?? "destructive",
-  title: options.title ?? "Något gick fel",
-  description: options.description ?? "Du kan kontakta oss om detta fortsätter.",
-  trackingId: options.trackingId ?? undefined,
-  id: options.messageId ?? MessageId.Unknown,
-  data: options.data ?? undefined,
+  variant: options?.variant ?? "destructive",
+  title: options?.title ?? "Något gick fel",
+  description: options?.description ?? "Du kan kontakta oss om detta fortsätter.",
+  trackingId: options?.trackingId ?? undefined,
+  id: options?.messageId ?? MessageId.Unknown,
+  data: options?.data ?? undefined,
 });
 
 export const getSuccessFormMessage = (

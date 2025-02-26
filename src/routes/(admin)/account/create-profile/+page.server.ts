@@ -1,6 +1,6 @@
 import {
-  defaultErrorInfo,
   defaultErrorTitle,
+  getDefaultErrorInfoObjectified,
 } from "$lib/shared/constants/constants.ts";
 import { error, fail, redirect } from "@sveltejs/kit";
 import { zod } from "sveltekit-superforms/adapters";
@@ -8,6 +8,7 @@ import { message, superValidate } from "sveltekit-superforms/client";
 import { nameSchema, type ProfileInput } from "$lib/shared/models/profile.ts";
 import { updateProfile } from "$lib/server/database/profiles.js";
 import { hasFullProfile } from "src/lib/shared/utils/profile/utils.ts";
+import { logError } from "src/lib/shared/utils/logging/utils.ts";
 
 export async function load({ parent }) {
   const data = await parent();
@@ -28,8 +29,11 @@ export async function load({ parent }) {
     const form = await superValidate(initFormData, zod(nameSchema));
     return { form, data };
   } catch (e) {
-    console.error("Error when loading createprofile", e);
-    error(500, { ...defaultErrorInfo });
+    const trackingId = logError({
+      error: e,
+      message: "Error when loading create profile page",
+    });
+    error(500, { ...getDefaultErrorInfoObjectified({ trackingId }) });
   }
 }
 

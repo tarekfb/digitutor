@@ -18,7 +18,7 @@ export const load: LayoutServerLoad = async ({
     const dbProfile = await getProfileByUser(supabase, user.id);
     profile = formatProfile(dbProfile);
   } catch (e) {
-    const trackingId = logError(e, {
+    const trackingId = logError({error: e, 
       message: "Error while fetching profile in layout for account",
     });
     error(500, { ...getDefaultErrorInfoObjectified({ trackingId }) });

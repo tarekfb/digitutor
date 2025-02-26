@@ -41,7 +41,8 @@ export const load = async ({
           description: "Konversationen finns inte eller har tagits bort.",
         });
     }
-    const trackingId = logError(e, {
+    const trackingId = logError({
+      error: e,
       message: "Error when retrieving conversation with slug " + slug,
     });
     error(500, { ...getDefaultErrorInfoObjectified({ trackingId }) });

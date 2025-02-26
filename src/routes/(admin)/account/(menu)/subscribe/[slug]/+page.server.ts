@@ -6,9 +6,10 @@ import {
   getOrCreateCustomerId,
   fetchSubscription,
 } from "src/lib/shared/utils/subscription/subscription-helper.ts";
-import { getDefaultErrorInfo, websiteName } from "src/lib/shared/constants/constants.ts";
+import { getDefaultErrorInfoObjectified, websiteName } from "src/lib/shared/constants/constants.ts";
 import type { PageServerLoad } from "./$types.ts";
 import { redirect } from "sveltekit-flash-message/server";
+import { logError } from "src/lib/shared/utils/logging/utils.ts";
 
 const stripe = new Stripe(PRIVATE_STRIPE_API_KEY);
 // { apiVersion: "2023-08-16" }
@@ -45,8 +46,11 @@ export const load: PageServerLoad = async ({
     user,
   });
   if (idError || !customerId) {
-    console.error("Error creating customer id", idError);
-    error(500, getDefaultErrorInfo());
+    const trackingId = logError({
+      error: idError,
+      message: "Error creating customer id",
+    });
+    error(500, { ...getDefaultErrorInfoObjectified({ trackingId }) });
   }
 
   const { primarySubscription } = await fetchSubscription({
@@ -89,8 +93,11 @@ export const load: PageServerLoad = async ({
     });
     checkoutUrl = stripeSession.url;
   } catch (e) {
-    console.error("Error creating checkout session", e);
-    error(500, getDefaultErrorInfo());
+    const trackingId = logError({
+      error: e,
+      message: "Error creating checkout session",
+    });
+    error(500, { ...getDefaultErrorInfoObjectified({ trackingId }) });
   }
 
   redirect(303, checkoutUrl ?? "/pricing"); // stripe takes over checkout process

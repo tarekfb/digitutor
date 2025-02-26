@@ -42,7 +42,8 @@ export const load: PageServerLoad = (async (event) => {
     user,
   });
   if (idError || !customerId) {
-    const trackingId = logError(idError, {
+    const trackingId = logError({
+      error: idError,
       message: "Error creating customer id",
     });
     error(500, { ...getDefaultErrorInfoObjectified({ trackingId }) });
@@ -55,7 +56,8 @@ export const load: PageServerLoad = (async (event) => {
   } = await fetchSubscription({ customerId });
 
   if (fetchErr) {
-    const trackingId = logError(fetchErr, {
+    const trackingId = logError({
+      error: fetchErr,
       message: "Error while fetching subscription for account billing page",
     });
     error(500, { ...getDefaultErrorInfoObjectified({ trackingId }) });
@@ -65,7 +67,8 @@ export const load: PageServerLoad = (async (event) => {
   try {
     balance = await getCreditsByStudent(supabaseServiceRole, user.id);
   } catch (error) {
-    logError(error, {
+    logError({
+      error,
       message: "Error while fetching credits for account billing page",
     });
   }

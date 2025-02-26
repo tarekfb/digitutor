@@ -25,7 +25,8 @@ export const load = (async ({
     user: session.user,
   });
   if (idError || !customerId) {
-    const trackingId = logError(idError, {
+    const trackingId = logError({
+      error: idError,
       message: "Error creating customer id in billing manage page",
     });
     error(500, { ...getDefaultErrorInfoObjectified({ trackingId }) });
@@ -39,7 +40,8 @@ export const load = (async ({
     });
     portalLink = portalSession?.url;
   } catch (e) {
-    const trackingId = logError(e, {
+    const trackingId = logError({
+      error: e,
       message: "Error creating billing portal session in billing manage page",
     });
     error(500, { ...getDefaultErrorInfoObjectified({ trackingId }) });

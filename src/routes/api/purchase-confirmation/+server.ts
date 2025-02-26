@@ -4,6 +4,7 @@ import { creditProducts } from "src/lib/shared/constants/constants.ts";
 import type { RequestHandler } from "./$types.ts";
 import { sendEmail } from "src/lib/shared/utils/emails/utils.ts";
 import PurchaseConfirmation from "src/emails/purchase-confirmation.svelte";
+import { logError } from "src/lib/shared/utils/logging/utils.ts";
 
 export const POST: RequestHandler = async ({
   request,
@@ -41,35 +42,60 @@ export const POST: RequestHandler = async ({
       (product) => product.stripePriceId === priceId,
     );
     if (!matchedProduct) {
-      console.error(
-        "Unexpected error: product not found.",
-        { userId },
-        { priceId },
-        { matchedProduct },
-      );
+      logError({
+        message: "Unexpected error: product not found.",
+        additionalData: {
+          userId,
+          priceId,
+          matchedProduct,
+        },
+        critical: true
+      });
     }
 
     if (customerEmail) {
       try {
         const { error: sendError } = await sendEmail(PurchaseConfirmation, [customerEmail], "Tack för ditt köp", { userName: customerName, priceId })
         if (sendError)
-          console.error(`Error sending email for deleted acc ${userId}`, sendError);
+          logError({
+            error: sendError,
+            message: `Error sending email for purchase confirmation ${userId}`,
+            additionalData: {
+              metadata,
+              userId,
+              customerEmail
+            },
+            critical: true,
+          });
       } catch (e) {
-        console.error(`Error sending email for deleted acc ${userId}`, e);
+        logError({
+          error: e,
+          message: `Error sending email for purchase confirmation ${userId}`,
+          additionalData: {
+            metadata,
+            userId,
+            customerEmail
+          },
+          critical: true,
+        });
       }
-    } else console.error(`Missing email, unable to send confirmation email for userid ${userId}`);
+    } else logError({ message: `Missing email, unable to send confirmation email for userid ${userId}` });
     // shouldnt happen but we dont own the API, safeguarding against future changes 
 
     if (mode === "payment" && matchedProduct) {
       try {
         await updateCredits(supabaseServiceRole, matchedProduct.credits, userId);
       } catch (e) {
-        console.error(
-          `Critical error: after completing payment and trying to add credit value of ${matchedProduct.credits}. User ${userId} most likely didnt receive their ${matchedProduct.credits} credits`,
-          { metadata },
-          { userId },
-          e,
-        );
+        logError({
+          error: e,
+          message: `After completing payment and trying to add credit value of ${matchedProduct.credits}. User ${userId} most likely didnt receive their ${matchedProduct.credits} credits`,
+          additionalData: {
+            metadata,
+            userId,
+            matchedProduct
+          },
+          critical: true,
+        });
         return json({ success: false, status: 500 });
       }
     }

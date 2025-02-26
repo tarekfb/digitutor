@@ -4,9 +4,11 @@ import { fail, message, superValidate } from "sveltekit-superforms";
 import { passwordResetSchema } from "src/lib/shared/models/user.ts";
 import {
   getFailFormMessage,
+  getFailFormMessageObjectified,
   getSuccessFormMessage,
 } from "src/lib/shared/constants/constants.ts";
 import { SupabaseErrorMessages } from "src/lib/shared/models/common.ts";
+import { logError } from "src/lib/shared/utils/logging/utils.ts";
 
 export const load = (async () => {
   const form = await superValidate(zod(passwordResetSchema));
@@ -36,13 +38,14 @@ export const actions = {
           { status: 500 },
         );
 
-      console.error("Unknown error updating user password", error);
+      const trackingId = logError({ error, message: "Unknown error updating user password" });
       return message(
         form,
-        getFailFormMessage(
-          "Kunde inte uppdatera lösenordet",
-          "Något gick fel. Du kan kontakta oss om detta fortsätter.",
-        ),
+        getFailFormMessageObjectified({
+          title: "Kunde inte uppdatera lösenordet",
+          description: "Något gick fel. Du kan kontakta oss om detta fortsätter.",
+          trackingId
+        }),
         { status: 500 },
       );
     }

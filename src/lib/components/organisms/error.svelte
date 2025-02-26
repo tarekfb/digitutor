@@ -6,24 +6,24 @@
   import UserRound from "lucide-svelte/icons/user-round";
   import Bug from "lucide-svelte/icons/bug";
   import {
-    defaultErrorDescription,
     defaultErrorTitle,
+    getDefaultErrorInfoObjectified,
   } from "src/lib/shared/constants/constants.ts";
   import Footer from "./footer.svelte";
 
   export let error: App.Error;
   export let code: number | undefined | null = undefined;
 
-  const getTitle = (): string => {
+  const getTitle = (error: App.Error): string => {
     if (!error.message || error.message === "Internal Error")
       return defaultErrorTitle;
     return error.message;
   };
 
-  const getDescription = (): string => {
-    if (error.message === "Internal Error")
-      return "Ett oväntat fel uppstod. Du kan kontakta oss om detta fortsätter.";
-    return error.description ?? defaultErrorDescription;
+  const getDescription = (error: App.Error): string => {
+    if (error.message === "Internal Error" || !error.description)
+      return getDefaultErrorInfoObjectified().description;
+    return error.description;
   };
 
   // const {id, data} = error; // not using atm, implement when needed
@@ -36,13 +36,13 @@
 >
   <div class="flex flex-col items-center gap-y-4 md:gap-y-6">
     <PrimaryTitle class="text-4xl font-normal md:text-5xl"
-      >{getTitle()}</PrimaryTitle
+      >{getTitle(error)}</PrimaryTitle
     >
     {#if code}
       <p class="font-mono text-3xl text-accent md:text-4xl">{code}</p>
     {/if}
     <p class="max-w-md text-xl text-muted-foreground md:text-2xl">
-      {getDescription()}
+      {getDescription(error)}
     </p>
   </div>
   <ul class="h-62 mt-4 flex w-3/4 flex-col gap-4 md:mt-6 md:w-full md:flex-row">

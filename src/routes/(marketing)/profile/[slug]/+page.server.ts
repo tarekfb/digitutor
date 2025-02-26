@@ -6,6 +6,8 @@ import {
   costPerRequest,
   MessageId,
   getBaseUrl,
+  getDefaultErrorInfoObjectified,
+  getFailFormMessageObjectified,
 } from "$lib/shared/constants/constants.ts";
 import { getProfileByUser } from "$lib/server/database/profiles.ts";
 import { getListing } from "$lib/server/database/listings.ts";
@@ -56,6 +58,7 @@ import {
 import RequestNotification from "src/emails/request-notification.svelte";
 import { getEmailById, sendEmail } from "src/lib/shared/utils/emails/utils.ts";
 import { PUBLIC_ENVIRONMENT } from "$env/static/public";
+import { logError } from "src/lib/shared/utils/logging/utils.ts";
 
 export const load = async ({
   locals: { supabase, safeGetSession },
@@ -82,21 +85,23 @@ export const load = async ({
           description: "Profilen finns inte eller har tagits bort.",
         });
     }
-    console.error("Error when reading profile with id: " + teacherId, e);
-    error(500, { ...defaultErrorInfo });
+    const trackingId = logError({ error: e, message: `Error when reading profile with id: ${teacherId}` });
+    error(500, { ...getDefaultErrorInfoObjectified({ trackingId }) });
   }
 
   if (teacher.role !== "teacher") {
-    console.error("Attempted to read a non-teacher profile: " + teacherId);
-    error(
-      400,
-      getDefaultErrorInfo(
-        "Denna profilen är inte tillgänglig just nu",
-        "Du kan kontakta oss om detta fortsätter.",
-      ),
+    const trackingId = logError(
+      { message: `Attempted to read a non-teacher profile with id: ${teacherId}` },
     );
+    error(400,
+      {
+        ...getDefaultErrorInfoObjectified({
+          trackingId,
+          message: "Denna profilen är inte tillgänglig just nu",
+          description: "Du kan kontakta oss om detta fortsätter.",
+        })
+      })
   }
-
   const parentData = await parent();
   const student = parentData?.profile ?? undefined;
   const role = student?.role ?? "";
@@ -136,10 +141,10 @@ export const load = async ({
         );
 
       listing = undefined;
-      console.error(
-        "Error when reading listings for profile with id: " + teacherId,
+      logError({
         error,
-      );
+        message: `Error when reading listings for profile with id: ${teacherId}. Showing profile without listing`,
+      });
     }
   }
 
@@ -149,17 +154,18 @@ export const load = async ({
     const dbReviews = await getReviewsByReceiver(supabase, teacherId);
     reviews = dbReviews.map((review) => formatReviewWithReferences(review));
   } catch (e) {
-    console.error(
-      "Error when reading reviews for profile with id: " + teacherId,
-      e,
-    );
+    const trackingId = logError({
+      error: e,
+      message: `Error when reading reviews for profile with id: ${teacherId}`,
+    });
     const isOwner = userId === teacherId;
     if (isOwner)
       // only show error info to owner
-      reviewsMessage = getFailFormMessage(
-        "Vi kunde inte hämta recensioner",
-        "Något gick fel. Kontakta oss om detta fortsätter.",
-      );
+      reviewsMessage = getFailFormMessageObjectified({
+        title: "Vi kunde inte hämta recensioner",
+        description: "Något gick fel. Kontakta oss om detta fortsätter.",
+        trackingId
+      });
   }
 
   let allowCreateReview: boolean = false;
@@ -178,11 +184,10 @@ export const load = async ({
             ? true
             : false;
         } catch (error) {
-          console.error(
-            `Error when adding review for profile slug ${teacherId}, unable to read conversation for teacher & student` +
-            teacherId,
+          logError({
             error,
-          );
+            message: `Error when adding review for profile slug ${teacherId}, unable to read conversation for teacher & student`,
+          });
           allowCreateReview = true;
           // incase of error do allow anyway in off-chance it would've been permitted
           // for better UX
@@ -235,21 +240,22 @@ export const actions = {
 
     const userId = session.user.id;
     const form = await superValidate(event, zod(requestContactSchema));
-    const { role } = form.data;
 
+    // todo test flow
+    let { role } = form.data;
     if (!role) {
-      console.error(
-        "Error when submitting request contact. Data that user does not submit manually is invalid: role",
-      ); // user hasnt entered data theirselves, therefore send error message
-      redirect(
-        303,
-        `/sign-in?next=/profile/${teacherId}`,
-        {
-          type: "info",
-          message: "Skapa ett konto eller logga in för att kontakta en lärare.",
-        },
-        cookies,
-      );
+      logError({ message: `Error when submitting request contact. Data that user does not submit manually is invalid: role. Fetching role for user ${userId}`, },);
+      try {
+        const profile = await getProfileByUser(supabase, userId);
+        role = profile?.role;
+      } catch (e) {
+        const trackingId = logError({
+          error: e,
+          message: "Form.data.role was invalid on requestcontact, tried to fetch profile but failed. Showing error",
+          critical: true
+        });
+        error(500, { ...getDefaultErrorInfoObjectified({ trackingId }) });
+      }
     }
 
     if (teacherId === userId)
@@ -279,8 +285,8 @@ export const actions = {
       );
 
     if (role !== "student") {
-      console.error("Role was invalid: " + role);
-      return message(form, getFailFormMessage(), { status: 500 });
+      const trackingId = logError({ message: "Role was invalid: " + role });
+      return message(form, getFailFormMessageObjectified({ trackingId }), { status: 500 });
     }
 
     let conversation: DbConversationWithReferences | null = null;
@@ -291,11 +297,10 @@ export const actions = {
         teacherId,
       );
     } catch (error) {
-      console.error(
-        `unable to read conversation for teacher: ${teacherId} & student: ${session.user.id}, allowing student to contact` +
-        teacherId,
+      logError({
+        message: `unable to read conversation for teacher: ${teacherId} & student: ${session.user.id}, allowing student to contact`,
         error,
-      );
+      });
     }
 
     if (conversation)
@@ -340,52 +345,42 @@ export const actions = {
         { status: 403 },
       );
 
-    const { role, firstMessage } = form.data;
+    const { firstMessage } = form.data;
 
+    // todo test flow
+    let { role } = form.data;
     if (!role) {
-      console.error(
-        "Error when submitting request contact. Data that user does not submit manually is invalid: role",
-      ); // user hasnt entered data theirselves, therefore send error message
-      redirect(
-        303,
-        `/sign-in?next=/profile/${teacherId}`,
-        {
-          type: "info",
-          message: "Skapa ett konto eller logga in för att kontakta en lärare.",
-        },
-        cookies,
-      );
+      logError({ message: `Error when submitting request contact. Data that user does not submit manually is invalid: role. Fetching role for user ${userId}`, },);
+      try {
+        const profile = await getProfileByUser(supabase, userId);
+        role = profile?.role;
+      } catch (e) {
+        const trackingId = logError({
+          error: e,
+          message: "Form.data.role was invalid on requestcontact, tried to fetch profile but failed. Showing error",
+          critical: true
+        });
+        error(500, { ...getDefaultErrorInfoObjectified({ trackingId }) });
+      }
     }
 
     if (teacherId === userId)
       return message(
         form,
-        getFailFormMessage(
-          undefined,
-          "Du kan inte kontakta dig själv.",
-          undefined,
-          undefined,
-          "default",
-        ),
+        getFailFormMessageObjectified({ description: "Du kan inte kontakta dig själv.", variant: "default" }),
         { status: 403 },
       );
 
     if (role === "teacher")
       return message(
         form,
-        getFailFormMessage(
-          "Detta går ej att göra som lärare",
-          "Skapa ett konto som student om du vill kontakta en annan lärare.",
-          undefined,
-          undefined,
-          "default",
-        ),
+        getFailFormMessageObjectified({ title: "Detta går ej att göra som lärare", description: "Skapa ett konto som student om du vill kontakta en annan lärare.", variant: "default" }),
         { status: 403 },
       );
 
     if (role !== "student") {
-      console.error("Role was invalid: " + role);
-      return message(form, getFailFormMessage(), { status: 500 });
+      const trackingId = logError({ message: "Role was invalid: " + role });
+      return message(form, getFailFormMessageObjectified({ trackingId }), { status: 500 });
     }
 
     let hasSubscription: boolean = false;
@@ -395,10 +390,10 @@ export const actions = {
         user,
       });
       if (idError || !customerId)
-        console.error(
-          "Error getting or creating customer id. Allowing flow to proceed anyway.",
-          idError,
-        );
+        logError({
+          error: idError,
+          message: "Error getting or creating customer id. Allowing flow to proceed anyway.",
+        });
 
       const { primarySubscription } = await fetchSubscription({
         // @ts-expect-error - ts doesn't understand customerId has value because of if check above
@@ -407,10 +402,10 @@ export const actions = {
 
       hasSubscription = primarySubscription ? true : false;
     } catch (error) {
-      console.error(
-        `Unexpected issue when checking subscription and charging ${costPerRequest} credits for student: ${userId} contacting teacher: ${teacherId}. Allowing flow to procceed.`,
+      logError({
         error,
-      );
+        message: `Unexpected issue when checking subscription and charging ${costPerRequest} credits for student: ${userId} contacting teacher: ${teacherId}. Allowing flow to procceed.`,
+      });
     }
 
     let shouldChargeCredits: boolean = false;
@@ -420,24 +415,23 @@ export const actions = {
         balance = await getCreditsByStudent(supabase, userId);
       } catch (error) {
         balance = undefined;
-        console.error(
-          "Unexpected error when checking if credit balance is enough to contact teacher. Allowing contact.",
+        logError({
           error,
-        );
+          message: "Unexpected error when checking if credit balance is enough to contact teacher. Allowing contact.",
+        });
       }
 
       if (balance !== undefined && balance - costPerRequest < 0) {
         // student doesnt have enough credits
-        const missing = (balance - costPerRequest) * -1;
+        const missingCredits = (balance - costPerRequest) * -1;
         return message(
           form,
-          getFailFormMessage(
-            `Du har ${missing} krediter för lite`,
-            "",
-            MessageId.InsufficientCredits,
-            undefined,
-            "warning",
-          ),
+          getFailFormMessageObjectified({
+            title: `Du har ${missingCredits} krediter för lite`,
+            description: "",
+            messageId: MessageId.InsufficientCredits,
+            variant: "warning",
+          }),
           { status: 403 },
         );
       }
@@ -465,16 +459,16 @@ export const actions = {
         );
         // message is conversation id
       }
-      console.error(
-        "Error when starting conversation for profile slug: " + teacherId,
+      const trackingId = logError({
         error,
-      );
+        message: `Error when starting conversation for profile slug: ${teacherId}`,
+      });
       return message(
         form,
-        getFailFormMessage(
-          undefined,
-          "Inga krediter har dragits. Du kan kontakta oss om detta fortsätter.",
-        ),
+        getFailFormMessageObjectified({
+          description: "Inga krediter har dragits. Du kan kontakta oss om detta fortsätter.",
+          trackingId
+        }),
         { status: 500 },
       );
     }
@@ -488,10 +482,10 @@ export const actions = {
           `Started contact with teacher: ${teacherId}.`,
         );
       } catch (error) {
-        console.error(
-          `Unknown error when charging student ${userId} -${costPerRequest} credits, for contacting teacher ${teacherId}. Conversation ${conversationId} already created. Allowing contact.`,
+        logError({
           error,
-        );
+          message: `Unknown error when charging student ${userId} -${costPerRequest} credits, for contacting teacher ${teacherId}. Conversation ${conversationId} already created. Allowing contact.`,
+        });
       }
     }
 
@@ -499,7 +493,10 @@ export const actions = {
     try {
       teacherEmail = await getEmailById(supabaseServiceRole, teacherId)
     } catch (error) {
-      console.error("Error getting teacher email. Unable to contact teacher", error);
+      logError({
+        error,
+        message: "Error getting teacher email. Unable to contact teacher",
+      });
     }
 
     let teacherName: string = "";
@@ -507,7 +504,10 @@ export const actions = {
       const profile = await getProfileByUser(supabase, teacherId)
       teacherName = profile.first_name;
     } catch (error) {
-      console.error(`Error getting teacher first name for id ${teacherId}. Omitting teacher name`, error);
+      logError({
+        error,
+        message: `Error getting teacher first name for id ${teacherId}. Omitting teacher name`,
+      });
     }
 
 
@@ -516,14 +516,20 @@ export const actions = {
       const profile = await getProfileByUser(supabase, userId)
       studentName = profile.first_name;
     } catch (error) {
-      console.error(`Error getting student first name for id ${userId}. Omitting student name`, error);
+      logError({
+        error,
+        message: `Error getting student first name for id ${userId}. Omitting student name`,
+      });
     }
 
     let contactRequestUrl = "";
     try {
       contactRequestUrl = `${getBaseUrl(PUBLIC_ENVIRONMENT)}/account/conversation/${conversationId}`
     } catch (error) {
-      console.error(`Error getting contact request url for id ${conversationId}. Omitting contact request url`, error);
+      logError({
+        error,
+        message: `Error getting contact request url for id ${conversationId}. Omitting contact request url`,
+      });
     }
 
     if (teacherEmail) {
@@ -535,9 +541,15 @@ export const actions = {
         };
         const { error: sendError } = await sendEmail(RequestNotification, [teacherEmail], "En elev vill kontakta dig!", props)
         if (sendError)
-          console.error("Error sending email for when teacher received contact request", sendError);
+          logError({
+            error: sendError,
+            message: "Error sending email for when teacher received contact request",
+          });
       } catch (e) {
-        console.error("Error sending email for when teacher received contact request", e);
+        logError({
+          error: e,
+          message: "Error sending email for when teacher received contact request",
+        });
       }
     }
 
@@ -572,24 +584,21 @@ export const actions = {
         teacherId,
       );
       if (!conversation) {
-        console.error(
-          `Error when adding review for profile slug ${teacherId}, teacher & student has no conversation.`,
-        );
+        const trackingId = logError({ message: `Error when adding review for profile slug ${teacherId}, teacher & student has no conversation.`, });
         return message(
           form,
-          getFailFormMessage(
-            undefined,
-            "Har ni haft en lektion ihop? Isåfall kan ni kontakta oss för att få hjälp med att göra recensionen.",
-          ),
+          getFailFormMessageObjectified({
+            trackingId,
+            description: "Har ni haft en lektion ihop? Isåfall kan ni kontakta oss för att få hjälp med att göra recensionen.",
+          }),
           { status: 403 },
         );
       }
     } catch (error) {
-      console.error(
-        `Error when adding review for profile slug ${teacherId}, unable to read conversation for teacher & student.Proceeding` +
-        teacherId,
+      logError({
         error,
-      );
+        message: `Error when adding review for profile slug ${teacherId}, unable to read conversation for teacher & student. Proceeding`,
+      });
     }
 
     try {
@@ -601,11 +610,10 @@ export const actions = {
           { status: 403 },
         );
     } catch (error) {
-      console.error(
-        "Error when checking if user has already made a review for profile slug: " +
-        teacherId,
+      logError({
         error,
-      );
+        message: `Error when checking if user has already made a review for profile slug: ${teacherId}`,
+      });
     }
 
     try {
@@ -616,11 +624,15 @@ export const actions = {
         session,
       );
     } catch (error) {
-      console.error(
-        "Error when adding review for profile slug: " + teacherId,
+      const trackingId = logError({
         error,
+        message: `Error when adding review for profile slug: ${teacherId}`,
+      });
+      return message(
+        form,
+        getFailFormMessageObjectified({ trackingId }),
+        { status: 500 }
       );
-      return message(form, getFailFormMessage(), { status: 500 });
     }
 
     setFlash({ message: "Din recension har skapats.", type: "success" }, event);
