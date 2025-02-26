@@ -35,7 +35,7 @@
 </script>
 
 <SecondaryTitle class="foreground self-start">
-  {results.length} lärare tillgänglig{results.length > 1 ? "a" : ""}
+  {results.length} resultat
 </SecondaryTitle>
 <ul class="flex w-full flex-col gap-y-4">
   {#each results as result, i}
