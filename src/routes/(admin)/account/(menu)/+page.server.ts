@@ -5,7 +5,7 @@ import { redirect } from "sveltekit-flash-message/server";
 import { getConversations } from "src/lib/server/database/conversations.ts";
 import type { ConversationWithReferences } from "src/lib/shared/models/conversation.ts";
 import { formatConversationWithReferences } from "src/lib/shared/utils/conversation/utils.ts";
-import { logError } from "src/lib/shared/utils/logging/utils.ts";
+import { logErrorServer } from "src/lib/shared/utils/logging/utils.ts";
 
 export const load: PageServerLoad = async ({
   locals: { supabase, safeGetSession },
@@ -21,7 +21,7 @@ export const load: PageServerLoad = async ({
       formatConversationWithReferences(c),
     );
   } catch (e) {
-    const trackingId = logError({
+    const trackingId = logErrorServer({
       error: e,
       message: `Error while getting conversations ${session.user.id}`,
     });

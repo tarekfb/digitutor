@@ -8,7 +8,7 @@ import {
   getSuccessFormMessage,
 } from "src/lib/shared/constants/constants.ts";
 import { SupabaseErrorMessages } from "src/lib/shared/models/common.ts";
-import { logError } from "src/lib/shared/utils/logging/utils.ts";
+import { logErrorServer } from "src/lib/shared/utils/logging/utils.ts";
 
 export const load = (async () => {
   const form = await superValidate(zod(passwordResetSchema));
@@ -38,7 +38,7 @@ export const actions = {
           { status: 500 },
         );
 
-      const trackingId = logError({ error, message: "Unknown error updating user password" });
+      const trackingId = logErrorServer({ error, message: "Unknown error updating user password" });
       return message(
         form,
         getFailFormMessageObjectified({

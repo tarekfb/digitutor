@@ -5,7 +5,7 @@ import type { PageServerLoad } from "./$types.ts";
 import { getDefaultErrorInfoObjectified } from "src/lib/shared/constants/constants.ts";
 import { getOrCreateCustomerId } from "src/lib/shared/utils/subscription/subscription-helper.ts";
 import { redirect } from "sveltekit-flash-message/server";
-import { logError } from "src/lib/shared/utils/logging/utils.ts";
+import { logErrorServer } from "src/lib/shared/utils/logging/utils.ts";
 
 // , { apiVersion: "2023-08-16" }
 const stripe = new Stripe(PRIVATE_STRIPE_API_KEY);
@@ -25,7 +25,7 @@ export const load = (async ({
     user: session.user,
   });
   if (idError || !customerId) {
-    const trackingId = logError({
+    const trackingId = logErrorServer({
       error: idError,
       message: "Error creating customer id in billing manage page",
     });
@@ -40,7 +40,7 @@ export const load = (async ({
     });
     portalLink = portalSession?.url;
   } catch (e) {
-    const trackingId = logError({
+    const trackingId = logErrorServer({
       error: e,
       message: "Error creating billing portal session in billing manage page",
     });

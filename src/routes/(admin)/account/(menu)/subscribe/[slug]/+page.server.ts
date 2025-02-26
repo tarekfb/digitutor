@@ -9,7 +9,7 @@ import {
 import { getDefaultErrorInfoObjectified, websiteName } from "src/lib/shared/constants/constants.ts";
 import type { PageServerLoad } from "./$types.ts";
 import { redirect } from "sveltekit-flash-message/server";
-import { logError } from "src/lib/shared/utils/logging/utils.ts";
+import { logErrorServer } from "src/lib/shared/utils/logging/utils.ts";
 
 const stripe = new Stripe(PRIVATE_STRIPE_API_KEY);
 // { apiVersion: "2023-08-16" }
@@ -46,7 +46,7 @@ export const load: PageServerLoad = async ({
     user,
   });
   if (idError || !customerId) {
-    const trackingId = logError({
+    const trackingId = logErrorServer({
       error: idError,
       message: "Error creating customer id",
     });
@@ -93,7 +93,7 @@ export const load: PageServerLoad = async ({
     });
     checkoutUrl = stripeSession.url;
   } catch (e) {
-    const trackingId = logError({
+    const trackingId = logErrorServer({
       error: e,
       message: "Error creating checkout session",
     });

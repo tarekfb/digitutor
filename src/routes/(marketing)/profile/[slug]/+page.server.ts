@@ -58,7 +58,7 @@ import {
 import RequestNotification from "src/emails/request-notification.svelte";
 import { getEmailById, sendEmail } from "src/lib/shared/utils/emails/utils.ts";
 import { PUBLIC_ENVIRONMENT } from "$env/static/public";
-import { logError } from "src/lib/shared/utils/logging/utils.ts";
+import { logErrorServer } from "src/lib/shared/utils/logging/utils.ts";
 
 export const load = async ({
   locals: { supabase, safeGetSession },
@@ -85,12 +85,12 @@ export const load = async ({
           description: "Profilen finns inte eller har tagits bort.",
         });
     }
-    const trackingId = logError({ error: e, message: `Error when reading profile with id: ${teacherId}` });
+    const trackingId = logErrorServer({ error: e, message: `Error when reading profile with id: ${teacherId}` });
     error(500, { ...getDefaultErrorInfoObjectified({ trackingId }) });
   }
 
   if (teacher.role !== "teacher") {
-    const trackingId = logError(
+    const trackingId = logErrorServer(
       { message: `Attempted to read a non-teacher profile with id: ${teacherId}` },
     );
     error(400,
@@ -141,7 +141,7 @@ export const load = async ({
         );
 
       listing = undefined;
-      logError({
+      logErrorServer({
         error,
         message: `Error when reading listings for profile with id: ${teacherId}. Showing profile without listing`,
       });
@@ -154,7 +154,7 @@ export const load = async ({
     const dbReviews = await getReviewsByReceiver(supabase, teacherId);
     reviews = dbReviews.map((review) => formatReviewWithReferences(review));
   } catch (e) {
-    const trackingId = logError({
+    const trackingId = logErrorServer({
       error: e,
       message: `Error when reading reviews for profile with id: ${teacherId}`,
     });
@@ -184,7 +184,7 @@ export const load = async ({
             ? true
             : false;
         } catch (error) {
-          logError({
+          logErrorServer({
             error,
             message: `Error when adding review for profile slug ${teacherId}, unable to read conversation for teacher & student`,
           });
@@ -244,12 +244,12 @@ export const actions = {
     // todo test flow
     let { role } = form.data;
     if (!role) {
-      logError({ message: `Error when submitting request contact. Data that user does not submit manually is invalid: role. Fetching role for user ${userId}`, },);
+      logErrorServer({ message: `Error when submitting request contact. Data that user does not submit manually is invalid: role. Fetching role for user ${userId}`, },);
       try {
         const profile = await getProfileByUser(supabase, userId);
         role = profile?.role;
       } catch (e) {
-        const trackingId = logError({
+        const trackingId = logErrorServer({
           error: e,
           message: "Form.data.role was invalid on requestcontact, tried to fetch profile but failed. Showing error",
           critical: true
@@ -285,7 +285,7 @@ export const actions = {
       );
 
     if (role !== "student") {
-      const trackingId = logError({ message: "Role was invalid: " + role });
+      const trackingId = logErrorServer({ message: "Role was invalid: " + role });
       return message(form, getFailFormMessageObjectified({ trackingId }), { status: 500 });
     }
 
@@ -297,7 +297,7 @@ export const actions = {
         teacherId,
       );
     } catch (error) {
-      logError({
+      logErrorServer({
         message: `unable to read conversation for teacher: ${teacherId} & student: ${session.user.id}, allowing student to contact`,
         error,
       });
@@ -350,12 +350,12 @@ export const actions = {
     // todo test flow
     let { role } = form.data;
     if (!role) {
-      logError({ message: `Error when submitting request contact. Data that user does not submit manually is invalid: role. Fetching role for user ${userId}`, },);
+      logErrorServer({ message: `Error when submitting request contact. Data that user does not submit manually is invalid: role. Fetching role for user ${userId}`, },);
       try {
         const profile = await getProfileByUser(supabase, userId);
         role = profile?.role;
       } catch (e) {
-        const trackingId = logError({
+        const trackingId = logErrorServer({
           error: e,
           message: "Form.data.role was invalid on requestcontact, tried to fetch profile but failed. Showing error",
           critical: true
@@ -379,7 +379,7 @@ export const actions = {
       );
 
     if (role !== "student") {
-      const trackingId = logError({ message: "Role was invalid: " + role });
+      const trackingId = logErrorServer({ message: "Role was invalid: " + role });
       return message(form, getFailFormMessageObjectified({ trackingId }), { status: 500 });
     }
 
@@ -390,7 +390,7 @@ export const actions = {
         user,
       });
       if (idError || !customerId)
-        logError({
+        logErrorServer({
           error: idError,
           message: "Error getting or creating customer id. Allowing flow to proceed anyway.",
         });
@@ -402,7 +402,7 @@ export const actions = {
 
       hasSubscription = primarySubscription ? true : false;
     } catch (error) {
-      logError({
+      logErrorServer({
         error,
         message: `Unexpected issue when checking subscription and charging ${costPerRequest} credits for student: ${userId} contacting teacher: ${teacherId}. Allowing flow to procceed.`,
       });
@@ -415,7 +415,7 @@ export const actions = {
         balance = await getCreditsByStudent(supabase, userId);
       } catch (error) {
         balance = undefined;
-        logError({
+        logErrorServer({
           error,
           message: "Unexpected error when checking if credit balance is enough to contact teacher. Allowing contact.",
         });
@@ -459,7 +459,7 @@ export const actions = {
         );
         // message is conversation id
       }
-      const trackingId = logError({
+      const trackingId = logErrorServer({
         error,
         message: `Error when starting conversation for profile slug: ${teacherId}`,
       });
@@ -482,7 +482,7 @@ export const actions = {
           `Started contact with teacher: ${teacherId}.`,
         );
       } catch (error) {
-        logError({
+        logErrorServer({
           error,
           message: `Unknown error when charging student ${userId} -${costPerRequest} credits, for contacting teacher ${teacherId}. Conversation ${conversationId} already created. Allowing contact.`,
         });
@@ -493,7 +493,7 @@ export const actions = {
     try {
       teacherEmail = await getEmailById(supabaseServiceRole, teacherId)
     } catch (error) {
-      logError({
+      logErrorServer({
         error,
         message: "Error getting teacher email. Unable to contact teacher",
       });
@@ -504,7 +504,7 @@ export const actions = {
       const profile = await getProfileByUser(supabase, teacherId)
       teacherName = profile.first_name;
     } catch (error) {
-      logError({
+      logErrorServer({
         error,
         message: `Error getting teacher first name for id ${teacherId}. Omitting teacher name`,
       });
@@ -516,7 +516,7 @@ export const actions = {
       const profile = await getProfileByUser(supabase, userId)
       studentName = profile.first_name;
     } catch (error) {
-      logError({
+      logErrorServer({
         error,
         message: `Error getting student first name for id ${userId}. Omitting student name`,
       });
@@ -526,7 +526,7 @@ export const actions = {
     try {
       contactRequestUrl = `${getBaseUrl(PUBLIC_ENVIRONMENT)}/account/conversation/${conversationId}`
     } catch (error) {
-      logError({
+      logErrorServer({
         error,
         message: `Error getting contact request url for id ${conversationId}. Omitting contact request url`,
       });
@@ -541,12 +541,12 @@ export const actions = {
         };
         const { error: sendError } = await sendEmail(RequestNotification, [teacherEmail], "En elev vill kontakta dig!", props)
         if (sendError)
-          logError({
+          logErrorServer({
             error: sendError,
             message: "Error sending email for when teacher received contact request",
           });
       } catch (e) {
-        logError({
+        logErrorServer({
           error: e,
           message: "Error sending email for when teacher received contact request",
         });
@@ -584,7 +584,7 @@ export const actions = {
         teacherId,
       );
       if (!conversation) {
-        const trackingId = logError({ message: `Error when adding review for profile slug ${teacherId}, teacher & student has no conversation.`, });
+        const trackingId = logErrorServer({ message: `Error when adding review for profile slug ${teacherId}, teacher & student has no conversation.`, });
         return message(
           form,
           getFailFormMessageObjectified({
@@ -595,7 +595,7 @@ export const actions = {
         );
       }
     } catch (error) {
-      logError({
+      logErrorServer({
         error,
         message: `Error when adding review for profile slug ${teacherId}, unable to read conversation for teacher & student. Proceeding`,
       });
@@ -610,7 +610,7 @@ export const actions = {
           { status: 403 },
         );
     } catch (error) {
-      logError({
+      logErrorServer({
         error,
         message: `Error when checking if user has already made a review for profile slug: ${teacherId}`,
       });
@@ -624,7 +624,7 @@ export const actions = {
         session,
       );
     } catch (error) {
-      const trackingId = logError({
+      const trackingId = logErrorServer({
         error,
         message: `Error when adding review for profile slug: ${teacherId}`,
       });

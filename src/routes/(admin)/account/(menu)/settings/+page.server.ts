@@ -35,7 +35,7 @@ import { ResourceNotFoundError } from "src/lib/shared/errors/missing-error.ts";
 import { ExternalErrorCodes } from "src/lib/shared/models/common.ts";
 import { sendEmail } from "src/lib/shared/utils/emails/utils.ts";
 import AccountDeletionConfirmation from "src/emails/account-deletion-confirmation.svelte";
-import { logError } from "src/lib/shared/utils/logging/utils.ts";
+import { logErrorServer } from "src/lib/shared/utils/logging/utils.ts";
 
 export const load: PageServerLoad = async ({
   parent,
@@ -96,7 +96,7 @@ export const actions = {
     try {
       await updateProfile(supabase, profileInput);
     } catch (error) {
-      const trackingId = logError({
+      const trackingId = logErrorServer({
         error,
         message: "Error on update profile in update bio with userid " + user.id,
       });
@@ -128,7 +128,7 @@ export const actions = {
     try {
       await updateProfile(supabase, profileInput);
     } catch (error) {
-      const trackingId = logError({
+      const trackingId = logErrorServer({
         error,
         message: "Error on update profile in update name with userid " + user.id,
       });
@@ -155,7 +155,7 @@ export const actions = {
     try {
       await updateUserEmail(supabase, email.trim());
     } catch (error) {
-      const trackingId = logError({
+      const trackingId = logErrorServer({
         error,
         message: "Error on update profile in update email with userid " + session?.user.id,
       });
@@ -211,7 +211,7 @@ export const actions = {
       input = await res.arrayBuffer();
     } catch (error) {
       failedCompression = true;
-      trackingId = logError({
+      trackingId = logErrorServer({
         error,
         message: "Error on compression in upload avatar for userid " + userId,
       });
@@ -248,7 +248,7 @@ export const actions = {
             { status: 413 }
         }
       }
-      const trackingId = logError({
+      const trackingId = logErrorServer({
         error,
         message: "Unknown error on upload avatar for userid " + userId,
       });
@@ -265,7 +265,7 @@ export const actions = {
         avatar_url: avatarPath,
       });
     } catch (error) {
-      const trackingId = logError({
+      const trackingId = logErrorServer({
         error,
         message: `Error on update profile with new avatar on path ${avatarPath} with userid ${userId}`,
       });
@@ -288,7 +288,7 @@ export const actions = {
     const { path } = form.data;
 
     if (!verifyAvatarOwnership(path, userId)) {
-      const trackingId = logError({ message: `User ${userId} sent incorrect filename and might have tampered with form data. Filename is ${path}`, },
+      const trackingId = logErrorServer({ message: `User ${userId} sent incorrect filename and might have tampered with form data. Filename is ${path}`, },
       );
       return message(
         form,
@@ -302,7 +302,7 @@ export const actions = {
     try {
       await deleteAvatar(supabase, fileName);
     } catch (error) {
-      const trackingId = logError({
+      const trackingId = logErrorServer({
         error,
         message: error instanceof ResourceNotFoundError ? "No object deleted. Possible permission or path issue" : "Unknown error on delete avatar from storage",
       })
@@ -315,7 +315,7 @@ export const actions = {
         avatar_url: "",
       });
     } catch (error) {
-      const trackingId = logError({
+      const trackingId = logErrorServer({
         error,
         message: `Error on update profile with delete avatar for userid ${userId}`,
       });
@@ -342,7 +342,7 @@ export const actions = {
     const { password } = form.data;
     const { id: userId, email } = user;
     if (!email) {
-      const trackingId = logError({ ...getDefaultErrorInfoObjectified({ message: `User with id ${userId} has no email and therefore password could not be verified` }), },);
+      const trackingId = logErrorServer({ ...getDefaultErrorInfoObjectified({ message: `User with id ${userId} has no email and therefore password could not be verified` }), },);
       return message(form, getFailFormMessageObjectified({ trackingId }), { status: 500 });
     }
 
@@ -360,7 +360,7 @@ export const actions = {
       const profile = await getProfileByUser(supabase, userId)
       studentName = profile.first_name;
     } catch (error) {
-      logError({
+      logErrorServer({
         error,
         message: `Error getting  first name for id ${userId}. Omitting name`,
       });
@@ -372,13 +372,13 @@ export const actions = {
         false,
       );
       if (error) {
-        const trackingId = logError({ error, message: `User with id ${userId} has no email and therefore password could not be verified` })
+        const trackingId = logErrorServer({ error, message: `User with id ${userId} has no email and therefore password could not be verified` })
         return message(form, getFailFormMessageObjectified({ trackingId }), { status: 500 });
       }
 
       await supabase.auth.signOut();
     } catch (e) {
-      const trackingId = logError({ error: e, message: `Error on attempt to delete & signout user with userid ${userId}` })
+      const trackingId = logErrorServer({ error: e, message: `Error on attempt to delete & signout user with userid ${userId}` })
       return message(
         form,
         getFailFormMessageObjectified({ trackingId }),
@@ -389,12 +389,12 @@ export const actions = {
     try {
       const { error: sendError } = await sendEmail(AccountDeletionConfirmation, [email], "Ditt konto har avslutats", { studentName })
       if (sendError)
-        logError({
+        logErrorServer({
           error,
           message: `Error sending email for deleted acc ${userId}`,
         });
     } catch (e) {
-      logError({
+      logErrorServer({
         error: e,
         message: `Error sending email for deleted acc ${userId}`,
       });
@@ -418,7 +418,7 @@ export const actions = {
 
     const { id, email } = session.user;
     if (!email) {
-      const trackingId = logError(
+      const trackingId = logErrorServer(
         { message: `User with id ${id} has no email and therefore password could not be verified` },
       );
       return message(
@@ -454,7 +454,7 @@ export const actions = {
           { status: 500 },
         );
 
-      const trackingId = logError({
+      const trackingId = logErrorServer({
         error: updateError,
         message: `Error on attempt to update password with userid ${id}`,
       });

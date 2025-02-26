@@ -13,7 +13,7 @@ import {
 import { getCreditsByStudent } from "src/lib/server/database/credits.ts";
 import { redirect, setFlash } from "sveltekit-flash-message/server";
 import { PricingPlanIds } from "src/lib/shared/models/subscription.ts";
-import { logError } from "src/lib/shared/utils/logging/utils.ts";
+import { logErrorServer } from "src/lib/shared/utils/logging/utils.ts";
 
 export const load: PageServerLoad = (async (event) => {
   const {
@@ -42,7 +42,7 @@ export const load: PageServerLoad = (async (event) => {
     user,
   });
   if (idError || !customerId) {
-    const trackingId = logError({
+    const trackingId = logErrorServer({
       error: idError,
       message: "Error creating customer id",
     });
@@ -56,7 +56,7 @@ export const load: PageServerLoad = (async (event) => {
   } = await fetchSubscription({ customerId });
 
   if (fetchErr) {
-    const trackingId = logError({
+    const trackingId = logErrorServer({
       error: fetchErr,
       message: "Error while fetching subscription for account billing page",
     });
@@ -67,7 +67,7 @@ export const load: PageServerLoad = (async (event) => {
   try {
     balance = await getCreditsByStudent(supabaseServiceRole, user.id);
   } catch (error) {
-    logError({
+    logErrorServer({
       error,
       message: "Error while fetching credits for account billing page",
     });

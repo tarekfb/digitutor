@@ -5,7 +5,7 @@ import Stripe from "stripe";
 import { pricingPlans } from "../../constants/constants.ts";
 import type { Database } from "src/supabase.ts";
 import { getNow } from "../utils.ts";
-import { logError } from "../logging/utils.ts";
+import { logErrorServer } from "../logging/utils.ts";
 
 const stripe = new Stripe(PRIVATE_STRIPE_API_KEY);
 // { apiVersion: "2023-08-16" }
@@ -25,7 +25,7 @@ export const getOrCreateCustomerId = async ({
 
   // PGRST116 == no rows
   if (error && error.code != "PGRST116") {
-    logError({
+    logErrorServer({
       error,
       message: "Error searching for teachers with following search: no rows",
     });
@@ -54,7 +54,7 @@ export const getOrCreateCustomerId = async ({
       },
     });
   } catch (e) {
-    logError({
+    logErrorServer({
       error: e,
       message: "Unknown error when creating stripe customer",
     });
@@ -62,7 +62,7 @@ export const getOrCreateCustomerId = async ({
   }
 
   if (!customer.id) {
-    logError({ message: "Unknown error on stripe user creation" });
+    logErrorServer({ message: "Unknown error on stripe user creation" });
     return { error: "Unknown stripe user creation error" };
   }
 
@@ -76,7 +76,7 @@ export const getOrCreateCustomerId = async ({
     });
 
   if (insertError) {
-    logError({
+    logErrorServer({
       error: insertError,
       message: "Unknown error on inserting row to stripe_customers",
     });
@@ -100,7 +100,7 @@ export const fetchSubscription = async ({
       status: "all",
     });
   } catch (e) {
-    logError({
+    logErrorServer({
       error: e,
       message: `unknown error when fetching list of subscriptions from stripe for customerid: ${customerId}`,
     });
@@ -123,7 +123,7 @@ export const fetchSubscription = async ({
       return pricingPlan.stripeProductId === productId;
     });
     if (!appSubscription) {
-      logError(
+      logErrorServer(
         { message: "Stripe subscription does not have matching app subscription in pricing_plans.ts (via product id match)", }
       )
       return {

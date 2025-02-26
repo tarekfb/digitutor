@@ -16,7 +16,7 @@ import { isErrorWithCode } from "src/lib/shared/utils/utils.ts";
 import type { ReviewWithReferences } from "src/lib/shared/models/review.ts";
 import { formatReviewWithReferences } from "src/lib/shared/utils/reviews/utils.ts";
 import { updateCredits } from "src/lib/server/database/credits.ts";
-import { logError } from "src/lib/shared/utils/logging/utils.ts";
+import { logErrorServer } from "src/lib/shared/utils/logging/utils.ts";
 
 export const load: PageServerLoad = async ({ locals: { supabase } }) => {
   let review: ReviewWithReferences | undefined;
@@ -28,7 +28,7 @@ export const load: PageServerLoad = async ({ locals: { supabase } }) => {
     const dbReview = longReviews[0] ?? reviews[0];
     if (dbReview) review = formatReviewWithReferences(dbReview);
   } catch (e) {
-    logError({ error: e, message: "Error when reviews signup display, perhaps didnt find valid review" });
+    logErrorServer({ error: e, message: "Error when reviews signup display, perhaps didnt find valid review" });
     review = undefined;
   }
   const form = await superValidate(zod(signUpSchema));
@@ -69,7 +69,7 @@ export const actions = {
 
       // this error takes presence of email in use and presumably more errors
       if (error?.status === 429) {
-        const trackingId = logError({
+        const trackingId = logErrorServer({
           error,
           message: "Email rate limit exceeded",
         });
@@ -86,7 +86,7 @@ export const actions = {
       }
 
       if (!data.user) {
-        const trackingId = logError({
+        const trackingId = logErrorServer({
           additionalData: { data },
           message: "User data was null on signup",
         });
@@ -98,7 +98,7 @@ export const actions = {
         return setError(form, "email", "E-postadressen används redan");
 
       if (error) {
-        const trackingId = logError({
+        const trackingId = logErrorServer({
           error,
           message: "Supabase error on signup",
         });
@@ -111,7 +111,7 @@ export const actions = {
         firstName,
       };
     } catch (error) {
-      const trackingId = logError({ error, message: "Error when creating supabase auth user" });
+      const trackingId = logErrorServer({ error, message: "Error when creating supabase auth user" });
       return message(form, getFailFormMessageObjectified({ trackingId }), { status: 500 });
     }
 
@@ -132,7 +132,7 @@ export const actions = {
           });
       }
 
-      const trackingId = logError({
+      const trackingId = logErrorServer({
         error,
         message: "Error when creating profile",
       });
@@ -142,7 +142,7 @@ export const actions = {
     try {
       await updateCredits(supabaseServiceRole, freeCredits, inputUser.id);
     } catch (error) {
-      logError({
+      logErrorServer({
         error,
         message: `Unknown error when adding free credits to new profile with id ${inputUser.id}`,
       });

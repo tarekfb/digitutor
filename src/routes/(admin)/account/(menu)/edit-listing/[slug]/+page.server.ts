@@ -32,7 +32,7 @@ import type { Tables } from "src/supabase.ts";
 import { findSimilarSubjects } from "src/lib/shared/utils/subjects/utils.ts";
 import { ExternalErrorCodes } from "src/lib/shared/models/common.js";
 import { formatListingWithProfile } from "src/lib/shared/utils/listing/utils.js";
-import { logError } from "src/lib/shared/utils/logging/utils.ts";
+import { logErrorServer } from "src/lib/shared/utils/logging/utils.ts";
 import type { Actions } from "./$types.js";
 
 export const load = async ({
@@ -62,7 +62,7 @@ export const load = async ({
           description: "Annonsen finns inte eller har tagits bort.",
         });
     }
-    const trackingId = logError({
+    const trackingId = logErrorServer({
       error: e,
       message: "Error when reading listing with id " + slug,
     });
@@ -70,7 +70,7 @@ export const load = async ({
   }
 
   if (session?.user.id !== listing.profile.id) {
-    const trackingId = logError({
+    const trackingId = logErrorServer({
       message: "Attempted to access a listing not owned by the user",
       additionalData: {
         listingId: listing.id,
@@ -85,7 +85,7 @@ export const load = async ({
     const rawSubjects = await getSubjects(supabase);
     subjects = rawSubjects.map((s) => formatSubject(s));
   } catch (e) {
-    const trackingId = logError({
+    const trackingId = logErrorServer({
       error: e,
       message: "Error while fetching subjects",
     });
@@ -141,7 +141,7 @@ export const actions: Actions = {
       await updateListing(supabase, form.data, slug, session);
       return { form };
     } catch (error) {
-      const trackingId = logError({
+      const trackingId = logErrorServer({
         error,
         message: "Error when updating listing slug id: " + slug,
       });
@@ -179,7 +179,7 @@ export const actions: Actions = {
             { status: 400 },
           ); // Todo: add some link or so in GUI to let user contact easily
       } catch (error) {
-        logError({
+        logErrorServer({
           error,
           message: "Error when looking for match. Allowing user to insert suggestion.",
           additionalData: { slug },
@@ -196,7 +196,7 @@ export const actions: Actions = {
         email,
       );
     } catch (error) {
-      const trackingId = logError({
+      const trackingId = logErrorServer({
         error,
         message: "Error when adding suggestion",
         additionalData: { slug },

@@ -5,7 +5,7 @@ import { contactUsSchema } from "$lib/shared/models/contact-us.ts";
 import { superValidate, message } from "sveltekit-superforms";
 import { zod } from "sveltekit-superforms/adapters";
 import { getFailFormMessageObjectified } from "$lib/shared/constants/constants.ts";
-import { logError } from "src/lib/shared/utils/logging/utils.ts";
+import { logErrorServer } from "src/lib/shared/utils/logging/utils.ts";
 
 export const load: PageServerLoad = async () => {
   const form = await superValidate(zod(contactUsSchema));
@@ -34,7 +34,7 @@ export const actions: Actions = {
         });
 
       if (insertError) {
-        const trackingId = logError({ error: insertError, message: "Error when inserting contact request" });
+        const trackingId = logErrorServer({ error: insertError, message: "Error when inserting contact request" });
         return message(
           form,
           getFailFormMessageObjectified({
@@ -47,7 +47,7 @@ export const actions: Actions = {
 
       return { form };
     } catch (error) {
-      const trackingId = logError({ error, message: "Unknown error when inserting contact request" });
+      const trackingId = logErrorServer({ error, message: "Unknown error when inserting contact request" });
       return message(
         form,
         getFailFormMessageObjectified({

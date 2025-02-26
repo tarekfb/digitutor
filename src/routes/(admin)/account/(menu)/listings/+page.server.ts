@@ -13,7 +13,7 @@ import {
 import { zod } from "sveltekit-superforms/adapters";
 import { redirect } from "sveltekit-flash-message/server";
 import { formatListingWithProfile } from "src/lib/shared/utils/listing/utils.ts";
-import { logError } from "src/lib/shared/utils/logging/utils.ts";
+import { logErrorServer } from "src/lib/shared/utils/logging/utils.ts";
 
 export const load: PageServerLoad = async ({
   locals: { supabase, safeGetSession },
@@ -30,7 +30,7 @@ export const load: PageServerLoad = async ({
     const dbListings = await getListings(supabase, 4, session.user.id);
     listings = dbListings.map((listing) => formatListingWithProfile(listing));
   } catch (e) {
-    const trackingId = logError({
+    const trackingId = logErrorServer({
       error: e,
       message: "Error while fetching listings in profile page with userId: " + session.user.id,
     });
@@ -60,7 +60,7 @@ export const actions: Actions = {
     let { nbrOfListings } = form.data;
 
     if (nbrOfListings === undefined) {
-      logError({ message: "User had undefined nbr of listings and tried to create listing, allow creation.", },);
+      logErrorServer({ message: "User had undefined nbr of listings and tried to create listing, allow creation.", },);
       nbrOfListings = 0;
     }
 
@@ -81,7 +81,7 @@ export const actions: Actions = {
       const { id } = await createListing(supabase, title.trim(), session);
       listingId = id;
     } catch (error) {
-      const trackingId = logError({
+      const trackingId = logErrorServer({
         error,
         message: "Error when creating listing",
       });

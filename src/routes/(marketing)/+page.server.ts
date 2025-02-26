@@ -14,7 +14,7 @@ import { formatSubject, type Subject } from "src/lib/shared/models/subject.ts";
 import { languages } from "src/lib/shared/models/common.ts";
 import { getSubjects } from "src/lib/server/database/subjects.ts";
 import { getQueryFromFormData } from "src/lib/shared/utils/search/utils.ts";
-import { logError } from "src/lib/shared/utils/logging/utils.ts";
+import { logErrorServer } from "src/lib/shared/utils/logging/utils.ts";
 
 export const load: PageServerLoad = async ({ locals: { supabase } }) => {
   const form = await superValidate(zod(searchSchema));
@@ -44,7 +44,7 @@ export const load: PageServerLoad = async ({ locals: { supabase } }) => {
       formatReviewWithReferences(review),
     );
   } catch (e) {
-    logError({ error: e, message: "Error when fetching display reviews" });
+    logErrorServer({ error: e, message: "Error when fetching display reviews" });
     displayReviews = [];
   }
 
@@ -53,7 +53,7 @@ export const load: PageServerLoad = async ({ locals: { supabase } }) => {
     const rawSubjects = await getSubjects(supabase);
     subjects = rawSubjects.map((s) => formatSubject(s));
   } catch (e) {
-    logError({ error: e, message: "Unknown error when reading subjects" });
+    logErrorServer({ error: e, message: "Unknown error when reading subjects" });
     subjects = languages;
   }
 

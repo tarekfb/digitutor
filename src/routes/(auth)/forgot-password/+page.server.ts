@@ -7,7 +7,7 @@ import {
   getFailFormMessageObjectified,
   getSuccessFormMessage,
 } from "src/lib/shared/constants/constants.ts";
-import { logError } from "src/lib/shared/utils/logging/utils.ts";
+import { logErrorServer } from "src/lib/shared/utils/logging/utils.ts";
 
 export const load = (async () => {
   const form = await superValidate(zod(requestPasswordResetSchema));
@@ -30,7 +30,7 @@ export const actions = {
 
     const { error } = await supabase.auth.resetPasswordForEmail(email);
     if (error) {
-      const trackingId = logError({
+      const trackingId = logErrorServer({
         error,
         message: "Error when requesting password reset",
       });

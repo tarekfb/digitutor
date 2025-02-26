@@ -4,7 +4,7 @@ import { creditProducts } from "src/lib/shared/constants/constants.ts";
 import type { RequestHandler } from "./$types.ts";
 import { sendEmail } from "src/lib/shared/utils/emails/utils.ts";
 import PurchaseConfirmation from "src/emails/purchase-confirmation.svelte";
-import { logError } from "src/lib/shared/utils/logging/utils.ts";
+import { logErrorServer } from "src/lib/shared/utils/logging/utils.ts";
 
 export const POST: RequestHandler = async ({
   request,
@@ -42,7 +42,7 @@ export const POST: RequestHandler = async ({
       (product) => product.stripePriceId === priceId,
     );
     if (!matchedProduct) {
-      logError({
+      logErrorServer({
         message: "Unexpected error: product not found.",
         additionalData: {
           userId,
@@ -57,7 +57,7 @@ export const POST: RequestHandler = async ({
       try {
         const { error: sendError } = await sendEmail(PurchaseConfirmation, [customerEmail], "Tack för ditt köp", { userName: customerName, priceId })
         if (sendError)
-          logError({
+          logErrorServer({
             error: sendError,
             message: `Error sending email for purchase confirmation ${userId}`,
             additionalData: {
@@ -68,7 +68,7 @@ export const POST: RequestHandler = async ({
             critical: true,
           });
       } catch (e) {
-        logError({
+        logErrorServer({
           error: e,
           message: `Error sending email for purchase confirmation ${userId}`,
           additionalData: {
@@ -79,14 +79,14 @@ export const POST: RequestHandler = async ({
           critical: true,
         });
       }
-    } else logError({ message: `Missing email, unable to send confirmation email for userid ${userId}` });
+    } else logErrorServer({ message: `Missing email, unable to send confirmation email for userid ${userId}` });
     // shouldnt happen but we dont own the API, safeguarding against future changes 
 
     if (mode === "payment" && matchedProduct) {
       try {
         await updateCredits(supabaseServiceRole, matchedProduct.credits, userId);
       } catch (e) {
-        logError({
+        logErrorServer({
           error: e,
           message: `After completing payment and trying to add credit value of ${matchedProduct.credits}. User ${userId} most likely didnt receive their ${matchedProduct.credits} credits`,
           additionalData: {

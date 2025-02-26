@@ -8,7 +8,7 @@ import { message, superValidate } from "sveltekit-superforms/client";
 import { nameSchema, type ProfileInput } from "$lib/shared/models/profile.ts";
 import { updateProfile } from "$lib/server/database/profiles.js";
 import { hasFullProfile } from "src/lib/shared/utils/profile/utils.ts";
-import { logError } from "src/lib/shared/utils/logging/utils.ts";
+import { logErrorServer } from "src/lib/shared/utils/logging/utils.ts";
 
 export async function load({ parent }) {
   const data = await parent();
@@ -29,7 +29,7 @@ export async function load({ parent }) {
     const form = await superValidate(initFormData, zod(nameSchema));
     return { form, data };
   } catch (e) {
-    const trackingId = logError({
+    const trackingId = logErrorServer({
       error: e,
       message: "Error when loading create profile page",
     });

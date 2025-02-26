@@ -17,7 +17,7 @@ import { getSubjects } from "src/lib/server/database/subjects.ts";
 import { formatSubject, type Subject } from "src/lib/shared/models/subject.ts";
 import { filterUniqueAndFormatSearchResults } from "src/lib/shared/utils/search/utils.ts";
 import { getQueryFromFormData } from "src/lib/shared/utils/search/utils.ts";
-import { logError } from "src/lib/shared/utils/logging/utils.ts";
+import { logErrorServer } from "src/lib/shared/utils/logging/utils.ts";
 
 export const load = (async ({ url, locals: { supabase } }) => {
   const query = url.searchParams.get("q") || ""; // falsy query will get all
@@ -45,7 +45,7 @@ export const load = (async ({ url, locals: { supabase } }) => {
           "Testa söka på något annat, eller försök igen senare.",
         );
     } else {
-      logError({
+      logErrorServer({
         error,
         message: `Error searching for teachers with following search: ${query}`,
       });
@@ -58,7 +58,7 @@ export const load = (async ({ url, locals: { supabase } }) => {
     const rawSubjects = await getSubjects(supabase);
     subjects = rawSubjects.map((s) => formatSubject(s));
   } catch (e) {
-    logError({ error: e, message: "Unknown error when reading subjects" });
+    logErrorServer({ error: e, message: "Unknown error when reading subjects" });
     subjects = languages;
   }
 
@@ -91,7 +91,7 @@ export const actions: Actions = {
             { status: 400 },
           );
       }
-      const trackingId = logError({
+      const trackingId = logErrorServer({
         error,
         message: "Error searching for teachers with following search: " + query,
       });

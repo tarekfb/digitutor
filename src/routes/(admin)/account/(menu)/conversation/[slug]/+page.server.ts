@@ -10,7 +10,7 @@ import { getConversation } from "src/lib/server/database/conversations.ts";
 import { ExternalErrorCodes } from "src/lib/shared/models/common.ts";
 import { formatConversationWithReferences } from "src/lib/shared/utils/conversation/utils.ts";
 import { isErrorWithCode } from "src/lib/shared/utils/utils.ts";
-import { logError } from "src/lib/shared/utils/logging/utils.ts";
+import { logErrorServer } from "src/lib/shared/utils/logging/utils.ts";
 
 export const ssr = false;
 
@@ -41,7 +41,7 @@ export const load = async ({
           description: "Konversationen finns inte eller har tagits bort.",
         });
     }
-    const trackingId = logError({
+    const trackingId = logErrorServer({
       error: e,
       message: "Error when retrieving conversation with slug " + slug,
     });
