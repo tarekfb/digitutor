@@ -16,12 +16,12 @@ export const load: PageServerLoad = async (event) => {
   const type = url.searchParams.get("type") as EmailOtpType | null;
 
   if (!tokenHash || !type) {
-    logErrorServer({
+    const trackingId = logErrorServer({
       message: "Issue at confirm signup, missing information",
       additionalData: { tokenHash, type, url },
       critical: true,
     });
-    error(500, getDefaultErrorInfo("Det saknas lite info för att verifiera dig"));
+    error(500, getDefaultErrorInfo({ trackingId, message: "Det saknas lite info för att verifiera dig" }));
   }
 
   const {

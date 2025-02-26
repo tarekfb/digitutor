@@ -4,7 +4,7 @@ import {
   getFailFormMessage,
   MessageId,
   defaultErrorDescription,
-  getDefaultErrorInfoObjectified,
+  getDefaultErrorInfo,
   getFailFormMessageObjectified,
 } from "$lib/shared/constants/constants.ts";
 import { message, superValidate } from "sveltekit-superforms";
@@ -66,7 +66,7 @@ export const load = async ({
       error: e,
       message: "Error when reading listing with id " + slug,
     });
-    error(500, { ...getDefaultErrorInfoObjectified({ trackingId }) });
+    error(500, { ...getDefaultErrorInfo({ trackingId }) });
   }
 
   if (session?.user.id !== listing.profile.id) {
@@ -77,7 +77,7 @@ export const load = async ({
         userId: session?.user.id,
       }
     });
-    error(500, { ...getDefaultErrorInfoObjectified({ trackingId }) });
+    error(500, { ...getDefaultErrorInfo({ trackingId }) });
   }
 
   let subjects: Subject[] = [];
@@ -89,7 +89,7 @@ export const load = async ({
       error: e,
       message: "Error while fetching subjects",
     });
-    error(500, { ...getDefaultErrorInfoObjectified({ trackingId }) });
+    error(500, { ...getDefaultErrorInfo({ trackingId }) });
   }
 
   const updateListingForm = await superValidate(

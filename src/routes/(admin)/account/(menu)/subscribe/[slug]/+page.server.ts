@@ -6,7 +6,7 @@ import {
   getOrCreateCustomerId,
   fetchSubscription,
 } from "src/lib/shared/utils/subscription/subscription-helper.ts";
-import { getDefaultErrorInfoObjectified, websiteName } from "src/lib/shared/constants/constants.ts";
+import { getDefaultErrorInfo, websiteName } from "src/lib/shared/constants/constants.ts";
 import type { PageServerLoad } from "./$types.ts";
 import { redirect } from "sveltekit-flash-message/server";
 import { logErrorServer } from "src/lib/shared/utils/logging/utils.ts";
@@ -50,7 +50,7 @@ export const load: PageServerLoad = async ({
       error: idError,
       message: "Error creating customer id",
     });
-    error(500, { ...getDefaultErrorInfoObjectified({ trackingId }) });
+    error(500, { ...getDefaultErrorInfo({ trackingId }) });
   }
 
   const { primarySubscription } = await fetchSubscription({
@@ -97,7 +97,7 @@ export const load: PageServerLoad = async ({
       error: e,
       message: "Error creating checkout session",
     });
-    error(500, { ...getDefaultErrorInfoObjectified({ trackingId }) });
+    error(500, { ...getDefaultErrorInfo({ trackingId }) });
   }
 
   redirect(303, checkoutUrl ?? "/pricing"); // stripe takes over checkout process

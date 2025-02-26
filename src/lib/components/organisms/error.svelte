@@ -7,7 +7,7 @@
   import Bug from "lucide-svelte/icons/bug";
   import {
     defaultErrorTitle,
-    getDefaultErrorInfoObjectified,
+    getDefaultErrorInfo,
   } from "src/lib/shared/constants/constants.ts";
   import Footer from "./footer.svelte";
 
@@ -22,7 +22,7 @@
 
   const getDescription = (error: App.Error): string => {
     if (error.message === "Internal Error" || !error.description)
-      return getDefaultErrorInfoObjectified().description;
+      return getDefaultErrorInfo().description;
     return error.description;
   };
 

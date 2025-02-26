@@ -7,7 +7,6 @@ import { error } from "@sveltejs/kit";
 import {
   defaultPlanId,
   getDefaultErrorInfo,
-  getDefaultErrorInfoObjectified,
   websiteName,
 } from "src/lib/shared/constants/constants.ts";
 import { getCreditsByStudent } from "src/lib/server/database/credits.ts";
@@ -46,7 +45,7 @@ export const load: PageServerLoad = (async (event) => {
       error: idError,
       message: "Error creating customer id",
     });
-    error(500, { ...getDefaultErrorInfoObjectified({ trackingId }) });
+    error(500, { ...getDefaultErrorInfo({ trackingId }) });
   }
 
   const {
@@ -60,7 +59,7 @@ export const load: PageServerLoad = (async (event) => {
       error: fetchErr,
       message: "Error while fetching subscription for account billing page",
     });
-    error(500, { ...getDefaultErrorInfoObjectified({ trackingId }) });
+    error(500, { ...getDefaultErrorInfo({ trackingId }) });
   }
 
   let balance: number | undefined;

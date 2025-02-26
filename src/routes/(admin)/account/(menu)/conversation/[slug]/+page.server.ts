@@ -1,5 +1,5 @@
 import { error } from "@sveltejs/kit";
-import { getDefaultErrorInfoObjectified } from "$lib/shared/constants/constants.ts";
+import { getDefaultErrorInfo } from "$lib/shared/constants/constants.ts";
 import {
   sendMessageSchema,
   type ConversationWithReferences,
@@ -45,7 +45,7 @@ export const load = async ({
       error: e,
       message: "Error when retrieving conversation with slug " + slug,
     });
-    error(500, { ...getDefaultErrorInfoObjectified({ trackingId }) });
+    error(500, { ...getDefaultErrorInfo({ trackingId }) });
   }
 
   const form = await superValidate(zod(sendMessageSchema));

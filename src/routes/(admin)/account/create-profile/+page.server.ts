@@ -1,6 +1,6 @@
 import {
   defaultErrorTitle,
-  getDefaultErrorInfoObjectified,
+  getDefaultErrorInfo,
 } from "$lib/shared/constants/constants.ts";
 import { error, fail, redirect } from "@sveltejs/kit";
 import { zod } from "sveltekit-superforms/adapters";
@@ -33,7 +33,7 @@ export async function load({ parent }) {
       error: e,
       message: "Error when loading create profile page",
     });
-    error(500, { ...getDefaultErrorInfoObjectified({ trackingId }) });
+    error(500, { ...getDefaultErrorInfo({ trackingId }) });
   }
 }
 

@@ -31,19 +31,6 @@ export const defaultErrorInfo: App.Error = {
 };
 
 export const getDefaultErrorInfo = (
-  message?: string,
-  description?: string,
-  id?: MessageId,
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  data?: any,
-): App.Error => ({
-  message: message ?? defaultErrorTitle,
-  description: description ?? defaultErrorInfo.description,
-  id: id ?? MessageId.Unknown,
-  data: data ?? undefined,
-});
-
-export const getDefaultErrorInfoObjectified = (
   options?: {
     message?: string,
     description?: string,

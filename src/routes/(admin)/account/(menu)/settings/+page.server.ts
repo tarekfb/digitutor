@@ -1,6 +1,6 @@
 import type { PageServerLoad } from "./$types.ts";
 import {
-  getDefaultErrorInfoObjectified,
+  getDefaultErrorInfo,
   getFailFormMessageObjectified,
   getSuccessFormMessage,
   maxAvatarSize,
@@ -342,7 +342,7 @@ export const actions = {
     const { password } = form.data;
     const { id: userId, email } = user;
     if (!email) {
-      const trackingId = logErrorServer({ ...getDefaultErrorInfoObjectified({ message: `User with id ${userId} has no email and therefore password could not be verified` }), },);
+      const trackingId = logErrorServer({ ...getDefaultErrorInfo({ message: `User with id ${userId} has no email and therefore password could not be verified` }), },);
       return message(form, getFailFormMessageObjectified({ trackingId }), { status: 500 });
     }
 

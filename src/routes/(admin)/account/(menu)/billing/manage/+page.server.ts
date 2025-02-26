@@ -2,7 +2,7 @@ import { PRIVATE_STRIPE_API_KEY } from "$env/static/private";
 import { error } from "@sveltejs/kit";
 import Stripe from "stripe";
 import type { PageServerLoad } from "./$types.ts";
-import { getDefaultErrorInfoObjectified } from "src/lib/shared/constants/constants.ts";
+import { getDefaultErrorInfo } from "src/lib/shared/constants/constants.ts";
 import { getOrCreateCustomerId } from "src/lib/shared/utils/subscription/subscription-helper.ts";
 import { redirect } from "sveltekit-flash-message/server";
 import { logErrorServer } from "src/lib/shared/utils/logging/utils.ts";
@@ -29,7 +29,7 @@ export const load = (async ({
       error: idError,
       message: "Error creating customer id in billing manage page",
     });
-    error(500, { ...getDefaultErrorInfoObjectified({ trackingId }) });
+    error(500, { ...getDefaultErrorInfo({ trackingId }) });
   }
 
   let portalLink;
@@ -44,7 +44,7 @@ export const load = (async ({
       error: e,
       message: "Error creating billing portal session in billing manage page",
     });
-    error(500, { ...getDefaultErrorInfoObjectified({ trackingId }) });
+    error(500, { ...getDefaultErrorInfo({ trackingId }) });
   }
 
   if (!portalLink) {

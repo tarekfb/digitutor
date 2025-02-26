@@ -2,7 +2,7 @@ import { error, redirect } from "@sveltejs/kit";
 import type { LayoutServerLoad } from "./$types.ts";
 import { getProfileByUser } from "$lib/server/database/profiles.ts";
 import type { Profile } from "src/lib/shared/models/profile.ts";
-import { getDefaultErrorInfoObjectified } from "src/lib/shared/constants/constants.ts";
+import { getDefaultErrorInfo } from "src/lib/shared/constants/constants.ts";
 import { formatProfile } from "src/lib/shared/utils/profile/utils.ts";
 import { logErrorServer } from "src/lib/shared/utils/logging/utils.ts";
 
@@ -22,7 +22,7 @@ export const load: LayoutServerLoad = async ({
       error: e,
       message: "Error while fetching profile in layout for account",
     });
-    error(500, { ...getDefaultErrorInfoObjectified({ trackingId }) });
+    error(500, { ...getDefaultErrorInfo({ trackingId }) });
   }
   return { profile };
 };

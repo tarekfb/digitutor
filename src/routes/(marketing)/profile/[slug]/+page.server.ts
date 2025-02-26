@@ -1,12 +1,10 @@
 import { error } from "@sveltejs/kit";
 import {
   getFailFormMessage,
-  defaultErrorInfo,
-  getDefaultErrorInfo,
   costPerRequest,
   MessageId,
   getBaseUrl,
-  getDefaultErrorInfoObjectified,
+  getDefaultErrorInfo,
   getFailFormMessageObjectified,
 } from "$lib/shared/constants/constants.ts";
 import { getProfileByUser } from "$lib/server/database/profiles.ts";
@@ -86,7 +84,7 @@ export const load = async ({
         });
     }
     const trackingId = logErrorServer({ error: e, message: `Error when reading profile with id: ${teacherId}` });
-    error(500, { ...getDefaultErrorInfoObjectified({ trackingId }) });
+    error(500, { ...getDefaultErrorInfo({ trackingId }) });
   }
 
   if (teacher.role !== "teacher") {
@@ -95,7 +93,7 @@ export const load = async ({
     );
     error(400,
       {
-        ...getDefaultErrorInfoObjectified({
+        ...getDefaultErrorInfo({
           trackingId,
           message: "Denna profilen är inte tillgänglig just nu",
           description: "Du kan kontakta oss om detta fortsätter.",
@@ -254,7 +252,7 @@ export const actions = {
           message: "Form.data.role was invalid on requestcontact, tried to fetch profile but failed. Showing error",
           critical: true
         });
-        error(500, { ...getDefaultErrorInfoObjectified({ trackingId }) });
+        error(500, { ...getDefaultErrorInfo({ trackingId }) });
       }
     }
 
@@ -360,7 +358,7 @@ export const actions = {
           message: "Form.data.role was invalid on requestcontact, tried to fetch profile but failed. Showing error",
           critical: true
         });
-        error(500, { ...getDefaultErrorInfoObjectified({ trackingId }) });
+        error(500, { ...getDefaultErrorInfo({ trackingId }) });
       }
     }
 

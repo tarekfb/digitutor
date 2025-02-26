@@ -3,7 +3,7 @@ import { createListing, getListings } from "$lib/server/database/listings.ts";
 import type { Actions, PageServerLoad } from "./$types.ts";
 import {
   getFailFormMessageObjectified,
-  getDefaultErrorInfoObjectified,
+  getDefaultErrorInfo,
 } from "$lib/shared/constants/constants.ts";
 import { message, superValidate } from "sveltekit-superforms";
 import {
@@ -34,7 +34,7 @@ export const load: PageServerLoad = async ({
       error: e,
       message: "Error while fetching listings in profile page with userId: " + session.user.id,
     });
-    error(500, { ...getDefaultErrorInfoObjectified({ trackingId, message: "Kunde inte hämta konversationer" }) });
+    error(500, { ...getDefaultErrorInfo({ trackingId, message: "Kunde inte hämta konversationer" }) });
   }
 
   const form = await superValidate(
