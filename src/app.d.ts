@@ -33,7 +33,16 @@ declare global {
     // interface PageData {
     //   session: Session | null;
     // }
-    // interface Platform {}
+    interface Platform {
+      env: {
+        COUNTER: DurableObjectNamespace;
+      };
+      context: {
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any -- code provided by cloudflare docs
+        waitUntil(promise: Promise<any>): void;
+      };
+      caches: CacheStorage & { default: Cache }
+    }
   }
 }
 
