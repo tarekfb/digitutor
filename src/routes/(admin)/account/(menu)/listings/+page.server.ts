@@ -2,7 +2,7 @@ import { error, fail } from "@sveltejs/kit";
 import { createListing, getListings } from "$lib/server/database/listings.ts";
 import type { Actions, PageServerLoad } from "./$types.ts";
 import {
-  getFailFormMessageObjectified,
+  getFailFormMessage,
   getDefaultErrorInfo,
 } from "$lib/shared/constants/constants.ts";
 import { message, superValidate } from "sveltekit-superforms";
@@ -67,7 +67,7 @@ export const actions: Actions = {
     if (nbrOfListings > 4)
       return message(
         form,
-        getFailFormMessageObjectified(
+        getFailFormMessage(
           {
             title: "Du har för många annonser",
             description: "Ta bort en annons innan du skapar en ny.",
@@ -87,7 +87,7 @@ export const actions: Actions = {
       });
       return message(
         form,
-        getFailFormMessageObjectified({ trackingId }),
+        getFailFormMessage({ trackingId }),
         { status: 500 },
       );
     }

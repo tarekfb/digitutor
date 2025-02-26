@@ -3,7 +3,7 @@ import { redirect } from "sveltekit-flash-message/server";
 import type { PageServerLoad } from "./$types.ts";
 import {
   freeCredits,
-  getFailFormMessageObjectified,
+  getFailFormMessage,
 } from "$lib/shared/constants/constants.ts";
 import { message, setError, superValidate } from "sveltekit-superforms";
 import { zod } from "sveltekit-superforms/adapters";
@@ -90,7 +90,7 @@ export const actions = {
           additionalData: { data },
           message: "User data was null on signup",
         });
-        return message(form, getFailFormMessageObjectified({ trackingId }), { status: 500 });
+        return message(form, getFailFormMessage({ trackingId }), { status: 500 });
       }
 
       // https://github.com/orgs/supabase/discussions/1282
@@ -102,7 +102,7 @@ export const actions = {
           error,
           message: "Supabase error on signup",
         });
-        return message(form, getFailFormMessageObjectified({ trackingId }), { status: 500 });
+        return message(form, getFailFormMessage({ trackingId }), { status: 500 });
       }
 
       inputUser = {
@@ -112,7 +112,7 @@ export const actions = {
       };
     } catch (error) {
       const trackingId = logErrorServer({ error, message: "Error when creating supabase auth user" });
-      return message(form, getFailFormMessageObjectified({ trackingId }), { status: 500 });
+      return message(form, getFailFormMessage({ trackingId }), { status: 500 });
     }
 
     try {
@@ -136,7 +136,7 @@ export const actions = {
         error,
         message: "Error when creating profile",
       });
-      return message(form, getFailFormMessageObjectified({ trackingId }), { status: 500 });
+      return message(form, getFailFormMessage({ trackingId }), { status: 500 });
     }
 
     try {

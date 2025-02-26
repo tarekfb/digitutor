@@ -4,7 +4,7 @@ import type { Actions, PageServerLoad } from "./$types.ts";
 import { contactUsSchema } from "$lib/shared/models/contact-us.ts";
 import { superValidate, message } from "sveltekit-superforms";
 import { zod } from "sveltekit-superforms/adapters";
-import { getFailFormMessageObjectified } from "$lib/shared/constants/constants.ts";
+import { getFailFormMessage } from "$lib/shared/constants/constants.ts";
 import { logErrorServer } from "src/lib/shared/utils/logging/utils.ts";
 
 export const load: PageServerLoad = async () => {
@@ -37,7 +37,7 @@ export const actions: Actions = {
         const trackingId = logErrorServer({ error: insertError, message: "Error when inserting contact request" });
         return message(
           form,
-          getFailFormMessageObjectified({
+          getFailFormMessage({
             trackingId,
             description: "Kunde ej skicka meddelandet. Försök igen lite senare.",
           }),
@@ -50,7 +50,7 @@ export const actions: Actions = {
       const trackingId = logErrorServer({ error, message: "Unknown error when inserting contact request" });
       return message(
         form,
-        getFailFormMessageObjectified({
+        getFailFormMessage({
           trackingId,
           description: "Kunde ej skicka meddelandet. Försök igen lite senare.",
         }),

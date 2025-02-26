@@ -2,7 +2,7 @@ import { fail, redirect } from "@sveltejs/kit";
 import type { Actions, PageServerLoad } from "./$types.ts";
 import {
   MessageId,
-  getFailFormMessageObjectified,
+  getFailFormMessage,
 } from "$lib/shared/constants/constants.ts";
 import { message, superValidate } from "sveltekit-superforms";
 import { zod } from "sveltekit-superforms/adapters";
@@ -105,7 +105,7 @@ export const actions: Actions = {
                 error,
                 message: "Supabase error on signin",
               });
-              return message(form, getFailFormMessageObjectified({ trackingId }), { status: 500 });
+              return message(form, getFailFormMessage({ trackingId }), { status: 500 });
             }
         }
       }
@@ -113,14 +113,14 @@ export const actions: Actions = {
         const trackingId = logErrorServer({
           message: "User data was null on signin",
         });
-        return message(form, getFailFormMessageObjectified({ trackingId }), { status: 500 });
+        return message(form, getFailFormMessage({ trackingId }), { status: 500 });
       }
     } catch (error) {
       const trackingId = logErrorServer({
         error,
         message: "Error on signin supabase auth user",
       });
-      return message(form, getFailFormMessageObjectified({ trackingId }), { status: 500 });
+      return message(form, getFailFormMessage({ trackingId }), { status: 500 });
     }
 
     redirect(302, url.searchParams.get("next") ?? "/account");

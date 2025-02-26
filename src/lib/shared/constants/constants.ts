@@ -47,22 +47,8 @@ export const getDefaultErrorInfo = (
   trackingId: options?.trackingId ?? undefined,
 });
 
-export const getFailFormMessage = (
-  title?: string,
-  description?: string,
-  messageId?: MessageId,
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  data?: any,
-  variant: "destructive" | "default" | "warning" = "destructive",
-): Message => ({
-  variant,
-  title: title ?? "Något gick fel",
-  description: description ?? "Du kan kontakta oss om detta fortsätter.",
-  id: messageId ?? MessageId.Unknown,
-  data: data ?? undefined,
-});
 
-export const getFailFormMessageObjectified = (
+export const getFailFormMessage = (
   options?: {
     title?: string,
     description?: string,

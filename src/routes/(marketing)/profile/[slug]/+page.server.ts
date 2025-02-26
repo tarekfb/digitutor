@@ -1,11 +1,10 @@
 import { error } from "@sveltejs/kit";
 import {
-  getFailFormMessage,
   costPerRequest,
   MessageId,
   getBaseUrl,
   getDefaultErrorInfo,
-  getFailFormMessageObjectified,
+  getFailFormMessage,
 } from "$lib/shared/constants/constants.ts";
 import { getProfileByUser } from "$lib/server/database/profiles.ts";
 import { getListing } from "$lib/server/database/listings.ts";
@@ -115,29 +114,30 @@ export const load = async ({
       const dbListing = await getListing(supabase, listingId);
       listing = formatListingWithProfile(dbListing);
       if (!listing.visible && userId !== listing.profile.id) {
-        listingMessage = getFailFormMessage(
-          "Vi kunde inte hämta din annons",
-          "Denna annonsen är inte tillgänglig just nu.",
-        );
+        listingMessage = getFailFormMessage({
+          title: "Vi kunde inte hämta din annons",
+          description: "Denna annonsen är inte tillgänglig just nu.",
+        });
         listing = undefined;
       }
       if (listing?.profile.id !== teacher.id) {
-        listingMessage = getFailFormMessage("Vi kunde inte hämta din annons");
+        listingMessage = getFailFormMessage({
+          title: "Vi kunde inte hämta din annons",
+        });
         listing = undefined;
       }
     } catch (error) {
       if (isErrorWithCode(error)) {
-        if (error.code === ExternalErrorCodes.InvalidInputSyntax)
-          listingMessage = getFailFormMessage("Vi kunde inte hitta din annons");
-
-        if (error.code === ExternalErrorCodes.ContainsZeroRows)
-          listingMessage = getFailFormMessage("Vi kunde inte hitta din annons");
-      } else
-        listingMessage = getFailFormMessage(
-          "Vi kunde inte hämta din annons",
-          "Något gick fel. Kontakta oss om detta fortsätter.",
-        );
-
+        if (error.code === ExternalErrorCodes.InvalidInputSyntax || error.code === ExternalErrorCodes.ContainsZeroRows)
+          listingMessage = getFailFormMessage({
+            title: "Vi kunde inte hitta din annons",
+          });
+      } else {
+        listingMessage = getFailFormMessage({
+          title: "Vi kunde inte hämta din annons",
+          description: "Något gick fel. Kontakta oss om detta fortsätter.",
+        });
+      }
       listing = undefined;
       logErrorServer({
         error,
@@ -159,7 +159,7 @@ export const load = async ({
     const isOwner = userId === teacherId;
     if (isOwner)
       // only show error info to owner
-      reviewsMessage = getFailFormMessageObjectified({
+      reviewsMessage = getFailFormMessage({
         title: "Vi kunde inte hämta recensioner",
         description: "Något gick fel. Kontakta oss om detta fortsätter.",
         trackingId
@@ -259,32 +259,28 @@ export const actions = {
     if (teacherId === userId)
       return message(
         form,
-        getFailFormMessage(
-          "Detta går inte att göra",
-          "Du kan inte kontakta dig själv.",
-          undefined,
-          undefined,
-          "default",
-        ),
+        getFailFormMessage({
+          title: "Detta går inte att göra",
+          description: "Du kan inte kontakta dig själv.",
+          variant: "default",
+        }),
         { status: 403 },
       );
 
     if (role === "teacher")
       return message(
         form,
-        getFailFormMessage(
-          "Detta går ej att göra som lärare",
-          "Skapa ett konto som student om du vill kontakta en annan lärare.",
-          undefined,
-          undefined,
-          "default",
-        ),
+        getFailFormMessage({
+          title: "Detta går ej att göra som lärare",
+          description: "Skapa ett konto som student om du vill kontakta en annan lärare.",
+          variant: "default",
+        }),
         { status: 403 },
       );
 
     if (role !== "student") {
       const trackingId = logErrorServer({ message: "Role was invalid: " + role });
-      return message(form, getFailFormMessageObjectified({ trackingId }), { status: 500 });
+      return message(form, getFailFormMessage({ trackingId }), { status: 500 });
     }
 
     let conversation: DbConversationWithReferences | null = null;
@@ -336,10 +332,10 @@ export const actions = {
     if (!form.valid)
       return message(
         form,
-        getFailFormMessage(
-          undefined,
-          "Om du inte är inloggad, testa att logga in och försöka igen. Om detta fortsätter kan du kontakta oss.",
-        ),
+        getFailFormMessage({
+          description:
+            "Om du inte är inloggad, testa att logga in och försöka igen. Om detta fortsätter kan du kontakta oss.",
+        }),
         { status: 403 },
       );
 
@@ -365,20 +361,20 @@ export const actions = {
     if (teacherId === userId)
       return message(
         form,
-        getFailFormMessageObjectified({ description: "Du kan inte kontakta dig själv.", variant: "default" }),
+        getFailFormMessage({ description: "Du kan inte kontakta dig själv.", variant: "default" }),
         { status: 403 },
       );
 
     if (role === "teacher")
       return message(
         form,
-        getFailFormMessageObjectified({ title: "Detta går ej att göra som lärare", description: "Skapa ett konto som student om du vill kontakta en annan lärare.", variant: "default" }),
+        getFailFormMessage({ title: "Detta går ej att göra som lärare", description: "Skapa ett konto som student om du vill kontakta en annan lärare.", variant: "default" }),
         { status: 403 },
       );
 
     if (role !== "student") {
       const trackingId = logErrorServer({ message: "Role was invalid: " + role });
-      return message(form, getFailFormMessageObjectified({ trackingId }), { status: 500 });
+      return message(form, getFailFormMessage({ trackingId }), { status: 500 });
     }
 
     let hasSubscription: boolean = false;
@@ -424,7 +420,7 @@ export const actions = {
         const missingCredits = (balance - costPerRequest) * -1;
         return message(
           form,
-          getFailFormMessageObjectified({
+          getFailFormMessage({
             title: `Du har ${missingCredits} krediter för lite`,
             description: "",
             messageId: MessageId.InsufficientCredits,
@@ -463,7 +459,7 @@ export const actions = {
       });
       return message(
         form,
-        getFailFormMessageObjectified({
+        getFailFormMessage({
           description: "Inga krediter har dragits. Du kan kontakta oss om detta fortsätter.",
           trackingId
         }),
@@ -585,7 +581,7 @@ export const actions = {
         const trackingId = logErrorServer({ message: `Error when adding review for profile slug ${teacherId}, teacher & student has no conversation.`, });
         return message(
           form,
-          getFailFormMessageObjectified({
+          getFailFormMessage({
             trackingId,
             description: "Har ni haft en lektion ihop? Isåfall kan ni kontakta oss för att få hjälp med att göra recensionen.",
           }),
@@ -604,7 +600,9 @@ export const actions = {
       if (reviews.length > 0)
         return message(
           form,
-          getFailFormMessage(undefined, "Du har redan gjort en recension."),
+          getFailFormMessage({
+            description: "Du har redan gjort en recension.",
+          }),
           { status: 403 },
         );
     } catch (error) {
@@ -628,7 +626,7 @@ export const actions = {
       });
       return message(
         form,
-        getFailFormMessageObjectified({ trackingId }),
+        getFailFormMessage({ trackingId }),
         { status: 500 }
       );
     }

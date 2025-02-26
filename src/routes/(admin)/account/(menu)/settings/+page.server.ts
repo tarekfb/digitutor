@@ -1,7 +1,7 @@
 import type { PageServerLoad } from "./$types.ts";
 import {
   getDefaultErrorInfo,
-  getFailFormMessageObjectified,
+  getFailFormMessage,
   getSuccessFormMessage,
   maxAvatarSize,
 } from "$lib/shared/constants/constants.ts";
@@ -102,7 +102,7 @@ export const actions = {
       });
       return message(
         form,
-        getFailFormMessageObjectified({ trackingId }),
+        getFailFormMessage({ trackingId }),
         { status: 500 },
       );
     }
@@ -134,7 +134,7 @@ export const actions = {
       });
       return message(
         form,
-        getFailFormMessageObjectified({ trackingId }),
+        getFailFormMessage({ trackingId }),
         { status: 500 },
       );
     }
@@ -161,7 +161,7 @@ export const actions = {
       });
       return message(
         form,
-        getFailFormMessageObjectified({ trackingId }),
+        getFailFormMessage({ trackingId }),
         { status: 500 },
       );
     }
@@ -187,7 +187,7 @@ export const actions = {
     if (form.data.avatar.type.endsWith("octet-stream"))
       return message(
         form,
-        getFailFormMessageObjectified({
+        getFailFormMessage({
           title: "Filformatet är inte giltigt",
           description: `Filformatet är "octet-stream". Testa med en annan bild.`,
         }),
@@ -220,7 +220,7 @@ export const actions = {
     if (failedCompression)
       return message(
         form,
-        getFailFormMessageObjectified(
+        getFailFormMessage(
           {
             title: "Bilden är för stor",
             description: `Komprimeringen misslyckades. Din bild är ${formatBytes(Buffer.byteLength(input))}. Testa med en mindre bild.`,
@@ -254,7 +254,7 @@ export const actions = {
       });
       return message(
         form,
-        getFailFormMessageObjectified({ trackingId }),
+        getFailFormMessage({ trackingId }),
         { status: 500 },
       );
     }
@@ -269,7 +269,7 @@ export const actions = {
         error,
         message: `Error on update profile with new avatar on path ${avatarPath} with userid ${userId}`,
       });
-      return message(form, getFailFormMessageObjectified({ trackingId }), { status: 500 });
+      return message(form, getFailFormMessage({ trackingId }), { status: 500 });
     }
 
     return withFiles({ form });
@@ -292,7 +292,7 @@ export const actions = {
       );
       return message(
         form,
-        getFailFormMessageObjectified({ trackingId }),
+        getFailFormMessage({ trackingId }),
         { status: 401 },
       );
     }
@@ -306,7 +306,7 @@ export const actions = {
         error,
         message: error instanceof ResourceNotFoundError ? "No object deleted. Possible permission or path issue" : "Unknown error on delete avatar from storage",
       })
-      return message(form, getFailFormMessageObjectified({ trackingId }), { status: 500 });
+      return message(form, getFailFormMessage({ trackingId }), { status: 500 });
     }
 
     try {
@@ -321,7 +321,7 @@ export const actions = {
       });
       return message(
         form,
-        getFailFormMessageObjectified({ trackingId }),
+        getFailFormMessage({ trackingId }),
         { status: 500 },
       );
     }
@@ -343,7 +343,7 @@ export const actions = {
     const { id: userId, email } = user;
     if (!email) {
       const trackingId = logErrorServer({ ...getDefaultErrorInfo({ message: `User with id ${userId} has no email and therefore password could not be verified` }), },);
-      return message(form, getFailFormMessageObjectified({ trackingId }), { status: 500 });
+      return message(form, getFailFormMessage({ trackingId }), { status: 500 });
     }
 
     // Check current password is correct before deleting account
@@ -373,7 +373,7 @@ export const actions = {
       );
       if (error) {
         const trackingId = logErrorServer({ error, message: `User with id ${userId} has no email and therefore password could not be verified` })
-        return message(form, getFailFormMessageObjectified({ trackingId }), { status: 500 });
+        return message(form, getFailFormMessage({ trackingId }), { status: 500 });
       }
 
       await supabase.auth.signOut();
@@ -381,7 +381,7 @@ export const actions = {
       const trackingId = logErrorServer({ error: e, message: `Error on attempt to delete & signout user with userid ${userId}` })
       return message(
         form,
-        getFailFormMessageObjectified({ trackingId }),
+        getFailFormMessage({ trackingId }),
         { status: 500 },
       );
     }
@@ -423,7 +423,7 @@ export const actions = {
       );
       return message(
         form,
-        getFailFormMessageObjectified({ trackingId }),
+        getFailFormMessage({ trackingId }),
         { status: 500 }
       );
     }
@@ -447,7 +447,7 @@ export const actions = {
       if (isSameAsCurrent)
         return message(
           form,
-          getFailFormMessageObjectified({
+          getFailFormMessage({
             title: "Ange ett nytt lösenord",
             description: "Det angivna lösenordet är samma som det nuvarande.",
           }),
@@ -458,7 +458,7 @@ export const actions = {
         error: updateError,
         message: `Error on attempt to update password with userid ${id}`,
       });
-      return message(form, getFailFormMessageObjectified({ trackingId }), { status: 500 });
+      return message(form, getFailFormMessage({ trackingId }), { status: 500 });
     }
     return message(
       form,

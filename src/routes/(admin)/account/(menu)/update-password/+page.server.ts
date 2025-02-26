@@ -4,7 +4,6 @@ import { fail, message, superValidate } from "sveltekit-superforms";
 import { passwordResetSchema } from "src/lib/shared/models/user.ts";
 import {
   getFailFormMessage,
-  getFailFormMessageObjectified,
   getSuccessFormMessage,
 } from "src/lib/shared/constants/constants.ts";
 import { SupabaseErrorMessages } from "src/lib/shared/models/common.ts";
@@ -31,17 +30,17 @@ export const actions = {
       if (error.message === SupabaseErrorMessages.NewPasswordNotDifferent)
         return message(
           form,
-          getFailFormMessage(
-            "Ange ett helt nytt lösenord",
-            "Ange ett lösenord som aldrig har använts tidigare.",
-          ),
+          getFailFormMessage({
+            title: "Ange ett helt nytt lösenord",
+            description: "Ange ett lösenord som aldrig har använts tidigare.",
+          }),
           { status: 500 },
         );
 
       const trackingId = logErrorServer({ error, message: "Unknown error updating user password" });
       return message(
         form,
-        getFailFormMessageObjectified({
+        getFailFormMessage({
           title: "Kunde inte uppdatera lösenordet",
           description: "Något gick fel. Du kan kontakta oss om detta fortsätter.",
           trackingId

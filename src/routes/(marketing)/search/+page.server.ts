@@ -1,5 +1,5 @@
 import { search } from "src/lib/server/database/search.ts";
-import { getFailFormMessage, getFailFormMessageObjectified } from "src/lib/shared/constants/constants.ts";
+import { getFailFormMessage } from "src/lib/shared/constants/constants.ts";
 import { fail, message, superValidate } from "sveltekit-superforms";
 import { zod } from "sveltekit-superforms/adapters";
 import {
@@ -35,15 +35,12 @@ export const load = (async ({ url, locals: { supabase } }) => {
   } catch (error) {
     if (isErrorWithCode(error)) {
       if (error.code == ExternalErrorCodes.SyntaxError)
-        initMessage = getFailFormMessage(
-          "Ogiltiga karaktärer",
-          "Testa söka på något annat.",
-        );
+        initMessage = getFailFormMessage({ title: "Ogiltiga karaktärer", description: "Testa söka på något annat.", });
       else
-        initMessage = getFailFormMessage(
-          "Något gick fel",
-          "Testa söka på något annat, eller försök igen senare.",
-        );
+        initMessage = getFailFormMessage({
+          title: "Något gick fel",
+          description: "Testa söka på något annat, eller försök igen senare.",
+        });
     } else {
       logErrorServer({
         error,
@@ -84,10 +81,10 @@ export const actions: Actions = {
         if (error.code === ExternalErrorCodes.SyntaxError)
           return message(
             form,
-            getFailFormMessage(
-              "Ogiltiga karaktärer",
-              "Testa söka på något annat.",
-            ),
+            getFailFormMessage({
+              title: "Ogiltiga karaktärer",
+              description: "Testa söka på något annat.",
+            }),
             { status: 400 },
           );
       }
@@ -95,7 +92,7 @@ export const actions: Actions = {
         error,
         message: "Error searching for teachers with following search: " + query,
       });
-      return message(form, getFailFormMessageObjectified({ trackingId }), { status: 500 });
+      return message(form, getFailFormMessage({ trackingId }), { status: 500 });
     }
   },
 };

@@ -1,11 +1,10 @@
 import { fail, error } from "@sveltejs/kit";
 import { zod } from "sveltekit-superforms/adapters";
 import {
-  getFailFormMessage,
   MessageId,
   defaultErrorDescription,
   getDefaultErrorInfo,
-  getFailFormMessageObjectified,
+  getFailFormMessage,
 } from "$lib/shared/constants/constants.ts";
 import { message, superValidate } from "sveltekit-superforms";
 import {
@@ -145,7 +144,7 @@ export const actions: Actions = {
         error,
         message: "Error when updating listing slug id: " + slug,
       });
-      return message(form, getFailFormMessageObjectified({ trackingId }), { status: 500 });
+      return message(form, getFailFormMessage({ trackingId }), { status: 500 });
     }
   },
   suggestSubject: async (event) => {
@@ -169,13 +168,12 @@ export const actions: Actions = {
         if (matches.length > 0)
           return message(
             form,
-            getFailFormMessage(
-              `Detta verkar redan finnas: ${matches[0].title}`,
-              "Om detta inte stämmer kan du skicka in förslaget ändå.",
-              MessageId.ResourceAlreadyExists,
-              undefined,
-              "default",
-            ),
+            getFailFormMessage({
+              title: `Detta verkar redan finnas: ${matches[0].title}`,
+              description: "Om detta inte stämmer kan du skicka in förslaget ändå.",
+              messageId: MessageId.ResourceAlreadyExists,
+              variant: "default",
+            }),
             { status: 400 },
           ); // Todo: add some link or so in GUI to let user contact easily
       } catch (error) {
@@ -201,7 +199,7 @@ export const actions: Actions = {
         message: "Error when adding suggestion",
         additionalData: { slug },
       });
-      return message(form, getFailFormMessageObjectified({ trackingId }), { status: 500 });
+      return message(form, getFailFormMessage({ trackingId }), { status: 500 });
     }
 
     // todo send email to admin here

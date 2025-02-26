@@ -4,7 +4,7 @@ import { zod } from "sveltekit-superforms/adapters";
 import type { PageServerLoad } from "./$types.ts";
 import { redirect } from "sveltekit-flash-message/server";
 import {
-  getFailFormMessageObjectified,
+  getFailFormMessage,
   getSuccessFormMessage,
 } from "src/lib/shared/constants/constants.ts";
 import { logErrorServer } from "src/lib/shared/utils/logging/utils.ts";
@@ -36,7 +36,7 @@ export const actions = {
       });
       return message(
         form,
-        getFailFormMessageObjectified({
+        getFailFormMessage({
           trackingId,
         }),
         { status: 500 },
