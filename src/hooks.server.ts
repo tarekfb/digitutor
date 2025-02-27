@@ -5,11 +5,9 @@ import { sequence } from "@sveltejs/kit/hooks";
 import {
   PUBLIC_SUPABASE_URL,
   PUBLIC_SUPABASE_ANON_KEY,
-  PUBLIC_ENVIRONMENT,
 } from "$env/static/public";
 import { createClient } from "@supabase/supabase-js";
 import { PRIVATE_SUPABASE_SERVICE_ROLE } from "$env/static/private";
-import { initCloudflareSentryHandle, sentryHandle } from '@sentry/sveltekit';
 
 const supabase: Handle = async ({ event, resolve }) => {
   /**
