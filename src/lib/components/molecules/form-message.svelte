@@ -48,9 +48,9 @@
         <p class="inline text-xs md:text-sm">
           <Link
             href="/report-bug?id={$message.trackingId}"
-            class="flex-inline items-center gap-x-2 font-normal text-inherit"
+            class="flex-inline items-center space-x-2 font-normal text-inherit"
             target="_blank"
-            >Rapportera detta fel <SquareArrowOutUpRight class="inline size-4" /></Link
+            ><span>Rapportera detta fel</span><SquareArrowOutUpRight class="inline size-4" /></Link
           >
         </p>
       {/if}
