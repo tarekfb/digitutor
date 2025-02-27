@@ -80,7 +80,6 @@ const supabase: Handle = async ({ event, resolve }) => {
 };
 
 const authGuard: Handle = async ({ event, resolve }) => {
-  console.log(event.platform?.env)
   const { cookies, locals, url } = event;
   const { session, user } = await locals.safeGetSession();
   locals.session = session;
