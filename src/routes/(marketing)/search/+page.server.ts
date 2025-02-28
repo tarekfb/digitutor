@@ -15,7 +15,7 @@ import {
 import { isErrorWithCode } from "src/lib/shared/utils/utils.ts";
 import { getSubjects } from "src/lib/server/database/subjects.ts";
 import { formatSubject, type Subject } from "src/lib/shared/models/subject.ts";
-import { filterUniqueAndFormatSearchResults, formatSearchResult } from "src/lib/shared/utils/search/utils.ts";
+import { filterUniqueAndFormatSearchResults } from "src/lib/shared/utils/search/utils.ts";
 import { getQueryFromFormData } from "src/lib/shared/utils/search/utils.ts";
 
 export const load = (async ({ url, locals: { supabase } }) => {

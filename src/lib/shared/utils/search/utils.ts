@@ -1,5 +1,5 @@
 import type { DbSearchResult } from "../../models/listing.ts";
-import type { SearchResult } from "../../models/search.ts";
+import type { SearchResult, SortingSearchOption } from "../../models/search.ts";
 
 const handleUndefinedInFormData = (data: {
     subjects: string;
@@ -72,11 +72,16 @@ export const formatSearchResult = ({
 
 
 export const filterUniqueAndFormatSearchResults = (listings: DbSearchResult[]): SearchResult[] => {
-    const filtered = listings.filter((value, index, self) => {
-        return (
-            self.findIndex((v) => v.id === value.id) === index
-        );
-    });
+    const filtered = listings.filter((value, index, self) =>
+        self.findIndex((v) => v.id === value.id) === index
+    );
 
     return filtered.map(formatSearchResult);
 };
+
+const priceAsc: SortingSearchOption = { value: "price", ascending: true, id: "priceAsc", readable: "pris - stigande" };
+const priceDesc: SortingSearchOption = { value: "price", ascending: false, id: "priceDesc", readable: "pris - fallande" };
+const reviewsAsc: SortingSearchOption = { value: "rating", ascending: true, id: "reviewsAsc", readable: "recensioner - stigande" };
+const reviewsDesc: SortingSearchOption = { value: "rating", ascending: false, id: "reviewsDesc", readable: "recensioner - fallande" };
+const defaultSort: SortingSearchOption = { value: "default", ascending: false, id: "default", readable: "" };
+export const sortSearchResults: SortingSearchOption[] = [priceAsc, priceDesc, reviewsAsc, reviewsDesc, defaultSort];

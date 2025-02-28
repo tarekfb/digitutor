@@ -14,6 +14,7 @@
   import {
     searchSchema,
     type SearchResult as SearchResultType,
+    type SortingSearchOption,
   } from "src/lib/shared/models/search.ts";
   import AlertMessage from "$lib/components/atoms/alert-message.svelte";
   import SearchResultList from "src/lib/components/molecules/search-result-list.svelte";
@@ -28,14 +29,16 @@
   import { websiteName } from "src/lib/shared/constants/constants.ts";
   import SearchSuggestion from "src/lib/components/molecules/search-suggestion.svelte";
   import SearchSubjectButton from "src/lib/components/atoms/search-subject-button.svelte";
+  import * as DropdownMenu from "$lib/components/ui/dropdown-menu/index.js";
+  import { sortSearchResults } from "src/lib/shared/utils/search/utils.ts";
 
   export let data: PageData;
-  $: ({ initResults, initMessage, subjects } = data);
+  $: ({ initMessage, subjects } = data);
 
   const handleUndefinedBug =
     subjects && subjects.length > 0 ? subjects : languages;
   let isInit = true;
-  let results: SearchResultType[] = [];
+  let results: SearchResultType[] = data.initResults;
 
   const searchForm = superForm(data.form, {
     validators: zodClient(searchSchema),
@@ -115,6 +118,17 @@
     $selected = [{ label: subjectName, value: subjectName }];
     submit();
   };
+
+  const sortByReviewCount = (list: SearchResultType[], asc: boolean = true) =>
+    list.sort((a, b) =>
+      asc ? a.reviewCount - b.reviewCount : b.reviewCount - a.reviewCount,
+    );
+  const sortByPrice = (list: SearchResultType[], asc: boolean = true) =>
+    list.sort((a, b) =>
+      asc ? a.hourlyPrice - b.hourlyPrice : b.hourlyPrice - a.hourlyPrice,
+    );
+
+  let sorting: SortingSearchOption["id"] = "default";
 </script>
 
 <svelte:head>
@@ -209,6 +223,42 @@
         </Button>
       </div>
     </form>
+
+    {#if results.length > 0}
+      <DropdownMenu.Root>
+        <DropdownMenu.Trigger asChild let:builder>
+          <Button variant="outline" builders={[builder]}
+            >Sortera efter: {sorting !== "default"
+              ? sortSearchResults.find((s) => s.id === sorting)?.readable
+              : ""}</Button
+          >
+        </DropdownMenu.Trigger>
+        <DropdownMenu.Content class="w-56">
+          <DropdownMenu.RadioGroup bind:value={sorting}>
+            <DropdownMenu.RadioItem
+              value={"priceAsc"}
+              on:click={() => (results = sortByPrice(results, true))}
+              >Pris: stigande</DropdownMenu.RadioItem
+            >
+            <DropdownMenu.RadioItem
+              value="priceDesc"
+              on:click={() => (results = sortByPrice(results, false))}
+              >Pris: fallande</DropdownMenu.RadioItem
+            >
+            <DropdownMenu.RadioItem
+              value="reviewsAsc"
+              on:click={() => (results = sortByReviewCount(results, true))}
+              >Recensioner: stigande</DropdownMenu.RadioItem
+            >
+            <DropdownMenu.RadioItem
+              value="reviewsDesc"
+              on:click={() => (results = sortByReviewCount(results, false))}
+              >Recensioner: fallande</DropdownMenu.RadioItem
+            >
+          </DropdownMenu.RadioGroup>
+        </DropdownMenu.Content>
+      </DropdownMenu.Root>
+    {/if}
     {#if $selected && $selected.length > 0}
       <ul class="flex w-full flex-wrap gap-2">
         <li>
@@ -288,9 +338,9 @@
     <div class={messageStyling}>
       <FormMessage {message} scroll scrollTo="end" />
     </div>
-  {:else if isInit && initResults.length > 0 && !$submitting}
-    <SearchResultList results={initResults} searchTerm={getSearchTerm()} />
-  {:else if isInit && initResults.length === 0 && !$page.url.searchParams.get("q")}
+  {:else if isInit && results.length > 0 && !$submitting}
+    <SearchResultList {results} searchTerm={getSearchTerm()} />
+  {:else if isInit && results.length === 0 && !$page.url.searchParams.get("q")}
     <!-- intentionally excluded !$formdata.subjects here because it can never be true with $!formdata.subjects (and subjects is reactive) -->
     <SearchSuggestion {setSuggestion} />
   {:else if initMessage && !$submitting}

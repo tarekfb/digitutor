@@ -32,3 +32,10 @@ export type SearchResult = {
   avgRating: number;
   reviewCount: number;
 };
+
+export type SortingSearchOption = {
+  value: "price" | "rating" | "default";
+  ascending: boolean;
+  id: "priceAsc" | "priceDesc" | "reviewsAsc" | "reviewsDesc" | "default";
+  readable: "pris - stigande" | "pris - fallande" | "recensioner - stigande" | "recensioner - fallande" | "";
+}
