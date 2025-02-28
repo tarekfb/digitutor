@@ -14,7 +14,7 @@ export default defineConfig({
       {
         sourceMapsUploadOptions: {
           org: 'digitutor-dev',
-          project: '4507622079660112',
+          project: 'javascript-sveltekit',
           authToken: env.VITE_PRIVATE_SENTRY_AUTH_TOKEN,
         }
       }
