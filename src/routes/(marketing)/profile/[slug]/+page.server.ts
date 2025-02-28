@@ -56,6 +56,7 @@ import {
 import RequestNotification from "src/emails/request-notification.svelte";
 import { getEmailById, sendEmail } from "src/lib/shared/utils/emails/utils.ts";
 import { PUBLIC_ENVIRONMENT } from "$env/static/public";
+import { detectSocials, getFormMessageForSocial } from "src/lib/shared/utils/detect-socials/utils.ts";
 
 export const load = async ({
   locals: { supabase, safeGetSession },
@@ -564,6 +565,9 @@ export const actions = {
     const form = await superValidate(event, zod(addReviewSchema));
     if (!form.valid) return fail(400, { form });
     const { rating, description } = form.data;
+
+    const forbiddenContent = detectSocials(description ?? "");
+    if (forbiddenContent) return message(form, getFormMessageForSocial(forbiddenContent), { status: 400 });
 
     try {
       const conversation = await getConversationForStudentAndTeacher(

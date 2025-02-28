@@ -19,6 +19,11 @@ export const load: PageServerLoad = async ({
     conversations = dbConversations.map((c) =>
       formatConversationWithReferences(c),
     );
+    conversations.sort((a, b) => {
+      const aHasReplied = b.hasReplied ? 0 : 1;
+      const bHasReplied = a.hasReplied ? 0 : 1;
+      return aHasReplied - bHasReplied;
+    });
   } catch (e) {
     console.error(e);
     error(500, { ...defaultErrorInfo });

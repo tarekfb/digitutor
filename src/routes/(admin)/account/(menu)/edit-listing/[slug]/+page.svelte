@@ -128,7 +128,6 @@
   <PrimaryTitle class="text-center">Redigera annons</PrimaryTitle>
   <RootContainer class="w-full">
     <Dialog.Root bind:open>
-      <FormMessage {message} scroll />
       <form
         method="POST"
         use:enhance
@@ -214,10 +213,6 @@
             {/if}
           </Form.FieldErrors>
         </Form.Field>
-        <!-- <SuggestSubject
-          suggestSubjectForm={data.suggestSubjectForm}
-          {isTainted}
-        /> -->
 
         <Dialog.Trigger asChild let:builder>
           <small
@@ -229,6 +224,7 @@
             ></small
           >
         </Dialog.Trigger>
+        <FormMessage {message} scroll />
 
         <div class="mt-4 flex flex-col gap-y-4 md:items-end">
           <div class="flex items-center justify-between gap-x-2 md:gap-x-6">
