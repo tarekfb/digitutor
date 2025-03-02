@@ -30,7 +30,10 @@
   import SearchSuggestion from "src/lib/components/molecules/search-suggestion.svelte";
   import SearchSubjectButton from "src/lib/components/atoms/search-subject-button.svelte";
   import * as DropdownMenu from "$lib/components/ui/dropdown-menu/index.js";
-  import { sortSearchResults } from "src/lib/shared/utils/search/utils.ts";
+  import {
+    defaultSort,
+    sortSearchResults,
+  } from "src/lib/shared/utils/search/utils.ts";
 
   export let data: PageData;
   $: ({ initMessage, subjects } = data);
@@ -106,6 +109,7 @@
       "query-input",
     ) as HTMLInputElement | null;
     if (queryInput) queryInput.value = "";
+    sortingId = defaultSort.id;
   };
 
   const getAll = async () => {
@@ -119,7 +123,7 @@
     submit();
   };
 
-  let sorting: SortingSearchOption["id"] = "default";
+  let sortingId: SortingSearchOption["id"] = defaultSort.id;
 </script>
 
 <svelte:head>
@@ -135,7 +139,7 @@
     >
     <Button
       variant="link"
-      class="text-md -my-4 normal-case text-background md:text-lg"
+      class="text-md -my-4 normal-case text-background underline md:text-lg"
       on:click={getAll}
     >
       Visa alla</Button
@@ -215,43 +219,56 @@
       </div>
     </form>
 
-    {#if results.length > 0}
-      <DropdownMenu.Root>
-        <DropdownMenu.Trigger asChild let:builder>
-          <Button
-            variant="outline"
-            builders={[builder]}
-            class="flex min-w-56 justify-between gap-x-2 self-start md:hover:bg-third"
-            ><span
-              >{sortSearchResults.find((s) => s.id === sorting)?.readable ??
-                "Sortera"}</span
-            >
-            {#if $open}
-              <ChevronUp class="size-4" />
-            {:else}
-              <ChevronDown class="size-4" />
-            {/if}
-          </Button>
-        </DropdownMenu.Trigger>
-        <DropdownMenu.Content class="w-56">
-          <DropdownMenu.RadioGroup bind:value={sorting}>
-            {#each sortSearchResults as sortOption}
-              {#if sortOption.id !== "default"}
-                <DropdownMenu.RadioItem
-                  value={sortOption.id}
-                  on:click={() => {
-                    results = sortOption.onSelect(
-                      results,
-                      sortOption.ascending,
-                    );
-                  }}>{sortOption.readable}</DropdownMenu.RadioItem
-                >
+    <div class="-mt-4 flex justify-between gap-x-2">
+      {#if results.length > 0}
+        <DropdownMenu.Root>
+          <DropdownMenu.Trigger asChild let:builder>
+            <Button
+              variant="outline"
+              builders={[builder]}
+              class="flex w-full justify-between gap-x-2 md:max-w-96 md:hover:bg-third"
+              ><span
+                >{sortSearchResults.find((s) => s.id === sortingId)?.readable ??
+                  "Sortera"}</span
+              >
+              {#if $open}
+                <ChevronUp class="size-4" />
+              {:else}
+                <ChevronDown class="size-4" />
               {/if}
-            {/each}
-          </DropdownMenu.RadioGroup>
-        </DropdownMenu.Content>
-      </DropdownMenu.Root>
-    {/if}
+            </Button>
+          </DropdownMenu.Trigger>
+          <DropdownMenu.Content class="min-w-[60vw] md:w-96 md:min-w-0">
+            <DropdownMenu.RadioGroup bind:value={sortingId}>
+              {#each sortSearchResults as sortOption}
+                {#if sortOption.id !== defaultSort.id}
+                  <DropdownMenu.RadioItem
+                    value={sortOption.id}
+                    on:click={() => {
+                      results = sortOption.onSelect(
+                        results,
+                        sortOption.ascending,
+                      );
+                    }}>{sortOption.readable}</DropdownMenu.RadioItem
+                  >
+                {/if}
+              {/each}
+            </DropdownMenu.RadioGroup>
+          </DropdownMenu.Content>
+        </DropdownMenu.Root>
+      {/if}
+      {#if ($selected && $selected.length > 0) || sortingId !== defaultSort.id || $formData.query}
+        <Button
+          variant="outline"
+          class="flex items-center gap-x-2 md:hover:bg-third"
+          on:click={() => {
+            resetForm();
+          }}
+          ><X class="size-4" />
+          Rensa</Button
+        >
+      {/if}
+    </div>
     {#if $selected && $selected.length > 0}
       <ul class="flex w-full flex-wrap gap-2">
         <li>

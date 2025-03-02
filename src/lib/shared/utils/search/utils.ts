@@ -97,5 +97,5 @@ export const reviewsAsc = { ascending: true, id: "reviewsAsc", readable: "Minst 
 export const reviewsDesc = { ascending: false, id: "reviewsDesc", readable: "Flest recensioner", onSelect: sortByReviewCount };
 export const ratingAsc = { ascending: true, id: "ratingAsc", readable: "Lägst betyg", onSelect: sortByRating };
 export const ratingDesc = { ascending: false, id: "ratingDesc", readable: "Högst betyg", onSelect: sortByRating };
-export const defaultSort = { ascending: false, id: "default", readable: "Relevans", onSelect: (list: SearchResult[]) => list };
+export const defaultSort = { ascending: false, id: "default", readable: "Sortera efter:", onSelect: (list: SearchResult[]) => list };
 export const sortSearchResults: SortingSearchOption[] = [priceAsc, priceDesc, ratingDesc, ratingAsc, reviewsDesc, reviewsAsc, defaultSort];
