@@ -119,15 +119,6 @@
     submit();
   };
 
-  const sortByReviewCount = (list: SearchResultType[], asc: boolean = true) =>
-    list.sort((a, b) =>
-      asc ? a.reviewCount - b.reviewCount : b.reviewCount - a.reviewCount,
-    );
-  const sortByPrice = (list: SearchResultType[], asc: boolean = true) =>
-    list.sort((a, b) =>
-      asc ? a.hourlyPrice - b.hourlyPrice : b.hourlyPrice - a.hourlyPrice,
-    );
-
   let sorting: SortingSearchOption["id"] = "default";
 </script>
 
@@ -137,7 +128,7 @@
   >
 </svelte:head>
 
-<div class="flex min-h-44 w-full justify-center bg-secondary p-8">
+<section class="flex min-h-44 w-full justify-center bg-secondary p-8">
   <div class="flex w-full max-w-screen-sm flex-col gap-y-4">
     <PrimaryTitle class="heading self-center text-background md:mb-4"
       >Sök bland våra lärare</PrimaryTitle
@@ -227,34 +218,36 @@
     {#if results.length > 0}
       <DropdownMenu.Root>
         <DropdownMenu.Trigger asChild let:builder>
-          <Button variant="outline" builders={[builder]}
-            >Sortera efter: {sorting !== "default"
-              ? sortSearchResults.find((s) => s.id === sorting)?.readable
-              : ""}</Button
-          >
+          <Button
+            variant="outline"
+            builders={[builder]}
+            class="flex min-w-56 justify-between gap-x-2 self-start md:hover:bg-third"
+            ><span
+              >{sortSearchResults.find((s) => s.id === sorting)?.readable ??
+                "Sortera"}</span
+            >
+            {#if $open}
+              <ChevronUp class="size-4" />
+            {:else}
+              <ChevronDown class="size-4" />
+            {/if}
+          </Button>
         </DropdownMenu.Trigger>
         <DropdownMenu.Content class="w-56">
           <DropdownMenu.RadioGroup bind:value={sorting}>
-            <DropdownMenu.RadioItem
-              value={"priceAsc"}
-              on:click={() => (results = sortByPrice(results, true))}
-              >Pris: stigande</DropdownMenu.RadioItem
-            >
-            <DropdownMenu.RadioItem
-              value="priceDesc"
-              on:click={() => (results = sortByPrice(results, false))}
-              >Pris: fallande</DropdownMenu.RadioItem
-            >
-            <DropdownMenu.RadioItem
-              value="reviewsAsc"
-              on:click={() => (results = sortByReviewCount(results, true))}
-              >Recensioner: stigande</DropdownMenu.RadioItem
-            >
-            <DropdownMenu.RadioItem
-              value="reviewsDesc"
-              on:click={() => (results = sortByReviewCount(results, false))}
-              >Recensioner: fallande</DropdownMenu.RadioItem
-            >
+            {#each sortSearchResults as sortOption}
+              {#if sortOption.id !== "default"}
+                <DropdownMenu.RadioItem
+                  value={sortOption.id}
+                  on:click={() => {
+                    results = sortOption.onSelect(
+                      results,
+                      sortOption.ascending,
+                    );
+                  }}>{sortOption.readable}</DropdownMenu.RadioItem
+                >
+              {/if}
+            {/each}
           </DropdownMenu.RadioGroup>
         </DropdownMenu.Content>
       </DropdownMenu.Root>
@@ -307,7 +300,7 @@
                 label: subject.title,
               })}
               class="relative cursor-pointer scroll-my-2 rounded-md py-2 pl-4 pr-4
-        data-[highlighted]:bg-third/50 data-[highlighted]:text-primary
+        data-[highlighted]:bg-third data-[highlighted]:text-background
           data-[disabled]:opacity-50"
             >
               {#if $isSelected(subject.title)}
@@ -322,7 +315,7 @@
           {:else}
             <li
               class="relative cursor-pointer rounded-md py-1 pl-8 pr-4
-        data-[highlighted]:bg-third/50 data-[highlighted]:text-primary"
+        data-[highlighted]:bg-third data-[highlighted]:text-background"
             >
               Inga resultat
             </li>
@@ -331,9 +324,9 @@
       </ul>
     {/if}
   </div>
-</div>
+</section>
 <Wavy class="-mt-4 overflow-x-hidden" />
-<RootContainer class="my-4 w-full px-8 md:my-6" minWidth maxWidth>
+<RootContainer class="my-4 w-full px-8 md:my-6" minWidth maxWidth tag="main">
   {#if $message}
     <div class={messageStyling}>
       <FormMessage {message} scroll scrollTo="end" />

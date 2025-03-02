@@ -33,9 +33,11 @@ export type SearchResult = {
   reviewCount: number;
 };
 
+export type SortMethod = (list: SearchResult[], ascending: boolean) => SearchResult[];
+
 export type SortingSearchOption = {
-  value: "price" | "rating" | "default";
   ascending: boolean;
-  id: "priceAsc" | "priceDesc" | "reviewsAsc" | "reviewsDesc" | "default";
-  readable: "pris - stigande" | "pris - fallande" | "recensioner - stigande" | "recensioner - fallande" | "";
+  id: string;
+  readable: string;
+  onSelect: SortMethod;
 }
