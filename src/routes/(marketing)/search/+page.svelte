@@ -140,7 +140,7 @@
     >
     <Button
       variant="link"
-      class="text-md -my-4 normal-case text-background underline md:text-lg"
+      class="text-md -my-4 normal-case text-background md:text-lg"
       on:click={getAll}
     >
       Visa alla</Button
@@ -221,46 +221,43 @@
     </form>
 
     <div class="-mt-4 flex w-full justify-between gap-x-2">
-      {#if results.length > 0}
-        <DropdownMenu.Root>
-          <DropdownMenu.Trigger asChild let:builder>
-            <Button
-              variant="outline"
-              builders={[builder]}
-              class="flex w-{sortingId === defaultSort.id
-                ? 'auto'
-                : 'full'} justify-between gap-x-2 md:max-w-96 md:hover:bg-third"
-              ><span
-                >{sortSearchResults.find((s) => s.id === sortingId)?.readable ??
-                  defaultSort.readable}</span
-              >
-              {#if $open}
-                <ChevronUp class="size-4" />
-              {:else}
-                <ChevronDown class="size-4" />
+      <DropdownMenu.Root>
+        <DropdownMenu.Trigger asChild let:builder>
+          <Button
+            variant="outline"
+            builders={[builder]}
+            class="flex w-{sortingId === defaultSort.id
+              ? 'auto'
+              : 'full'} justify-between gap-x-2 md:max-w-96 md:hover:bg-third"
+            ><span
+              >{sortSearchResults.find((s) => s.id === sortingId)?.readable ??
+                defaultSort.readable}</span
+            >
+            {#if $open}
+              <ChevronUp class="size-4" />
+            {:else}
+              <ChevronDown class="size-4" />
+            {/if}
+          </Button>
+        </DropdownMenu.Trigger>
+        <DropdownMenu.Content class="min-w-[60vw] md:w-96 md:min-w-0">
+          <DropdownMenu.RadioGroup bind:value={sortingId}>
+            {#each sortSearchResults as sortOption}
+              {#if sortOption.id !== defaultSort.id}
+                <DropdownMenu.RadioItem
+                  value={sortOption.id}
+                  on:click={() => {
+                    results = sortOption.onSelect(
+                      results,
+                      sortOption.ascending,
+                    );
+                  }}>{sortOption.readable}</DropdownMenu.RadioItem
+                >
               {/if}
-            </Button>
-          </DropdownMenu.Trigger>
-          <DropdownMenu.Content class="min-w-[60vw] md:w-96 md:min-w-0">
-            <DropdownMenu.RadioGroup bind:value={sortingId}>
-              {#each sortSearchResults as sortOption}
-                {#if sortOption.id !== defaultSort.id}
-                  <DropdownMenu.RadioItem
-                    value={sortOption.id}
-                    on:click={() => {
-                      results = sortOption.onSelect(
-                        results,
-                        sortOption.ascending,
-                      );
-                    }}>{sortOption.readable}</DropdownMenu.RadioItem
-                  >
-                {/if}
-              {/each}
-            </DropdownMenu.RadioGroup>
-          </DropdownMenu.Content>
-        </DropdownMenu.Root>
-      {/if}
-
+            {/each}
+          </DropdownMenu.RadioGroup>
+        </DropdownMenu.Content>
+      </DropdownMenu.Root>
       {#if ($selected && $selected.length > 0) || sortingId !== defaultSort.id || $formData.query}
         <Button
           variant="outline"
@@ -274,7 +271,7 @@
       {/if}
     </div>
     {#if $selected && $selected.length > 0}
-      <ul class="flex w-full flex-wrap gap-2">
+      <ul class="-mt-2 flex w-full flex-wrap gap-2">
         <li>
           <SearchSubjectButton
             ariaLabel="Rensa {$selected.length} teknologier"
