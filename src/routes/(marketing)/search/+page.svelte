@@ -101,6 +101,8 @@
   const resetForm = () => {
     if (isInit) isInit = false;
     if ($selected) $selected = undefined;
+    sortingId = defaultSort.id;
+    $message = undefined;
     reset({
       newState: { subjects: "", query: "" },
       data: { subjects: "", query: "" },
@@ -109,7 +111,6 @@
       "query-input",
     ) as HTMLInputElement | null;
     if (queryInput) queryInput.value = "";
-    sortingId = defaultSort.id;
   };
 
   const getAll = async () => {
@@ -219,17 +220,19 @@
       </div>
     </form>
 
-    <div class="-mt-4 flex justify-between gap-x-2">
+    <div class="-mt-4 flex w-full justify-between gap-x-2">
       {#if results.length > 0}
         <DropdownMenu.Root>
           <DropdownMenu.Trigger asChild let:builder>
             <Button
               variant="outline"
               builders={[builder]}
-              class="flex w-full justify-between gap-x-2 md:max-w-96 md:hover:bg-third"
+              class="flex w-{sortingId === defaultSort.id
+                ? 'auto'
+                : 'full'} justify-between gap-x-2 md:max-w-96 md:hover:bg-third"
               ><span
                 >{sortSearchResults.find((s) => s.id === sortingId)?.readable ??
-                  "Sortera"}</span
+                  defaultSort.readable}</span
               >
               {#if $open}
                 <ChevronUp class="size-4" />
@@ -257,10 +260,11 @@
           </DropdownMenu.Content>
         </DropdownMenu.Root>
       {/if}
+
       {#if ($selected && $selected.length > 0) || sortingId !== defaultSort.id || $formData.query}
         <Button
           variant="outline"
-          class="flex items-center gap-x-2 md:hover:bg-third"
+          class="ml-auto flex items-center gap-x-2 md:hover:bg-third"
           on:click={() => {
             resetForm();
           }}
