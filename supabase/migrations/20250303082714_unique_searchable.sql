@@ -1,7 +1,6 @@
-CREATE
-OR REPLACE VIEW public.searchable_listings
+CREATE OR REPLACE VIEW public.searchable_listings
 WITH (security_invoker = on) AS
-SELECT
+SELECT DISTINCT ON (l.id)
     l.id,
     l.title,
     l.description,
@@ -24,5 +23,5 @@ FROM
     LEFT JOIN subjects s ON s.id = ANY(l.subjects)
     LEFT JOIN avg_rating ar ON ar.id = p.id
 WHERE
-        l.visible = TRUE
-    AND p.role = 'teacher'
+    l.visible = TRUE
+    AND p.role = 'teacher';
