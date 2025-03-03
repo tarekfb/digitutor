@@ -32,3 +32,12 @@ export type SearchResult = {
   avgRating: number;
   reviewCount: number;
 };
+
+export type SortMethod = (list: SearchResult[], ascending: boolean) => SearchResult[];
+
+export type SortingSearchOption = {
+  ascending: boolean;
+  id: string;
+  readable: string;
+  onSelect: SortMethod;
+}

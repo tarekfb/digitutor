@@ -1,5 +1,5 @@
 import type { DbSearchResult } from "../../models/listing.ts";
-import type { SearchResult } from "../../models/search.ts";
+import type { SearchResult, SortingSearchOption, SortMethod } from "../../models/search.ts";
 
 const handleUndefinedInFormData = (data: {
     subjects: string;
@@ -70,13 +70,32 @@ export const formatSearchResult = ({
     };
 };
 
+export const sortByReviewCount: SortMethod = (list, ascending) =>
+    list.sort((a, b) =>
+        ascending ? a.reviewCount - b.reviewCount : b.reviewCount - a.reviewCount,
+    );
+export const sortByRating: SortMethod = (list, ascending) =>
+    list.sort((a, b) =>
+        ascending ? a.avgRating - b.avgRating : b.avgRating - a.avgRating,
+    );
+export const sortByPrice: SortMethod = (list, ascending) =>
+    list.sort((a, b) =>
+        ascending ? a.hourlyPrice - b.hourlyPrice : b.hourlyPrice - a.hourlyPrice,
+    );
 
 export const filterUniqueAndFormatSearchResults = (listings: DbSearchResult[]): SearchResult[] => {
-    const filtered = listings.filter((value, index, self) => {
-        return (
-            self.findIndex((v) => v.id === value.id) === index
-        );
-    });
+    const filtered = listings.filter((value, index, self) =>
+        self.findIndex((v) => v.id === value.id) === index
+    );
 
     return filtered.map(formatSearchResult);
 };
+
+export const priceAsc = { ascending: true, id: "priceAsc", readable: "Billigast först", onSelect: sortByPrice };
+export const priceDesc = { ascending: false, id: "priceDesc", readable: "Dyrast först", onSelect: sortByPrice };
+export const reviewsAsc = { ascending: true, id: "reviewsAsc", readable: "Minst recensioner", onSelect: sortByReviewCount };
+export const reviewsDesc = { ascending: false, id: "reviewsDesc", readable: "Flest recensioner", onSelect: sortByReviewCount };
+export const ratingAsc = { ascending: true, id: "ratingAsc", readable: "Lägst betyg", onSelect: sortByRating };
+export const ratingDesc = { ascending: false, id: "ratingDesc", readable: "Högst betyg", onSelect: sortByRating };
+export const defaultSort = { ascending: false, id: "default", readable: "Sortera efter", onSelect: (list: SearchResult[]) => list };
+export const sortSearchResults: SortingSearchOption[] = [priceAsc, priceDesc, ratingDesc, ratingAsc, reviewsDesc, reviewsAsc, defaultSort];

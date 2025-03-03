@@ -14,6 +14,7 @@
   import {
     searchSchema,
     type SearchResult as SearchResultType,
+    type SortingSearchOption,
   } from "src/lib/shared/models/search.ts";
   import AlertMessage from "$lib/components/atoms/alert-message.svelte";
   import SearchResultList from "src/lib/components/molecules/search-result-list.svelte";
@@ -28,14 +29,19 @@
   import { websiteName } from "src/lib/shared/constants/constants.ts";
   import SearchSuggestion from "src/lib/components/molecules/search-suggestion.svelte";
   import SearchSubjectButton from "src/lib/components/atoms/search-subject-button.svelte";
+  import * as DropdownMenu from "$lib/components/ui/dropdown-menu/index.js";
+  import {
+    defaultSort,
+    sortSearchResults,
+  } from "src/lib/shared/utils/search/utils.ts";
 
   export let data: PageData;
-  $: ({ initResults, initMessage, subjects } = data);
+  $: ({ initMessage, subjects } = data);
 
   const handleUndefinedBug =
     subjects && subjects.length > 0 ? subjects : languages;
   let isInit = true;
-  let results: SearchResultType[] = [];
+  let results: SearchResultType[] = data.initResults;
 
   const searchForm = superForm(data.form, {
     validators: zodClient(searchSchema),
@@ -95,6 +101,8 @@
   const resetForm = () => {
     if (isInit) isInit = false;
     if ($selected) $selected = undefined;
+    sortingId = defaultSort.id;
+    $message = undefined;
     reset({
       newState: { subjects: "", query: "" },
       data: { subjects: "", query: "" },
@@ -115,6 +123,8 @@
     $selected = [{ label: subjectName, value: subjectName }];
     submit();
   };
+
+  let sortingId: SortingSearchOption["id"] = defaultSort.id;
 </script>
 
 <svelte:head>
@@ -123,7 +133,7 @@
   >
 </svelte:head>
 
-<div class="flex min-h-44 w-full justify-center bg-secondary p-8">
+<section class="flex min-h-44 w-full justify-center bg-secondary p-8">
   <div class="flex w-full max-w-screen-sm flex-col gap-y-4">
     <PrimaryTitle class="heading self-center text-background md:mb-4"
       >Sök bland våra lärare</PrimaryTitle
@@ -209,8 +219,59 @@
         </Button>
       </div>
     </form>
+
+    <div class="-mt-4 flex w-full justify-between gap-x-2">
+      <DropdownMenu.Root>
+        <DropdownMenu.Trigger asChild let:builder>
+          <Button
+            variant="outline"
+            builders={[builder]}
+            class="flex w-{sortingId === defaultSort.id
+              ? 'auto'
+              : 'full'} justify-between gap-x-2 md:max-w-96 md:hover:bg-third"
+            ><span
+              >{sortSearchResults.find((s) => s.id === sortingId)?.readable ??
+                defaultSort.readable}</span
+            >
+            {#if $open}
+              <ChevronUp class="size-4" />
+            {:else}
+              <ChevronDown class="size-4" />
+            {/if}
+          </Button>
+        </DropdownMenu.Trigger>
+        <DropdownMenu.Content class="min-w-[60vw] md:w-96 md:min-w-0">
+          <DropdownMenu.RadioGroup bind:value={sortingId}>
+            {#each sortSearchResults as sortOption}
+              {#if sortOption.id !== defaultSort.id}
+                <DropdownMenu.RadioItem
+                  value={sortOption.id}
+                  on:click={() => {
+                    results = sortOption.onSelect(
+                      results,
+                      sortOption.ascending,
+                    );
+                  }}>{sortOption.readable}</DropdownMenu.RadioItem
+                >
+              {/if}
+            {/each}
+          </DropdownMenu.RadioGroup>
+        </DropdownMenu.Content>
+      </DropdownMenu.Root>
+      {#if ($selected && $selected.length > 0) || sortingId !== defaultSort.id || $formData.query}
+        <Button
+          variant="outline"
+          class="ml-auto flex items-center gap-x-2 md:hover:bg-third"
+          on:click={() => {
+            resetForm();
+          }}
+          ><X class="size-4" />
+          Rensa</Button
+        >
+      {/if}
+    </div>
     {#if $selected && $selected.length > 0}
-      <ul class="flex w-full flex-wrap gap-2">
+      <ul class="-mt-2 flex w-full flex-wrap gap-2">
         <li>
           <SearchSubjectButton
             ariaLabel="Rensa {$selected.length} teknologier"
@@ -257,7 +318,7 @@
                 label: subject.title,
               })}
               class="relative cursor-pointer scroll-my-2 rounded-md py-2 pl-4 pr-4
-        data-[highlighted]:bg-third/50 data-[highlighted]:text-primary
+        data-[highlighted]:bg-third data-[highlighted]:text-background
           data-[disabled]:opacity-50"
             >
               {#if $isSelected(subject.title)}
@@ -272,7 +333,7 @@
           {:else}
             <li
               class="relative cursor-pointer rounded-md py-1 pl-8 pr-4
-        data-[highlighted]:bg-third/50 data-[highlighted]:text-primary"
+        data-[highlighted]:bg-third data-[highlighted]:text-background"
             >
               Inga resultat
             </li>
@@ -281,16 +342,16 @@
       </ul>
     {/if}
   </div>
-</div>
+</section>
 <Wavy class="-mt-4 overflow-x-hidden" />
-<RootContainer class="my-4 w-full px-8 md:my-6" minWidth maxWidth>
+<RootContainer class="my-4 w-full px-8 md:my-6" minWidth maxWidth tag="main">
   {#if $message}
     <div class={messageStyling}>
       <FormMessage {message} scroll scrollTo="end" />
     </div>
-  {:else if isInit && initResults.length > 0 && !$submitting}
-    <SearchResultList results={initResults} searchTerm={getSearchTerm()} />
-  {:else if isInit && initResults.length === 0 && !$page.url.searchParams.get("q")}
+  {:else if isInit && results.length > 0 && !$submitting}
+    <SearchResultList {results} searchTerm={getSearchTerm()} />
+  {:else if isInit && results.length === 0 && !$page.url.searchParams.get("q")}
     <!-- intentionally excluded !$formdata.subjects here because it can never be true with $!formdata.subjects (and subjects is reactive) -->
     <SearchSuggestion {setSuggestion} />
   {:else if initMessage && !$submitting}

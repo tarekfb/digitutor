@@ -6,9 +6,11 @@
   export let responsiveGap = false;
   export let maxWidth = false;
   export let minWidth = false;
+  export let tag = "div";
 </script>
 
-<div
+<svelte:element
+  this={tag}
   class={cn(
     "m-8 flex flex-col items-center",
     responsiveGap ? "gap-y-2 md:gap-y-4" : "gap-y-4",
@@ -18,4 +20,4 @@
   )}
 >
   <slot />
-</div>
+</svelte:element>
