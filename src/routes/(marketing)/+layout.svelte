@@ -8,7 +8,6 @@
 
   export let data: PageData;
   $: ({ supabase, session, profile } = data);
-  $: console.log($page.url);
 </script>
 
 {#if $page.url.pathname !== "/"}

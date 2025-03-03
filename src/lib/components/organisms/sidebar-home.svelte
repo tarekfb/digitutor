@@ -55,7 +55,7 @@
   <Sidebar.Trigger class="hover:text-third" aria-label="Öppna meny">
     <Menu class={trigger} />
   </Sidebar.Trigger>
-  <Sidebar.Content class="w-full rounded-none md:w-3/5 lg:w-2/5">
+  <Sidebar.Content class="w-full rounded-none md:w-3/5 lg:w-1/5 lg:min-w-[30vw] xl:min-w-fit">
     <div
       transition:fade={{ duration: 300 }}
       class="w-full overflow-y-auto pb-4 *:px-4"
@@ -91,11 +91,13 @@
           {/if}
         </div>
       {:else}
-        <div class="flex flex-col items-start gap-y-2 *:w-full">
-          <Button variant="third" on:click={() => wrappedGoto("/sign-up")}
+        <div
+          class="flex flex-col items-start gap-y-2 *:w-full  *:md:self-center"
+        >
+          <Button variant="accent" on:click={() => wrappedGoto("/sign-up")}
             >Skapa konto gratis</Button
           >
-          <Button class="outline" on:click={() => wrappedGoto("/sign-in")}
+          <Button variant="outline" on:click={() => wrappedGoto("/sign-in")}
             >Logga in</Button
           >
           <Button

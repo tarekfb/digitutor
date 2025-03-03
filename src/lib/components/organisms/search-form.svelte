@@ -48,7 +48,7 @@
       if (onUpdatedCallback) onUpdatedCallback(form, result);
     },
   });
-  const { form: formData, enhance, delayed, message, allErrors } = searchForm;
+  const { form: formData, enhance, delayed, errors, allErrors } = searchForm;
 
   const {
     elements: { menu, input, option, label, hiddenInput },
@@ -143,7 +143,10 @@
             </div>
           </div>
         </div>
-        <Form.FieldErrors class="" />
+
+        {#if $errors.subjects}
+          <Form.FieldErrors />
+        {/if}
       </Form.Control>
     </Form.Field>
     <Form.Field form={searchForm} name="query" class="w-28 flex-none md:w-64">
@@ -159,7 +162,9 @@
           />
         </div>
       </Form.Control>
-      <Form.FieldErrors />
+      {#if $errors.query}
+        <Form.FieldErrors />
+      {/if}
     </Form.Field>
     <Button
       type="submit"
@@ -176,9 +181,8 @@
     </Button>
   </div>
 </form>
-<FormMessage {message} scroll scrollTo="end" />
 {#if $selected && $selected.length > 0}
-  <ul class="flex w-full flex-wrap gap-2 md:hidden">
+  <ul class="mt-2 flex w-full flex-wrap gap-2 md:hidden">
     <li>
       <button
         aria-label="Rensa {$selected.length} teknologier"

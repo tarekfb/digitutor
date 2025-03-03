@@ -19,7 +19,7 @@ const buttonVariants = tv({
         "border-secondary bg-background md:hover:bg-primary md:hover:text-background border",
       "outline-card":
         "border-secondary bg-card md:hover:bg-primary md:hover:text-background border",
-      ghost: "md:hover:bg-third md:hover:text-background",
+      ghost: "md:hover:bg-primary md:hover:text-background",
       "ghost-none": "md:hover:text-third",
       link: "text-primary underline-offset-4 md:hover:underline",
     },

@@ -1,20 +1,14 @@
 <script lang="ts">
-  import Autoplay from "embla-carousel-autoplay";
   import { websiteName } from "$lib/shared/constants/constants.ts";
   import type { PageData } from "./$types.ts";
   import ReviewCardExtra from "src/lib/components/molecules/review-card-extra.svelte";
   import { Button } from "src/lib/components/ui/button/index.js";
-  import { goto } from "$app/navigation";
-  import * as Carousel from "$lib/components/ui/carousel/index.js";
-  import { languages } from "src/lib/shared/models/common.ts";
   import Container from "src/lib/components/templates/container.svelte";
   import SearchForm from "src/lib/components/organisms/search-form.svelte";
-  import Wavy from "src/lib/components/atoms/wavy.svelte";
   import PrimaryTitle from "src/lib/components/atoms/primary-title.svelte";
   import ArrowRight from "lucide-svelte/icons/arrow-right";
   import Navbar from "src/lib/components/organisms/navbar.svelte";
   import { logout } from "src/lib/shared/utils/utils.ts";
-  import { Separator } from "src/lib/components/ui/separator/index.ts";
 
   export let data: PageData;
   $: ({ displayReviews, subjects, profile, supabase, session } = data);
@@ -30,7 +24,7 @@
 
 <Navbar {profile} logout={() => logout(supabase, session)}>
   <svelte:fragment slot="search-form">
-      <SearchForm form={data.form} {subjects} />
+    <SearchForm form={data.form} {subjects} />
   </svelte:fragment>
 </Navbar>
 
@@ -48,16 +42,16 @@
         >
           {cta}
         </h1>
-        <div class="background-gradient absolute h-full w-full"></div>
+        <div class="background-gradient absolute size-full"></div>
         <enhanced:img
           src="src/lib/assets/kampus.jpg"
-          class="h-full w-full object-cover"
+          class="size-full object-cover"
           alt=""
         />
       </div>
       <p class="text-2xl">{subDescr}</p>
       <Button class="flex w-full items-center gap-x-2 md:w-auto"
-        >Kom igång
+        >Skapa konto
         <ArrowRight class="size-4" />
       </Button>
     </div>
@@ -66,8 +60,8 @@
       <div class="mr-5 flex w-1/2 max-w-2xl flex-col justify-center gap-y-4">
         <h1 class="heading text-5xl">{cta}</h1>
         <p class="text-2xl font-semibold">{subDescr}</p>
-        <Button class="flex w-full items-center gap-x-2 md:w-auto"
-          >Kom igång
+        <Button class="flex w-full max-w-72 items-center gap-x-2 md:w-auto"
+          >Skapa konto
           <ArrowRight class="size-4" />
         </Button>
       </div>
@@ -76,51 +70,55 @@
       >
         <enhanced:img
           src="src/lib/assets/kampus.jpg"
-          class=" h-full w-full max-w-4xl object-cover"
+          class="size-full max-w-4xl object-cover"
           alt=""
         />
       </div>
     </div>
   </section>
-  <Container maxWidth class="m-0 px-8" responsiveGap tag="main">
-    <!-- <ProfileCarousel profiles={displayProfiles} /> -->
-    <!-- atm unused but will bring back -->
+  <!-- todo fix the mt-6, have it work with my or gap-y or something -->
+  <div class="flex w-screen flex-col items-center self-center bg-card md:mt-6">
+    <Container maxWidth class="m-0 px-8" responsiveGap>
+      <!-- <ProfileCarousel profiles={displayProfiles} /> -->
+      <!-- atm unused but will bring back -->
 
-    {#if displayReviews.length > 0}
-      <div class="flex flex-col items-center gap-y-2">
-        <PrimaryTitle class="text-gradient my-4 text-center ">
-          Vad våra användare säger
-        </PrimaryTitle>
-        <div
-          class="grid grid-cols-1 gap-4 {displayReviews.length > 1
-            ? 'md:grid-cols-2'
-            : ''}"
-        >
-          {#each Array(2) as _, colIndex}
-            <div class="flex flex-col gap-4">
-              {#each displayReviews.filter((_, index) => index % 4 === colIndex) as review}
-                <ReviewCardExtra
-                  truncate={40}
-                  {review}
-                  class="h-auto min-w-32 max-w-full rounded-lg {colIndex > 0
-                    ? 'hidden md:flex'
-                    : ''}"
-                />
-              {/each}
-            </div>
-          {/each}
+      {#if displayReviews.length > 0}
+        <div class="flex flex-col items-center gap-y-2">
+          <PrimaryTitle class="text-gradient my-4 text-center ">
+            Vad våra användare säger
+          </PrimaryTitle>
+          <div
+            class="grid grid-cols-1 gap-4 {displayReviews.length > 1
+              ? 'md:grid-cols-2'
+              : ''}"
+          >
+            {#each Array(2) as _, colIndex}
+              <div class="flex flex-col gap-4">
+                {#each displayReviews.filter((_, index) => index % 4 === colIndex) as review}
+                  <ReviewCardExtra
+                    truncate={40}
+                    {review}
+                    class="h-auto min-w-32 max-w-full rounded-lg bg-background {colIndex >
+                    0
+                      ? 'hidden md:flex'
+                      : ''}"
+                  />
+                {/each}
+              </div>
+            {/each}
+          </div>
         </div>
-      </div>
-    {/if}
+      {/if}
+    </Container>
+  </div>
+  <div class="flex w-screen flex-col items-center self-center">
+    <Container maxWidth class="m-0 px-8" responsiveGap>
+      <PrimaryTitle class="text-gradient my-4 text-center ">
+        Vanliga frågor och svar
+      </PrimaryTitle>
 
-    <p class="text-gradient mt-4 text-center text-xl font-bold md:text-3xl">
-      Vill du lära ut på {websiteName}?
-    </p>
-    <Button
-      on:click={() => goto("/sign-up?role=teacher")}
-      class="w-full md:w-auto">Skapa konto som lärare</Button
-    >
-  </Container>
+    </Container>
+  </div>
 </Container>
 
 <style lang="postcss">
