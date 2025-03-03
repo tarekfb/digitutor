@@ -334,7 +334,7 @@ VALUES
         '550e8400-e29b-41d4-a716-446655440080',
         'Programmering nybörjare',
         'Hej, jag lär ut python. När jag inte kodar så gillar jag att springa, cykla, eller bara sitta i soffan och läsa en bra bok. Det är roligt att träffa nya människor och höra deras historier. Jag är bra på att förklara saker på ett enkelt sätt och jag har tålamod med de som behöver en extra förklaring. Secret ',
-        '{1,2}',
+        '{1,2, 5}',
         60,
         'SEK',
         '550e8400-e29b-41d4-a716-446655440000',
