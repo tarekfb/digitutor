@@ -831,7 +831,6 @@ VALUES
         '550e8400-e29b-41d4-a716-446655440120',
         TRUE
     );
-
 -- Add reviews for the new teachers
 INSERT INTO
     public.reviews (id, sender, receiver, rating, description)
@@ -848,7 +847,7 @@ VALUES
         uuid_generate_v4(),
         '550e8400-e29b-41d4-a716-446655440140',
         '550e8400-e29b-41d4-a716-446655440100',
-        4,
+        3,
         'Bra lärare som verkligen kan sina algoritmer.'
     ),
     (
@@ -863,44 +862,8 @@ VALUES
         uuid_generate_v4(),
         '550e8400-e29b-41d4-a716-446655440020',
         '550e8400-e29b-41d4-a716-446655440110',
-        5,
+        4,
         'Tamara förklarar React på ett sätt som gör det lätt att förstå.'
-    ),
-    (
-        uuid_generate_v4(),
-        '550e8400-e29b-41d4-a716-446655440040',
-        '550e8400-e29b-41d4-a716-446655440110',
-        5,
-        'Fantastisk lärare! Hennes UX/UI kurs var precis vad jag behövde.'
-    ),
-    (
-        uuid_generate_v4(),
-        '550e8400-e29b-41d4-a716-446655440130',
-        '550e8400-e29b-41d4-a716-446655440110',
-        4,
-        'Mycket kompetent inom frontend utveckling.'
-    ),
-    -- Reviews for Trevor
-    (
-        uuid_generate_v4(),
-        '550e8400-e29b-41d4-a716-446655440050',
-        '550e8400-e29b-41d4-a716-446655440120',
-        5,
-        'Trevor har hjälpt mig att förstå backend utveckling på ett helt nytt sätt.'
-    ),
-    (
-        uuid_generate_v4(),
-        '550e8400-e29b-41d4-a716-446655440060',
-        '550e8400-e29b-41d4-a716-446655440120',
-        4,
-        'Bra genomgång av DevOps verktygen.'
-    ),
-    (
-        uuid_generate_v4(),
-        '550e8400-e29b-41d4-a716-446655440140',
-        '550e8400-e29b-41d4-a716-446655440120',
-        5,
-        'Trevors Node.js kurs var precis vad jag behövde för mitt projekt.'
     );
 
 -- Add some conversations and messages for the new users
