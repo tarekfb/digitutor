@@ -20,10 +20,7 @@ BEGIN
   FROM subjects s
   WHERE s.id = ANY((sl).subjects);
 
-  -- Construct the searchable text string using column positions
-  -- Note: Column positions based on the view definition:
-  -- first_name is column 8, title is column 2, 
-  -- description is column 3, hourly_price is column 4, subjects is column 15
+  -- Construct the searchable text string
   RETURN (sl).first_name || ' ' ||
          COALESCE((sl).title, '') || ' ' ||
          COALESCE((sl).description, '') || ' ' ||
