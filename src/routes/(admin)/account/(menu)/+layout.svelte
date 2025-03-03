@@ -1,5 +1,4 @@
 <script lang="ts">
-  import Sidebar from "src/lib/components/organisms/sidebar.svelte";
   import type { PageData } from "./$types.ts";
   import { logout } from "src/lib/shared/utils/utils.ts";
   import Navbar from "src/lib/components/organisms/navbar.svelte";
@@ -36,13 +35,11 @@
   }
 </script>
 
-<Navbar profile={false} logout={false}>
-  <Sidebar
-    role={profile?.role}
-    logout={() => {
-      logout(supabase, session);
-      goto("/sign-in");
-    }}
-  />
-</Navbar>
+<Navbar
+  {profile}
+  logout={() => {
+    logout(supabase, session);
+    goto("/sign-in");
+  }}
+></Navbar>
 <slot />

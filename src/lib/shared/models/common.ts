@@ -3,18 +3,18 @@ import { type Subject } from "./subject.ts";
 
 export const languages: Subject[] = [
   { title: "JavaScript", id: 1, altTitle: "JS" },
-  { title: "Typescript", id: 2, altTitle: "TS" },
   { title: "Python", id: 3, altTitle: "" },
   { title: "Java", id: 4, altTitle: "" },
-  { title: "C#", id: 5, altTitle: "" },
+  { title: "React.JS", id: 13, altTitle: "React" },
+  { title: "C#", id: 5, altTitle: "CSharp" },
+  { title: "Typescript", id: 2, altTitle: "TS" },
   { title: "C++", id: 6, altTitle: "CPlusPlus" },
   { title: "Ruby", id: 7, altTitle: "" },
   { title: "Swift", id: 8, altTitle: "" },
   { title: "Go", id: 9, altTitle: "" },
   { title: "PHP", id: 10, altTitle: "" },
   { title: "HTML", id: 11, altTitle: "" },
-  { title: "CSS", id: 12, altTitle: "" },
-  { title: "React.JS", id: 13, altTitle: "React" },
+  { title: "CSS", id: 12, altTitle: "Cascading Style Sheets" },
   { title: "Angular.JS", id: 14, altTitle: "Angular" },
   { title: "Vue.JS", id: 15, altTitle: "Vue" },
   { title: "Node.JS", id: 16, altTitle: "Node" },
@@ -45,19 +45,7 @@ export const languages: Subject[] = [
   { title: "Express", id: 41, altTitle: "" },
   { title: "Flutter", id: 42, altTitle: "" },
   { title: "Apache Spark", id: 43, altTitle: "Spark" },
-  { title: "Hadoop", id: 44, altTitle: "" },
-  { title: "Terraform", id: 45, altTitle: "" },
-  { title: "Ansible", id: 46, altTitle: "" },
-  { title: "Puppet", id: 47, altTitle: "" },
-  { title: "Kubernetes", id: 48, altTitle: "K8s" },
-  { title: "Docker", id: 49, altTitle: "" },
-  { title: "Redis", id: 50, altTitle: "" },
-  { title: "MongoDB", id: 51, altTitle: "" },
-  { title: "SQL", id: 52, altTitle: "" },
-  { title: "PostgreSQL", id: 53, altTitle: "Postgres" },
-  { title: "MySQL", id: 54, altTitle: "" },
-  { title: "Oracle", id: 55, altTitle: "" },
-  { title: "SQLite", id: 56, altTitle: "" },
+
 ];
 
 export type Message = {

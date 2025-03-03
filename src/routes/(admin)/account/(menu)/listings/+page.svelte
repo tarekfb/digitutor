@@ -10,7 +10,7 @@
     type Infer,
   } from "sveltekit-superforms";
   import { zodClient } from "sveltekit-superforms/adapters";
-  import RootContainer from "src/lib/components/templates/root-container.svelte";
+  import Container from "src/lib/components/templates/container.svelte";
   import AccountLayout from "src/lib/components/templates/account-layout.svelte";
   import { websiteName } from "src/lib/shared/constants/constants.ts";
 
@@ -34,12 +34,12 @@
 
 <AccountLayout>
   <PrimaryTitle class="text-center">Dina annonser</PrimaryTitle>
-  <RootContainer class="my-6 w-full">
+  <Container class="my-6 w-full">
     {#each listings as listing}
       <ListingCard {listing} publicView={false} />
     {:else}
       <p class="text-center">Inga annonser. Testa skapa en!</p>
     {/each}
     <CreateListing form={userForm} />
-  </RootContainer>
+  </Container>
 </AccountLayout>

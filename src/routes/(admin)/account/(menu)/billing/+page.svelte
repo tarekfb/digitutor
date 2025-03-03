@@ -1,7 +1,7 @@
 <script lang="ts">
   import PrimaryTitle from "src/lib/components/atoms/primary-title.svelte";
   import type { PageData } from "./$types.ts";
-  import RootContainer from "src/lib/components/templates/root-container.svelte";
+  import Container from "src/lib/components/templates/container.svelte";
   import { PricingPlanIds } from "src/lib/shared/models/subscription.ts";
   import {
     costPerRequest,
@@ -35,7 +35,7 @@
   <title>{websiteName} | Betalningar</title>
 </svelte:head>
 
-<RootContainer maxWidth minWidth class="gap-y-6 self-center md:gap-y-8">
+<Container maxWidth minWidth class="gap-y-6 self-center md:gap-y-8">
   <section class="flex flex-col items-center justify-center gap-y-2 md:gap-y-4">
     <PrimaryTitle responsiveMb>Betalningar</PrimaryTitle>
     <div class="self-start text-muted-foreground">
@@ -148,4 +148,4 @@
       {/if}
     {/if}
   </section>
-</RootContainer>
+</Container>

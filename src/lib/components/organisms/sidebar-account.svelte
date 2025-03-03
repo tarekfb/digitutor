@@ -7,13 +7,12 @@
   import Menu from "lucide-svelte/icons/menu";
   import DollarSign from "lucide-svelte/icons/dollar-sign";
   import type { Role } from "$lib/shared/models/profile.ts";
-  import { websiteName } from "$lib/shared/constants/constants.ts";
-  import Link from "../atoms/link.svelte";
   import LoadingSpinner from "../atoms/loading-spinner.svelte";
   import * as Sidebar from "$lib/components/ui/sidebar/index.js";
   import SidebarNav from "./sidebar-nav.svelte";
   import { fade } from "svelte/transition";
   import { Separator } from "../ui/separator/index.ts";
+  import SiteTitle from "../atoms/site-title.svelte";
 
   export let role: Role | undefined;
   export let logout: () => void;
@@ -28,29 +27,24 @@
     logoutLoading = false;
   };
 
-  const icon = "w-5 h-5";
+  const icon = "size-5";
+  const trigger = "size-7 text-muted-foreground";
+  // todo delete this whole comp
 </script>
 
 <Sidebar.Root direction="right" bind:open>
   <Sidebar.Trigger class="hover:text-third" aria-label="Öppna meny">
     <Menu class="h-7 w-7" />
   </Sidebar.Trigger>
-  <Sidebar.Content class="w-3/5 rounded-none px-2 md:w-2/5 lg:w-1/5">
-    <div transition:fade={{ duration: 300 }} class="w-full">
-      <Sidebar.Header
-        class="relative mb-4 flex items-center justify-center py-2"
-      >
-        <Sidebar.Close
-          class="absolute left-0 m-0 p-0 hover:text-accent active:text-accent"
-          aria-label="Stäng meny"><X class="h-7 w-7" /></Sidebar.Close
+  <Sidebar.Content class="w-full rounded-none md:w-2/5 lg:w-1/5">
+    <div transition:fade={{ duration: 300 }} class="w-full *:px-4">
+      <Sidebar.Header class="relative flex items-center py-4">
+        <SiteTitle />
+        <Sidebar.Close class="m-0 ml-auto p-0" aria-label="Stäng meny"
+          ><X class={trigger} /></Sidebar.Close
         >
-        <Link
-          href="/"
-          class="hover:text-primary hover:no-underline active:text-primary"
-        >
-          <Sidebar.Title class="text-3xl">{websiteName}</Sidebar.Title>
-        </Link>
       </Sidebar.Header>
+      <Separator class="mb-4 px-0" />
       <div class="flex flex-col items-start gap-y-1">
         <SidebarNav href="/account" {closeSidebar}>
           <Mail class={icon} />
@@ -72,16 +66,16 @@
             Betalningar
           </SidebarNav>
         {/if}
-        <Separator />
-        <SidebarNav disabled={logoutLoading} onClick={wrappedLogout}>
-          {#if logoutLoading}
-            <LoadingSpinner class="text-background" />
-          {:else}
-            <LogOutIcon class={icon} />
-            Logga ut
-          {/if}
-        </SidebarNav>
       </div>
+      <Separator class="my-4 px-0" />
+      <SidebarNav disabled={logoutLoading} onClick={wrappedLogout}>
+        {#if logoutLoading}
+          <LoadingSpinner class="text-background" />
+        {:else}
+          <LogOutIcon class={icon} />
+          Logga ut
+        {/if}
+      </SidebarNav>
     </div>
   </Sidebar.Content>
 </Sidebar.Root>

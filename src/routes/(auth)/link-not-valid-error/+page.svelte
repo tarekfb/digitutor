@@ -1,7 +1,7 @@
 <script lang="ts">
   import PrimaryTitle from "$lib/components/atoms/primary-title.svelte";
   import Link from "$lib/components/atoms/link.svelte";
-  import RootContainer from "src/lib/components/templates/root-container.svelte";
+  import Container from "src/lib/components/templates/container.svelte";
   import TriangleAlert from "lucide-svelte/icons/triangle-alert";
   import { websiteName } from "src/lib/shared/constants/constants.ts";
 </script>
@@ -10,7 +10,7 @@
   <title>{websiteName} | Ogiltig länk</title>
 </svelte:head>
 
-<RootContainer minWidth maxWidth class="items-start gap-y-4 md:gap-y-6">
+<Container minWidth maxWidth class="items-start gap-y-4 md:gap-y-6">
   <TriangleAlert size="100" class="self-center text-warning" />
   <PrimaryTitle class="self-center text-wrap text-center"
     >Länken är inte längre tillgänglig</PrimaryTitle
@@ -26,4 +26,4 @@
       href="/contact-us">kontakta oss</Link
     > om problemet kvarstår.
   </p>
-</RootContainer>
+</Container>

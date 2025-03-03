@@ -4,7 +4,7 @@
   import { updateListingSchema } from "$lib/shared/models/listing.js";
   import PrimaryTitle from "$lib/components/atoms/primary-title.svelte";
   import type { PageData } from "./$types.ts";
-  import RootContainer from "src/lib/components/templates/root-container.svelte";
+  import Container from "src/lib/components/templates/container.svelte";
   import DeleteListing from "$lib/components/atoms/delete-listing.svelte";
   import * as Dialog from "$lib/components/ui/dialog/index.js";
   import { Button } from "$lib/components/ui/button/index.js";
@@ -126,7 +126,7 @@
 
 <AccountLayout>
   <PrimaryTitle class="text-center">Redigera annons</PrimaryTitle>
-  <RootContainer class="w-full">
+  <Container class="w-full">
     <Dialog.Root bind:open>
       <form
         method="POST"
@@ -338,5 +338,5 @@
         </form>
       </Dialog.Content>
     </Dialog.Root>
-  </RootContainer>
+  </Container>
 </AccountLayout>

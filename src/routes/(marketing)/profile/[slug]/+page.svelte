@@ -2,7 +2,7 @@
   import type { PageData } from "./$types.ts";
   import PrimaryTitle from "$lib/components/atoms/primary-title.svelte";
   import { mediaQuery } from "svelte-legos";
-  import RootContainer from "src/lib/components/templates/root-container.svelte";
+  import Container from "src/lib/components/templates/container.svelte";
   import ProfileHeaderMobile from "src/lib/components/organisms/profile-header-mobile.svelte";
   import ContactTeacherForm from "src/lib/components/molecules/contact-teacher-form.svelte";
   import SecondaryTitle from "src/lib/components/atoms/secondary-title.svelte";
@@ -52,7 +52,7 @@
 </svelte:head>
 
 {#if !$isDesktop}
-  <RootContainer class="m-0 w-full">
+  <Container class="m-0 w-full">
     <ProfileHeaderMobile
       {teacher}
       {listing}
@@ -90,7 +90,7 @@
         <OwnerSection {listing} />
       {/if}
     </div>
-  </RootContainer>
+  </Container>
 {:else}
   <div class="flex">
     <div class="grid w-full grid-cols-3 gap-x-8 p-8">

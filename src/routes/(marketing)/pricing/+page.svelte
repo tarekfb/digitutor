@@ -1,7 +1,7 @@
 <script lang="ts">
   import { goto } from "$app/navigation";
   import PrimaryTitle from "src/lib/components/atoms/primary-title.svelte";
-  import RootContainer from "src/lib/components/templates/root-container.svelte";
+  import Container from "src/lib/components/templates/container.svelte";
   import Button from "src/lib/components/ui/button/button.svelte";
   import {
     premiumPlan,
@@ -21,7 +21,7 @@
   <title>{websiteName} | Premium</title>
 </svelte:head>
 
-<RootContainer maxWidth minWidth class="gap-y-6 self-center md:gap-y-10">
+<Container maxWidth minWidth class="gap-y-6 self-center md:gap-y-10">
   <div class="flex flex-col items-center justify-center">
     <PrimaryTitle responsiveMb>Premium</PrimaryTitle>
     <p class="text-lg text-muted-foreground md:text-xl">
@@ -90,4 +90,4 @@
       class="mt-2 md:mt-3">Köp krediter</Button
     >
   </section>
-</RootContainer>
+</Container>

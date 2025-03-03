@@ -18,7 +18,7 @@
   } from "src/lib/shared/models/search.ts";
   import AlertMessage from "$lib/components/atoms/alert-message.svelte";
   import SearchResultList from "src/lib/components/molecules/search-result-list.svelte";
-  import RootContainer from "src/lib/components/templates/root-container.svelte";
+  import Container from "src/lib/components/templates/container.svelte";
   import Wavy from "src/lib/components/atoms/wavy.svelte";
   import PrimaryTitle from "src/lib/components/atoms/primary-title.svelte";
   import LoadingSpinner from "src/lib/components/atoms/loading-spinner.svelte";
@@ -198,7 +198,7 @@
               type="text"
               autocomplete="false"
               bind:value={$formData.query}
-              placeholder="Sök på lärare"
+              placeholder="Sök lärare"
               class="text-md rounded-l-none rounded-r-none bg-card text-muted-foreground placeholder:text-muted-foreground"
             />
           </Form.Control>
@@ -344,7 +344,7 @@
   </div>
 </section>
 <Wavy class="-mt-4 overflow-x-hidden" />
-<RootContainer class="my-4 w-full px-8 md:my-6" minWidth maxWidth tag="main">
+<Container class="my-4 w-full px-8 md:my-6" minWidth maxWidth tag="main">
   {#if $message}
     <div class={messageStyling}>
       <FormMessage {message} scroll scrollTo="end" />
@@ -375,7 +375,7 @@
       <SearchSuggestion {setSuggestion} />
     </div>
   {/if}
-</RootContainer>
+</Container>
 
 <style lang="postcss">
   .check {
