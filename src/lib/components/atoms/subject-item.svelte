@@ -2,12 +2,13 @@
   import { cn } from "src/lib/shared/utils/utils.js";
   import Terminal from "lucide-svelte/icons/terminal";
   import { languages } from "src/lib/shared/models/common.ts";
+  import type { Subject } from "src/lib/shared/models/subject.ts";
 
   let className: string | null | undefined = undefined;
   export { className as class };
   export let iconStyling = "";
   export let textStyling = "";
-  export let subject: number;
+  export let subject: number | Subject;
   export let li: boolean = false;
   export let muted: boolean = true;
 
@@ -23,6 +24,10 @@
 >
   <Terminal class={cn("size-5 text-accent", iconStyling)} />
   <p class={cn("font-mono md:text-lg", textStyling)}>
-    {languages[subject - 1].title}
+    {#if typeof subject === "number"}
+      {languages[subject - 1].title}
+    {:else}
+      {subject.title}
+    {/if}
   </p>
 </svelte:element>

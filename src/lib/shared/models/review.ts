@@ -44,34 +44,6 @@ const addReviewProperties = {
 export const addReviewSchema = z.object(addReviewProperties);
 export type AddReviewSchema = typeof addReviewSchema;
 
-// export type DbDisplayProfile = {
-//   id: Profile["id"];
-//   first_name: DbProfile["first_name"];
-//   avatar_url: DbProfile["avatar_url"];
-//   avg_rating: number;
-//   review_count: number;
-//   five_star_reviews_with_description: number;
-//   subjects: DbSubject[];
-//   reviews: {
-//     rating: DbReviewBase["rating"];
-//     review_id: DbReviewBase["id"];
-//     sender_id: DbReviewBase["sender"];
-//     receiver_id: DbReviewBase["receiver"];
-//     created_at: DbReviewBase["created_at"];
-//     description: DbReviewBase["description"];
-//     sender_name?: DbProfile["first_name"];
-//     receiver_name: DbReviewWithReferences["receiver"]["first_name"];
-//   }[];
-// };
-
-// export type DisplayProfile = {
-//   id: string;
-//   firstName: Profile["firstName"];
-//   avatarUrl: Profile["avatarUrl"];
-//   avgRating: number;
-//   subjects: Subject[];
-// };
-
 export type DbTopTeacher = {
   id: Profile["id"];
   first_name: DbProfile["first_name"];

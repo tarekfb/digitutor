@@ -7,9 +7,10 @@
   import PrimaryTitle from "src/lib/components/atoms/primary-title.svelte";
   import ArrowRight from "lucide-svelte/icons/arrow-right";
   import { goto } from "$app/navigation";
-
+  import ProfileCarousel from "src/lib/components/organisms/profile-carousel.svelte";
+  import DisplayProfile from "src/lib/components/molecules/display-profile.svelte";
   export let data: PageData;
-  $: ({ displayReviews } = data);
+  $: ({ displayReviews, displayProfiles } = data);
 
   const cta = "Lär dig programmering från erfarna utvecklare";
   const subDescr = "Gratis just nu, alltid prisvärt.";
@@ -20,7 +21,7 @@
   <meta name="description" content="{websiteName} startsida" />
 </svelte:head>
 
-<Container class="mt-0">
+<Container margin={false}>
   <section
     class="flex flex-col items-start gap-y-4 self-center lg:w-full lg:flex-row lg:justify-evenly lg:gap-8 xl:max-w-[80vw]"
   >
@@ -42,18 +43,21 @@
         />
       </div>
       <p class="text-2xl">{subDescr}</p>
-      <Button class="flex w-full items-center gap-x-2 md:w-auto"
-      on:click={() => goto('/sign-up')}
+      <Button
+        class="flex w-full items-center gap-x-2 md:w-auto"
+        on:click={() => goto("/sign-up")}
         >Skapa konto
         <ArrowRight class="size-4" />
       </Button>
     </div>
     <!-- desktop -->
-    <div class="hidden w-full flex-row justify-evenly gap-y-4 lg:flex px-8 ">
+    <div class="hidden w-full flex-row justify-evenly gap-y-4 px-8 lg:flex">
       <div class="mr-5 flex w-1/2 max-w-2xl flex-col justify-center gap-y-4">
         <h1 class="heading text-5xl">{cta}</h1>
         <p class="text-2xl font-semibold">{subDescr}</p>
-        <Button class="flex w-full max-w-72 items-center gap-x-2 md:w-auto" on:click={() => goto('/sign-up')}
+        <Button
+          class="flex w-full max-w-72 items-center gap-x-2 md:w-auto"
+          on:click={() => goto("/sign-up")}
           >Skapa konto
           <ArrowRight class="size-4" />
         </Button>
@@ -69,12 +73,33 @@
       </div>
     </div>
   </section>
-  <!-- todo fix the mt-6, have it work with my or gap-y or something -->
-  <div class="flex w-screen flex-col items-center self-center bg-card md:mt-6">
-    <Container maxWidth class="m-0 px-8" responsiveGap>
-      <!-- <ProfileCarousel profiles={displayProfiles} /> -->
-      <!-- atm unused but will bring back -->
 
+  <div class="flex w-screen flex-col items-center self-center bg-card">
+    <Container maxWidth margin={false} responsiveGap>
+      {#if displayReviews.length > 0}
+        <div class="flex flex-col items-center gap-y-2">
+          <PrimaryTitle class="text-gradient my-4 text-center ">
+            Se våra lärare
+          </PrimaryTitle>
+          <div
+            class="grid grid-cols-1 gap-4 {displayReviews.length > 1
+              ? 'md:grid-cols-2'
+              : ''}"
+          >
+            {#each Array(2) as _, colIndex}
+              <div class="flex flex-col gap-4">
+                {#each displayProfiles.filter((_, index) => index % 4 === colIndex) as profile}
+                  <DisplayProfile {profile} />
+                {/each}
+              </div>
+            {/each}
+          </div>
+        </div>
+      {/if}
+    </Container>
+  </div>
+  <div class="flex w-screen flex-col items-center self-center">
+    <Container maxWidth margin={false} responsiveGap>
       {#if displayReviews.length > 0}
         <div class="flex flex-col items-center gap-y-2">
           <PrimaryTitle class="text-gradient my-4 text-center ">
@@ -91,7 +116,7 @@
                   <ReviewCardExtra
                     truncate={40}
                     {review}
-                    class="h-auto min-w-32 max-w-full rounded-lg bg-background {colIndex >
+                    class="h-auto min-w-32 max-w-full rounded-lg bg-card {colIndex >
                     0
                       ? 'hidden md:flex'
                       : ''}"
@@ -104,14 +129,13 @@
       {/if}
     </Container>
   </div>
-  <div class="flex w-screen flex-col items-center self-center">
-    <Container maxWidth class="m-0 px-8" responsiveGap>
+  <!-- <div class="flex w-screen flex-col items-center self-center">
+    <Container maxWidth responsiveGap>
       <PrimaryTitle class="text-gradient my-4 text-center ">
         Vanliga frågor och svar
       </PrimaryTitle>
-
     </Container>
-  </div>
+  </div> -->
 </Container>
 
 <style lang="postcss">
