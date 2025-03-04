@@ -7,7 +7,6 @@
   import PrimaryTitle from "src/lib/components/atoms/primary-title.svelte";
   import ArrowRight from "lucide-svelte/icons/arrow-right";
   import { goto } from "$app/navigation";
-  import ProfileCarousel from "src/lib/components/organisms/profile-carousel.svelte";
   import DisplayProfile from "src/lib/components/molecules/display-profile.svelte";
   export let data: PageData;
   $: ({ displayReviews, displayProfiles } = data);
