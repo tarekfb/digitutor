@@ -52,7 +52,7 @@
       href="/account/billing/manage"
       target="_blank"
       class="flex items-center gap-x-2"
-      ><ExternalLink class="size-5" />Se betalningshistorik</Link
+      ><ExternalLink class="size-button-icon" />Se betalningshistorik</Link
     >
   </section>
   <section class="flex w-full flex-col items-center justify-center gap-y-4">

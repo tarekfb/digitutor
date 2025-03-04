@@ -6,9 +6,7 @@
   import Mail from "lucide-svelte/icons/mail";
   import Menu from "lucide-svelte/icons/menu";
   import DollarSign from "lucide-svelte/icons/dollar-sign";
-  import type { Profile, Role } from "$lib/shared/models/profile.ts";
-  import { websiteName } from "$lib/shared/constants/constants.ts";
-  import Link from "../atoms/link.svelte";
+  import type { Profile } from "$lib/shared/models/profile.ts";
   import LoadingSpinner from "../atoms/loading-spinner.svelte";
   import * as Sidebar from "$lib/components/ui/sidebar/index.js";
   import SidebarNav from "./sidebar-nav.svelte";
@@ -16,9 +14,6 @@
   import { Separator } from "../ui/separator/index.ts";
   import SiteTitle from "../atoms/site-title.svelte";
   import { Button } from "../ui/button/index.ts";
-  // import Js from "@icons-pack/svelte-simple-icons/icons/SiJavascript";
-  // import Java from "@icons-pack/svelte-simple-icons/icons/SiJava";
-  // import Css from "@icons-pack/svelte-simple-icons/icons/SiCss";
   import Csharp from "src/lib/icons/csharp.svelte";
   import Js from "src/lib/icons/js.svelte";
   import Python from "src/lib/icons/python.svelte";
@@ -27,6 +22,7 @@
   import Css from "src/lib/icons/css.svelte";
   import React from "src/lib/icons/react.svelte";
   import Search from "lucide-svelte/icons/search";
+  import Crown from "lucide-svelte/icons/crown";
   import { goto } from "$app/navigation";
 
   export let profile: Profile | undefined;
@@ -47,15 +43,19 @@
     logoutLoading = false;
   };
 
-  const icon = "size-5";
+  const icon = "size-button-icon";
   const trigger = "size-7 text-muted-foreground";
+
+  const widthHeight = 20;
 </script>
 
 <Sidebar.Root direction="right" bind:open>
   <Sidebar.Trigger class="hover:text-third" aria-label="Öppna meny">
     <Menu class={trigger} />
   </Sidebar.Trigger>
-  <Sidebar.Content class="w-full rounded-none md:w-3/5 lg:w-1/5 lg:min-w-[30vw] xl:min-w-fit">
+  <Sidebar.Content
+    class="w-full rounded-none md:w-3/5 lg:w-1/5 lg:min-w-[30vw] xl:min-w-fit"
+  >
     <div
       transition:fade={{ duration: 300 }}
       class="w-full overflow-y-auto pb-4 *:px-4"
@@ -92,7 +92,7 @@
         </div>
       {:else}
         <div
-          class="flex flex-col items-start gap-y-2 *:w-full  *:md:self-center"
+          class="flex flex-col items-start gap-y-2 *:w-full *:md:self-center"
         >
           <Button variant="accent" on:click={() => wrappedGoto("/sign-up")}
             >Skapa konto gratis</Button
@@ -109,39 +109,46 @@
         <Separator class="my-2 px-0" />
       {/if}
       {#if !profile || profile.role === "student"}
-        <SidebarNav href="/search?getAll=true" {closeSidebar}>
-          <Search class={icon} />
-          Se alla lärare
-        </SidebarNav>
+        <div class="flex flex-col items-start gap-y-1">
+          <SidebarNav href="/search?getAll=true" {closeSidebar}>
+            <Search class={icon} />
+            Se alla lärare
+          </SidebarNav>
+          <SidebarNav href="/pricing" {closeSidebar}>
+            <Crown class={icon} />
+            Premium
+          </SidebarNav>
+        </div>
+
         <Separator class="mb-4 mt-2 px-0" />
         <div class="flex flex-col items-start gap-y-1">
           <h2 class="text-lg">Sök på ett språk eller ramverk</h2>
           <SidebarNav href="/search?q=javascript" {closeSidebar}>
-            <Js width={20} height={20} />
+            <Js width={widthHeight} height={widthHeight} />
             JavaScript
           </SidebarNav>
           <SidebarNav href="/search?q=python" {closeSidebar}>
-            <Python width={20} height={20} />
+            <Python width={widthHeight} height={widthHeight} />
             Python
           </SidebarNav>
           <SidebarNav href="/search?q=java" {closeSidebar}>
-            <Java width={20} height={20} />
+            <Java width={widthHeight} height={widthHeight} />
             Java
           </SidebarNav>
           <SidebarNav href="/search?q=csharp" {closeSidebar}>
-            <Csharp width={20} height={20} />
+            <Csharp width={widthHeight} height={widthHeight} />
             C#
           </SidebarNav>
           <SidebarNav href="/search?q=html" {closeSidebar}>
-            <Html width={20} height={20} />
+            <Html width={widthHeight} height={widthHeight} />
             Html
           </SidebarNav>
           <SidebarNav href="/search?q=css" {closeSidebar}>
-            <Css width={20} height={20} />
+            <Css width={widthHeight} height={widthHeight} />
             CSS
           </SidebarNav>
           <SidebarNav href="/search?q=react" {closeSidebar}>
-            <React width={20} height={20} />
+            <React width={widthHeight} height={widthHeight} />
             React.JS
           </SidebarNav>
         </div>

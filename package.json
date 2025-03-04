@@ -62,7 +62,6 @@
   },
   "type": "module",
   "dependencies": {
-    "@icons-pack/svelte-simple-icons": "^5.0.0",
     "@jill64/sentry-sveltekit-cloudflare": "^2.0.6",
     "@square/svelte-store": "^0.2.1",
     "@supabase/ssr": "^0.3.0",
@@ -86,7 +85,6 @@
     "svelty-email": "^0.0.11",
     "tailwind-merge": "^2.3.0",
     "tailwind-variants": "^0.2.1",
-    "tech-stack-icons": "^2.1.0",
     "ts-custom-error": "^3.3.1",
     "vaul-svelte": "^0.3.1",
     "zod": "^3.23.6"

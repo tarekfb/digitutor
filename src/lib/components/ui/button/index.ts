@@ -9,7 +9,7 @@ const buttonVariants = tv({
       default: "bg-primary text-background md:hover:bg-third",
       secondary: "bg-secondary text-background md:hover:bg-primary",
       "secondary-third": "bg-secondary text-background md:hover:bg-third",
-      third: "bg-third text-background md:hover:bg-accent",
+      third: "bg-third text-background md:hover:bg-primary",
       "third-secondary": "bg-third text-background md:hover:bg-secondary",
       accent: "bg-accent text-background md:hover:bg-primary",
       "accent-third": "bg-accent text-background md:hover:bg-third",

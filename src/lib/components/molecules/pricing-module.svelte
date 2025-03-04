@@ -13,7 +13,7 @@
 
 <div
   class="flex-none rounded-xl border border-solid bg-card {highlighted
-    ? 'border-primary'
+    ? 'border-third'
     : 'border-gray-200'} min-w-[260px] max-w-[310px] flex-1 flex-grow p-6 shadow-xl"
 >
   <div class="flex h-full flex-col">

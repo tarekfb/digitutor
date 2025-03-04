@@ -6,9 +6,10 @@
   import { toast } from "svelte-sonner";
   import { getFlash } from "sveltekit-flash-message/client";
   import { goto } from "$app/navigation";
+  import SearchForm from "src/lib/components/organisms/search-form.svelte";
 
   export let data: PageData;
-  $: ({ supabase, session, profile } = data);
+  $: ({ supabase, session, profile, subjects } = data);
 
   const flash = getFlash(page);
 
@@ -35,11 +36,27 @@
   }
 </script>
 
-<Navbar
-  {profile}
-  logout={() => {
-    logout(supabase, session);
-    goto("/sign-in");
-  }}
-></Navbar>
+{#if profile.role === "student"}
+  <Navbar
+    {profile}
+    logout={() => {
+      logout(supabase, session);
+      goto("/sign-in");
+    }}
+    isAccount={true}
+  >
+    <svelte:fragment slot="searchForm">
+      <SearchForm form={data.searchForm} {subjects} />
+    </svelte:fragment>
+  </Navbar>
+{:else}
+  <Navbar
+    {profile}
+    logout={() => {
+      logout(supabase, session);
+      goto("/sign-in");
+    }}
+    isAccount={true}
+  />
+{/if}
 <slot />

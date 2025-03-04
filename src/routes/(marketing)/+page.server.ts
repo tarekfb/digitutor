@@ -1,8 +1,7 @@
-import { fail, superValidate } from "sveltekit-superforms";
+import { superValidate } from "sveltekit-superforms";
 import { zod } from "sveltekit-superforms/adapters";
 import { searchSchema } from "src/lib/shared/models/search.ts";
-import type { Actions, PageServerLoad } from "./$types.ts";
-import { redirect } from "@sveltejs/kit";
+import type { PageServerLoad } from "./$types.ts";
 import {
   getHighQualityReviews,
 } from "src/lib/server/database/review.ts";
@@ -13,10 +12,9 @@ import { formatReviewWithReferences } from "src/lib/shared/utils/reviews/utils.t
 import { formatSubject, type Subject } from "src/lib/shared/models/subject.ts";
 import { languages } from "src/lib/shared/models/common.ts";
 import { getSubjects } from "src/lib/server/database/subjects.ts";
-import { getQueryFromFormData } from "src/lib/shared/utils/search/utils.ts";
 
 export const load: PageServerLoad = async ({ locals: { supabase } }) => {
-  const form = await superValidate(zod(searchSchema));
+  const searchForm = await superValidate(zod(searchSchema));
 
   // todo: not used or tested atm, but must bring back.
   // let displayProfiles: DisplayProfile[] = [];
@@ -47,24 +45,5 @@ export const load: PageServerLoad = async ({ locals: { supabase } }) => {
     displayReviews = [];
   }
 
-  let subjects: Subject[] = [];
-  try {
-    const rawSubjects = await getSubjects(supabase);
-    subjects = rawSubjects.map((s) => formatSubject(s));
-  } catch (e) {
-    console.error("Unknown error when reading subjects", e);
-    subjects = languages;
-  }
-
-  return { form, displayReviews, subjects };
-};
-
-export const actions: Actions = {
-  search: async (event) => {
-    const form = await superValidate(event, zod(searchSchema));
-    if (!form.valid) return fail(400, { form });
-
-    const query = getQueryFromFormData(form.data, true);
-    redirect(302, query ? `/search/?q=${query}` : `/search?getAll=true`);
-  },
-};
+  return { searchForm, displayReviews };
+}

@@ -4,14 +4,12 @@
   import ReviewCardExtra from "src/lib/components/molecules/review-card-extra.svelte";
   import { Button } from "src/lib/components/ui/button/index.js";
   import Container from "src/lib/components/templates/container.svelte";
-  import SearchForm from "src/lib/components/organisms/search-form.svelte";
   import PrimaryTitle from "src/lib/components/atoms/primary-title.svelte";
   import ArrowRight from "lucide-svelte/icons/arrow-right";
-  import Navbar from "src/lib/components/organisms/navbar.svelte";
-  import { logout } from "src/lib/shared/utils/utils.ts";
+  import { goto } from "$app/navigation";
 
   export let data: PageData;
-  $: ({ displayReviews, subjects, profile, supabase, session } = data);
+  $: ({ displayReviews } = data);
 
   const cta = "Lär dig programmering från erfarna utvecklare";
   const subDescr = "Gratis just nu, alltid prisvärt.";
@@ -21,12 +19,6 @@
   <title>{websiteName}</title>
   <meta name="description" content="{websiteName} startsida" />
 </svelte:head>
-
-<Navbar {profile} logout={() => logout(supabase, session)}>
-  <svelte:fragment slot="search-form">
-    <SearchForm form={data.form} {subjects} />
-  </svelte:fragment>
-</Navbar>
 
 <Container class="mt-0">
   <section
@@ -51,16 +43,17 @@
       </div>
       <p class="text-2xl">{subDescr}</p>
       <Button class="flex w-full items-center gap-x-2 md:w-auto"
+      on:click={() => goto('/sign-up')}
         >Skapa konto
         <ArrowRight class="size-4" />
       </Button>
     </div>
     <!-- desktop -->
-    <div class="hidden w-full flex-row justify-evenly gap-y-4 lg:flex">
+    <div class="hidden w-full flex-row justify-evenly gap-y-4 lg:flex px-8 ">
       <div class="mr-5 flex w-1/2 max-w-2xl flex-col justify-center gap-y-4">
         <h1 class="heading text-5xl">{cta}</h1>
         <p class="text-2xl font-semibold">{subDescr}</p>
-        <Button class="flex w-full max-w-72 items-center gap-x-2 md:w-auto"
+        <Button class="flex w-full max-w-72 items-center gap-x-2 md:w-auto" on:click={() => goto('/sign-up')}
           >Skapa konto
           <ArrowRight class="size-4" />
         </Button>

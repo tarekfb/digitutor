@@ -1,5 +1,4 @@
 <script lang="ts">
-  import FormMessage from "$lib/components/molecules/form-message.svelte";
   import {
     superForm,
     type Infer,
@@ -60,7 +59,7 @@
     onSelectedChange: ({ next }) => {
       if (next && next[0] && next[next.length - 1].value === "all") {
         goto("/search?getAll=true");
-        // this removal of the "all" element from being pushed to the next array while goto is loading async operation
+        // stops "all" from being pushed to the next array while goto is loading async operation
         const seeAllIndex = next.find((element) => element.value === "all");
         if (seeAllIndex) next.splice(next.indexOf(seeAllIndex), 1);
       }
@@ -85,12 +84,12 @@
     "h-12 grow inline-flex gap-x-2 items-center px-2 py-1 text-sm bg-background rounded-full md:hover:bg-background bg-card";
 
   const languageItemStyling =
-    "relative cursor-pointer rounded-md pl-4 data-[highlighted]:bg-third/75 data-[highlighted]:text-background data-[disabled]:opacity-50";
+    "relative cursor-pointer rounded-md pl-4 data-[highlighted]:bg-third data-[highlighted]:text-background data-[disabled]:opacity-50";
 </script>
 
 <form
   class="flex w-full flex-col gap-y-4 text-center {formStyling}"
-  action="?/search"
+  action="/actions/?/search"
   method="POST"
   use:enhance
 >
@@ -214,12 +213,12 @@
 {/if}
 
 {#if $open}
+  <!-- z-40 to match navbar -->
   <ul
     class="z-40 flex max-h-[300px] flex-col overflow-hidden rounded-lg"
     use:melt={$menu}
     transition:fly={{ duration: 150, y: -5 }}
   >
-    <!-- z-40 to match navbar -->
     <!-- svelte-ignore a11y-no-noninteractive-tabindex -->
     <div
       class="flex max-h-full flex-col gap-0 overflow-y-auto bg-card px-2 py-2 text-foreground"

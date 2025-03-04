@@ -76,6 +76,9 @@ const config = {
 				"wide": "9rem",
 				"wider": "11rem",
 				"widest": "15rem",
+			},
+			size: {
+				"button-icon": "1.25rem",
 			}
 		}
 	},

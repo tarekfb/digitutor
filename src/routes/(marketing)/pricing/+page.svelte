@@ -12,6 +12,7 @@
   import PricingModule from "src/lib/components/molecules/pricing-module.svelte";
   import SecondaryTitle from "src/lib/components/atoms/secondary-title.svelte";
   import { costPerRequest } from "src/lib/shared/constants/constants.js";
+  import ArrowRightIcon from "lucide-svelte/icons/arrow-right";
 
   export let highlightedPlanId: string = "premium";
   export let currentPlanId: string = "";
@@ -31,8 +32,11 @@
     <Button
       variant="third"
       on:click={() => goto(`/account/subscribe/${premiumPlan.stripePriceId}`)}
-      class="mt-2 md:mt-3">Skaffa Premium</Button
+      class="mt-2 flex w-full items-center gap-x-2 md:mt-3 md:w-auto md:min-w-widest"
     >
+      Skaffa Premium
+      <ArrowRightIcon class="size-button-icon" />
+    </Button>
   </div>
 
   <section
@@ -80,14 +84,17 @@
   </section>
   <section class="flex w-full flex-col items-center">
     <SecondaryTitle responsiveMb>Köp fler krediter</SecondaryTitle>
-    <p>
-      Under <a href="/account/billing" class="link">betalningar</a> kan du köpa fler
-      krediter.
+    <p class="text-muted-foreground">
+      Du kan även köpa fler krediter under <a
+        href="/account/billing"
+        class="link">betalningar</a
+      >.
     </p>
     <Button
       variant="third"
       on:click={() => goto("/account/billing")}
-      class="mt-2 md:mt-3">Köp krediter</Button
+      class="mt-2 w-full  md:mt-3 md:w-auto md:min-w-widest"
+      >Köp krediter</Button
     >
   </section>
 </Container>

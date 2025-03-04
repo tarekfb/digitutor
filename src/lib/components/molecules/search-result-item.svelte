@@ -8,15 +8,17 @@
   import SeeMore from "./see-more.svelte";
   import SecondaryTitle from "../atoms/secondary-title.svelte";
   import NbrOfReviews from "../atoms/nbr-of-reviews.svelte";
+  import ArrowRight from "lucide-svelte/icons/arrow-right";
 
   const rowItemStyling = "flex flex-col gap-y-2 items-center";
   const boxStyling = "p-0 m-0 h-8";
+  const maxWidth = "max-w-full md:max-w-screen-sm lg:max-w-screen-md";
 
   export let result: SearchResult;
   export let searchedSubject: number;
 </script>
 
-<div class="flex w-full flex-col gap-x-4 gap-y-4 overflow-x-hidden">
+<div class="flex w-full flex-col gap-x-4 gap-y-4 overflow-x-hidden {maxWidth}">
   {#if result.profile.avatarUrl}
     <div class="flex gap-x-4">
       <div class="flex flex-shrink-0 flex-col gap-y-2 md:gap-y-4">
@@ -56,8 +58,12 @@
           </SecondaryTitle>
         </Link>
         <div class="flex flex-col gap-y-1">
-          <Stars rating={result.avgRating} size={4} class="m-0 p-0 " />
-          <NbrOfReviews nbrOfReviews={result.reviewCount} />
+          {#if result.reviewCount > 0}
+            <Stars rating={result.avgRating} size={4} class="m-0 p-0 " />
+            <NbrOfReviews nbrOfReviews={result.reviewCount} />
+          {:else}
+            <p>Ny lärare</p>
+          {/if}
         </div>
         <div class="flex flex-col">
           <SubjectItem
@@ -73,10 +79,11 @@
     </div>
     <div class="flex justify-evenly">
       <Button
-        class="w-full self-center md:w-auto"
+        class="icon-button wide-button self-center"
         href="/profile/{result.profile.id}?id={result.id}"
-        >Gå till profil</Button
-      >
+        >Gå till profil
+        <ArrowRight class="size-button-icon" />
+      </Button>
     </div>
   {:else}
     <div class="flex flex-col gap-y-2">
@@ -139,8 +146,10 @@
       </div>
     </div>
     <Button
-      class="w-full self-center md:w-auto"
-      href="/profile/{result.profile.id}?id={result.id}">Gå till profil</Button
-    >
+      class="icon-button wide-button self-center"
+      href="/profile/{result.profile.id}?id={result.id}"
+      >Gå till profil
+      <ArrowRight class="size-button-icon" />
+    </Button>
   {/if}
 </div>

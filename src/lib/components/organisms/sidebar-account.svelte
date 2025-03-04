@@ -27,7 +27,6 @@
     logoutLoading = false;
   };
 
-  const icon = "size-5";
   const trigger = "size-7 text-muted-foreground";
   // todo delete this whole comp
 </script>
@@ -47,22 +46,22 @@
       <Separator class="mb-4 px-0" />
       <div class="flex flex-col items-start gap-y-1">
         <SidebarNav href="/account" {closeSidebar}>
-          <Mail class={icon} />
+          <Mail class="size-button-icon" />
           Konversationer
         </SidebarNav>
         {#if role === "teacher"}
           <SidebarNav href="/account/listings" {closeSidebar}>
-            <NotepadText class={icon} />
+            <NotepadText class="size-button-icon" />
             Annonser
           </SidebarNav>
         {/if}
         <SidebarNav href="/account/settings" {closeSidebar}>
-          <Settings class={icon} />
+          <Settings class="size-button-icon" />
           Inställningar
         </SidebarNav>
         {#if role === "student"}
           <SidebarNav href="/account/billing" {closeSidebar}>
-            <DollarSign class={icon} />
+            <DollarSign class="size-button-icon" />
             Betalningar
           </SidebarNav>
         {/if}
@@ -72,7 +71,7 @@
         {#if logoutLoading}
           <LoadingSpinner class="text-background" />
         {:else}
-          <LogOutIcon class={icon} />
+          <LogOutIcon class="size-button-icon" />
           Logga ut
         {/if}
       </SidebarNav>

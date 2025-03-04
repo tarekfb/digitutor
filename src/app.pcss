@@ -4,7 +4,7 @@
 
 @layer base {
   :root {
-    --background: 0 0% 95%;
+    --background: 0 0% 96%;
     --foreground: 222.2 84% 4.9%;
     --muted: 210 40% 96.1%;
     --muted-foreground: 215.4 16.3% 35%;
@@ -105,4 +105,12 @@
 
 .grow {
   @apply md:hover:scale-105 md:ease-in-out md:transition-all 
+}
+
+.icon-button {
+  @apply flex gap-x-2 items-center;
+}
+
+.wide-button {
+  @apply w-full md:w-auto md:min-w-widest;
 }
