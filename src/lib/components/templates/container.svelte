@@ -14,7 +14,7 @@
 <svelte:element
   this={tag}
   class={cn(
-    "m-4 flex flex-col items-center md:m-8",
+    "flex flex-col items-center md:m-8",
     responsiveGap ? "gap-y-2 md:gap-y-4" : "gap-y-4",
     padding ? "m-4 md:m-8" : "",
     maxWidth ? "max-w-full md:max-w-screen-sm lg:max-w-screen-md" : "",

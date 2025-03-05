@@ -89,7 +89,7 @@
 
 <form
   class="flex w-full flex-col gap-y-4 text-center {formStyling}"
-  action="/actions/?/search"
+  action="/actions?/search"
   method="POST"
   use:enhance
 >

@@ -73,33 +73,35 @@
     </div>
   </section>
 
-  <div class="flex w-screen flex-col items-center self-center bg-card">
-    <Container maxWidth margin={false} responsiveGap>
-      {#if displayReviews.length > 0}
-        <div class="flex flex-col items-center gap-y-2">
-          <PrimaryTitle class="text-gradient my-4 text-center ">
-            Se våra lärare
-          </PrimaryTitle>
-          <div
-            class="grid grid-cols-1 gap-4 {displayReviews.length > 1
-              ? 'md:grid-cols-2'
-              : ''}"
-          >
-            {#each Array(2) as _, colIndex}
-              <div class="flex flex-col gap-4">
-                {#each displayProfiles.filter((_, index) => index % 4 === colIndex) as profile}
-                  <DisplayProfile {profile} />
-                {/each}
-              </div>
-            {/each}
+  {#if displayProfiles.length > 0}
+    <div class="flex w-screen flex-col items-center self-center bg-card">
+      <Container maxWidth margin={false} class="mx-4 md:mx-8" responsiveGap>
+        {#if displayReviews.length > 0}
+          <div class="flex flex-col items-center gap-y-2">
+            <PrimaryTitle class="text-gradient my-4 text-center ">
+              Se våra lärare
+            </PrimaryTitle>
+            <div
+              class="grid grid-cols-1 gap-4 {displayReviews.length > 1
+                ? 'md:grid-cols-2'
+                : ''}"
+            >
+              {#each Array(2) as _, colIndex}
+                <div class="flex flex-col gap-4">
+                  {#each displayProfiles.filter((_, index) => index % 4 === colIndex) as profile}
+                    <DisplayProfile {profile} />
+                  {/each}
+                </div>
+              {/each}
+            </div>
           </div>
-        </div>
-      {/if}
-    </Container>
-  </div>
-  <div class="flex w-screen flex-col items-center self-center">
-    <Container maxWidth margin={false} responsiveGap>
-      {#if displayReviews.length > 0}
+        {/if}
+      </Container>
+    </div>
+  {/if}
+  {#if displayReviews.length > 0}
+    <div class="flex w-screen flex-col items-center self-center">
+      <Container maxWidth margin={false} class="mx-4 md:mx-8" responsiveGap>
         <div class="flex flex-col items-center gap-y-2">
           <PrimaryTitle class="text-gradient my-4 text-center ">
             Vad våra användare säger
@@ -125,9 +127,9 @@
             {/each}
           </div>
         </div>
-      {/if}
-    </Container>
-  </div>
+      </Container>
+    </div>
+  {/if}
   <!-- <div class="flex w-screen flex-col items-center self-center">
     <Container maxWidth responsiveGap>
       <PrimaryTitle class="text-gradient my-4 text-center ">

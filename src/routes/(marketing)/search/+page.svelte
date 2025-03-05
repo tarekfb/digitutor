@@ -136,7 +136,7 @@
   let sortingId: SortingSearchOption["id"] = defaultSort.id;
 
   const containterStyling =
-    "px-4 md:px-8 max-w-full md:max-w-screen-sm lg:max-w-screen-md";
+    "px-4 md:px-8 py-4 md:py-8 max-w-full md:max-w-screen-sm lg:max-w-screen-md";
 </script>
 
 <svelte:head>
