@@ -8,7 +8,6 @@
     defaultErrorDescription,
     defaultErrorTitle,
   } from "src/lib/shared/constants/constants.ts";
-  import Footer from "./footer.svelte";
 
   export let error: App.Error;
   export let code: number | undefined | null = undefined;
@@ -56,4 +55,3 @@
     </ErrorNav>
   </ul>
 </div>
-<Footer />

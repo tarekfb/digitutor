@@ -1,103 +1,78 @@
 <script lang="ts">
-  import { Button } from "$lib/components/ui/button/index.js";
-  import * as DropdownMenu from "$lib/components/ui/dropdown-menu/index.ts";
-  import UserRound from "lucide-svelte/icons/user-round";
-  import LogOutIcon from "lucide-svelte/icons/log-out";
   // import Logo from "$lib/components/atoms/logo.svelte";
-  import { goto } from "$app/navigation";
   import type { Profile } from "src/lib/shared/models/profile.ts";
-  import { websiteName } from "../../shared/constants/constants.ts";
-  import Avatar from "../atoms/avatar.svelte";
-  import LoadingSpinner from "../atoms/loading-spinner.svelte";
+  import SidebarHome from "./sidebar-home.svelte";
+  import SiteTitle from "../atoms/site-title.svelte";
+  import { Separator } from "../ui/separator/index.ts";
+  import { Button } from "../ui/button/index.ts";
+  import UserRound from "lucide-svelte/icons/user-round";
+  import { page } from "$app/stores";
 
   export let profile: Profile | undefined | null | false;
   export let logout: (() => void) | false;
+  export let isAccount: boolean = false;
 
-  let logoutLoading = false;
+  const iconButton = "flex items-center gap-x-2";
+
   const wrappedLogout = () => {
     if (!logout) return;
-    logoutLoading = true;
     logout();
-    logoutLoading = false;
   };
+
+  const navItem = "px-4 py-2 text-muted-foreground md:hover:bg-third md:hover:text-background";
 </script>
 
 <header
-  class="sticky top-0 z-40 flex h-16 w-full items-center gap-x-3 overflow-x-hidden bg-secondary px-2 text-background sm:justify-between sm:space-x-0 md:h-20 md:px-4 lg:px-8"
+  class="sticky top-0 z-40 flex w-full flex-col overflow-x-hidden bg-background"
 >
-  <a href="/" class="text-xl uppercase md:text-3xl font-medium md:hover:text-third">
-    {websiteName}
-  </a>
-
-  <div class="flex flex-1 items-center justify-end">
-    <nav class="flex items-center gap-x-2 md:gap-x-4">
-      {#if profile !== false}
-        {#if profile === undefined || profile === null}
-          <Button
-            variant="secondary-third"
-            class="px-2 md:px-3"
-            on:click={() => goto("/sign-in")}>Logga in</Button
+  <div
+    class="flex w-full max-w-screen-2xl items-center justify-between gap-x-3 self-center px-4 py-4 sm:justify-between sm:space-x-0 md:h-20 md:px-4 lg:px-8"
+  >
+    <SiteTitle />
+    {#if $$slots.searchForm}
+      <div
+        class="my-2 hidden w-full max-w-screen-sm flex-col items-center justify-center self-center px-4 md:flex"
+      >
+        <slot name="searchForm" />
+      </div>
+    {/if}
+    <nav class="flex items-center justify-end {!isAccount ? 'lg:hidden' : ''}">
+      <SidebarHome
+        logout={wrappedLogout}
+        profile={profile ? profile : undefined}
+      />
+    </nav>
+    {#if !isAccount}
+      <nav class="hidden items-center justify-end gap-x-2 lg:flex">
+        {#if profile}
+          <Button class={iconButton} href="/account">
+            <UserRound class="size-4" />
+            Konto</Button
           >
-          <Button
-            variant="third-secondary"
-            on:click={() => goto("/sign-up")}
-            class="px-2 md:px-3">Skapa konto</Button
-          >
-        {:else if profile}
-          <DropdownMenu.Root>
-            <DropdownMenu.Trigger asChild let:builder>
-              <Button
-                variant="ghost"
-                builders={[builder]}
-                class="relative mx-1 h-8 w-8 rounded-full"
-              >
-                <Avatar
-                  url={profile.avatarUrl ?? ""}
-                  firstName={profile.firstName}
-                  role={profile.role}
-                  fallbackClass="bg-primary"
-                />
-              </Button>
-            </DropdownMenu.Trigger>
-            <DropdownMenu.Content class="w-56" align="end">
-              <DropdownMenu.Label class="font-normal">
-                <p class="text-sm font-medium leading-none">
-                  {profile.firstName}
-                </p>
-              </DropdownMenu.Label>
-              <DropdownMenu.Separator />
-              <DropdownMenu.Item class="data-[highlighted]:bg-white">
-                <button
-                  class="flex w-full items-center gap-x-2"
-                  disabled={logoutLoading}
-                  on:click={() => goto("/account")}
-                >
-                  <UserRound class="mr-2 h-4 w-4" />
-                  Konto
-                </button>
-              </DropdownMenu.Item>
-              <DropdownMenu.Separator />
-              <DropdownMenu.Item class="data-[highlighted]:bg-white">
-                <button
-                  class="flex w-full items-center gap-x-2"
-                  disabled={logoutLoading}
-                  on:click={wrappedLogout}
-                >
-                  {#if logoutLoading}
-                    <LoadingSpinner class="mr-2 text-background" />
-                  {:else}
-                    <LogOutIcon size="18" class="mr-2" />
-                  {/if}
-                  Logga ut
-                </button>
-              </DropdownMenu.Item>
-            </DropdownMenu.Content>
-          </DropdownMenu.Root>
+        {:else}
+          <Button variant="outline" href="/sign-in">Logga in</Button>
+          <Button variant="third" href="/sign-up">Skapa konto</Button>
         {/if}
-      {/if}
-    </nav>
-    <nav>
-      <slot />
-    </nav>
+      </nav>
+    {/if}
   </div>
+  <Separator class="mb-2 w-full md:mb-0" />
+  {#if $$slots.searchForm}
+    <div
+      class="flex w-full max-w-screen-sm flex-col items-center justify-center self-center px-4 pb-4 pt-2 md:hidden"
+    >
+      <slot name="searchForm" />
+    </div>
+  {/if}
+  <nav
+    class="hidden w-full max-w-screen-2xl items-center self-center px-4 lg:flex"
+  >
+    <a href="/sign-up?role=teacher" class={navItem}>Skapa konto som lärare</a>
+    <a href="/pricing" class={navItem}>Premium</a>
+    <Separator orientation="vertical" class="py-3" />
+    <a href="/search?getAll=true" class={navItem}>Se alla lärare</a>
+    <a href="/search?q=javascript" class={navItem}>Javascript</a>
+    <a href="/search?q=python" class={navItem}>Python</a>
+    <a href="/search?q=java" class={navItem}>Java</a>
+  </nav>
 </header>

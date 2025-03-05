@@ -123,30 +123,16 @@ export const getHighQualityReviews = async (
   return data as unknown as DbReviewWithReferences[];
 };
 
-// export const getTopTeacherByReviews = async (
-//   supabase: SupabaseClient<Database>,
-//   max?: number,
-// ): Promise<DbDisplayProfile[]> => {
-//   let query = supabase.rpc("get_top_teacher_by_reviews");
-
-//   if (max) query = query.limit(max);
-//   const { data, error } = await query;
-
-//   if (error) {
-//     console.error(`Failed to find reviews`, { error });
-//     throw error;
-//   }
-
-//   return data as unknown as DbDisplayProfile[];
-// };
-
 export const getTopTeacher = async (
   supabase: SupabaseClient<Database>,
   max?: number,
+  withReviews: boolean = true,
 ): Promise<DbTopTeacher[]> => {
-  let query = supabase.from("top_rated_teachers").select("*").eq("avg_rating", 5).gt("five_star_reviews_with_description", 0);
+  let query = supabase.from("top_rated_teachers").select("*").eq("avg_rating", 5);
 
+  if (withReviews) query = query.gt("five_star_reviews_with_description", 0);
   if (max) query = query.limit(max);
+  
   const { data, error } = await query;
 
   if (error) {

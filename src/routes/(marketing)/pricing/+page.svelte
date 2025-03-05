@@ -1,7 +1,7 @@
 <script lang="ts">
   import { goto } from "$app/navigation";
   import PrimaryTitle from "src/lib/components/atoms/primary-title.svelte";
-  import RootContainer from "src/lib/components/templates/root-container.svelte";
+  import Container from "src/lib/components/templates/container.svelte";
   import Button from "src/lib/components/ui/button/button.svelte";
   import {
     premiumPlan,
@@ -12,6 +12,7 @@
   import PricingModule from "src/lib/components/molecules/pricing-module.svelte";
   import SecondaryTitle from "src/lib/components/atoms/secondary-title.svelte";
   import { costPerRequest } from "src/lib/shared/constants/constants.js";
+  import ArrowRightIcon from "lucide-svelte/icons/arrow-right";
 
   export let highlightedPlanId: string = "premium";
   export let currentPlanId: string = "";
@@ -21,7 +22,7 @@
   <title>{websiteName} | Premium</title>
 </svelte:head>
 
-<RootContainer maxWidth minWidth class="gap-y-6 self-center md:gap-y-10">
+<Container maxWidth minWidth class="gap-y-6 self-center md:gap-y-10">
   <div class="flex flex-col items-center justify-center">
     <PrimaryTitle responsiveMb>Premium</PrimaryTitle>
     <p class="text-lg text-muted-foreground md:text-xl">
@@ -31,8 +32,11 @@
     <Button
       variant="third"
       on:click={() => goto(`/account/subscribe/${premiumPlan.stripePriceId}`)}
-      class="mt-2 md:mt-3">Skaffa Premium</Button
+      class="mt-2 flex w-full items-center gap-x-2 md:mt-3 md:w-auto md:min-w-widest"
     >
+      Skaffa Premium
+      <ArrowRightIcon class="size-button-icon" />
+    </Button>
   </div>
 
   <section
@@ -80,14 +84,17 @@
   </section>
   <section class="flex w-full flex-col items-center">
     <SecondaryTitle responsiveMb>Köp fler krediter</SecondaryTitle>
-    <p>
-      Under <a href="/account/billing" class="link">betalningar</a> kan du köpa fler
-      krediter.
+    <p class="text-muted-foreground">
+      Du kan även köpa fler krediter under <a
+        href="/account/billing"
+        class="link">betalningar</a
+      >.
     </p>
     <Button
       variant="third"
       on:click={() => goto("/account/billing")}
-      class="mt-2 md:mt-3">Köp krediter</Button
+      class="mt-2 w-full  md:mt-3 md:w-auto md:min-w-widest"
+      >Köp krediter</Button
     >
   </section>
-</RootContainer>
+</Container>

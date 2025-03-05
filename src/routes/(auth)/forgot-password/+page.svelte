@@ -5,7 +5,7 @@
   import FormSubmit from "src/lib/components/molecules/form-submit.svelte";
   import { zodClient } from "sveltekit-superforms/adapters";
   import { requestPasswordResetSchema } from "src/lib/shared/models/user.ts";
-  import RootContainer from "src/lib/components/templates/root-container.svelte";
+  import Container from "src/lib/components/templates/container.svelte";
   import FormMessage from "$lib/components/molecules/form-message.svelte";
   import * as Form from "$lib/components/ui/form/index.js";
   import { Input } from "$lib/components/ui/input/index.js";
@@ -31,7 +31,7 @@
   <title>Glömt lösenord</title>
 </svelte:head>
 
-<RootContainer responsiveGap minWidth maxWidth>
+<Container responsiveGap minWidth maxWidth>
   {#if $page.url.searchParams.get("wrongBrowser") == "true"}
     <AlertMessage
       variant="warning"
@@ -85,4 +85,4 @@
       <a href="/sign-in" class="underline">Logga in här.</a>
     </p>
   </div>
-</RootContainer>
+</Container>

@@ -20,7 +20,7 @@
   import PasswordInput from "$lib/components/molecules/password-input.svelte";
   import AvatarForm from "src/lib/components/molecules/avatar-form.svelte";
   import type { PageData } from "./$types.ts";
-  import RootContainer from "src/lib/components/templates/root-container.svelte";
+  import Container from "src/lib/components/templates/container.svelte";
   import AccountLayout from "src/lib/components/templates/account-layout.svelte";
   import { Textarea } from "src/lib/components/ui/textarea/index.ts";
   import * as Collapsible from "$lib/components/ui/collapsible/index.ts";
@@ -77,7 +77,7 @@
 
 <AccountLayout>
   <PrimaryTitle class="text-center">Inställningar</PrimaryTitle>
-  <RootContainer class="my-6 w-full">
+  <Container class="my-6 w-full">
     {#if profile.role === "teacher"}
       <SettingsForm
         form={bioForm}
@@ -107,7 +107,7 @@
             </div>
           </Collapsible.Trigger>
           <Collapsible.Content class="mt-2 text-muted-foreground md:mt-1">
-            {@const styling = "size-5 flex-shrink-0 md:size-7"}
+            {@const styling = "size-button-icon flex-shrink-0 md:size-7"}
             <ul
               class="list-disc space-y-1.5 *:mx-1 *:flex *:gap-x-2 md:space-y-2"
             >
@@ -226,5 +226,5 @@
     </SettingsForm>
 
     <DeleteAccount form={deleteForm} />
-  </RootContainer>
+  </Container>
 </AccountLayout>

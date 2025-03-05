@@ -1,5 +1,4 @@
 <script lang="ts">
-  import FormMessage from "$lib/components/molecules/form-message.svelte";
   import {
     superForm,
     type Infer,
@@ -20,6 +19,7 @@
   import { createCombobox, melt } from "@melt-ui/svelte";
   import { fly } from "svelte/transition";
   import type { ActionResult } from "@sveltejs/kit";
+  import { goto } from "$app/navigation";
 
   export let formStyling: string = "";
   export let subjects: Subject[];
@@ -47,7 +47,7 @@
       if (onUpdatedCallback) onUpdatedCallback(form, result);
     },
   });
-  const { form: formData, enhance, delayed, message, allErrors } = searchForm;
+  const { form: formData, enhance, delayed, errors, allErrors } = searchForm;
 
   const {
     elements: { menu, input, option, label, hiddenInput },
@@ -57,6 +57,12 @@
     forceVisible: true,
     multiple: true,
     onSelectedChange: ({ next }) => {
+      if (next && next[0] && next[next.length - 1].value === "all") {
+        goto("/search?getAll=true");
+        // stops "all" from being pushed to the next array while goto is loading async operation
+        const seeAllIndex = next.find((element) => element.value === "all");
+        if (seeAllIndex) next.splice(next.indexOf(seeAllIndex), 1);
+      }
       if (next && next[0] && next[0].value)
         $formData.subjects = next.map((element) => element.value).join(" ");
       else $formData.subjects = "";
@@ -75,12 +81,15 @@
     : subjects;
 
   const subjectChipStyling =
-    "h-12 grow inline-flex gap-x-2 items-center px-2 py-1 text-sm bg-background rounded-full md:hover:bg-background";
+    "h-12 grow inline-flex gap-x-2 items-center px-2 py-1 text-sm bg-background rounded-full md:hover:bg-background bg-card";
+
+  const languageItemStyling =
+    "relative cursor-pointer rounded-md pl-4 data-[highlighted]:bg-third data-[highlighted]:text-background data-[disabled]:opacity-50";
 </script>
 
 <form
   class="flex w-full flex-col gap-y-4 text-center {formStyling}"
-  action="?/search"
+  action="/actions?/search"
   method="POST"
   use:enhance
 >
@@ -98,11 +107,28 @@
             value={$formData.subjects}
           />
 
-          <div class="relative">
+          <div
+            class="relative rounded-r-none bg-card md:flex md:items-center md:rounded-l-sm"
+          >
+            {#if $selected && $selected.length > 0}
+              <button
+                type="button"
+                aria-label="Rensa {$selected.length} teknologier"
+                on:click={() => ($selected = [])}
+                class="border-r-1 m-0 hidden px-2 md:inline-flex md:items-center md:gap-x-1"
+                ><span class="rounded-full bg-third px-2 text-background"
+                  >{$selected.length}</span
+                >
+                <X /></button
+              >
+            {/if}
             <input
               use:melt={$input}
-              class="text-md flex h-10 w-full items-center justify-between rounded-lg
-          rounded-r-none bg-card px-3 pr-6 placeholder:text-muted-foreground"
+              class="text-md flex h-10 w-full items-center justify-between rounded-lg rounded-r-none
+            px-3 pr-6 placeholder:text-muted-foreground {$selected &&
+              $selected.length > 0
+                ? 'rounded-l-none border-l border-solid border-input'
+                : ''}"
               placeholder="Välj teknologi"
             />
             <div
@@ -116,7 +142,10 @@
             </div>
           </div>
         </div>
-        <Form.FieldErrors class="" />
+
+        {#if $errors.subjects}
+          <Form.FieldErrors />
+        {/if}
       </Form.Control>
     </Form.Field>
     <Form.Field form={searchForm} name="query" class="w-28 flex-none md:w-64">
@@ -127,16 +156,18 @@
             type="text"
             autocomplete="false"
             bind:value={$formData.query}
-            placeholder="Sök på lärare"
+            placeholder="Sök lärare"
             class="text-md rounded-l-none rounded-r-none bg-card text-muted-foreground placeholder:text-muted-foreground"
           />
         </div>
       </Form.Control>
-      <Form.FieldErrors />
+      {#if $errors.query}
+        <Form.FieldErrors />
+      {/if}
     </Form.Field>
     <Button
       type="submit"
-      variant="accent-third"
+      variant="third-secondary"
       size="icon"
       disabled={$allErrors.length > 0 || $delayed}
       class="flex flex-none items-center justify-center gap-x-2 rounded-l-none"
@@ -149,14 +180,13 @@
     </Button>
   </div>
 </form>
-<FormMessage {message} scroll scrollTo="end" />
 {#if $selected && $selected.length > 0}
-  <ul class="flex w-full flex-wrap gap-2">
+  <ul class="mt-2 flex w-full flex-wrap gap-2 md:hidden">
     <li>
       <button
         aria-label="Rensa {$selected.length} teknologier"
         on:click={() => ($selected = [])}
-        class="{subjectChipStyling} border-2 border-third"
+        class="{subjectChipStyling} border-2 border-third bg-card"
       >
         <span class="rounded-full bg-third px-3 py-1 text-background"
           >{$selected.length}</span
@@ -183,8 +213,9 @@
 {/if}
 
 {#if $open}
+  <!-- z-40 to match navbar -->
   <ul
-    class="z-10 flex max-h-[300px] flex-col overflow-hidden rounded-lg"
+    class="z-40 flex max-h-[300px] flex-col overflow-hidden rounded-lg"
     use:melt={$menu}
     transition:fly={{ duration: 150, y: -5 }}
   >
@@ -193,15 +224,23 @@
       class="flex max-h-full flex-col gap-0 overflow-y-auto bg-card px-2 py-2 text-foreground"
       tabindex="0"
     >
+      <li
+        class="{languageItemStyling} py-2 pl-8 text-third data-[highlighted]:bg-accent"
+        use:melt={$option({
+          value: "all",
+          label: "Alla",
+        })}
+      >
+        Se alla lärare
+      </li>
+
       {#each filteredSubjects as subject, index (index)}
         <li
           use:melt={$option({
             value: subject.title,
             label: subject.title,
           })}
-          class="relative cursor-pointer scroll-my-2 rounded-md py-2 pl-4 pr-4
-        data-[highlighted]:bg-third/50 data-[highlighted]:text-primary
-          data-[disabled]:opacity-50"
+          class="scroll-my-2 py-2 {languageItemStyling}"
         >
           {#if $isSelected(subject.title)}
             <div class="check absolute left-2 top-1/2 z-10 text-primary">
@@ -214,8 +253,8 @@
         </li>
       {:else}
         <li
-          class="relative cursor-pointer rounded-md py-1 pl-8 pr-4
-        data-[highlighted]:bg-third/50 data-[highlighted]:text-primary"
+          class="py-1 pl-8
+        {languageItemStyling}"
         >
           Inga resultat
         </li>

@@ -12,11 +12,11 @@ export const searchSchema = z
       (!data.subjects || data.subjects !== "undefined") &&
       data.query &&
       data.query.length > 0 &&
-      data.query.length <= 2
+      data.query.length <= 1
     ) {
       ctx.addIssue({
         code: z.ZodIssueCode.custom,
-        message: "Måste vara minst 3 karaktärer",
+        message: "Måste vara minst 1 karaktär",
         path: ["query"],
       });
     }

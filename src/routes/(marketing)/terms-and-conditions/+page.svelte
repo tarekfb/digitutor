@@ -1,6 +1,6 @@
 <script lang="ts">
   import PrimaryTitle from "$lib/components/atoms/primary-title.svelte";
-  import RootContainer from "$lib/components/templates/root-container.svelte";
+  import Container from "src/lib/components/templates/container.svelte";
   import { websiteName } from "$lib/shared/constants/constants.ts";
 </script>
 
@@ -8,7 +8,7 @@
   <title>{websiteName} | Användarvillkor</title>
 </svelte:head>
 
-<RootContainer responsiveGap maxWidth class="items-start">
+<Container responsiveGap maxWidth class="items-start">
   <PrimaryTitle class="self-center">Användarvillkor</PrimaryTitle>
   <p>
     Läs noggrant igenom våra villkor innan du använder {websiteName}.
@@ -64,4 +64,4 @@
     användning av plattformen efter ändringar innebär att du godkänner de
     uppdaterade villkoren.
   </p>
-</RootContainer>
+</Container>

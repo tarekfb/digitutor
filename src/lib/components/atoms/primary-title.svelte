@@ -6,6 +6,7 @@
   export let id: string | undefined = undefined;
   export let responsiveMb: boolean = false;
   export let responsiveMt: boolean = false;
+  export let testId: string | undefined | null = undefined;
 </script>
 
 <!-- heading styling from app.pcss but putting it here helps cn function work properly -->
@@ -17,6 +18,7 @@
     responsiveMt ? "mt-2 md:mt-4" : "",
     className,
   )}
+  data-testid={testId}
 >
   <slot />
 </h1>

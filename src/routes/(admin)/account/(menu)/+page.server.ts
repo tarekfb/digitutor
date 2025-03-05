@@ -11,7 +11,7 @@ export const load: PageServerLoad = async ({
   parent,
 }) => {
   const { session } = await safeGetSession();
-  if (!session) throw redirect(303, "/sign-in");
+  if (!session) redirect(303, "/sign-in");
 
   let conversations: ConversationWithReferences[];
   try {

@@ -9,7 +9,7 @@ const buttonVariants = tv({
       default: "bg-primary text-background md:hover:bg-third",
       secondary: "bg-secondary text-background md:hover:bg-primary",
       "secondary-third": "bg-secondary text-background md:hover:bg-third",
-      third: "bg-third text-background md:hover:bg-accent",
+      third: "bg-third text-background md:hover:bg-primary",
       "third-secondary": "bg-third text-background md:hover:bg-secondary",
       accent: "bg-accent text-background md:hover:bg-primary",
       "accent-third": "bg-accent text-background md:hover:bg-third",
@@ -19,7 +19,7 @@ const buttonVariants = tv({
         "border-secondary bg-background md:hover:bg-primary md:hover:text-background border",
       "outline-card":
         "border-secondary bg-card md:hover:bg-primary md:hover:text-background border",
-      ghost: "md:hover:bg-third md:hover:text-background",
+      ghost: "md:hover:bg-primary md:hover:text-background",
       "ghost-none": "md:hover:text-third",
       link: "text-primary underline-offset-4 md:hover:underline",
     },
