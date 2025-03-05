@@ -22,14 +22,12 @@ export const load: PageServerLoad = async ({ locals: { supabase } }) => {
     displayProfiles = displayProfiles.filter(
       (r) => r.avatarUrl,
     );
-    if (displayProfiles.length > 4)
-      displayProfiles = displayProfiles.slice(0, 4);
+    if (displayProfiles.length > 12)
+      displayProfiles = displayProfiles.slice(0, 12);
   } catch (e) {
     console.error("Error when fetching top teacher by reviews", e);
     displayProfiles = [];
   }
-
-  console.log(displayProfiles)
 
   let displayReviews: ReviewWithReferences[] = [];
   try {

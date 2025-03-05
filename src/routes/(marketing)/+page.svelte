@@ -1,18 +1,26 @@
 <script lang="ts">
   import { websiteName } from "$lib/shared/constants/constants.ts";
   import type { PageData } from "./$types.ts";
-  import ReviewCardExtra from "src/lib/components/molecules/review-card-extra.svelte";
   import { Button } from "src/lib/components/ui/button/index.js";
   import Container from "src/lib/components/templates/container.svelte";
   import PrimaryTitle from "src/lib/components/atoms/primary-title.svelte";
   import ArrowRight from "lucide-svelte/icons/arrow-right";
   import { goto } from "$app/navigation";
   import DisplayProfile from "src/lib/components/molecules/display-profile.svelte";
+  import ProfileCarousel from "src/lib/components/organisms/profile-carousel.svelte";
+  import ReviewCarousel from "src/lib/components/organisms/review-carousel.svelte";
   export let data: PageData;
   $: ({ displayReviews, displayProfiles } = data);
 
   const cta = "Lär dig programmering från erfarna utvecklare";
   const subDescr = "Gratis just nu, alltid prisvärt.";
+
+  const getGridCols = (listLength: number): string => {
+    if (listLength === 1) return "grid-cols-1";
+    if (listLength === 2) return "grid-cols-2";
+    if (listLength === 3) return "grid-cols-2 md:grid-cols-3";
+    return "grid-cols-2 md:grid-cols-3 lg:grid-cols-4";
+  };
 </script>
 
 <svelte:head>
@@ -20,9 +28,9 @@
   <meta name="description" content="{websiteName} startsida" />
 </svelte:head>
 
-<Container margin={false}>
+<Container margin={false} class="gap-y-0">
   <section
-    class="flex flex-col items-start gap-y-4 self-center lg:w-full lg:flex-row lg:justify-evenly lg:gap-8 xl:max-w-[80vw]"
+    class="flex flex-col items-start gap-y-4 self-center py-4 md:py-8 lg:w-full lg:flex-row lg:justify-evenly lg:gap-8 xl:max-w-[80vw]"
   >
     <!-- mobile -->
     <div class="flex w-full flex-col gap-y-4 lg:hidden">
@@ -74,33 +82,34 @@
   </section>
 
   {#if displayProfiles.length > 0}
-    <div class="flex w-screen flex-col items-center self-center bg-card">
+    <div
+      class="flex w-screen flex-col items-center self-center bg-card pb-4 md:pb-8"
+    >
       <Container maxWidth margin={false} class="mx-4 md:mx-8" responsiveGap>
-        {#if displayReviews.length > 0}
-          <div class="flex flex-col items-center gap-y-2">
-            <PrimaryTitle class="text-gradient my-4 text-center ">
-              Se våra lärare
-            </PrimaryTitle>
-            <div
-              class="grid grid-cols-1 gap-4 {displayReviews.length > 1
-                ? 'md:grid-cols-2'
-                : ''}"
-            >
-              {#each Array(2) as _, colIndex}
-                <div class="flex flex-col gap-4">
-                  {#each displayProfiles.filter((_, index) => index % 4 === colIndex) as profile}
-                    <DisplayProfile {profile} />
-                  {/each}
-                </div>
-              {/each}
-            </div>
-          </div>
-        {/if}
+        <PrimaryTitle class="my-4 text-center ">Se våra lärare</PrimaryTitle>
+        <div class="grid {getGridCols(displayProfiles.length)} gap-4 md:gap-8">
+          {#each displayProfiles as profile}
+            <DisplayProfile {profile} />
+          {/each}
+        </div>
       </Container>
     </div>
   {/if}
-  {#if displayReviews.length > 0}
-    <div class="flex w-screen flex-col items-center self-center">
+  <div
+    class="flex w-screen flex-col items-center self-center bg-secondary pb-4 md:pb-8"
+  >
+    <Container maxWidth margin={false} class="mx-4 md:mx-8" responsiveGap>
+      <PrimaryTitle class="my-4 text-center text-background ">Såhär säger våra användare</PrimaryTitle>
+      <!-- <div class="grid {getGridCols(displayProfiles.length)} gap-4 md:gap-8">
+        {#each displayProfiles as profile}
+          <DisplayProfile {profile} />
+        {/each}
+      </div> -->
+      <ReviewCarousel reviews={displayReviews} />
+    </Container>
+  </div>
+  <!-- {#if displayReviews.length > 0}
+    <div class="flex w-screen flex-col items-center self-center pb-4 md:pb-8">
       <Container maxWidth margin={false} class="mx-4 md:mx-8" responsiveGap>
         <div class="flex flex-col items-center gap-y-2">
           <PrimaryTitle class="text-gradient my-4 text-center ">
@@ -114,7 +123,7 @@
             {#each Array(2) as _, colIndex}
               <div class="flex flex-col gap-4">
                 {#each displayReviews.filter((_, index) => index % 4 === colIndex) as review}
-                  <ReviewCardExtra
+                  <CardExtra
                     truncate={40}
                     {review}
                     class="h-auto min-w-32 max-w-full rounded-lg bg-card {colIndex >
@@ -129,8 +138,8 @@
         </div>
       </Container>
     </div>
-  {/if}
-  <!-- <div class="flex w-screen flex-col items-center self-center">
+  {/if} -->
+  <!-- <div class="flex w-screen flex-col items-center self-center pb-4 md:pb-8">
     <Container maxWidth responsiveGap>
       <PrimaryTitle class="text-gradient my-4 text-center ">
         Vanliga frågor och svar

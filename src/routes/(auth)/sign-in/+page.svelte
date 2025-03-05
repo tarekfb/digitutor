@@ -15,7 +15,7 @@
   import SecondaryTitle from "src/lib/components/atoms/secondary-title.svelte";
   import type { PageData } from "./$types.ts";
   import Stars from "src/lib/components/atoms/stars.svelte";
-  import ReviewCardExtra from "src/lib/components/molecules/review-card-extra.svelte";
+  import ReviewCardExtra from "src/lib/components/molecules/auth-review-card.svelte";
   import { page } from "$app/stores";
   import SubjectItem from "src/lib/components/atoms/subject-item.svelte";
   import Avatar from "src/lib/components/atoms/avatar.svelte";
@@ -65,7 +65,7 @@
         <div class="flex justify-around gap-x-8">
           <div class="flex max-w-36 flex-col">
             {#if displayTeacher.avatarUrl}
-              <a href="/profile/{displayTeacher.id}" class="grow">
+              <a href="/profile/{displayTeacher.id}">
                 <img
                   alt="profile avatar"
                   class="mb-2 rounded-sm"

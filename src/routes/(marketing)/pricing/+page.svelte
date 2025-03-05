@@ -40,7 +40,7 @@
   </div>
 
   <section
-    class="flex flex-col-reverse flex-wrap place-content-center gap-6 md:gap-10 lg:flex-row"
+    class="flex flex-col-reverse flex-wrap w-full place-content-center gap-6 md:gap-10 lg:flex-row"
   >
     {#each pricingPlans as pricingPlan}
       <PricingModule

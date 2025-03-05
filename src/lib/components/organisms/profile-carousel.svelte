@@ -6,11 +6,8 @@
   import { goto } from "$app/navigation";
   import { Button } from "src/lib/components/ui/button/index.js";
   import { mediaQuery } from "svelte-legos";
-  import type {
-    DisplayProfile,
-    TopTeacher,
-  } from "src/lib/shared/models/review.ts";
   import SubjectItem from "../atoms/subject-item.svelte";
+  import type { TopTeacher } from "src/lib/shared/models/review.ts";
 
   const isDesktop = mediaQuery("(min-width: 768px)");
   export let profiles: TopTeacher[];

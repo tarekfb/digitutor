@@ -847,7 +847,7 @@ VALUES
         uuid_generate_v4(),
         '550e8400-e29b-41d4-a716-446655440140',
         '550e8400-e29b-41d4-a716-446655440100',
-        3,
+        5,
         'Bra lärare som verkligen kan sina algoritmer.'
     ),
     (
@@ -862,7 +862,7 @@ VALUES
         uuid_generate_v4(),
         '550e8400-e29b-41d4-a716-446655440020',
         '550e8400-e29b-41d4-a716-446655440110',
-        4,
+        5,
         'Tamara förklarar React på ett sätt som gör det lätt att förstå.'
     );
 
@@ -1130,7 +1130,7 @@ VALUES
         uuid_generate_v4(),
         '550e8400-e29b-41d4-a716-446655440140',
         '550e8400-e29b-41d4-a716-446655440210',
-        4,
+        5,
         'Tobias explains complex JavaScript concepts in a simple way.'
     ),
     -- Reviews for Tara
