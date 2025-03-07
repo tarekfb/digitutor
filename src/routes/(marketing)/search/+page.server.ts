@@ -73,7 +73,6 @@ export const actions: Actions = {
     const query = getQueryFromFormData(form.data);
 
     try {
-      if (query === 'test') throw new Error("test error")
       const listings = await search(supabase, query);
       const formatted = listings.map(listing => formatSearchResult(listing));
       return { form, formatted };
