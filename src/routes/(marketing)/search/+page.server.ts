@@ -73,6 +73,7 @@ export const actions: Actions = {
     const query = getQueryFromFormData(form.data);
 
     try {
+      throw new Error("Test error from search");
       const listings = await search(supabase, query);
       const formatted = filterUniqueAndFormatSearchResults(listings);
       return { form, formatted };
