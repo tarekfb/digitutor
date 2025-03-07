@@ -95,7 +95,7 @@
         </p>
         <Collapsible.Root>
           <Collapsible.Trigger
-            class="group flex w-full items-center justify-between text-start text-muted-foreground"
+            class="gap-x-2 group flex w-full items-center justify-between text-start text-muted-foreground"
             >Några exempel på saker du kan nämna i din profilbeskrivning:
             <div class="p-0 text-foreground group-data-[state=open]:hidden">
               <ChevronDown class="size-4" />

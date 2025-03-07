@@ -10,6 +10,7 @@ import {
   type ReviewWithReferences,
   type TopTeacher,
 } from "src/lib/shared/models/review.ts";
+import { logErrorServer } from "src/lib/shared/utils/logging/utils.ts";
 import { formatReviewWithReferences, formatTopTeacher } from "src/lib/shared/utils/reviews/utils.ts";
 
 export const load: PageServerLoad = async ({ locals: { supabase } }) => {
@@ -29,8 +30,6 @@ export const load: PageServerLoad = async ({ locals: { supabase } }) => {
     displayProfiles = [];
   }
 
-  console.log(displayProfiles)
-
   let displayReviews: ReviewWithReferences[] = [];
   try {
     const dbReviews = await getHighQualityReviews(supabase, 8);
@@ -41,7 +40,7 @@ export const load: PageServerLoad = async ({ locals: { supabase } }) => {
       formatReviewWithReferences(review),
     );
   } catch (e) {
-    console.error("Error when fetching display reviews", e);
+    logErrorServer({ error: e, message: "Error when fetching display reviews" });
     displayReviews = [];
   }
 

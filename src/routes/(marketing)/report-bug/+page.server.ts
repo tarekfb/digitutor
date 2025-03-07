@@ -1,46 +1,46 @@
 import { fail } from "@sveltejs/kit";
-import { getNow } from "src/lib/shared/utils/utils.js";
 import type { Actions, PageServerLoad } from "./$types.ts";
-import { contactUsSchema } from "$lib/shared/models/contact-us.ts";
 import { superValidate, message } from "sveltekit-superforms";
 import { zod } from "sveltekit-superforms/adapters";
 import { getFailFormMessage } from "$lib/shared/constants/constants.ts";
+import { reportBugSchema } from "src/lib/shared/models/report-bug.ts";
 import { logErrorServer } from "src/lib/shared/utils/logging/utils.ts";
 
-export const load: PageServerLoad = async () => {
-  const form = await superValidate(zod(contactUsSchema));
+export const load: PageServerLoad = async ({ url }) => {
+  const trackingId = url.searchParams.get("id") ?? "";
+  const form = await superValidate({ trackingId }, zod(reportBugSchema));
   return { form };
 };
 
 export const actions: Actions = {
   submit: async (event) => {
     const {
-      locals: { supabaseServiceRole },
+      locals: { supabase },
     } = event;
 
-    const form = await superValidate(event, zod(contactUsSchema));
+    const form = await superValidate(event, zod(reportBugSchema));
     if (!form.valid) return fail(400, { form });
 
-    const { firstName, lastName, email, message: contactMessage } = form.data;
+    const { trackingId, description } = form.data;
+
     try {
-      const { error: insertError } = await supabaseServiceRole
-        .from("contact_requests")
+      const { error } = await supabase
+        .from("bug_report")
         .insert({
-          first_name: firstName.trim(),
-          last_name: lastName.trim(),
-          email: email.trim(),
-          message_body: contactMessage,
-          updated_at: getNow(),
+          tracking_id: trackingId?.trim(),
+          description: description?.trim(),
         });
 
-      if (insertError) {
-        const trackingId = logErrorServer({ error: insertError, message: "Error when inserting contact request" });
+      if (error) {
+        const trackingId = logErrorServer({ error, message: "Error when inserting bug report" });
         return message(
           form,
-          getFailFormMessage({
-            trackingId,
-            description: "Kunde ej skicka meddelandet. Försök igen lite senare.",
-          }),
+          getFailFormMessage(
+            {
+              trackingId,
+              description: "Kunde ej skicka meddelandet. Försök igen lite senare.",
+            }
+          ),
           { status: 500 },
         );
       }

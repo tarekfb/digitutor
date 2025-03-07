@@ -16,6 +16,7 @@ import { isErrorWithCode } from "src/lib/shared/utils/utils.ts";
 import type { ReviewWithReferences } from "src/lib/shared/models/review.ts";
 import { formatReviewWithReferences } from "src/lib/shared/utils/reviews/utils.ts";
 import { updateCredits } from "src/lib/server/database/credits.ts";
+import { logErrorServer } from "src/lib/shared/utils/logging/utils.ts";
 
 export const load: PageServerLoad = async ({ locals: { supabase } }) => {
   let review: ReviewWithReferences | undefined;
@@ -27,10 +28,7 @@ export const load: PageServerLoad = async ({ locals: { supabase } }) => {
     const dbReview = longReviews[0] ?? reviews[0];
     if (dbReview) review = formatReviewWithReferences(dbReview);
   } catch (e) {
-    console.error(
-      "Error when reviews signup display, perhaps didnt find valid review",
-      e,
-    );
+    logErrorServer({ error: e, message: "Error when reviews signup display, perhaps didnt find valid review" });
     review = undefined;
   }
   const form = await superValidate(zod(signUpSchema));
@@ -71,21 +69,28 @@ export const actions = {
 
       // this error takes presence of email in use and presumably more errors
       if (error?.status === 429) {
-        console.error("Email rate limit exceeded", error);
+        const trackingId = logErrorServer({
+          error,
+          message: "Email rate limit exceeded",
+        });
         return message(
           form,
           {
             variant: "destructive",
             title: "För många e-postutskick",
             description: "Kan ej skicka e-post just nu. Försök igen senare.",
+            trackingId,
           },
           { status: 429 },
         );
       }
 
       if (!data.user) {
-        console.error("User data was null on signup", error);
-        return message(form, getFailFormMessage(), { status: 500 });
+        const trackingId = logErrorServer({
+          additionalData: { data },
+          message: "User data was null on signup",
+        });
+        return message(form, getFailFormMessage({ trackingId }), { status: 500 });
       }
 
       // https://github.com/orgs/supabase/discussions/1282
@@ -93,8 +98,11 @@ export const actions = {
         return setError(form, "email", "E-postadressen används redan");
 
       if (error) {
-        console.error("Supabase error on signup", { error });
-        return message(form, getFailFormMessage(), { status: 500 });
+        const trackingId = logErrorServer({
+          error,
+          message: "Supabase error on signup",
+        });
+        return message(form, getFailFormMessage({ trackingId }), { status: 500 });
       }
 
       inputUser = {
@@ -103,8 +111,8 @@ export const actions = {
         firstName,
       };
     } catch (error) {
-      console.error("Error when creating supabase auth user", error);
-      return message(form, getFailFormMessage(), { status: 500 });
+      const trackingId = logErrorServer({ error, message: "Error when creating supabase auth user" });
+      return message(form, getFailFormMessage({ trackingId }), { status: 500 });
     }
 
     try {
@@ -124,17 +132,20 @@ export const actions = {
           });
       }
 
-      console.error("Error when creating profile", error);
-      return message(form, getFailFormMessage(), { status: 500 });
+      const trackingId = logErrorServer({
+        error,
+        message: "Error when creating profile",
+      });
+      return message(form, getFailFormMessage({ trackingId }), { status: 500 });
     }
 
     try {
       await updateCredits(supabaseServiceRole, freeCredits, inputUser.id);
     } catch (error) {
-      console.error(
-        `Unknown error when adding free credits to new profile with id ${inputUser.id}`,
+      logErrorServer({
         error,
-      );
+        message: `Unknown error when adding free credits to new profile with id ${inputUser.id}`,
+      });
     }
 
     return message(form, {

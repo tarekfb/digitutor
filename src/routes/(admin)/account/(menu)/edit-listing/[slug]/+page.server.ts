@@ -1,11 +1,10 @@
 import { fail, error } from "@sveltejs/kit";
 import { zod } from "sveltekit-superforms/adapters";
 import {
-  defaultErrorInfo,
-  getFailFormMessage,
   MessageId,
   defaultErrorDescription,
   getDefaultErrorInfo,
+  getFailFormMessage,
 } from "$lib/shared/constants/constants.ts";
 import { message, superValidate } from "sveltekit-superforms";
 import {
@@ -32,6 +31,8 @@ import type { Tables } from "src/supabase.ts";
 import { findSimilarSubjects } from "src/lib/shared/utils/subjects/utils.ts";
 import { ExternalErrorCodes } from "src/lib/shared/models/common.js";
 import { formatListingWithProfile } from "src/lib/shared/utils/listing/utils.js";
+import { logErrorServer } from "src/lib/shared/utils/logging/utils.ts";
+import type { Actions } from "./$types.js";
 import { detectSocials, getFormMessageForSocial } from "src/lib/shared/utils/detect-socials/utils.ts";
 
 export const load = async ({
@@ -61,18 +62,22 @@ export const load = async ({
           description: "Annonsen finns inte eller har tagits bort.",
         });
     }
-    console.error("Unknown error when reading listing with id: " + slug, e);
-    error(500, getDefaultErrorInfo("Vi kunde inte hämta annonsen"));
+    const trackingId = logErrorServer({
+      error: e,
+      message: "Error when reading listing with id " + slug,
+    });
+    error(500, { ...getDefaultErrorInfo({ trackingId }) });
   }
 
   if (session?.user.id !== listing.profile.id) {
-    console.error(
-      "Tried to read listing that is not theirs. listingid: " +
-      listing.id +
-      " userid: " +
-      session?.user.id,
-    );
-    error(500, { ...defaultErrorInfo });
+    const trackingId = logErrorServer({
+      message: "Attempted to access a listing not owned by the user",
+      additionalData: {
+        listingId: listing.id,
+        userId: session?.user.id,
+      }
+    });
+    error(500, { ...getDefaultErrorInfo({ trackingId }) });
   }
 
   let subjects: Subject[] = [];
@@ -80,8 +85,11 @@ export const load = async ({
     const rawSubjects = await getSubjects(supabase);
     subjects = rawSubjects.map((s) => formatSubject(s));
   } catch (e) {
-    console.error("Unknown error when reading subjects", e);
-    error(500, { ...defaultErrorInfo });
+    const trackingId = logErrorServer({
+      error: e,
+      message: "Error while fetching subjects",
+    });
+    error(500, { ...getDefaultErrorInfo({ trackingId }) });
   }
 
   const updateListingForm = await superValidate(
@@ -93,7 +101,7 @@ export const load = async ({
   return { subjects, updateListingForm, suggestSubjectForm };
 };
 
-export const actions = {
+export const actions: Actions = {
   deleteListing: async ({
     locals: { supabase, safeGetSession },
     cookies,
@@ -137,8 +145,11 @@ export const actions = {
       await updateListing(supabase, form.data, slug, session);
       return { form };
     } catch (error) {
-      console.error("Error when updating listing slug id: " + slug, error);
-      return message(form, getFailFormMessage(), { status: 500 });
+      const trackingId = logErrorServer({
+        error,
+        message: "Error when updating listing slug id: " + slug,
+      });
+      return message(form, getFailFormMessage({ trackingId }), { status: 500 });
     }
   },
   suggestSubject: async (event) => {
@@ -162,21 +173,20 @@ export const actions = {
         if (matches.length > 0)
           return message(
             form,
-            getFailFormMessage(
-              `Detta verkar redan finnas: ${matches[0].title}`,
-              "Om detta inte stämmer kan du skicka in förslaget ändå.",
-              MessageId.ResourceAlreadyExists,
-              undefined,
-              "default",
-            ),
+            getFailFormMessage({
+              title: `Detta verkar redan finnas: ${matches[0].title}`,
+              description: "Om detta inte stämmer kan du skicka in förslaget ändå.",
+              messageId: MessageId.ResourceAlreadyExists,
+              variant: "default",
+            }),
             { status: 400 },
           ); // Todo: add some link or so in GUI to let user contact easily
       } catch (error) {
-        console.error(
-          "Error when looking for match. Allowing user to insert suggestion. slug: " +
-          slug,
+        logErrorServer({
           error,
-        );
+          message: "Error when looking for match. Allowing user to insert suggestion.",
+          additionalData: { slug },
+        });
       }
     }
 
@@ -189,8 +199,12 @@ export const actions = {
         email,
       );
     } catch (error) {
-      console.error("Error when adding suggestion", error);
-      return message(form, getFailFormMessage(), { status: 500 });
+      const trackingId = logErrorServer({
+        error,
+        message: "Error when adding suggestion",
+        additionalData: { slug },
+      });
+      return message(form, getFailFormMessage({ trackingId }), { status: 500 });
     }
 
     // todo send email to admin here

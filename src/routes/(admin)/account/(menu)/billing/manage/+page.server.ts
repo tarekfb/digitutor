@@ -5,6 +5,7 @@ import type { PageServerLoad } from "./$types.ts";
 import { getDefaultErrorInfo } from "src/lib/shared/constants/constants.ts";
 import { getOrCreateCustomerId } from "src/lib/shared/utils/subscription/subscription-helper.ts";
 import { redirect } from "sveltekit-flash-message/server";
+import { logErrorServer } from "src/lib/shared/utils/logging/utils.ts";
 
 // , { apiVersion: "2023-08-16" }
 const stripe = new Stripe(PRIVATE_STRIPE_API_KEY);
@@ -14,18 +15,21 @@ export const load = (async ({
   locals: { safeGetSession, supabaseServiceRole },
   cookies,
 }) => {
-  const { session, user } = await safeGetSession();
+  const { session } = await safeGetSession();
   if (!session) {
     redirect(303, "/login");
   }
 
   const { error: idError, customerId } = await getOrCreateCustomerId({
     supabaseServiceRole,
-    user,
+    user: session.user,
   });
   if (idError || !customerId) {
-    console.error("Error creating customer id", idError);
-    error(500, getDefaultErrorInfo());
+    const trackingId = logErrorServer({
+      error: idError,
+      message: "Error creating customer id in billing manage page",
+    });
+    error(500, { ...getDefaultErrorInfo({ trackingId }) });
   }
 
   let portalLink;
@@ -36,8 +40,11 @@ export const load = (async ({
     });
     portalLink = portalSession?.url;
   } catch (e) {
-    console.error("Error creating billing portal session", e);
-    error(500, getDefaultErrorInfo());
+    const trackingId = logErrorServer({
+      error: e,
+      message: "Error creating billing portal session in billing manage page",
+    });
+    error(500, { ...getDefaultErrorInfo({ trackingId }) });
   }
 
   if (!portalLink) {

@@ -5,6 +5,7 @@ import {
   defaultErrorInfo,
   getDefaultErrorInfo,
 } from "$lib/shared/constants/constants.ts";
+import { logErrorServer } from "src/lib/shared/utils/logging/utils.ts";
 
 export const load: PageServerLoad = async (event) => {
   const {
@@ -15,12 +16,12 @@ export const load: PageServerLoad = async (event) => {
   const type = url.searchParams.get("type") as EmailOtpType | null;
 
   if (!tokenHash || !type) {
-    console.error(
-      "Issue at confirm signup, mimssing information",
-      { tokenHash },
-      { type },
-    );
-    error(500, getDefaultErrorInfo("Det saknas lite info för att verifiera dig"));
+    const trackingId = logErrorServer({
+      message: "Issue at confirm signup, missing information",
+      additionalData: { tokenHash, type, url },
+      critical: true,
+    });
+    error(500, getDefaultErrorInfo({ trackingId, message: "Det saknas lite info för att verifiera dig" }));
   }
 
   const {
@@ -29,15 +30,19 @@ export const load: PageServerLoad = async (event) => {
   } = await supabase.auth.verifyOtp({ type, token_hash: tokenHash });
 
   if (e) {
-    console.error("Unknown error on verify otp on email confirmation", e);
+    logErrorServer({
+      message: "Unknown error on verify otp on email confirmation", error: e, additionalData: { tokenHash, type, url, user }, critical: true,
+    });
     redirect(303, "/signup-error");
   }
 
   if (!user) {
-    console.error(
-      "User data was null on verify otp on email confirmation",
-      e,
-    );
+    logErrorServer({
+      message: "User data was null on verify otp on email confirmation",
+      additionalData: { tokenHash, type, url, user },
+      critical: true,
+      error: e,
+    });
     error(500, { ...defaultErrorInfo });
   }
 

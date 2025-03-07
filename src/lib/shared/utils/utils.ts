@@ -141,6 +141,7 @@ export const logout = (
   if (!session) redirect(303, "/sign-in");
   supabase.auth.signOut();
   invalidate("supabase:auth");
+  redirect(303, "/sign-in");
 };
 
 export const removeUndefined = (fields: Record<string, unknown>) =>

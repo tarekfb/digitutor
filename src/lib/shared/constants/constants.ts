@@ -31,31 +31,40 @@ export const defaultErrorInfo: App.Error = {
 };
 
 export const getDefaultErrorInfo = (
-  message?: string,
-  description?: string,
-  id?: MessageId,
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  data?: any,
+  options?: {
+    message?: string,
+    description?: string,
+    trackingId?: string,
+    id?: MessageId,
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    data?: any,
+  }
 ): App.Error => ({
-  message: message ?? defaultErrorTitle,
-  description: description ?? defaultErrorDescription,
-  id: id ?? MessageId.Unknown,
-  data: data ?? undefined,
+  message: options?.message ?? defaultErrorTitle,
+  description: options?.description ?? defaultErrorInfo.description,
+  id: options?.id ?? MessageId.Unknown,
+  data: options?.data ?? undefined,
+  trackingId: options?.trackingId ?? undefined,
 });
 
+
 export const getFailFormMessage = (
-  title?: string,
-  description?: string,
-  messageId?: MessageId,
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  data?: any,
-  variant: "destructive" | "default" | "warning" = "destructive",
+  options?: {
+    title?: string,
+    description?: string,
+    messageId?: MessageId,
+    trackingId?: string,
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    data?: any,
+    variant?: "destructive" | "default" | "warning",
+  }
 ): Message => ({
-  variant,
-  title: title ?? "Något gick fel",
-  description: description ?? "Du kan kontakta oss om detta fortsätter.",
-  id: messageId ?? MessageId.Unknown,
-  data: data ?? undefined,
+  variant: options?.variant ?? "destructive",
+  title: options?.title ?? "Något gick fel",
+  description: options?.description ?? "Du kan kontakta oss om detta fortsätter.",
+  trackingId: options?.trackingId ?? undefined,
+  id: options?.messageId ?? MessageId.Unknown,
+  data: options?.data ?? undefined,
 });
 
 export const getSuccessFormMessage = (
