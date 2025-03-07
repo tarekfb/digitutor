@@ -18,11 +18,11 @@
 >
   <div class="flex h-full flex-col">
     <div class="text-xl font-bold">{pricingPlan.name}</div>
-    <p class="mt-2 text-sm leading-relaxed text-gray-500">
+    <p class="mt-2 text-sm leading-relaxed text-muted-foreground">
       {pricingPlan.description}
     </p>
     {#if pricingPlan.bold}
-      <p class="mt-2 text-sm font-bold leading-relaxed text-gray-500">
+      <p class="mt-2 text-sm font-bold leading-relaxed text-muted-foreground">
         {pricingPlan.bold}
       </p>
     {/if}

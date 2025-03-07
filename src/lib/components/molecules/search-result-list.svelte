@@ -20,17 +20,17 @@
   };
 
   const getDisplaySubject = (result: SearchResult): number => {
-    const defaultSubject = result.subjects[0];
-    if (!searchTerm) return defaultSubject;
+    const noFind = -1;
+    if (!searchTerm) return noFind;
     return (
       result.subjects.find((subjectIndex) =>
         isSearchMatchingSubject(subjectIndex),
-      ) ?? defaultSubject
+      ) ?? noFind
     );
   };
 </script>
 
-<ul class="flex w-full flex-col gap-y-4">
+<ul class="flex w-full flex-col">
   {#each results as result, i}
     {@const searchedSubject = getDisplaySubject(result)}
     <li

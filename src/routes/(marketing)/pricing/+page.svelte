@@ -14,7 +14,6 @@
   import { costPerRequest } from "src/lib/shared/constants/constants.js";
   import ArrowRightIcon from "lucide-svelte/icons/arrow-right";
 
-  export let highlightedPlanId: string = "premium";
   export let currentPlanId: string = "";
 </script>
 
@@ -40,12 +39,12 @@
   </div>
 
   <section
-    class="flex flex-col-reverse flex-wrap place-content-center gap-6 md:gap-10 lg:flex-row"
+    class="flex flex-col-reverse flex-wrap w-full place-content-center gap-6 md:gap-10 lg:flex-row"
   >
     {#each pricingPlans as pricingPlan}
       <PricingModule
         {currentPlanId}
-        highlighted={pricingPlan.id === highlightedPlanId}
+        highlighted={pricingPlan.id === premiumPlan.id}
         {pricingPlan}
       />
     {/each}

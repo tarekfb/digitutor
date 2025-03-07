@@ -148,8 +148,9 @@
 <Container
   minWidth
   maxWidth
+  margin={false}
   tag="section"
-  class="flex w-full flex-col justify-center gap-y-4"
+  class="flex w-full flex-col justify-center gap-y-4 px-4 md:px-0 my-4 md:my-8"
 >
   <PrimaryTitle class="heading self-center  md:mb-4"
     >Sök bland våra lärare</PrimaryTitle
@@ -355,9 +356,9 @@
   {/if}
 </Container>
 <Separator />
-<Container class="md:m-0 m-0 w-full px-0 " minWidth tag="main">
+<Container class="w-full" margin={false} tag="main">
   {#if $message}
-    <div class="{messageStyling}{containterStyling}">
+    <div class="{messageStyling} {containterStyling}">
       <FormMessage {message} scroll scrollTo="end" />
     </div>
   {:else if isInit && results.length > 0 && !$submitting}

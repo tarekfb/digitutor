@@ -20,7 +20,7 @@
 
 <div
   class={cn(
-    `mt-2 flex ${listing ? "justify-between" : "justify-center text-center"} w-8/12 gap-x-2 ${light ? "text-background" : ""}`,
+    `mt-2 flex w-full ${listing ? "justify-between" : "justify-center text-center"} w-8/12 gap-x-2 ${light ? "text-background" : ""}`,
     className,
   )}
 >
