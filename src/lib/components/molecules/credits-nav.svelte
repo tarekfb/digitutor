@@ -29,7 +29,7 @@
     <Button
       variant="accent"
       class="flex items-center gap-x-2"
-      on:click={() => goto(href)}><ExternalLink class="size-5" />Köp</Button
+      on:click={() => goto(href)}><ExternalLink class="size-button-icon" />Köp</Button
     >
   </li>
 </a>

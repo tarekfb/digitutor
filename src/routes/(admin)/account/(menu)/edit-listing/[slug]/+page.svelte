@@ -4,7 +4,7 @@
   import { updateListingSchema } from "$lib/shared/models/listing.js";
   import PrimaryTitle from "$lib/components/atoms/primary-title.svelte";
   import type { PageData } from "./$types.ts";
-  import RootContainer from "src/lib/components/templates/root-container.svelte";
+  import Container from "src/lib/components/templates/container.svelte";
   import DeleteListing from "$lib/components/atoms/delete-listing.svelte";
   import * as Dialog from "$lib/components/ui/dialog/index.js";
   import { Button } from "$lib/components/ui/button/index.js";
@@ -126,9 +126,8 @@
 
 <AccountLayout>
   <PrimaryTitle class="text-center">Redigera annons</PrimaryTitle>
-  <RootContainer class="w-full">
+  <Container class="w-full">
     <Dialog.Root bind:open>
-      <FormMessage {message} scroll />
       <form
         method="POST"
         use:enhance
@@ -214,10 +213,6 @@
             {/if}
           </Form.FieldErrors>
         </Form.Field>
-        <!-- <SuggestSubject
-          suggestSubjectForm={data.suggestSubjectForm}
-          {isTainted}
-        /> -->
 
         <Dialog.Trigger asChild let:builder>
           <small
@@ -229,6 +224,7 @@
             ></small
           >
         </Dialog.Trigger>
+        <FormMessage {message} scroll />
 
         <div class="mt-4 flex flex-col gap-y-4 md:items-end">
           <div class="flex items-center justify-between gap-x-2 md:gap-x-6">
@@ -342,5 +338,5 @@
         </form>
       </Dialog.Content>
     </Dialog.Root>
-  </RootContainer>
+  </Container>
 </AccountLayout>

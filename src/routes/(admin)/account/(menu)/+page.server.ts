@@ -12,7 +12,7 @@ export const load: PageServerLoad = async ({
   parent,
 }) => {
   const { session } = await safeGetSession();
-  if (!session) throw redirect(303, "/sign-in");
+  if (!session) redirect(303, "/sign-in");
 
   let conversations: ConversationWithReferences[];
   try {
@@ -20,6 +20,11 @@ export const load: PageServerLoad = async ({
     conversations = dbConversations.map((c) =>
       formatConversationWithReferences(c),
     );
+    conversations.sort((a, b) => {
+      const aHasReplied = b.hasReplied ? 0 : 1;
+      const bHasReplied = a.hasReplied ? 0 : 1;
+      return aHasReplied - bHasReplied;
+    });
   } catch (e) {
     const trackingId = logErrorServer({
       error: e,

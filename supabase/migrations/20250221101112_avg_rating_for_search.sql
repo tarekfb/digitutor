@@ -24,5 +24,5 @@ FROM
     LEFT JOIN subjects s ON s.id = ANY(l.subjects)
     LEFT JOIN avg_rating ar ON ar.id = p.id
 WHERE
-    l.visible = TRUE
+        l.visible = TRUE
     AND p.role = 'teacher'

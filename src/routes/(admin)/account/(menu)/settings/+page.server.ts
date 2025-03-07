@@ -4,6 +4,7 @@ import {
   getFailFormMessage,
   getSuccessFormMessage,
   maxAvatarSize,
+  MessageId,
 } from "$lib/shared/constants/constants.ts";
 import { fail, message, superValidate, withFiles } from "sveltekit-superforms";
 import { zod } from "sveltekit-superforms/adapters";
@@ -36,6 +37,7 @@ import { ExternalErrorCodes } from "src/lib/shared/models/common.ts";
 import { sendEmail } from "src/lib/shared/utils/emails/utils.ts";
 import AccountDeletionConfirmation from "src/emails/account-deletion-confirmation.svelte";
 import { logErrorServer } from "src/lib/shared/utils/logging/utils.ts";
+import { detectSocials, getFormMessageForSocial } from "src/lib/shared/utils/detect-socials/utils.ts";
 
 export const load: PageServerLoad = async ({
   parent,
@@ -88,6 +90,9 @@ export const actions = {
     if (!form.valid) return fail(400, { form });
     const { bio } = form.data;
 
+    const forbiddenSocial = detectSocials(bio);
+    if (forbiddenSocial) return message(form, { ...getFormMessageForSocial(forbiddenSocial) }, { status: 400 });
+
     const profileInput: ProfileInput = {
       id: user.id,
       bio: bio.trim(),
@@ -119,6 +124,10 @@ export const actions = {
     const form = await superValidate(event, zod(nameSchema));
     if (!form.valid) return fail(400, { form });
     const { firstName } = form.data;
+
+    const forbiddenSocial = detectSocials(firstName);
+    if (forbiddenSocial) return message(form, { ...getFormMessageForSocial(forbiddenSocial) }, { status: 400 });
+
 
     const profileInput: ProfileInput = {
       id: user.id,

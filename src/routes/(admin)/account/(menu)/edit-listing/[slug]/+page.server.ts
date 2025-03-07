@@ -33,6 +33,7 @@ import { ExternalErrorCodes } from "src/lib/shared/models/common.js";
 import { formatListingWithProfile } from "src/lib/shared/utils/listing/utils.js";
 import { logErrorServer } from "src/lib/shared/utils/logging/utils.ts";
 import type { Actions } from "./$types.js";
+import { detectSocials, getFormMessageForSocial } from "src/lib/shared/utils/detect-socials/utils.ts";
 
 export const load = async ({
   locals: { supabase },
@@ -135,6 +136,10 @@ export const actions: Actions = {
 
     const form = await superValidate(event, zod(updateListingSchema));
     if (!form.valid) return fail(400, { form });
+
+
+    const forbiddenSocials = [form.data.description, form.data.title].map((prop) => detectSocials(prop)).filter(prop => prop !== undefined);
+    if (forbiddenSocials[0]) return message(form, { ...getFormMessageForSocial(forbiddenSocials[0]) }, { status: 400 });
 
     try {
       await updateListing(supabase, form.data, slug, session);

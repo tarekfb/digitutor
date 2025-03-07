@@ -1,8 +1,10 @@
 <script lang="ts">
+  import MessageCircle from "lucide-svelte/icons/message-circle";
   import type { Message } from "$lib/shared/models/common.ts";
   import type { Writable } from "@square/svelte-store";
   import AlertMessage from "$lib/components/atoms/alert-message.svelte";
   import SquareArrowOutUpRight from "lucide-svelte/icons/square-arrow-out-up-right";
+  import { MessageId } from "src/lib/shared/constants/constants.ts";
   import Link from "../atoms/link.svelte";
 
   let className: string | null | undefined = undefined;
@@ -31,7 +33,7 @@
       variant={$message.variant ?? "default"}
       class={className}
     >
-      {#if $message.id === 3}
+      {#if $message.id === MessageId.InsufficientCredits}
         <p class="inline text-sm">
           Du kan köpa mer krediter på <a
             href="/account/billing"
@@ -40,6 +42,17 @@
           <a href="/pricing" class="font-medium text-accent hover:underline"
             >premium</a
           > för att kontakta läraren.
+        </p>
+      {:else if $message.id === MessageId.ContactUs}
+        <p class="inline text-xs md:text-sm">
+          <Link
+            href="/contact-us"
+            class="flex-inline items-center space-x-2 font-normal text-inherit"
+            target="_blank"
+            ><span>Kontakta oss</span><MessageCircle
+              class="inline size-4"
+            /></Link
+          >
         </p>
       {/if}
 
@@ -50,7 +63,9 @@
             href="/report-bug?id={$message.trackingId}"
             class="flex-inline items-center space-x-2 font-normal text-inherit"
             target="_blank"
-            ><span>Rapportera detta fel</span><SquareArrowOutUpRight class="inline size-4" /></Link
+            ><span>Rapportera detta fel</span><SquareArrowOutUpRight
+              class="inline size-4"
+            /></Link
           >
         </p>
       {/if}

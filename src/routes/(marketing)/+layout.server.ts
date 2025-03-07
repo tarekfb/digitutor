@@ -3,6 +3,12 @@ import { getProfileByUser } from "$lib/server/database/profiles.ts";
 import { formatProfile } from "src/lib/shared/utils/profile/utils.ts";
 import type { Profile } from "src/lib/shared/models/profile.ts";
 import { logErrorServer } from "src/lib/shared/utils/logging/utils.ts";
+import { searchSchema } from "src/lib/shared/models/search.ts";
+import { superValidate } from "sveltekit-superforms";
+import { zod } from "sveltekit-superforms/adapters";
+import { getSubjects } from "src/lib/server/database/subjects.ts";
+import { languages } from "src/lib/shared/models/common.ts";
+import { type Subject, formatSubject } from "src/lib/shared/models/subject.ts";
 
 export const load: LayoutServerLoad = async ({
   locals: { supabase, safeGetSession },
@@ -24,5 +30,16 @@ export const load: LayoutServerLoad = async ({
     }
   }
 
-  return { session, profile };
+  let subjects: Subject[] = [];
+  try {
+    const rawSubjects = await getSubjects(supabase);
+    subjects = rawSubjects.map((s) => formatSubject(s));
+  } catch (e) {
+    console.error("Unknown error when reading subjects", e);
+    subjects = languages;
+  }
+
+  const searchForm = await superValidate(zod(searchSchema));
+
+  return { session, profile, searchForm, subjects }; // TODO: stream these
 };

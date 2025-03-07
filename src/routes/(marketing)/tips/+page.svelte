@@ -1,7 +1,7 @@
 <script>
   import PrimaryTitle from "src/lib/components/atoms/primary-title.svelte";
   import SecondaryTitle from "src/lib/components/atoms/secondary-title.svelte";
-  import RootContainer from "src/lib/components/templates/root-container.svelte";
+  import Container from "src/lib/components/templates/container.svelte";
   import { websiteName } from "src/lib/shared/constants/constants.ts";
 </script>
 
@@ -9,7 +9,7 @@
   <title>{websiteName} | Tips</title>
 </svelte:head>
 
-<RootContainer maxWidth responsiveGap minWidth>
+<Container maxWidth responsiveGap minWidth>
   <PrimaryTitle>Tips för lärare</PrimaryTitle>
   <main
     class="mt-4 flex list-inside flex-col gap-y-4 *:flex *:flex-col *:gap-y-2 md:mt-6"
@@ -61,4 +61,4 @@
       </p>
     </section>
   </main>
-</RootContainer>
+</Container>

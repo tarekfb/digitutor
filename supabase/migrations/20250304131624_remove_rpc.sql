@@ -1,0 +1,1 @@
+DROP FUNCTION IF EXISTS get_top_teacher_by_reviews

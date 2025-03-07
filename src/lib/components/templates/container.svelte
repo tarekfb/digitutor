@@ -6,16 +6,22 @@
   export let responsiveGap = false;
   export let maxWidth = false;
   export let minWidth = false;
+  export let margin = true;
+  export let padding = false;
+  export let tag = "div";
 </script>
 
-<div
+<svelte:element
+  this={tag}
   class={cn(
-    "m-8 flex flex-col items-center",
+    "flex flex-col items-center md:m-8",
     responsiveGap ? "gap-y-2 md:gap-y-4" : "gap-y-4",
+    padding ? "m-4 md:m-8" : "",
     maxWidth ? "max-w-full md:max-w-screen-sm lg:max-w-screen-md" : "",
-    minWidth ? "min-w-full px-8 md:min-w-[400px] md:px-0 lg:min-w-[500px]" : "",
+    minWidth ? "min-w-full px-4 md:min-w-[400px] md:px-4 lg:min-w-[500px]" : "",
+    margin ? "m-4 md:m-8" : "",
     className,
   )}
 >
   <slot />
-</div>
+</svelte:element>

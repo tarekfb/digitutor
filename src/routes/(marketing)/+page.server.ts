@@ -1,38 +1,34 @@
-import { fail, superValidate } from "sveltekit-superforms";
+import { superValidate } from "sveltekit-superforms";
 import { zod } from "sveltekit-superforms/adapters";
 import { searchSchema } from "src/lib/shared/models/search.ts";
-import type { Actions, PageServerLoad } from "./$types.ts";
-import { redirect } from "@sveltejs/kit";
+import type { PageServerLoad } from "./$types.ts";
 import {
   getHighQualityReviews,
+  getTopTeacher,
 } from "src/lib/server/database/review.ts";
 import {
   type ReviewWithReferences,
+  type TopTeacher,
 } from "src/lib/shared/models/review.ts";
-import { formatReviewWithReferences } from "src/lib/shared/utils/reviews/utils.ts";
-import { formatSubject, type Subject } from "src/lib/shared/models/subject.ts";
-import { languages } from "src/lib/shared/models/common.ts";
-import { getSubjects } from "src/lib/server/database/subjects.ts";
-import { getQueryFromFormData } from "src/lib/shared/utils/search/utils.ts";
 import { logErrorServer } from "src/lib/shared/utils/logging/utils.ts";
+import { formatReviewWithReferences, formatTopTeacher } from "src/lib/shared/utils/reviews/utils.ts";
 
 export const load: PageServerLoad = async ({ locals: { supabase } }) => {
-  const form = await superValidate(zod(searchSchema));
+  const searchForm = await superValidate(zod(searchSchema));
 
-  // todo: not used or tested atm, but must bring back.
-  // let displayProfiles: DisplayProfile[] = [];
-  // try {
-  //   const unformatted = await getTopTeacherByReviews(supabase, 5);
-  //   displayProfiles = unformatted.map((r) => formatDisplayProfile(r));
-  //   displayProfiles = displayProfiles.filter(
-  //     (r) => r.avgRating > 0 && r.avatarUrl,
-  //   );
-  //   if (displayProfiles.length > 4)
-  //     displayProfiles = displayProfiles.slice(0, 4);
-  // } catch (e) {
-  //   console.error("Error when fetching top teacher by reviews", e);
-  //   displayProfiles = [];
-  // }
+  let displayProfiles: TopTeacher[] = [];
+  try {
+    const dbDisplayProfiles = await getTopTeacher(supabase, 5, false);
+    displayProfiles = dbDisplayProfiles.map((r) => formatTopTeacher(r));
+    displayProfiles = displayProfiles.filter(
+      (r) => r.avatarUrl,
+    );
+    if (displayProfiles.length > 4)
+      displayProfiles = displayProfiles.slice(0, 4);
+  } catch (e) {
+    console.error("Error when fetching top teacher by reviews", e);
+    displayProfiles = [];
+  }
 
   let displayReviews: ReviewWithReferences[] = [];
   try {
@@ -48,24 +44,5 @@ export const load: PageServerLoad = async ({ locals: { supabase } }) => {
     displayReviews = [];
   }
 
-  let subjects: Subject[] = [];
-  try {
-    const rawSubjects = await getSubjects(supabase);
-    subjects = rawSubjects.map((s) => formatSubject(s));
-  } catch (e) {
-    logErrorServer({ error: e, message: "Unknown error when reading subjects" });
-    subjects = languages;
-  }
-
-  return { form, displayReviews, subjects };
-};
-
-export const actions: Actions = {
-  search: async (event) => {
-    const form = await superValidate(event, zod(searchSchema));
-    if (!form.valid) return fail(400, { form });
-
-    const query = getQueryFromFormData(form.data, true);
-    redirect(302, query ? `/search/?q=${query}` : `/search?getAll=true`);
-  },
-};
+  return { searchForm, displayReviews, displayProfiles };
+}

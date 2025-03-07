@@ -5,13 +5,13 @@
     prodBaseUrl,
     contactEmail,
   } from "src/lib/shared/constants/constants.ts";
-  import RootContainer from "src/lib/components/templates/root-container.svelte";
+  import Container from "src/lib/components/templates/container.svelte";
 </script>
 
 <svelte:head>
   <title>{websiteName} | Integritetspolicy</title>
 </svelte:head>
-<RootContainer maxWidth responsiveGap class="items-start">
+<Container maxWidth responsiveGap class="items-start">
   <PrimaryTitle class="self-center">Integritetspolicy</PrimaryTitle>
   <p>
     {websiteName} är personuppgiftsansvarig för behandlingen av personuppgifter som
@@ -186,4 +186,4 @@
     Genom att fortsätta använda vår webbplats samtycker du till användningen av
     dessa kakor.
   </p>
-</RootContainer>
+</Container>

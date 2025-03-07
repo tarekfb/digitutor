@@ -57,7 +57,7 @@
             <cite class="text-lg not-italic">
               {review.sender.firstName}
             </cite>
-            <ArrowRightIcon class="h-4 w-4" />
+            <ArrowRightIcon class="size-4" />
             <a
               class="flex items-center gap-x-2"
               href="/profile/{review.receiver.id}"

@@ -5,6 +5,7 @@
   import type { Subject } from "src/lib/shared/models/subject.ts";
 
   export let setSuggestion: (subjectName: string) => void;
+  export let containerStyling: string | null | undefined = undefined;
 
   const getSuggestions = (): Subject[] => {
     const js = languages.find((subject) => subject.title === "JavaScript");
@@ -21,7 +22,7 @@
 </script>
 
 {#if suggestions.length > 0}
-  <div>
+  <div class={containerStyling}>
     <SecondaryTitle class="mb-2">Behöver du ett sökförslag?</SecondaryTitle>
     <ul class="flex w-full justify-center gap-x-2 py-1">
       {#each suggestions as subject}
@@ -29,7 +30,7 @@
           <SearchSubjectButton
             text={subject.title}
             onClickCallback={setSuggestion}
-            class="border-2 border-third"
+            class="border-2 border-third bg-card"
             textStyling="text-third"
           />
         </li>
