@@ -10,7 +10,7 @@
   import FormMessage from "$lib/components/molecules/form-message.svelte";
   import PrimaryTitle from "$lib/components/atoms/primary-title.svelte";
   import Link from "$lib/components/atoms/link.svelte";
-  import RootContainer from "src/lib/components/templates/root-container.svelte";
+  import Container from "src/lib/components/templates/container.svelte";
   import type { PageData } from "./$types.ts";
   import SendHorizontal from "lucide-svelte/icons/send-horizontal";
   import { websiteName } from "src/lib/shared/constants/constants.ts";
@@ -38,7 +38,7 @@
   <title>{websiteName} | Rapportera fel</title>
 </svelte:head>
 
-<RootContainer responsiveGap maxWidth minWidth>
+<Container responsiveGap maxWidth minWidth>
   <div
     class="flex flex-col items-center justify-center gap-y-0.5 md:self-start"
   >
@@ -123,4 +123,4 @@
       <SendHorizontal slot="icon" class="h-5 w-5" />
     </FormSubmit>
   </form>
-</RootContainer>
+</Container>
