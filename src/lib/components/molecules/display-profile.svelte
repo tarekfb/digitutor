@@ -1,7 +1,6 @@
 <script lang="ts">
   import SecondaryTitle from "src/lib/components/atoms/secondary-title.svelte";
   import Stars from "src/lib/components/atoms/stars.svelte";
-  import SubjectItem from "src/lib/components/atoms/subject-item.svelte";
   import type { TopTeacher } from "src/lib/shared/models/review.ts";
   import NbrOfReviews from "../atoms/nbr-of-reviews.svelte";
   import SeeMore from "./see-more.svelte";
@@ -22,13 +21,5 @@
     <Stars size={5} rating={profile.avgRating} />
     <NbrOfReviews class="text-sm " nbrOfReviews={profile.reviewCount} />
   </div>
-  <ul class="flex h-full flex-col justify-between">
-    {#each profile.subjects as subject, i}
-      {#if i === 0}
-        <SubjectItem {subject} textStyling="text-base" />
-      {:else if i === 1}
-        <SeeMore subjects={profile.subjects} triggerStyling="w-full" />
-      {/if}
-    {/each}
-  </ul>
+  <SeeMore subjects={profile.subjects} triggerStyling="w-full" />
 </article>
