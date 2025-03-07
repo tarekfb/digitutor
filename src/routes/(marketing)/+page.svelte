@@ -1,5 +1,9 @@
 <script lang="ts">
-  import { websiteName } from "$lib/shared/constants/constants.ts";
+  import {
+    premiumPlan,
+    pricingPlans,
+    websiteName,
+  } from "$lib/shared/constants/constants.ts";
   import type { PageData } from "./$types.ts";
   import { Button } from "src/lib/components/ui/button/index.js";
   import Container from "src/lib/components/templates/container.svelte";
@@ -9,6 +13,7 @@
   import DisplayProfile from "src/lib/components/molecules/display-profile.svelte";
   import ProfileCarousel from "src/lib/components/organisms/profile-carousel.svelte";
   import ReviewCarousel from "src/lib/components/organisms/review-carousel.svelte";
+  import PricingModule from "src/lib/components/molecules/pricing-module.svelte";
   export let data: PageData;
   $: ({ displayReviews, displayProfiles } = data);
 
@@ -83,7 +88,7 @@
 
   {#if displayProfiles.length > 0}
     <div
-      class="flex w-screen flex-col items-center self-center bg-card pb-4 md:pb-8"
+      class="flex w-screen flex-col items-center self-center bg-card pb-4 md:py-8"
     >
       <Container maxWidth margin={false} class="mx-4 md:mx-8" responsiveGap>
         <PrimaryTitle class="my-4 text-center ">Se våra lärare</PrimaryTitle>
@@ -95,57 +100,39 @@
       </Container>
     </div>
   {/if}
+  {#if displayReviews.length > 0}
+    <div class="h-[550px] overflow-y-clip bg-background md:h-[450px]">
+      <div
+        class="flex max-h-72 w-screen flex-col items-center self-center bg-secondary pb-4 md:max-h-64 md:py-8"
+      >
+        <Container maxWidth margin={false} class="mx-4 md:mx-8" responsiveGap>
+          <PrimaryTitle class="my-4 text-center text-background "
+            >Såhär säger våra användare</PrimaryTitle
+          >
+          <ReviewCarousel reviews={displayReviews} />
+        </Container>
+      </div>
+    </div>
+  {/if}
   <div
-    class="flex w-screen flex-col items-center self-center bg-secondary pb-4 md:pb-8"
+    class="flex w-screen flex-col items-center self-center bg-background pb-4 md:py-8"
   >
     <Container maxWidth margin={false} class="mx-4 md:mx-8" responsiveGap>
-      <PrimaryTitle class="my-4 text-center text-background ">Såhär säger våra användare</PrimaryTitle>
-      <!-- <div class="grid {getGridCols(displayProfiles.length)} gap-4 md:gap-8">
-        {#each displayProfiles as profile}
-          <DisplayProfile {profile} />
+      <PrimaryTitle class="my-4 text-center "
+        >Enkel och generös betalmodell
+      </PrimaryTitle>
+      <section
+        class="flex w-full flex-col-reverse flex-wrap place-content-center gap-6 md:gap-10 lg:flex-row"
+      >
+        {#each pricingPlans as pricingPlan}
+          <PricingModule
+            highlighted={pricingPlan.id === premiumPlan.id}
+            {pricingPlan}
+          />
         {/each}
-      </div> -->
-      <ReviewCarousel reviews={displayReviews} />
+      </section>
     </Container>
   </div>
-  <!-- {#if displayReviews.length > 0}
-    <div class="flex w-screen flex-col items-center self-center pb-4 md:pb-8">
-      <Container maxWidth margin={false} class="mx-4 md:mx-8" responsiveGap>
-        <div class="flex flex-col items-center gap-y-2">
-          <PrimaryTitle class="text-gradient my-4 text-center ">
-            Vad våra användare säger
-          </PrimaryTitle>
-          <div
-            class="grid grid-cols-1 gap-4 {displayReviews.length > 1
-              ? 'md:grid-cols-2'
-              : ''}"
-          >
-            {#each Array(2) as _, colIndex}
-              <div class="flex flex-col gap-4">
-                {#each displayReviews.filter((_, index) => index % 4 === colIndex) as review}
-                  <CardExtra
-                    truncate={40}
-                    {review}
-                    class="h-auto min-w-32 max-w-full rounded-lg bg-card {colIndex >
-                    0
-                      ? 'hidden md:flex'
-                      : ''}"
-                  />
-                {/each}
-              </div>
-            {/each}
-          </div>
-        </div>
-      </Container>
-    </div>
-  {/if} -->
-  <!-- <div class="flex w-screen flex-col items-center self-center pb-4 md:pb-8">
-    <Container maxWidth responsiveGap>
-      <PrimaryTitle class="text-gradient my-4 text-center ">
-        Vanliga frågor och svar
-      </PrimaryTitle>
-    </Container>
-  </div> -->
 </Container>
 
 <style lang="postcss">

@@ -26,7 +26,7 @@
       {@const { text, truncated } = truncate(review.description, 50)}
       <Carousel.Item>
         <div class="h-full p-1">
-          <Card.Root class="h-full">
+          <Card.Root class="h-full shadow-md">
             <Card.Content
               class="relative flex h-full w-full flex-col items-center justify-between gap-y-6 p-8 md:gap-y-8 md:px-16"
             >
@@ -35,7 +35,9 @@
               >
                 <Quote fillHex="#E0E0E0" width={60} height={60} />
               </div>
-              <p class="z-10 overflow-hidden flex-grow flex flex-col justify-center">
+              <p
+                class="z-10 flex flex-grow flex-col justify-center overflow-hidden"
+              >
                 {text}
                 {#if truncated}
                   <Link
