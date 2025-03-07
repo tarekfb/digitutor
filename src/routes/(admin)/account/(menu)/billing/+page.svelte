@@ -94,7 +94,7 @@
             <Button
               on:click={() =>
                 goto(`/account/subscribe/${premiumPlan.stripePriceId}`)}
-              class="flex gap-x-2"
+              class="icon-button wide-button flex gap-x-2 "
               variant="third"
             >
               <ExternalLink class="size-4" />Skaffa premium</Button
@@ -110,7 +110,7 @@
           class="flex flex-row items-center justify-between gap-x-2 gap-y-0"
         >
           <Card.Title id="credits" class="text-xl md:text-2xl"
-            >Dina krediter</Card.Title
+            >Dina gratis kontaktförfrågningar</Card.Title
           >
           <div
             class="self-start whitespace-nowrap rounded-sm border border-accent bg-card p-1 font-mono font-normal uppercase tracking-wider md:p-2 md:text-lg"
@@ -118,17 +118,40 @@
             {#if balance === undefined}
               ?
             {:else if balance < 0}
-              0 <span class="hidden md:inline">KREDITER</span>
+              0
             {:else}
-              {balance} <span class="hidden md:inline">KREDITER</span>
+              {balance}
             {/if}
+            / {freeCredits}
           </div>
         </Card.Header>
         <Separator />
         <Card.Content
           class="flex flex-col gap-y-2 pt-5 text-muted-foreground md:gap-y-4"
         >
-          <p>Vill du köpa fler krediter? Välj ett alternativ nedan.</p>
+          {#if balance !== undefined}
+            <p>
+              {#if balance <= 0}
+                <div class="flex flex-col gap-y-2">
+                  <span>
+                    Du verkar ha slut på gratis kontaktförfrågningar. Du kan
+                    läsa mer om <Link href="/pricing">premium</Link>, eller
+                    uppgradera medlemskapet direkt nedan.
+                  </span>
+                  <Button
+                    on:click={() =>
+                      goto(`/account/subscribe/${premiumPlan.stripePriceId}`)}
+                    class="icon-button wide-button self-end"
+                    variant="third"
+                  >
+                    <ExternalLink class="size-4" />Skaffa premium</Button
+                  >
+                </div>
+              {:else}
+                Du kan kontakta lärare {balance} gånger till, helt utan kostnad.
+              {/if}
+            </p>
+          {/if}
           <ul
             class="flex flex-wrap justify-evenly gap-4 self-center md:w-full md:flex-row md:self-start"
           >

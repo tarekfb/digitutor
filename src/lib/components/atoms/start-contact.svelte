@@ -45,8 +45,8 @@
           {/each}
         </ul>
         <p class="mt-4">
-          Detta kostar {costPerRequest} krediter. För dig som har
-          <a href="/pricing" class="link">premium</a> kostar det ingenting.
+          Detta förbrukar {costPerRequest} gratis kontaktförfrågan. För dig som har
+          <a href="/pricing" class="link">premium</a> har du oändligt med kontaktförfrågningar.
         </p>
       </Dialog.Description>
     </Dialog.Header>

@@ -120,8 +120,8 @@ export const getFormatsHumanReadable = () => {
   return acceptedFormatsHumanReadable;
 };
 
-export const costPerRequest = 9;
-export const freeCredits = 35;
+export const costPerRequest = 1;
+export const freeCredits = 5;
 export const defaultPlanId = PricingPlanIds.Free;
 export const creditProducts: CreditsProduct[] = [
   {
