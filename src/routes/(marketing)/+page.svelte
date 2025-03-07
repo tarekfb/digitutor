@@ -101,26 +101,23 @@
     </div>
   {/if}
   {#if displayReviews.length > 0}
-    <div class="h-[550px] overflow-y-clip bg-background md:h-[450px]">
+    <div class="relative bg-background">
       <div
-        class="flex max-h-72 w-screen flex-col items-center self-center bg-secondary pb-4 md:max-h-64 md:py-8"
+        class="flex w-screen flex-col items-center self-center bg-secondary pb-4 md:py-8"
       >
-        <Container
-          maxWidth
-          margin={false}
-          class="mx-4 h-[650px] md:mx-8 md:h-96"
-          responsiveGap
-        >
-          <PrimaryTitle class="my-4 text-center text-background "
+        <Container maxWidth margin={false} class="mx-4 md:mx-8" responsiveGap>
+          <PrimaryTitle class="my-4 text-center text-background"
             >Såhär säger våra användare</PrimaryTitle
           >
-          <ReviewCarousel reviews={displayReviews} />
+          <div class="relative z-10 -mb-28 md:-mb-36">
+            <ReviewCarousel reviews={displayReviews} />
+          </div>
         </Container>
       </div>
     </div>
   {/if}
   <div
-    class="flex w-screen flex-col items-center self-center bg-background pb-4 md:py-8"
+    class="mt-40 flex w-screen flex-col items-center self-center bg-background pb-4 md:py-8"
   >
     <Container maxWidth margin={false} class="mx-4 md:mx-8" responsiveGap>
       <PrimaryTitle class="my-4 text-center "

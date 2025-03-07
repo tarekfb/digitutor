@@ -14,25 +14,23 @@
 </script>
 
 <Carousel.Root
-  class="h-full w-full max-w-xs md:max-w-2xl"
+  class="h-full w-full max-w-xs md:max-w-2xl  "
   plugins={[
     Autoplay({
       delay: 5000,
     }),
   ]}
 >
-  <Carousel.Content>
+  <Carousel.Content class="">
     {#each reviews as review}
-      {@const { text, truncated } = truncate(review.description, 50)}
+      {@const { text, truncated } = truncate(review.description, 25)}
       <Carousel.Item>
         <div class="h-full p-1">
           <Card.Root class="h-full shadow-md">
             <Card.Content
-              class="relative flex h-full w-full flex-col items-center justify-between gap-y-6 p-8 md:gap-y-8 md:px-16"
+              class=" relative flex h-full w-full flex-col items-center justify-between gap-y-6 p-8 md:gap-y-8 md:px-16"
             >
-              <div
-                class="absolute left-0 top-0 rotate-180 select-none md:-top-20 md:left-3"
-              >
+              <div class="absolute left-0 top-0 rotate-180 select-none">
                 <Quote fillHex="#E0E0E0" width={60} height={60} />
               </div>
               <p
