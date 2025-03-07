@@ -70,7 +70,7 @@
         <Collapsible.Root class="text-sm">
           <Collapsible.Trigger
             class=" group mb-1 flex w-full items-center justify-between gap-x-2 text-start text-muted-foreground"
-            >Några exempel på vad som är bra att nämna i en felbeskrivning
+            >Några exempel på vad som är bra att nämna i en felbeskrivning:
             <div class="p-0 text-foreground group-data-[state=open]:hidden">
               <ChevronDown class="size-4" />
               <span class="sr-only">Öppna</span>
