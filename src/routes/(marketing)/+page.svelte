@@ -105,7 +105,12 @@
       <div
         class="flex max-h-72 w-screen flex-col items-center self-center bg-secondary pb-4 md:max-h-64 md:py-8"
       >
-        <Container maxWidth margin={false} class="mx-4 md:mx-8" responsiveGap>
+        <Container
+          maxWidth
+          margin={false}
+          class="mx-4 h-[650px] md:mx-8 md:h-96"
+          responsiveGap
+        >
           <PrimaryTitle class="my-4 text-center text-background "
             >Såhär säger våra användare</PrimaryTitle
           >
