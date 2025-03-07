@@ -1,12 +1,10 @@
-// import * as Sentry from '@sentry/sveltekit';
-// import { initSentryHasnd, sentryHandle } from '@sentry/sveltekit';
-// import { sequence } from '@sveltejs/kit/hooks';
+import * as Sentry from '@sentry/sveltekit';
 
-// export const handle = sequence(
-//     initCloudflareSentryHandle({
-//         dsn: "https://485a49edf664c4bad08c2ab0bf87a8eb@o4507622077169664.ingest.de.sentry.io/4507622079660112",
-//         tracesSampleRate: 1.0,
-//         integrations: [Sentry.replayIntegration()],
-//     }),
-//     sentryHandle(),
-// );
+Sentry.init({
+  dsn: 'https://485a49edf664c4bad08c2ab0bf87a8eb@o4507622077169664.ingest.de.sentry.io/4507622079660112',
+  tracesSampleRate: 1.0,
+  // For instance, initialize Session Replay:
+  replaysSessionSampleRate: 0.1,
+  replaysOnErrorSampleRate: 1.0,
+  integrations: [Sentry.replayIntegration()],
+});
