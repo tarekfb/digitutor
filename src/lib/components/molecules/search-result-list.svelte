@@ -2,7 +2,6 @@
   import type { SearchResult } from "src/lib/shared/models/search.ts";
   import SearchResultItem from "./search-result-item.svelte";
   import { languages } from "src/lib/shared/models/common.ts";
-  import SecondaryTitle from "../atoms/secondary-title.svelte";
 
   export let results: SearchResult[];
   export let searchTerm = "";
@@ -31,9 +30,6 @@
   };
 </script>
 
-<SecondaryTitle class="foreground self-start">
-  {results.length} resultat
-</SecondaryTitle>
 <ul class="flex w-full flex-col gap-y-4">
   {#each results as result, i}
     {@const searchedSubject = getDisplaySubject(result)}
