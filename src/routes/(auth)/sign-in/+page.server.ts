@@ -10,6 +10,7 @@ import { resendSchema, signInSchema } from "$lib/shared/models/user.ts";
 import { getTopTeacher } from "src/lib/server/database/review.ts";
 import { formatTopTeacher } from "src/lib/shared/utils/reviews/utils.ts";
 import type { TopTeacher } from "src/lib/shared/models/review.ts";
+import { logErrorServer } from "src/lib/shared/utils/logging/utils.ts";
 
 export const load: PageServerLoad = async ({ locals: { supabase } }) => {
 
@@ -18,7 +19,10 @@ export const load: PageServerLoad = async ({ locals: { supabase } }) => {
     const dbTeacher = await getTopTeacher(supabase, 1);
     displayTeacher = dbTeacher.length > 0 ? formatTopTeacher(dbTeacher[0]) : undefined;
   } catch (e) {
-    console.error("Error when fetching signin topteacher", e);
+    const trackingId = logErrorServer({
+      error: e,
+      message: "Error when fetching signin topteacher",
+    });
     displayTeacher = undefined;
   }
 
@@ -96,17 +100,27 @@ export const actions: Actions = {
             );
           }
           default:
-            console.error("Supabase error on signin", { error });
-            return message(form, getFailFormMessage(), { status: 500 });
+            {
+              const trackingId = logErrorServer({
+                error,
+                message: "Supabase error on signin",
+              });
+              return message(form, getFailFormMessage({ trackingId }), { status: 500 });
+            }
         }
       }
       if (!data.user) {
-        console.error("User data was null on signup", error);
-        return message(form, getFailFormMessage(), { status: 500 });
+        const trackingId = logErrorServer({
+          message: "User data was null on signin",
+        });
+        return message(form, getFailFormMessage({ trackingId }), { status: 500 });
       }
     } catch (error) {
-      console.error("Error on signin supabase auth user", error);
-      return message(form, getFailFormMessage(), { status: 500 });
+      const trackingId = logErrorServer({
+        error,
+        message: "Error on signin supabase auth user",
+      });
+      return message(form, getFailFormMessage({ trackingId }), { status: 500 });
     }
 
     redirect(302, url.searchParams.get("next") ?? "/account");

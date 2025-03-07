@@ -1,21 +1,19 @@
-import { PUBLIC_ENVIRONMENT } from "$env/static/public";
-import { init } from "@jill64/sentry-sveltekit-cloudflare/client";
-// or
-// import { clientInit } from '@jill64/sentry-sveltekit-cloudflare'
-// import * as Sentry from "@sentry/sveltekit";
+import { PUBLIC_ENVIRONMENT } from '$env/static/public';
+import * as Sentry from '@sentry/sveltekit';
+import { handleErrorWithSentry } from '@sentry/sveltekit';
 
-const onError = init(
-  "https://485a49edf664c4bad08c2ab0bf87a8eb@o4507622077169664.ingest.de.sentry.io/4507622079660112",
-  {
-    sentryOptions: {
-      environment: PUBLIC_ENVIRONMENT,
-      //     // ... Other Sentry Config
-      //   },
-      //   enableInDevMode: boolean (default: false)
-    },
-  },
-);
-
-export const handleError = onError((e, sentryEventId) => {
-  console.error(e, sentryEventId);
+Sentry.init({
+    dsn: 'https://485a49edf664c4bad08c2ab0bf87a8eb@o4507622077169664.ingest.de.sentry.io/4507622079660112',
+    environment: PUBLIC_ENVIRONMENT,
+    enabled: PUBLIC_ENVIRONMENT !== "local",
+    tracesSampleRate: 1.0,
+    // For instance, initialize Session Replay:
+    replaysSessionSampleRate: 0.1,
+    replaysOnErrorSampleRate: 1.0,
+    integrations: [Sentry.replayIntegration()],
 });
+
+
+export const handleError = handleErrorWithSentry();
+// or alternatively, if you don't have a custom error handler:
+// export const handleError = handleErrorWithSentry();

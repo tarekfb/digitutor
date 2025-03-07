@@ -33,9 +33,11 @@
   <title>{websiteName} | Kontakta oss</title>
 </svelte:head>
 
-<Container responsiveGap>
-  <div class="flex flex-col items-center justify-center gap-y-0.5">
-    <PrimaryTitle class="mb-2">Kontakta oss</PrimaryTitle>
+<Container responsiveGap maxWidth minWidth>
+  <div
+    class="flex flex-col items-center justify-center gap-y-0.5 md:self-start"
+  >
+    <PrimaryTitle class="mb-2 md:mb-4">Kontakta oss</PrimaryTitle>
     <p class="text-lg md:text-xl">
       Glöm inte att kolla om din fråga finns bland <Link
         class="text-lg"
@@ -43,13 +45,12 @@
       >.
     </p>
   </div>
-  <p class="self-start text-muted-foreground md:text-lg">
+  <p class="text-muted-foreground md:self-start md:text-lg">
     Vi svarar dig så fort vi kan.
   </p>
 
-  <FormMessage {message} scroll />
   <form
-    class="mt-4 flex w-full max-w-xl flex-col gap-y-2 text-lg md:gap-y-4 md:text-xl"
+    class="flex w-full flex-col gap-y-2 text-lg md:gap-y-4 md:text-xl"
     method="POST"
     action="?/submit"
     use:enhance
@@ -106,7 +107,7 @@
       </Form.Control>
       <Form.FieldErrors />
     </Form.Field>
-
+    <FormMessage {message} scroll />
     <FormSubmit
       {delayed}
       {allErrors}

@@ -12,7 +12,7 @@
   } from "src/lib/shared/constants/constants.ts";
   import Button from "src/lib/components/ui/button/button.svelte";
   import Pencil from "lucide-svelte/icons/pencil";
-  import ExternalLink from "lucide-svelte/icons/external-link";
+  import ExternalLink from "lucide-svelte/icons/square-arrow-out-up-right";
   import CreditsNav from "src/lib/components/molecules/credits-nav.svelte";
   import {
     creditProducts,

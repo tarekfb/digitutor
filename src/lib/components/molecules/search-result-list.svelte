@@ -30,7 +30,7 @@
   };
 </script>
 
-<ul class="flex w-full flex-col">
+<ul class="flex w-full flex-col gap-y-4">
   {#each results as result, i}
     {@const searchedSubject = getDisplaySubject(result)}
     <li

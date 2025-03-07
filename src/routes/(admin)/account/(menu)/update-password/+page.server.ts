@@ -7,6 +7,7 @@ import {
   getSuccessFormMessage,
 } from "src/lib/shared/constants/constants.ts";
 import { SupabaseErrorMessages } from "src/lib/shared/models/common.ts";
+import { logErrorServer } from "src/lib/shared/utils/logging/utils.ts";
 
 export const load = (async () => {
   const form = await superValidate(zod(passwordResetSchema));
@@ -29,20 +30,21 @@ export const actions = {
       if (error.message === SupabaseErrorMessages.NewPasswordNotDifferent)
         return message(
           form,
-          getFailFormMessage(
-            "Ange ett helt nytt lösenord",
-            "Ange ett lösenord som aldrig har använts tidigare.",
-          ),
+          getFailFormMessage({
+            title: "Ange ett helt nytt lösenord",
+            description: "Ange ett lösenord som aldrig har använts tidigare.",
+          }),
           { status: 500 },
         );
 
-      console.error("Unknown error updating user password", error);
+      const trackingId = logErrorServer({ error, message: "Unknown error updating user password" });
       return message(
         form,
-        getFailFormMessage(
-          "Kunde inte uppdatera lösenordet",
-          "Något gick fel. Du kan kontakta oss om detta fortsätter.",
-        ),
+        getFailFormMessage({
+          title: "Kunde inte uppdatera lösenordet",
+          description: "Något gick fel. Du kan kontakta oss om detta fortsätter.",
+          trackingId
+        }),
         { status: 500 },
       );
     }

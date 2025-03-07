@@ -41,7 +41,6 @@
     {profile}
     logout={() => {
       logout(supabase, session);
-      goto("/sign-in");
     }}
     isAccount={true}
   >
