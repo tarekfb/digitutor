@@ -21,5 +21,5 @@
     <Stars size={5} rating={profile.avgRating} />
     <NbrOfReviews class="text-sm " nbrOfReviews={profile.reviewCount} />
   </div>
-  <SeeMore subjects={profile.subjects} triggerStyling="w-full" />
+  <SeeMore subjects={profile.subjects} triggerStyling="w-full" triggerTextStyling="font-normal font-mono" />
 </article>

@@ -11,6 +11,7 @@
   export let subjects: number[] | Subject[];
   export let contentStyling: string | null | undefined = undefined;
   export let triggerStyling: string | null | undefined = undefined;
+  export let triggerTextStyling: string | null | undefined = undefined;
   export let listStyling: string | null | undefined = undefined;
   export let variant: Variant = "ghost-none";
   export let max: number = 1;
@@ -35,7 +36,7 @@
         {variant}
         builders={[builder]}
         class={cn(
-          "group m-0 h-auto justify-start gap-x-2 p-0 font-normal normal-case ",
+          "group m-0 h-auto justify-start gap-x-2 p-0 normal-case ",
           triggerStyling,
         )}
       >
@@ -44,10 +45,10 @@
           <span class="sr-only">Öppna</span>
         </div>
         <div class="p-0 text-foreground {open ? '' : 'hidden'}">
-          <ChevronUp class="size-5  text-accent " />
+          <ChevronUp class="size-5 text-accent " />
           <span class="sr-only">Öppna</span>
         </div>
-        <span class="font-semibold md:text-lg">Se {subjects.length} språk</span></Button
+        <span class={cn("md:text-lg text-[14px] font-semibold", triggerTextStyling)}>Se {subjects.length} språk</span></Button
       >
     </Popover.Trigger>
     <Popover.Content
