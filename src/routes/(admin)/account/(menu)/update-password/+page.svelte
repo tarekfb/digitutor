@@ -24,7 +24,7 @@
   <title>{websiteName} | Uppdatera lösenord</title>
 </svelte:head>
 
-<Container responsiveGap maxWidth minWidth class="self-center">
+<Container responsiveGap maxWidth minWidth padding class="self-center">
   <div class="flex flex-col items-center justify-center gap-y-0.5">
     <PrimaryTitle class="mb-2">Uppdatera lösenord</PrimaryTitle>
     <p class="text-lg text-muted-foreground md:text-xl">
