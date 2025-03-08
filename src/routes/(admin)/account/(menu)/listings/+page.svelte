@@ -34,7 +34,7 @@
 
 <AccountLayout>
   <PrimaryTitle class="text-center">Dina annonser</PrimaryTitle>
-  <Container class="my-6 w-full">
+  <Container class="my-6 w-full" minWidth maxWidth padding>
     {#each listings as listing}
       <ListingCard {listing} publicView={false} />
     {:else}

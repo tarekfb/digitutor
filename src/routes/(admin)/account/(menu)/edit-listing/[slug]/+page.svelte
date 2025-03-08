@@ -126,7 +126,7 @@
 
 <AccountLayout>
   <PrimaryTitle class="text-center">Redigera annons</PrimaryTitle>
-  <Container class="w-full">
+  <Container class="w-full" minWidth maxWidth padding>
     <Dialog.Root bind:open>
       <form
         method="POST"
