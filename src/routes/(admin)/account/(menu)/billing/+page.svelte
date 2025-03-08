@@ -35,7 +35,7 @@
   <title>{websiteName} | Betalningar</title>
 </svelte:head>
 
-<Container maxWidth minWidth class="gap-y-6 self-center md:gap-y-8">
+<Container maxWidth minWidth padding class="gap-y-6 self-center md:gap-y-8">
   <section class="flex flex-col items-center justify-center gap-y-2 md:gap-y-4">
     <PrimaryTitle responsiveMb>Betalningar</PrimaryTitle>
     <div class="self-start text-muted-foreground">
