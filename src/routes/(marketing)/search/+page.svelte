@@ -231,9 +231,7 @@
       <DropdownMenu.Trigger asChild let:builder>
         <Button
           builders={[builder]}
-          class="flex w-{sortingId === defaultSort.id
-            ? 'auto'
-            : 'full'} justify-between gap-x-2 md:max-w-96 md:hover:bg-third"
+          class="flex w-auto justify-between gap-x-2 md:max-w-96 md:hover:bg-third"
           ><span
             >{sortSearchResults.find((s) => s.id === sortingId)?.readable ??
               defaultSort.readable}</span
