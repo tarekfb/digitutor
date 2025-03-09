@@ -1,12 +1,10 @@
 <script lang="ts">
-  // import Logo from "$lib/components/atoms/logo.svelte";
   import type { Profile } from "src/lib/shared/models/profile.ts";
   import SidebarHome from "./sidebar-home.svelte";
   import SiteTitle from "../atoms/site-title.svelte";
   import { Separator } from "../ui/separator/index.ts";
   import { Button } from "../ui/button/index.ts";
   import UserRound from "lucide-svelte/icons/user-round";
-  import { page } from "$app/stores";
 
   export let profile: Profile | undefined | null | false;
   export let logout: (() => void) | false;
