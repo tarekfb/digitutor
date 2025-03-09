@@ -112,7 +112,7 @@
       {delayed}
       {allErrors}
       text="Skicka"
-      class="self-center md:min-w-wider"
+      class="self-center icon-btn wide-btn"
     >
       <SendHorizontal slot="icon" class="h-5 w-5" />
     </FormSubmit>
