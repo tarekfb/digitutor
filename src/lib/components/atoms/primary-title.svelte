@@ -7,10 +7,12 @@
   export let responsiveMb: boolean = false;
   export let responsiveMt: boolean = false;
   export let testId: string | undefined | null = undefined;
+  export let tag: "h1" | "h2" | "h3" | "h4" = "h1";
 </script>
 
 <!-- heading styling from app.pcss but putting it here helps cn function work properly -->
-<h1
+<svelte:element
+  this={tag}
   {id}
   class={cn(
     "text-3xl font-extrabold leading-none tracking-tight md:text-4xl ",
@@ -21,4 +23,4 @@
   data-testid={testId}
 >
   <slot />
-</h1>
+</svelte:element>

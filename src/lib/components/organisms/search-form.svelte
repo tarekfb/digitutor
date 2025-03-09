@@ -124,7 +124,7 @@
             {/if}
             <input
               use:melt={$input}
-              class="text-md flex h-10 w-full items-center justify-between rounded-lg rounded-r-none
+              class="text-base flex h-10 w-full items-center justify-between rounded-lg rounded-r-none
             px-3 pr-6 placeholder:text-muted-foreground {$selected &&
               $selected.length > 0
                 ? 'rounded-l-none border-l border-solid border-input'

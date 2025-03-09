@@ -1,7 +1,7 @@
 <script lang="ts">
   import PrimaryTitle from "$lib/components/atoms/primary-title.svelte";
   import Container from "src/lib/components/templates/container.svelte";
-  import { websiteName } from "$lib/shared/constants/constants.ts";
+  import { freeCredits, websiteName } from "$lib/shared/constants/constants.ts";
 </script>
 
 <svelte:head>
@@ -32,11 +32,10 @@
     verifiera sin e-postadress.
   </p>
 
-  <h2>4. Betalningar och krediter</h2>
+  <h2>4. Betalningar och gratis kontaktförfrågningar</h2>
   <p>
-    Betalningar sker utanför plattformen. Studenter kan köpa premium för
-    obegränsade kontakter eller köpa krediter, där varje ny kontakt med en
-    lärare kostar krediter.
+    Betalningar sker utanför plattformen med en tredjepartstjänst. Studenter får automatiskt {freeCredits} vid registrering. Varje gång en student kontaktar en lärare förbrukas en gratis kontaktförfrågan. Studenter kan köpa premium för
+    obegränsat antal kontaktförfrågningar.
   </p>
 
   <h2>5. Plattformens roll</h2>

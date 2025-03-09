@@ -11,9 +11,9 @@
   import ArrowRight from "lucide-svelte/icons/arrow-right";
   import { goto } from "$app/navigation";
   import DisplayProfile from "src/lib/components/molecules/display-profile.svelte";
-  import ProfileCarousel from "src/lib/components/organisms/profile-carousel.svelte";
   import ReviewCarousel from "src/lib/components/organisms/review-carousel.svelte";
   import PricingModule from "src/lib/components/molecules/pricing-module.svelte";
+  import Faq from "src/lib/components/molecules/faq.svelte";
   export let data: PageData;
   $: ({ displayReviews, displayProfiles } = data);
 
@@ -26,6 +26,7 @@
     if (listLength === 3) return "grid-cols-2 md:grid-cols-3";
     return "grid-cols-2 md:grid-cols-3 lg:grid-cols-4";
   };
+  const maxWidth = "max-w-full md:max-w-screen-sm lg:max-w-screen-md";
 </script>
 
 <svelte:head>
@@ -101,7 +102,7 @@
     </div>
   {/if}
   {#if displayReviews.length > 0}
-    <div class="relative bg-background">
+    <div class="relative">
       <div
         class="flex w-screen flex-col items-center self-center bg-secondary pb-4 md:py-8"
       >
@@ -120,8 +121,8 @@
     class="mt-40 flex w-screen flex-col items-center self-center bg-background pb-4 md:py-8"
   >
     <Container maxWidth margin={false} class="mx-4 md:mx-8" responsiveGap>
-      <PrimaryTitle class="my-4 text-center "
-        >Enkel och generös betalmodell
+      <PrimaryTitle class="my-4 text-center  "
+        >Enkel betallmodell och generös gratisnivå.
       </PrimaryTitle>
       <section
         class="flex w-full flex-col-reverse flex-wrap place-content-center gap-6 md:gap-10 lg:flex-row"
@@ -134,6 +135,14 @@
         {/each}
       </section>
     </Container>
+  </div>
+  <div
+    class="flex w-screen flex-col items-center self-center bg-secondary p-4 md:p-8"
+  >
+    <PrimaryTitle class="w-full bg-secondary text-center text-background"
+      >Vanliga frågor och svar</PrimaryTitle
+    >
+    <Faq class={maxWidth} dark />
   </div>
 </Container>
 

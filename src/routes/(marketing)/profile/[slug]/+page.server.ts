@@ -405,24 +405,22 @@ export const actions = {
 
     let shouldChargeCredits: boolean = false;
     if (!hasSubscription) {
-      let balance: number | undefined;
+      let credits: number | undefined;
       try {
-        balance = await getCreditsByStudent(supabase, userId);
+        credits = await getCreditsByStudent(supabase, userId);
       } catch (error) {
-        balance = undefined;
+        credits = undefined;
         logErrorServer({
           error,
           message: "Unexpected error when checking if credit balance is enough to contact teacher. Allowing contact.",
         });
       }
 
-      if (balance !== undefined && balance - costPerRequest < 0) {
-        // student doesnt have enough credits
-        const missingCredits = (balance - costPerRequest) * -1;
+      if (credits !== undefined && credits - costPerRequest < 0) {
         return message(
           form,
           getFailFormMessage({
-            title: `Du har ${missingCredits} krediter för lite`,
+            title: "Du har slut på gratis kontaktförfrågningar.",
             description: "",
             messageId: MessageId.InsufficientCredits,
             variant: "warning",
@@ -461,7 +459,7 @@ export const actions = {
       return message(
         form,
         getFailFormMessage({
-          description: "Inga krediter har dragits. Du kan kontakta oss om detta fortsätter.",
+          description: "Din gratis kontaktförfrågan har inte förbrukats. Du kan kontakta oss om detta fortsätter.",
           trackingId
         }),
         { status: 500 },

@@ -150,7 +150,7 @@
   maxWidth
   margin={false}
   tag="section"
-  class="flex w-full flex-col justify-center gap-y-4 px-4 md:px-0 my-4 md:my-8"
+  class="my-4 flex w-full flex-col justify-center gap-y-4 px-4 md:my-8 md:px-0"
 >
   <PrimaryTitle class="heading self-center  md:mb-4"
     >Sök bland våra lärare</PrimaryTitle
@@ -178,8 +178,8 @@
             <div class="relative">
               <input
                 use:melt={$input}
-                class="text-md flex h-10 w-full items-center justify-between rounded-lg
-          rounded-r-none bg-card px-3 pr-6 placeholder:text-muted-foreground"
+                class="flex h-10 w-full items-center justify-between rounded-lg rounded-r-none
+          bg-card px-3 pr-6 text-base placeholder:text-muted-foreground"
                 placeholder="Välj teknologi"
               />
               <div
@@ -205,7 +205,7 @@
             autocomplete="false"
             bind:value={$formData.query}
             placeholder="Sök lärare"
-            class="text-md rounded-l-none rounded-r-none bg-card text-muted-foreground placeholder:text-muted-foreground"
+            class="rounded-l-none rounded-r-none bg-card text-base text-muted-foreground placeholder:text-muted-foreground"
           />
         </Form.Control>
         <Form.FieldErrors />

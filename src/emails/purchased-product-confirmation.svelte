@@ -2,7 +2,7 @@
   import {
     pricingPlans,
     websiteName,
-    creditProducts,
+    // creditProducts,
     prodBaseUrl,
   } from "src/lib/shared/constants/constants.ts";
   import {
@@ -19,23 +19,24 @@
   import Footer from "./footer.svelte";
 
   export let userName: string = "";
-  export let priceId: string = "";
+  // export let priceId: string = "";
 
-  const allProducts = [...creditProducts, ...pricingPlans];
-  const matchedProduct = allProducts.find(
-    (product) => product.stripePriceId === priceId,
-  );
+  // const allProducts = [...creditProducts, ...pricingPlans];
+  const allProducts = [...pricingPlans];
+  // const matchedProduct = allProducts.find(
+  //   (product) => product.stripePriceId === priceId,
+  // );
 
   let productName: string = "";
   let productPrice: string = "";
 
-  if (matchedProduct) {
-    productName =
-      "credits" in matchedProduct
-        ? `${matchedProduct.credits} Credits`
-        : matchedProduct.name;
-    productPrice = matchedProduct.price;
-  }
+  // if (matchedProduct) {
+  //   productName =
+  //     "credits" in matchedProduct
+  //       ? `${matchedProduct.credits} Credits`
+  //       : matchedProduct.name;
+  //   productPrice = matchedProduct.price;
+  // }
 
   const previewText = `Tack för ditt köp på ${websiteName}!`;
 

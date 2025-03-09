@@ -5,7 +5,6 @@ import {
   type PricingPlan,
   StripeProductId,
 } from "../models/subscription.ts";
-import type { CreditsProduct } from "../models/subscription.js";
 
 export const websiteName = "Digitutor";
 export const contactEmail = "info@digitutor.se";
@@ -123,32 +122,18 @@ export const getFormatsHumanReadable = () => {
 export const costPerRequest = 1;
 export const freeCredits = 5;
 export const defaultPlanId = PricingPlanIds.Free;
-export const creditProducts: CreditsProduct[] = [
-  {
-    price: "250 SEK",
-    credits: 50,
-    stripePriceId: StripePriceId.SmallCreditsTest,
-    stripeProductId: StripeProductId.SmallCreditsTest,
-  },
-  {
-    price: "400 SEK",
-    credits: 100,
-    stripePriceId: StripePriceId.LargeCreditsTest,
-    stripeProductId: StripeProductId.LargeCreditsTest,
-  },
-];
+
 export const freePlan: PricingPlan = {
   id: PricingPlanIds.Free,
   name: "Gratis",
-  description: `Inkluderar ${freeCredits} krediter vid start (att kontakta lärare kostar ${costPerRequest} krediter).`,
+  description: `Inkluderar ${freeCredits} gratis kontaktförfrågningar. Tilldelas automatiskt när du skapar konto, uppgradera när som helst.`,
   bold: `Inget betalkort behövs!`,
   price: "0 SEK",
   priceIntervalName: "per månad",
   stripePriceId: StripePriceId.Free,
   features: [
-    `${freeCredits} gratis krediter`,
+    `${freeCredits} gratis kontaktförfrågningar`,
     "Tillgång alla lärare",
-    "Möjlighet att köpa fler krediter när som helst",
   ],
 };
 export const premiumPlan: PricingPlan = {
@@ -162,7 +147,7 @@ export const premiumPlan: PricingPlan = {
   // stripePriceId: isProd ? StripePriceId.PremiumProd : StripePriceId.PremiumTest,  // todo: reactive when live
   stripeProductId: StripeProductId.PremiumTest,
   // stripeProductId:  isProd ? StripeProductId.PremiumProd : StripeProductId.PremiumTest, // todo: reactive when live
-  features: ["Allt i gratisplanen", "Oändligt med krediter"],
+  features: ["Allt i gratisplanen", "Oändligt med kontaktförfrågningar", "Avbryt prenumerationen när som helst"],
 };
 
 export const pricingPlans: PricingPlan[] = [freePlan, premiumPlan];
