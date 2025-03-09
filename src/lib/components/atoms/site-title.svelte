@@ -1,6 +1,6 @@
 <script lang="ts">
-  import { websiteName } from "src/lib/shared/constants/constants.ts";
   import { cn } from "src/lib/shared/utils/utils.js";
+  import Logo from "./logo.svelte";
   let className: string | null | undefined = undefined;
   export { className as class };
 </script>
@@ -12,7 +12,5 @@
     className,
   )}
 >
-  <h1>
-    {websiteName}
-  </h1>
+  <Logo width={200} height={50} />
 </a>
