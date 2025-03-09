@@ -33,7 +33,7 @@
   <title>{websiteName} | Kontakta oss</title>
 </svelte:head>
 
-<Container responsiveGap maxWidth minWidth>
+<Container responsiveGap maxWidth minWidth padding>
   <div
     class="flex flex-col items-center justify-center gap-y-0.5 md:self-start"
   >

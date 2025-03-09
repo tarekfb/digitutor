@@ -15,15 +15,17 @@
 
   const getLabels = (subjectIndex: number): string[] => {
     const language = languages[subjectIndex - 1];
+    if (!language) return [];
     const labels = [language.title, ...(language.altTitle ?? [])];
     return labels;
   };
 
-  const getDisplaySubject = (result: SearchResult): number => {
+  // todo write unit tests for this
+  const getDisplaySubject = (resultSubject: number[]): number => {
     const noFind = -1;
     if (!searchTerm) return noFind;
     return (
-      result.subjects.find((subjectIndex) =>
+      resultSubject.find((subjectIndex) =>
         isSearchMatchingSubject(subjectIndex),
       ) ?? noFind
     );
@@ -32,7 +34,7 @@
 
 <ul class="flex w-full flex-col">
   {#each results as result, i}
-    {@const searchedSubject = getDisplaySubject(result)}
+    {@const searchedSubject = getDisplaySubject(result.subjects)}
     <li
       class="w-full {i % 2 === 0
         ? 'bg-background'

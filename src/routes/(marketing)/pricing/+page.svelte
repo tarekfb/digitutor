@@ -21,7 +21,7 @@
   <title>{websiteName} | Premium</title>
 </svelte:head>
 
-<Container maxWidth minWidth class="gap-y-6 self-center md:gap-y-10">
+<Container maxWidth minWidth class="gap-y-6 self-center md:gap-y-10" padding>
   <div class="flex flex-col items-center justify-center">
     <PrimaryTitle responsiveMb>Premium</PrimaryTitle>
     <p class="text-lg text-muted-foreground md:text-xl">

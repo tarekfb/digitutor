@@ -13,6 +13,7 @@ export default defineConfig({
   plugins: [
     sentrySvelteKit(
       {
+        adapter: 'cloudflare',
         sourceMapsUploadOptions: {
           org: 'digitutor-dev',
           project: 'javascript-sveltekit',
@@ -21,7 +22,7 @@ export default defineConfig({
       }
     ),
     sveltekit(),
-		enhancedImages(),
+    enhancedImages(),
 
     // svelteInspector({
     //   /* plugin options */

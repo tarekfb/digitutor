@@ -16,7 +16,7 @@
 
 <AccountLayout>
   <PrimaryTitle class="text-center">Dina konversationer</PrimaryTitle>
-  <Container class="my-6 w-full text-center">
+  <Container class="my-6 w-full text-center" minWidth maxWidth padding>
     {#each conversations as conversation}
       <a
         href={"/account/conversation/" + conversation.id}
