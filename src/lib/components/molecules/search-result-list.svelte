@@ -24,15 +24,11 @@
   const getDisplaySubject = (resultSubject: number[]): number => {
     const noFind = -1;
     if (!searchTerm) return noFind;
-    try {
-      return (
-        resultSubject.find((subjectIndex) =>
-          isSearchMatchingSubject(subjectIndex),
-        ) ?? noFind
-      );
-    } catch (error) {
-      return noFind;
-    }
+    return (
+      resultSubject.find((subjectIndex) =>
+        isSearchMatchingSubject(subjectIndex),
+      ) ?? noFind
+    );
   };
 </script>
 
