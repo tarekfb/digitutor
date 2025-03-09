@@ -62,9 +62,9 @@ export const load: PageServerLoad = (async (event) => {
     error(500, { ...getDefaultErrorInfo({ trackingId }) });
   }
 
-  let balance: number | undefined;
+  let credits: number | undefined;
   try {
-    balance = await getCreditsByStudent(supabaseServiceRole, user.id);
+    credits = await getCreditsByStudent(supabaseServiceRole, user.id);
   } catch (error) {
     logErrorServer({
       error,
@@ -80,6 +80,6 @@ export const load: PageServerLoad = (async (event) => {
     isActiveCustomer: !!primarySubscription,
     hasEverHadSubscription,
     currentPlanId,
-    balance,
+    credits,
   };
 }) satisfies PageServerLoad;

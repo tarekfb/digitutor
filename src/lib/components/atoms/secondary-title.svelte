@@ -3,12 +3,16 @@
   let className: string | null | undefined = undefined;
   export { className as class };
 
+  export let id: string | undefined = undefined;
   export let responsiveMb: boolean = false;
   export let responsiveMt: boolean = false;
+  export let tag: "h2" | "h3" | "h4" = "h2";
 </script>
 
 <!-- heading styling from app.pcss but putting it here helps cn function work properly -->
-<h2
+<svelte:element
+  this={tag}
+  {id}
   class={cn(
     "text-xl font-semibold leading-none tracking-tight md:text-2xl",
     responsiveMb ? "mb-2 md:mb-4" : "",
@@ -17,4 +21,4 @@
   )}
 >
   <slot />
-</h2>
+</svelte:element>

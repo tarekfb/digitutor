@@ -66,9 +66,9 @@
           description={listingMessage.description}
           variant={listingMessage.variant}
           class="text-lg"
-          descriptionClass="text-md"
+          descriptionClass="text-base"
         >
-          <p class="text-md mt-2 italic">Bara du kan se detta</p>
+          <p class="text-base mt-2 italic">Bara du kan se detta</p>
         </AlertMessage>
       </div>
     {/if}

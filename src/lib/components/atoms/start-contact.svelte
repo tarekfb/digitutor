@@ -8,6 +8,7 @@
   import { Textarea } from "$lib/components/ui/textarea/index.js";
   import { isStartingContact } from "src/stores/start-contact.ts";
   import { costPerRequest } from "src/lib/shared/constants/constants.js";
+  import Link from "./link.svelte";
 
   export let form;
   export let action: string;
@@ -45,8 +46,8 @@
           {/each}
         </ul>
         <p class="mt-4">
-          Detta kostar {costPerRequest} krediter. För dig som har
-          <a href="/pricing" class="link">premium</a> kostar det ingenting.
+          Detta förbrukar {costPerRequest} gratis kontaktförfrågan. För dig som har
+          <Link href="/pricing">premium</Link> har du oändligt med kontaktförfrågningar.
         </p>
       </Dialog.Description>
     </Dialog.Header>

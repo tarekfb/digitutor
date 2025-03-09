@@ -18,15 +18,17 @@
 >
   <div class="flex h-full flex-col">
     <div class="text-xl font-bold">{pricingPlan.name}</div>
-    <p class="mt-2 text-sm leading-relaxed text-muted-foreground">
+    <p class="mt-2 text-sm leading-relaxed text-muted-foreground md:text-base">
       {pricingPlan.description}
     </p>
     {#if pricingPlan.bold}
-      <p class="mt-2 text-sm font-bold leading-relaxed text-muted-foreground">
+      <p
+        class="mt-2 text-sm font-bold leading-relaxed text-muted-foreground md:text-base"
+      >
         {pricingPlan.bold}
       </p>
     {/if}
-    <div class="mt-auto pt-4 text-sm text-gray-600">
+    <div class="mt-auto pt-4 text-sm text-gray-600 md:text-base">
       Planen inkluderar:
       <ul class="mt-2 list-inside list-disc space-y-1">
         {#each pricingPlan.features as feature}

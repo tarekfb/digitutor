@@ -104,7 +104,7 @@
         title="Vi kunde inte hämta några meddelanden"
         description={defaultErrorDescription}
         variant="destructive"
-        descriptionClass="text-md"
+        descriptionClass="text-base"
       />
       <!-- todo: provide contact option here -->
     {/await}

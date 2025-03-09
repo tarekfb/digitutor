@@ -2,7 +2,6 @@
   import {
     pricingPlans,
     websiteName,
-    creditProducts,
     prodBaseUrl,
   } from "src/lib/shared/constants/constants.ts";
   import {
@@ -21,7 +20,7 @@
   export let userName: string = "";
   export let priceId: string = "";
 
-  const allProducts = [...creditProducts, ...pricingPlans];
+  const allProducts = [...pricingPlans];
   const matchedProduct = allProducts.find(
     (product) => product.stripePriceId === priceId,
   );

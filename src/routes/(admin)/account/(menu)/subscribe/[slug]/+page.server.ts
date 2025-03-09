@@ -69,9 +69,6 @@ export const load: PageServerLoad = async ({
     );
   }
 
-  const mode =
-    url.searchParams.get("mode") === "payment" ? "payment" : "subscription"; // if credits, then single purchase (payment)
-
   let checkoutUrl;
   let stripeSession: Stripe.Response<Stripe.Checkout.Session> | undefined;
   try {
@@ -87,7 +84,7 @@ export const load: PageServerLoad = async ({
         },
       ],
       customer: customerId,
-      mode,
+      mode: "subscription",
       success_url: `${url.origin}${successUrl}`,
       cancel_url: `${url.origin}${successUrl}`,
     });

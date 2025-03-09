@@ -28,7 +28,7 @@
     </Card.Header>
     <Separator />
     <Card.Content
-      class="md:text-md flex flex-col gap-y-4 pt-5  text-sm text-muted-foreground"
+      class="md:text-base flex flex-col gap-y-4 pt-5  text-sm text-muted-foreground"
     >
       <p>
         {#if listing.description}

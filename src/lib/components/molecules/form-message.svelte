@@ -35,13 +35,14 @@
     >
       {#if $message.id === MessageId.InsufficientCredits}
         <p class="inline text-sm">
-          Du kan köpa mer krediter på <a
-            href="/account/billing"
-            class=" font-medium text-accent hover:underline">betalningar</a
-          >, eller uppgradera till
-          <a href="/pricing" class="font-medium text-accent hover:underline"
-            >premium</a
-          > för att kontakta läraren.
+          Du kan uppgradera till <a
+            href="/pricing"
+            class="font-medium text-accent hover:underline">premium</a
+          >
+          för att kontakta läraren eller läsa mer om vår betallmodell via
+          <a href="/pricing#faq" class="font-medium text-accent hover:underline"
+            >vanliga frågor och svar</a
+          >.
         </p>
       {:else if $message.id === MessageId.ContactUs}
         <p class="inline text-xs md:text-sm">
