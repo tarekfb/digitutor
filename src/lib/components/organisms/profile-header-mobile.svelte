@@ -8,6 +8,7 @@
     startContactSchema,
   } from "src/lib/shared/models/conversation.ts";
   import type { Profile } from "src/lib/shared/models/profile.ts";
+  import type { Rating } from "src/lib/shared/models/review.ts";
 
   export let teacher: Profile;
   export let listing: ListingWithProfile | undefined;
@@ -15,10 +16,10 @@
     Infer<typeof requestContactSchema>
   >;
   export let startContactForm: SuperValidated<Infer<typeof startContactSchema>>;
+  export let rating: Pick<Rating, "reviewCount" | "avgRating"> | undefined;
 
   const maxWidth = "max-w-full md:max-w-screen-sm lg:max-w-screen-md";
 </script>
-
 
 <div class="flex w-full {maxWidth} flex-col items-center gap-y-4 px-8">
   {#if teacher.avatarUrl}
@@ -28,7 +29,12 @@
       class="h-60 w-max rounded-sm object-cover"
     />
   {/if}
-  <ProfileHeaderInfo {teacher} {listing} class="{teacher.avatarUrl ? '' : 'justify-evenly w-full'}" />
+  <ProfileHeaderInfo
+    {teacher}
+    {rating}
+    {listing}
+    class={teacher.avatarUrl ? "" : "w-full justify-evenly"}
+  />
   <ContactTeacherForm
     {requestContactForm}
     {startContactForm}

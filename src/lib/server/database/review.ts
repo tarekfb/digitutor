@@ -3,6 +3,7 @@ import type {
   InputReview,
   DbReviewWithReferences,
   DbTopTeacher,
+  DbRating,
 } from "src/lib/shared/models/review.ts";
 import { getNow } from "src/lib/shared/utils/utils.ts";
 import type { Database, Tables } from "src/supabase.ts";
@@ -132,7 +133,7 @@ export const getTopTeacher = async (
 
   if (withReviews) query = query.gt("five_star_reviews_with_description", 0);
   if (max) query = query.limit(max);
-  
+
   const { data, error } = await query;
 
   if (error) {
@@ -142,3 +143,21 @@ export const getTopTeacher = async (
 
   return data as unknown as DbTopTeacher[];
 };
+
+export const getRating = async (
+  supabase: SupabaseClient<Database>,
+  teacher: string
+): Promise<DbRating> => {
+  const { data, error } = await supabase
+    .from("avg_rating")
+    .select("*")
+    .limit(1)
+    .single();
+
+  if (error) {
+    console.error("Failed to get rating for teacher: " + teacher, { error });
+    throw error;
+  }
+
+  return data as unknown as DbRating;
+}

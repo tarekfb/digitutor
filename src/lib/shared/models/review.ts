@@ -65,3 +65,13 @@ export type TopTeacher = {
   subjects: Subject[];
   reviews: ReviewWithReferences[];
 };
+
+export type DbRating = Pick<DbProfile, "id" | "first_name" | "avatar_url" | "created_at" | "updated_at"> & {
+  review_count: number;
+  avg_rating: number;
+}
+
+export type Rating = Pick<Profile, "id" | "firstName" | "avatarUrl"> & {
+  reviewCount: number;
+  avgRating: number;
+}

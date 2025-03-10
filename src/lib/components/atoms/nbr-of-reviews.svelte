@@ -5,6 +5,8 @@
   export let nbrOfReviews: number;
 </script>
 
-<p class={cn("text-muted-foreground", className)}>
-  {nbrOfReviews} recension{nbrOfReviews > 1 ? "er" : ""}
-</p>
+{#if nbrOfReviews}
+  <p class={cn("text-muted-foreground", className)}>
+    {nbrOfReviews} recension{nbrOfReviews > 1 ? "er" : ""}
+  </p>
+{/if}
