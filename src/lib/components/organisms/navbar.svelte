@@ -82,17 +82,17 @@
     <a
       href="/search?q=javascript"
       data-sveltekit-reload={isReloadOnSearch($page.url.pathname)}
-      class={navItem}>Javascript</a
+      class={navItem}>Lärare i Javascript</a
     >
     <a
       href="/search?q=python"
       data-sveltekit-reload={isReloadOnSearch($page.url.pathname)}
-      class={navItem}>Python</a
+      class={navItem}>Lärare i Python</a
     >
     <a
       href="/search?q=java"
       data-sveltekit-reload={isReloadOnSearch($page.url.pathname)}
-      class={navItem}>Java</a
+      class={navItem}>Lärare i Java</a
     >
   </nav>
 </header>

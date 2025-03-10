@@ -1,5 +1,6 @@
 <script lang="ts">
   import {
+    freeCredits,
     premiumPlan,
     pricingPlans,
     websiteName,
@@ -14,11 +15,12 @@
   import ReviewCarousel from "src/lib/components/organisms/review-carousel.svelte";
   import PricingModule from "src/lib/components/molecules/pricing-module.svelte";
   import Faq from "src/lib/components/molecules/faq.svelte";
+  import Vector from "src/lib/icons/vector.svelte";
   export let data: PageData;
   $: ({ displayReviews, displayProfiles } = data);
 
   const cta = "Lär dig programmering från erfarna utvecklare";
-  const subDescr = "Gratis just nu, alltid prisvärt.";
+  const subDescr = `Är du stressad inför en tenta, fast på en inlämning eller bara nyfiken på programmering? Skapa ett konto nu och få ${freeCredits} gratis kontaktförfrågningar till lärare - inget betalkort behövs.`;
 
   const getGridCols = (listLength: number): string => {
     if (listLength === 1) return "grid-cols-1";
@@ -27,6 +29,9 @@
     return "grid-cols-2 md:grid-cols-3 lg:grid-cols-4";
   };
   const maxWidth = "max-w-full md:max-w-screen-sm lg:max-w-screen-md";
+  const yContainerPadding = "py-20 md:py-32";
+  const xContainerPadding = "px-4 md:px-12";
+  const bTitleMargin = "mb-6 md:mb-10";
 </script>
 
 <svelte:head>
@@ -34,12 +39,9 @@
   <meta name="description" content="{websiteName} startsida" />
 </svelte:head>
 
-<Container margin={false} class="gap-y-0">
-  <section
-    class="flex flex-col items-start gap-y-4 self-center pb-4 md:py-8 lg:w-full lg:flex-row lg:justify-evenly lg:gap-8 xl:max-w-[80vw]"
-  >
-    <!-- mobile -->
-    <div class="flex w-full flex-col gap-y-4 lg:hidden">
+<Container margin={false} class="gap-y-0 ">
+  <!-- mobile -->
+  <!-- <div class="flex w-full flex-col gap-y-4 {xContainerPadding} lg:hidden">
       <div
         class="relative -mx-4 flex h-full flex-col items-center justify-end md:-mx-8 lg:mx-0 lg:w-1/2"
       >
@@ -62,12 +64,12 @@
         >Skapa konto
         <ArrowRight class="size-4" />
       </Button>
-    </div>
-    <!-- desktop -->
-    <div class="hidden w-full flex-row justify-evenly gap-y-4 px-8 lg:flex">
-      <div class="mr-5 flex w-1/2 max-w-2xl flex-col justify-center gap-y-4">
+    </div> -->
+  <!-- desktop -->
+  <!-- <div class="hidden w-full flex-row justify-evenly gap-y-4 {xContainerPadding} lg:flex">
+      <div class="flex w-1/2 max-w-2xl flex-col justify-center gap-y-4">
         <h1 class="heading text-5xl">{cta}</h1>
-        <p class="text-2xl font-semibold">{subDescr}</p>
+        <p class="text-2xl text-muted-foreground">{subDescr}</p>
         <Button
           class="flex w-full max-w-72 items-center gap-x-2 md:w-auto"
           on:click={() => goto("/sign-up")}
@@ -78,21 +80,33 @@
       <div
         class="ml-5 flex flex-grow items-center justify-center lg:max-w-[50vw]"
       >
-        <enhanced:img
-          src="src/lib/assets/kampus.jpg"
-          class="size-full max-w-4xl object-cover"
-          alt=""
-        />
+        <Vector width={500} height={500} />
       </div>
+    </div> -->
+  <section
+    class="flex w-screen flex-col items-center gap-4 self-center {xContainerPadding} w-full pb-8 pt-4 md:flex-row md:justify-evenly md:py-32 lg:gap-8 xl:max-w-[80vw]"
+  >
+    <div class="flex flex-col justify-center gap-y-4 md:w-1/2 md:max-w-2xl">
+      <PrimaryTitle class="text-4xl md:text-5xl ">{cta}</PrimaryTitle>
+      <p class="text-2xl text-muted-foreground">{subDescr}</p>
+      <Button
+        class="icon-button wide-button flex"
+        on:click={() => goto("/sign-up")}
+        >Skapa konto
+        <ArrowRight class="size-4" />
+      </Button>
     </div>
+    <Vector class="mt-8 md:mt-0 lg:max-h-[500px] lg:max-w-[500px]" />
   </section>
 
   {#if displayProfiles.length > 0}
     <div
-      class="flex w-screen flex-col items-center self-center bg-card pb-4 md:py-8"
+      class="flex w-screen flex-col items-center self-center bg-secondary {yContainerPadding}"
     >
       <Container maxWidth margin={false} class="mx-4 md:mx-8" responsiveGap>
-        <PrimaryTitle class="my-4 text-center ">Se våra lärare</PrimaryTitle>
+        <PrimaryTitle class=" text-center {bTitleMargin} text-background"
+          >Se våra lärare</PrimaryTitle
+        >
         <div class="grid {getGridCols(displayProfiles.length)} gap-4 md:gap-8">
           {#each displayProfiles as profile}
             <DisplayProfile {profile} />
@@ -104,13 +118,13 @@
   {#if displayReviews.length > 0}
     <div class="relative">
       <div
-        class="flex w-screen flex-col items-center self-center bg-secondary pb-4 md:py-8"
+        class="flex w-screen flex-col items-center self-center bg-card {yContainerPadding}"
       >
         <Container maxWidth margin={false} class="mx-4 md:mx-8" responsiveGap>
-          <PrimaryTitle class="my-4 text-center text-background"
+          <PrimaryTitle class="{bTitleMargin} text-center "
             >Såhär säger våra användare</PrimaryTitle
           >
-          <div class="relative z-10 -mb-28 md:-mb-36">
+          <div class="relative z-10 -mb-36 md:-mb-48">
             <ReviewCarousel reviews={displayReviews} />
           </div>
         </Container>
@@ -118,10 +132,12 @@
     </div>
   {/if}
   <div
-    class="{displayReviews.length > 0 ? 'mt-40' : ''} flex w-screen flex-col items-center self-center bg-background pb-4 md:py-8"
+    class="{displayReviews.length > 0
+      ? 'mt-20 md:mt-32'
+      : ''} flex w-screen flex-col items-center self-center bg-background {yContainerPadding}"
   >
     <Container maxWidth margin={false} class="mx-4 md:mx-8" responsiveGap>
-      <PrimaryTitle class="my-4 text-center  "
+      <PrimaryTitle class="{bTitleMargin} text-center  "
         >Generös gratisnivå och möjlighet att uppgradera när som helst.
       </PrimaryTitle>
       <section
@@ -137,12 +153,31 @@
     </Container>
   </div>
   <div
-    class="flex w-screen flex-col items-center self-center bg-secondary p-4 md:p-8"
+    class="flex w-screen flex-col items-center self-center bg-secondary {xContainerPadding} {yContainerPadding} "
   >
-    <PrimaryTitle class="w-full bg-secondary text-center text-background"
+    <PrimaryTitle class="{bTitleMargin} w-full text-center text-background"
       >Vanliga frågor och svar</PrimaryTitle
     >
     <Faq class={maxWidth} dark />
+  </div>
+  <!-- todo fix padding larger const -->
+  <div
+    class="flex w-screen flex-col items-center self-center {xContainerPadding} {yContainerPadding} "
+  >
+    <PrimaryTitle class="{bTitleMargin} w-full text-center "
+      >Vill du lära ut?</PrimaryTitle
+    >
+    <p class="text-muted-foreground md:text-lg {maxWidth}">
+      Vi söker alltid lärare. Som lärare betalar du ingenting för att undervisa
+      på {websiteName}. Har du erfarenhet inom programmering? Skapa ett konto
+      nedan.
+    </p>
+    <Button
+      class="icon-button wide-button mt-4 w-full md:mt-6 "
+      on:click={() => goto("/sign-up?role=teacher")}
+      >Skapa konto som lärare
+      <ArrowRight class="size-4" />
+    </Button>
   </div>
 </Container>
 

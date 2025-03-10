@@ -8,7 +8,10 @@
   export let profile: TopTeacher;
 </script>
 
-<article class="flex max-w-[50vw] flex-col gap-y-2 md:max-w-full">
+
+<article
+  class="flex max-w-[50vw] flex-col gap-y-2 rounded-md bg-card p-4 md:max-w-full"
+>
   <a href="/profile/{profile.id}" class=" h-40 w-full self-center">
     <img
       alt="profile avatar"
@@ -21,5 +24,9 @@
     <Stars size={5} rating={profile.avgRating} />
     <NbrOfReviews class="text-sm " nbrOfReviews={profile.reviewCount} />
   </div>
-  <SeeMore subjects={profile.subjects} triggerStyling="w-full" triggerTextStyling="font-normal font-mono" />
+  <SeeMore
+    subjects={profile.subjects}
+    triggerStyling="w-full"
+    triggerTextStyling="font-normal"
+  />
 </article>
