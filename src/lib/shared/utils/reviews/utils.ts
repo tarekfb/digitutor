@@ -1,6 +1,8 @@
 import type {
+  DbRating,
   DbReviewWithReferences,
   DbTopTeacher,
+  Rating,
   ReviewWithReferences,
   TopTeacher,
 } from "../../models/review.ts";
@@ -46,3 +48,20 @@ export const formatTopTeacher = ({
     reviews: reviews.map(r => formatReviewWithReferences(r)),
   };
 };
+
+export const formatRating = ({
+  id,
+  first_name,
+  avatar_url,
+  review_count,
+  avg_rating,
+}: DbRating): Rating => {
+  return {
+    id,
+    firstName: first_name,
+    avatarUrl: avatar_url ?? undefined,
+    reviewCount: review_count,
+    avgRating: avg_rating,
+  };
+};
+

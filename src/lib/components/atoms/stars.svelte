@@ -8,6 +8,7 @@
 
   const handleRounding = (rating: number) => {
     let rounded = Math.round(rating);
+    if (!rounded) rounded = 1;
     if (rounded > 5) rounded = 5;
     if (rounded < 1) rounded = 1;
     return rounded;

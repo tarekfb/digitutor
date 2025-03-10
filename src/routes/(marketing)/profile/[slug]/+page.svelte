@@ -16,6 +16,7 @@
   import type { Session } from "@supabase/supabase-js";
   import type { Profile } from "src/lib/shared/models/profile.ts";
   import { websiteName } from "src/lib/shared/constants/constants.ts";
+  import NbrOfReviews from "src/lib/components/atoms/nbr-of-reviews.svelte";
 
   export let data: PageData;
   $: ({
@@ -28,6 +29,7 @@
     reviews,
     allowCreateReview,
     listingMessage,
+    rating,
   } = data);
 
   const isDesktop = mediaQuery("(min-width: 768px)");
@@ -58,6 +60,7 @@
       {listing}
       {requestContactForm}
       {startContactForm}
+      {rating}
     />
     {#if isOwner && listingMessage}
       <div class="mx-8">
@@ -68,7 +71,7 @@
           class="text-lg"
           descriptionClass="text-base"
         >
-          <p class="text-base mt-2 italic">Bara du kan se detta</p>
+          <p class="mt-2 text-base italic">Bara du kan se detta</p>
         </AlertMessage>
       </div>
     {/if}
@@ -109,7 +112,15 @@
             <SecondaryTitle class="font-normal md:text-4xl"
               >{teacher.firstName}</SecondaryTitle
             >
-            <Stars size={5} rating={4.7} />
+            {#if rating}
+              <div class="flex flex-col gap-y-1">
+                <Stars size={5} rating={rating.avgRating} />
+                <NbrOfReviews
+                  class="text-sm text-background/50 "
+                  nbrOfReviews={rating.reviewCount}
+                />
+              </div>
+            {/if}
             {#if listing}
               <ul>
                 {#each listing?.subjects as subject, i}
