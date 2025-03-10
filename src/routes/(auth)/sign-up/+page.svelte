@@ -89,12 +89,12 @@
         <Tabs.List class="self-center">
           <Tabs.Trigger
             value="student"
-            class="data-[state=active]:bg-third data-[state=inactive]:bg-none data-[state=active]:text-background data-[state=inactive]:text-black"
+            class="rounded-r-none data-[state=active]:bg-third data-[state=inactive]:bg-card data-[state=active]:text-background data-[state=inactive]:text-black"
             >Student</Tabs.Trigger
           >
           <Tabs.Trigger
             value="teacher"
-            class="data-[state=active]:bg-third data-[state=inactive]:bg-none data-[state=active]:text-background data-[state=inactive]:text-black"
+            class="rounded-l-none data-[state=active]:bg-third data-[state=inactive]:bg-card data-[state=active]:text-background data-[state=inactive]:text-black"
             >Lärare</Tabs.Trigger
           >
         </Tabs.List>
@@ -110,7 +110,7 @@
         {delayed}
         {allErrors}
         text="Skapa konto"
-        class="min-w-wider self-center"
+        class="wide-button self-center"
       />
       <Form.Field form={userForm} name="role" class="hidden">
         <Form.Control let:attrs>
