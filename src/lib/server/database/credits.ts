@@ -14,7 +14,7 @@ export const getCreditsByStudent = async (
     .limit(1)
     .maybeSingle();
 
-  if (error) {
+  if (error || data === null || data === undefined) {
     console.error(`Failed to get credits for studentId: ${studentId}`, {
       error,
     });

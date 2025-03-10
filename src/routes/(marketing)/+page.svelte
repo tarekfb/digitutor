@@ -40,49 +40,6 @@
 </svelte:head>
 
 <Container margin={false} class="gap-y-0 ">
-  <!-- mobile -->
-  <!-- <div class="flex w-full flex-col gap-y-4 {xContainerPadding} lg:hidden">
-      <div
-        class="relative -mx-4 flex h-full flex-col items-center justify-end md:-mx-8 lg:mx-0 lg:w-1/2"
-      >
-        <h1
-          class="heading absolute z-10 m-4 self-start text-2xl !font-bold text-background md:m-8 md:text-3xl lg:text-4xl"
-        >
-          {cta}
-        </h1>
-        <div class="background-gradient absolute size-full"></div>
-        <enhanced:img
-          src="src/lib/assets/kampus.jpg"
-          class="size-full object-cover"
-          alt=""
-        />
-      </div>
-      <p class="text-2xl">{subDescr}</p>
-      <Button
-        class="flex w-full items-center gap-x-2 md:w-auto"
-        on:click={() => goto("/sign-up")}
-        >Skapa konto
-        <ArrowRight class="size-4" />
-      </Button>
-    </div> -->
-  <!-- desktop -->
-  <!-- <div class="hidden w-full flex-row justify-evenly gap-y-4 {xContainerPadding} lg:flex">
-      <div class="flex w-1/2 max-w-2xl flex-col justify-center gap-y-4">
-        <h1 class="heading text-5xl">{cta}</h1>
-        <p class="text-2xl text-muted-foreground">{subDescr}</p>
-        <Button
-          class="flex w-full max-w-72 items-center gap-x-2 md:w-auto"
-          on:click={() => goto("/sign-up")}
-          >Skapa konto
-          <ArrowRight class="size-4" />
-        </Button>
-      </div>
-      <div
-        class="ml-5 flex flex-grow items-center justify-center lg:max-w-[50vw]"
-      >
-        <Vector width={500} height={500} />
-      </div>
-    </div> -->
   <section
     class="flex w-screen flex-col items-center gap-4 self-center {xContainerPadding} w-full pb-8 pt-4 md:flex-row md:justify-evenly md:py-32 lg:gap-8 xl:max-w-[80vw]"
   >
@@ -96,7 +53,7 @@
         <ArrowRight class="size-4" />
       </Button>
     </div>
-    <Vector class="mt-8 md:mt-0 lg:max-h-[500px] lg:max-w-[500px]" />
+    <Vector class="mt-8 md:mt-0 lg:max-h-[500px] lg:max-w-[500px] max-h-[400px] max-w-[400px]" />
   </section>
 
   {#if displayProfiles.length > 0}
