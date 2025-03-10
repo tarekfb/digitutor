@@ -18,7 +18,7 @@
   type="submit"
   {variant}
   disabled={$allErrors.length > 0 || $delayed || disabled}
-  class={cn("flex items-center gap-x-2", className)}
+  class={cn("icon-button", className)}
 >
   {#if $delayed}
     <LoadingSpinner />

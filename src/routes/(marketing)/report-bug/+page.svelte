@@ -118,9 +118,9 @@
       {delayed}
       {allErrors}
       text="Skicka"
-            class="self-center wide-btn"
+      class="wide-button self-center"
     >
-      <SendHorizontal slot="icon" class="h-5 w-5" />
+      <SendHorizontal slot="icon" class="size-button-icon" />
     </FormSubmit>
   </form>
 </Container>
