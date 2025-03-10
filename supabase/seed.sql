@@ -1186,3 +1186,21 @@ VALUES
         'Of course! Closures can be tricky, but I’ll break it down for you.',
         current_timestamp - INTERVAL '2 hours'
     );
+
+
+    INSERT INTO
+    public.credit_transactions (id, student, amount, created_at)
+VALUES
+    -- Teachers
+    (
+        '550e8400-e29b-41d4-a716-442155440100',
+        '550e8400-e29b-41d4-a716-446655440140',
+        '5',
+        NOW()
+    ),
+    (
+        '550e8400-e29b-41d4-a716-446345440110',
+        '550e8400-e29b-41d4-a716-446655440150',
+        '2',
+        NOW()
+    );

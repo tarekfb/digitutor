@@ -436,7 +436,7 @@ export const actions = {
     if (!hasSubscription) {
       let credits: number | undefined;
       try {
-        credits = await getCreditsByStudent(supabase, userId);
+        credits = await getCreditsByStudent(supabaseServiceRole, userId);
       } catch (error) {
         credits = undefined;
         logErrorServer({
@@ -587,7 +587,7 @@ export const actions = {
     if (!session)
       redirect(
         303,
-        `/ sign -in? next = /profile/${teacherId}`,
+        `/sign-in?next=/profile/${teacherId}`,
         {
           type: "info",
           message: "Skapa ett konto eller logga in för att göra en recension.",
