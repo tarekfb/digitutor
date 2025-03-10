@@ -36,7 +36,7 @@
 
 <Container margin={false} class="gap-y-0">
   <section
-    class="flex flex-col items-start gap-y-4 self-center py-4 md:py-8 lg:w-full lg:flex-row lg:justify-evenly lg:gap-8 xl:max-w-[80vw]"
+    class="flex flex-col items-start gap-y-4 self-center pb-4 md:py-8 lg:w-full lg:flex-row lg:justify-evenly lg:gap-8 xl:max-w-[80vw]"
   >
     <!-- mobile -->
     <div class="flex w-full flex-col gap-y-4 lg:hidden">
@@ -118,11 +118,11 @@
     </div>
   {/if}
   <div
-    class="mt-40 flex w-screen flex-col items-center self-center bg-background pb-4 md:py-8"
+    class="{displayReviews.length > 0 ? 'mt-40' : ''} flex w-screen flex-col items-center self-center bg-background pb-4 md:py-8"
   >
     <Container maxWidth margin={false} class="mx-4 md:mx-8" responsiveGap>
       <PrimaryTitle class="my-4 text-center  "
-        >Enkel betallmodell och generös gratisnivå.
+        >Generös gratisnivå och möjlighet att uppgradera när som helst.
       </PrimaryTitle>
       <section
         class="flex w-full flex-col-reverse flex-wrap place-content-center gap-6 md:gap-10 lg:flex-row"
