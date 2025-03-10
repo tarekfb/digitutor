@@ -59,7 +59,7 @@
     <Container style={container}>
       <Heading style={heading}>Tack för din tid hos oss!</Heading>
       <Text style={paragraph}>
-        Hej{studentName ? ` ${studentName}` : ""}!
+        Hej{studentName ? ` ${studentName}!` : "!"}
       </Text>
       <Text style={paragraph}>
         Ditt konto hos oss har nu tagits bort. Vi hoppas att vi har varit till
