@@ -6,6 +6,7 @@
   export { className as class };
 </script>
 
+<!-- attribution to https://www.vecteezy.com/members/nerizaamanda -->
 <svg
   {width}
   {height}
