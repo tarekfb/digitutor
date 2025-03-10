@@ -19,17 +19,17 @@
 
 <div
   class={cn(
-    `mt-2 flex ${listing ? "flex-col" : "flex-row justify-between flex-wrap"} gap-2 w-full `,
+    `mt-2 flex ${listing ? "flex-col" : "flex-row flex-wrap justify-between"} w-full gap-2 `,
     className,
   )}
 >
   <PrimaryTitle class="font-semibold">{teacher.firstName}</PrimaryTitle>
-  <div class="flex flex-row gap-y-2 justify-between">
+  <div class="flex flex-row justify-between gap-y-2">
     <div class="flex flex-col gap-y-2">
       {#if rating}
         <div class="flex flex-col gap-y-1">
           <Stars size={5} rating={rating.avgRating} />
-          <NbrOfReviews class="text-sm " nbrOfReviews={rating.reviewCount} />
+          <NbrOfReviews class="text-sm" nbrOfReviews={rating.reviewCount} />
         </div>
       {/if}
       {#if listing}
