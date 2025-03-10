@@ -18,7 +18,9 @@
 </script>
 
 <div class="mb-4 space-y-1 text-center lg:text-start">
-  <PrimaryTitle testId={type}>Skapa konto som {getReadableType(type)}</PrimaryTitle>
+  <PrimaryTitle testId={type}
+    >Skapa konto som {getReadableType(type)}</PrimaryTitle
+  >
   <p class="text-muted-foreground">
     Ett konto är gratis och inget betalkort behövs. Har du redan ett konto?
     <a href="/sign-in" class="underline"> Logga in här. </a>
@@ -32,6 +34,7 @@
         {...attrs}
         type="text"
         bind:value={$formData.firstName}
+        class="bg-card"
         placeholder="Förnamn"
       />
     </Form.Control>
@@ -43,6 +46,7 @@
       <Input
         {...attrs}
         type="email"
+        class="bg-card"
         bind:value={$formData.email}
         placeholder="E-postadress"
       />
@@ -52,7 +56,7 @@
   <Form.Field form={userForm} name="password">
     <Form.Control let:attrs>
       <Label>Lösenord</Label>
-      <PasswordInput {formData} {attrs} />
+      <PasswordInput bgStyling="bg-card" {formData} {attrs} />
     </Form.Control>
     <Form.FieldErrors />
   </Form.Field>
@@ -60,11 +64,11 @@
   <Form.Field
     form={userForm}
     name="terms"
-    class="flex flex-row items-start space-x-3 space-y-0 rounded-md border p-4"
+    class="flex flex-row items-center  space-y-0 rounded-md"
   >
     <Form.Control let:attrs>
       <Checkbox {...attrs} bind:checked={$formData.terms} />
-      <Form.Label class="text-foreground"
+      <Form.Label class="px-2 text-foreground cursor-pointer"
         >Jag accepterar <a href="/terms-and-conditions" class="underline"
           >villkoren</a
         >

@@ -55,9 +55,9 @@
   shouldShowAside={!!displayTeacher && displayTeacher.reviews.length > 0}
 >
   <svelte:fragment slot="aside">
+    <!-- this if is here only to please explain to ts displayteacher is not undefined -->
     {#if displayTeacher}
       {@const reviews = displayTeacher.reviews.splice(0, 3)}
-      <!-- this is here only to please explain to ts displayteacher is not undefined -->
       <div class="flex max-h-[75vh] flex-col gap-y-4">
         <PrimaryTitle class="text-muted-foreground"
           >Spana in en av våra lärare</PrimaryTitle
@@ -98,7 +98,7 @@
               <ul>
                 {#each displayTeacher.subjects as subject, i}
                   {#if i < 10}
-                    <SubjectItem subject={subject.id} muted={false} li />
+                      <SubjectItem subject={subject.id} muted={false} li />
                   {/if}
                 {/each}
               </ul>
@@ -112,7 +112,7 @@
                 {index}
                 {review}
                 li
-                class="z-{(reviews.length - index) * 10} {getBlur(index)} w-96"
+                class="z-{(reviews.length - index) * 10} {getBlur(index)} w-96 bg-background border shadow-md"
               />
             {/each}
           </ul>
@@ -142,6 +142,7 @@
             <Input
               {...attrs}
               type="email"
+              class="bg-card"
               bind:value={$formData.email}
               placeholder="E-postadress"
             />
@@ -151,7 +152,7 @@
         <Form.Field form={userForm} name="password">
           <Form.Control let:attrs>
             <Label>Lösenord</Label>
-            <PasswordInput {formData} {attrs} />
+            <PasswordInput bgStyling="bg-card" {formData} {attrs} />
           </Form.Control>
           <Form.FieldErrors />
         </Form.Field>
@@ -174,7 +175,7 @@
         {delayed}
         {allErrors}
         text="Logga in"
-        class="min-w-wider self-center"
+        class="wide-button self-center"
       />
     </form>
   </svelte:fragment>
