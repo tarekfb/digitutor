@@ -130,13 +130,12 @@
     submit();
   };
 
-  const languageItemStyling =
-    "relative cursor-pointer rounded-md pl-4 data-[highlighted]:bg-third data-[highlighted]:text-background data-[disabled]:opacity-50";
-
   let sortingId: SortingSearchOption["id"] = defaultSort.id;
 
-  const containterStyling =
-    "px-4 md:px-8 py-4 md:py-8 max-w-full md:max-w-screen-sm lg:max-w-screen-md";
+  const languageItemStyling =
+    "relative cursor-pointer rounded-md pl-4 data-[highlighted]:bg-third data-[highlighted]:text-background data-[disabled]:opacity-50";
+  const maxWidth = "max-w-full md:max-w-screen-sm lg:max-w-screen-md";
+  const containterStyling = "px-4 md:px-8 py-4 md:py-8 " + maxWidth;
 </script>
 
 <svelte:head>

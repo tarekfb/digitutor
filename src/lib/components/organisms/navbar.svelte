@@ -5,6 +5,7 @@
   import { Separator } from "../ui/separator/index.ts";
   import { Button } from "../ui/button/index.ts";
   import UserRound from "lucide-svelte/icons/user-round";
+  import { page } from "$app/stores";
 
   export let profile: Profile | undefined | null | false;
   export let logout: (() => void) | false;
@@ -17,7 +18,12 @@
     logout();
   };
 
-  const navItem = "px-4 py-2 text-muted-foreground md:hover:bg-third md:hover:text-background";
+  const isReloadOnSearch = (pathname: string) => {
+    return pathname === "/search";
+  };
+
+  const navItem =
+    "px-4 py-2 text-muted-foreground md:hover:bg-third md:hover:text-background";
 </script>
 
 <header
@@ -68,9 +74,25 @@
     <a href="/sign-up?role=teacher" class={navItem}>Skapa konto som lärare</a>
     <a href="/pricing" class={navItem}>Premium</a>
     <Separator orientation="vertical" class="py-3" />
-    <a href="/search?getAll=true" class={navItem}>Se alla lärare</a>
-    <a href="/search?q=javascript" class={navItem}>Javascript</a>
-    <a href="/search?q=python" class={navItem}>Python</a>
-    <a href="/search?q=java" class={navItem}>Java</a>
+    <a
+      href="/search?getAll=true"
+      data-sveltekit-reload={isReloadOnSearch($page.url.pathname)}
+      class={navItem}>Se alla lärare</a
+    >
+    <a
+      href="/search?q=javascript"
+      data-sveltekit-reload={isReloadOnSearch($page.url.pathname)}
+      class={navItem}>Javascript</a
+    >
+    <a
+      href="/search?q=python"
+      data-sveltekit-reload={isReloadOnSearch($page.url.pathname)}
+      class={navItem}>Python</a
+    >
+    <a
+      href="/search?q=java"
+      data-sveltekit-reload={isReloadOnSearch($page.url.pathname)}
+      class={navItem}>Java</a
+    >
   </nav>
 </header>

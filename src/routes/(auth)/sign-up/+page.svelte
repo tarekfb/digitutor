@@ -89,12 +89,12 @@
         <Tabs.List class="self-center">
           <Tabs.Trigger
             value="student"
-            class="data-[state=active]:bg-primary data-[state=inactive]:bg-none data-[state=active]:text-red-300 data-[state=inactive]:text-black"
+            class="data-[state=active]:bg-third data-[state=inactive]:bg-none data-[state=active]:text-background data-[state=inactive]:text-black"
             >Student</Tabs.Trigger
           >
           <Tabs.Trigger
             value="teacher"
-            class="data-[state=active]:bg-primary data-[state=inactive]:bg-none data-[state=active]:text-red-300 data-[state=inactive]:text-black"
+            class="data-[state=active]:bg-third data-[state=inactive]:bg-none data-[state=active]:text-background data-[state=inactive]:text-black"
             >Lärare</Tabs.Trigger
           >
         </Tabs.List>
