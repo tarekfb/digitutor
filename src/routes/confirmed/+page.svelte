@@ -6,6 +6,7 @@
   import { goto } from "$app/navigation";
   import Navbar from "src/lib/components/organisms/navbar.svelte";
   import PrimaryTitle from "src/lib/components/atoms/primary-title.svelte";
+  import Container from "src/lib/components/templates/container.svelte";
   import SecondaryTitle from "src/lib/components/atoms/secondary-title.svelte";
 </script>
 
@@ -21,12 +22,10 @@
   </Button>
 </Navbar>
 
-<div
-  class="m-8 flex max-w-xl flex-col items-center gap-y-6 self-center text-center md:gap-y-8"
->
+<Container class="self-center text-center" padding maxWidth minWidth>
   <CheckCircle2 size="100" class="text-success" />
   <div class="space-y-2 md:space-y-4">
-    <PrimaryTitle class="text-3xl font-semibold md:text-6xl">
+    <PrimaryTitle class="text-3xl font-semibold md:text-5xl">
       E-post verifierad!
     </PrimaryTitle>
     <SecondaryTitle class="text-muted-foreground"
@@ -37,4 +36,4 @@
   <Button on:click={() => goto("/account")} class="md:min-w-wider"
     >Gå till ditt konto</Button
   >
-</div>
+</Container>
