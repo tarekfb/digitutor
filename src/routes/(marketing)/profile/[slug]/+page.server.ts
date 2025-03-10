@@ -16,6 +16,7 @@ import {
 } from "$lib/shared/models/conversation.ts";
 import {
   addReviewSchema,
+  type Rating,
   type ReviewWithReferences,
 } from "$lib/shared/models/review.ts";
 import { zod } from "sveltekit-superforms/adapters";
@@ -27,6 +28,7 @@ import { redirect, setFlash } from "sveltekit-flash-message/server";
 import { ResourceAlreadyExistsError } from "src/lib/shared/errors/resource-already-exists-error.js";
 import {
   createReview,
+  getRating,
   getReviewsByReceiver,
   getReviewsBySender,
 } from "src/lib/server/database/review.js";
@@ -42,7 +44,7 @@ import {
 import type { Profile } from "src/lib/shared/models/profile.js";
 import { formatProfile } from "src/lib/shared/utils/profile/utils.js";
 import { formatListingWithProfile } from "src/lib/shared/utils/listing/utils.js";
-import { formatReviewWithReferences } from "src/lib/shared/utils/reviews/utils.ts";
+import { formatRating, formatReviewWithReferences } from "src/lib/shared/utils/reviews/utils.ts";
 
 import {
   getCreditsByStudent,
@@ -167,6 +169,31 @@ export const load = async ({
       });
   }
 
+  let rating: Pick<Rating, "id" | "reviewCount" | "avgRating"> | undefined = undefined;
+  try {
+    const dbRating = await getRating(supabase, teacherId);
+    const { reviewCount, avgRating, id } = formatRating(dbRating);
+    rating = {
+      id,
+      reviewCount,
+      avgRating,
+    };
+  } catch (e) {
+    const trackingId = logErrorServer({
+      error: e,
+      message: `Error when reading rating for profile with id: ${teacherId}`,
+    });
+    const isOwner = userId === teacherId;
+    if (isOwner)
+      // only show error info to owner
+      reviewsMessage = getFailFormMessage({
+        title: "Vi kunde inte hämta ditt betyg",
+        description: "Något gick fel. Kontakta oss om detta fortsätter.",
+        trackingId
+      });
+  }
+
+
   let allowCreateReview: boolean = false;
   if (role === "student") {
     const hasExistingReview = reviews.find((r) => r.sender?.id === student?.id);
@@ -206,6 +233,7 @@ export const load = async ({
     { rating: 5 },
     zod(addReviewSchema),
   );
+
   return {
     teacher,
     reviews,
@@ -216,6 +244,7 @@ export const load = async ({
     startContactForm,
     addReviewForm,
     allowCreateReview,
+    rating
   };
 };
 

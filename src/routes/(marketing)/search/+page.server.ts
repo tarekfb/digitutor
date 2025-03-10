@@ -42,11 +42,11 @@ export const load = (async ({ url, locals: { supabase } }) => {
           description: "Testa söka på något annat, eller försök igen senare.",
         });
     } else {
-      logErrorServer({
+      const trackingId = logErrorServer({
         error,
         message: `Error searching for teachers with following search: ${query}`,
       });
-      initMessage = getFailFormMessage();
+      initMessage = getFailFormMessage({ trackingId });
     }
   }
 
