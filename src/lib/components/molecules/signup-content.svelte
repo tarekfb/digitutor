@@ -18,9 +18,7 @@
 </script>
 
 <div class="mb-4 space-y-1 text-center lg:text-start">
-  <PrimaryTitle class="whitespace-normal"
-    >Skapa konto som {getReadableType(type)}</PrimaryTitle
-  >
+  <PrimaryTitle testId={type}>Skapa konto som {getReadableType(type)}</PrimaryTitle>
   <p class="text-muted-foreground">
     Ett konto är gratis och inget betalkort behövs. Har du redan ett konto?
     <a href="/sign-in" class="underline"> Logga in här. </a>
@@ -35,18 +33,6 @@
         type="text"
         bind:value={$formData.firstName}
         placeholder="Förnamn"
-      />
-    </Form.Control>
-    <Form.FieldErrors />
-  </Form.Field>
-  <Form.Field form={userForm} name="lastName">
-    <Form.Control let:attrs>
-      <Label>Efternamn</Label>
-      <Input
-        {...attrs}
-        type="text"
-        bind:value={$formData.lastName}
-        placeholder="Efternamn"
       />
     </Form.Control>
     <Form.FieldErrors />

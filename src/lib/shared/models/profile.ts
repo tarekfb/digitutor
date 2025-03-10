@@ -11,22 +11,19 @@ export type DbProfile = Tables<"profiles">;
 
 export type Profile = Omit<
   DbProfile,
-  "created_at" | "updated_at" | "first_name" | "last_name" | "avatar_url"
+  "created_at" | "updated_at" | "first_name" | "avatar_url"
 > & {
   firstName: string;
-  lastName: string;
   avatarUrl?: string;
 };
 
 export type FinishProfileInput = {
   firstName: string;
-  lastName: string;
 };
 
 export type ProfileInput = {
   id: string;
   first_name?: string;
-  last_name?: string;
   bio?: string;
   avatar_url?: string;
   is_active?: boolean;
@@ -39,10 +36,6 @@ export const nameSchema = z.object({
     .string()
     .min(1, "Får inte vara tomt.")
     .max(50, "Får inte vara mer än 50 karaktärer."),
-  lastName: z
-    .string()
-    .min(1, "Får inte vara tomt.")
-    .max(50, "Får inte vara mer än 50 karaktärer."),
 });
 
 export const emailSchema = z.object({
@@ -51,7 +44,6 @@ export const emailSchema = z.object({
 
 // export const nameSchema = z.object({
 //     firstName: signUpUserFields.firstName,
-//     lastName: signUpUserFields.lastName,
 // });
 
 // export const emailSchema = z.object({
@@ -62,7 +54,6 @@ export type CreateProfile = {
   id: string;
   role: "teacher" | "student" | "admin";
   firstName: string;
-  lastName: string;
 };
 
 export type Role = DbProfile["role"];

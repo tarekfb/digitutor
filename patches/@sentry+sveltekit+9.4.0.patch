@@ -1,0 +1,14 @@
+diff --git a/node_modules/@sentry/sveltekit/build/esm/server-common/utils.js b/node_modules/@sentry/sveltekit/build/esm/server-common/utils.js
+index 42d94d1..01f93fe 100644
+--- a/node_modules/@sentry/sveltekit/build/esm/server-common/utils.js
++++ b/node_modules/@sentry/sveltekit/build/esm/server-common/utils.js
+@@ -17,7 +17,8 @@ function getTracePropagationData(event) {
+ 
+ /** Flush the event queue to ensure that events get sent to Sentry before the response is finished and the lambda ends */
+ async function flushIfServerless() {
+-  if (!process) {
++  console.log("sentry logging here", typeof process)
++  if  (typeof process === 'undefined') {
+     return;
+   }
+ 

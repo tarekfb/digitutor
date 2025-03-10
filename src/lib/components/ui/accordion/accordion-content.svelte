@@ -14,7 +14,7 @@
 </script>
 
 <AccordionPrimitive.Content
-  class={cn("overflow-hidden text-sm transition-all", className)}
+  class={cn("overflow-hidden text-sm transition-all md:text-base", className)}
   {transition}
   {transitionConfig}
   {...$$restProps}

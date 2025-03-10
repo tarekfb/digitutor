@@ -1,35 +1,27 @@
 import type { SupabaseClient } from "@supabase/supabase-js";
-import type { DbListingWithProfile } from "src/lib/shared/models/listing.ts";
+import type { DbSearchResult } from "src/lib/shared/models/listing.ts";
 import type { Database } from "src/supabase.ts";
 
 export const search = async (
   supabase: SupabaseClient<Database>,
-  query: string,
-): Promise<DbListingWithProfile[]> => {
-  query = query
-    .trim()
-    .split(" ")
-    .map((word) => `'${word}'`)
-    .join(" | ");
-  // https://supabase.com/docs/guides/database/full-text-search?queryGroups=language&language=js#match-all-search-words
-
-  const { data, error } = await supabase
-    .from("listings")
-    .select(
-      `
-      *,
-      profile (
-        *
-      )
-    `,
-    )
-    .eq("visible", true)
-    .textSearch("compound_search", query);
+  inputQuery: string,
+): Promise<DbSearchResult[]> => {
+  const dbQuery = supabase.from("searchable_listings").select("*");
+  if (inputQuery) {
+    inputQuery = inputQuery
+      .trim()
+      .split(" ")
+      .map((word) => `'${word}'`)
+      .join(" | ");
+    // https://supabase.com/docs/guides/database/full-text-search?queryGroups=language&language=js#match-all-search-words
+    dbQuery.textSearch("compound_search", inputQuery);
+  }
+  const { data, error } = await dbQuery;
 
   if (error) {
-    console.error(`Error on search. Query: ${query}`, { error });
+    console.error(`Error on search. Query: '${inputQuery}'. If query empty, tried to return all`, { error });
     throw error;
   }
 
-  return data as unknown as DbListingWithProfile[];
+  return data as unknown as DbSearchResult[];
 };

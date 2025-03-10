@@ -5,17 +5,22 @@ import {
 import type { PageServerLoad } from "./$types.ts";
 import { error } from "@sveltejs/kit";
 import {
+  defaultPlanId,
   getDefaultErrorInfo,
   websiteName,
 } from "src/lib/shared/constants/constants.ts";
 import { getCreditsByStudent } from "src/lib/server/database/credits.ts";
-import { redirect } from "sveltekit-flash-message/server";
+import { redirect, setFlash } from "sveltekit-flash-message/server";
+import { PricingPlanIds } from "src/lib/shared/models/subscription.ts";
+import { logErrorServer } from "src/lib/shared/utils/logging/utils.ts";
 
-export const load: PageServerLoad = (async ({
-  locals: { supabaseServiceRole, safeGetSession },
-  parent,
-  cookies,
-}) => {
+export const load: PageServerLoad = (async (event) => {
+  const {
+    locals: { supabaseServiceRole, safeGetSession },
+    parent,
+    cookies,
+    url
+  } = event;
   const { profile } = await parent();
   if (profile.role === "teacher")
     redirect(
@@ -36,8 +41,11 @@ export const load: PageServerLoad = (async ({
     user,
   });
   if (idError || !customerId) {
-    console.error("Error creating customer id", idError);
-    error(500, getDefaultErrorInfo());
+    const trackingId = logErrorServer({
+      error: idError,
+      message: "Error creating customer id",
+    });
+    error(500, { ...getDefaultErrorInfo({ trackingId }) });
   }
 
   const {
@@ -47,22 +55,31 @@ export const load: PageServerLoad = (async ({
   } = await fetchSubscription({ customerId });
 
   if (fetchErr) {
-    console.error("Error fetching subscription", fetchErr);
-    error(500, getDefaultErrorInfo());
+    const trackingId = logErrorServer({
+      error: fetchErr,
+      message: "Error while fetching subscription for account billing page",
+    });
+    error(500, { ...getDefaultErrorInfo({ trackingId }) });
   }
 
-  let balance: number | undefined;
+  let credits: number | undefined;
   try {
-    balance = await getCreditsByStudent(supabaseServiceRole, user.id);
+    credits = await getCreditsByStudent(supabaseServiceRole, user.id);
   } catch (error) {
-    console.error("Error fetching credits", error);
-    balance = undefined;
+    logErrorServer({
+      error,
+      message: "Error while fetching credits for account billing page",
+    });
   }
+
+  const currentPlanId = primarySubscription?.appSubscription?.id || defaultPlanId;
+  if (currentPlanId === PricingPlanIds.Free && url.searchParams.get("plan") === "free")
+    setFlash({ message: "Din nuvarande plan är redan: Gratis ", type: "info" }, event);
 
   return {
     isActiveCustomer: !!primarySubscription,
     hasEverHadSubscription,
-    currentPlanId: primarySubscription?.appSubscription?.id,
-    balance,
+    currentPlanId,
+    credits,
   };
 }) satisfies PageServerLoad;

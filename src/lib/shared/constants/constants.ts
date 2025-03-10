@@ -5,7 +5,6 @@ import {
   type PricingPlan,
   StripeProductId,
 } from "../models/subscription.ts";
-import type { CreditsProduct } from "../models/subscription.js";
 
 export const websiteName = "Digitutor";
 export const contactEmail = "info@digitutor.se";
@@ -31,31 +30,40 @@ export const defaultErrorInfo: App.Error = {
 };
 
 export const getDefaultErrorInfo = (
-  message?: string,
-  description?: string,
-  id?: MessageId,
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  data?: any,
+  options?: {
+    message?: string,
+    description?: string,
+    trackingId?: string,
+    id?: MessageId,
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    data?: any,
+  }
 ): App.Error => ({
-  message: message ?? defaultErrorTitle,
-  description: description ?? defaultErrorDescription,
-  id: id ?? MessageId.Unknown,
-  data: data ?? undefined,
+  message: options?.message ?? defaultErrorTitle,
+  description: options?.description ?? defaultErrorInfo.description,
+  id: options?.id ?? MessageId.Unknown,
+  data: options?.data ?? undefined,
+  trackingId: options?.trackingId ?? undefined,
 });
 
+
 export const getFailFormMessage = (
-  title?: string,
-  description?: string,
-  messageId?: MessageId,
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  data?: any,
-  variant: "destructive" | "default" | "warning" = "destructive",
+  options?: {
+    title?: string,
+    description?: string,
+    messageId?: MessageId,
+    trackingId?: string,
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    data?: any,
+    variant?: "destructive" | "default" | "warning",
+  }
 ): Message => ({
-  variant,
-  title: title ?? "Något gick fel",
-  description: description ?? "Du kan kontakta oss om detta fortsätter.",
-  id: messageId ?? MessageId.Unknown,
-  data: data ?? undefined,
+  variant: options?.variant ?? "destructive",
+  title: options?.title ?? "Något gick fel",
+  description: options?.description ?? "Du kan kontakta oss om detta fortsätter.",
+  trackingId: options?.trackingId ?? undefined,
+  id: options?.messageId ?? MessageId.Unknown,
+  data: options?.data ?? undefined,
 });
 
 export const getSuccessFormMessage = (
@@ -77,6 +85,7 @@ export enum MessageId {
   RateLimitExceeded = 1,
   ResourceAlreadyExists = 2,
   InsufficientCredits = 3,
+  ContactUs = 4,
 }
 
 export const initMessagesCount = 25;
@@ -110,35 +119,21 @@ export const getFormatsHumanReadable = () => {
   return acceptedFormatsHumanReadable;
 };
 
-export const costPerRequest = 9;
-export const freeCredits = 35;
+export const costPerRequest = 1;
+export const freeCredits = 5;
 export const defaultPlanId = PricingPlanIds.Free;
-export const creditProducts: CreditsProduct[] = [
-  {
-    price: "250 SEK",
-    credits: 50,
-    stripePriceId: StripePriceId.SmallCreditsTest,
-    stripeProductId: StripeProductId.SmallCreditsTest,
-  },
-  {
-    price: "400 SEK",
-    credits: 100,
-    stripePriceId: StripePriceId.LargeCreditsTest,
-    stripeProductId: StripeProductId.LargeCreditsTest,
-  },
-];
+
 export const freePlan: PricingPlan = {
   id: PricingPlanIds.Free,
   name: "Gratis",
-  description: `Inkluderar ${freeCredits} krediter vid start (att kontakta lärare kostar ${costPerRequest} krediter).`,
+  description: `Inkluderar ${freeCredits} gratis kontaktförfrågningar. Tilldelas automatiskt när du skapar konto, uppgradera när som helst.`,
   bold: `Inget betalkort behövs!`,
   price: "0 SEK",
   priceIntervalName: "per månad",
   stripePriceId: StripePriceId.Free,
   features: [
-    `${freeCredits} gratis krediter`,
+    `${freeCredits} gratis kontaktförfrågningar`,
     "Tillgång alla lärare",
-    "Möjlighet att köpa fler krediter när som helst",
   ],
 };
 export const premiumPlan: PricingPlan = {
@@ -152,7 +147,7 @@ export const premiumPlan: PricingPlan = {
   // stripePriceId: isProd ? StripePriceId.PremiumProd : StripePriceId.PremiumTest,  // todo: reactive when live
   stripeProductId: StripeProductId.PremiumTest,
   // stripeProductId:  isProd ? StripeProductId.PremiumProd : StripeProductId.PremiumTest, // todo: reactive when live
-  features: ["Allt i gratisplanen", "Oändligt med krediter"],
+  features: ["Allt i gratisplanen", "Oändligt med kontaktförfrågningar", "Avbryt prenumerationen när som helst"],
 };
 
 export const pricingPlans: PricingPlan[] = [freePlan, premiumPlan];

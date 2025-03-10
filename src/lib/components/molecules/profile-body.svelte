@@ -17,15 +17,13 @@
   export let addReviewForm: SuperValidated<Infer<typeof addReviewSchema>>;
 </script>
 
-<PrimaryTitle class="text-wrap">Om {teacher.firstName}</PrimaryTitle>
-<p class={cn("text-muted-foreground md:text-lg", pStyle)}>
-  {#if teacher.bio}
+{#if teacher.bio}
+  <PrimaryTitle class="text-wrap">Om {teacher.firstName}</PrimaryTitle>
+  <p class={cn("text-muted-foreground md:text-lg", pStyle)}>
     {teacher.bio}
-  {:else}
-    Den här läraren har ingen beskrivning just nu.
-  {/if}
-</p>
-<PrimaryTitle class="text-wrap">Recensioner</PrimaryTitle>
+  </p>
+{/if}
+<PrimaryTitle class="text-wrap" id="reviews">Recensioner</PrimaryTitle>
 {#if allowCreateReview}
   <AddReview form={addReviewForm} {teacher} />
 {/if}

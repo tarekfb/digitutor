@@ -7,51 +7,29 @@ import {
 import { message, superValidate } from "sveltekit-superforms";
 import { zod } from "sveltekit-superforms/adapters";
 import { resendSchema, signInSchema } from "$lib/shared/models/user.ts";
-import { getHighQualityReviews } from "src/lib/server/database/review.ts";
-import { getListingsByTeacher } from "src/lib/server/database/listings.ts";
-import { formatReviewWithReferences } from "src/lib/shared/utils/reviews/utils.ts";
-import type { ReviewWithReferences } from "src/lib/shared/models/review.ts";
-import type { ListingWithProfile } from "src/lib/shared/models/listing.ts";
-import { formatListingWithProfile } from "src/lib/shared/utils/listing/utils.ts";
+import { getTopTeacher } from "src/lib/server/database/review.ts";
+import { formatTopTeacher } from "src/lib/shared/utils/reviews/utils.ts";
+import type { TopTeacher } from "src/lib/shared/models/review.ts";
+import { logErrorServer } from "src/lib/shared/utils/logging/utils.ts";
 
 export const load: PageServerLoad = async ({ locals: { supabase } }) => {
-  let longReviews: ReviewWithReferences[];
-  try {
-    const dbReviews = await getHighQualityReviews(supabase);
-    let sorted = dbReviews.sort(
-      (a, b) => (b.description?.length ?? 0) - (a.description?.length ?? 0),
-    );
-    sorted = sorted.slice(0, 3);
-    longReviews = sorted.map((s) => formatReviewWithReferences(s));
-  } catch (e) {
-    console.error(
-      "Error when fetching signin display review, perhaps didnt find valid review",
-      e,
-    );
-    longReviews = [];
-  }
 
-  let subjects: number[] = [];
-  let listings: ListingWithProfile[] = [];
-  if (longReviews[0]) {
-    try {
-      const dbListings = await getListingsByTeacher(
-        supabase,
-        longReviews[0].receiver.id,
-      );
-      listings = dbListings.map((listing) => formatListingWithProfile(listing));
-      subjects = listings.flatMap((listing) => listing.subjects);
-    } catch (e) {
-      console.error("Error when fetching listings and subjects for signin", e);
-      subjects = [];
-      listings = [];
-    }
+  let displayTeacher: TopTeacher | undefined;
+  try {
+    const dbTeacher = await getTopTeacher(supabase, 1);
+    displayTeacher = dbTeacher.length > 0 ? formatTopTeacher(dbTeacher[0]) : undefined;
+  } catch (e) {
+    const trackingId = logErrorServer({
+      error: e,
+      message: "Error when fetching signin topteacher",
+    });
+    displayTeacher = undefined;
   }
 
   const form = await superValidate(zod(signInSchema));
   const resendEmailForm = await superValidate(zod(resendSchema));
 
-  return { listings, subjects, reviews: longReviews, form, resendEmailForm };
+  return { displayTeacher, form, resendEmailForm };
 };
 
 export const actions: Actions = {
@@ -65,8 +43,9 @@ export const actions: Actions = {
 
     const form = await superValidate(event, zod(signInSchema));
 
-    const { email, password } = form.data;
     if (!form.valid) return fail(400, { form });
+    const { password } = form.data;
+    const email = form.data.email.trim();
 
     try {
       const { data, error } = await supabase.auth.signInWithPassword({
@@ -121,17 +100,27 @@ export const actions: Actions = {
             );
           }
           default:
-            console.error("Supabase error on signin", { error });
-            return message(form, getFailFormMessage(), { status: 500 });
+            {
+              const trackingId = logErrorServer({
+                error,
+                message: "Supabase error on signin",
+              });
+              return message(form, getFailFormMessage({ trackingId }), { status: 500 });
+            }
         }
       }
       if (!data.user) {
-        console.error("User data was null on signup", error);
-        return message(form, getFailFormMessage(), { status: 500 });
+        const trackingId = logErrorServer({
+          message: "User data was null on signin",
+        });
+        return message(form, getFailFormMessage({ trackingId }), { status: 500 });
       }
     } catch (error) {
-      console.error("Error on signin supabase auth user", error);
-      return message(form, getFailFormMessage(), { status: 500 });
+      const trackingId = logErrorServer({
+        error,
+        message: "Error on signin supabase auth user",
+      });
+      return message(form, getFailFormMessage({ trackingId }), { status: 500 });
     }
 
     redirect(302, url.searchParams.get("next") ?? "/account");

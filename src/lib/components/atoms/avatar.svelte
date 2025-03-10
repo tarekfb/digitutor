@@ -11,10 +11,9 @@
   export let url: string = "";
   export let role: "teacher" | "student" | "admin" | "" = "";
   export let firstName: string;
-  export let lastName: string;
   export let size = "10";
 
-  let initials = convertToInitials(firstName, lastName);
+  let initials = convertToInitials(firstName);
 
   const fallback = `text-background bg-accent w-${size} h-${size}`;
 </script>
@@ -22,7 +21,7 @@
 <Avatar.Root
   data-testid="avatar"
   class={cn(
-    `flex justify-center text-lg items-center font-normal h-${size} w-${size}`,
+    `flex items-center justify-center text-lg font-normal h-${size} w-${size} ${href ? "md:transition-all md:ease-in-out md:hover:scale-110" : ""}`,
     className,
   )}
 >

@@ -20,7 +20,7 @@
   import PasswordInput from "$lib/components/molecules/password-input.svelte";
   import AvatarForm from "src/lib/components/molecules/avatar-form.svelte";
   import type { PageData } from "./$types.ts";
-  import RootContainer from "src/lib/components/templates/root-container.svelte";
+  import Container from "src/lib/components/templates/container.svelte";
   import AccountLayout from "src/lib/components/templates/account-layout.svelte";
   import { Textarea } from "src/lib/components/ui/textarea/index.ts";
   import * as Collapsible from "$lib/components/ui/collapsible/index.ts";
@@ -77,7 +77,7 @@
 
 <AccountLayout>
   <PrimaryTitle class="text-center">Inställningar</PrimaryTitle>
-  <RootContainer class="my-6 w-full">
+  <Container class="my-6 w-full" minWidth maxWidth padding>
     {#if profile.role === "teacher"}
       <SettingsForm
         form={bioForm}
@@ -95,7 +95,7 @@
         </p>
         <Collapsible.Root>
           <Collapsible.Trigger
-            class="group flex w-full items-center justify-between text-start text-muted-foreground"
+            class="group flex w-full items-center justify-between gap-x-2 text-start text-muted-foreground"
             >Några exempel på saker du kan nämna i din profilbeskrivning:
             <div class="p-0 text-foreground group-data-[state=open]:hidden">
               <ChevronDown class="size-4" />
@@ -107,9 +107,9 @@
             </div>
           </Collapsible.Trigger>
           <Collapsible.Content class="mt-2 text-muted-foreground md:mt-1">
-            {@const styling = "size-5 flex-shrink-0 md:size-7"}
+            {@const styling = "size-button-icon flex-shrink-0 md:size-7"}
             <ul
-              class="*:border-testing list-disc space-y-1.5 *:mx-1 *:flex *:gap-x-2 md:space-y-2"
+              class="list-disc space-y-1.5 *:mx-1 *:flex *:gap-x-2 md:space-y-2"
             >
               <li>
                 <Star class={styling} />Din expertis.
@@ -133,7 +133,8 @@
             <Textarea
               {...attrs}
               placeholder="Skriv en text om dig själv som lärare..."
-              class="max-h-[700px] min-h-32 resize-y"
+              class="max-h-[500px] min-h-32 resize-y md:max-h-[700px]"
+              style={"field-sizing: content"}
               bind:value={$bioData.bio}
             />
           </Form.Control>
@@ -156,19 +157,6 @@
             type="text"
             bind:value={$nameData.firstName}
             placeholder="Förnamn"
-          />
-        </Form.Control>
-        <Form.FieldErrors />
-      </Form.Field>
-
-      <Form.Field form={nameForm} name="lastName">
-        <Form.Control let:attrs>
-          <Form.Label>Efternamn</Form.Label>
-          <Input
-            {...attrs}
-            type="text"
-            bind:value={$nameData.lastName}
-            placeholder="Efternamn"
           />
         </Form.Control>
         <Form.FieldErrors />
@@ -238,5 +226,5 @@
     </SettingsForm>
 
     <DeleteAccount form={deleteForm} />
-  </RootContainer>
+  </Container>
 </AccountLayout>

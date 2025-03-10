@@ -57,3 +57,4 @@ export const formatListingWithProfile = ({
     profile: formatProfile(profile),
   };
 };
+

@@ -9,7 +9,7 @@
 </script>
 
 <a
-  class={cn("font-medium text-accent hover:underline", className)}
+  class={cn("font-medium text-accent md:hover:underline", className)}
   {href}
   aria-label={ariaLabel}
   {target}

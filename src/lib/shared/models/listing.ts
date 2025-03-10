@@ -9,6 +9,25 @@ export type DbListingWithProfile = Omit<Tables<"listings">, "profile"> & {
   profile: DbProfile;
 };
 
+export type DbSearchResult = {
+  id: DbListingBase["id"];
+  title: DbListingBase["title"];
+  description: DbListingBase["description"];
+  hourly_price: DbListingBase["hourly_price"];
+  created_at: DbListingBase["created_at"];
+  updated_at: DbListingBase["updated_at"];
+  profile_id: DbProfile["id"];
+  first_name: DbProfile["first_name"];
+  avatar_url: DbProfile["avatar_url"];
+  profile_created_at: DbProfile["created_at"];
+  profile_updated_at: DbProfile["updated_at"];
+  bio: DbProfile["bio"];
+  role: DbProfile["role"];
+  subjects: DbListingBase["subjects"];
+  avg_rating: number;
+  review_count: number;
+};
+
 export type ListingBase = Omit<
   DbListingBase,
   "created_at" | "updated_at" | "hourly_price"

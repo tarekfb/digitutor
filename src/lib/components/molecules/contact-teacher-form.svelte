@@ -73,7 +73,7 @@
     {allErrors}
     variant={buttonVariant}
     text="Kontakta {firstName}"
-    class="w-full md:min-w-widest md:max-w-widest {buttonStyling}"
+    class="w-full self-center {buttonStyling}"
   />
   <FormMessage {message} scroll />
 </form>

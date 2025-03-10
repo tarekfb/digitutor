@@ -1,35 +1,30 @@
-import { fail, superValidate } from "sveltekit-superforms";
+import { superValidate } from "sveltekit-superforms";
 import { zod } from "sveltekit-superforms/adapters";
 import { searchSchema } from "src/lib/shared/models/search.ts";
-import type { Actions, PageServerLoad } from "./$types.ts";
-import { redirect } from "@sveltejs/kit";
+import type { PageServerLoad } from "./$types.ts";
 import {
   getHighQualityReviews,
-  getTopTeacherByReviews,
-} from "src/lib/server/database/review";
+  getTopTeacher,
+} from "src/lib/server/database/review.ts";
 import {
-  type DisplayProfile,
   type ReviewWithReferences,
+  type TopTeacher,
 } from "src/lib/shared/models/review.ts";
-import { formatDisplayProfile } from "src/lib/shared/utils/profile/utils.ts";
-import { formatReviewWithReferences } from "src/lib/shared/utils/reviews/utils";
-import { formatSubject, type Subject } from "src/lib/shared/models/subject.ts";
-import { languages } from "src/lib/shared/models/common.ts";
-import { getSubjects } from "src/lib/server/database/subjects.ts";
-import { cleanQuery } from "src/lib/shared/utils/utils.ts";
+import { logErrorServer } from "src/lib/shared/utils/logging/utils.ts";
+import { formatReviewWithReferences, formatTopTeacher } from "src/lib/shared/utils/reviews/utils.ts";
 
 export const load: PageServerLoad = async ({ locals: { supabase } }) => {
-  const form = await superValidate(zod(searchSchema));
+  const searchForm = await superValidate(zod(searchSchema));
 
-  let displayProfiles: DisplayProfile[] = [];
+  let displayProfiles: TopTeacher[] = [];
   try {
-    const unformatted = await getTopTeacherByReviews(supabase, 5);
-    displayProfiles = unformatted.map((r) => formatDisplayProfile(r));
+    const dbDisplayProfiles = await getTopTeacher(supabase, 5, false);
+    displayProfiles = dbDisplayProfiles.map((r) => formatTopTeacher(r));
     displayProfiles = displayProfiles.filter(
-      (r) => r.avgRating > 0 && r.avatarUrl,
+      (r) => r.avatarUrl,
     );
-    if (displayProfiles.length > 4)
-      displayProfiles = displayProfiles.slice(0, 4);
+    if (displayProfiles.length > 12)
+      displayProfiles = displayProfiles.slice(0, 12);
   } catch (e) {
     console.error("Error when fetching top teacher by reviews", e);
     displayProfiles = [];
@@ -37,7 +32,7 @@ export const load: PageServerLoad = async ({ locals: { supabase } }) => {
 
   let displayReviews: ReviewWithReferences[] = [];
   try {
-    const dbReviews = await getHighQualityReviews(supabase, 4);
+    const dbReviews = await getHighQualityReviews(supabase, 8);
     const dbDisplayReviews = dbReviews.filter(
       (r) => r.description && r.description.length > 15,
     );
@@ -45,32 +40,9 @@ export const load: PageServerLoad = async ({ locals: { supabase } }) => {
       formatReviewWithReferences(review),
     );
   } catch (e) {
-    console.error("Error when fetching display reviews", e);
+    logErrorServer({ error: e, message: "Error when fetching display reviews" });
     displayReviews = [];
   }
 
-  let subjects: Subject[] = [];
-  try {
-    const rawSubjects = await getSubjects(supabase);
-    subjects = rawSubjects.map((s) => formatSubject(s));
-  } catch (e) {
-    console.error("Unknown error when reading subjects", e);
-    subjects = languages;
-  }
-
-  return { form, displayProfiles, displayReviews, subjects };
-};
-
-export const actions: Actions = {
-  search: async (event) => {
-    const form = await superValidate(event, zod(searchSchema));
-    if (!form.valid) return fail(400, { form });
-    const { query, subjects } = form.data;
-    if (!query && (!subjects || subjects === "undefined"))
-      return fail(400, { form });
-
-    const cleanedQuery = cleanQuery(query ?? "", subjects, true);
-    if (!cleanedQuery) return fail(400, { form });
-    redirect(302, `/search/?q=${cleanedQuery}`);
-  },
-};
+  return { searchForm, displayReviews, displayProfiles };
+}

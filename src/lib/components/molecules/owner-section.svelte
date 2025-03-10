@@ -4,7 +4,8 @@
   import { Button } from "$lib/components/ui/button/index.js";
   import { page } from "$app/stores";
   import { goto } from "$app/navigation";
-  import ExternalLink from "lucide-svelte/icons/external-link";
+  import ExternalLink from "lucide-svelte/icons/square-arrow-out-up-right";
+  import Link from "../atoms/link.svelte";
 
   export let listing: ListingWithProfile | undefined = undefined;
 
@@ -16,7 +17,7 @@
   <Button
     on:click={() => goto(url)}
     variant="outline"
-    class="flex items-center gap-x-2 self-center bg-card"
+    class="flex w-full items-center gap-x-2 self-center bg-card md:w-auto"
     ><ExternalLink class="h-4 w-4" />visa som student</Button
   >
   <IsPublished
@@ -26,16 +27,16 @@
   />
   <small class="mb-8 flex flex-col gap-y-4 px-8 text-center text-lg">
     <p class="text-muted-foreground">
-      Vill du göra ändringar på informationen om dig själv? <a
-        href="/account/settings"
-        class="whitespace-nowrap underline">Gå till din profil</a
+      Vill du göra ändringar på din profilbeskrivning eller annan informationen
+      om dig själv? <Link href="/account/settings" class="whitespace-nowrap"
+        >Gå till din profil</Link
       >
     </p>
     {#if listing}
       <p class="text-muted-foreground">
-        Vill du göra ändringar på din annons? <a
+        Vill du göra ändringar på din annons? <Link
           href="/account/edit-listing/{listing.id}"
-          class="whitespace-nowrap underline">Gå till redigera annons</a
+          class="whitespace-nowrap">Gå till redigera annons</Link
         >
       </p>
     {/if}

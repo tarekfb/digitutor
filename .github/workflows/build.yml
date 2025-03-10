@@ -17,6 +17,7 @@ env:
   CF_IMAGE_RESIZE_URL: "dummy_value"
   PUBLIC_ENVIRONMENT: "dummy_value"
   RESEND_API_KEY: "dummy_value"
+  VITE_PRIVATE_SENTRY_AUTH_TOKEN: "dummy_value"
 
 jobs:
   build_and_test:

@@ -51,14 +51,13 @@
             <Avatar
               url={review.sender.avatarUrl ?? ""}
               firstName={review.sender.firstName}
-              lastName={review.sender.lastName}
               role={review.sender.role}
               class="h-7 w-7 text-sm"
             />
             <cite class="text-lg not-italic">
               {review.sender.firstName}
             </cite>
-            <ArrowRightIcon class="h-4 w-4" />
+            <ArrowRightIcon class="size-4" />
             <a
               class="flex items-center gap-x-2"
               href="/profile/{review.receiver.id}"
@@ -66,7 +65,6 @@
               <Avatar
                 url={review.receiver.avatarUrl ?? ""}
                 firstName={review.receiver.firstName}
-                lastName={review.receiver.lastName}
                 role={review.receiver.role}
                 class="h-7 w-7 text-sm"
               />
@@ -91,12 +89,12 @@
         <Tabs.List class="self-center">
           <Tabs.Trigger
             value="student"
-            class="data-[state=active]:bg-primary data-[state=inactive]:bg-none data-[state=active]:text-red-300 data-[state=inactive]:text-black"
+            class="data-[state=active]:bg-third data-[state=inactive]:bg-none data-[state=active]:text-background data-[state=inactive]:text-black"
             >Student</Tabs.Trigger
           >
           <Tabs.Trigger
             value="teacher"
-            class="data-[state=active]:bg-primary data-[state=inactive]:bg-none data-[state=active]:text-red-300 data-[state=inactive]:text-black"
+            class="data-[state=active]:bg-third data-[state=inactive]:bg-none data-[state=active]:text-background data-[state=inactive]:text-black"
             >Lärare</Tabs.Trigger
           >
         </Tabs.List>

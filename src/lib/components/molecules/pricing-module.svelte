@@ -1,6 +1,9 @@
 <script lang="ts">
   import { goto } from "$app/navigation";
-  import type { PricingPlan } from "src/lib/shared/models/subscription.ts";
+  import {
+    PricingPlanIds,
+    type PricingPlan,
+  } from "src/lib/shared/models/subscription.ts";
   import Button from "src/lib/components/ui/button/button.svelte";
 
   export let pricingPlan: PricingPlan;
@@ -10,20 +13,22 @@
 
 <div
   class="flex-none rounded-xl border border-solid bg-card {highlighted
-    ? 'border-primary'
+    ? 'border-third'
     : 'border-gray-200'} min-w-[260px] max-w-[310px] flex-1 flex-grow p-6 shadow-xl"
 >
   <div class="flex h-full flex-col">
     <div class="text-xl font-bold">{pricingPlan.name}</div>
-    <p class="mt-2 text-sm leading-relaxed text-gray-500">
+    <p class="mt-2 text-sm leading-relaxed text-muted-foreground md:text-base">
       {pricingPlan.description}
     </p>
     {#if pricingPlan.bold}
-      <p class="mt-2 text-sm font-bold leading-relaxed text-gray-500">
+      <p
+        class="mt-2 text-sm font-bold leading-relaxed text-muted-foreground md:text-base"
+      >
         {pricingPlan.bold}
       </p>
     {/if}
-    <div class="mt-auto pt-4 text-sm text-gray-600">
+    <div class="mt-auto pt-4 text-sm text-gray-600 md:text-base">
       Planen inkluderar:
       <ul class="mt-2 list-inside list-disc space-y-1">
         {#each pricingPlan.features as feature}
@@ -44,8 +49,11 @@
         {:else}
           <Button
             on:click={() =>
-              goto(`/account/subscribe/${pricingPlan.stripePriceId}`)}
-            >Kom igång</Button
+              goto(
+                pricingPlan.id === PricingPlanIds.Free
+                  ? "/account/billing?plan=free"
+                  : `/account/subscribe/${pricingPlan.stripePriceId}`,
+              )}>Kom igång</Button
           >
         {/if}
       </div>

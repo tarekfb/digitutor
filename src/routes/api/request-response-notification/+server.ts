@@ -3,6 +3,7 @@ import type { RequestHandler } from "./$types.ts";
 import { getEmailById, sendEmail } from "src/lib/shared/utils/emails/utils.ts";
 import ResponseNotification from "src/emails/response-notification.svelte";
 import { getProfileByUser } from "src/lib/server/database/profiles.ts";
+import { logErrorServer } from "src/lib/shared/utils/logging/utils.ts";
 
 export const POST: RequestHandler = async ({
   request,
@@ -17,7 +18,7 @@ export const POST: RequestHandler = async ({
   const { studentId, conversationId } = requestBodyTyped;
 
   if (!studentId) {
-    console.error("Bad request, missing param studentId")
+    logErrorServer({ message: "Bad request, missing param studentId", additionalData: { studentId, conversationId } })
     return json({ success: false, status: 400 });
   }
 
@@ -25,7 +26,7 @@ export const POST: RequestHandler = async ({
   try {
     email = await getEmailById(supabase, studentId);
   } catch (error) {
-    console.error(`Error getting email while sending request response email for studentId: ${studentId}`, error)
+    logErrorServer({ error, message: `Error getting email while sending request response email`, additionalData: { studentId, conversationId } })
     return json({ success: true });
   }
 
@@ -34,15 +35,15 @@ export const POST: RequestHandler = async ({
     const student = await getProfileByUser(supabase, studentId);
     studentName = student.first_name;
   } catch (error) {
-    console.error(`Error getting student profile while sending request response email for student ${studentId}`, error);
+    logErrorServer({ error, message: `Error getting student profile while sending request response email`, additionalData: { studentId, conversationId } })
   }
 
   try {
     const { error: sendError } = await sendEmail(ResponseNotification, [email], "Din kontaktförfrågan har besvarats", { studentName, conversationId })
     if (sendError)
-      console.error(`Error sending email for request response for student ${studentId} and conversationId: ${conversationId}`, sendError);
+      logErrorServer({ error: sendError, message: `Error sending email for request response`, additionalData: { studentId, conversationId } });
   } catch (e) {
-    console.error(`Error sending email for request response for student ${studentId} and conversationId: ${conversationId}`, e);
+    logErrorServer({ error: e, message: `Error sending email for request response`, additionalData: { studentId, conversationId } });
     return json({ success: false })
   }
 

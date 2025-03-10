@@ -1,6 +1,7 @@
 import type { Tables } from "src/supabase.ts";
 import { z } from "zod";
 import type { DbProfile, Profile } from "./profile.ts";
+import type { DbSubject, Subject } from "./subject.ts";
 
 export type DbReviewBase = Tables<"reviews">;
 
@@ -18,7 +19,7 @@ export type ReviewBase = Omit<
 > & {
   createdAt: string;
   description: string;
-  sender: string;
+  sender?: string;
 };
 
 export type ReviewWithReferences = Omit<ReviewBase, "receiver" | "sender"> & {
@@ -43,20 +44,24 @@ const addReviewProperties = {
 export const addReviewSchema = z.object(addReviewProperties);
 export type AddReviewSchema = typeof addReviewSchema;
 
-export type DbDisplayProfile = {
-  id: string;
-  first_name: string;
-  last_name: string;
-  avatar_url: string | null;
-  avg_rating: number | null;
-  subjects: number[];
+export type DbTopTeacher = {
+  id: Profile["id"];
+  first_name: DbProfile["first_name"];
+  avatar_url: DbProfile["avatar_url"];
+  review_count: number;
+  avg_rating: number;
+  five_star_reviews_with_description: number;
+  subjects: DbSubject[];
+  reviews: DbReviewWithReferences[];
 };
 
-export type DisplayProfile = {
+export type TopTeacher = {
   id: string;
-  firstName: string;
-  lastName: string;
-  avatarUrl: string | null;
+  firstName: Profile["firstName"];
+  avatarUrl: Profile["avatarUrl"];
   avgRating: number;
-  subjects: number[];
+  reviewCount: number;
+  fiveStarReviewsWithDescription: number;
+  subjects: Subject[];
+  reviews: ReviewWithReferences[];
 };

@@ -5,7 +5,7 @@
   import IsPublished from "../atoms/is-published.svelte";
   import { Button } from "$lib/components/ui/button/index.js";
   import Pen from "lucide-svelte/icons/pen";
-  import ExternalLink from "lucide-svelte/icons/external-link";
+  import ExternalLink from "lucide-svelte/icons/square-arrow-out-up-right";
   import Separator from "../ui/separator/separator.svelte";
 
   export let listing: ListingWithProfile;
@@ -28,11 +28,11 @@
     </Card.Header>
     <Separator />
     <Card.Content
-      class="md:text-md flex flex-col gap-y-4 pt-5  text-sm text-muted-foreground"
+      class="md:text-base flex flex-col gap-y-4 pt-5  text-sm text-muted-foreground"
     >
       <p>
         {#if listing.description}
-          {truncate(listing.description, 50)}
+          {truncate(listing.description, 50).text}
         {:else}
           Den här annonsen har ingen beskrivning just nu.
         {/if}

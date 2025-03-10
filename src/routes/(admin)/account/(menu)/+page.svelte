@@ -2,7 +2,7 @@
   import PrimaryTitle from "$lib/components/atoms/primary-title.svelte";
   import ConversationCard from "$lib/components/molecules/conversation-card.svelte";
   import Link from "$lib/components/atoms/link.svelte";
-  import RootContainer from "src/lib/components/templates/root-container.svelte";
+  import Container from "src/lib/components/templates/container.svelte";
   import AccountLayout from "src/lib/components/templates/account-layout.svelte";
   import { websiteName } from "src/lib/shared/constants/constants.js";
 
@@ -16,7 +16,7 @@
 
 <AccountLayout>
   <PrimaryTitle class="text-center">Dina konversationer</PrimaryTitle>
-  <RootContainer class="my-6 w-full text-center">
+  <Container class="my-6 w-full text-center" minWidth maxWidth padding>
     {#each conversations as conversation}
       <a
         href={"/account/conversation/" + conversation.id}
@@ -40,5 +40,5 @@
         </p>
       {/if}
     {/each}
-  </RootContainer>
+  </Container>
 </AccountLayout>

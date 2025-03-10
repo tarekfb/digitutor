@@ -12,50 +12,40 @@ import {
   ExternalErrorCodes,
   languages,
 } from "src/lib/shared/models/common.ts";
-import { cleanQuery, isErrorWithCode } from "src/lib/shared/utils/utils.ts";
-import { formatProfile } from "src/lib/shared/utils/profile/utils.ts";
+import { isErrorWithCode } from "src/lib/shared/utils/utils.ts";
 import { getSubjects } from "src/lib/server/database/subjects.ts";
 import { formatSubject, type Subject } from "src/lib/shared/models/subject.ts";
+import { formatSearchResult } from "src/lib/shared/utils/search/utils.ts";
+import { getQueryFromFormData } from "src/lib/shared/utils/search/utils.ts";
+import { logErrorServer } from "src/lib/shared/utils/logging/utils.ts";
 
 export const load = (async ({ url, locals: { supabase } }) => {
-  const query = url.searchParams.get("q") || "";
+  const query = url.searchParams.get("q") || ""; // falsy query will get all
+  const getAll = url.searchParams.get("getAll");
   const form = await superValidate(zod(searchSchema));
 
   let initMessage: Message | undefined;
   let initResults: SearchResult[] = [];
 
-  if (!query) return { form, initResults, initMessage };
+  if (!query && !getAll) return { form, initResults, initMessage };
 
   try {
-    const dbLlistings = await search(supabase, query);
-    initResults = dbLlistings.map((listing) => ({
-      id: listing.id,
-      title: listing.title,
-      description: listing.description ?? undefined,
-      hourlyPrice: listing.hourly_price,
-      firstName: listing.profile.first_name,
-      lastName: listing.profile.last_name,
-      avatar: listing.profile.avatar_url ?? undefined,
-      subjects: listing.subjects,
-      profile: formatProfile(listing.profile),
-    }));
+    const dbListings = await search(supabase, query);
+    initResults = dbListings.map(dbListing => formatSearchResult(dbListing));
   } catch (error) {
     if (isErrorWithCode(error)) {
       if (error.code == ExternalErrorCodes.SyntaxError)
-        initMessage = getFailFormMessage(
-          "Ogiltiga karaktärer",
-          "Testa söka på något annat.",
-        );
+        initMessage = getFailFormMessage({ title: "Ogiltiga karaktärer", description: "Testa söka på något annat.", });
       else
-        initMessage = getFailFormMessage(
-          "Något gick fel",
-          "Testa söka på något annat, eller försök igen senare.",
-        );
+        initMessage = getFailFormMessage({
+          title: "Något gick fel",
+          description: "Testa söka på något annat, eller försök igen senare.",
+        });
     } else {
-      console.error(
-        "Error searching for teachers with following search: " + query,
+      logErrorServer({
         error,
-      );
+        message: `Error searching for teachers with following search: ${query}`,
+      });
       initMessage = getFailFormMessage();
     }
   }
@@ -65,9 +55,10 @@ export const load = (async ({ url, locals: { supabase } }) => {
     const rawSubjects = await getSubjects(supabase);
     subjects = rawSubjects.map((s) => formatSubject(s));
   } catch (e) {
-    console.error("Unknown error when reading subjects", e);
+    logErrorServer({ error: e, message: "Unknown error when reading subjects" });
     subjects = languages;
   }
+
   return { subjects, form, initResults, initMessage };
 }) satisfies PageServerLoad;
 
@@ -79,48 +70,29 @@ export const actions: Actions = {
 
     const form = await superValidate(event, zod(searchSchema));
     if (!form.valid) return fail(400, { form });
-    const { query, subjects } = form.data;
-
-    if (!query && (!subjects || subjects === "undefined"))
-      return fail(400, { form });
-
-    const cleanedQuery = cleanQuery(query ?? "", subjects);
-    if (!cleanedQuery) return fail(400, { form });
+    const query = getQueryFromFormData(form.data);
 
     try {
-      const listings = await search(supabase, cleanedQuery);
-      const formatted: SearchResult[] = listings.map((listing) => {
-        return {
-          id: listing.id,
-          title: listing.title,
-          description: listing.description ?? undefined,
-          hourlyPrice: listing.hourly_price,
-          firstName: listing.profile.first_name,
-          lastName: listing.profile.last_name,
-          avatar: listing.profile.avatar_url ?? undefined,
-          subjects: listing.subjects,
-          profile: formatProfile(listing.profile),
-        };
-      });
-
+      const listings = await search(supabase, query);
+      const formatted = listings.map(listing => formatSearchResult(listing));
       return { form, formatted };
     } catch (error) {
       if (isErrorWithCode(error)) {
         if (error.code === ExternalErrorCodes.SyntaxError)
           return message(
             form,
-            getFailFormMessage(
-              "Ogiltiga karaktärer",
-              "Testa söka på något annat.",
-            ),
+            getFailFormMessage({
+              title: "Ogiltiga karaktärer",
+              description: "Testa söka på något annat.",
+            }),
             { status: 400 },
           );
       }
-      console.error(
-        "Error searching for teachers with following search: " + query,
+      const trackingId = logErrorServer({
         error,
-      );
-      return message(form, getFailFormMessage(), { status: 500 });
+        message: "Error searching for teachers with following search: " + query,
+      });
+      return message(form, getFailFormMessage({ trackingId }), { status: 500 });
     }
   },
 };

@@ -6,7 +6,7 @@ export const languages: Subject[] = [
   { title: "Typescript", id: 2, altTitle: "TS" },
   { title: "Python", id: 3, altTitle: "" },
   { title: "Java", id: 4, altTitle: "" },
-  { title: "C#", id: 5, altTitle: "" },
+  { title: "C#", id: 5, altTitle: "CSharp" },
   { title: "C++", id: 6, altTitle: "CPlusPlus" },
   { title: "Ruby", id: 7, altTitle: "" },
   { title: "Swift", id: 8, altTitle: "" },
@@ -53,11 +53,11 @@ export const languages: Subject[] = [
   { title: "Docker", id: 49, altTitle: "" },
   { title: "Redis", id: 50, altTitle: "" },
   { title: "MongoDB", id: 51, altTitle: "" },
-  { title: "SQL", id: 52, altTitle: "" },
-  { title: "PostgreSQL", id: 53, altTitle: "Postgres" },
+  { title: "SQL", id: 52, altTitle: "Sequel" },
+  { title: "PostgreSQL", id: 53, altTitle: "Psql" },
   { title: "MySQL", id: 54, altTitle: "" },
   { title: "Oracle", id: 55, altTitle: "" },
-  { title: "SQLite", id: 56, altTitle: "" },
+  { title: "SQLite", id: 56, altTitle: "" }
 ];
 
 export type Message = {
@@ -65,6 +65,7 @@ export type Message = {
   description: string;
   variant?: "success" | "warning" | "destructive" | "default";
   id?: MessageId;
+  trackingId?: string;
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   data: any;
 };

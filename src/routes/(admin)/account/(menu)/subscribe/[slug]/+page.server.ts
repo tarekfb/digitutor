@@ -1,13 +1,15 @@
 import { PRIVATE_STRIPE_API_KEY } from "$env/static/private";
-import { error, redirect } from "@sveltejs/kit";
+import { error } from "@sveltejs/kit";
 import Stripe from "stripe";
 
 import {
   getOrCreateCustomerId,
   fetchSubscription,
 } from "src/lib/shared/utils/subscription/subscription-helper.ts";
-import { getDefaultErrorInfo } from "src/lib/shared/constants/constants.ts";
+import { getDefaultErrorInfo, websiteName } from "src/lib/shared/constants/constants.ts";
 import type { PageServerLoad } from "./$types.ts";
+import { redirect } from "sveltekit-flash-message/server";
+import { logErrorServer } from "src/lib/shared/utils/logging/utils.ts";
 
 const stripe = new Stripe(PRIVATE_STRIPE_API_KEY);
 // { apiVersion: "2023-08-16" }
@@ -15,11 +17,11 @@ const stripe = new Stripe(PRIVATE_STRIPE_API_KEY);
 export const load: PageServerLoad = async ({
   params: { slug },
   url,
-  locals: { safeGetSession, supabaseServiceRole },
+  locals: { safeGetSession, supabaseServiceRole }, parent, cookies
 }) => {
   const { session, user } = await safeGetSession();
-  if (!session) {
-    redirect(303, "/sign-in"); // todo add flash
+  if (!session || !user) {
+    redirect(303, "/sign-in");
   }
 
   const successUrl = "/account/billing";
@@ -27,13 +29,28 @@ export const load: PageServerLoad = async ({
   // free plan. simulate success by redirecting to success url
   if (slug === "free") redirect(303, successUrl);
 
+  const { profile } = await parent();
+  if (profile.role === "teacher")
+    redirect(
+      303,
+      "/account",
+      {
+        type: "info",
+        message: `Du är lärare och betalar därför ingenting för att använda ${websiteName}.`,
+      },
+      cookies,
+    );
+
   const { error: idError, customerId } = await getOrCreateCustomerId({
     supabaseServiceRole,
     user,
   });
   if (idError || !customerId) {
-    console.error("Error creating customer id", idError);
-    error(500, getDefaultErrorInfo());
+    const trackingId = logErrorServer({
+      error: idError,
+      message: "Error creating customer id",
+    });
+    error(500, { ...getDefaultErrorInfo({ trackingId }) });
   }
 
   const { primarySubscription } = await fetchSubscription({
@@ -41,11 +58,16 @@ export const load: PageServerLoad = async ({
   });
   if (primarySubscription) {
     // User already has plan, we shouldn't let them buy another
-    redirect(303, successUrl); // todo add flash
+    redirect(
+      303,
+      successUrl,
+      {
+        type: "info",
+        message: `Du har redan en prenumeration.`,
+      },
+      cookies,
+    );
   }
-
-  const mode =
-    url.searchParams.get("mode") === "payment" ? "payment" : "subscription"; // if credits, then single purchase
 
   let checkoutUrl;
   let stripeSession: Stripe.Response<Stripe.Checkout.Session> | undefined;
@@ -62,14 +84,17 @@ export const load: PageServerLoad = async ({
         },
       ],
       customer: customerId,
-      mode,
+      mode: "subscription",
       success_url: `${url.origin}${successUrl}`,
       cancel_url: `${url.origin}${successUrl}`,
     });
     checkoutUrl = stripeSession.url;
   } catch (e) {
-    console.error("Error creating checkout session", e);
-    error(500, getDefaultErrorInfo());
+    const trackingId = logErrorServer({
+      error: e,
+      message: "Error creating checkout session",
+    });
+    error(500, { ...getDefaultErrorInfo({ trackingId }) });
   }
 
   redirect(303, checkoutUrl ?? "/pricing"); // stripe takes over checkout process

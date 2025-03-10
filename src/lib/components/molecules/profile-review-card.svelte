@@ -10,7 +10,7 @@
   export let review: ReviewWithReferences;
 </script>
 
-<li class="w-full list-none">
+<li class="w-full list-none" id={review.id}>
   <Card.Root class={cn(`w-full shadow-md`, className)}>
     <Card.Header
       class="gap-y-2 pb-4 {!review.description
@@ -25,7 +25,6 @@
             <Avatar
               url={sender.avatarUrl ?? ""}
               firstName={sender.firstName}
-              lastName={sender.lastName}
               role={sender.role}
               class="h-8 w-8 text-sm"
             />
@@ -39,7 +38,9 @@
           {/if}
         </div>
         {#if review.description}
-          <small>{formatDateReadable(review.createdAt)}</small>
+          <small class="text-muted-foreground"
+            >{formatDateReadable(review.createdAt)}</small
+          >
         {/if}
       </div>
       <Stars rating={review.rating} size={5} />

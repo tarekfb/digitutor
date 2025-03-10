@@ -1,13 +1,10 @@
 <script lang="ts">
   import type { SearchResult } from "src/lib/shared/models/search.ts";
   import SearchResultItem from "./search-result-item.svelte";
-  import { Separator } from "src/lib/components/ui/separator/index.js";
   import { languages } from "src/lib/shared/models/common.ts";
 
   export let results: SearchResult[];
   export let searchTerm = "";
-
-  const hasMultiple = results.length > 1;
 
   const isSearchMatchingSubject = (subjectIndex: number): boolean => {
     const labels = getLabels(subjectIndex);
@@ -18,31 +15,32 @@
 
   const getLabels = (subjectIndex: number): string[] => {
     const language = languages[subjectIndex - 1];
+    if (!language) return [];
     const labels = [language.title, ...(language.altTitle ?? [])];
     return labels;
   };
 
-  const getDisplaySubject = (result: SearchResult): number => {
-    const defaultSubject = result.subjects[0];
-    if (!searchTerm) return defaultSubject;
+  // todo write unit tests for this
+  const getDisplaySubject = (resultSubject: number[]): number => {
+    const noFind = -1;
+    if (!searchTerm) return noFind;
     return (
-      result.subjects.find((subjectIndex) =>
+      resultSubject.find((subjectIndex) =>
         isSearchMatchingSubject(subjectIndex),
-      ) ?? defaultSubject
+      ) ?? noFind
     );
   };
 </script>
 
-<ul class="flex w-full flex-col gap-y-4">
+<ul class="flex w-full flex-col">
   {#each results as result, i}
-    {@const isLast = results.length - 1 === i}
-    {@const hasBelow = results.length !== 1 && !isLast}
-    {@const searchedSubject = getDisplaySubject(result)}
-    <li class="w-full p-4">
+    {@const searchedSubject = getDisplaySubject(result.subjects)}
+    <li
+      class="w-full {i % 2 === 0
+        ? 'bg-background'
+        : 'bg-card'} flex flex-col items-center p-4 md:p-8"
+    >
       <SearchResultItem {result} {searchedSubject} />
     </li>
-    {#if (hasMultiple && !isLast) || hasBelow}
-      <Separator />
-    {/if}
   {/each}
 </ul>

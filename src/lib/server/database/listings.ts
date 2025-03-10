@@ -110,7 +110,7 @@ export const createListing = async (
 ): Promise<DbListingWithProfile> => {
   const dbListing: Tables<"listings"> = {
     id: crypto.randomUUID(),
-    title: title,
+    title,
     hourly_price: 0,
     created_at: getNow(),
     updated_at: null,
@@ -174,9 +174,9 @@ export const updateListing = async (
 ): Promise<DbListingWithProfile> => {
   const dbListing = {
     id: listingId,
-    title: input.title,
+    title: input.title.trim(),
     hourly_price: input.hourlyPrice,
-    description: input.description,
+    description: input.description.trim(),
     subjects: input.subjects,
     visible: input.visible,
     updated_at: getNow(),

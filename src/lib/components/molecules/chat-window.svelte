@@ -39,7 +39,6 @@
       url={other.avatarUrl ?? ""}
       href="/profile/{other.id}"
       firstName={other.firstName}
-      lastName={other.lastName}
       role={other.role}
       class="h-20 w-20 {other.avatarUrl && 'md:h-28 md:w-28 lg:h-36 lg:w-36'}"
       fallbackClass="h-20 w-20 text-3xl"
@@ -81,7 +80,6 @@
                 href="/profile/{other.id}"
                 url={other.avatarUrl}
                 firstName={other.firstName}
-                lastName={other.lastName}
                 role={other.role}
                 size="8"
                 class="text-sm"
@@ -106,7 +104,7 @@
         title="Vi kunde inte hämta några meddelanden"
         description={defaultErrorDescription}
         variant="destructive"
-        descriptionClass="text-md"
+        descriptionClass="text-base"
       />
       <!-- todo: provide contact option here -->
     {/await}

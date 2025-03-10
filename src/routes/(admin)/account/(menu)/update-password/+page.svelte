@@ -5,7 +5,7 @@
   import FormSubmit from "src/lib/components/molecules/form-submit.svelte";
   import { zodClient } from "sveltekit-superforms/adapters";
   import { passwordResetSchema } from "src/lib/shared/models/user.ts";
-  import RootContainer from "src/lib/components/templates/root-container.svelte";
+  import Container from "src/lib/components/templates/container.svelte";
   import FormMessage from "$lib/components/molecules/form-message.svelte";
   import * as Form from "$lib/components/ui/form/index.js";
   import Label from "$lib/components/atoms/label.svelte";
@@ -24,7 +24,7 @@
   <title>{websiteName} | Uppdatera lösenord</title>
 </svelte:head>
 
-<RootContainer responsiveGap maxWidth minWidth class="self-center">
+<Container responsiveGap maxWidth minWidth padding class="self-center">
   <div class="flex flex-col items-center justify-center gap-y-0.5">
     <PrimaryTitle class="mb-2">Uppdatera lösenord</PrimaryTitle>
     <p class="text-lg text-muted-foreground md:text-xl">
@@ -53,4 +53,4 @@
       class="self-center md:min-w-wider"
     />
   </form>
-</RootContainer>
+</Container>

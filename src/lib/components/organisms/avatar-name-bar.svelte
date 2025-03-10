@@ -19,7 +19,6 @@
     <Avatar
       url={profile.avatarUrl ?? ""}
       firstName={profile.firstName}
-      lastName={profile.lastName}
       role={profile.role}
     />
     <slot />
@@ -29,7 +28,6 @@
     <Avatar
       url={profile.avatarUrl ?? ""}
       firstName={profile.firstName}
-      lastName={profile.lastName}
       role={profile.role}
     />
     <slot />

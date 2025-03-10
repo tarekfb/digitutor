@@ -231,7 +231,6 @@ export type Database = {
           created_at: string
           first_name: string
           id: string
-          last_name: string
           role: Database["public"]["Enums"]["role"]
           updated_at: string | null
         }
@@ -241,7 +240,6 @@ export type Database = {
           created_at: string
           first_name: string
           id: string
-          last_name?: string
           role: Database["public"]["Enums"]["role"]
           updated_at?: string | null
         }
@@ -251,7 +249,6 @@ export type Database = {
           created_at?: string
           first_name?: string
           id?: string
-          last_name?: string
           role?: Database["public"]["Enums"]["role"]
           updated_at?: string | null
         }
@@ -392,6 +389,33 @@ export type Database = {
       }
     }
     Views: {
+      searchable_listings: {
+        Row: {
+          avatar_url: string | null
+          bio: string | null
+          created_at: string | null
+          description: string | null
+          first_name: string | null
+          hourly_price: number | null
+          id: string | null
+          profile_created_at: string | null
+          profile_id: string | null
+          profile_updated_at: string | null
+          role: Database["public"]["Enums"]["role"] | null
+          subjects: number[] | null
+          title: string | null
+          updated_at: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "listings_profile_fkey"
+            columns: ["profile_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       student_credit_balances: {
         Row: {
           balance: number | null
@@ -409,18 +433,24 @@ export type Database = {
       }
     }
     Functions: {
-      compound_search: {
-        Args: {
-          listing: Record<string, unknown>
-        }
-        Returns: string
-      }
+      compound_search:
+        | {
+            Args: {
+              listing: Record<string, unknown>
+            }
+            Returns: string
+          }
+        | {
+            Args: {
+              sl: unknown
+            }
+            Returns: string
+          }
       get_top_teacher_by_reviews: {
         Args: Record<PropertyKey, never>
         Returns: {
           id: string
           first_name: string
-          last_name: string
           avatar_url: string
           avg_rating: number
           subjects: number[]
