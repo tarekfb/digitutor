@@ -6,8 +6,9 @@
   import { goto } from "$app/navigation";
   import Navbar from "src/lib/components/organisms/navbar.svelte";
   import PrimaryTitle from "src/lib/components/atoms/primary-title.svelte";
-  import Container from "src/lib/components/templates/container.svelte";
   import SecondaryTitle from "src/lib/components/atoms/secondary-title.svelte";
+  import Container from "src/lib/components/templates/container.svelte";
+  import { page } from "$app/stores";
 </script>
 
 <svelte:head>
@@ -25,15 +26,14 @@
 <Container class="self-center text-center" padding maxWidth minWidth>
   <CheckCircle2 size="100" class="text-success" />
   <div class="space-y-2 md:space-y-4">
-    <PrimaryTitle class="text-3xl font-semibold md:text-5xl">
-      E-post verifierad!
-    </PrimaryTitle>
+    {#if $page.url.searchParams.get("isFirst") === "true"}
+      <PrimaryTitle class="text-3xl font-semibold md:text-5xl">
+        Första e-posten verifierad
+      </PrimaryTitle>
+    {/if}
     <SecondaryTitle class="text-muted-foreground"
-      >Du kan nu fortsätta.</SecondaryTitle
+      >Bekräfta den andra e-posten. När den andra e-posten är bekräftad är bytet
+      klart.</SecondaryTitle
     >
   </div>
-
-  <Button on:click={() => goto("/account")} class="md:min-w-wider"
-    >Gå till ditt konto</Button
-  >
 </Container>

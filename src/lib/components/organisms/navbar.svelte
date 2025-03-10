@@ -48,14 +48,16 @@
     </nav>
     {#if !isAccount}
       <nav class="hidden items-center justify-end gap-x-2 lg:flex">
-        {#if profile}
-          <Button class={iconButton} href="/account">
-            <UserRound class="size-4" />
-            Konto</Button
-          >
-        {:else}
-          <Button variant="outline" href="/sign-in">Logga in</Button>
-          <Button variant="third" href="/sign-up">Skapa konto</Button>
+        {#if profile !== false}
+          {#if profile}
+            <Button class={iconButton} href="/account">
+              <UserRound class="size-4" />
+              Konto</Button
+            >
+          {:else}
+            <Button variant="outline" href="/sign-in">Logga in</Button>
+            <Button variant="third" href="/sign-up">Skapa konto</Button>
+          {/if}
         {/if}
       </nav>
     {/if}
