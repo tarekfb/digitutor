@@ -13,7 +13,7 @@ import {
 import { logErrorServer } from "src/lib/shared/utils/logging/utils.ts";
 import { formatReviewWithReferences, formatTopTeacher } from "src/lib/shared/utils/reviews/utils.ts";
 
-export const load: PageServerLoad = async ({ locals: { supabase } }) => {
+export const load: PageServerLoad = async ({ locals: { supabase }, url }) => {
   const searchForm = await superValidate(zod(searchSchema));
 
   let displayProfiles: TopTeacher[] = [];

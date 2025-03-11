@@ -33,7 +33,8 @@ export const load: PageServerLoad = async (event) => {
     logErrorServer({
       message: "Unknown error on verify otp on email confirmation", error: e, additionalData: { tokenHash, type, url, user }, critical: true,
     });
-    redirect(303, "/signup-error");
+    redirect(303, "/email-confirmation-error");
+
   }
 
   if (!user) {
@@ -46,5 +47,5 @@ export const load: PageServerLoad = async (event) => {
     error(500, { ...defaultErrorInfo });
   }
 
-  return { email: user.email };
+  return { email: user.email, type };
 }
