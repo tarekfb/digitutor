@@ -119,9 +119,9 @@ export const actions: Actions = {
       });
     }
 
-    throw redirect(
+    redirect(
       303,
-      `/account`,
+      `/account/listings`,
       { message: "Annonsen är borttagen.", type: "success" },
       cookies,
     );

@@ -16,21 +16,21 @@
   >
     <section>
       <SecondaryTitle>Fokusera på att få recensioner</SecondaryTitle>
-      <p>
+      <p class="text-muted-foreground">
         Lärare med fler recensioner får betydligt fler kontaktförfrågningar. Det
         kan vara väldigt svårt att komma igång om du tar ett högt timpris men
         inte har (eller har väldigt få) recensioner. För att få dina första
         recensioner kan du sänka ditt pris temporärt. När du fått några bra
         recensioner kan du återgå till din normala prissättning.
       </p>
-      <p>
+      <p class="text-muted-foreground">
         <strong>Detta är utan tvekan viktigaste rekomendationen här</strong> - om
         du ska ändra något är detta en bra plats att börja på.
       </p>
     </section>
     <section>
       <SecondaryTitle>Använd en bra profilbild</SecondaryTitle>
-      <p>
+      <p class="text-muted-foreground">
         En trevlig och professionell profilbild ökar chansen att bli kontaktad.
         Välj en bild där du ser vänlig och tillgänglig ut.
       </p>
@@ -38,7 +38,7 @@
 
     <section>
       <SecondaryTitle>Skapa en tydlig och informativ profil</SecondaryTitle>
-      <p>
+      <p class="text-muted-foreground">
         Beskriv tydligt vad du lär ut, din erfarenhet och din undervisningsstil.
         En välskriven profil hjälper elever att förstå om du passar deras behov.
       </p>
@@ -46,7 +46,7 @@
 
     <section>
       <SecondaryTitle>Håll ditt pris konkurrenskraftigt</SecondaryTitle>
-      <p>
+      <p class="text-muted-foreground">
         Ett pris som är i linje med marknaden lockar fler elever. Tänk på att du
         alltid kan justera ditt pris baserat på efterfrågan och dina
         recensioner.
@@ -55,7 +55,7 @@
 
     <section>
       <SecondaryTitle>Var snabb med att svara på meddelanden</SecondaryTitle>
-      <p>
+      <p class="text-muted-foreground">
         En elev kan ha kontaktat flera lärare. Om du svarar först ökar dina
         chanser att bli vald av eleven.
       </p>

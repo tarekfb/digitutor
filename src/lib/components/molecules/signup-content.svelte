@@ -67,7 +67,7 @@
     class="flex flex-row items-center  space-y-0 rounded-md"
   >
     <Form.Control let:attrs>
-      <Checkbox {...attrs} bind:checked={$formData.terms} />
+      <Checkbox {...attrs} bind:checked={$formData.terms} class="bg-card" />
       <Form.Label class="px-2 text-foreground cursor-pointer"
         >Jag accepterar <a href="/terms-and-conditions" class="underline"
           >villkoren</a

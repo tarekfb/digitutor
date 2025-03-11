@@ -42,11 +42,11 @@
     class={cn(
       buttonVariants({
         variant: "outline-card",
-        className: `flex gap-x-2 md:self-start`,
+        className: `icon-button md:self-start`,
       }),
     )}
   >
-    <Plus />Lägg till recension</Dialog.Trigger
+    Lägg till recension<Plus /></Dialog.Trigger
   >
   <Dialog.Content class="bg-card sm:max-w-[425px]">
     <Dialog.Header>

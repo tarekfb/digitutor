@@ -112,7 +112,7 @@
             <SecondaryTitle class="font-normal md:text-4xl"
               >{teacher.firstName}</SecondaryTitle
             >
-            {#if rating}
+            {#if rating?.reviewCount && rating.avgRating}
               <div class="flex flex-col gap-y-1">
                 <Stars size={5} rating={rating.avgRating} />
                 <NbrOfReviews
@@ -120,6 +120,8 @@
                   nbrOfReviews={rating.reviewCount}
                 />
               </div>
+            {:else}
+              <p class="text-background/50">Ny lärare</p>
             {/if}
             {#if listing}
               <ul>
@@ -138,9 +140,12 @@
           </div>
         </div>
         {#if listing}
-          <p class="text-4xl">
-            {listing.hourlyPrice} SEK
-          </p>
+          <div class="flex flex-col items-center gap-y-1">
+            <p class="text-4xl">
+              {listing.hourlyPrice} SEK
+            </p>
+            <p class="text-muted-foreground">60 minuter</p>
+          </div>
         {/if}
         <ContactTeacherForm
           {requestContactForm}

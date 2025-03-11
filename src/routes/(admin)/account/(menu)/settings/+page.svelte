@@ -77,8 +77,8 @@
 </svelte:head>
 
 <AccountLayout>
-  <PrimaryTitle class="text-center">Inställningar</PrimaryTitle>
-  <Container class="my-6 w-full" minWidth maxWidth padding>
+  <PrimaryTitle class="text-center" responsiveMb>Inställningar</PrimaryTitle>
+  <Container class="w-full" minWidth maxWidth padding>
     {#if profile.role === "teacher"}
       <SettingsForm
         form={bioForm}
