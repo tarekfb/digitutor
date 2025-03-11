@@ -47,5 +47,5 @@ export const load: PageServerLoad = async (event) => {
     error(500, { ...defaultErrorInfo });
   }
 
-  return { email: user.email };
+  return { email: user.email, type };
 }
