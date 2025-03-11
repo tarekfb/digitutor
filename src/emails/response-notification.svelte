@@ -20,7 +20,7 @@
   export let conversationId: string = "";
 
   const conversationUrl = conversationId
-    ? `${prodBaseUrl}/conversations/${conversationId}`
+    ? `${prodBaseUrl}/account/conversations/${conversationId}`
     : `${prodBaseUrl}/account`;
 
   const previewText = `Din kontaktförfrågan på ${websiteName} har besvarats!`;

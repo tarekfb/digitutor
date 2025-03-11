@@ -37,7 +37,7 @@ const addReviewProperties = {
   description: z
     .string()
     .min(1, "Får inte vara tom.")
-    .max(100, "Får inte vara mer än 100 karaktärer.")
+    .max(500, "Får inte vara mer än 500 karaktärer.")
     .optional(),
 };
 
