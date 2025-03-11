@@ -5,7 +5,7 @@ export const logErrorServer = (options: { error?: unknown, message: string, addi
     let { additionalData } = options;
     if (options.critical) {
         if (additionalData) additionalData.critical = true;
-        else additionalData = { critical: true };
+        else additionalData = { critical: false };
     }
 
     if (handleLocalLog({ error: options.error, additionalData })) return crypto.randomUUID();

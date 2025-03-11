@@ -34,7 +34,6 @@ export const load: PageServerLoad = async (event) => {
       message: "Unknown error on verify otp on email confirmation", error: e, additionalData: { tokenHash, type, url, user }, critical: true,
     });
     redirect(303, "/email-confirmation-error");
-
   }
 
   if (!user) {
