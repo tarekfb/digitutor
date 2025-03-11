@@ -8,6 +8,10 @@
   import PrimaryTitle from "src/lib/components/atoms/primary-title.svelte";
   import Container from "src/lib/components/templates/container.svelte";
   import SecondaryTitle from "src/lib/components/atoms/secondary-title.svelte";
+  import type { PageData } from "./$types.ts";
+
+  export let data: PageData;
+  $: ({ email, type } = data);
 </script>
 
 <svelte:head>
@@ -26,14 +30,24 @@
   <CheckCircle2 size="100" class="text-success" />
   <div class="space-y-2 md:space-y-4">
     <PrimaryTitle class="text-3xl font-semibold md:text-5xl">
-      E-post verifierad!
+      {#if email}
+        E-post {email} verifierad!
+      {:else}
+        E-post verifierad!
+      {/if}
     </PrimaryTitle>
-    <SecondaryTitle class="text-muted-foreground"
-      >Du kan nu fortsätta.</SecondaryTitle
-    >
+    <SecondaryTitle class="text-muted-foreground">
+      {#if type === "email_change"}
+        Bytet är klart när båda e-postadresserna har verifierats.
+      {:else}
+        Du kan nu fortsätta.
+      {/if}
+    </SecondaryTitle>
   </div>
 
-  <Button on:click={() => goto("/account")} class="md:min-w-wider"
-    >Gå till ditt konto</Button
-  >
+  {#if type === "signup"}
+    <Button on:click={() => goto("/account")} class="md:min-w-wider"
+      >Gå till ditt konto</Button
+    >
+  {/if}
 </Container>

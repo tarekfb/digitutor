@@ -12,15 +12,8 @@ import {
 } from "src/lib/shared/models/review.ts";
 import { logErrorServer } from "src/lib/shared/utils/logging/utils.ts";
 import { formatReviewWithReferences, formatTopTeacher } from "src/lib/shared/utils/reviews/utils.ts";
-import { redirect } from "@sveltejs/kit";
 
 export const load: PageServerLoad = async ({ locals: { supabase }, url }) => {
-  if (url.searchParams.get("message")?.includes("other"))
-    // For email change
-    // "Confirmation link accepted. Please proceed to confirm link sent to the other email."
-    // I dont trust this value configured from supabase to never change
-    // Therefore do includes
-    redirect(303, "/confirm-email-change?isFirst=true");
   const searchForm = await superValidate(zod(searchSchema));
 
   let displayProfiles: TopTeacher[] = [];
