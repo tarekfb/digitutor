@@ -57,6 +57,7 @@
   });
   const emailForm = superForm(data.updateEmailForm, {
     validators: zodClient(emailSchema),
+    resetForm: false,
   });
   const deleteForm = superForm(data.deleteAccountForm, {
     validators: zodClient(deleteSchema),
@@ -199,6 +200,14 @@
       title="Lösenord"
       submitText="Ändra"
     >
+      <Form.Field form={passwordForm} name="current">
+        <Form.Control let:attrs>
+          <Label>Nuvarande lösenord</Label>
+          <PasswordInput formData={passwordData} {attrs} placeholder="" />
+        </Form.Control>
+        <Form.Description />
+        <Form.FieldErrors />
+      </Form.Field>
       <Form.Field form={passwordForm} name="new">
         <Form.Control let:attrs>
           <Label>Nytt lösenord</Label>
@@ -210,14 +219,6 @@
       <Form.Field form={passwordForm} name="confirm">
         <Form.Control let:attrs>
           <Label>Bekräfta nytt lösenord</Label>
-          <PasswordInput formData={passwordData} {attrs} placeholder="" />
-        </Form.Control>
-        <Form.Description />
-        <Form.FieldErrors />
-      </Form.Field>
-      <Form.Field form={passwordForm} name="current">
-        <Form.Control let:attrs>
-          <Label>Nuvarande lösenord</Label>
           <PasswordInput formData={passwordData} {attrs} placeholder="" />
         </Form.Control>
         <Form.Description />

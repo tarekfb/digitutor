@@ -26,7 +26,7 @@
     onUpdated({ form }) {
       if (form.valid)
         toast.success(
-          `Rapport skickat. Vi följer upp ärendet så snart vi kan.`,
+          `Rapport skickad. Vi följer upp ärendet så snart vi kan.`,
         );
     },
   });

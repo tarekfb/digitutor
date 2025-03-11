@@ -50,7 +50,7 @@
   };
 </script>
 
-<div class="generic-card flex w-full flex-col gap-y-4">
+<div class="generic-card flex w-full flex-col gap-y-4 overflow-x-hidden">
   <SecondaryTitle>Profilbild</SecondaryTitle>
   <p class="text-muted-foreground">
     Maxstorlek är {formatBytes(maxAvatarSize)}.
@@ -73,7 +73,7 @@
         />
         <DeleteAvatar rootForm={deleteAvatarForm} />
       </div>
-      <Form.Field form={formRoot} name="avatar">
+      <Form.Field form={formRoot} name="avatar" >
         <Form.Control let:attrs>
           <Label>Profilbild</Label>
           <input
@@ -82,7 +82,7 @@
             name="avatar"
             bind:value={$form.avatar}
             accept={getMimeType()}
-            class="flex h-10 w-full overflow-hidden rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
+            class="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
             on:input={(e) => setAvatar(e.currentTarget?.files?.item(0))}
           />
         </Form.Control>

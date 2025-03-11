@@ -7,7 +7,7 @@ export const updateUserEmail = async (
 ) => {
   const { error, data } = await supabase.auth.updateUser({ email });
 
-  // this error takes presence of email in use and presumably more errors
+  // this error takes presedence of email in use and presumably more errors
   if (error?.status === 429) {
     console.error("Email rate limit exceeded", error);
     throw new Error("Email rate limit exceeded");

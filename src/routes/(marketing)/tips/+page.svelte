@@ -9,10 +9,10 @@
   <title>{websiteName} | Tips</title>
 </svelte:head>
 
-<Container maxWidth responsiveGap minWidth>
-  <PrimaryTitle>Tips för lärare</PrimaryTitle>
+<Container maxWidth responsiveGap minWidth padding margin class="w-full self-center pt-0">
+  <PrimaryTitle responsiveMb>Tips för lärare</PrimaryTitle>
   <main
-    class="mt-4 flex list-inside flex-col gap-y-4 *:flex *:flex-col *:gap-y-2 md:mt-6"
+    class="flex list-inside flex-col gap-y-4 *:flex *:flex-col *:gap-y-2 md:mt-6"
   >
     <section>
       <SecondaryTitle>Fokusera på att få recensioner</SecondaryTitle>
