@@ -50,7 +50,7 @@
       <nav class="hidden items-center justify-end gap-x-2 lg:flex">
         {#if profile !== false}
           {#if profile}
-            <Button class={iconButton} href="/account">
+            <Button class={iconButton} href="/account" variant="outline-card">
               <UserRound class="size-4" />
               Konto</Button
             >
