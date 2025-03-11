@@ -167,7 +167,7 @@ export const actions = {
     } catch (error) {
       if (isAuthApiError(error)) {
         if (error.message.includes("already been registered")) {
-          return message(form, getFailFormMessage({ title: "E-postadressen finns redan", description: "Ange en ny e-postadress.", variant: "warning" }), { status: 400 });
+          return message(form, getFailFormMessage({ title: "E-postadressen används redan", description: "Ange en ny e-postadress.", variant: "warning" }), { status: 400 });
         }
       }
       const trackingId = logErrorServer({
