@@ -112,7 +112,7 @@
             <SecondaryTitle class="font-normal md:text-4xl"
               >{teacher.firstName}</SecondaryTitle
             >
-            {#if rating}
+            {#if rating?.reviewCount && rating.avgRating}
               <div class="flex flex-col gap-y-1">
                 <Stars size={5} rating={rating.avgRating} />
                 <NbrOfReviews
@@ -120,6 +120,8 @@
                   nbrOfReviews={rating.reviewCount}
                 />
               </div>
+            {:else}
+              <p>Ny lärare</p>
             {/if}
             {#if listing}
               <ul>

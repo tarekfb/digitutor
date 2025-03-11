@@ -54,7 +54,7 @@
   </div>
   <div class="flex items-center justify-between gap-x-4 md:gap-x-8">
     <div class="flex flex-col gap-y-1">
-      {#if result.reviewCount > 0}
+      {#if result.reviewCount && result.avgRating}
         <Stars rating={result.avgRating} size={4} class="m-0 p-0 " />
         <NbrOfReviews nbrOfReviews={result.reviewCount} />
       {:else}
@@ -80,66 +80,4 @@
       <ArrowRight class="size-button-icon" />
     </Button>
   </div>
-  <!-- {:else}
-    <div class="flex flex-col gap-y-2">
-      <Link
-        href="/profile/{result.profile.id}?id={result.id}"
-        class="text-foreground"
-        ariaLabel="Gå till profil"
-      >
-        <PrimaryTitle class="text-2xl md:text-3xl">
-          {result.title}
-        </PrimaryTitle>
-      </Link>
-      <Link
-        href="/profile/{result.profile.id}?id={result.id}"
-        ariaLabel="Gå till profil"
-        class="text-foreground"
-      >
-        <SecondaryTitle>
-          {result.profile.firstName}
-        </SecondaryTitle>
-      </Link>
-      <div class="mt-2 flex flex-col items-start gap-y-1 md:hidden">
-        {#if result.reviewCount > 0}
-          <Stars rating={result.avgRating} size={4} />
-          <NbrOfReviews nbrOfReviews={result.reviewCount} />
-        {:else}
-          <p>Ny lärare</p>
-        {/if}
-      </div>
-
-      <div class="flex items-center justify-between gap-x-2">
-        <div class="{rowItemStyling} hidden md:block">
-          {#if result.reviewCount > 0}
-            <Stars
-              rating={result.avgRating}
-              size={4}
-              class="{boxStyling} items-center self-start "
-            />
-            <NbrOfReviews nbrOfReviews={result.reviewCount} />
-          {:else}
-            <p>Ny lärare</p>
-          {/if}
-        </div>
-        <div class={rowItemStyling}>
-          <h3 class="self-start text-2xl md:self-center {boxStyling}">
-            {result.hourlyPrice} SEK
-          </h3>
-          <p class="text-muted-foreground">60 minuter</p>
-        </div>
-        <SeeMore
-          subjects={result.subjects.includes(searchedSubject)
-            ? [searchedSubject]
-            : result.subjects}
-          max={1}
-        />
-      </div>
-    </div>
-    <Button
-      class="icon-button wide-button self-center"
-      href="/profile/{result.profile.id}?id={result.id}"
-      >Gå till profil
-      <ArrowRight class="size-button-icon" />
-    </Button> -->
 </div>

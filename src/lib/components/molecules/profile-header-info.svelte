@@ -26,7 +26,7 @@
   <PrimaryTitle class="font-semibold">{teacher.firstName}</PrimaryTitle>
   <div class="flex flex-row justify-between gap-y-2">
     <div class="flex flex-col gap-y-2">
-      {#if rating}
+      {#if rating?.reviewCount && rating.avgRating}
         <div class="flex flex-col gap-y-1">
           <Stars size={5} rating={rating.avgRating} />
           <NbrOfReviews class="text-sm" nbrOfReviews={rating.reviewCount} />
