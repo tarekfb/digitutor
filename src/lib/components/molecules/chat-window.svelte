@@ -33,7 +33,7 @@
   };
 </script>
 
-<div class="flex flex-col gap-y-4 overflow-y-auto">
+<div class="flex flex-col gap-y-4 overflow-y-auto w-full">
   <div class="mb-4 flex flex-col items-center gap-y-2">
     <Avatar
       url={other.avatarUrl ?? ""}
