@@ -24,16 +24,16 @@
   <title>{websiteName} | Uppdatera lösenord</title>
 </svelte:head>
 
-<Container responsiveGap maxWidth minWidth padding class="self-center">
+<Container responsiveGap maxWidth padding minWidth class="self-center w-full">
   <div class="flex flex-col items-center justify-center gap-y-0.5">
-    <PrimaryTitle class="mb-2">Uppdatera lösenord</PrimaryTitle>
+    <PrimaryTitle responsiveMb>Uppdatera lösenord</PrimaryTitle>
     <p class="text-lg text-muted-foreground md:text-xl">
       Ange ett nytt lösenord.
     </p>
   </div>
 
   <form
-    class="mt-4 flex w-full max-w-xl flex-col gap-y-4 text-lg md:text-xl"
+    class="mt-4 flex w-full flex-col gap-y-4 text-lg md:text-xl"
     method="POST"
     action="?/reset"
     use:enhance
@@ -50,7 +50,7 @@
       {delayed}
       {allErrors}
       text="Uppdatera"
-      class="self-center md:min-w-wider"
+      class="self-center wide-button"
     />
   </form>
 </Container>

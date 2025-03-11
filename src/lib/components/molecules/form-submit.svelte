@@ -21,12 +21,12 @@
   class={cn("icon-button", className)}
 >
   {#if $delayed}
+  {#if loadingText}
+    <span>{loadingText}</span>
+  {/if}
     <LoadingSpinner />
-    {#if loadingText}
-      <span>{loadingText}</span>
-    {/if}
   {:else}
-    <slot name="icon" />
     {text}
+    <slot name="icon" />
   {/if}
 </Button>

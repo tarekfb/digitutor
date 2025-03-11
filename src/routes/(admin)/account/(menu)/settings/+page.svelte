@@ -57,6 +57,7 @@
   });
   const emailForm = superForm(data.updateEmailForm, {
     validators: zodClient(emailSchema),
+    resetForm: false,
   });
   const deleteForm = superForm(data.deleteAccountForm, {
     validators: zodClient(deleteSchema),
