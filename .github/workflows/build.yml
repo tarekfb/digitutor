@@ -18,6 +18,7 @@ env:
   PUBLIC_ENVIRONMENT: "dummy_value"
   RESEND_API_KEY: "dummy_value"
   VITE_PRIVATE_SENTRY_AUTH_TOKEN: "dummy_value"
+  SENTRY_AUTH_TOKEN: ${{ secrets.SENTRY_AUTH_TOKEN }}
 
 jobs:
   build_and_test:

@@ -161,9 +161,15 @@ export const actions = {
     if (!form.valid) return fail(400, { form });
 
     const { email } = form.data;
+    if (session.user.email === email) return message(form, getFailFormMessage({ title: "Du kan inte byta till din nuvarande e-postadress", description: "Ange en ny e-postadress.", variant: "warning" }), { status: 400 });
     try {
       await updateUserEmail(supabase, email.trim());
     } catch (error) {
+      if (isAuthApiError(error)) {
+        if (error.message.includes("already been registered")) {
+          return message(form, getFailFormMessage({ title: "E-postadressen finns redan", description: "Ange en ny e-postadress.", variant: "warning" }), { status: 400 });
+        }
+      }
       const trackingId = logErrorServer({
         error,
         message: "Error on update profile in update email with userid " + session?.user.id,
@@ -179,7 +185,7 @@ export const actions = {
       form,
       getSuccessFormMessage(
         "Bekräfta e-postadresserna",
-        "Bekräfta ändringen på både gamla och nya e-postadresserna. Tills dess loggar du in med din nuvarande e-postadress.",
+        "Om e-postadressen inte redan används skickar vi en länk till båda e-postadresserna. Bekräfta ändringen på både gamla och nya e-postadresserna. Tills dess loggar du in med din nuvarande e-postadress.",
       ),
     );
   },

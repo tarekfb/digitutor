@@ -24,5 +24,6 @@ export const load: LayoutServerLoad = async ({
     });
     error(500, { ...getDefaultErrorInfo({ trackingId }) });
   }
+  
   return { profile };
 };

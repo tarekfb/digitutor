@@ -31,7 +31,7 @@
   <title>Glömt lösenord</title>
 </svelte:head>
 
-<Container responsiveGap minWidth maxWidth>
+<Container responsiveGap minWidth maxWidth class="w-full self-center" padding>
   {#if $page.url.searchParams.get("wrongBrowser") == "true"}
     <AlertMessage
       variant="warning"
@@ -41,7 +41,7 @@
     />
   {/if}
   <div class="flex flex-col items-center justify-center gap-y-0.5">
-    <PrimaryTitle class="mb-2">Glömt lösenord</PrimaryTitle>
+    <PrimaryTitle responsiveMb>Glömt lösenord</PrimaryTitle>
     <p class="text-center text-lg text-muted-foreground md:text-xl">
       Ange e-postaddressen för ditt konto så skickar vi ett e-post med
       information om hur du återställer ditt lösenord.
@@ -72,7 +72,7 @@
       {delayed}
       {allErrors}
       text="Skicka"
-      class="self-center md:min-w-wider"
+      class="self-center wide-button"
     >
       <SendHorizontal slot="icon" class="h-5 w-5" />
     </FormSubmit>

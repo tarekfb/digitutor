@@ -95,7 +95,7 @@
           class="flex flex-col items-start gap-y-2 *:w-full *:md:self-center"
         >
           <Button variant="accent" on:click={() => wrappedGoto("/sign-up")}
-            >Skapa konto gratis</Button
+            >Skapa gratis konto</Button
           >
           <Button variant="outline" on:click={() => wrappedGoto("/sign-in")}
             >Logga in</Button

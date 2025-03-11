@@ -28,7 +28,7 @@
     </Card.Header>
     <Separator />
     <Card.Content
-      class="md:text-base flex flex-col gap-y-4 pt-5  text-sm text-muted-foreground"
+      class="flex flex-col gap-y-4 pt-5 text-sm  text-muted-foreground md:text-base"
     >
       <p>
         {#if listing.description}
@@ -41,10 +41,11 @@
         <Button
           href="/profile/{listing.profile.id}?id={listing.id}"
           class="flex gap-x-2 text-foreground"
-          variant="outline"><ExternalLink class="h-4 w-4" />visa annons</Button
+          variant="outline"
+          >Visa annons<ExternalLink class="size-button-icon" /></Button
         >
         <Button href="/account/edit-listing/{listing.id}" class="flex gap-x-2">
-          <Pen class="h-4 w-4" />Redigera</Button
+          Redigera<Pen class="size-button-icon" /></Button
         >
       </div>
       <div class="flex flex-col gap-y-2">
