@@ -55,7 +55,6 @@ export const formatMessage = ({
 export const sendMessageSchema = z.object({
   content: z
     .string()
-    .trim()
     .min(1, "Meddelandet måste vara minst 1 karaktär.")
     .max(300, "Meddelandet får inte vara mer än 300 karaktärer."),
 });

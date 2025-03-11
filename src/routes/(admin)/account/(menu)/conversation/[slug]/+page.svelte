@@ -4,6 +4,7 @@
   import { superForm } from "sveltekit-superforms";
   import { sendMessageSchema } from "src/lib/shared/models/conversation.js";
   import ChatWindow from "$lib/components/molecules/chat-window.svelte";
+  import Container from "$lib/components/templates/container.svelte";
   import { initChat, sendMessageToStore } from "src/stores/chat.ts";
   import type { PageData } from "./$types.ts";
   import { Button } from "src/lib/components/ui/button/index.js";
@@ -77,18 +78,22 @@
   <title>{websiteName} | Konversation</title>
 </svelte:head>
 
-<div
-  class="mx-8 my-8 flex flex-1 flex-col justify-end md:w-full md:max-w-xl md:self-center lg:max-w-2xl"
+<Container
+  class="w-full flex-1 justify-end self-center "
+  padding
+  margin
+  maxWidth
+  minWidth
 >
   <ChatWindow {chatStore} {self} other={recipient} />
 
   <form
-    class="fixed bottom-0 -mx-8 flex h-20 w-full flex-col justify-center gap-y-2 px-4 md:w-2/4 md:self-center lg:w-1/3"
+    class="fixed bottom-4 w-full max-w-full bg-background px-4 md:max-w-screen-sm md:px-8 lg:max-w-screen-md"
   >
-    <div class="flex items-center justify-between gap-x-2">
+    <div class="flex w-full items-center justify-between gap-x-2">
       <Input
         placeholder="Skriv ett meddelande..."
-        class="bg-card"
+        class="w-full bg-card"
         bind:value={$form.content}
       />
       <Button
@@ -100,4 +105,4 @@
       </Button>
     </div>
   </form>
-</div>
+</Container>

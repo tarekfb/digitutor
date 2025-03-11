@@ -151,6 +151,7 @@ export const getRating = async (
   const { data, error } = await supabase
     .from("avg_rating")
     .select("*")
+    .eq("id", teacher)
     .limit(1)
     .single();
 
