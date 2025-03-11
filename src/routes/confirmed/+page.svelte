@@ -8,7 +8,7 @@
   import PrimaryTitle from "src/lib/components/atoms/primary-title.svelte";
   import Container from "src/lib/components/templates/container.svelte";
   import SecondaryTitle from "src/lib/components/atoms/secondary-title.svelte";
-  import { type PageData } from "./$types.js";
+  import type { PageData } from "./$types.ts";
 
   export let data: PageData;
   $: ({ email, type } = data);
