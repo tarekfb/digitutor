@@ -165,6 +165,11 @@ export const actions = {
     try {
       await updateUserEmail(supabase, email.trim());
     } catch (error) {
+      if (isAuthApiError(error)) {
+        if (error.message.includes("already been registered")) {
+          return message(form, getFailFormMessage({ title: "E-postadressen finns redan", description: "Ange en ny e-postadress.", variant: "warning" }), { status: 400 });
+        }
+      }
       const trackingId = logErrorServer({
         error,
         message: "Error on update profile in update email with userid " + session?.user.id,
