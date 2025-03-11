@@ -33,9 +33,12 @@
         </div>
       {/if}
       {#if listing}
-        <SecondaryTitle>
-          {listing.hourlyPrice} SEK
-        </SecondaryTitle>
+        <div class="flex flex-col gap-y-1">
+          <SecondaryTitle>
+            {listing.hourlyPrice} SEK
+          </SecondaryTitle>
+          <p class="text-muted-foreground text-sm">60 minuter</p>
+        </div>
       {/if}
     </div>
     {#if listing?.subjects}

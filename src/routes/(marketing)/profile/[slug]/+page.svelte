@@ -121,7 +121,7 @@
                 />
               </div>
             {:else}
-              <p>Ny lärare</p>
+              <p class="text-background/50">Ny lärare</p>
             {/if}
             {#if listing}
               <ul>
@@ -140,9 +140,12 @@
           </div>
         </div>
         {#if listing}
-          <p class="text-4xl">
-            {listing.hourlyPrice} SEK
-          </p>
+          <div class="flex flex-col items-center gap-y-1">
+            <p class="text-4xl">
+              {listing.hourlyPrice} SEK
+            </p>
+            <p class="text-muted-foreground">60 minuter</p>
+          </div>
         {/if}
         <ContactTeacherForm
           {requestContactForm}
