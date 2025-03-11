@@ -167,6 +167,7 @@ export const actions = {
     } catch (error) {
       if (isAuthApiError(error)) {
         if (error.message.includes("already been registered")) {
+          // "A user with this email address has already been registered"
           return message(form, getFailFormMessage({ title: "E-postadressen används redan", description: "Ange en ny e-postadress.", variant: "warning" }), { status: 400 });
         }
       }
@@ -185,7 +186,7 @@ export const actions = {
       form,
       getSuccessFormMessage(
         "Bekräfta e-postadresserna",
-        "Om e-postadressen inte redan används skickar vi en länk till båda e-postadresserna. Bekräfta ändringen på både gamla och nya e-postadresserna. Tills dess loggar du in med din nuvarande e-postadress.",
+        "Bekräfta ändringen på både gamla och nya e-postadresserna. Tills dess loggar du in med din nuvarande e-postadress.",
       ),
     );
   },
