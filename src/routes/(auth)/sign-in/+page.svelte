@@ -164,7 +164,7 @@
       </div>
       <FormMessage {message} scroll>
         {#if $message.id === MessageId.RateLimitExceeded}
-          <p class="mt-2">
+          <p class="mt-2 text-sm">
             Försökte skicka bekräftelsemail men misslyckades p.g.a. för många
             e-postutskick.
           </p>

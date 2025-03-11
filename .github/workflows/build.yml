@@ -33,4 +33,4 @@ jobs:
 
       - name: SvelteKit Build
         run: export SENTRY_LOG_LEVEL=debug
-        run: npm run build --log-level=debug
+        run: npm run build
