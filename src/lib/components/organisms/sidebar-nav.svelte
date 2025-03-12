@@ -5,12 +5,14 @@
 
   export let href: string = "";
   export let closeSidebar: undefined | (() => void) = undefined;
-  export let disabled = false;
+  export let disabled: boolean= false;
   export let onClick: undefined | (() => void) = undefined;
+  export let reload: true | undefined = undefined;
 </script>
 
 <Button
   variant="link"
+  data-sveltekit-reload={reload}
   {disabled}
   class="p-0 hover:text-accent active:text-accent  {$page.url.pathname === href
     ? 'md:hover:no-underline'

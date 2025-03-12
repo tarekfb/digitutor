@@ -6,6 +6,7 @@
   import { Button } from "../ui/button/index.ts";
   import UserRound from "lucide-svelte/icons/user-round";
   import { page } from "$app/stores";
+  import { isReloadOnSearch } from "src/lib/shared/utils/utils.ts";
 
   export let profile: Profile | undefined | null | false;
   export let logout: (() => void) | false;
@@ -18,9 +19,6 @@
     logout();
   };
 
-  const isReloadOnSearch = (pathname: string) => {
-    return pathname === "/search";
-  };
 
   const navItem =
     "px-4 py-2 text-muted-foreground md:hover:bg-third md:hover:text-background";
