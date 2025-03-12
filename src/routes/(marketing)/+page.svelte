@@ -16,6 +16,7 @@
   import PricingModule from "src/lib/components/molecules/pricing-module.svelte";
   import Faq from "src/lib/components/molecules/faq.svelte";
   import Vector from "src/lib/icons/vector.svelte";
+
   export let data: PageData;
   $: ({ displayReviews, displayProfiles } = data);
 
@@ -28,6 +29,7 @@
     if (listLength === 3) return "grid-cols-2 md:grid-cols-3";
     return "grid-cols-2 md:grid-cols-3 lg:grid-cols-4";
   };
+  
   const maxWidth = "max-w-full md:max-w-screen-sm lg:max-w-screen-md";
   const yContainerPadding = "py-20 md:py-32";
   const xContainerPadding = "px-4 md:px-12";
@@ -137,51 +139,3 @@
     </Button>
   </div>
 </Container>
-
-<style lang="postcss">
-  .background-gradient {
-    background: linear-gradient(
-      to bottom,
-      hsla(0, 0%, 0%, 0) 0%,
-      hsla(0, 0%, 0%, 0.01) 13.7%,
-      hsla(0, 0%, 0%, 0.036) 25.6%,
-      hsla(0, 0%, 0%, 0.076) 35.9%,
-      hsla(0, 0%, 0%, 0.128) 44.9%,
-      hsla(0, 0%, 0%, 0.189) 52.6%,
-      hsla(0, 0%, 0%, 0.259) 59.2%,
-      hsla(0, 0%, 0%, 0.334) 65%,
-      hsla(0, 0%, 0%, 0.414) 70.1%,
-      hsla(0, 0%, 0%, 0.495) 74.6%,
-      hsla(0, 0%, 0%, 0.577) 78.7%,
-      hsla(0, 0%, 0%, 0.657) 82.7%,
-      hsla(0, 0%, 0%, 0.733) 86.6%,
-      hsla(0, 0%, 0%, 0.804) 90.7%,
-      hsla(0, 0%, 0%, 0.867) 95.1%,
-      hsla(0, 0%, 0%, 0.92) 100%
-    );
-  }
-
-  @media (min-width: 768px) {
-    .background-gradient {
-      background: linear-gradient(
-        to bottom,
-        hsla(0, 0%, 0%, 0) 0%,
-        hsla(0, 0%, 0%, 0.003) 15.2%,
-        hsla(0, 0%, 0%, 0.012) 28.2%,
-        hsla(0, 0%, 0%, 0.029) 39.1%,
-        hsla(0, 0%, 0%, 0.052) 48.3%,
-        hsla(0, 0%, 0%, 0.083) 55.9%,
-        hsla(0, 0%, 0%, 0.122) 62.3%,
-        hsla(0, 0%, 0%, 0.17) 67.6%,
-        hsla(0, 0%, 0%, 0.227) 72%,
-        hsla(0, 0%, 0%, 0.294) 75.9%,
-        hsla(0, 0%, 0%, 0.371) 79.4%,
-        hsla(0, 0%, 0%, 0.458) 82.8%,
-        hsla(0, 0%, 0%, 0.556) 86.3%,
-        hsla(0, 0%, 0%, 0.665) 90.2%,
-        hsla(0, 0%, 0%, 0.786) 94.7%,
-        hsla(0, 0%, 0%, 0.92) 100%
-      );
-    }
-  }
-</style>

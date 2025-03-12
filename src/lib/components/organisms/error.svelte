@@ -6,6 +6,7 @@
   import UserRound from "lucide-svelte/icons/user-round";
   import Bug from "lucide-svelte/icons/bug";
   import {
+    defaultErrorInfo,
     defaultErrorTitle,
     getDefaultErrorInfo,
   } from "src/lib/shared/constants/constants.ts";
@@ -14,12 +15,16 @@
   export let code: number | undefined | null = undefined;
 
   const getTitle = (error: App.Error): string => {
+    if (error.message.toLowerCase() === "not found")
+      return "Sidan hittades inte";
     if (!error.message || error.message === "Internal Error")
       return defaultErrorTitle;
     return error.message;
   };
 
   const getDescription = (error: App.Error): string => {
+    if (error.message.toLowerCase() === "not found" && !error.description)
+      return "Det verkar som att sidan du söker inte är tillgänglig. Det kan bero på att du inte har tillgång till sidan (är du inloggad?), att den tagit borts eller att adressen är felaktig.";
     if (error.message === "Internal Error" || !error.description)
       return getDefaultErrorInfo().description;
     return error.description;
@@ -45,11 +50,6 @@
     </p>
   </div>
   <ul class="h-62 mt-4 flex w-3/4 flex-col gap-4 md:mt-6 md:w-full md:flex-row">
-    {#if error.trackingId}
-      <ErrorNav text="Rapportera fel" href="/report-bug?id={error.trackingId}">
-        <Bug class={iconStyling} />
-      </ErrorNav>
-    {/if}
     <ErrorNav text="Tillbaka till startsidan" href="/">
       <Home class={iconStyling} />
     </ErrorNav>
@@ -58,6 +58,12 @@
     </ErrorNav>
     <ErrorNav text="Kontakta oss" href="/contact-us">
       <MessageCircle class={iconStyling} />
+    </ErrorNav>
+    <ErrorNav
+      text="Rapportera fel"
+      href="/report-bug{error.trackingId ? `?id=${error.trackingId}` : ''}"
+    >
+      <Bug class={iconStyling} />
     </ErrorNav>
   </ul>
 </div>
