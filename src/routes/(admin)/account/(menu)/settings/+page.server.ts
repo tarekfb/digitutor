@@ -448,7 +448,7 @@ export const actions = {
       password: current,
     });
 
-    if (error) throw redirect(303, "/settings_password_error");
+    if (error) redirect(303, "/settings-password-error");
     // user was logged out because of bad password. Redirect to error page with explaination.
 
     const { error: updateError } = await supabase.auth.updateUser({
