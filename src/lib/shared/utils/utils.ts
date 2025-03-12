@@ -226,3 +226,5 @@ export const loadContactTeacherForms = async (
   );
   return { requestContactForm, startContactForm };
 };
+
+export const isReloadOnSearch = (pathname: string): true | undefined => pathname === "/search" ? true : undefined;
