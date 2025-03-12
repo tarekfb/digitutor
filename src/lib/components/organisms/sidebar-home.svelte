@@ -24,6 +24,8 @@
   import Search from "lucide-svelte/icons/search";
   import Crown from "lucide-svelte/icons/crown";
   import { goto } from "$app/navigation";
+  import { isReloadOnSearch } from "src/lib/shared/utils/utils.ts";
+  import { page } from "$app/stores";
 
   export let profile: Profile | undefined;
   export let logout: () => void;
@@ -123,31 +125,31 @@
         <Separator class="mb-4 mt-2 px-0" />
         <div class="flex flex-col items-start gap-y-1">
           <h2 class="text-lg">Sök på ett språk eller ramverk</h2>
-          <SidebarNav href="/search?q=javascript" {closeSidebar}>
+          <SidebarNav href="/search?q=javascript" reload={isReloadOnSearch($page.url.pathname)} {closeSidebar}>
             <Js width={widthHeight} height={widthHeight} />
             JavaScript
           </SidebarNav>
-          <SidebarNav href="/search?q=python" {closeSidebar}>
+          <SidebarNav href="/search?q=python" reload={isReloadOnSearch($page.url.pathname)} {closeSidebar}>
             <Python width={widthHeight} height={widthHeight} />
             Python
           </SidebarNav>
-          <SidebarNav href="/search?q=java" {closeSidebar}>
+          <SidebarNav href="/search?q=java" reload={isReloadOnSearch($page.url.pathname)} {closeSidebar}>
             <Java width={widthHeight} height={widthHeight} />
             Java
           </SidebarNav>
-          <SidebarNav href="/search?q=csharp" {closeSidebar}>
+          <SidebarNav href="/search?q=csharp" reload={isReloadOnSearch($page.url.pathname)} {closeSidebar}>
             <Csharp width={widthHeight} height={widthHeight} />
             C#
           </SidebarNav>
-          <SidebarNav href="/search?q=html" {closeSidebar}>
+          <SidebarNav href="/search?q=html"reload={isReloadOnSearch($page.url.pathname)}  {closeSidebar}>
             <Html width={widthHeight} height={widthHeight} />
             Html
           </SidebarNav>
-          <SidebarNav href="/search?q=css" {closeSidebar}>
+          <SidebarNav href="/search?q=css" reload={isReloadOnSearch($page.url.pathname)} {closeSidebar}>
             <Css width={widthHeight} height={widthHeight} />
             CSS
           </SidebarNav>
-          <SidebarNav href="/search?q=react" {closeSidebar}>
+          <SidebarNav href="/search?q=react" reload={isReloadOnSearch($page.url.pathname)} {closeSidebar}>
             <React width={widthHeight} height={widthHeight} />
             React.JS
           </SidebarNav>
