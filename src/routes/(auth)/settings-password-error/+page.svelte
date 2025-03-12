@@ -11,7 +11,6 @@
 
 <Container
   class="w-full items-start self-center pt-0"
-  
   margin
   padding
   responsiveGap
