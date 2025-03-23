@@ -127,6 +127,7 @@
               <ul>
                 {#each listing?.subjects as subject, i}
                   {#if i < 6}
+                  <!-- todo replace with subject-item -->
                     <li class="flex items-center gap-x-2">
                       <Terminal class="h-5 w-5 text-third flex-shrink-0" />
                       <p class="font-mono text-xl">
