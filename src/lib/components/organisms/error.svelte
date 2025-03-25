@@ -6,7 +6,6 @@
   import UserRound from "lucide-svelte/icons/user-round";
   import Bug from "lucide-svelte/icons/bug";
   import {
-    defaultErrorInfo,
     defaultErrorTitle,
     getDefaultErrorInfo,
   } from "src/lib/shared/constants/constants.ts";
@@ -24,7 +23,7 @@
 
   const getDescription = (error: App.Error): string => {
     if (error.message.toLowerCase() === "not found" && !error.description)
-      return "Det verkar som att sidan du söker inte är tillgänglig. Det kan bero på att du inte har tillgång till sidan (är du inloggad?), att den tagit borts eller att adressen är felaktig.";
+      return "Det verkar som att sidan du söker inte är tillgänglig. Det kan bero på att du inte är inloggad, att den tagit borts eller att adressen är felaktig.";
     if (error.message === "Internal Error" || !error.description)
       return getDefaultErrorInfo().description;
     return error.description;

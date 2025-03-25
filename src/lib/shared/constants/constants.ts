@@ -126,7 +126,7 @@ export const defaultPlanId = PricingPlanIds.Free;
 export const freePlan: PricingPlan = {
   id: PricingPlanIds.Free,
   name: "Gratis",
-  description: `Inkluderar ${freeCredits} gratis kontaktförfrågningar. Tilldelas automatiskt när du skapar konto, uppgradera när som helst.`,
+  description: `Allt du behöver för att använda plattformen. Perfekt för de flesta användare. Du kan kontakta ${freeCredits} lärare helt gratis. Uppgradera när som helst.`,
   bold: `Inget betalkort behövs!`,
   price: "0 SEK",
   priceIntervalName: "per månad",
