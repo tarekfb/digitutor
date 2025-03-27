@@ -32,7 +32,7 @@ export const load = async ({
         error(404, {
           message: "Vi kunde inte hitta konversationen",
           description:
-            "Konversationen finns inte eller har tagits bort. Du kan kontakta oss om detta fortsätter.",
+            "Det verkar som att konversationen du söker inte är tillgänglig. Det kan bero på att du inte är inloggad, att den tagits bort, eller att adressen är felaktig.",
         });
 
       if (e.code === ExternalErrorCodes.ContainsZeroRows)

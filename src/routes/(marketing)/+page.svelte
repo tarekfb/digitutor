@@ -100,11 +100,10 @@
         >Generös gratisnivå och möjlighet att uppgradera när som helst.
       </PrimaryTitle>
       <section
-        class="flex w-full flex-col-reverse flex-wrap place-content-center gap-6 md:gap-10 lg:flex-row"
+        class="flex w-full flex-wrap place-content-center gap-6 md:gap-10 lg:flex-row"
       >
         {#each pricingPlans as pricingPlan}
           <PricingModule
-            highlighted={pricingPlan.id === premiumPlan.id}
             {pricingPlan}
           />
         {/each}
