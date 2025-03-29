@@ -11,7 +11,7 @@ export const contactEmail = "info@digitutor.se";
 export const noReplyEmail = "noreply@digitutor.se";
 export const localBaseUrl = "http://localhost:5173";
 export const testBaseUrl = `https://dev.mindic.pages.dev`;
-export const prodBaseUrl = `https://mindic.pro`;
+export const prodBaseUrl = `https://digitutor.se`;
 
 export const getBaseUrl = (env: string): string => {
   if (env === "local") return localBaseUrl;
