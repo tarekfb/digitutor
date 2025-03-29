@@ -199,6 +199,7 @@
               {...attrs}
               bind:value={$values}
               multiple
+              max={10}
               placeholder="Välj språk"
               options={subjects}
               highlightFirstItem={false}
