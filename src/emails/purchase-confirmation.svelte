@@ -84,7 +84,7 @@
           Vi bekräftar härmed din beställning. Du har köpt <strong
             >{productName}</strong
           >
-          för <strong>{productPrice}</strong>.
+          för <strong>{productPrice} per månad</strong>.
         </Text>
       {:else}
         <Text style={paragraph}>
@@ -94,8 +94,8 @@
 
       <Text style={paragraph}>
         Produkten har aktiverats på ditt konto och är redo att användas. Du kan
-        se mer information på ditt konto via <Link
-          href="{prodBaseUrl}/account/billing">betalningar</Link
+        se mer information via <Link href="{prodBaseUrl}/account/billing"
+          >betalningar</Link
         >.
       </Text>
 
