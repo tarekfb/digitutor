@@ -5,6 +5,7 @@
     type PricingPlan,
   } from "src/lib/shared/models/subscription.ts";
   import Button from "src/lib/components/ui/button/button.svelte";
+  import { premiumPlan } from "src/lib/shared/constants/constants.ts";
 
   export let pricingPlan: PricingPlan;
   export let highlighted: boolean = false;
@@ -17,7 +18,12 @@
     : 'border-gray-200'} min-w-[260px] max-w-[310px] flex-1 flex-grow p-6 shadow-xl"
 >
   <div class="flex h-full flex-col">
-    <div class="text-xl font-bold">{pricingPlan.name}</div>
+    <div class="text-xl font-bold">
+      <span
+        class={pricingPlan.name === premiumPlan.name ? "text-gradient " : ""}
+        >{pricingPlan.name}</span
+      >
+    </div>
     <p class="mt-2 text-sm leading-relaxed text-muted-foreground md:text-base">
       {pricingPlan.description}
     </p>

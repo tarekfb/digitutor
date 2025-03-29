@@ -22,7 +22,7 @@
     className,
   )}
 >
-  <Terminal class={cn("size-5 text-accent", iconStyling)} />
+  <Terminal class={cn("size-5 text-accent flex-shrink-0", iconStyling)} />
   <p class={cn("font-mono md:text-lg", textStyling)}>
     {#if typeof subject === "number"}
       {languages[subject - 1].title}

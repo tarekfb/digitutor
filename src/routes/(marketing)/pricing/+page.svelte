@@ -42,12 +42,11 @@
   </div>
 
   <section
-    class="flex w-full flex-col-reverse flex-wrap place-content-center gap-6 md:gap-10 lg:flex-row {containerStyling}"
+    class="flex w-full flex-wrap place-content-center gap-6 md:gap-10 lg:flex-row {containerStyling}"
   >
     {#each pricingPlans as pricingPlan}
       <PricingModule
         {currentPlanId}
-        highlighted={pricingPlan.id === premiumPlan.id}
         {pricingPlan}
       />
     {/each}

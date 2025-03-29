@@ -11,7 +11,7 @@ export const contactEmail = "info@digitutor.se";
 export const noReplyEmail = "noreply@digitutor.se";
 export const localBaseUrl = "http://localhost:5173";
 export const testBaseUrl = `https://dev.mindic.pages.dev`;
-export const prodBaseUrl = `https://mindic.pro`;
+export const prodBaseUrl = `https://digitutor.se`;
 
 export const getBaseUrl = (env: string): string => {
   if (env === "local") return localBaseUrl;
@@ -126,7 +126,7 @@ export const defaultPlanId = PricingPlanIds.Free;
 export const freePlan: PricingPlan = {
   id: PricingPlanIds.Free,
   name: "Gratis",
-  description: `Inkluderar ${freeCredits} gratis kontaktförfrågningar. Tilldelas automatiskt när du skapar konto, uppgradera när som helst.`,
+  description: `Allt du behöver för att använda plattformen. Perfekt för de flesta användare. Du kan kontakta ${freeCredits} lärare helt gratis. Uppgradera när som helst.`,
   bold: `Inget betalkort behövs!`,
   price: "0 SEK",
   priceIntervalName: "per månad",
