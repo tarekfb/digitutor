@@ -268,7 +268,6 @@
                 </div>
               </div>
             </div>
-            >>>>>>> Stashed changes
           </Form.Control>
           <Form.FieldErrors>
             {#if $errors.subjects?._errors}
