@@ -132,7 +132,7 @@ export const actions: Actions = {
       params: { slug },
     } = event;
     const { session } = await safeGetSession();
-    if (!session) throw redirect(303, "/sign-in");
+    if (!session) redirect(303, "/sign-in");
 
     const form = await superValidate(event, zod(updateListingSchema));
     if (!form.valid) return fail(400, { form });

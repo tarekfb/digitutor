@@ -48,6 +48,8 @@ export type InputListing = Pick<
   hourlyPrice: number;
 };
 
+export const maxSubjects = 5;
+
 const updateListingProps: TypeToZod<InputListing> = {
   description: z
     .string()
@@ -57,7 +59,11 @@ const updateListingProps: TypeToZod<InputListing> = {
     .number()
     .min(0, "Måste vara minst 0.")
     .max(100000, "Självinsikt och självsäkerhet är en hårfin balansgång."),
-  subjects: z.number().array().min(1, "Du måste välja minst ett ämne."),
+  subjects: z
+    .number()
+    .array()
+    .min(1, "Du måste välja minst ett ämne.")
+    .max(5, "Du kan välja max 5 språk."),
   title: z
     .string()
     .min(3, "Måste vara minst 3 karaktärer.")
