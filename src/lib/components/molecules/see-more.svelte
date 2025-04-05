@@ -15,17 +15,20 @@
   export let listStyling: string | null | undefined = undefined;
   export let variant: Variant = "ghost-none";
   export let max: number = 1;
+  export let showUpToMax = false;
 
   let open = false;
 </script>
 
-{#if subjects.length <= max}
+{#if showUpToMax || subjects.length <= max}
   {#if subjects.length === 1}
     <SubjectItem subject={subjects[0]} muted={false} li={false} />
   {:else}
     <ul class={cn("flex flex-col gap-y-2", listStyling)}>
-      {#each subjects as subject}
-        <SubjectItem {subject} muted={false} li />
+      {#each subjects as subject, i}
+        {#if !showUpToMax && showUpToMax && i < showUpToMax}
+          <SubjectItem {subject} muted={false} li />
+        {/if}
       {/each}
     </ul>
   {/if}
@@ -48,7 +51,10 @@
           <ChevronUp class="size-5 text-accent " />
           <span class="sr-only">Öppna</span>
         </div>
-        <span class={cn("md:text-lg text-[14px] font-semibold", triggerTextStyling)}>Se {subjects.length} språk</span></Button
+        <span
+          class={cn("text-[14px] font-semibold md:text-lg", triggerTextStyling)}
+          >Se {subjects.length} språk</span
+        ></Button
       >
     </Popover.Trigger>
     <Popover.Content

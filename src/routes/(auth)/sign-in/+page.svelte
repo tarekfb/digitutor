@@ -96,7 +96,7 @@
                 </div>
               {/if}
               <Stars size={5} rating={displayTeacher.avgRating} />
-              <SeeMore subjects={displayTeacher.subjects} max={5} />
+              <SeeMore subjects={displayTeacher.subjects} max={5} showUpToMax />
             </div>
           </div>
           <ul class="flex list-outside flex-col gap-y-2">
