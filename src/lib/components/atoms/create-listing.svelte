@@ -23,7 +23,7 @@
         builders={[builder]}
         disabled={$delayed}
         aria-label="Skapa annons"
-        class="md:self-center md:min-w-wider"
+        class="md:self-center wide-button"
       >
         {#if $delayed}
           <LoadingSpinner class="mr-2" /> <span>Laddar...</span>

@@ -63,13 +63,16 @@
     </div>
     <div class="flex flex-col items-center gap-y-1">
       <h3 class="text-2xl {boxStyling}">{result.hourlyPrice} SEK</h3>
-      <p class="text-muted-foreground text-sm">60 minuter</p>
+      <p class="text-sm text-muted-foreground">60 minuter</p>
     </div>
     <SeeMore
       subjects={result.subjects.includes(searchedSubject)
         ? [searchedSubject]
         : result.subjects}
-      max={1}
+      max={result.subjects.includes(searchedSubject) ||
+      result.subjects.length === 1
+        ? 1
+        : 0}
     />
   </div>
   <div class="flex justify-evenly">
