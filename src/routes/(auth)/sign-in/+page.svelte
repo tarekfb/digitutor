@@ -52,7 +52,9 @@
   <title>Logga in</title>
 </svelte:head>
 
-<AuthSplit shouldShowAside={true}>
+<AuthSplit
+  shouldShowAside={!!displayTeacher && displayTeacher.reviews.length > 0}
+>
   <svelte:fragment slot="aside">
     <!-- this if is here only to please explain to ts displayteacher is not undefined -->
     {#if displayTeacher}
@@ -94,7 +96,11 @@
                 </div>
               {/if}
               <Stars size={5} rating={displayTeacher.avgRating} />
-              <SeeMore max={3} subjects={[6, 8, 9, 8, 7, 5, 7]} />
+              <SeeMore max={4} subjects={displayTeacher.subjects} />
+              <!-- <ul>
+                {#each displayTeacher.subjects as subject, i}
+                {/each}
+              </ul> -->
             </div>
           </div>
           <ul class="flex list-outside flex-col gap-y-2">
