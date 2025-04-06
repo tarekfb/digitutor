@@ -26,6 +26,7 @@
       <NbrOfReviews class="text-sm " nbrOfReviews={profile.reviewCount} />
     </div>
     <SeeMore
+      max={1}
       subjects={profile.subjects}
       triggerStyling="w-full"
       triggerTextStyling="font-normal"

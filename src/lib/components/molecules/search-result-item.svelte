@@ -71,7 +71,10 @@
       subjects={result.subjects.includes(searchedSubject)
         ? [searchedSubject]
         : result.subjects}
-      max={1}
+      max={result.subjects.includes(searchedSubject) ||
+      result.subjects.length === 1
+        ? 1
+        : 0}
     />
   </div>
   <div class="flex justify-evenly">
