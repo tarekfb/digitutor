@@ -97,7 +97,7 @@
   >
     <Container maxWidth margin={false} class="mx-4 md:mx-8" responsiveGap>
       <PrimaryTitle class="{bTitleMargin} text-center  "
-        >Generös gratisnivå och möjlighet att uppgradera när som helst.
+        >Generös gratisnivå och möjlighet att uppgradera när som helst
       </PrimaryTitle>
       <section
         class="flex w-full flex-wrap place-content-center gap-6 md:gap-10 lg:flex-row"
