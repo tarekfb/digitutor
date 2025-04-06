@@ -4,21 +4,16 @@
   import SiteTitle from "../atoms/site-title.svelte";
   import { Separator } from "../ui/separator/index.ts";
   import { Button } from "../ui/button/index.ts";
-  import UserRound from "lucide-svelte/icons/user-round";
   import { page } from "$app/stores";
   import { isReloadOnSearch } from "src/lib/shared/utils/utils.ts";
 
-  export let profile: Profile | undefined | null | false;
+  export let profile: Profile | undefined | false;
   export let logout: (() => void) | false;
-  export let isAccount: boolean = false;
-
-  const iconButton = "flex items-center gap-x-2";
 
   const wrappedLogout = () => {
     if (!logout) return;
     logout();
   };
-
 
   const navItem =
     "px-4 py-2 text-muted-foreground md:hover:bg-third md:hover:text-background";
@@ -38,27 +33,22 @@
         <slot name="searchForm" />
       </div>
     {/if}
-    <nav class="flex items-center justify-end {!isAccount ? 'lg:hidden' : ''}">
+    <nav class="flex items-center justify-end lg:hidden">
       <SidebarHome
         logout={wrappedLogout}
         profile={profile ? profile : undefined}
       />
     </nav>
-    {#if !isAccount}
-      <nav class="hidden items-center justify-end gap-x-2 lg:flex">
-        {#if profile !== false}
-          {#if profile}
-            <Button class={iconButton} href="/account" variant="outline-card">
-              <UserRound class="size-4" />
-              Konto</Button
-            >
-          {:else}
-            <Button variant="outline" href="/sign-in">Logga in</Button>
-            <Button variant="third" href="/sign-up">Skapa konto</Button>
-          {/if}
+    <nav class="hidden items-center justify-end gap-x-2 lg:flex">
+      {#if profile !== false}
+        {#if profile}
+          <SidebarHome logout={wrappedLogout} {profile} />
+        {:else}
+          <Button variant="outline" href="/sign-in">Logga in</Button>
+          <Button variant="third" href="/sign-up">Skapa konto</Button>
         {/if}
-      </nav>
-    {/if}
+      {/if}
+    </nav>
   </div>
   <Separator class="mb-2 w-full md:mb-0" />
   {#if $$slots.searchForm}
@@ -71,9 +61,15 @@
   <nav
     class="hidden w-full max-w-screen-2xl items-center self-center px-4 lg:flex"
   >
-    <a href="/sign-up?role=teacher" class={navItem}>Skapa konto som lärare</a>
-    <a href="/pricing" class={navItem}>Premium</a>
-    <Separator orientation="vertical" class="py-3" />
+    {#if profile === undefined}
+      <a href="/sign-up?role=teacher" class={navItem}>Skapa konto som lärare</a>
+    {/if}
+    {#if profile && profile.role === "student"}
+      <a href="/pricing" class={navItem}>Premium</a>
+    {/if}
+    {#if profile === undefined || (profile && profile.role === "student")}
+      <Separator orientation="vertical" class="py-3" />
+    {/if}
     <a
       href="/search?getAll=true"
       data-sveltekit-reload={isReloadOnSearch($page.url.pathname)}
