@@ -45,7 +45,7 @@
           <SidebarHome logout={wrappedLogout} {profile} />
         {:else}
           <Button variant="outline" href="/sign-in">Logga in</Button>
-          <Button variant="third" href="/sign-up">Skapa konto</Button>
+          <Button variant="third" href="/sign-up">Skapa gratis konto</Button>
         {/if}
       {/if}
     </nav>
