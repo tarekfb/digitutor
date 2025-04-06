@@ -95,11 +95,7 @@
                 </div>
               {/if}
               <Stars size={5} rating={displayTeacher.avgRating} />
-              <SeeMore max={4} subjects={displayTeacher.subjects} />
-              <!-- <ul>
-                {#each displayTeacher.subjects as subject, i}
-                {/each}
-              </ul> -->
+              <SeeMore max={5} subjects={displayTeacher.subjects} />
             </div>
           </div>
           <ul class="flex list-outside flex-col gap-y-2">
