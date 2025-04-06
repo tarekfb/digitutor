@@ -17,7 +17,6 @@
   import Stars from "src/lib/components/atoms/stars.svelte";
   import ReviewCardExtra from "src/lib/components/molecules/auth-review-card.svelte";
   import { page } from "$app/stores";
-  import SubjectItem from "src/lib/components/atoms/subject-item.svelte";
   import Avatar from "src/lib/components/atoms/avatar.svelte";
   import SeeMore from "src/lib/components/molecules/see-more.svelte";
 
