@@ -19,6 +19,7 @@
   import { page } from "$app/stores";
   import SubjectItem from "src/lib/components/atoms/subject-item.svelte";
   import Avatar from "src/lib/components/atoms/avatar.svelte";
+  import SeeMore from "src/lib/components/molecules/see-more.svelte";
 
   export let data: PageData;
 
@@ -51,9 +52,7 @@
   <title>Logga in</title>
 </svelte:head>
 
-<AuthSplit
-  shouldShowAside={!!displayTeacher && displayTeacher.reviews.length > 0}
->
+<AuthSplit shouldShowAside={true}>
   <svelte:fragment slot="aside">
     <!-- this if is here only to please explain to ts displayteacher is not undefined -->
     {#if displayTeacher}
@@ -95,13 +94,7 @@
                 </div>
               {/if}
               <Stars size={5} rating={displayTeacher.avgRating} />
-              <ul>
-                {#each displayTeacher.subjects as subject, i}
-                  {#if i < 5}
-                    <SubjectItem subject={subject.id} muted={false} li />
-                  {/if}
-                {/each}
-              </ul>
+              <SeeMore max={3} subjects={[6, 8, 9, 8, 7, 5, 7]} />
             </div>
           </div>
           <ul class="flex list-outside flex-col gap-y-2">

@@ -37,12 +37,12 @@
           <SecondaryTitle>
             {listing.hourlyPrice} SEK
           </SecondaryTitle>
-          <p class="text-muted-foreground text-sm">60 minuter</p>
+          <p class="text-sm text-muted-foreground">60 minuter</p>
         </div>
       {/if}
     </div>
     {#if listing?.subjects}
-      <SeeMore subjects={listing.subjects} max={3} />
+      <SeeMore subjects={listing.subjects} max={2} />
     {/if}
   </div>
 </div>
