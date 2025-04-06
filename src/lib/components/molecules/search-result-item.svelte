@@ -9,7 +9,7 @@
   import NbrOfReviews from "../atoms/nbr-of-reviews.svelte";
   import ArrowRight from "lucide-svelte/icons/arrow-right";
 
-  const boxStyling = "p-0 m-0 h-8";
+  const boxStyling = "p-0 m-0 min-h-8";
   const maxWidth = "max-w-full md:max-w-screen-sm lg:max-w-screen-md";
 
   export let result: SearchResult;
@@ -62,8 +62,10 @@
       {/if}
     </div>
     <div class="flex flex-col items-center gap-y-1">
-      <h3 class="text-2xl {boxStyling}">{result.hourlyPrice} SEK</h3>
-      <p class="text-muted-foreground text-sm">60 minuter</p>
+      <h3 class="text-xl md:text-2xl {boxStyling}">
+        {result.hourlyPrice} <span class="text-sm md:text-lg">SEK</span>
+      </h3>
+      <p class="text-sm text-muted-foreground">60 minuter</p>
     </div>
     <SeeMore
       subjects={result.subjects.includes(searchedSubject)
