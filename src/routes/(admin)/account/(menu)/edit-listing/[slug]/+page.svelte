@@ -275,7 +275,6 @@
             {/if}
           </Form.FieldErrors>
         </Form.Field>
-
         {#if $openSubjects}
           <ul
             class="z-10 flex max-h-[300px] flex-col overflow-hidden rounded-lg"

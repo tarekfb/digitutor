@@ -15,7 +15,7 @@
 </svelte:head>
 
 <AccountLayout>
-  <PrimaryTitle class="text-center" responsiveMb>Dina konversationer</PrimaryTitle>
+  <PrimaryTitle class="text-center">Dina konversationer</PrimaryTitle>
   <Container class="w-full text-center" minWidth maxWidth>
     {#each conversations as conversation}
       <a
