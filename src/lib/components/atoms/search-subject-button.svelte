@@ -16,6 +16,7 @@
   on:click={() => onClickCallback(text)}
   class={cn(subjectChipStyling, className)}
   aria-label={ariaLabel}
+  type="button"
 >
   <span class={textStyling}>{text}</span>
   <slot />
