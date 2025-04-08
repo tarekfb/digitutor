@@ -9,13 +9,14 @@
   export let ariaLabel: string | null | undefined = "";
 
   const subjectChipStyling =
-    "h-12 grow inline-flex gap-x-2 items-center px-2 py-1 text-sm bg-background rounded-full md:hover:bg-background bg-card";
+    "h-12 grow inline-flex gap-x-2 items-center px-2 py-1 text-sm bg-background rounded-full bg-card";
 </script>
 
 <button
   on:click={() => onClickCallback(text)}
   class={cn(subjectChipStyling, className)}
   aria-label={ariaLabel}
+  type="button"
 >
   <span class={textStyling}>{text}</span>
   <slot />

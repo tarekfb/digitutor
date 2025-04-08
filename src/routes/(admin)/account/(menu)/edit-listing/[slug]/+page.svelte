@@ -1,7 +1,10 @@
 <script lang="ts">
   import { zodClient } from "sveltekit-superforms/adapters";
   import { superForm } from "sveltekit-superforms";
-  import { updateListingSchema } from "$lib/shared/models/listing.js";
+  import {
+    maxSubjects,
+    updateListingSchema,
+  } from "$lib/shared/models/listing.js";
   import PrimaryTitle from "$lib/components/atoms/primary-title.svelte";
   import type { PageData } from "./$types.ts";
   import Container from "src/lib/components/templates/container.svelte";
@@ -18,13 +21,19 @@
   import SaveIcon from "lucide-svelte/icons/save";
   import ExternalLink from "lucide-svelte/icons/square-arrow-out-up-right";
   import { Checkbox } from "src/lib/components/ui/checkbox/index.js";
-  import Svelecte from "svelecte";
-  import { arrayProxy } from "sveltekit-superforms/client";
   import { Label } from "src/lib/components/ui/label/index.ts";
   import FormSubmit from "src/lib/components/molecules/form-submit.svelte";
   import AccountLayout from "src/lib/components/templates/account-layout.svelte";
-  import { websiteName } from "src/lib/shared/constants/constants.ts";
   import { suggestSubjectSchema } from "src/lib/shared/models/subject.ts";
+  import ChevronDown from "lucide-svelte/icons/chevron-down";
+  import ChevronUp from "lucide-svelte/icons/chevron-up";
+  import { createCombobox, melt } from "@melt-ui/svelte";
+  import { websiteName } from "src/lib/shared/constants/constants.ts";
+  import SearchSubjectButton from "src/lib/components/atoms/search-subject-button.svelte";
+  import { fly } from "svelte/transition";
+  import Check from "lucide-svelte/icons/check";
+  import X from "lucide-svelte/icons/x";
+  import { languages } from "src/lib/shared/models/common.ts";
 
   export let data: PageData;
   $: ({ subjects, profile } = data);
@@ -52,13 +61,6 @@
     allErrors,
     isTainted,
   } = listingForm;
-  const { values, errors: subjectsErrors } = arrayProxy(
-    listingForm,
-    "subjects",
-    {
-      taint: true,
-    },
-  );
 
   const labelStyling = "text-xl md:text-2xl";
 
@@ -118,6 +120,46 @@
     // what we are saying: if user is detoggling the checkbox --> clear the email input
     if (checked) $formSuggestSubject.email = undefined;
   };
+
+  const {
+    elements: { menu, input, option, label },
+    states: { open: openSubjects, inputValue, touchedInput, selected },
+    helpers: { isSelected },
+  } = createCombobox<number, true>({
+    forceVisible: true,
+    multiple: true,
+    onSelectedChange: ({ next }) => {
+      if (next && next.length > maxSubjects) {
+        toast.error(`Du kan välja max ${maxSubjects} språk.`);
+        return next.slice(0, maxSubjects);
+      }
+
+      if (next) {
+        $form.subjects = next.map((subject) => subject.value);
+      } else {
+        $form.subjects = [];
+      }
+      return next;
+    },
+  });
+
+  const handleUndefinedBug =
+    subjects && subjects.length > 0 ? subjects : languages;
+
+  $: filteredSubjects = $touchedInput
+    ? handleUndefinedBug?.filter(({ title, altTitle }) => {
+        const normalizedInput = $inputValue.toLowerCase();
+        return (
+          title.toLowerCase().includes(normalizedInput) ||
+          altTitle?.toLowerCase().includes(normalizedInput)
+        );
+      })
+    : (handleUndefinedBug ?? []);
+
+  const languageItemStyling =
+    "relative cursor-pointer rounded-md pl-4 data-[highlighted]:bg-third data-[highlighted]:text-background data-[disabled]:opacity-50";
+
+  $selected = $form.subjects.map((subject) => ({ value: subject }));
 </script>
 
 <svelte:head>
@@ -195,24 +237,117 @@
         <Form.Field form={listingForm} name="subjects">
           <Form.Control let:attrs>
             <Label class={labelStyling}>Språk</Label>
-            <Svelecte
-              {...attrs}
-              bind:value={$values}
-              multiple
-              placeholder="Välj språk"
-              options={subjects}
-              highlightFirstItem={false}
-              labelField="title"
-              name="subjects"
-              clearable
-            />
+            <div class="flex flex-col gap-1">
+              <!-- eslint-disable-next-line svelte/no-unused-svelte-ignore -->
+              <!-- svelte-ignore a11y-label-has-associated-control - $label contains the 'for' attribute -->
+              <label use:melt={$label} hidden>Välj språk</label>
+              {#each $form.subjects as subject, i}
+                <input
+                  {...attrs}
+                  type="hidden"
+                  name="subjects"
+                  value={subject}
+                />
+              {/each}
+
+              <div class="relative">
+                <input
+                  use:melt={$input}
+                  class="flex h-10 w-full items-center justify-between rounded-lg rounded-r-none
+                  bg-card px-3 pr-6 text-base placeholder:text-muted-foreground"
+                  placeholder="Välj språk"
+                />
+                <div
+                  class="absolute right-2 top-1/2 z-10 -translate-y-1/2 text-secondary"
+                >
+                  {#if $openSubjects}
+                    <ChevronUp class="size-4" />
+                  {:else}
+                    <ChevronDown class="size-4" />
+                  {/if}
+                </div>
+              </div>
+            </div>
           </Form.Control>
           <Form.FieldErrors>
-            {#if $subjectsErrors}
-              {$subjectsErrors}
+            {#if $errors.subjects?._errors}
+              {$errors.subjects?._errors}
             {/if}
           </Form.FieldErrors>
         </Form.Field>
+        {#if $openSubjects}
+          <ul
+            class="z-10 flex max-h-[300px] flex-col overflow-hidden rounded-lg"
+            use:melt={$menu}
+            transition:fly={{ duration: 150, y: -5 }}
+          >
+            <!-- svelte-ignore a11y-no-noninteractive-tabindex -->
+            <div
+              class="flex max-h-full flex-col gap-0 overflow-y-auto bg-card px-2 py-2 text-foreground"
+              tabindex="0"
+            >
+              {#each filteredSubjects as subject, index (index)}
+                <li
+                  use:melt={$option({
+                    value: subject.id,
+                    label: subject.title,
+                  })}
+                  class="scroll-my-2 py-2 {languageItemStyling}"
+                >
+                  {#if $isSelected(subject.id)}
+                    <div
+                      class="check absolute left-2 top-1/2 z-10 text-primary"
+                    >
+                      <Check class="size-4" />
+                    </div>
+                  {/if}
+                  <div class="pl-4">
+                    <span>{subject.title}</span>
+                  </div>
+                </li>
+              {:else}
+                <li
+                  class="py-1 pl-8
+          {languageItemStyling}"
+                >
+                  Inga resultat
+                </li>
+              {/each}
+            </div>
+          </ul>
+        {/if}
+
+        {#if $selected && $selected.length > 0}
+          <ul class="-mt-2 flex w-full flex-wrap gap-2">
+            <li>
+              <SearchSubjectButton
+                ariaLabel="Rensa {$selected.length} språk"
+                onClickCallback={() => ($selected = [])}
+                text={$selected.length.toString()}
+                class="border-2 border-third"
+                textStyling="rounded-full bg-third px-3 py-1 text-background"
+              >
+                <X class="size-4" />
+              </SearchSubjectButton>
+            </li>
+            {#each $selected as subject, i}
+              <li>
+                <SearchSubjectButton
+                  ariaLabel="Rensa {subject.label}"
+                  onClickCallback={() => {
+                    if ($selected)
+                      $selected = $selected.filter((_, index) => index !== i);
+                  }}
+                  text={subject.label ??
+                    languages.find((l) => l.id === subject.value)?.title ??
+                    ""}
+                >
+                  <X class="size-4" />
+                </SearchSubjectButton>
+              </li>
+            {/each}
+          </ul>
+        {/if}
 
         <Dialog.Trigger asChild let:builder>
           <small
@@ -340,3 +475,10 @@
     </Dialog.Root>
   </Container>
 </AccountLayout>
+
+<style lang="postcss">
+  .check {
+    @apply absolute left-2 top-1/2 text-primary;
+    translate: 0 calc(-50% + 1px);
+  }
+</style>

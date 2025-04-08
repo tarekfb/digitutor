@@ -17,8 +17,8 @@
   import Stars from "src/lib/components/atoms/stars.svelte";
   import ReviewCardExtra from "src/lib/components/molecules/auth-review-card.svelte";
   import { page } from "$app/stores";
-  import SubjectItem from "src/lib/components/atoms/subject-item.svelte";
   import Avatar from "src/lib/components/atoms/avatar.svelte";
+  import SeeMore from "src/lib/components/molecules/see-more.svelte";
 
   export let data: PageData;
 
@@ -95,13 +95,7 @@
                 </div>
               {/if}
               <Stars size={5} rating={displayTeacher.avgRating} />
-              <ul>
-                {#each displayTeacher.subjects as subject, i}
-                  {#if i < 10}
-                      <SubjectItem subject={subject.id} muted={false} li />
-                  {/if}
-                {/each}
-              </ul>
+              <SeeMore max={5} subjects={displayTeacher.subjects} />
             </div>
           </div>
           <ul class="flex list-outside flex-col gap-y-2">
@@ -112,7 +106,9 @@
                 {index}
                 {review}
                 li
-                class="z-{(reviews.length - index) * 10} {getBlur(index)} w-96 bg-background border shadow-md"
+                class="z-{(reviews.length - index) * 10} {getBlur(
+                  index,
+                )} w-96 border bg-background shadow-md"
               />
             {/each}
           </ul>

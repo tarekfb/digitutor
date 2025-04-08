@@ -33,7 +33,7 @@
 </svelte:head>
 
 <AccountLayout>
-  <PrimaryTitle class="text-center" responsiveMb>Dina annonser</PrimaryTitle>
+  <PrimaryTitle class="text-center">Dina annonser</PrimaryTitle>
   <Container class="w-full" minWidth maxWidth padding>
     {#each listings as listing}
       <ListingCard {listing} publicView={false} />

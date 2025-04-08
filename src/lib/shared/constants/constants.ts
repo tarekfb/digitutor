@@ -90,7 +90,7 @@ export enum MessageId {
 
 export const initMessagesCount = 25;
 
-export const maxAvatarSize = 10485760;
+export const maxAvatarSize = 1048576;
 // export const maxAvatarUncompressedSize = 512000;
 export const acceptedAvatarFormats = [
   "image/jpeg",
@@ -126,7 +126,7 @@ export const defaultPlanId = PricingPlanIds.Free;
 export const freePlan: PricingPlan = {
   id: PricingPlanIds.Free,
   name: "Gratis",
-  description: `Allt du behöver för att använda plattformen. Perfekt för de flesta användare. Du kan kontakta ${freeCredits} lärare helt gratis. Uppgradera när som helst.`,
+  description: `Allt du behöver för att använda plattformen. Du kan kontakta ${freeCredits} lärare helt gratis. Uppgradera när som helst.`,
   bold: `Inget betalkort behövs!`,
   price: "0 SEK",
   priceIntervalName: "per månad",
