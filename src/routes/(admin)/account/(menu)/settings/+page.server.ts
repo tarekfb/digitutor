@@ -4,7 +4,6 @@ import {
   getFailFormMessage,
   getSuccessFormMessage,
   maxAvatarSize,
-  MessageId,
 } from "$lib/shared/constants/constants.ts";
 import { fail, message, superValidate, withFiles } from "sveltekit-superforms";
 import { zod } from "sveltekit-superforms/adapters";

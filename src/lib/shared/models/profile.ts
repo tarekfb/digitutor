@@ -58,12 +58,15 @@ export type CreateProfile = {
 
 export type Role = DbProfile["role"];
 
+export const isValidFileSize = (f: File): boolean => f.size < maxAvatarSize;
+export const invalidFileSizeMessage = `Max ${formatBytes(maxAvatarSize)} filstorlek.`;
+
 export const avatarSchema = z.object({
   avatar: z
     .instanceof(File, { message: "Ladda upp en fil." })
     .refine(
-      (f) => f.size < maxAvatarSize,
-      `Max ${formatBytes(maxAvatarSize)} filstorlek.`,
+      (f) => isValidFileSize(f),
+      invalidFileSizeMessage,
     )
     .refine(
       (f) => acceptedAvatarFormats.includes(f.type),

@@ -90,7 +90,7 @@ export enum MessageId {
 
 export const initMessagesCount = 25;
 
-export const maxAvatarSize = 10485760;
+export const maxAvatarSize = 1048576;
 // export const maxAvatarUncompressedSize = 512000;
 export const acceptedAvatarFormats = [
   "image/jpeg",
