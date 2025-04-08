@@ -141,8 +141,15 @@
         {#if $form.avatar?.name}
           <p>{$form.avatar.name}</p>
         {/if}
-        {#if $errors.avatar && isBadHeic($form.avatar)}
-          <Form.FieldErrors />
+        {#if $errors.avatar && !isBadHeic($form.avatar)}
+          <Form.FieldErrors>
+            {#if !isValidFileSize($form.avatar)}
+              <p>{$errors.avatar}</p>
+              <p>Din filstorlek är {formatBytes($form.avatar.size)}.</p>
+            {:else}
+              <p>{$errors.avatar}</p>
+            {/if}
+          </Form.FieldErrors>
         {/if}
       </div>
     {/if}
