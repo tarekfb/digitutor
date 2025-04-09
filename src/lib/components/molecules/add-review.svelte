@@ -11,6 +11,7 @@
   import { Input } from "$lib/components/ui/input/index.js";
   import {
     addReviewSchema,
+    maxReviewLength,
     type AddReviewSchema,
   } from "src/lib/shared/models/review.ts";
   import Label from "$lib/components/atoms/label.svelte";
@@ -21,6 +22,7 @@
   import { Button, buttonVariants } from "$lib/components/ui/button/index.js";
   import { Textarea } from "$lib/components/ui/textarea/index.js";
   import type { Profile } from "src/lib/shared/models/profile.ts";
+  import CharCount from "../atoms/char-count.svelte";
 
   export let form: SuperValidated<Infer<AddReviewSchema>>;
   export let teacher: Profile;
@@ -34,7 +36,14 @@
     },
   });
 
-  const { form: formData, enhance, delayed, allErrors, message } = formValues;
+  const {
+    form: formData,
+    enhance,
+    delayed,
+    allErrors,
+    message,
+    errors,
+  } = formValues;
 </script>
 
 <Dialog.Root bind:open>
@@ -77,7 +86,11 @@
         </Form.Control>
         <Form.FieldErrors />
       </Form.Field>
-      <Form.Field form={formValues} name="description">
+      <Form.Field
+        form={formValues}
+        name="description"
+        class="flex flex-col gap-x-2"
+      >
         <Form.Control let:attrs>
           <Label>Beskriv din lektion med {teacher.firstName}</Label>
           <Textarea
@@ -87,6 +100,11 @@
             bind:value={$formData.description}
           />
         </Form.Control>
+        <CharCount
+          text={$formData.description}
+          errors={$errors.description}
+          max={maxReviewLength}
+        />
         <Form.FieldErrors />
       </Form.Field>
       <FormMessage {message} scroll />

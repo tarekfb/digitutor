@@ -29,6 +29,8 @@ export type ReviewWithReferences = Omit<ReviewBase, "receiver" | "sender"> & {
 
 export type InputReview = Pick<DbReviewBase, "description" | "rating">;
 
+
+export const maxReviewLength = 500;
 const addReviewProperties = {
   rating: z.coerce
     .number()
@@ -37,7 +39,7 @@ const addReviewProperties = {
   description: z
     .string()
     .min(1, "Får inte vara tom.")
-    .max(500, "Får inte vara mer än 500 karaktärer.")
+    .max(maxReviewLength, `Får inte vara mer än ${maxReviewLength} karaktärer.`)
     .optional(),
 };
 

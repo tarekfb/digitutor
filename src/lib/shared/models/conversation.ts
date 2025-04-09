@@ -66,10 +66,11 @@ const requestContactProperties = {
 
 export const requestContactSchema = z.object(requestContactProperties);
 
+export const maxMessageLength = 300;
 export const startContactSchema = z.object({
   ...requestContactProperties,
   firstMessage: z
     .string()
     .min(5, "Måste vara minst 5 karaktär.")
-    .max(300, "Får inte vara mer än 300 karaktärer."),
+    .max(maxMessageLength, `Får inte vara mer än ${maxMessageLength} karaktärer.`),
 });

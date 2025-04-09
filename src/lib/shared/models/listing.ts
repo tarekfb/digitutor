@@ -49,12 +49,13 @@ export type InputListing = Pick<
 };
 
 export const maxSubjects = 5;
+export const maxDescriptionLength = 400;
 
 const updateListingProps: TypeToZod<InputListing> = {
   description: z
     .string()
     .min(10, "Måste vara minst 10 karaktärer.")
-    .max(400, "Får inte vara mer än 400 karaktärer."),
+    .max(maxDescriptionLength, `Får inte vara mer än ${maxDescriptionLength} karaktärer.`),
   hourlyPrice: z.coerce
     .number()
     .min(0, "Måste vara minst 0.")

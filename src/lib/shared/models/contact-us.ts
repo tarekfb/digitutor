@@ -1,5 +1,6 @@
 import { z } from "zod";
 
+export const maxMessageLength = 500;
 export const contactUsSchema = z.object({
   email: z.string().email("Ogiltig e-postadress."),
   firstName: z
@@ -13,5 +14,5 @@ export const contactUsSchema = z.object({
   message: z
     .string()
     .min(5, "Måste vara minst 5 karaktärer.")
-    .max(500, "Får inte vara mer än 500 karaktärer."),
+    .max(maxMessageLength, `Får inte vara mer än ${maxMessageLength} karaktärer.`),
 });

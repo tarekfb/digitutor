@@ -4,7 +4,8 @@
   import {
     maxSubjects,
     updateListingSchema,
-  } from "$lib/shared/models/listing.js";
+    maxDescriptionLength,
+  } from "$lib/shared/models/listing.ts";
   import PrimaryTitle from "$lib/components/atoms/primary-title.svelte";
   import type { PageData } from "./$types.ts";
   import Container from "src/lib/components/templates/container.svelte";
@@ -34,10 +35,11 @@
   import Check from "lucide-svelte/icons/check";
   import X from "lucide-svelte/icons/x";
   import { languages } from "src/lib/shared/models/common.ts";
+  import CharCount from "src/lib/components/atoms/char-count.svelte";
 
   export let data: PageData;
   $: ({ subjects, profile } = data);
-  const { slug } = $page.params;
+  $: ({ slug } = $page.params);
 
   const listingForm = superForm(data.updateListingForm, {
     validators: zodClient(updateListingSchema),
@@ -209,7 +211,11 @@
           <Form.FieldErrors />
         </Form.Field>
 
-        <Form.Field form={listingForm} name="description">
+        <Form.Field
+          form={listingForm}
+          name="description"
+          class="flex flex-col gap-x-1"
+        >
           <Form.Control let:attrs>
             <Label class={labelStyling}>Beskrivning</Label>
             <p class="text-muted-foreground">
@@ -227,6 +233,11 @@
               bind:value={$form.description}
             />
           </Form.Control>
+          <CharCount
+            text={$form.description}
+            errors={$errors.description}
+            max={maxDescriptionLength}
+          />
           <Form.FieldErrors>
             {#if $errors.description?.at(0)}
               {$errors.description?.at(0)}
