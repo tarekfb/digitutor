@@ -78,9 +78,11 @@ export const deleteAvatarSchema = z.object({
   path: z.string(),
 });
 
+export const maxBioLength = 2000;
 export const updateBioSchema = z.object({
   bio: z
     .string()
     .min(10, "Måste vara minst 10 karaktärer.")
-    .max(2000, "Får inte vara mer än 2000 karaktärer."),
+    .max(maxBioLength, `Får inte vara mer än ${maxBioLength} karaktärer.`),
 });
+
