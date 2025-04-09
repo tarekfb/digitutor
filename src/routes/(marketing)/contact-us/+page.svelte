@@ -1,5 +1,8 @@
 <script lang="ts">
-  import { contactUsSchema } from "$lib/shared/models/contact-us.js";
+  import {
+    contactUsSchema,
+    maxMessageLength,
+  } from "$lib/shared/models/contact-us.js";
   import { toast } from "svelte-sonner";
   import { superForm } from "sveltekit-superforms";
   import { zodClient } from "sveltekit-superforms/adapters";
@@ -15,6 +18,7 @@
   import type { PageData } from "./$types.ts";
   import SendHorizontal from "lucide-svelte/icons/send-horizontal";
   import { websiteName } from "src/lib/shared/constants/constants.ts";
+  import CharCount from "src/lib/components/atoms/char-count.svelte";
 
   export let data: PageData;
 
@@ -26,7 +30,7 @@
     },
   });
 
-  const { form: formData, enhance, delayed, message, allErrors } = contactForm;
+  const { form: formData, enhance, delayed, message, allErrors, errors } = contactForm;
 </script>
 
 <svelte:head>
@@ -95,7 +99,7 @@
       <Form.FieldErrors />
     </Form.Field>
 
-    <Form.Field form={contactForm} name="message">
+    <Form.Field form={contactForm} name="message" class="flex flex-col gap-x-2">
       <Form.Control let:attrs>
         <Label>Ditt meddelande</Label>
         <Textarea
@@ -103,6 +107,11 @@
           placeholder="Skriv ett meddelande till oss..."
           class="resize-y bg-card"
           bind:value={$formData.message}
+        />
+        <CharCount
+          text={$formData.message}
+          errors={$errors.message}
+          max={maxMessageLength}
         />
       </Form.Control>
       <Form.FieldErrors />
@@ -112,7 +121,7 @@
       {delayed}
       {allErrors}
       text="Skicka"
-      class="self-center wide-button"
+      class="wide-button self-center"
     >
       <SendHorizontal slot="icon" class="size-button-icon" />
     </FormSubmit>

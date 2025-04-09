@@ -9,11 +9,17 @@
   import { isStartingContact } from "src/stores/start-contact.ts";
   import { costPerRequest } from "src/lib/shared/constants/constants.js";
   import Link from "./link.svelte";
+  import CharCount from "./char-count.svelte";
+  import {
+    maxMessageLength,
+    startContactSchema,
+  } from "src/lib/shared/models/conversation.ts";
+  import type { Infer, SuperForm } from "sveltekit-superforms";
 
-  export let form;
+  export let form: SuperForm<Infer<typeof startContactSchema>>;
   export let action: string;
 
-  const { form: formData, enhance, delayed, allErrors, message } = form;
+  const { form: formData, enhance, delayed, allErrors, message, errors } = form;
 
   const suggestions = [
     "Online eller fysiskt?",
@@ -54,7 +60,7 @@
     <form method="POST" {action} use:enhance class="flex flex-col gap-y-4">
       <input type="hidden" name="teacher" value={$formData.teacher} />
       <input type="hidden" name="role" value={$formData.role} />
-      <Form.Field {form} name="firstMessage">
+      <Form.Field {form} name="firstMessage" class="flex flex-col gap-x-2">
         <Form.Control let:attrs>
           <Label>Ditt meddelande</Label>
           <Textarea
@@ -64,6 +70,11 @@
             bind:value={$formData.firstMessage}
           />
         </Form.Control>
+        <CharCount
+          text={$formData.firstMessage}
+          errors={$errors.firstMessage}
+          max={maxMessageLength}
+        />
         <Form.FieldErrors />
       </Form.Field>
       <FormMessage {message} scroll />

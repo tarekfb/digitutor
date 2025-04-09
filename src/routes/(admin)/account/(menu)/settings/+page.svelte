@@ -13,6 +13,7 @@
   } from "$lib/shared/models/user.js";
   import {
     emailSchema,
+    maxBioLength,
     nameSchema,
     updateBioSchema,
   } from "$lib/shared/models/profile.ts";
@@ -31,6 +32,7 @@
   import ChevronDown from "lucide-svelte/icons/chevron-down";
   import ChevronUp from "lucide-svelte/icons/chevron-up";
   import { websiteName } from "src/lib/shared/constants/constants.ts";
+  import CharCount from "src/lib/components/atoms/char-count.svelte";
 
   export let data: PageData;
   $: ({ profile, uploadAvatarForm, deleteAvatarForm } = data);
@@ -67,7 +69,7 @@
   });
 
   const { form: nameData, reset: nameReset } = nameForm;
-  const { form: bioData, reset: bioReset } = bioForm;
+  const { form: bioData, reset: bioReset, errors: bioErrors } = bioForm;
   const { form: emailData } = emailForm;
   const { form: passwordData } = passwordForm;
 </script>
@@ -128,7 +130,7 @@
             </ul>
           </Collapsible.Content>
         </Collapsible.Root>
-        <Form.Field form={bioForm} name="bio">
+        <Form.Field form={bioForm} name="bio" class="flex flex-col gap-x-2">
           <Form.Control let:attrs>
             <Form.Label>Profilbeskrivning</Form.Label>
             <Textarea
@@ -139,6 +141,11 @@
               bind:value={$bioData.bio}
             />
           </Form.Control>
+          <CharCount
+            text={$bioData.bio}
+            errors={$bioErrors.bio}
+            max={maxBioLength}
+          />
           <Form.FieldErrors />
         </Form.Field>
       </SettingsForm>

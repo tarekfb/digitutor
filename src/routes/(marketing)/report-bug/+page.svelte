@@ -14,10 +14,11 @@
   import type { PageData } from "./$types.ts";
   import SendHorizontal from "lucide-svelte/icons/send-horizontal";
   import { websiteName } from "src/lib/shared/constants/constants.ts";
-  import { reportBugSchema } from "src/lib/shared/models/report-bug.ts";
+  import { reportBugSchema, max } from "src/lib/shared/models/report-bug.ts";
   import * as Collapsible from "$lib/components/ui/collapsible/index.ts";
   import ChevronDown from "lucide-svelte/icons/chevron-down";
   import ChevronUp from "lucide-svelte/icons/chevron-up";
+  import CharCount from "src/lib/components/atoms/char-count.svelte";
 
   export let data: PageData;
 
@@ -31,7 +32,14 @@
     },
   });
 
-  const { form: formData, enhance, delayed, message, allErrors } = contactForm;
+  const {
+    form: formData,
+    enhance,
+    delayed,
+    message,
+    allErrors,
+    errors,
+  } = contactForm;
 </script>
 
 <svelte:head>
@@ -61,7 +69,11 @@
     action="?/submit"
     use:enhance
   >
-    <Form.Field form={contactForm} name="description">
+    <Form.Field
+      form={contactForm}
+      name="description"
+      class="flex flex-col gap-x-2 w-full"
+    >
       <Form.Control let:attrs>
         <Label>Beskrivning</Label>
         <p class="text-sm text-muted-foreground">
@@ -91,11 +103,16 @@
         <Textarea
           {...attrs}
           placeholder="Hur uppstod felet? Vilken webbläsare? Löstes problemet, hur?"
-          class="max-h-[500px] min-h-32 resize-y bg-card md:max-h-[700px]"
+          class="max-h-[500px] min-h-32 resize-y bg-card md:max-h-[700px] w-full"
           style={"field-sizing: content"}
           bind:value={$formData.description}
         />
       </Form.Control>
+      <CharCount
+        text={$formData.description}
+        errors={$errors.description}
+        {max}
+      />
       <Form.FieldErrors />
     </Form.Field>
     <Form.Field form={contactForm} name="trackingId">
