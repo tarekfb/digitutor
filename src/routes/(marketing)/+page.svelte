@@ -29,7 +29,7 @@
     if (listLength === 3) return "grid-cols-2 md:grid-cols-3";
     return "grid-cols-2 md:grid-cols-3 lg:grid-cols-4";
   };
-  
+
   const maxWidth = "max-w-full md:max-w-screen-sm lg:max-w-screen-md";
   const yContainerPadding = "py-20 md:py-32";
   const xContainerPadding = "px-4 md:px-12";
@@ -55,10 +55,12 @@
         <ArrowRight class="size-4" />
       </Button>
     </div>
-    <Vector class="mt-8 md:mt-0 lg:max-h-[500px] lg:max-w-[500px] max-h-[400px] max-w-[400px]" />
+    <Vector
+      class="mt-8 max-h-[400px] max-w-[400px] md:mt-0 lg:max-h-[500px] lg:max-w-[500px]"
+    />
   </section>
 
-  {#if displayProfiles.length > 0}
+  {#if displayProfiles.length > 2}
     <div
       class="flex w-screen flex-col items-center self-center bg-secondary {yContainerPadding}"
     >
@@ -103,9 +105,7 @@
         class="flex w-full flex-wrap place-content-center gap-6 md:gap-10 lg:flex-row"
       >
         {#each pricingPlans as pricingPlan}
-          <PricingModule
-            {pricingPlan}
-          />
+          <PricingModule {pricingPlan} />
         {/each}
       </section>
     </Container>
