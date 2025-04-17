@@ -18,7 +18,7 @@ import { formatReviewWithReferences } from "src/lib/shared/utils/reviews/utils.t
 import { updateCredits } from "src/lib/server/database/credits.ts";
 import { logErrorServer } from "src/lib/shared/utils/logging/utils.ts";
 
-export const load: PageServerLoad = async ({ locals: { supabase } }) => {
+export const load: PageServerLoad = async ({ locals: { supabase }, url }) => {
   let review: ReviewWithReferences | undefined;
   try {
     const reviews = await getHighQualityReviews(supabase, 1);
@@ -31,7 +31,8 @@ export const load: PageServerLoad = async ({ locals: { supabase } }) => {
     logErrorServer({ error: e, message: "Error when reviews signup display, perhaps didnt find valid review" });
     review = undefined;
   }
-  const form = await superValidate(zod(signUpSchema));
+  const role = url.searchParams.get("role") === "teacher" ? "teacher" : "student";
+  const form = await superValidate({ role }, zod(signUpSchema), { errors: false });
   return { form, review };
 };
 

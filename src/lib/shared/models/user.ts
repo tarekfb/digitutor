@@ -15,8 +15,12 @@ export const signUpUserFields: TypeToZod<SignUpUser> = {
   firstName: z
     .string()
     .min(1, "Får inte vara tomt.")
-    .max(50, "Får inte vara mer än 50 karaktärer."),
-  terms: z.boolean().refine((s) => s === true, "Villkoren är obligatoriska."),
+    .max(50, "Får inte vara mer än 50 karaktärer.")
+    .refine(s => {
+      if (s.length > 0) return !!s.trim()
+      return true
+    }, { message: "Får inte vara tomt." }),
+  terms: z.boolean().refine((s) => s === true, "Villkoren är obligatoriska.")
 };
 
 export const signUpSchema = z.object(signUpUserFields);

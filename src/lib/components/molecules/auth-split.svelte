@@ -8,7 +8,7 @@
 <div class="grid w-full flex-1 lg:grid-cols-6">
   {#if shouldShowAside}
     <aside
-      class="hidden flex-1 flex-shrink basis-1/4 flex-col items-center justify-center bg-card lg:col-span-4 lg:flex"
+      class="hidden flex-1 flex-shrink basis-1/4 flex-col items-center justify-center border-r-[1px] border-t-[1px] border-solid bg-card lg:col-span-4 lg:flex border-black/10"
     >
       <slot name="aside" />
     </aside>

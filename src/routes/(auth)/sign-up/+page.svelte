@@ -3,7 +3,6 @@
   import { zodClient } from "sveltekit-superforms/adapters";
   import { signUpSchema } from "$lib/shared/models/user.js";
   import * as Tabs from "$lib/components/ui/tabs/index.ts";
-  import { page } from "$app/stores";
   import Avatar from "src/lib/components/atoms/avatar.svelte";
   import ArrowRightIcon from "lucide-svelte/icons/arrow-right";
   import SignupContent from "src/lib/components/molecules/signup-content.svelte";
@@ -22,9 +21,6 @@
     validators: zodClient(signUpSchema),
   });
   const { form: formData, enhance, delayed, message, allErrors } = userForm;
-
-  $formData.role =
-    $page.url.searchParams.get("role") === "teacher" ? "teacher" : "student";
 </script>
 
 <svelte:head>
