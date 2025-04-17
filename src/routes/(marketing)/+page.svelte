@@ -65,7 +65,7 @@
       class="flex w-screen flex-col items-center self-center bg-secondary {yContainerPadding}"
     >
       <Container maxWidth margin={false} class="mx-4 md:mx-8" responsiveGap>
-        <PrimaryTitle class=" text-center {bTitleMargin} text-background"
+        <PrimaryTitle class="text-center {bTitleMargin} text-background"
           >Se våra lärare</PrimaryTitle
         >
         <div class="grid {getGridCols(displayProfiles.length)} gap-4 md:gap-8">
