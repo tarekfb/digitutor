@@ -32,7 +32,7 @@ export const load: PageServerLoad = async ({ locals: { supabase }, url }) => {
     review = undefined;
   }
   const role = url.searchParams.get("role") === "teacher" ? "teacher" : "student";
-  const form = await superValidate({ role }, zod(signUpSchema));
+  const form = await superValidate({ role }, zod(signUpSchema), { errors: false });
   return { form, review };
 };
 
