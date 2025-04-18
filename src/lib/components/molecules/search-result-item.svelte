@@ -63,7 +63,13 @@
     </div>
     <div class="flex flex-col items-center gap-y-1">
       <h3 class="text-xl md:text-2xl {boxStyling}">
-        {result.hourlyPrice} <span class="text-sm md:text-lg">SEK</span>
+        <span class="text-sm md:text-lg">
+          {#if result.hourlyPrice < 1}
+            Gratis
+          {:else}
+            {result.hourlyPrice} SEK
+          {/if}
+        </span>
       </h3>
       <p class="text-sm text-muted-foreground">60 minuter</p>
     </div>
