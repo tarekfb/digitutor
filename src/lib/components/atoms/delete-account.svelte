@@ -24,7 +24,7 @@
         variant="destructive"
         disabled={$delayed}
         aria-label="Delete account"
-        class="md:min-w-wider md:self-center"
+        class="wide-button md:self-center"
       >
         {#if $delayed}
           <LoadingSpinner class="mr-2" /> <span>Laddar...</span>

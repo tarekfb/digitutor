@@ -20,7 +20,6 @@
   const { enhance, delayed, allErrors, message } = form;
 </script>
 
-
 <form
   method="POST"
   use:enhance
@@ -37,7 +36,8 @@
       {delayed}
       {allErrors}
       text={submitText}
-      class="md:min-w-wider md:self-center {submitStyling}"
+      class={cn("wide-button md:self-center", submitStyling)}
     />
   {/if}
+  <slot name="view-profile" />
 </form>

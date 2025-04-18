@@ -156,7 +156,7 @@
     <FormMessage {message} scroll />
     <Button
       type="submit"
-      class="md:min-w-wider md:self-center"
+      class="wide-button md:self-center"
       disabled={$allErrors.length > 0 || $delayed || !$form.avatar}
     >
       {#if $timeout}

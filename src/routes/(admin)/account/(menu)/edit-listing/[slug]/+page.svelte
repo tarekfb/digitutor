@@ -397,8 +397,8 @@
             <Button
               variant="outline"
               href="/profile/{profile.id}?id={slug}"
-              class="flex gap-x-2 bg-card"
-              ><ExternalLink class="h-4 w-4" />visa annons</Button
+              class="icon-button bg-card"
+              ><ExternalLink class="size-4" />visa annons</Button
             >
           </div>
           <div class="flex justify-between gap-x-2 md:gap-x-6">
