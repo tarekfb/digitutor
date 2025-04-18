@@ -35,7 +35,11 @@
       {#if listing}
         <div class="flex flex-col gap-y-1">
           <SecondaryTitle>
-            {listing.hourlyPrice} SEK
+            {#if listing.hourlyPrice < 1}
+              Gratis
+            {:else}
+              {listing.hourlyPrice} SEK
+            {/if}
           </SecondaryTitle>
           <p class="text-sm text-muted-foreground">60 minuter</p>
         </div>
