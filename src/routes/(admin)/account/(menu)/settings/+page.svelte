@@ -6,6 +6,7 @@
   import { zodClient } from "sveltekit-superforms/adapters";
   import { Input } from "$lib/components/ui/input/index.js";
   import * as Form from "$lib/components/ui/form/index.js";
+  import ExternalLink from "lucide-svelte/icons/square-arrow-out-up-right";
   import { toast } from "svelte-sonner";
   import {
     deleteAccountSchema as deleteSchema,
@@ -157,6 +158,7 @@
           target="_blank"
         >
           Visa profil
+          <ExternalLink class="size-button-icon" />
         </Button>
       </SettingsForm>
     {/if}
