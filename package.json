@@ -21,8 +21,7 @@
     "format:check": "prettier --check --plugin prettier-plugin-svelte ./src",
     "prepare": "husky && husky install",
     "db:types": "supabase gen types typescript --local > src/supabase.ts",
-    "db:reset": "supabase db reset",
-    "postinstall": "patch-package"
+    "db:reset": "supabase db reset"
   },
   "devDependencies": {
     "@melt-ui/pp": "^0.3.2",
@@ -51,7 +50,6 @@
     "jsdom": "^24.1.0",
     "lucide-svelte": "^0.473.0",
     "msw": "^2.3.1",
-    "patch-package": "^8.0.0",
     "postcss": "^8.4.31",
     "prettier": "^3.4.2",
     "prettier-plugin-svelte": "^3.0.3",

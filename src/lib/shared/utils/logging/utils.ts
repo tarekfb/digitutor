@@ -2,17 +2,17 @@ import { PUBLIC_ENVIRONMENT } from "$env/static/public";
 // import * as Sentry from "@sentry/sveltekit";
 
 export const logErrorServer = (options: { error?: unknown, message: string, additionalData?: Record<string, unknown>, critical?: boolean }): string => {
-    return ""; // terminated logging as of 2025-12-17
+    return ""; // terminated logging as of 2025-12-17t
     
-    let { additionalData } = options;
-    const {message} = options;
-    if (options.critical) {
-        if (additionalData) additionalData.critical = true;
-        else additionalData = { critical: false };
-    }
+    // let { additionalData } = options;
+    // const {message} = options;
+    // if (options.critical) {
+    //     if (additionalData) additionalData.critical = true;
+    //     else additionalData = { critical: false };
+    // }
 
-    if (handleLocalLog({ error: options.error, additionalData, })) return crypto.randomUUID();
-    return Sentry.captureException(options.error, { extra: { ...(additionalData && additionalData), message } });
+    // if (handleLocalLog({ error: options.error, additionalData, })) return crypto.randomUUID();
+    // return Sentry.captureException(options.error, { extra: { ...(additionalData && additionalData), message } });
 };
 
 const handleLocalLog = (data?: Record<string, unknown>): boolean => {
