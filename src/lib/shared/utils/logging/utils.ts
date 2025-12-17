@@ -1,7 +1,9 @@
 import { PUBLIC_ENVIRONMENT } from "$env/static/public";
-import * as Sentry from "@sentry/sveltekit";
+// import * as Sentry from "@sentry/sveltekit";
 
 export const logErrorServer = (options: { error?: unknown, message: string, additionalData?: Record<string, unknown>, critical?: boolean }): string => {
+    return ""; // terminated logging as of 2025-12-17
+    
     let { additionalData } = options;
     const {message} = options;
     if (options.critical) {
