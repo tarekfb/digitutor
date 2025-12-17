@@ -2,7 +2,6 @@ import { sveltekit } from "@sveltejs/kit/vite";
 import { sentrySvelteKit } from "@sentry/sveltekit";
 import { defineConfig, loadEnv } from 'vite';
 import { enhancedImages } from '@sveltejs/enhanced-img';
-// import { svelteInspector } from '@sveltejs/vite-plugin-svelte-inspector';
 
 const env = loadEnv(
   'all',
@@ -23,9 +22,5 @@ export default defineConfig({
     ),
     sveltekit(),
     enhancedImages(),
-
-    // svelteInspector({
-    //   /* plugin options */
-    // })
   ],
 });
