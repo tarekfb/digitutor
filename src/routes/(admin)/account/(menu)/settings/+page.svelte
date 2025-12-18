@@ -6,6 +6,7 @@
   import { zodClient } from "sveltekit-superforms/adapters";
   import { Input } from "$lib/components/ui/input/index.js";
   import * as Form from "$lib/components/ui/form/index.js";
+  import ExternalLink from "lucide-svelte/icons/square-arrow-out-up-right";
   import { toast } from "svelte-sonner";
   import {
     deleteAccountSchema as deleteSchema,
@@ -33,6 +34,7 @@
   import ChevronUp from "lucide-svelte/icons/chevron-up";
   import { websiteName } from "src/lib/shared/constants/constants.ts";
   import CharCount from "src/lib/components/atoms/char-count.svelte";
+  import { Button } from "src/lib/components/ui/button/index.ts";
 
   export let data: PageData;
   $: ({ profile, uploadAvatarForm, deleteAvatarForm } = data);
@@ -42,7 +44,7 @@
     onUpdated({ form }) {
       if (form.valid) {
         nameReset({ newState: data.updateNameForm.data });
-        toast.success(`Ändrat namn.`);
+        toast.success(`Sparat namn.`);
       }
     },
     resetForm: false,
@@ -148,6 +150,16 @@
           />
           <Form.FieldErrors />
         </Form.Field>
+        <Button
+          slot="view-profile"
+          variant="outline"
+          href="/profile/{profile.id}"
+          class="wide-button icon-button self-center"
+          target="_blank"
+        >
+          Visa profil
+          <ExternalLink class="size-button-icon" />
+        </Button>
       </SettingsForm>
     {/if}
 
@@ -155,7 +167,7 @@
       form={nameForm}
       action="?/name"
       title="Namn"
-      submitText="Ändra"
+      submitText="Spara"
     >
       <Form.Field form={nameForm} name="firstName">
         <Form.Control let:attrs>
@@ -175,7 +187,7 @@
       form={emailForm}
       action="?/email"
       title="E-postadress"
-      submitText="Ändra"
+      submitText="Spara"
     >
       <p class="text-muted-foreground">
         Du kommer behöva bekräfta den nya <span class="italic">och</span> den gamla
@@ -205,7 +217,7 @@
       form={passwordForm}
       action="?/password"
       title="Lösenord"
-      submitText="Ändra"
+      submitText="Spara"
     >
       <Form.Field form={passwordForm} name="current">
         <Form.Control let:attrs>

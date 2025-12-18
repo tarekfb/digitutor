@@ -10,25 +10,20 @@
   export let listing: ListingWithProfile | undefined = undefined;
 
   const { slug } = $page.params;
-  const url = `/profile/${slug}?${listing && `id=${listing.id}`}${listing ? "&" : "?"}preview=true`;
+  const url = `/profile/${slug}?${listing ? `id=${listing.id}&` : ""}preview=true`;
 </script>
 
-<div class="mt-6 flex flex-col items-center gap-y-4">
-  <Button
-    on:click={() => goto(url)}
-    variant="outline"
-    class="flex w-full items-center gap-x-2 self-center bg-card md:w-auto"
-    ><ExternalLink class="h-4 w-4" />visa som student</Button
-  >
+<div class="mb-2 mt-4 flex flex-col items-center gap-y-4 md:mb-6">
   <IsPublished
     isPublished={listing?.visible}
     class="self-center"
     variant="accent"
   />
-  <small class="mb-8 flex flex-col gap-y-4 px-8 text-center text-lg">
-    <p class="text-muted-foreground">
+  <small class="flex flex-col gap-y-4 px-8 text-center text-lg">
+    <p class="flex flex-col text-muted-foreground">
       Vill du göra ändringar på din profilbeskrivning eller annan informationen
-      om dig själv? <Link href="/account/settings" class="whitespace-nowrap"
+      om dig själv?
+      <Link href="/account/settings" class="whitespace-nowrap"
         >Gå till din profil</Link
       >
     </p>
@@ -42,4 +37,10 @@
     {/if}
     <p class="italic text-muted-foreground">Bara du kan se detta.</p>
   </small>
+  <Button
+    on:click={() => goto(url)}
+    variant="outline-card"
+    class="wide-button icon-button"
+    ><ExternalLink class="size-4" />visa som student</Button
+  >
 </div>
