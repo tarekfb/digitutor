@@ -21,12 +21,16 @@ export const getBaseUrl = (env: string): string => {
 }
 
 export const defaultErrorDescription =
-  "Något gick fel. Du kan kontakta oss om detta fortsätter.";
-export const defaultErrorTitle = "Något gick fel...";
+  // "Något gick fel. Du kan kontakta oss om detta fortsätter.";
+  "Tjänsten har tyvärr lagts ned."
+export const defaultErrorTitle =
+  // "Något gick fel...";
+  "Denna tjänsten är ej i bruk längre..."
 export const defaultErrorInfo: App.Error = {
   message: defaultErrorTitle,
   description:
-    "Ett oväntat fel uppstod. Du kan kontakta oss om detta fortsätter.",
+    // "Ett oväntat fel uppstod. Du kan kontakta oss om detta fortsätter.",
+    "Det går inte att göra detta längre, då tjänsten ej är i bruk."
 };
 
 export const getDefaultErrorInfo = (
@@ -59,8 +63,8 @@ export const getFailFormMessage = (
   }
 ): Message => ({
   variant: options?.variant ?? "destructive",
-  title: options?.title ?? "Något gick fel",
-  description: options?.description ?? "Du kan kontakta oss om detta fortsätter.",
+  title: options?.title ?? "Denna tjänst är inte längre i bruk", //"Något gick fel",
+  description: options?.description ?? "Detta går tyvärr inte att göra längre",//"Du kan kontakta oss om detta fortsätter.",
   trackingId: options?.trackingId ?? undefined,
   id: options?.messageId ?? MessageId.Unknown,
   data: options?.data ?? undefined,
